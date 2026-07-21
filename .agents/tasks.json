@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "fb69a7ea1fba746208d323a8b205187ab8493e38ab86ba467f144e70eddfce66",
+  "chainHead": "31514ba62fa340db6ee6eac1f71e0bc6f05093d98636ddff23ba2809f7201c2c",
   "tasks": [
     {
       "id": "T-001",
@@ -42,9 +42,15 @@
         "A spec file exists under .agents/specs/",
         ".agents/tasks.json contains the tasks decomposed from the spec"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "First feature spec written: .agents/specs/finops-framework-mcp-server.md, backed by docs/architecture.md and docs/research.md from the owner build brief; decomposition handled by the brief's phased plan (owner-approved deviation from plan-feature).",
+        "commit": "e5dc84a1d5a1f69674e96d6ab074181cefe9c857",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-21T10:50:39.192Z"
+      },
+      "hash": "31514ba62fa340db6ee6eac1f71e0bc6f05093d98636ddff23ba2809f7201c2c"
     },
     {
       "id": "T-004",
