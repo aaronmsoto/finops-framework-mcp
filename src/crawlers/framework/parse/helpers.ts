@@ -66,7 +66,10 @@ export function h4Blocks(
     .addBack("h4")
     .each((_, el) => {
       const $el = $(el);
-      blocks.push({ title: $el.text().trim(), nodes: $el.nextUntil("h4") });
+      blocks.push({
+        title: $el.text().replace(/\s+/g, " ").trim(),
+        nodes: $el.nextUntil("h4"),
+      });
     });
   return blocks;
 }

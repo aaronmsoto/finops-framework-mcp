@@ -85,8 +85,26 @@ function titleMatchers(capabilities: Capability[]): TitleMatcher[] {
       .replace(/&/g, "(?:&|and)")
       .replace(/[.*+?^${}()[\]\\]/g, "\\$&")
       .replace(/\s+/g, "\\s+");
-    return { slug: c.slug, res: [new RegExp(`\\b${escaped}\\b`, "i")] };
+    // Single-word titles (Allocation, Forecasting, …) double as common
+    // nouns; require exact title-case so lowercase prose usage never
+    // creates an edge (critique-2 M5': false positives).
+    const singleWord = !/\s/.test(c.title);
+    return {
+      slug: c.slug,
+      res: [new RegExp(`\\b${escaped}\\b`, singleWord ? "" : "i")],
+    };
   });
+}
+
+/** True when the match sits inside a parenthetical list of 2+ commas —
+ *  the "(Product, Leadership, …, Sustainability)" persona-list pattern. */
+function insideParentheticalList(text: string, index: number): boolean {
+  const open = text.lastIndexOf("(", index);
+  if (open < 0) return false;
+  const close = text.indexOf(")", index);
+  if (close < 0) return false;
+  const inner = text.slice(open + 1, close);
+  return (inner.match(/,/g) ?? []).length >= 2;
 }
 
 export function inferredRelationships(
@@ -113,20 +131,29 @@ export function inferredRelationships(
   for (const { slug, text, where } of texts) {
     for (const m of matchers) {
       if (m.slug === slug) continue;
-      if (!m.res.some((re) => re.test(text))) continue;
+      const match = m.res.map((re) => re.exec(text)).find((x) => x !== null);
+      if (!match) continue;
+      if (insideParentheticalList(text, match.index)) continue;
       const quote = text.length > 240 ? `${text.slice(0, 237)}…` : text;
       const prereq = PREREQ_RE.test(text);
+      // Bare mentions carry no reliable direction — emit an undirected
+      // `related` edge (canonical from<to). Direction is asserted only for
+      // prerequisite edges backed by explicit dependency language
+      // (critique-2 M5': inverted informs edges).
+      const [a, b] = [m.slug, slug].sort();
       const r: CapabilityRelationship = {
-        from: m.slug,
-        to: slug,
-        type: prereq ? "prerequisite" : "informs",
+        from: prereq ? m.slug : (a as string),
+        to: prereq ? slug : (b as string),
+        type: prereq ? "prerequisite" : "related",
         source: "inferred",
         heuristic: prereq
           ? "title-mention-dependency-language"
           : "title-mention",
         evidence_quote: quote,
         confidence: prereq ? "moderate" : "weak",
-        rationale: `The ${slug} ${where} text names ${m.slug} explicitly${prereq ? " with dependency language" : ""}.`,
+        rationale: prereq
+          ? `The ${slug} ${where} text names ${m.slug} explicitly with dependency language.`
+          : `The ${slug} ${where} text names ${m.slug} explicitly (no direction implied).`,
       };
       const k = `${r.type}:${r.from}->${r.to}`;
       const existing = out.get(k);

@@ -35,12 +35,25 @@ function instruction(text: string): Msg {
 
 export function registerPrompts(server: McpServer, artifact: Artifact): void {
   const capSlugs = artifact.capabilities.map((c) => c.slug);
-  const capabilityArg = completable(z.string(), (v) =>
-    capSlugs.filter((s) => s.startsWith(v)),
-  );
-  const levelArg = completable(z.string(), (v) =>
-    ["pre-crawl", "crawl", "walk", "run"].filter((l) => l.startsWith(v)),
-  );
+  const personaSlugs = artifact.personas.map((p) => p.slug);
+  // .describe() must be applied INSIDE completable(): zod v4 clones on
+  // describe and would drop the SDK's completable marker (critique-2 M1').
+  const capabilityArg = (desc: string) =>
+    completable(z.string().describe(desc), (v) =>
+      capSlugs.filter((s) => s.startsWith(v)),
+    );
+  const currentLevelArg = (desc: string) =>
+    completable(z.string().describe(desc), (v) =>
+      ["pre-crawl", "crawl", "walk", "run"].filter((l) => l.startsWith(v)),
+    );
+  const targetLevelArg = (desc: string) =>
+    completable(z.string().describe(desc), (v) =>
+      ["crawl", "walk", "run"].filter((l) => l.startsWith(v)),
+    );
+  const personaArg = (desc: string) =>
+    completable(z.string().describe(desc), (v) =>
+      personaSlugs.filter((s) => s.startsWith(v)),
+    );
 
   server.registerPrompt(
     "explain-framework",
@@ -72,9 +85,7 @@ export function registerPrompts(server: McpServer, artifact: Artifact): void {
       description:
         "Structured interview to place an organization's maturity (pre-crawl/crawl/walk/run) for one capability, citing assessment characteristics as evidence.",
       argsSchema: {
-        capability: capabilityArg.describe(
-          "Capability slug, e.g. 'allocation'",
-        ),
+        capability: capabilityArg("Capability slug, e.g. 'allocation'"),
       },
     },
     ({ capability }) => {
@@ -108,22 +119,41 @@ export function registerPrompts(server: McpServer, artifact: Artifact): void {
       description:
         "Ordered plan to move one capability from a current to a target maturity level, honoring (unofficial) prerequisite constraints.",
       argsSchema: {
-        capability: capabilityArg.describe("Capability slug"),
-        current: levelArg.describe("Current level: pre-crawl|crawl|walk|run"),
-        target: levelArg.describe("Target level: crawl|walk|run"),
+        capability: capabilityArg("Capability slug"),
+        current: currentLevelArg("Current level: pre-crawl|crawl|walk|run"),
+        target: targetLevelArg("Target level: crawl|walk|run"),
       },
     },
-    ({ capability, current, target }) => ({
-      messages: [
-        instruction(
-          `Build a maturity roadmap for capability "${capability}" from "${current}" to "${target}".\n` +
-            `1. Call assess_maturity_path(capability: "${capability}", current_level: "${current}", target_level: "${target}") — the gap characteristics are assessment evidence to aim for, not literal tasks.\n` +
-            `2. Call get_prerequisites(capability: "${capability}", target_maturity: "${target}") and check the org is not skipping foundations. ANY step you derive from a prerequisite edge must be labeled "(unofficial inference — evidence: <quote>)" because the framework publishes no prerequisite graph.\n` +
-            `3. Call get_kpis(capability: "${capability}") and attach 2-3 KPIs as progress measures per phase of the plan.\n` +
-            `Deliver: a phased roadmap (quarters or stages), each phase with target characteristics, dependency notes, owning personas (map_personas(capability: "${capability}")), and KPIs. Remind the reader that maturing beyond business value is explicitly discouraged by the framework's maturity model.`,
-        ),
-      ],
-    }),
+    ({ capability, current, target }) => {
+      const c = artifact.capabilities.find((x) => x.slug === capability);
+      const order = ["pre-crawl", "crawl", "walk", "run"];
+      if (!c || order.indexOf(target) <= order.indexOf(current)) {
+        return {
+          messages: [
+            instruction(
+              !c
+                ? `Unknown capability "${capability}". Call list_capabilities, pick a slug, and re-invoke this prompt.`
+                : `target ("${target}") must be above current ("${current}"). Re-invoke with a higher target level.`,
+            ),
+          ],
+        };
+      }
+      return {
+        messages: [
+          embedded(
+            URI.capability(c.slug),
+            capabilityMd(artifact, c, ["summary", "definition"]),
+          ),
+          instruction(
+            `Build a maturity roadmap for capability "${capability}" from "${current}" to "${target}".\n` +
+              `1. Call assess_maturity_path(capability: "${capability}", current_level: "${current}", target_level: "${target}") — the gap characteristics are assessment evidence to aim for, not literal tasks.\n` +
+              `2. Call get_prerequisites(capability: "${capability}", target_maturity: "${target}") and check the org is not skipping foundations. ANY step you derive from a prerequisite edge must be labeled "(unofficial inference — evidence: <quote>)" because the framework publishes no prerequisite graph.\n` +
+              `3. Call get_kpis(capability: "${capability}") and attach 2-3 KPIs as progress measures per phase of the plan.\n` +
+              `Deliver: a phased roadmap (quarters or stages), each phase with target characteristics, dependency notes, owning personas (map_personas(capability: "${capability}")), and KPIs. Remind the reader that maturing beyond business value is explicitly discouraged by the framework's maturity model.`,
+          ),
+        ],
+      };
+    },
   );
 
   server.registerPrompt(
@@ -133,12 +163,9 @@ export function registerPrompts(server: McpServer, artifact: Artifact): void {
       description:
         "Engagement guide: what a persona (or every persona) does across the framework's capabilities.",
       argsSchema: {
-        persona: z
-          .string()
-          .optional()
-          .describe(
-            "Persona slug (finops-practitioner, finance, itam, …); omit for all",
-          ),
+        persona: personaArg(
+          "Persona slug (finops-practitioner, finance, itam, …); omit for all",
+        ).optional(),
       },
     },
     ({ persona }) => ({

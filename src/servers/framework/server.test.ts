@@ -82,6 +82,25 @@ describe("resources", () => {
     ).rejects.toMatchObject({ code: -32002 });
   });
 
+  it("returns -32002 for concrete capability/persona typos too (critique-2 M2')", async () => {
+    await expect(
+      client.readResource({
+        uri: "finops://framework/capabilities/allocaton",
+      }),
+    ).rejects.toMatchObject({ code: -32002 });
+    await expect(
+      client.readResource({ uri: "finops://framework/personas/financee" }),
+    ).rejects.toMatchObject({ code: -32002 });
+  });
+
+  it("completes prompt arguments (critique-2 M1')", async () => {
+    const res = await client.complete({
+      ref: { type: "ref/prompt", name: "assess-capability-maturity" },
+      argument: { name: "capability", value: "allo" },
+    });
+    expect(res.completion.values).toContain("allocation");
+  });
+
   it("separates official and inferred edges in the graph resource", async () => {
     const res = await client.readResource({
       uri: "finops://framework/graph/relationships",
@@ -167,6 +186,56 @@ describe("tools", () => {
     }[];
     expect(kpis.length).toBeGreaterThanOrEqual(3);
     expect(kpis.some((k) => !!k.formula)).toBe(true);
+  });
+
+  it("get_kpis text carries full records, truncation note, and attribution (critique-2 B1')", async () => {
+    const res = await call("get_kpis", {});
+    const text = res.content.find((c) => c.type === "text")?.text ?? "";
+    expect(text).toContain("description_md");
+    expect(text).toMatch(/Showing 25 of \d+ — pass cursor/);
+    expect(text).toContain("CC BY 4.0");
+    const one = await call("get_kpis", {
+      slug: "allocation-accuracy-index-aai",
+    });
+    const oneText = one.content.find((c) => c.type === "text")?.text ?? "";
+    expect(oneText).toContain("Directly Attributed Costs");
+    expect(one.content.some((c) => c.type === "resource_link")).toBe(true);
+  });
+
+  it("leaf tools carry CC BY attribution in text (critique-2 M7')", async () => {
+    for (const [tool, args] of [
+      ["get_capability", { slug: "allocation" }],
+      ["get_actions", { capability: "allocation", maturity: "crawl" }],
+      ["get_maturity_model", {}],
+    ] as const) {
+      const res = await call(tool, args as Record<string, unknown>);
+      const text = res.content.find((c) => c.type === "text")?.text ?? "";
+      expect(text, tool).toContain("CC BY 4.0");
+    }
+  });
+
+  it("get_entity serves full text for resource-only entity types (critique-2 M3')", async () => {
+    const res = await call("get_entity", { entity_type: "principles" });
+    const text = res.content.find((c) => c.type === "text")?.text ?? "";
+    expect(text).toContain("Teams need to collaborate");
+    expect(text).toContain("CC BY 4.0");
+    const persona = await call("get_entity", {
+      entity_type: "persona",
+      slug: "finance",
+    });
+    expect((persona.structuredContent?.markdown as string) ?? "").toContain(
+      "Finance",
+    );
+  });
+
+  it("get_actions honors the level alias", async () => {
+    const res = await call("get_actions", {
+      capability: "allocation",
+      level: "crawl",
+    });
+    const levels = res.structuredContent?.levels as { maturity: string }[];
+    expect(levels).toHaveLength(1);
+    expect(levels[0]?.maturity).toBe("crawl");
   });
 
   it("get_kpis slug lookup returns one record; unknown slug suggests", async () => {

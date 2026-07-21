@@ -17,7 +17,7 @@ data files.
 3. Answers graded against `<expected>`; grader = build session, criteria =
    factual match on the verifiable elements.
 
-## Run 1 — 2026-07-22, artifact v1.0.0, server 0.1.0
+## Run 1 — 2026-07-21, artifact v1.0.0, server 0.1.0
 
 | # | Question (short) | Verdict | Notes |
 |---|---|---|---|

@@ -9,6 +9,7 @@ import { ORIGIN } from "./urls.js";
 export function normalizeHeading(text: string): string {
   return text
     .toLowerCase()
+    .replace(/\(s\)/g, "s") // "Measure(s) of Success" → "measures ..."
     .replace(/&amp;|&#0?38;|&/g, " and ")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
@@ -96,7 +97,9 @@ export function htmlToMd($: CheerioAPI, node: Cheerio<AnyNode>): string {
         el.children("li").each((i, li) => {
           const marker = tag === "ol" ? `${i + 1}.` : "-";
           out.push(`\n${listPrefix}${marker} `);
-          renderChildren($(li), listPrefix + "  ");
+          // Child indent must match the parent marker's content column so
+          // CommonMark keeps nested lists inside the parent item.
+          renderChildren($(li), listPrefix + " ".repeat(marker.length + 1));
         });
         out.push("\n");
         return;

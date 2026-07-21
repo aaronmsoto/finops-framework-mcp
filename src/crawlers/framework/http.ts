@@ -14,12 +14,12 @@ interface CacheEntry {
   body: string;
 }
 
-interface RobotsRules {
+export interface RobotsRules {
   disallow: string[];
   crawlDelayMs: number;
 }
 
-function parseRobots(text: string): RobotsRules {
+export function parseRobots(text: string): RobotsRules {
   // Minimal parser: rules in the "User-agent: *" group.
   const rules: RobotsRules = { disallow: [], crawlDelayMs: 0 };
   let applies = false;

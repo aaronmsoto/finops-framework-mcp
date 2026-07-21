@@ -116,31 +116,75 @@ export function registerResources(server: McpServer, artifact: Artifact): void {
     );
   }
 
-  // Concrete per-entity resources (critique m7) + templates for completion.
-  for (const c of artifact.capabilities) {
-    server.registerResource(
-      `capability-${c.slug}`,
-      URI.capability(c.slug),
-      { title: c.title, description: c.summary.slice(0, 180), ...std() },
-      (u) => text(u.href, capabilityMd(artifact, c)),
-    );
-  }
-  for (const p of artifact.personas) {
-    server.registerResource(
-      `persona-${p.slug}`,
-      URI.persona(p.slug),
-      {
-        title: `${p.title} persona`,
-        description: `${p.category} persona`,
-        ...std(),
-      },
-      (u) => text(u.href, personaMd(artifact, p)),
-    );
-  }
-
   const capSlugs = artifact.capabilities.map((c) => c.slug);
   const kpiSlugs = artifact.kpis.map((k) => k.slug);
   const levels = ["pre-crawl", "crawl", "walk", "run"];
+
+  // Capability and persona docs are templates WITH list callbacks: every
+  // concrete entry still appears in resources/list (critique m7), and any
+  // slug miss routes through notFound() for the -32002 + suggestions
+  // contract instead of the SDK's generic -32602 (critique-2 M2').
+  server.registerResource(
+    "capability",
+    new ResourceTemplate(TEMPLATES.capability, {
+      list: () => ({
+        resources: artifact.capabilities.map((c) => ({
+          uri: URI.capability(c.slug),
+          name: c.title,
+          description: c.summary.slice(0, 180),
+          mimeType: MD,
+        })),
+      }),
+      complete: { slug: (v) => capSlugs.filter((s) => s.startsWith(v)) },
+    }),
+    {
+      title: "Capability document",
+      description:
+        "Full capability document: definition, maturity assessments, activities, KPIs, inputs/outputs.",
+      ...std(),
+    },
+    (uri, vars) => {
+      const slug = String(vars.slug);
+      const c = artifact.capabilities.find((x) => x.slug === slug);
+      if (!c) notFound(uri.href, "capability", slug, capSlugs);
+      return text(uri.href, capabilityMd(artifact, c));
+    },
+  );
+  server.registerResource(
+    "persona",
+    new ResourceTemplate(TEMPLATES.persona, {
+      list: () => ({
+        resources: artifact.personas.map((p) => ({
+          uri: URI.persona(p.slug),
+          name: `${p.title} persona`,
+          description: `${p.category} persona`,
+          mimeType: MD,
+        })),
+      }),
+      complete: {
+        slug: (v) =>
+          artifact.personas.map((p) => p.slug).filter((s) => s.startsWith(v)),
+      },
+    }),
+    {
+      title: "Persona document",
+      description:
+        "One persona's goals, objectives, and capability involvement.",
+      ...std(),
+    },
+    (uri, vars) => {
+      const slug = String(vars.slug);
+      const p = artifact.personas.find((x) => x.slug === slug);
+      if (!p)
+        notFound(
+          uri.href,
+          "persona",
+          slug,
+          artifact.personas.map((x) => x.slug),
+        );
+      return text(uri.href, personaMd(artifact, p));
+    },
+  );
 
   server.registerResource(
     "capability-maturity",
@@ -173,7 +217,7 @@ export function registerResources(server: McpServer, artifact: Artifact): void {
     new ResourceTemplate(TEMPLATES.kpi, {
       list: undefined,
       complete: {
-        slug: (v) => kpiSlugs.filter((s) => s.startsWith(v)).slice(0, 20),
+        slug: (v) => kpiSlugs.filter((s) => s.startsWith(v)),
       },
     }),
     {

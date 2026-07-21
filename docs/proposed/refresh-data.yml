@@ -3,13 +3,20 @@
 #
 #   git mv docs/proposed/refresh-data.yml .github/workflows/refresh-data.yml
 #
-# Notes for the owner:
-# - GitHub disables scheduled workflows after ~60 days without repository
-#   activity; re-enable under Actions, or rely on workflow_dispatch.
-# - The refresh PR targets `dev` (integration branching); the rolling
-#   release PR carries it to main.
-# - Until installed, the architecture's "monthly refresh surfaces site
-#   breakage" mitigation is INACTIVE.
+# Owner install checklist (critique-2 M6'):
+# 1. This repo deletes `dev` after each release merge — the workflow
+#    recreates it from main when missing (step below), but if dev exists
+#    with unmerged work, the PR diff will show that drift too.
+# 2. Repo setting required: Actions → "Allow GitHub Actions to create and
+#    approve pull requests".
+# 3. PRs created with the default GITHUB_TOKEN do NOT trigger ci.yml
+#    (token-cascade block). Either supply a PAT via the `token` input of
+#    create-pull-request, or rely on the gates step below, whose output is
+#    part of the PR body evidence.
+# 4. GitHub disables scheduled workflows after ~60 days without repository
+#    activity; re-enable under Actions, or rely on workflow_dispatch.
+# 5. Until installed, the architecture's "monthly refresh surfaces site
+#    breakage" mitigation is INACTIVE.
 
 name: refresh-framework-data
 
@@ -33,12 +40,24 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Ensure dev branch exists (recreated from main when absent)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.git.getRef({...context.repo, ref: "heads/dev"});
+            } catch (e) {
+              const main = await github.rest.git.getRef({...context.repo, ref: "heads/main"});
+              await github.rest.git.createRef({...context.repo, ref: "refs/heads/dev", sha: main.data.object.sha});
+            }
       - name: Run refresh (network crawl, no cache)
         id: refresh
         run: |
           npm run build
           node dist/crawlers/framework/cli.js refresh --no-cache --soft-counts \
             --report-dir .cache/crawl-report
+      - name: Run gates on the refreshed artifact
+        run: ./scripts/agentic gates --tier fast
       - name: Detect changes
         id: diff
         run: |

@@ -1,382 +1,202 @@
 [
   {
     "confidence": "weak",
-    "evidence_quote": "Product and Engineering Personas primarily manage to direct costs only, resulting in reduction in accuracy of forecasting and budgets",
-    "from": "forecasting",
+    "evidence_quote": "Budgeting and Forecasting are done case by case, and approvals for spend-impacting changes are informal. Cost and usage visibility is inconsistent and often relies on manual reporting.",
+    "from": "architecting-workload-placement",
     "heuristic": "title-mention",
-    "rationale": "The allocation crawl assessment text names forecasting explicitly.",
+    "rationale": "The architecting-workload-placement crawl assessment text names budgeting explicitly (no direction implied).",
     "source": "inferred",
-    "to": "allocation",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Product and Engineering Personas are aware of their portion of shared platform/service costs and include these costs when forecasting and budgeting",
-    "from": "budgeting",
-    "heuristic": "title-mention",
-    "rationale": "The allocation walk assessment text names budgeting explicitly.",
-    "source": "inferred",
-    "to": "allocation",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Cost allocation metadata provides context to segment anomalies, allowing for easier analysis",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The anomaly-management walk assessment text names allocation explicitly.",
-    "source": "inferred",
-    "to": "anomaly-management",
-    "type": "informs"
+    "to": "budgeting",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Budgeting and Forecasting are done case by case, and approvals for spend-impacting changes are informal. Cost and usage visibility is inconsistent and often relies on manual reporting.",
-    "from": "budgeting",
+    "from": "architecting-workload-placement",
     "heuristic": "title-mention",
-    "rationale": "The architecting-workload-placement crawl assessment text names budgeting explicitly.",
+    "rationale": "The architecting-workload-placement crawl assessment text names forecasting explicitly (no direction implied).",
     "source": "inferred",
-    "to": "architecting-workload-placement",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Budgeting and Forecasting are done case by case, and approvals for spend-impacting changes are informal. Cost and usage visibility is inconsistent and often relies on manual reporting.",
-    "from": "forecasting",
-    "heuristic": "title-mention",
-    "rationale": "The architecting-workload-placement crawl assessment text names forecasting explicitly.",
-    "source": "inferred",
-    "to": "architecting-workload-placement",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Governance and policy compliance (for example landing zones or equivalent, tagging or allocation metadata) are manual or lightly scripted due to simplicity.",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The architecting-workload-placement crawl assessment text names allocation explicitly.",
-    "source": "inferred",
-    "to": "architecting-workload-placement",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Limited budget granularity (not consistently available by business unit, application) due to lack of allocation compliance or simplicity of environments",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The budgeting crawl assessment text names allocation explicitly.",
-    "source": "inferred",
-    "to": "budgeting",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Stakeholder teams (Product, Leadership, Engineering, Finance) have access to cloud cost forecasting data and budget allocations",
-    "from": "forecasting",
-    "heuristic": "title-mention",
-    "rationale": "The budgeting walk assessment text names forecasting explicitly.",
-    "source": "inferred",
-    "to": "budgeting",
-    "type": "informs"
+    "to": "forecasting",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Identified sources of utilization data, carbon data, internal metadata required to support Allocation and Analytics & Reporting",
     "from": "allocation",
     "heuristic": "title-mention",
-    "rationale": "The data-ingestion crawl assessment text names allocation explicitly.",
+    "rationale": "The data-ingestion crawl assessment text names allocation explicitly (no direction implied).",
     "source": "inferred",
     "to": "data-ingestion",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Managing a unified data repository of cloud usage and cost data, performance, sustainability, utilization and other correlated data",
-    "from": "sustainability",
-    "heuristic": "title-mention",
-    "rationale": "The data-ingestion run assessment text names sustainability explicitly.",
-    "source": "inferred",
-    "to": "data-ingestion",
-    "type": "informs"
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Business outcomes and unit metrics improve within Scopes, with early Unit Economics and Forecasting tied to demand signals.",
-    "from": "forecasting",
+    "from": "executive-strategy-alignment",
     "heuristic": "title-mention",
-    "rationale": "The executive-strategy-alignment walk assessment text names forecasting explicitly.",
+    "rationale": "The executive-strategy-alignment walk assessment text names forecasting explicitly (no direction implied).",
     "source": "inferred",
-    "to": "executive-strategy-alignment",
-    "type": "informs"
+    "to": "forecasting",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Business outcomes and unit metrics improve within Scopes, with early Unit Economics and Forecasting tied to demand signals.",
-    "from": "unit-economics",
+    "from": "executive-strategy-alignment",
     "heuristic": "title-mention",
-    "rationale": "The executive-strategy-alignment walk assessment text names unit-economics explicitly.",
+    "rationale": "The executive-strategy-alignment walk assessment text names unit-economics explicitly (no direction implied).",
     "source": "inferred",
-    "to": "executive-strategy-alignment",
-    "type": "informs"
+    "to": "unit-economics",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Covers basic FinOps processes and principles, such as Metadata & Account Organization, Cost Allocation, Ownership & Accountability",
     "from": "allocation",
     "heuristic": "title-mention",
-    "rationale": "The finops-education-enablement crawl assessment text names allocation explicitly.",
+    "rationale": "The finops-education-enablement crawl assessment text names allocation explicitly (no direction implied).",
     "source": "inferred",
     "to": "finops-education-enablement",
-    "type": "informs"
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Education is generally directed towards Usage Optimization and Rate Optimization as the main vehicles for improving business value",
-    "from": "rate-optimization",
+    "from": "finops-education-enablement",
     "heuristic": "title-mention",
-    "rationale": "The finops-education-enablement crawl assessment text names rate-optimization explicitly.",
+    "rationale": "The finops-education-enablement crawl assessment text names rate-optimization explicitly (no direction implied).",
     "source": "inferred",
-    "to": "finops-education-enablement",
-    "type": "informs"
+    "to": "rate-optimization",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Education is generally directed towards Usage Optimization and Rate Optimization as the main vehicles for improving business value",
-    "from": "usage-optimization",
+    "from": "finops-education-enablement",
     "heuristic": "title-mention",
-    "rationale": "The finops-education-enablement crawl assessment text names usage-optimization explicitly.",
+    "rationale": "The finops-education-enablement crawl assessment text names usage-optimization explicitly (no direction implied).",
     "source": "inferred",
-    "to": "finops-education-enablement",
-    "type": "informs"
+    "to": "usage-optimization",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Covers a broader range of FinOps processes and practices, such as Forecasting, Managing shared costs, Budget Management and Environmental Impact",
-    "from": "forecasting",
+    "from": "finops-education-enablement",
     "heuristic": "title-mention",
-    "rationale": "The finops-education-enablement walk assessment text names forecasting explicitly.",
+    "rationale": "The finops-education-enablement walk assessment text names forecasting explicitly (no direction implied).",
     "source": "inferred",
-    "to": "finops-education-enablement",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "A common repository of FinOps terminology, sustainability terminology, and documentation is available to all personas",
-    "from": "sustainability",
-    "heuristic": "title-mention",
-    "rationale": "The finops-education-enablement walk assessment text names sustainability explicitly.",
-    "source": "inferred",
-    "to": "finops-education-enablement",
-    "type": "informs"
+    "to": "forecasting",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Forecast is inclusive of rate optimization and commitment-based discounts",
-    "from": "rate-optimization",
+    "from": "forecasting",
     "heuristic": "title-mention",
-    "rationale": "The forecasting walk assessment text names rate-optimization explicitly.",
+    "rationale": "The forecasting walk assessment text names rate-optimization explicitly (no direction implied).",
     "source": "inferred",
-    "to": "forecasting",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Global policy for applying allocation metadata to prevent unallocated cost",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The forecasting run assessment text names allocation explicitly.",
-    "source": "inferred",
-    "to": "forecasting",
-    "type": "informs"
+    "to": "rate-optimization",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Forecast is inclusive of usage optimization opportunities",
-    "from": "usage-optimization",
+    "from": "forecasting",
     "heuristic": "title-mention",
-    "rationale": "The forecasting run assessment text names usage-optimization explicitly.",
+    "rationale": "The forecasting run assessment text names usage-optimization explicitly (no direction implied).",
     "source": "inferred",
-    "to": "forecasting",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Chargeback data is fully automated each month into the financial system with the ability to support charging, mark-ups and allocation both in advance and in arrears",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The invoicing-chargeback run assessment text names allocation explicitly.",
-    "source": "inferred",
-    "to": "invoicing-chargeback",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "A broader and more diverse set of KPIs are identified, defined, and documented across cost, performance, efficiency, and sustainability themes, reflecting a more comprehensive understanding of what drives technology value across the orga…",
-    "from": "sustainability",
-    "heuristic": "title-mention",
-    "rationale": "The kpis-benchmarking walk assessment text names sustainability explicitly.",
-    "source": "inferred",
-    "to": "kpis-benchmarking",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Software licenses and SaaS products are billed separately but complex cost sharing or allocation isn’t required in showback reporting",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The licensing-saas crawl assessment text names allocation explicitly.",
-    "source": "inferred",
-    "to": "licensing-saas",
-    "type": "informs"
+    "to": "usage-optimization",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Forecasting is updated to include software costs to reflect the total cost of a service/application",
     "from": "forecasting",
     "heuristic": "title-mention",
-    "rationale": "The licensing-saas walk assessment text names forecasting explicitly.",
+    "rationale": "The licensing-saas walk assessment text names forecasting explicitly (no direction implied).",
     "source": "inferred",
     "to": "licensing-saas",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "A variety of cloud cost data-sources and tools are used for forecasting by stakeholders across the organization, and consistency is not required",
-    "from": "forecasting",
-    "heuristic": "title-mention",
-    "rationale": "The planning-estimating crawl assessment text names forecasting explicitly.",
-    "source": "inferred",
-    "to": "planning-estimating",
-    "type": "informs"
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Estimates are inclusive of cloud rate optimization, commitment-based discounts and carbon targets",
-    "from": "rate-optimization",
+    "from": "planning-estimating",
     "heuristic": "title-mention",
-    "rationale": "The planning-estimating walk assessment text names rate-optimization explicitly.",
-    "source": "inferred",
-    "to": "planning-estimating",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "FinOps Core and Allied Personas (Product, Leadership, Engineering, Finance, Sustainability) have access to cloud cost estimate data",
-    "from": "sustainability",
-    "heuristic": "title-mention",
-    "rationale": "The planning-estimating walk assessment text names sustainability explicitly.",
-    "source": "inferred",
-    "to": "planning-estimating",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Estimates aligned to the organization’s allocation constructs being used across the organization for reporting cloud costs",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The planning-estimating run assessment text names allocation explicitly.",
-    "source": "inferred",
-    "to": "planning-estimating",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Automated allocation of discounts according to business requirements",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The rate-optimization run assessment text names allocation explicitly.",
+    "rationale": "The planning-estimating walk assessment text names rate-optimization explicitly (no direction implied).",
     "source": "inferred",
     "to": "rate-optimization",
-    "type": "informs"
+    "type": "related"
+  },
+  {
+    "confidence": "weak",
+    "evidence_quote": "Estimating scenarios support rolling, trend-based and driver-based Forecasting capability",
+    "from": "forecasting",
+    "heuristic": "title-mention",
+    "rationale": "The planning-estimating run assessment text names forecasting explicitly (no direction implied).",
+    "source": "inferred",
+    "to": "planning-estimating",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Incorporation of Licensing & SaaS, Sustainability, and Architecting guidance when making rate optimization decisions",
-    "from": "sustainability",
+    "from": "rate-optimization",
     "heuristic": "title-mention",
-    "rationale": "The rate-optimization run assessment text names sustainability explicitly.",
-    "source": "inferred",
-    "to": "rate-optimization",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Data enrichment and business logic added to incoming usage and billing datasets (e.g. synthetic tags, correcting values, combining other business datasets such as sustainability)",
-    "from": "sustainability",
-    "heuristic": "title-mention",
-    "rationale": "The reporting-analytics walk assessment text names sustainability explicitly.",
-    "source": "inferred",
-    "to": "reporting-analytics",
-    "type": "informs"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Sustainability metrics are beginning to be incorporated into allocation and chargeback models, enabling teams to understand their carbon footprint alongside their technology spend",
-    "from": "allocation",
-    "heuristic": "title-mention",
-    "rationale": "The sustainability walk assessment text names allocation explicitly.",
+    "rationale": "The rate-optimization run assessment text names sustainability explicitly (no direction implied).",
     "source": "inferred",
     "to": "sustainability",
-    "type": "informs"
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Sustainability metrics are fully embedded into allocation, chargeback, and unit economics models, enabling teams to track and be accountable for their carbon footprint alongside their technology spend in a consistent and repeatable way",
-    "from": "unit-economics",
+    "from": "sustainability",
     "heuristic": "title-mention",
-    "rationale": "The sustainability run assessment text names unit-economics explicitly.",
+    "rationale": "The sustainability run assessment text names unit-economics explicitly (no direction implied).",
     "source": "inferred",
-    "to": "sustainability",
-    "type": "informs"
+    "to": "unit-economics",
+    "type": "related"
   },
   {
     "confidence": "weak",
-    "evidence_quote": "Awareness of sustainability and carbon impact as a consideration in optimization decisions is emerging, but sustainability data is limited in availability and not yet consistently incorporated into usage optimization recommendations or p…",
+    "evidence_quote": "A comprehensive usage optimization strategy is in place that provides clear guidance across all usage types and FinOps Scopes, defines multiple approaches to addressing waste and inefficiency, sets specific optimization expectations for …",
     "from": "sustainability",
     "heuristic": "title-mention",
-    "rationale": "The usage-optimization crawl assessment text names sustainability explicitly.",
+    "rationale": "The usage-optimization run assessment text names sustainability explicitly (no direction implied).",
     "source": "inferred",
     "to": "usage-optimization",
-    "type": "informs"
+    "type": "related"
+  },
+  {
+    "confidence": "weak",
+    "evidence_quote": "Sustainability efficiency where measurable (for example emissions or energy intensity per unit of work)",
+    "from": "architecting-workload-placement",
+    "heuristic": "title-mention",
+    "rationale": "The architecting-workload-placement KPI bullets text names sustainability explicitly (no direction implied).",
+    "source": "inferred",
+    "to": "sustainability",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Architecting products and services to support publishing information related to their unit economics",
-    "from": "unit-economics",
+    "from": "reporting-analytics",
     "heuristic": "title-mention",
-    "rationale": "The reporting-analytics KPI bullets text names unit-economics explicitly.",
+    "rationale": "The reporting-analytics KPI bullets text names unit-economics explicitly (no direction implied).",
     "source": "inferred",
-    "to": "reporting-analytics",
-    "type": "informs"
-  },
-  {
-    "confidence": "moderate",
-    "evidence_quote": "Carbon emissions are allocatable to individual teams, products, and workloads across all FinOps Scopes, enabling accountability and driving informed decision making at the team level. Organizations should be aware that carbon allocation …",
-    "from": "allocation",
-    "heuristic": "title-mention-dependency-language",
-    "rationale": "The sustainability KPI bullets text names allocation explicitly with dependency language.",
-    "source": "inferred",
-    "to": "sustainability",
-    "type": "prerequisite"
-  },
-  {
-    "confidence": "weak",
-    "evidence_quote": "Sustainability metrics are integrated into existing FinOps reporting and forecasting processes, enabling the organization to project future carbon emissions alongside future technology spend",
-    "from": "forecasting",
-    "heuristic": "title-mention",
-    "rationale": "The sustainability KPI bullets text names forecasting explicitly.",
-    "source": "inferred",
-    "to": "sustainability",
-    "type": "informs"
+    "to": "unit-economics",
+    "type": "related"
   },
   {
     "confidence": "weak",
     "evidence_quote": "Unit Economics KPIs are defined and tracked to measure the efficiency of technology usage relative to meaningful units of business value including cost, compute consumption, or carbon emissions per customer, transaction, or other relevan…",
     "from": "unit-economics",
     "heuristic": "title-mention",
-    "rationale": "The usage-optimization KPI bullets text names unit-economics explicitly.",
+    "rationale": "The usage-optimization KPI bullets text names unit-economics explicitly (no direction implied).",
     "source": "inferred",
     "to": "usage-optimization",
-    "type": "informs"
+    "type": "related"
   }
 ]

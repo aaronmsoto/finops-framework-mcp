@@ -7,7 +7,13 @@ import type {
 } from "../../shared/index.js";
 import { nearestMatches } from "../../shared/index.js";
 import { prerequisiteClosure, relatedEdges } from "./graph.js";
-import { UNOFFICIAL_ACTIONS_NOTE, overviewMd } from "./render.js";
+import {
+  UNOFFICIAL_ACTIONS_NOTE,
+  collectionMd,
+  footer,
+  overviewMd,
+  personaMd,
+} from "./render.js";
 import { buildSearchIndex, search, type SearchEntityType } from "./search.js";
 import { URI } from "./uris.js";
 
@@ -52,8 +58,18 @@ function decodeCursor(raw: string): Cursor | null {
   }
 }
 
+type ContentBlock =
+  | { type: "text"; text: string }
+  | {
+      type: "resource_link";
+      uri: string;
+      name: string;
+      description?: string;
+      mimeType?: string;
+    };
+
 type ToolResult = {
-  content: { type: "text"; text: string }[];
+  content: ContentBlock[];
   structuredContent?: Record<string, unknown>;
   isError?: boolean;
 };
@@ -73,6 +89,9 @@ function ok(structured: Record<string, unknown>, summary?: string): ToolResult {
 
 export function registerTools(server: McpServer, artifact: Artifact): void {
   const index = buildSearchIndex(artifact);
+  // Tools are the canonical distribution path, so leaf-level content must
+  // carry the same CC BY 4.0 attribution as resources (critique-2 M7').
+  const attribution = (sourceUrl: string) => footer(artifact, sourceUrl);
   const capSlugs = artifact.capabilities.map((c) => c.slug);
   const dataVersion = artifact.manifest.data_version;
 
@@ -253,6 +272,7 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
           }),
         ),
         total: z.number(),
+        note: z.string().optional(),
         nextCursor: z.string().optional(),
       },
       annotations: RO,
@@ -294,13 +314,21 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
         domain: c.domain_slug,
         summary: c.summary.slice(0, 200),
       }));
+      const alliedNote =
+        persona &&
+        artifact.personas.find((x) => x.slug === persona.toLowerCase())
+          ?.category === "allied"
+          ? `Note: ${persona} is an allied persona — the framework maps capability activities to Allied Personas collectively, not to ${persona} individually.\n`
+          : "";
       return ok(
         {
           capabilities: rows,
           total: caps.length,
+          ...(alliedNote ? { note: alliedNote.trim() } : {}),
           ...(pg.nextCursor ? { nextCursor: pg.nextCursor } : {}),
         },
-        rows.map((r) => `- ${r.title} (${r.slug}) [${r.domain}]`).join("\n"),
+        alliedNote +
+          rows.map((r) => `- ${r.title} (${r.slug}) [${r.domain}]`).join("\n"),
       );
     },
   );
@@ -321,7 +349,7 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     {
       title: "Get one capability",
       description:
-        "One capability's content, section-selectable via `include` to control size. Default include is [summary, definition] (~1-2k tokens); add sections as needed: maturity (Crawl/Walk/Run prose), activities (per-persona, filter with `persona`), kpis (bullets+examples+featured titles), relationships (graph edges, inferred marked), headline_groups, inputs_outputs. For the full document in one shot, read the finops://framework/capabilities/{slug} resource instead.",
+        "One capability's content, section-selectable via `include` to control size. Default include is [summary, definition] (~1-2k tokens). Approximate extra cost per section: maturity ~2.5k tokens, activities ~3k (filter with `persona`), kpis ~1k, relationships ~1k, headline_groups/inputs_outputs <1k; requesting ALL sections is roughly 8k tokens — prefer the finops://framework/capabilities/{slug} resource for the full document.",
       inputSchema: {
         slug: z.string().describe("Capability slug, e.g. 'allocation'"),
         include: z
@@ -341,6 +369,8 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
         domain: z.string(),
         sections: z.record(z.string(), z.unknown()),
         uri: z.string(),
+        source_url: z.string(),
+        license: z.string(),
       },
       annotations: RO,
     },
@@ -400,10 +430,16 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
         domain: c.domain_slug,
         sections,
         uri: URI.capability(c.slug),
+        source_url: c.source_url,
+        license: c.license,
       };
       return {
         content: [
-          { type: "text", text: JSON.stringify(structured, null, 2) },
+          {
+            type: "text",
+            text:
+              JSON.stringify(structured, null, 2) + attribution(c.source_url),
+          },
           capLink(c.slug),
         ],
         structuredContent: structured,
@@ -424,6 +460,10 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
           .enum(LEVELS)
           .optional()
           .describe("One level; omit for all three official levels"),
+        level: z
+          .enum(LEVELS)
+          .optional()
+          .describe("Alias for `maturity` (same values)"),
       },
       outputSchema: {
         capability: z.string(),
@@ -444,9 +484,10 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
       },
       annotations: RO,
     },
-    ({ capability, maturity }) => {
+    ({ capability, maturity, level }) => {
       const c = findCapability(capability);
       if (isErr(c)) return c;
+      maturity = maturity ?? level;
       if (maturity === "pre-crawl") {
         return ok(
           {
@@ -484,7 +525,8 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
                   .map((i) => `${i.parent_ordinal ? "  " : ""}- ${i.text}`)
                   .join("\n"),
             )
-            .join("\n\n"),
+            .join("\n\n") +
+          attribution(c.source_url),
       );
     },
   );
@@ -576,28 +618,46 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
         related_capability_slugs: k.related_capability_slugs,
         featured_on: k.featured_on,
         uri: URI.kpi(k.slug),
+        source_url: k.source_url,
+        license: k.license,
       }));
-      return ok(
-        {
-          kpis: rows,
-          total: kpis.length,
-          ...(pg.nextCursor ? { nextCursor: pg.nextCursor } : {}),
-        },
-        `${kpis.length} KPI(s)` +
-          (rows.length
-            ? ":\n" +
-              rows
-                .map(
-                  (k) =>
-                    `- ${k.title} (${k.slug})${k.formula ? " [formula]" : ""}${
-                      k.featured_on.length
-                        ? ` featured on: ${k.featured_on.join(", ")}`
-                        : ""
-                    }`,
-                )
-                .join("\n")
-            : ""),
-      );
+      const structured = {
+        kpis: rows,
+        total: kpis.length,
+        ...(pg.nextCursor ? { nextCursor: pg.nextCursor } : {}),
+      };
+      // Text must be functionally equivalent to structuredContent for hosts
+      // that surface only content blocks (critique-2 BLOCKER): full records,
+      // plus an explicit truncation note when paginated.
+      const truncationNote = pg.nextCursor
+        ? `\n\nShowing ${rows.length} of ${kpis.length} — pass cursor: "${pg.nextCursor}" for more.`
+        : "";
+      const result: ToolResult = {
+        content: [
+          {
+            type: "text",
+            text:
+              JSON.stringify(structured, null, 2) +
+              truncationNote +
+              (rows.length > 0
+                ? attribution(
+                    rows[0]?.source_url ?? "https://www.finops.org/kpi/",
+                  )
+                : ""),
+          },
+        ],
+        structuredContent: structured,
+      };
+      if (slug && rows.length === 1) {
+        result.content.push({
+          type: "resource_link",
+          uri: URI.kpi(rows[0]?.slug ?? ""),
+          name: rows[0]?.slug ?? "",
+          description: `Full ${rows[0]?.title ?? ""} KPI document`,
+          mimeType: "text/markdown",
+        });
+      }
+      return result;
     },
   );
 
@@ -725,7 +785,8 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
           inferred: r.inferred as unknown as Record<string, unknown>[],
           note,
         },
-        `${c.slug}: ${r.official.length} official, ${r.inferred.length} inferred edge(s).\n` +
+        `official = evidenced by finops.org page links / shared-KPI references (the Foundation publishes no relationship graph); inferred = unofficial extension.\n` +
+          `${c.slug}: ${r.official.length} official, ${r.inferred.length} inferred edge(s).\n` +
           [...r.official, ...r.inferred]
             .slice(0, 30)
             .map(
@@ -786,12 +847,18 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
       const note =
         `Characteristics observed at each level above ${current_level} up to ${target_level} — ` +
         `use as assessment evidence, not as a to-do list. ${UNOFFICIAL_ACTIONS_NOTE}`;
+      const hasPrereqs = [
+        ...artifact.relationships_official,
+        ...artifact.relationships_inferred,
+      ].some((rel) => rel.type === "prerequisite" && rel.to === c.slug);
       return ok(
         {
           capability: c.slug,
           note,
           gap,
-          related_prerequisites_hint: `Run get_prerequisites(capability: "${c.slug}") to see which other capabilities this path leans on (inferred).`,
+          related_prerequisites_hint: hasPrereqs
+            ? `Run get_prerequisites(capability: "${c.slug}") to see which other capabilities this path leans on (inferred).`
+            : `No prerequisite edges exist for ${c.slug} (the framework publishes none); get_related(capability: "${c.slug}") shows related capabilities instead.`,
         },
         `${note}\n\n` +
           gap
@@ -799,7 +866,8 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
               (g) =>
                 `## ${g.maturity}\n${g.characteristics.map((t) => `- ${t}`).join("\n")}`,
             )
-            .join("\n\n"),
+            .join("\n\n") +
+          attribution(c.source_url),
       );
     },
   );
@@ -869,6 +937,17 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
             `Unknown persona "${persona}". Valid: ${artifact.personas.map((x) => x.slug).join(", ")}`,
           );
         }
+        const namedOther = (item: string): string | undefined => {
+          const m =
+            item.match(/^\(([A-Za-z /]+)\)/) ??
+            item.match(/^as an? ([a-z ]+?) persona/i);
+          const named = m?.[1]?.trim().toLowerCase();
+          if (!named) return undefined;
+          const normalized = named.replace(/[^a-z]+/g, "-");
+          return normalized !== p.slug && normalized.length > 2
+            ? normalized
+            : undefined;
+        };
         const entries = artifact.capabilities.flatMap((c) =>
           c.functional_activities
             .filter(
@@ -880,7 +959,13 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
             .map((f) => ({
               capability: c.slug,
               heading: f.heading,
-              activities: f.items,
+              activities:
+                f.persona.kind === "allied-group"
+                  ? f.items.map((i) => {
+                      const other = namedOther(i);
+                      return other ? `[addressed to ${other}] ${i}` : i;
+                    })
+                  : f.items,
               group_level: f.persona.kind === "allied-group",
             })),
         );
@@ -919,6 +1004,76 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
               `## ${e.persona}\n${e.activities.map((a) => `- ${a}`).join("\n")}`,
           )
           .join("\n\n"),
+      );
+    },
+  );
+
+  // ---- get_entity ------------------------------------------------------------
+  // Tools-only parity for small entity types whose full text otherwise lives
+  // only in resources (critique-2 M3').
+  server.registerTool(
+    "get_entity",
+    {
+      title: "Get full text of a small framework entity",
+      description:
+        "Full rendered markdown for entity types that have no dedicated tool: the 6 principles, 3 phases, 4 domains, 5 technology categories, the Scopes guidance document, or one persona. Omit `slug` to get the whole collection (they are small); pass a persona slug for a single persona document. For capabilities use get_capability; for KPIs get_kpis; for maturity levels get_maturity_model.",
+      inputSchema: {
+        entity_type: z.enum([
+          "principles",
+          "phases",
+          "domains",
+          "technology-categories",
+          "scopes",
+          "persona",
+        ]),
+        slug: z
+          .string()
+          .optional()
+          .describe("Required for entity_type 'persona'; ignored otherwise"),
+      },
+      outputSchema: {
+        entity_type: z.string(),
+        slug: z.string().optional(),
+        markdown: z.string(),
+        uri: z.string(),
+      },
+      annotations: RO,
+    },
+    ({ entity_type, slug }) => {
+      if (entity_type === "persona") {
+        if (!slug) {
+          return err(
+            `entity_type "persona" needs a slug. Valid: ${artifact.personas.map((x) => x.slug).join(", ")}`,
+          );
+        }
+        const p = artifact.personas.find((x) => x.slug === slug.toLowerCase());
+        if (!p) {
+          return err(
+            `Unknown persona "${slug}". Valid: ${artifact.personas.map((x) => x.slug).join(", ")}`,
+          );
+        }
+        const markdown = personaMd(artifact, p);
+        return ok(
+          {
+            entity_type,
+            slug: p.slug,
+            markdown,
+            uri: URI.persona(p.slug),
+          },
+          markdown,
+        );
+      }
+      const uriByType: Record<string, string> = {
+        principles: URI.principles,
+        phases: URI.phases,
+        domains: URI.domains,
+        "technology-categories": URI.technologyCategories,
+        scopes: URI.scopes,
+      };
+      const markdown = collectionMd(artifact, entity_type);
+      return ok(
+        { entity_type, markdown, uri: uriByType[entity_type] as string },
+        markdown,
       );
     },
   );
@@ -973,7 +1128,11 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
               `## ${l.title} (official)\n**Characteristics**\n${l.characteristics_md}\n**Sample goals/KPIs**\n${l.sample_goals_md}`,
           )
           .join("\n\n") +
-          `\n\n## ${artifact.maturity_extension.title}\n${artifact.maturity_extension.description_md}`,
+          `\n\n## ${artifact.maturity_extension.title}\n${artifact.maturity_extension.description_md}` +
+          attribution(
+            artifact.maturity_levels[0]?.source_url ??
+              "https://www.finops.org/framework/maturity-model/",
+          ),
       ),
   );
 
@@ -983,7 +1142,7 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     {
       title: "Data changelog",
       description:
-        "What changed between data versions of this server's crawled artifact (rolling summaries recorded at each refresh). This reflects crawl-to-crawl differences in finops.org content, not a Foundation-published changelog.",
+        "What changed between data versions of this server's crawled artifact (rolling window of the 20 most recent refreshes — the crawler caps the log at 20, so this tool covers the full retained history; the same data is at finops://framework/meta/changelog). Reflects crawl-to-crawl differences in finops.org content, not a Foundation-published changelog.",
       inputSchema: {
         limit: z.number().int().min(1).max(20).default(5),
       },

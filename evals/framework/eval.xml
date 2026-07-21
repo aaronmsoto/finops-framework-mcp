@@ -14,7 +14,7 @@
   </eval>
   <eval id="2">
     <question>Does the Sustainability capability have any prerequisite capability according to this server's relationship graph? If so, which capability, at what minimum maturity, and is that relationship official FinOps Foundation guidance?</question>
-    <expected>Yes: allocation is a prerequisite of sustainability (minimum maturity crawl / "present at any level"). It is NOT official — it is an unofficial inference (source: inferred, confidence moderate) backed by a quoted evidence sentence; the Foundation publishes no prerequisite graph.</expected>
+    <expected>No prerequisite edges exist for sustainability (or any capability): the FinOps Foundation publishes no prerequisite graph, and this server's restrained inference pass found no dependency-language evidence strong enough to assert one. The correct answer states that explicitly (the tool's summary says prerequisite typing would be an unofficial inference) and may point to get_related, where allocation appears as an inferred *related* capability with a quoted evidence sentence.</expected>
     <expected_calls>get_prerequisites(capability: "sustainability")</expected_calls>
   </eval>
   <eval id="3">

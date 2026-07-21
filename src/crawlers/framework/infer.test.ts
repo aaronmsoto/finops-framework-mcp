@@ -41,9 +41,10 @@ describe("inferredRelationships (restrained per critique M14)", () => {
   const caps = [
     cap("allocation", "Allocation"),
     cap("forecasting", "Forecasting"),
+    cap("budgeting", "Budgeting"),
   ];
 
-  it("emits informs edges with quoted evidence for plain title mentions", () => {
+  it("emits undirected related edges with quoted evidence for plain title mentions", () => {
     const edges = inferredRelationships(caps, [
       action(
         "forecasting",
@@ -52,13 +53,29 @@ describe("inferredRelationships (restrained per critique M14)", () => {
     ]);
     expect(edges).toHaveLength(1);
     const e = edges[0];
-    expect(e?.type).toBe("informs");
-    expect(e?.from).toBe("allocation");
-    expect(e?.to).toBe("forecasting");
+    expect(e?.type).toBe("related");
+    expect([e?.from, e?.to].sort()).toEqual(["allocation", "forecasting"]);
     expect(e?.source).toBe("inferred");
     expect(e?.evidence_quote).toMatch(/Allocation metadata/);
     expect(e?.confidence).toBe("weak");
     expect(e?.heuristic).toBe("title-mention");
+  });
+
+  it("ignores lowercase common-noun usage of single-word titles", () => {
+    const edges = inferredRelationships(caps, [
+      action("forecasting", "Automated allocation of discounts is tracked."),
+    ]);
+    expect(edges).toHaveLength(0);
+  });
+
+  it("ignores title mentions inside parenthetical persona lists", () => {
+    const edges = inferredRelationships(caps, [
+      action(
+        "budgeting",
+        "Personas (Product, Leadership, Engineering, Allocation) have access to estimates.",
+      ),
+    ]);
+    expect(edges).toHaveLength(0);
   });
 
   it("emits prerequisite only with dependency language, at moderate confidence", () => {

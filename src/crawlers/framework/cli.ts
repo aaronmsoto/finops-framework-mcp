@@ -278,6 +278,16 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
     if (c.functional_activities.length === 0)
       errors.push(`${c.slug}: no functional activities`);
   }
+  for (const k of kpis) {
+    if (
+      k.formula &&
+      (/:\s*$/.test(k.formula) || /data sources?:/i.test(k.formula))
+    ) {
+      errors.push(
+        `${k.slug}: formula looks mis-segmented ("${k.formula.slice(0, 60)}…")`,
+      );
+    }
+  }
   const rawFallback = actions.filter(
     (a) => a.parse_quality === "raw_fallback",
   ).length;

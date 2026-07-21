@@ -116,6 +116,47 @@ describe("parseCapabilityPage — intersecting-disciplines (repeated Maturity h2
   });
 });
 
+describe("parseCapabilityPage — sustainability (h3-style page-top callout)", () => {
+  const page = parseCapabilityPage(
+    fixture("capability-sustainability.html"),
+    URL("sustainability"),
+  );
+
+  it("captures headline groups labeled with h3 (critique-2 B3')", () => {
+    expect(page.headline_groups.length).toBeGreaterThanOrEqual(2);
+    expect(page.headline_groups.every((g) => g.items.length > 0)).toBe(true);
+  });
+
+  it("never pollutes headline groups with persona role-play blocks", () => {
+    expect(
+      page.headline_groups.some((g) => /^as someone in/i.test(g.label)),
+    ).toBe(false);
+  });
+});
+
+describe("parseCapabilityPage — executive-strategy-alignment (Measure(s) heading)", () => {
+  const page = parseCapabilityPage(
+    fixture("capability-executive-strategy-alignment.html"),
+    URL("executive-strategy-alignment"),
+  );
+
+  it('parses bullets under the "Measure(s) of Success & KPIs" variant (critique-2 B4\')', () => {
+    expect(page.kpi_bullets.length).toBeGreaterThanOrEqual(10);
+  });
+
+  it("keeps persona blocks out of headline groups and maps Executive→leadership", () => {
+    expect(
+      page.headline_groups.some((g) => /^as someone in/i.test(g.label)),
+    ).toBe(false);
+    expect(
+      page.functional_activities.some(
+        (f) =>
+          f.persona.kind === "core" && f.persona.persona_slug === "leadership",
+      ),
+    ).toBe(true);
+  });
+});
+
 describe("resolveActivityPersona", () => {
   it("maps plain core persona headings", () => {
     expect(resolveActivityPersona("FinOps Practitioner")).toEqual({

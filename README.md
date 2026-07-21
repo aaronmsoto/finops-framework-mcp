@@ -53,10 +53,11 @@ Claude Desktop (`claude_desktop_config.json`):
 The artifact directory defaults to `./data/framework`; override with
 `FINOPS_MCP_DATA` or the first CLI argument.
 
-Surface: 12 read-only tools (`get_framework_info` is the entry point, then
+Surface: 13 read-only tools (`get_framework_info` is the entry point, then
 `search_framework`, `list_capabilities`, `get_capability`, `get_actions`,
-`get_kpis`, `get_prerequisites`, `get_related`, `assess_maturity_path`,
-`map_personas`, `get_maturity_model`, `get_changelog`), `finops://framework/…`
+`get_kpis`, `get_entity`, `get_prerequisites`, `get_related`,
+`assess_maturity_path`, `map_personas`, `get_maturity_model`,
+`get_changelog`), `finops://framework/…`
 resources for full documents, and 4 prompts (`explain-framework`,
 `assess-capability-maturity`, `plan-maturity-roadmap`,
 `map-personas-to-capabilities`).

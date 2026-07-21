@@ -48,8 +48,12 @@ function addTokens(
 }
 
 function snippetOf(text: string): string {
+  // Strip markdown constructs only — never intra-word characters like
+  // hyphens ("technology-related" must survive, critique-2).
   const flat = text
-    .replace(/[#*\->]/g, "")
+    .replace(/^[#>\-*]+\s*/gm, "")
+    .replace(/[*_`]/g, "")
+    .replace(/\[([^\]]*)\]\(([^)]*)\)/g, "$1")
     .replace(/\s+/g, " ")
     .trim();
   return flat.length > 220 ? `${flat.slice(0, 217)}…` : flat;

@@ -146,53 +146,6 @@
           "Define and maintain a strategy to document apportionment of shared costs and impacts to allocation targets"
         ],
         "label": "Validate allocation compliance"
-      },
-      {
-        "items": [
-          "Develop naming standards for all required and optional layers of hierarchical groupings (Accounts, Projects, Folders, Subscriptions, Departments, Organizational Units, etc.)",
-          "Develop compliance standards for various groups",
-          "Coordinate with COE or Data Platform teams to coordinate Tagging Strategy and metadata needs with other operational or security requirements",
-          "Coordinate with owners of shared services to determine the appropriate level of shared cost management for each and document in Shared Cost Strategy",
-          "Coordinate with Leadership on appropriate level of granularity for Cost Allocation Strategy",
-          "Evaluate compliance with established allocation strategies"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Provide feedback on cost allocations made to products within my control"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Determine the organizational and budgetary units to which costs will be allocated",
-          "Determine how to allocate percentages of any shared cost items"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Determine how and when metadata will be applied to hierarchical groupings and resources",
-          "Enforce and automate metadata standards for cost allocation metadata",
-          "Identify and provide all metadata sources required for analysis and cost allocation",
-          "Comply with organizational allocation strategies where required, and provide feedback on issues or opportunities to improve"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Review and approve cost allocations assigned to organizations within my control",
-          "Review and approve cost allocation strategies",
-          "Determine and provide feedback when cost allocation must become more granular or mature"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Provide feedback to FinOps personas on appropriate level of granularity and compliance requirements for allocation related to areas within my control (e.g. IT Security, ITAM, Service Management, IT Financial Management, etc.)"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
       }
     ],
     "inputs_outputs_md": "- Provide requirements to inform Data Ingestion activities as a feedback loop for improving Allocation strategy goals\n- Receive requirements from initiatives related to Reporting & Analytics activities to inform the requirements of Allocation mappings to achieve organizational reporting goals\n- Incorporate industry recognized adoption frameworks / architecture frameworks for technology categories from data and technology service providers\n- Consolidate existing tag/label standards and establish consistent naming conventions\n- Overlay the organizational business metadata for each element of allocation metadata. For example: constructs like Project Names, Application IDs, Cost Center IDs, …etc.\n- Establish reports that surface any spend that is not allocated by the established allocation metadata\n- Align roles for organizational P&L groupings to map cost ownership back to Invoicing & Chargeback activities\n- Leverage the capabilities of CI/CD, platform, data provider capabilities\n- Ensure allocation requirements align with Policy & Governance activities, including tag compliance, allocation compliance, governance mechanisms",
@@ -315,51 +268,6 @@
           "Document anomalies and their resolutions"
         ],
         "label": "Manage anomalies"
-      },
-      {
-        "items": [
-          "Establish requirements for anomaly detection tool selection that is appropriate for cost monitoring and capable of defining, refining, detecting and alerting unexpected spending events (cost anomalies)",
-          "Establish requirements for Anomaly automation and documentation tooling or processes and integration to appropriate ticketing or process management systems in place",
-          "Document and communicate anomaly detection mechanism and thresholds to all stakeholders",
-          "Work with stakeholder teams to establish anomaly detection thresholds and reporting/notifications frequency",
-          "Ensure that anomaly detection is tied appropriately to cost allocation metadata, providing feedback to the Allocation capability when additional metadata are required",
-          "Ensure anomaly detection tooling has access to raw spending data at appropriate real-time granularity and frequency",
-          "Generate reports that surface all and/or alerted anomalous spending"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Ensure my team checks for or receives anomalous spending alerts",
-          "Ensure that my team is aware of the correct processes and actions to respond to and address a cost anomaly",
-          "Ensure the appropriate metadata are applied to resources within my control to allow anomaly detection to occur",
-          "Provide feedback to FinOps on the correctness of established thresholds and detection coverage",
-          "Investigate and determine the causes and scope of detected anomalies and document false positives or plans of action",
-          "Resolve issues causing anomalous spending and document the resolution of anomalies",
-          "Proactively alert other Personas as to large unexpected anomalous spending that is planned and likely to create Anomaly alerts that would be troubling (e.g. launch of new environment)"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Monitor and investigate detected and reported anomalies for systems within my areas of responsibility",
-          "Assist Investigating and resolving reported anomalies and document resolutions in concert with engineering teams in my areas of responsibility"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Help establish anomalous percentage thresholds that trigger financial review of budget to actual spend",
-          "Provide contingency funding sources within forecasts for costs to accommodate anomalous spending trends that align with established thresholds"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Establish anomalous percentage thresholds that trigger action or attention",
-          "Provide guidelines and support policies related to OKRs and KPIs and mandate anomaly management activities by engineering and product teams"
-        ],
-        "label": "As someone in a Leadership role, I will…"
       }
     ],
     "inputs_outputs_md": "- Cost and usage data provided via Data Ingestion capability\n- Anomaly detection tooling (data provider, tooling vendor, homegrown tool)\n- Cost allocation metadata established and aligned to the organization’s reporting needs\n- Allocation strategy assigning usage to specific teams responsible for its oversight\n- Anomalous spend notification to stakeholder teams\n- Stakeholder real-time visibility into cost and usage reporting data\n- Policy & Governance associated with expectations for managing anomalies\n- Documentation of detection, analysis, and resolution processes and expectation of personas\n- Reporting & Analysis will be required to investigate and analyze anomalous spending\n- Workload optimization may be required to remediate usage-based causes of anomalous spending or to turn off resources which are not being used",
@@ -480,65 +388,79 @@
     "headline_groups": [
       {
         "items": [
-          "Connect architecting and workload placement options to business goals using business unit metrics",
-          "Assess financial viability and cost effectiveness of workload options, including modernization and placement changes",
-          "Provide transparent cost, usage, and impact decision support during design, intake, and onboarding",
-          "Partner with Engineering on architecture and workload placement plans to ensure allocation metadata, policy compliance, and forecast models are in place",
-          "Capture and track value benefits realization, and feed outcomes into future decision making"
+          "Understand responsibilities across the FinOps Personas involved",
+          "Understand the review cadence and governance touch points",
+          "Define criteria for new workload demands and existing workload change needs (modernization, re-platforming, relocation, replacement, consolidation, retirement)"
         ],
-        "label": "As someone in the FinOps team role, I will…"
+        "label": "Manage architecting and workload placement strategy"
       },
       {
         "items": [
-          "Define business outcomes and business unit metrics used to evaluate workload options and tradeoffs",
-          "Maintain competence in services and patterns used by my products, and identify opportunities to improve value and cost effectiveness",
-          "Partner with Engineering (including architecture) and FinOps Practitioner Personas to compare options (for example redesign, replace, consolidate) and prioritize work based on business needs",
-          "Validate success measures and support post-change evaluation of outcomes"
+          "Identify candidates from new demand and existing workloads, guided by spend, usage, value and adoption signals",
+          "Confirm constraints and non-functional requirements (security, reliability, regulatory, performance, compliance, sustainability)",
+          "Validate the viable candidate set"
         ],
-        "label": "As someone in a Product role, I will…"
+        "label": "Evaluate workloads for attention"
       },
       {
         "items": [
-          "Assess financial viability of workload decisions, including modernization and placement changes",
-          "Partner with FinOps Practitioner and Product Personas to understand planned changes, forecasts, and expected business outcomes",
-          "Support budgeting and forecasting practices required for decision making and onboarding execution",
-          "Capture and track value through benefits realization after changes are implemented"
+          "Understand architectures and service usage patterns",
+          "Understand impacts of architectural change, including second-order effects",
+          "Balance scale, speed, cost, skills, and operational constraints"
         ],
-        "label": "As someone in a Finance role, I will…"
+        "label": "Understand cost-effective designs and usage patterns"
       },
       {
         "items": [
-          "Evaluate workload design and placement options against operational requirements, constraints, and business objectives",
-          "Identify and deliver improvements across modernization, re-platforming, and placement to increase value and cost effectiveness while meeting reliability, scalability, and performance needs",
-          "Implement and operate required foundations and shared services, using automation and infrastructure as code where appropriate",
-          "Ensure compliance with governance and operational standards (for example allocation metadata, security controls, observability), and confirm operational readiness",
-          "Execute and coordinate implementation and onboarding to minimize risk and impact, and follow approved architectures and deployment patterns"
+          "Develop the financial business case",
+          "Create value comparisons between architectural options and placement options across relevant technology categories like public cloud, data center, private cloud",
+          "Assess functional and availability impact to the service or application",
+          "Define success measures and validation approach"
         ],
-        "label": "As someone in an Engineering role, I will…"
+        "label": "Build the decision case"
       },
       {
         "items": [
-          "Set direction and guardrails for Architecting and Workload Placement aligned to business priorities",
-          "Sponsor shared accountability across FinOps Personas and ensure governance touchpoints are effective",
-          "Make informed decisions to prioritize workload candidates and approve tradeoffs across value, cost effectiveness, risk, and operational objectives",
-          "Reinforce continuous modernization by acting on post-change outcomes and lessons learned",
-          "Provide strategic directions to reinvest the savings obtained from the workloads modernized in back to the business initiatives"
+          "Define the approach for workload option set (for example, modernization, re-platforming, relocation, replacement, consolidation, retirement)",
+          "Set sequencing, dependencies, milestones, acceptance criteria, and controls",
+          "Plan for transition states and overlap where applicable (for example parallel run, phased rollout, decommissioning)"
         ],
-        "label": "As someone in a Leadership role, I will…"
+        "label": "Plan implementation and change"
       },
       {
         "items": [
-          "Provide constraints, requirements, and decision support from my domain (for example security, ITAM, ITFM, sustainability, risk, compliance)",
-          "Support implementation and onboarding by ensuring required controls, standards, and reporting expectations are met"
+          "Establish required implementation foundations and shared services (for example delivery pipelines, observability, security controls, and landing zones or equivalent where relevant)",
+          "Ensure transparency to cost, usage, and impact throughout implementation (including baseline, change tracking, and outcome validation)",
+          "Establish robust program management processes and workflows"
         ],
-        "label": "As someone in an Allied Persona role, I will…"
+        "label": "Coordinate execution"
+      },
+      {
+        "items": [
+          "Build a repeatable review cadence and decision process",
+          "Perform post-change evaluation against success criteria and expected outcomes",
+          "Capture lessons learned and measurable outcomes",
+          "Feed improvements into standards, patterns, and future decisions",
+          "Revisit decisions as usage, pricing, and constraints evolve"
+        ],
+        "label": "Establish an effective review cadence and continuously modernize"
       }
     ],
     "inputs_outputs_md": "#### Inputs\n\n**Business value and success measures**\n\n- Business unit metrics and value metrics for workloads and systems\n- Customer and stakeholder outcomes (for example customer satisfaction)\n- Decision case assumptions, success criteria, and validation approach\n\n**Cost efficiency**\n\n- Infrastructure cost inputs\n- Support and run cost inputs\n- Modernization and implementation cost inputs (including transition or migration costs where applicable)\n\n**Resiliency and risk**\n\n- Service quality objectives and performance indicators\n- Security posture and compliance requirements\n- Operational stability inputs (for example incident history, support model, operational constraints)\n\n**Velocity**\n\n- Developer productivity inputs\n- Release frequency and delivery performance inputs\n- Business agility needs and constraints (for example time-to-market expectations)\n\n**Innovation**\n\n- Return on innovation inputs (for example expected benefits, option value)\n- Employee experience inputs (for example productivity friction, platform usability)\n\n**Sustainability**\n\n- Carbon footprint and sustainability reporting requirements where available\n- Power usage effectiveness\n- Circular economy considerations (for example asset lifecycle, reuse, disposal constraints)\n\n**Architecture, patterns, and usage behavior**\n\n- Reference architectures, approved patterns, and service usage patterns\n- Known cost drivers and second-order impacts (dependencies, integration, data movement, tooling)\n\n**Governance and enablement**\n\n- Allocation metadata standards and cost visibility requirements\n- Foundations and shared services (landing zones or equivalent where relevant)\n- Automation and infrastructure as code standards\n- Tooling readiness to detect workloads and report cost, usage, and impact\n\n#### Outputs\n\n**Triage and cadence**\n\n- Repeatable review cadence and decision process for Architecting and Workload Placement\n- Validated candidate set and prioritization (value vs effort)\n\n**Decision artifacts**\n\n- Architectural and workload placement options and tradeoffs\n- Financial business case and value comparisons\n- Defined success measures and validation plan\n\n**Onboarding and change artifacts**\n\n- Onboarding strategy to guide what is onboarded or moved, and under what circumstances\n- Implementation and migration plans, estimates, sequencing, and acceptance criteria\n- Program milestones, schedules, and reporting deliverables to provide transparency across personas\n\n**Continuous improvement**\n\n- Post-change evaluation results, lessons learned, and measurable outcomes\n- Updates to standards, patterns, and governance based on outcomes",
     "kpi_bullets": [
       "Unit cost trend aligned to a business unit metric (for example cost per customer, transaction, query, or model run)",
       "Benefits realization vs the business case (savings, avoided cost, productivity, or revenue impact where applicable)",
-      "Reinvestment rate of realized savings into prioritized business initiatives (where applicable)"
+      "Reinvestment rate of realized savings into prioritized business initiatives (where applicable)",
+      "Cost efficiency improvement, including infrastructure savings and avoided cost, net of modernization, migration, and support costs",
+      "Reduction in waste indicators tied to design and placement decisions (for example idle capacity, over-provisioning, low utilization)",
+      "Forecast variance for workloads being designed, onboarded, or materially changed",
+      "Budget or guardrail adherence for material changes (threshold breaches, approval compliance)",
+      "Time and cost of transition states (for example parallel run duration and incremental cost impact)",
+      "Time to market impact for major initiatives (lead time from decision to production readiness, or agreed delivery milestone)",
+      "Sustainability efficiency where measurable (for example emissions or energy intensity per unit of work)",
+      "Sustainability impact of transitions (for example overlap states) and effectiveness of mitigation",
+      "Post-change validation completion rate (measured outcomes recorded against success criteria)",
+      "Reuse of approved patterns and standards (adoption rate, reduction in repeat issues)"
     ],
     "license": "CC-BY-4.0",
     "maturity_raw": {
@@ -650,67 +572,29 @@
     "headline_groups": [
       {
         "items": [
-          "Ensure that all relevant stakeholder Personas are involved in requirements gathering for automation solutions, FinOps tools, and professional services activities, capturing their specific needs and priorities to ensure that whatever is implemented is fit for purpose across all FinOps Scopes and technology categories",
-          "Work closely with all Personas from implementation and integration through to training, ongoing operation, and continuous evaluation, ensuring that investments deliver lasting value to the organization",
-          "Develop and maintain build/buy/automate criteria that guides investment decisions across automation solutions, FinOps tools, and professional services activities, ensuring that decisions are well-informed, consistently applied, and aligned with organizational strategy",
-          "Establish and maintain an ROI methodology for evaluating the expected and actual value of automation solutions, FinOps tools, and professional services investments, tracking outcomes against projections and using insights to continuously improve selection and investment decision making",
-          "Conduct regular post-implementation evaluations of automation solutions, FinOps tools, and professional services activities, benchmarking them against evolving organizational requirements and emerging market alternatives to ensure continued alignment with the organization’s FinOps practice",
-          "Stay informed of emerging solutions, including developments in the FinOps Foundation community and the FinOps Landscape, and proactively assess their potential to advance the organization’s FinOps practice"
+          "Inventory and assess current automation practices, FinOps software tools, and FinOps professional services engagements in use",
+          "Using organizational objectives, identify outcomes that are of highest priority. Map automation solutions, FinOps tools, and professional services activities to FinOps Framework Capabilities to identify gaps and opportunities for improvement to achieve the desired outcomes",
+          "Establish organizational policies and governance criteria that apply to the evaluation, selection, and use of FinOps tools, including criteria for when professional services engagements are warranted and when automation solutions are appropriate",
+          "Define a collection of use cases for when to “build”, “buy”, and/or “automate” that guides decisions about developing internal solutions, procuring commercial tools, or engaging professional services"
         ],
-        "label": "As someone in the FinOps team role, I will…"
+        "label": "Develop a Strategy"
       },
       {
         "items": [
-          "Support the requirements gathering process by providing engineering, security, and compliance expertise, ensuring that automation solutions and FinOps tools are evaluated against technical requirements and organizational policies",
-          "Contribute automation and integration expertise to the design, development, and operationalization of automation solutions and FinOps tools, ensuring they are scalable, secure, interoperable, and aligned with open standards and existing engineering practices",
-          "Provide accurate and timely performance, utilization, and usage data where required to support the evaluation, selection, and ongoing assessment of automation solutions and FinOps tools across all FinOps Scopes and technology categories",
-          "Partner with FinOps Practitioners to design and implement automation solutions that reduce manual effort, improve consistency, and enable the FinOps practice to scale across all relevant FinOps Scopes and technology categories",
-          "Evaluate the technical feasibility and integration complexity of automation solutions and FinOps tools under consideration, providing clear and well-documented recommendations that inform build/buy/automate decisions",
-          "Stay informed of emerging automation technologies, open source tooling, and native technology provider capabilities, and advocate for their adoption where they would improve efficiency, scalability, or sustainability outcomes"
+          "Define and maintain selection criteria ensuring alignment with the FinOps Framework Capabilities and organization priorities when selecting FinOps tools, and evaluating professional services offerings.",
+          "Evaluate opportunities for automation solutions against organizational requirements, considering factors such as functionality, integration complexity, cost, scalability, and sustainability",
+          "Assess the relative merits of native technology provider tooling versus third-party commercial solutions versus internally developed automation, and document recommendations with supporting rationale"
         ],
-        "label": "As someone in an Engineering role, I will…"
+        "label": "Evaluation and Selection"
       },
       {
         "items": [
-          "Support the requirements gathering process by providing financial context, constraints, and priorities, ensuring that automation solutions, FinOps tools, and professional services offerings are evaluated against budgetary parameters and organizational financial policies",
-          "Support the development and management of budgets and forecasts for FinOps tools, and professional services investments, ensuring that planned expenditures are aligned with organizational financial strategy and that actual spend is tracked and reported against approved budgets",
-          "Support ongoing evaluation of automation solutions, FinOps tools, and professional services activities from a financial perspective, ensuring that investments continue to deliver expected ROI and that underperforming solutions are identified and addressed in a timely manner",
-          "Provide financial modeling and analysis to support build/buy/automate decisions, quantifying the fully burdened cost of ownership for each option and enabling well-informed investment decisions that balance upfront costs, ongoing operational expenses, and expected business value",
-          "Partner with FinOps Practitioners to develop and maintain the ROI methodology used to evaluate automation solutions, FinOps tools, and professional services investments, ensuring that financial metrics and value realization timelines are clearly defined and consistently applied",
-          "Incorporate investment outcomes from solutions and services into organizational budgeting and forecasting processes, ensuring that lessons learned from previous investments inform future financial planning and decision making"
+          "Configure, integrate, and onboard stakeholder Personas for the selected FinOps tools in alignment with organizational policies",
+          "Provide training, enablement, and ongoing support to ensure all stakeholder Personas can effectively leverage automation solutions and FinOps tools within their area of responsibility",
+          "Deploy automation solutions and FinOps tools prioritized by organizational unit and FinOps Scope, measuring adoption and impact over time to inform continuous improvement",
+          "Manage professional services engagements by establishing clear scope, deliverables, and success criteria at the outset, tracking progress and outcomes against organizational objectives, and capturing and socializing knowledge and artifacts generated through the engagement to ensure lasting value beyond the conclusion of the engagement itself"
         ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Lead and manage the requirements gathering process for FinOps tools and professional service providers ensuring that inputs from all relevant stakeholder Personas are captured and reflected in vendor selection criteria and commercial discussions",
-          "Leverage ongoing evaluation data and post-implementation performance insights to inform and strengthen commercial discussions, contract renewals, and vendor negotiations",
-          "Develop and maintain a vendor management process for FinOps tools, and professional services providers, establishing clear performance expectations, contractual obligations, and accountability mechanisms that protect the organization’s interests",
-          "Ensure that contractual agreements for FinOps tools, and professional services activities include appropriate provisions for data access, interoperability, open standards compliance, and exit strategies, reducing the risk of vendor lock-in and ensuring long-term flexibility",
-          "Partner with Finance and FinOps Practitioner Personas to evaluate the fully burdened cost for FinOps tools, and professional services engagement, ensuring that commercial decisions are grounded in a clear and comprehensive understanding of costs and expected returns",
-          "Work with FinOps Practitioner and Engineering Personas to stay informed of emerging FinOps tools in the market, proactively identifying opportunities to consolidate, replace, or supplement existing investments"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Support the requirements gathering process by providing product-level context, priorities, and constraints, ensuring that automation solutions, FinOps tools, and professional services activities are evaluated against the needs of the products and services I am responsible for",
-          "Contribute to the ongoing evaluation of automation solutions, FinOps tools, and professional services activities from a product perspective, providing feedback on whether selected solutions are meeting the needs of product teams and surfacing opportunities for improvement or replacement where appropriate",
-          "Define and communicate the product-level outcomes and KPIs that automation solutions and FinOps tools should support, ensuring that selected solutions are capable of delivering the visibility, insights, and optimization capabilities needed to effectively manage the products and services I am responsible for",
-          "Partner with Engineering and FinOps Practitioner Personas to identify and prioritize automation opportunities within my area of product responsibility, ensuring that repeatable and manual FinOps activities are candidates for automation where they would improve efficiency and consistency",
-          "Incorporate feedback from Engineering, Finance, and other FinOps Personas into product-level requirements for automation solutions and FinOps tools, ensuring that the solutions selected reflect the full range of stakeholder needs and deliver value"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Provide executive sponsorship and visibility for the adoption and operationalization of automation solutions, FinOps tools, and professional services activities, ensuring that all stakeholder Personas are engaged and accountable for their effective use",
-          "Ensure that the organization’s Automation, Tools & Services strategy is clearly aligned with organizational objectives, and the broader technology and business strategy across all technology categories",
-          "Collaborate with stakeholder Personas to establish clear success criteria, KPIs, and ROI expectations for automation solutions, FinOps tools, and professional services investments, and hold the organization accountable for tracking and reporting outcomes against those measures over time",
-          "Set organizational priorities for solutions and professional services activities, ensuring that resources are allocated in a way that maximizes the advancement of the organization’s FinOps practice",
-          "Foster a culture of continuous improvement across the organization, recognizing and rewarding teams that leverage automation solutions and FinOps tools effectively to drive efficiency, scalability, and business value"
-        ],
-        "label": "As someone in a Leadership role, I will…"
+        "label": "Implement and Operationalize"
       }
     ],
     "inputs_outputs_md": "#### Inputs to this Capability\n\n- Organizational policy, risk, and governance documents that define the boundaries and criteria within which automation solutions, FinOps tools, and professional services activities can be evaluated, selected, and operationalized\n- Security and compliance policies that establish the technical and regulatory requirements that automation solutions and FinOps tools must satisfy prior to procurement and implementation, including data access, privacy, and interoperability considerations\n- Organizational procurement processes and vendor management criteria that govern how FinOps tools and professional services providers are evaluated, contracted, and managed over time\n- Requirements and functionality gaps identified through the other FinOps Framework Capabilities, which inform the selection and prioritization of FinOps tools and professional services activities needed to advance the organization’s FinOps practice\n- Through the [Reporting & Analytics](https://www.finops.org/framework/capabilities/reporting-analytics/) Capability, performance, utilization, and adoption data that informs the ongoing evaluation of automation solutions and FinOps tools, and supports post-implementation assessment against defined success criteria and KPIs\n- Through the [Data Ingestion](https://www.finops.org/framework/capabilities/data-ingestion/) Capability, ensure that the cost, usage, and sustainability data that automation solutions and FinOps tools depend on to function effectively is collected, normalized, and made available from all relevant technology providers, data providers, and billing sources\n- Financial budgets, investment approvals, and ROI expectations from [Finance](https://www.finops.org/framework/persona/finance/) and [Leadership](https://www.finops.org/framework/persona/leadership/) Personas that define the commercial parameters within which FinOps tools and professional services investments are evaluated and approved\n\n#### Outputs from this Capability\n\n- Through the [FinOps Education & Enablement](https://www.finops.org/framework/capabilities/finops-education-enablement/) Capability, training and enablement programs that ensure all FinOps Personas are equipped to effectively leverage selected FinOps tools within their area of responsibility\n- Outputs to the [FinOps Practice Operations](https://www.finops.org/framework/capabilities/finops-practice-operations/) Capability reflecting the automation solutions, FinOps tools, and professional services activities in use across the organization, enabling consistent governance, oversight, and continuous improvement of the overall FinOps practice\n- ROI and post-implementation evaluation outcomes that are communicated to [Finance](https://www.finops.org/framework/persona/finance/) and [Leadership](https://www.finops.org/framework/persona/leadership/) Personas, providing evidence of the value generated by automation solutions, FinOps tools, and professional services investments and informing future investment decision making\n- Operationalized automation solutions and FinOps tools that are actively used by all relevant Personas across all [FinOps Scopes](https://www.finops.org/framework/scopes/), enabling the effective execution of FinOps Framework Capabilities throughout the organization\n- A documented and continuously refined Automation, Tools & Services strategy that serves as a reference for all relevant Personas and guides future investment decisions, vendor management activities, and automation development priorities",
@@ -735,7 +619,7 @@
     "wp_id": 12434
   },
   {
-    "definition_md": "FinOps Budgeting establishes approved funding to support an organization’s planned technology activities, tracks spending and value within that funding, makes transparent adjustments as appropriate, and ensures accountability from each budgeted cost center through a consistent set of budgeting strategies.\n\nBudgeting will typically begin as part of the broader IT budgeting process, and will evolve and mature as the complexity of the technology landscape increases. The faster pace of development and nearly unlimited capacity of modern technology categories like cloud, AI, and data cloud platforms ultimately requires organizations to adopt a shorter budgeting cycle, with more flexibility built in through holdbacks and out of cycle adjustments. The FinOps team must collaborate with Finance who primarily drive Budgeting, to establish and adjust the Budgeting strategy and holdback strategy over time.\n\nBudgeting is closely related to both Forecasting and Planning & Estimating. Budgets for a system or application are typically based on the forecasts provided by those teams. There is a strong tie to the organization’s allocation strategy, which will define how costs are to be allocated to different cost centers, and to Invoicing & Chargeback which will apply costs to those specific budget cost centers each period.\n\nHowever, while Forecasting is a promise by the engineering and product owners to deliver some amount of value for some amount of spending, budgeting is the organization’s commitment to those engineering or product owners to fund them at a certain level. Budgets should provide clear support for the work the product team is doing, while providing healthy constraints on those teams to work within the budget that will produce value for the organization as a whole.\n\nBudgets are allocated to budget owners, responsible for a specific scope of work. There may be multiple levels of budget owners in some organizations. Each budget owner will have one or more systems or applications they are responsible for delivering. System owners will be continuously estimating the cost (and other impacts) of their development work, and maintaining their forecasting model. When forecasts begin to appear that they will exceed budgets, collaboration between Personas must be done to resolve the issues causing the potential or actual overages.\n\nBudget provided for a documented scope of cost and value will typically also provide a holdback allocation to the budget owner. This holdback can be thought of as money that is not allocated to a specific purpose but is available to a budget owner to account for changes, overages, forecasting errors and other small corrections required during a budget period. As an organization matures, the amount of holdback, and rules for its use may be reduced, at least in areas where budgeting for more stable workloads.\n\nWhen a system owner determines that Budget adjustments may be necessary a potential process for resolution will follow steps such as these:\n\n1. Budget threshold reports anticipate exceeding budget (Engineering)\n2. Investigate the reasons for the overage (Engineering, Product) \n\n  - Take corrective action to optimize, or\n \n3. involve budget owner to request additional funding from holdback (Engineering, Product, and Budget Owner) \n\n  - Designate additional funding if available and reasons for the adjustment are understood, or\n \n4. Involve higher level budget owner, or Finance directly to review the request (Engineering, Budget Owner, Product, Finance) \n\n  - Designate additional funding from higher level holdback, or\n \n5. Involve Leadership to make adjustments to budgeted spending levels and record/adjust impacts to organizational performance expectations (Engineering, Product, Finance, Leadership) \n\n  - Approve adjustment to budget, or\n  - Deny adjustment and collaborate on corrective adjustments to be made\n \n\nThe above assumes that actual spending is unfavorable to budget. The term *favorable to budget* means that there are less expenses than as planned in the budget. The term unfavorable to budget means that there are more expenses than as planned in the budget.\n\nBeing unfavorable to budget requires action as soon as it is detected. However, being strongly favorable to budget is also not ideal. Large amounts of unused holdback funding could have been used to invest in other areas. Once risks and uncertainties are well understood, even within a budgeting cycle, budget owners and Finance should also collaborate on making adjustments to reclaim holdback that is no longer required and put it to work.\n\nIn organizations that are more simple, more stable or steady state, adjustments to budgets should lessen over time, and holdback can be reduced each budgeting cycle. Organizations that are very dynamic or experiencing high growth in cloud use may need to have higher holdback amounts, or more layers among its budget owners to accommodate the inevitable need to adjust funding when forecasting for unknown or dynamic workloads.\n\nShortening the budgeting cycle or extending budget thresholds can also be an effective way to manage change. More frequent budgeting cycles allow organizations to make more frequent adjustments, release undesignated holdback, spot forecasting problems, and redirect efforts more often. Exercising this process builds muscle memory for the organization, and allows even out of cycle changes to become more routine. This incremental budgeting can be particularly useful for AI investments which are faster-paced and more frequently submitted than traditional IT projects.\n\nBudgeting is driven primarily by Finance, but following the principle of “Everyone takes responsibility for their cloud use” should lead organizations to distribute the budget (and holdback) to budget owners throughout the organization. These budget owners are then empowered to work autonomously within their sphere of control, and to allow the entire organization to operate more quickly and efficiently without budget approvals becoming a gridlock risk.\n\nIn many organizations there will be more than one way to manage budgets. Finance partners may work with some parts of the organization differently due to the importance of some systems or business units. R&D work, purely internal IT systems, and customer-facing systems may be handled in different ways. Financial budgets may be combined with other resource budgets such as labor cost, license cost, cloud sustainability goals, or the like.\n\nParticularly in government, public sector, or highly-regulated organizations, the source and timing of funding may also create more restrictions on the budgeting process. Compliance with regulation will create more complexity that may not allow more efficient budgeting or which may require more collaboration or process to understand and follow. The FinOps team can be the catalyst for understanding these requirements and helping to facilitate changes over time as technology use diversifies.",
+    "definition_md": "FinOps Budgeting establishes approved funding to support an organization’s planned technology activities, tracks spending and value within that funding, makes transparent adjustments as appropriate, and ensures accountability from each budgeted cost center through a consistent set of budgeting strategies.\n\nBudgeting will typically begin as part of the broader IT budgeting process, and will evolve and mature as the complexity of the technology landscape increases. The faster pace of development and nearly unlimited capacity of modern technology categories like cloud, AI, and data cloud platforms ultimately requires organizations to adopt a shorter budgeting cycle, with more flexibility built in through holdbacks and out of cycle adjustments. The FinOps team must collaborate with Finance who primarily drive Budgeting, to establish and adjust the Budgeting strategy and holdback strategy over time.\n\nBudgeting is closely related to both Forecasting and Planning & Estimating. Budgets for a system or application are typically based on the forecasts provided by those teams. There is a strong tie to the organization’s allocation strategy, which will define how costs are to be allocated to different cost centers, and to Invoicing & Chargeback which will apply costs to those specific budget cost centers each period.\n\nHowever, while Forecasting is a promise by the engineering and product owners to deliver some amount of value for some amount of spending, budgeting is the organization’s commitment to those engineering or product owners to fund them at a certain level. Budgets should provide clear support for the work the product team is doing, while providing healthy constraints on those teams to work within the budget that will produce value for the organization as a whole.\n\nBudgets are allocated to budget owners, responsible for a specific scope of work. There may be multiple levels of budget owners in some organizations. Each budget owner will have one or more systems or applications they are responsible for delivering. System owners will be continuously estimating the cost (and other impacts) of their development work, and maintaining their forecasting model. When forecasts begin to appear that they will exceed budgets, collaboration between Personas must be done to resolve the issues causing the potential or actual overages.\n\nBudget provided for a documented scope of cost and value will typically also provide a holdback allocation to the budget owner. This holdback can be thought of as money that is not allocated to a specific purpose but is available to a budget owner to account for changes, overages, forecasting errors and other small corrections required during a budget period. As an organization matures, the amount of holdback, and rules for its use may be reduced, at least in areas where budgeting for more stable workloads.\n\nWhen a system owner determines that Budget adjustments may be necessary a potential process for resolution will follow steps such as these:\n\n1. Budget threshold reports anticipate exceeding budget (Engineering)\n2. Investigate the reasons for the overage (Engineering, Product) \n\n   - Take corrective action to optimize, or\n \n3. involve budget owner to request additional funding from holdback (Engineering, Product, and Budget Owner) \n\n   - Designate additional funding if available and reasons for the adjustment are understood, or\n \n4. Involve higher level budget owner, or Finance directly to review the request (Engineering, Budget Owner, Product, Finance) \n\n   - Designate additional funding from higher level holdback, or\n \n5. Involve Leadership to make adjustments to budgeted spending levels and record/adjust impacts to organizational performance expectations (Engineering, Product, Finance, Leadership) \n\n   - Approve adjustment to budget, or\n   - Deny adjustment and collaborate on corrective adjustments to be made\n \n\nThe above assumes that actual spending is unfavorable to budget. The term *favorable to budget* means that there are less expenses than as planned in the budget. The term unfavorable to budget means that there are more expenses than as planned in the budget.\n\nBeing unfavorable to budget requires action as soon as it is detected. However, being strongly favorable to budget is also not ideal. Large amounts of unused holdback funding could have been used to invest in other areas. Once risks and uncertainties are well understood, even within a budgeting cycle, budget owners and Finance should also collaborate on making adjustments to reclaim holdback that is no longer required and put it to work.\n\nIn organizations that are more simple, more stable or steady state, adjustments to budgets should lessen over time, and holdback can be reduced each budgeting cycle. Organizations that are very dynamic or experiencing high growth in cloud use may need to have higher holdback amounts, or more layers among its budget owners to accommodate the inevitable need to adjust funding when forecasting for unknown or dynamic workloads.\n\nShortening the budgeting cycle or extending budget thresholds can also be an effective way to manage change. More frequent budgeting cycles allow organizations to make more frequent adjustments, release undesignated holdback, spot forecasting problems, and redirect efforts more often. Exercising this process builds muscle memory for the organization, and allows even out of cycle changes to become more routine. This incremental budgeting can be particularly useful for AI investments which are faster-paced and more frequently submitted than traditional IT projects.\n\nBudgeting is driven primarily by Finance, but following the principle of “Everyone takes responsibility for their cloud use” should lead organizations to distribute the budget (and holdback) to budget owners throughout the organization. These budget owners are then empowered to work autonomously within their sphere of control, and to allow the entire organization to operate more quickly and efficiently without budget approvals becoming a gridlock risk.\n\nIn many organizations there will be more than one way to manage budgets. Finance partners may work with some parts of the organization differently due to the importance of some systems or business units. R&D work, purely internal IT systems, and customer-facing systems may be handled in different ways. Financial budgets may be combined with other resource budgets such as labor cost, license cost, cloud sustainability goals, or the like.\n\nParticularly in government, public sector, or highly-regulated organizations, the source and timing of funding may also create more restrictions on the budgeting process. Compliance with regulation will create more complexity that may not allow more efficient budgeting or which may require more collaboration or process to understand and follow. The FinOps team can be the catalyst for understanding these requirements and helping to facilitate changes over time as technology use diversifies.",
     "domain_slug": "quantify-business-value",
     "example_kpis": [],
     "featured_kpi_ids": [
@@ -842,58 +726,6 @@
           "Identify exception handling for scenarios when altering budgets out of cycle is needed"
         ],
         "label": "Track and manage budgets"
-      },
-      {
-        "items": [
-          "Collaborate with all personas to establish Budgeting Strategy and Holdback strategy and reinforce use",
-          "Help to establish budgeting KPIs that are in alignment with business goals",
-          "Explore optimization opportunities with teams that are expected to overspend budgets",
-          "Facilitate the collection of estimates and forecasting models for cloud costs to enable Finance and Leadership to create budgets",
-          "Provide granular reporting to teams on actual vs. budgeted spending by different business-centric dimensions",
-          "Provide reporting on budgets vs actuals vs forecast to establish trends and compare against variance KPIs"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Develop product centric KPIs to measure the cost effectiveness in achieving my desired business outcomes",
-          "Follow budget threshold variances that are in alignment with the products I own",
-          "Use these KPIs to inform budget and forecast models in collaboration with my engineering counterparts"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Establish requirements for when forecasting is due and how frequently forecast updates are needed",
-          "Aggregate granular forecast data to compile budgets with reasonable accuracy",
-          "Help to establish budgeting KPIs that are in alignment with business goals",
-          "Provide granular reporting to teams on actual vs. budgeted spending by different business-centric dimensions",
-          "Provide reporting on budgets vs actuals vs forecast to establish trends and compare against variance KPIs"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Monitor cloud spending budgets vs. actuals to identify instances where exceeding budgets would impact commitments, vendor agreements, or spending expectations with cloud providers or other vendors"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Monitor for cloud spend exceeding or trending toward exceeding budgets",
-          "Work with FinOps stakeholders to identify actionable optimization opportunities or estimate system changes to avoid overspending budgets",
-          "Get approval for planned changes which will have a negative impact to our cloud spend or value projections / budgets using approved processes with budget owners"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Consistently manage cloud budgets, forecasts, and estimates; and monitor for impacts to the business",
-          "Establish budget threshold variances that are in alignment with business goals",
-          "Manage competing priorities for active project timelines when forecasted spend impacts budgets for high-priority initiatives",
-          "Ensure successful communication between the FinOps team and Business Units"
-        ],
-        "label": "As someone in a Leadership role, I will…"
       }
     ],
     "inputs_outputs_md": "#### Inputs\n\n- Forecasting models from stakeholders in all relevant areas\n- Budgeting Strategy input from Leadership and Finance identifying Budget owners, P&L owners, levels of budgeting required, and other parameters\n- Organizational P&L and cost center strategy from Allocation\n- Cost, impact, and usage reporting data from Reporting & Analytics\n\n#### Outputs\n\n- Budget Strategy for use by all P&L owners and budget owners\n- Budget allocations to all funded cloud systems grouped by budget owner\n- Budget adjustment process to be used for out of cycle adjustments\n- Holdback strategy for use by all P&L owners and budget owners\n- Budgeted holdback allocations to appropriate budget owners\n- Budget allocations to P&L cost centers to Invoicing & Chargeback",
@@ -1046,70 +878,14 @@
           "Provide guidance to all Personas in the organization about how to access ingested data, and set expectations as to its quality and availability"
         ],
         "label": "Maintain data timeliness and availability"
-      },
-      {
-        "items": [
-          "Collaborate with the other FinOps Personas and determine the list of data sources required to fulfill my current reporting, analytics and operational needs",
-          "Determine gaps in data and work with responsible teams to update source data",
-          "Determine the level of granularity required in each data source",
-          "Establish a data model for normalization, mapping fields from various sources to one another",
-          "Regularly and proactively validate data source content, and clearly understand when changes occur, react to them, adjust and re-document accordingly, and notify all those affected",
-          "Ensure that the data sources and resulting repository of cost and usage information is kept accurately, is appropriately sized, backed up, and managed throughout its useful lifecycle",
-          "Provide and ensure everyone with a need to access information can do so",
-          "Develop reporting output expectations document (update over time as maturity grows)",
-          "Leverage the FOCUS Use Case Library and collaborate with the other FinOps Personas to identify FOCUS datasets the FinOps practice requires"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Provide business or product level information as required by the FinOps practice to create KPI or other information required"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Provide access to data sources as required by the FinOps practice",
-          "Ensure Finance is using the most up-to-date and appropriate data sources for reporting, forecasting and decision making",
-          "Participate in or lead data completeness and data quality validation efforts to ensure invoices, usage data sources and other information map together as expected (typically monthly or periodic reconciliation against usage data, and/or native cloud service provider tool data versus normalized data)",
-          "Minimize or eliminate data changes outside of source systems and record & reconcile any changes that are made back to source."
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Include data ingestion requirements and specifications in contracts or other managed interactions with data source providers so that expected data access is provided by those vendors",
-          "Provide requirements to data source providers so that contractual obligations and terms can be fulfilled and align to the needs of the FinOps practice"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Provide access to performance and usage monitoring information within the purview of Engineering for use by the FinOps data repository",
-          "Identify issues or discrepancies which appear in data being analyzed or reported to ensure data quality is maintained and ingested datasets are complete and accurate"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Support the strategy for centralized data normalization, requests for access to information of various sorts as required by the FinOps practice",
-          "Encourage and communicate clearly regarding the need to have a single source of cloud usage and cost truth for reporting and decision making"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Provide access to data sources or content that is within my purview so that information can be correlated to the broader FinOps data repository contents",
-          "Provide data schema and formatting to allow the FinOps data repository to normalize and correlate information appropriately over time",
-          "Identify issues, discrepancies, or changes which occur over time to the owner of the FinOps data repository so that data quality and availability is maintained",
-          "Work with 3rd party platform providers to make sure any data discrepancies are addressed between source of data and their dashboards"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
       }
     ],
     "inputs_outputs_md": "- Cloud provider cost and usage data (e.g. Azure Billing, Google Cloud Billing, AWS CUR, Oracle Billing Data) generated at the required granularity, resolution & cadence\n- FOCUS datasets for cloud provider usage & cost data plus any supplementary data such as sustainability, observability, SaaS, …etc\n- Utilization, performance, or observability data containing system metrics including CPU, Memory, Disk, and/or Network utilization at the required resource or resource group level\n- Transactional data from logs or systems which record the number or quantity of use for types of resources\n (often shared resources)\n- Business performance data providing contextual business data such as the number of customers supported, amount of revenue or sales, number of transactions, or other business outcomes which provide context to ingested cloud cost and usage data\n- KPI requirements as determined from Unit Economics activities to support collection and correlation of data elements in the FinOps data repository\n- Policy and Governance requirements to support the overall cloud policies and performance of other FinOps requirements with the ingested data\n- Google Cloud FOCUS Converter export dataset as a source\n- Azure FOCUS Converter export dataset as a source\n- AWS FOCUS Converter export dataset as a source\n- Oracle FOCUS Converter export dataset as a source",
     "kpi_bullets": [
       "Cloud Provider data received daily/multiple times per day at expected times; For example:",
+      "AWS CUR file, CUR 2.0 output, ABC output files delivered at least 1x per day",
+      "Azure Billing Export generated at least 1x per day",
+      "Google Cloud Billing Export generated at least 1x per day",
       "All required data sources identified, consistently formatted and available as outlined in established agreements",
       "Data quality checks complete successfully",
       "FOCUS validator checks complete successfully",
@@ -1157,7 +933,7 @@
         }
       },
       {
-        "heading": "As someone in an Engineering  role, I will…",
+        "heading": "As someone in an Engineering role, I will…",
         "items": [
           "Own service and platform cost drivers within my area and maintain reliable tagging and ownership signals",
           "Use unit measures and efficiency insights to guide design, capacity, and operational decisions",
@@ -1227,9 +1003,62 @@
         }
       }
     ],
-    "headline_groups": [],
+    "headline_groups": [
+      {
+        "items": [
+          "Connect spend to strategic outcomes: Relate technology-related spend across all technology categories—cloud, SaaS, AI, licensing, and data center, etc.—to the strategic initiatives and operational goals leaders are funding. Alignment starts with delivering trusted data that becomes a natural input to investment decisions rather than a separate report prepared after decisions are made. For example, mapping total technology costs to a product launch or an AI capability buildout.",
+          "Align internal modernization spend to delivery outcomes: Connect investment in engineering capabilities (developer tools, CI/CD, observability, architectural modernization) to product roadmaps through delivery speed, reliability, and total cost of ownership (TCO). This includes making the cost of not modernizing visible, especially where legacy and transition spend overlap.",
+          "Strengthen forecasting and unit economics: Improve visibility into how demand, revenue, and unit costs move together across technology categories so growth expectations are tied to a predictable cost model. AI spend introduces new unit measures, including cost per token and cost per inference, that need to sit alongside traditional metrics like cost per transaction or cost to serve.",
+          "Institutionalize spend accountability: Embed cost and value decisions into existing performance and governance structures through a federated model, where accountability lives with engineering and product owners and FinOps enables rather than polices. For example, incorporating cost efficiency expectations into performance reviews or product team OKRs.",
+          "Frame insights for executive consumption: Executives make decisions at speed with limited context. The most effective FinOps communication at the executive level is radically simplified: a two or three-page view that surfaces key tradeoffs without requiring prior FinOps knowledge to interpret."
+        ],
+        "label": "Executive Priority Alignment"
+      },
+      {
+        "items": [
+          "Optimize high-level financial planning: Bring FinOps cost and usage insights into enterprise budgeting, P&L ownership, and reporting, integrating with IT Finance practices when present. As technology portfolios span cloud, SaaS, AI, licensing, and data center, the financial planning model needs to reflect the full scope of managed spend.",
+          "Manage long-term commitments across a converged technology portfolio: Forecast and govern multi-year vendor commitments across cloud enterprise discount programs, SaaS subscriptions, AI platform contracts, data center refreshes, and licensed software. Commitment decisions made in isolation across these categories can create overlapping obligations or missed optimization windows.",
+          "Inform investment tolerance and sequencing: Provide projections and lifecycle cost analysis before major approvals, with benchmarks, so leaders can set guardrails and sequence investments with awareness of overlapping legacy and transition costs. Many organizations are now self-funding AI investments from optimization savings, making this dependency explicit in multi-year plans increasingly essential.",
+          "Plan for AI spend trajectories: With the majority of practitioners now managing some form of AI spend, multi-year planning needs to account for AI growth across cloud, SaaS, and dedicated infrastructure, alongside the forecasting challenges that come with consumption-based pricing for workloads still maturing toward production."
+        ],
+        "label": "Multi-Year Investment Strategy"
+      },
+      {
+        "items": [
+          "Govern technology investment portfolios across expanded scope: Provide integrated cost and usage visibility, including TCO across cloud, SaaS, data center, licensing, and AI, to help leaders govern technology investments in line with strategic priorities. Leaders managing AI investments across multiple platforms and modalities need the same coherent portfolio view they expect for cloud.",
+          "Support strategic tradeoffs: Make cost, speed, and quality tradeoffs visible and comparable across competing initiatives at the portfolio level, using consistent decision criteria. Build versus buy decisions, platform consolidation choices, and AI vendor selections all benefit from a common analytical framework applied before commitments are made.",
+          "Bring FinOps input into the design stage: Add FinOps insights during business design, project intake, and architecture so leaders compare options before major commitments are made. Architecture-stage cost estimation is particularly valuable for AI workloads, where the cost difference between design choices can be significant and often invisible until production.",
+          "Govern the volume and pace of AI initiatives: As AI project portfolios grow rapidly, product prioritization strategy must actively manage the transition from proof-of-concept to production. Leaders need visibility into which AI investments are scaling, which are stalled, and how to sequence commitments as confidence in ROI develops.",
+          "Reduce risk and leverage prior investment through standards: Inform build versus buy decisions using cost, value, and quality impacts, aligned to standards, risk, policy, and vendor requirements. Where quality varies across vendors or platforms, balance unit costs with outcome quality to avoid optimizing cost at the expense of strategic fit."
+        ],
+        "label": "Facilitate Product Prioritization Strategy"
+      },
+      {
+        "items": [
+          "Align the FinOps operating model and its intersections: Clarify where FinOps sits, which governance forums it supports, and how it works across ITFM, ITAM/SAM, ITSM, and other disciplines, when they exist.",
+          "Position FinOps where strategic decisions are made: FinOps practices aligned to the CTO or CIO report meaningfully higher rates of full strategic alignment. The reporting and sponsorship model should be deliberately chosen to maximize strategic reach, regardless of whether that means a standalone team or an integrated one.",
+          "Clarify decision rights and guardrails: Define who can approve spend changes, commit capacity, and accept cost, risk, and performance tradeoffs. This includes AI workloads, where consumption-based pricing creates rapid spend exposure. Governance frameworks designed for cloud should be reviewed for applicability across the expanded technology scope now under FinOps management.",
+          "Build capability through training and shared language: Invest in role-based FinOps education and cross-functional routines so engineering, product, procurement, and finance teams understand cost drivers and pricing model implications. Shared standards, including FOCUS and the FinOps Framework, reduce friction between technical and financial teams. Executive education is most effective when embedded in existing governance artifacts rather than delivered separately.",
+          "Support change events and leadership transitions: Provide decision-ready cost and usage diligence during M&A, restructuring, and transformations, including run-rate baselines, commitment exposure, and forecast scenarios across the full technology portfolio. Maintain continuity of measures and governance routines during leadership changes."
+        ],
+        "label": "Enable Strategic Decision Support"
+      }
+    ],
     "inputs_outputs_md": "#### Inputs\n\n- **Business strategy and priorities:** Strategic initiatives and operating goals that define the outcomes leaders are funding.\n- **Technology strategy, investment portfolio and roadmap context:** Product plans, platform roadmaps, and modernization timelines that shape investment choices.\n- **Budgeting strategy and ownership: **Budget owners, P&L owners, budgeting approach, and planning parameters from Finance and Leadership.\n- **Forecasting models and assumptions: **Demand drivers, scenarios, and forecast inputs from relevant stakeholders.\n- **Technology spend and usage data: **Technology-related spend and usage data for trending and comparison.\n- **Emerging Technology Cost Drivers: **Emerging technology cost drivers, such as virtual currency abstractions, including cost per token and how that converts to actual spend.\n- **Allocation and cost-center structure: **Cost centers, shared cost rules, and allocation outputs that link spend to accountable owners.\n- **Commitments and contract data:** Vendor terms, renewal dates, discount structures, and commitment obligations.\n- **Decision rights and guardrails:** Approval paths and limits for spend changes, commitments, and tradeoffs.\n\n#### Outputs\n\n- **Business and technology strategy impacts on the FinOps practice:** Specific guidance on how the business and technology strategies inform the behavior in other Capabilities, including FinOps Practice Operations, Governance, Policy & Risk in setting governance models and Scopes of practice\n- **Strategy impacts on FinOps outcomes:** Specific guidance on how business and technology strategy inform the expectations of FinOps outcomes, primarily in terms of visibility to data about usage, unit economics outcomes, and levels of optimization achieved for certain Scopes",
-    "kpi_bullets": [],
+    "kpi_bullets": [
+      "Decision cadence coverage: A defined percentage of major technology investment decisions follow an agreed decision support routine.",
+      "Decision rights clarity: Decision rights for spend changes, commitments, and tradeoffs are documented and understood, indicated by fewer escalations and fewer decisions without clear ownership.",
+      "Operating model and intersections: Where FinOps sits and how it works with IT Financial Management (ITFM), IT Asset Management (ITAM) and other disciplines is defined and consistently applied, indicated by reduced rework and clearer handoffs.",
+      "Consistency of technology value reporting: Leadership reporting uses a stable set of business-relevant measures across priorities, validated through reporting templates and periodic sampling.",
+      "FinOps capability and accountability awareness: Applicable personas have an understanding of FinOps within their organization, their responsibilities within that and adopt a shared language for managing technology costs and value, for example the FinOps Cost and Usage Specification (FOCUS).",
+      "Engineering productivity per tech spend: Track an agreed engineering value ratio, for example delivery output per dollar of internal technology spend, using a consistent proxy such as deployments, change failure rate, or throughput per spend, and review the trend in executive routines.",
+      "Change event readiness: The organization can produce decision-ready baselines for transformations and M&A (run rate, commitments exposure, unit measures, scenarios) within an agreed timeframe, validated through post-event review.",
+      "Priority Scope adoption: The Scope is used in leadership routines for that priority, tracked by an agreed review cadence or a lightweight decision log.",
+      "Decision readiness: A defined percentage of priority decisions include an option comparison covering cost, risk, delivery timing, quality, and expected outcomes.",
+      "Unit economics decision use: Decisions reference agreed unit measures (for example cost to serve, cost per transaction, cost per token) rather than total spend alone.",
+      "Guardrails and ownership: Decisions include explicit guardrails and named owners for follow-through within the Scope.",
+      "Action follow-through: A defined percentage of agreed actions are completed by the due date for that Scope, tracked through a simple action register."
+    ],
     "license": "CC-BY-4.0",
     "maturity_raw": {
       "crawl": "- An executive sponsor for FinOps is identified, with lightweight governance that is inconsistent across technology spend categories.\n- At least one initial FinOps Scope exists (often public cloud), but Scope boundaries and executive priority alignment are informal.\n- Technology spend, usage, and adoption insights can be related to strategic initiatives in a limited, ad hoc way.\n- FinOps, ITFM, Procurement, and ITAM share aligned cost and usage definitions for public cloud; other technology categories remain fragmented.\n- FinOps decision support is typically brought in late, decision rights and spend guardrails are not consistently defined.",
@@ -1342,53 +1171,6 @@
           "Reassess as appropriate"
         ],
         "label": "Continuous Assessment"
-      },
-      {
-        "items": [
-          "I will advocate for FinOps Assessments to be completed in a consistent and accurate fashion and make sure we have adequate Assessors on the team",
-          "I will understand the outcomes from our assessments and how they can be use to set goals for the broader practices"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "I will bring open and honest dialogue to the Assessments and speak freely with my knowledge on a specific Capability, FinOps Practice or Process",
-          "I will advocate for FinOps assessments to be completed for our Business Unit and share the results with my team",
-          "I will bring the learnings from the FinOps Assessment to my daily role and factor it in sprint planning and other product decisions"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "I will bring open and honest dialogue to the Assessments and speak freely with my knowledge on a specific Capability, FinOps Practice or Process",
-          "I will advocate for FinOps assessments to be completed for our Business Unit and share the results with my team",
-          "I will bring the learnings from the FinOps Assessment to my daily role and factor it in for finance decisions"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "I will bring open and honest dialogue to the Assessments and speak freely with my knowledge on a specific Capability, FinOps Practice or Process",
-          "I will advocate for FinOps assessments to be completed for our Business Unit and share the results with my team",
-          "I will bring the learnings from the FinOps Assessment to my daily role and factor it in for procurement decisions"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "I will bring open and honest dialogue to the Assessments and speak freely with my knowledge on a specific Capability, FinOps Practice or Process",
-          "I will advocate for FinOps assessments to be completed for our Business Unit and share the results with my team",
-          "I will bring the learnings from the FinOps Assessment to my daily role and factor it in for architectural decisions"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Define clear goals for the business so the FinOps team is able to assess on their impact to the organization",
-          "Support the FinOps team with prioritization and resource to conduct FinOps Assessment in the Core FinOps Team and the Business Units",
-          "Encourage Business Units to participate in the FinOps Assessments and support a culture of transparency and accountability"
-        ],
-        "label": "As someone in a Leadership role, I will…"
       }
     ],
     "inputs_outputs_md": "- [FinOps Framework Assessment Tool](https://www.finops.org/wg/finops-assessment/)\n- [FinOps Framework Assessment Paper](https://www.finops.org/wg/finops-assessment/)",
@@ -1540,83 +1322,6 @@
           "Develop or document external training or enablement programs"
         ],
         "label": "Enable training programs"
-      },
-      {
-        "items": [
-          "Become trained and certified in FinOps, and all aspects of the FinOps practice",
-          "Become trained or certified in the fundamentals of the major technology provider services and resources used by my organization",
-          "Seek training in the various persona disciplines with whom the FinOps practice will collaborate",
-          "Identify the training and enablement needs of various personas and organizational groups related to FinOps",
-          "Collaborate with my organization’s engineering, finance, product, or procurement teams to identify appropriate training or enablement opportunities",
-          "Identify champions within the various personas in my organization and collaborate with them on developing common requirements for enablement",
-          "Collaborate with vendors, and external groups to identify appropriate training opportunities",
-          "Collaborate with HR department to ensure job requirements, onboarding, and training paths are defined and aligned with the organization by persona",
-          "Participate in internal or external events in my organization to facilitate FinOps knowledge sharing",
-          "Establish a centralized knowledge based serving as a repository for FinOps documentation, training materials, and terminology to enable self-directed learning across FinOps Personas"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Become trained and certified as a FinOps Practitioner or equivalent",
-          "Collaborate with the FinOps team to identify skills and knowledge required of other disciplines to effectively collaborate with me in my areas of expertise",
-          "Share experience, best practices and tips regarding my practice of FinOps",
-          "Participate in cross-discipline training, as recommended by the FinOps team and my management",
-          "Contribute to documentation and common terminology repositories for content about my area",
-          "Give visibility on business objectives to contextualized FinOps concepts (e.g. unit economics for my products)"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Become trained and certified as a FinOps Practitioner or equivalent",
-          "Collaborate with the FinOps team to identify skills and knowledge required of other disciplines to effectively collaborate with me in my areas of expertise",
-          "Share experience, best practices and tips regarding my practice of FinOps",
-          "Participate in cross-discipline training, as recommended by the FinOps team and my management",
-          "Contribute to documentation and common terminology repositories for content about my area"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Become trained and certified as a FinOps Practitioner or equivalent",
-          "Collaborate with the FinOps team to identify skills and knowledge required of other disciplines to effectively collaborate with me in my areas of expertise",
-          "Share experience, best practices and tips regarding my practice of FinOps",
-          "Participate in cross-discipline training, as recommended by the FinOps team and my management",
-          "Contribute to documentation and common terminology repositories for content about my area"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Become trained and certified as a FinOps Engineer or equivalent",
-          "Collaborate with the FinOps team to identify skills and knowledge required of other disciplines to effectively collaborate with me in my areas of expertise",
-          "Share experience, best practices and tips regarding my practice of FinOps",
-          "Participate in cross-discipline training, as recommended by the FinOps team and my management",
-          "Contribute to documentation and common terminology repositories for content about my area",
-          "incorporate and prioritize FinOps initiatives into my daily activities"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Promote FinOps training and enablement as a vector for achieving business value from among those my areas of responsibility",
-          "Participate in formal and informal FinOps training activities to better understand and promote the culture of accountability throughout the organization",
-          "Become trained and Certified as a FinOps Practitioner or equivalent",
-          "Support and encourage including FinOps enablement in official job descriptions and training plans",
-          "Define and support the prioritization of FinOps initiatives as part of daily role activities across the organization",
-          "Speak often about FinOps’ importance and how it related to organizational objectives"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Seek out learning opportunities to understand and become trained in FinOps",
-          "Collaborate with the FinOps team to identify skills and knowledge required of other disciplines to effectively collaborate with me in my areas of expertise",
-          "Share experience, best practices and tips regarding my discipline and its relationship to FinOps and other persona disciplines",
-          "Contribute to documentation and common terminology repositories for content about my area"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
       }
     ],
     "inputs_outputs_md": "- FinOps targeted training and enablement\n- HR data that tracks training needs, training participation and certifications achieved\n- Cross-team FinOps training courses and sharing of best practices\n- Brown-bag/Lunch-n-Learn for cross FinOps Persona training\n- Centralized knowledge based serving as a repository for FinOps documentation, training materials, and terminology\n- Defined communication strategy to evangelize FinOps and communicate impact, value, and successes throughout the organization\n- Regular opportunities to ask questions related to cost optimization, cost savings, cost management, sustainability, and other FinOps capabilities\n- Centralized forum for any personas to submit questions and feedback to FinOps team",
@@ -1629,7 +1334,12 @@
       "Everyone in the organization understands why FinOps is important and how its practice in their persona discipline provides business value to the organization",
       "Training opportunities encourage collaboration and cross-fertilization of ideas across different functions",
       "Training is mindful of providing for different learning styles and needs for different individuals as well as different disciplines and levels of responsibility",
-      "Established centralized knowledge based serving as a repository for FinOps documentation, training materials, and terminology enabling self-directed learning"
+      "Established centralized knowledge based serving as a repository for FinOps documentation, training materials, and terminology enabling self-directed learning",
+      "Percentage of FinOps Personas who have completed training: (actual count certified / target for certification) * 100",
+      "Count of FinOps learning opportunities offered: (Target number of courses grouped by time period)",
+      "Participation in FinOps internal events: (Ratio = number of persons assisting/number of person invited * 100). Indicates involvement of stakeholders in acquiring knowledge and skills. It should increase at the beginning and then stabilize once the target population is mobilized.",
+      "Consultation ratio: (number of teams/stakeholders who consulted the Confluence/Wiki/Training material)",
+      "It could be related to the Number of Monthly Active Users (MAU) for Cost Insight Products but targeting knowledge acquisition. These indicators should increase over time and stabilize and include a comparison from previous KPI interest in the topic based on stakeholders’ initiatives to consult documentation."
     ],
     "license": "CC-BY-4.0",
     "maturity_raw": {
@@ -1771,66 +1481,6 @@
           "Drive cultural adoption"
         ],
         "label": "Drive stakeholder adoption"
-      },
-      {
-        "items": [
-          "Research and confirm cloud goals, current strengths, weaknesses, opportunities and blockers that are currently affecting my organization in terms of cloud usage, cost, and value",
-          "Provide clear and concise staffing needs to the appropriate executive teams. This will include requested FTE and virtual staff, recommended hierarchical position within the organization, overall FinOps budget needs, and goals that will be targeted as the FinOps team operates",
-          "Support the adoption of FinOps in the organization by reaching out to both executive and non-executive stakeholders. Additional work will go into engaging with staff from affected teams such as cloud engineering or finance to have them become more participatory and work towards long term engagement and cultural change. Consistent updates will be provided to all staff as the FinOps team progresses to make them part of the process as well.",
-          "Provide a FinOps team repository that will include reports, information related to FinOps, and a way for staff to utilize this information as needed."
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the goals of the FinOps team, and my interactions with it",
-          "Support the FinOps team and its members by providing insights into my needs, the tools I use, the information I require, and finance activities",
-          "Participate in identifying and providing input to decision models that may require my expertise (e.g. prepaying for reservations, managing budget overages)"
-        ],
-        "label": "As someone in the Finance role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the goals of the FinOps team, and my interactions with it",
-          "Support the FinOps team and its members by providing insights into my needs, the tools I use, the information I require",
-          "Participate in identifying and providing input to decision models that may require my expertise (e.g. managing budget overages)"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the goals of the FinOps team, and my interactions with it",
-          "Support the FinOps team and its members by providing insights into my needs, the tools I use, the information I require",
-          "Participate in identifying and providing input to decision models that may require my expertise (e.g. prepaying for reservations)"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the goals of the FinOps team, and my interactions with it",
-          "Support the FinOps team and its members by providing insights into my needs, the tools I use, the information I require, and engineering activities",
-          "Participate in identifying and providing input to decision models that may require Engineering expertise (e.g. managing anomalies)"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Provide input into the goals of the FinOps team, and my interactions with it",
-          "Support the actions of the FinOps team across the organization",
-          "Regularly review the effectiveness of the FinOps team, and determine where changes are required in its staffing, scope, size, or organizational structure",
-          "Support the FinOps team and its members by providing insights into my needs, the tools I use, the information I require",
-          "Participate in identifying and providing input to decision models that may require my expertise (e.g. prepaying for reservations, managing budget overages)",
-          "Provide funding and resources to the FinOps team"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the goals of the FinOps team, and my interactions with it",
-          "Support the FinOps team and its members by providing insights into my needs, the tools I use, the information I require",
-          "Participate in identifying and providing input to decision models that may require my expertise (e.g. managing budget overages)"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
       }
     ],
     "inputs_outputs_md": "- FinOps Tools & Services – coordinate on staffing and support needs, tools and resources to make the FinOps team more effective\n- FinOps Education & Enablement – coordinate to deliver needed training to all parts of the organization and to the FinOps team itself, to continually develop skills of the FInOps team staff\n- Executives and Leadership to support the activities of the FinOps team through executive sponsorship\n- HR and Organizational Design groups for FinOps role description development, hiring, skill development, support",
@@ -1969,62 +1619,6 @@
           "Identify exception handling for scenarios when forecasting anomalies occur"
         ],
         "label": "Track & Manage forecasts"
-      },
-      {
-        "items": [
-          "Develop the Forecasting Strategy in combination with Finance, Leadership, Engineering and Product personas",
-          "Establish requirements for when forecasting is due and how frequently forecast updates are needed",
-          "Generate granular forecasts with reasonable accuracy",
-          "Help to establish forecasting KPIs that are in alignment with business goals",
-          "explore optimization opportunities with teams that are forecast to overspend",
-          "Provide forecast data for cloud costs to enable stakeholders to create budgets",
-          "Provide granular reporting to teams on forecasted spend by different business-centric dimensions",
-          "Provide reporting on budgets vs actuals vs forecast to establish trends and compare against variance KPIs"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Develop product centric KPIs to measure the cost effectiveness in achieving my desired business outcomes",
-          "Establish forecasting threshold variances that are in alignment with the product-line that i own",
-          "Use these KPIs to inform forecast models in collaboration with my engineering counterparts"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Establish requirements for when forecasting is due and how frequently forecast updates are needed",
-          "Generate granular forecasts with reasonable accuracy",
-          "Help to establish forecasting KPIs that are in alignment with business goals",
-          "Explore optimization opportunities with teams that are forecast to overspend",
-          "Provide forecast data for cloud costs to enable stakeholders to create budgets",
-          "Provide granular reporting to teams on forecasted spend by different business-centric dimensions",
-          "Provide reporting on budgets vs actuals vs forecast to establish trends and compare against variance KPIs"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Monitor for cloud spend forecasts exceeding budgets in my area of responsibility"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Monitor for cloud spend forecasts exceeding budgets",
-          "Work with FinOps stakeholders to identify actionable optimization opportunities to avoid forecasted overspend",
-          "Get approval for planned changes which will have a negative impact to our cloud spend projections / budgets"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Be aware of cloud cost forecasts and monitor for impacts to the business",
-          "Establish forecasting threshold variances that are in alignment with business goals",
-          "Manage competing priorities for active project timelines when forecasted spend impacts budgets for high-priority initiatives",
-          "Ensure successful communication between the FinOps team and Business Units"
-        ],
-        "label": "As someone in a Leadership role, I will…"
       }
     ],
     "inputs_outputs_md": "#### Inputs\n\n- Cost and usage information from Reporting & Analytics\n- Estimates generated in Planning & Estimating\n- Functional and nonfunctional requirements for systems from Architecting for Cloud, Onboarding Workloads, Cloud Policy & Governance\n\n#### Outputs\n\n- Forecast model expectations to Budgeting\n- Updated Forecasting models",
@@ -2133,55 +1727,28 @@
     "headline_groups": [
       {
         "items": [
-          "Define, maintain, and communicate technology policies across all FinOps Scopes",
-          "Identify applicable risk categories and support risk assessment for technology decisions",
-          "Coordinate implementation of governance mechanisms including guardrails and automation",
-          "Develop and maintain KPIs for policy compliance and risk posture, and share them transparently",
-          "Ensure FinOps governance connects appropriately to enterprise IT governance, risk, and compliance structures",
-          "Promote cross-persona collaboration and integrate Governance, Policy & Risk outputs with other FinOps capabilities"
+          "Specify preferred, required, and restricted technology services and solutions across all FinOps Scopes and technology categories, ensuring policies are clearly communicated and consistently applied across all FinOps Personas",
+          "Define data storage lifecycle and retention policies that balance cost efficiency, performance, compliance, and sustainability considerations",
+          "Define technology modernization lifecycle policies that guide when and how technology resources are updated, replaced, or decommissioned",
+          "Define technology and spend-based commitment policies that establish organizational guardrails for making, managing, and evaluating commitment-based investments"
         ],
-        "label": "As someone in the FinOps team role, I will…"
+        "label": "Establish Technology Policy"
       },
       {
         "items": [
-          "Implement and operate technical governance controls, guardrails, and automation",
-          "Recommend policy improvements as systems, architectures, and technology categories evolve",
-          "Raise and escalate risk signals identified through engineering work",
-          "Execute corrective action plans when policy compliance gaps are identified"
+          "Specify requirements for governance tools and automation systems that support the consistent enforcement and monitoring of technology policies",
+          "Define governance procedures that establish clear accountability, escalation paths, and decision making processes for technology spend and usage across all relevant FinOps Personas",
+          "Establish governance cadences and reporting structures that ensure technology policy compliance and governance outcomes are regularly reviewed and communicated to Leadership and other stakeholder Personas"
         ],
-        "label": "As someone in an Engineering role, I will…"
+        "label": "Establish Technology Governance"
       },
       {
         "items": [
-          "Contribute to KPI definition for financial risk and policy adherence measures",
-          "Align technology financial policies to broader financial governance and planning frameworks",
-          "Support scenario planning for financial risk categories including forecasting variance and commitment exposure"
+          "Identify and document financial and operational risks associated with technology usage, spend commitments, and policy gaps across all technology categories, ensuring that risks are visible and assigned to appropriate owners",
+          "Define risk thresholds and tolerance levels in collaboration with Finance, Leadership, and other FinOps Personas, establishing clear criteria for when risks require escalation, remediation, or acceptance",
+          "Establish a continuous risk monitoring and review process that tracks emerging risks, evaluates the effectiveness of existing controls, and ensures that the organization’s risk posture remains aligned with its business objectives and regulatory obligations"
         ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Align vendor and contract management practices to technology policy",
-          "Surface contractual and vendor risk to the FinOps team",
-          "Ensure new technology procurement passes through appropriate governance review"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Apply FinOps policies and cost-efficiency principles in product planning and development decisions (shifting left)",
-          "Engage with governance processes when making architectural or technology investment decisions"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Set governing principles for technology use that FinOps policies translate into operational rules",
-          "Enforce and visibly support policy compliance across all teams",
-          "Engage with enterprise governance bodies to ensure FinOps perspectives are represented",
-          "Accept accountability for risk decisions within their scope of authority"
-        ],
-        "label": "As someone in a Leadership role, I will…"
+        "label": "Identify and Manage Technology Risk"
       }
     ],
     "inputs_outputs_md": "#### Inputs to this Capability:\n\n- Business strategy and technology investment priorities from Leadership\n- Regulatory, compliance, and contractual obligations from Legal, Compliance, and Procurement\n- Risk identification and assessment from enterprise risk management functions\n- Technology usage and spend data from Reporting & Analytics\n- Architectural standards and platform decisions from Engineering and CCoE teams\n- Market intelligence on best practices from FinOps Foundation and peer organizations\n\n#### Outputs from this Capability:\n\n- Authoritative policy statements covering each FinOps Scope\n- Governance mechanisms (guidelines, guardrails, automation) that implement those policies\n- Risk register inputs and risk mitigation documentation to Risk teams\n- Targets for automation of compliance to the Automation, Tools & Services Capability to eliminate the possibility where non-compliant technology decisions are made by defining the boundaries and criteria within which automation solutions, FinOps tools, and professional services activities can be evaluated, selected, and operationalized\n- Compliance KPIs and governance dashboards shared transparently across personas\n- Training and enablement materials for policy adoption (feeding into FinOps Education & Enablement)\n- Escalation paths and exception management processes for governance edge cases",
@@ -2325,81 +1892,24 @@
           "Define common decision making workflows, communication channels and cross-team notifications"
         ],
         "label": "Information and Data Coordination"
-      },
-      {
-        "items": [
-          "Establish and maintain clear lines of communication and coordination with other functions within the organization",
-          "Understand how organizational spending aligns with other taxonomies and overall technology Total Cost of Ownership.",
-          "Ensure allied teams have access to the data, embracing the FinOps Principle “FinOps data should be accessible, timely, and accurate”",
-          "Align tools, reports, and data sources between FinOps and other frameworks for reliability and user-friendliness so stakeholders get harmonious and dependable information from both functions",
-          "Determine and highlight usage impacting other disciplines (e.g. software license use, platform operational data)"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Use the information from the FinOps teams and other disciplines together to determine the optimal design and architecture to build business solutions",
-          "Use information from the FinOps teams and Allied Personas to understand the total cost of ownership (TCO) of investment decisions",
-          "Enable IT financial governance and policy on consumption within my business unit",
-          "Review and validate FinOps and intersecting discipline cost reports"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Leverage information from both FinOps teams and intersecting disciplines for budget planning and forecasting",
-          "Understand how FinOps intersectionality with other disciplines can enhance IT spend transparency and utilize their insights across the organization",
-          "Determine how to identify costs within the accounting system of record and systematically share relevant costs with those who require them",
-          "Collaborate with FinOps practitioners and Allied Personas to establish IT financial governance and policy on usage",
-          "Partner with FinOps and Allied Personas to confirm the accuracy of cost model calculation and reporting",
-          "Work with all Personas to understand the TCO and return on investment (ROI) of investment"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Use the information from the FinOps team & Allied Personas to determine the optimal procurement method for resources and licenses",
-          "Identify contracts within the procurement system of record",
-          "Ensure service provider and/or reseller agreements include access to cost data for Allied Personas in related disciplines",
-          "Determine forward use projections by license type to determine longer term strategies for creating, modifying or ceasing to maintain license agreements with other organizations"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Consider the input of not only cost but other intersecting discipline context when building (e.g. licenses owned, platforms available, well-architected models in use)",
-          "Properly tag resources so usage can be easily evaluated for its impact on other disciplines",
-          "Partner with FinOps Practitioners and Allied Personas to understand the total cost of ownership associated technology implementation, development, and operationalization, while using FinOps tools for specific deep-dive analytics of spending and resource optimization",
-          "Distribute costs among applications, products and solutions, business capabilities, and/or other taxonomies."
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Organize IT management disciplines to allow for and encourage collaboration between related disciplines",
-          "Direct the strategic path for technology investment, business goals, and roadmap",
-          "Serve as the ultimate escalation authority, using insights from FinOps and Allied Personas to steer the organization",
-          "Assume accountability for forecasts, budgets, TCO & ROI calculations"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Work with FinOps teams to provide insights and context",
-          "Track and manage the license position of resources by using the information provided by the FinOps team",
-          "Establish and maintain clear lines of communication with the FinOps Office/Practitioner to ensure seamless coordination and prioritization of FinOps and Allied Persona team initiatives",
-          "Understand and communicate the organization’s cloud-related TCO (e.g. direct costs and indirect labor, management tool, SaaS, and license costs)",
-          "Promote a culture of IT cost transparency and value-based decision-making on investments",
-          "Align tools, reports, and data sources between FinOps and other Intersecting Disciplines for reliability and user-friendliness so stakeholders get harmonious and dependable information from both functions"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
       }
     ],
     "inputs_outputs_md": "#### FinOps Inputs\n\n- Consumption Data (e.g. FOCUS Cost and Usage datasets)\n- Cloud Commitment Plans and Consumption (e.g. FOCUS Contract Commitment datasets listing savings plans, reserved instances, other negotiated commitments)\n- Enterprise Cost and Resource Pricing Schedule(s).\n- Cloud Platform Budgets and related monitoring, alerts, etc.\n- Related contractual benefits, inclusions, and licensing features (e.g. Azure Hybrid Use Benefits)\n- Tagging standards\n\n#### Allied Persona Inputs\n\n- Contract commitments and entitlements\n- Formal audit reports and asset inventory\n- Application Portfolio Master and Service Registry, including application/service owner, demand profile (in period and forecasted)\n- IT Service Management data, including IT Service Catalog/CMDB/Service Registry, and Service Tickets\n- IT Asset Management data, including Servers (physical, remote/cloud, and virtual including hypervisor)\n- IT Vendor Management data, including Vendor Agreements and Contracts (e.g. cloud service providers, as well as consulting, contract, and other related service providers)\n- IT Technical Inputs from monitoring tools for provisioned/ used storage, CPU/ RAM utilization, etc.\n- Management and Billing) information from vendors and providers in other related disciplines\n- Contextual data related to the use of technology internally and the allocation or responsibility of parts of the organization for elements of the IT estate\n\n#### Finance/Financial Inputs\n\n- Chart of Accounts, Cost Centers, Business Unit Codes, Capital Budget Codes, Location Codes\n- Cost Allocation Model (Actual / Planned Cost to Technology Category mapping)\n- General Ledger; Payables Ledger, and associated contextual codes\n- Financial Analysis Variables, Rates, and Ratios, including Discount Rate(s) (or WACC), Hurdle Rate(s), Event Horizon, Standard Labor Rates and Burden Rate (Labor; Planning)\n- Financial Planning and Budgeting data by Ledger Account, Cost Center and by financial period.\n- Fixed Asset Ledger\n- Financial Policies, Procedures, Protocols, and Practices, including financial expenditure approval thresholds; depreciation and amortization policy/strategy; capitalization bias/strategy;\n\n#### Organizational Inputs\n\n- Organizational Structure, Human Resources, and Labor data, including internal / external labor cost rates, number of FTEs, standard burden rates; contractual restrictions, limitations, etc.\n- Benchmark data, including industry/sector specific metrics",
     "kpi_bullets": [
       "Consistent Reporting: Reporting on usage is coordinated between Allied Personas and FinOps teams, the same data sources are used, and analytical results are consistent.",
       "Coordinated Policy and Governance: Allied Personas and FinOps teams consult with each other before establishing or changing technology and strategic IT policies, the governance structure, or products used to manage technology value.",
-      "Measures of success are represented in the context of business objectives / value and may include one or more key performance indicators (KPI), describe objectives with key results (OKR), and declare thresholds defining outliers or acceptable variance from forecasted trends."
+      "Measures of success are represented in the context of business objectives / value and may include one or more key performance indicators (KPI), describe objectives with key results (OKR), and declare thresholds defining outliers or acceptable variance from forecasted trends.",
+      "License Compliance: Monitoring software license compliance works to avoid potential legal and financial liabilities; the objective of this key performance indicator is to maintain compliance with license and contract obligations.",
+      "License Optimization: Monitoring software licenses to minimize underutilized licenses or to avoid unused licenses.",
+      "Security and Risk Management: Monitoring cloud security to identify potential risks by configuring and reporting appropriate policies and setting alerts with the objective to ensure the security and protection of cloud resources and to protect data on them (e.g. Cyber Asset Attack Surface Management, or CAASM).",
+      "% / count of licenses available by technology category (e.g. cloud, data center)",
+      "% of applications moved to a particular environment",
+      "% / amount of support costs for on-premises licenses reduced",
+      "Tag Compliance: percentage of resources tagged for allocation (in the cloud, using FOCUS, in a common repository, etc.)",
+      "% of costs aligned with the other standards",
+      "% of Costs Associated with Unallocated Cloud Resources",
+      "% of Costs that are Tagging Policy Compliant",
+      "% of Costs Associated with Untagged Resources"
     ],
     "license": "CC-BY-4.0",
     "maturity_raw": {
@@ -2535,77 +2045,6 @@
           "Handle adjustments and corrections with accounting systems"
         ],
         "label": "Manage chargeback financial interactions"
-      },
-      {
-        "items": [
-          "Receive Cloud Provider invoices and direct invoices for payment, or arrange for the appropriate team to receive them",
-          "Understand internal procurement process to generate a Purchase Order Number or Term Sheet for Cloud Provider to submit invoice against",
-          "Work with Finance to validate Cloud Provider invoice on a monthly basis, including expected costs, discounts, tax, credits",
-          "Validate any Marketplace invoice as needed and route to appropriate team",
-          "Understand how cloud expenses are generated",
-          "Help teach teams the tagging and account policies and the importance of expense accountability required for chargeback and invoice reconciliation",
-          "Establish and maintain data source/tool for allocation methodology for cloud usage and shared charges (i.e. commitment based discounts) and leverage this to create chargeback data",
-          "Validate chargeback data aligns with costs expected from invoice plus any added costs",
-          "Help teams reconcile their portion of expenses that is allocated to them each month using chargeback data",
-          "Partner with the accounting and finance team during close activities. Advise on estimation best practices for initial chargeback. Provide “true up” chargeback data to Finance if not in a single system in alignment with close timelines."
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Review the cloud costs I am accountable for each month",
-          "Understand how these costs impact my budget",
-          "Have an understanding of organizational policy regarding chargeback/showback and allocation of shared costs/discounts",
-          "Message cost expectations for my application to leadership",
-          "Leverage chargeback allocation information for prioritization of optimization work"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Understand how cloud expense is generated",
-          "Help teams understand their budgets and update forecasts as an iterative process",
-          "Explain variances to budget to leadership and budget owners (typically monthly, quarterly, yearly)",
-          "Partner with central FinOps team and Accounting to ensure the chargeback process evolves overtime to meet any changes to the organization’s budget or alignment needs",
-          "Help teams reconcile their portion of expense that is allocated to them each month",
-          "Partner with Accounting and the central FinOps team during close activities to ensure invoices are validated and paid on time",
-          "Utilize the centralized data/allocation tooling to execute chargeback postings in the financial system",
-          "Establish criteria for compliance with chargeback procedures that are in line with the company’s financial close, budgeting, and forecast processes",
-          "Provide detailed line item accounting such as General Ledger codes that tie back to budgets to enable proper chargeback",
-          "Track changes in cloud costs relating to currency fluctuations versus usage",
-          "Collaborate with central FinOps team to establish a process for charging back share cost and commitment based purchases",
-          "Execute on any necessary true-up entries after billing data is finalized to ensure cost to each department is accurate"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Understand how cloud expense is generated",
-          "Partner with Finance, Accounting, and the FinOps team on close activities and chargeback if Purchase Orders (POs) are required with cloud expenses, such as marketplace purchases via the Service Providers",
-          "Provide invoicing and payments terms to finance and accounting to ensure our chargeback processes meet the contractual criteria"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Understand how cloud expense is generated for each service used",
-          "Comply with company tagging and account policies that help drive more detailed chargeback",
-          "Review costs allocated to relevant teams/applications each month for awareness, trends, budgeting, etc.",
-          "Message cost expectations for my application to leadership and finance controller",
-          "Have an understanding of organizational policy regarding chargeback/showback and allocation of shared costs/discounts",
-          "If applicable, partner with FinOps practitioners, accounting, and Finance team to validate planned chargeback for shared services I own"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Understand how cloud expense is generated",
-          "Review cloud expense for portions I am accountable for",
-          "Leverage this information for real-time decision making",
-          "Establish metrics to measure and support chargeback success",
-          "Understand the organizational policy regarding chargeback/showback and allocation of shared costs/discounts and contribute to its evolvement if necessary"
-        ],
-        "label": "As someone in a Leadership role, I will…"
       }
     ],
     "inputs_outputs_md": "#### Inputs\n\n- Tagging standards and strategy provided by the FinOps team and determined as a part of Cost Allocation\n- Cost Allocation data provided by FinOps team from the established tooling\n- Cost allocation model for shared services provided by FinOps team and Finance\n- Internal allocation reporting built by FinOps team to feed chargeback process\n- Financial Policies, Procedures, Protocols, and Practices, including financial expenditure approval thresholds; depreciation and amortization policy/strategy; capitalization bias/strategy provided by finance and accounting team\n- Company cost center/department hierarchy provided by the finance team\n- Invoicing payment terms with each CSP provided by procurement team\n- General ledger requirements (Chart of Accounts, Cost Centers, Business Unit Codes, Capital Budget Codes, Location Code) provided by accounting team\n\n#### Outputs\n\n- Charges executed in financial systems and are visible in expense center actuals\n- A centralized reporting tool as the source of truth feeding the chargeback file\n- Feedback to Allocation on how Finance needs to officially allocate costs in Chargeback to organizational cost centers / General Ledger codes / etc.\n- Feedback to Data Ingestion Capability for specific data, metadata required for Chargeback or invoice reconciliation purposes\n- Feedback to Reporting & Analytics Capability on how showback reporting should be formatted into Chargeback reporting\n- Feedback to Intersecting Disciplines capability no how IT Finance or other financial extracts should also allocate or categorize costs\n- Terminology specifics around information provided on invoices and chargeback reports, for use by other personas to be more precise about reporting\n- Documentation of period close and invoice processing requirements to meet organizational finance needs\n- Chargeback file containing metadata, data – in the predetermined currency – aligned to the organization’s General Ledger for financial system ingestion and processing",
@@ -2614,7 +2053,13 @@
       "% of Invoices Paid On-Time – adherence to terms with Service Providers",
       "General Ledger Recharge Rate (Total and Per Cost Center) – variance between cloud spend in cloud management tool and amount charged in General Ledger",
       "% Accuracy of Chargebacks – Proper charges allocated to the correct cost center",
-      "% Variance in chargeback estimates vs actuals"
+      "% Variance in chargeback estimates vs actuals",
+      "Periodic reconciliation of invoices to ensure rate, discounts, and credits are validated",
+      "Budgets and forecasts are not impacted by material shifts in cost due to incorrect charges",
+      "An established and collaborative relationship between finance, accounting, and FinOps teams",
+      "An increase in awareness and accountability for cloud spend for each budget owner",
+      "Effective reporting on chargebacks executed",
+      "Reduced cycle time between receiving invoice and processing chargeback"
     ],
     "license": "CC-BY-4.0",
     "maturity_raw": {
@@ -2709,54 +2154,27 @@
     "headline_groups": [
       {
         "items": [
-          "Understand organizational technology strategy and business priorities across all FinOps Scopes, and work collaboratively with relevant FinOps Personas to translate these into meaningful KPIs that can be consistently benchmarked over time",
-          "Establish, communicate, and manage KPI and benchmarking programs for internal teams, ensuring that metrics are clearly defined, consistently measured, and presented in a format that is accessible and actionable for all relevant stakeholder FinOps Personas",
-          "Identify and pursue external benchmarking opportunities through trusted channels, such as the FinOps Foundation community, industry peer groups, and analyst networks to contextualize the organization’s performance and surface best practices that can inform internal optimization strategies",
-          "Regularly review and refine the organization’s KPI and benchmarking methodologies to ensure they remain aligned with evolving business objectives",
-          "Communicate KPI and benchmarking outcomes to Leadership and other stakeholder personas in a clear and compelling format, translating technology efficiency metrics into narratives that support informed strategic decision making and demonstrate the impact of FinOps activities across the organization"
+          "Identify, define, and document appropriate KPIs that reflect the organization’s priorities across cost, performance, efficiency, and sustainability dimensions, ensuring they are meaningful and actionable for all relevant stakeholder Personas",
+          "Establish internal benchmarks across teams, products, and FinOps Scopes to enable consistent measurement and comparison of optimization performance and business value generation within the organization",
+          "Identify and track external benchmarks against industry peers and established best practices, enabling the organization to contextualize its performance and identify opportunities for improvement relative to comparable organizations"
         ],
-        "label": "As someone in the FinOps team role, I will…"
+        "label": "Determine Organizational Benchmarks"
       },
       {
         "items": [
-          "Understand the organization’s benchmarking goals and work collaboratively with FinOps Practitioners, Engineering, and other FinOps Personas to achieve and improve upon them within my area of responsibility across all relevant FinOps Scopes and technology categories",
-          "Develop and contribute KPIs and timely benchmarking data for the products and services I am responsible for, ensuring that reporting reflects actual usage, efficiency, and business value outcomes in a format that supports consistent and meaningful comparison across the organization",
-          "Incorporate KPI and benchmarking insights into product planning and roadmap prioritization, using performance and efficiency data to inform decisions that balance cost, performance, and sustainability considerations",
-          "Communicate benchmarking outcomes for my area of responsibility to Leadership and other relevant FinOps Personas, translating product-level efficiency KPIs into business value narratives that are meaningful at the organizational level"
+          "Work with Leadership and Finance Personas to ensure that KPIs and benchmarks are directly connected to organizational strategy, business objectives, and executive-level performance expectations across FinOps Scopes and technology categories",
+          "Establish a governance methodology for iteratively reviewing and updating KPIs and benchmarks over time, ensuring they remain relevant and aligned with evolving business priorities",
+          "Communicate KPI and benchmarking outcomes to Leadership in a format that is meaningful at the executive level, translating technology efficiency KPIs into narratives that support strategic decision making"
         ],
-        "label": "As someone in a Product role, I will…"
+        "label": "Align KPIs and Benchmarks with Organizational Strategy"
       },
       {
         "items": [
-          "Understand the organization’s benchmarking goals and actively support their implementation by providing financial context and analysis that enables meaningful and consistent KPIs",
-          "Partner with FinOps Practitioners and Leadership Personas to ensure that KPIs and benchmarks are aligned with organizational financial strategy, budget targets, and investment priorities, and that benchmarking outcomes are reflected in financial planning and reporting processes",
-          "Provide financial modeling and analysis to support the development of unit economics KPIs, enabling the organization to measure and benchmark the business value generated",
-          "Incorporate insights into budgeting, forecasting, and variance analysis processes, ensuring that performance against benchmarks is visible and accounted for in financial plans and communicated clearly to Leadership",
-          "Work with FinOps Practitioners and Procurement Personas to leverage external benchmarking data in vendor negotiations and commercial decision making, ensuring that the organization’s technology spend is competitive and aligned with industry benchmarks"
+          "Use KPI and benchmarking data to identify performance gaps and optimization opportunities across all FinOps Scopes, and translate those insights into actionable recommendations that are prioritized in alignment with organizational strategy",
+          "Partner with Leadership and Finance Personas to establish improvement targets and accountability processes that ensure benchmarking insights drive measurable outcomes rather than remaining as observational data points",
+          "Track and report on progress over time, providing Leadership with a clear and consistent view of the organization’s FinOps maturity trajectory and its performance relative to industry peers"
         ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Understand the organization’s goals and work collaboratively with FinOps Practitioners, Product, and other FinOps Personas to achieve and continuously improve upon KPIs and benchmarks within my area of responsibility across all relevant FinOps Scopes and technology categories",
-          "Create systems, workloads, and services to automatically emit accurate benchmarking telemetry, ensuring that utilization, performance, efficiency, and sustainability KPIs are captured.",
-          "Contribute accurate benchmarking data for the systems, workloads, and services I am responsible for, ensuring that utilization, performance, efficiency, and sustainability KPIs are captured and reported in a format that supports consistent and meaningful comparison across the organization",
-          "Incorporate benchmark related insights into engineering decisions and optimization activities, using performance and efficiency data to develop KPIs and prioritize where to focus improvement efforts and tradeoffs",
-          "Proactively identify and communicate opportunities to improve benchmark data quality within my area of responsibility, working with FinOps Practitioners and other FinOps Personas to ensure that the KPI metrics being tracked are meaningful, accurate, and reflective of actual system and usage performance",
-          "Stay informed of emerging best practices and industry benchmark standards relevant to the technology categories and FinOps Scopes I work with, and advocate for their adoption where they would improve the organization’s ability to measure and demonstrate technology efficiency"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Define and champion a curated set of KPIs that reflect the organization’s strategic priorities across cost, performance, efficiency, and sustainability priorities, ensuring they are meaningful at the executive level",
-          "Provide executive-level sponsorship and visibility for internal KPI and benchmarking programs, ensuring that all teams understand the goals and expectations of the benchmarking in the context of business priorities and are held accountable for benchmarking outcomes",
-          "Establish and nurture relationships with peer organizations, industry bodies, and community networks such as the FinOps Foundation to enable trusted external benchmarking and the exchange of best practices",
-          "Use KPI and benchmarking insights to inform organizational strategy, validate technology investment decisions, and communicate the business value of FinOps activities to other executive stakeholders and the broader organization",
-          "Ensure that benchmarking outcomes are integrated into organizational governance programs and performance management processes, creating clear accountability for improvement and ensuring that benchmarking drives meaningful action rather than remaining as observational data",
-          "Foster a culture of continuous improvement and performance transparency across the organization, recognizing and rewarding teams that demonstrate measurable progress against KPI and benchmarking targets and contribute to the advancement of the organization’s overall FinOps maturity level"
-        ],
-        "label": "As someone in a Leadership role, I will…"
+        "label": "Drive Continuous Improvement Through Benchmarking Insights"
       }
     ],
     "inputs_outputs_md": "#### Inputs to this Capability\n\n- Through the [Unit Economics](https://www.finops.org/framework/capabilities/unit-economics/) Capability, identify and understand which KPIs will provide the most meaningful insights for benchmarking, ensuring that the metrics selected are aligned with organizational strategy and reflective of actual technology value and efficiency across all FinOps Scopes\n- Through the [Reporting & Analytics](https://www.finops.org/framework/capabilities/reporting-analytics/) Capability, develop and maintain dashboards and reporting that support internal benchmarking efforts, ensuring that KPI and benchmarking data is accessible, consistent, and presented in a format that is curated for stakeholder personas\n- Points of comparison and benchmarking data from external peer organizations, analyst networks, and community programs such as the FinOps Foundation, are used to contextualize internal performance and identify opportunities for improvement relative to industry best practices\n- Through the [Data Ingestion](https://www.finops.org/framework/capabilities/data-ingestion/) Capability, obtain the cost, utilization, performance, and sustainability data needed to calculate and track KPIs consistently across all FinOps Scopes and technology categories, ensuring that benchmarking is supported by accurate and normalized data, aligned to standardized schemas such as FOCUS\n- Through the Capabilities in the [Understand Usage & Cost Domain](https://www.finops.org/framework/domains/understand-usage-cost/), provide the foundational usage and cost visibility, allocation, and reporting needed to establish meaningful baselines against which KPIs can be measured and tracked over time\n- Inputs from [Leadership](https://www.finops.org/framework/persona/leadership/) and [Finance](https://www.finops.org/framework/persona/finance/) Personas on organizational strategy, business objectives, and financial priorities that inform the selection and definition of KPIs and benchmarks, ensuring they are relevant and meaningful at the executive level\n\n#### Outputs from this Capability\n\n- KPI trends and benchmarking insights from this Capability inform the [Forecasting](https://www.finops.org/framework/capabilities/forecasting/) Capability’s forward-looking projections of technology spend and efficiency across all [FinOps Scopes](https://www.finops.org/framework/scopes/)\n- KPI performance data and benchmarking insights from this Capability inform the [Usage Optimization](https://www.finops.org/framework/capabilities/workload-optimization/) and [Rate Optimization](https://www.finops.org/framework/capabilities/rate-optimization/) Capabilities by highlighting optimization opportunities that help prioritize optimization activities across all [FinOps Scopes](https://www.finops.org/framework/scopes/) and technology categories\n- Benchmarking outcomes and KPI performance reports communicated to [Leadership](https://www.finops.org/framework/persona/leadership/) and [Finance](https://www.finops.org/framework/persona/finance/) Personas, providing evidence of the organization’s technology efficiency and informing strategic investment and prioritization decisions across all FinOps Scopes\n- A documented and continuously refined KPI and benchmarking methodology that serves as a reference for all FinOps Personas, guiding the consistent definition, measurement, and reporting of KPIs across all FinOps Scopes and technology categories over time",
@@ -2905,64 +2323,6 @@
           "Understanding when to engage or coordinate with an IT Asset Management (ITAM) or Software Asset Management (SAM) function in your organization (via the Intersecting Disciplines Capability)"
         ],
         "label": "Managing use of Licenses & SaaS"
-      },
-      {
-        "items": [
-          "Determine which cloud resources are billed with software licenses or using licenses purchased from a cloud provider marketplace",
-          "Determine what SaaS products are used in the organization that integrate with, deploy, monitor, provide analytics about or secure my cloud-based applications and infrastructure",
-          "Determine which cloud resources have been configured with BYOL or can be",
-          "Participate in reviews/discussions where new or migrating workloads will require licensing or SaaS integration",
-          "Work to understand the use cases, contracts, channels, and restrictions in place for buying licensing and SaaS in use",
-          "Establish models for understanding and conveying the value of various tradeoffs between different software architectures, license use, license substitution, application modernization, etc."
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Leverage information from FinOps and SAM on licensing and SaaS to help determine total costs of a resource/group of resources",
-          "Be mindful of licensing and SaaS when designing new products/features and be sure to include them along with cloud costs",
-          "Understand and communicate plans over long term for license use and tradeoffs"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Include licensing and SaaS costs when planning and forecasting"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Work with Engineering, FinOps, and Finance when procuring through a CSP marketplace, negotiating a private purchase contract, or working with a reseller to understand the needs, costs, and likelihood of use over the entire contract term",
-          "Review all available options for procurement of licensing/SaaS and how it may impact spend thresholds set as part of CSP enterprise agreements"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Consider existing/BYOL licenses vs. SaaS when architecting new infrastructure or software in the cloud",
-          "Provide resource metadata (through tagging) to make it easy to identify resources should they be eligible for BYOL",
-          "Communicate with FinOps and SAM when licenses are no longer needed or there are plans to terminate a SaaS contract",
-          "Work with FinOps and SAM to determine if changes to existing workloads impact licensing or change the volume of consumption for SaaS",
-          "Work with FinOps and SAM to ensure cloud resources have been reviewed and optimization has taken place before license/contract renewal"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Ensure there is a process in place for reviewing requests for new licenses or SaaS to ensure that teams do not purchase what already exists or has similar functionality",
-          "Ensure the organization is balancing best value decision making when choosing the model for deploying software to support business functions"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Make available a summary of unallocated or hybrid use license entitlements with budget/ownership information that can be used by the FinOps team to optimize spend on cloud services .",
-          "Track and manage the license position of cloud resources by using the information provided by the FinOps team",
-          "Manage software license renewals, optimize licenses already migrated to cloud, and maximize use of BYOL where more economical than marketplace software",
-          "Use the information from the FinOps practitioner on marketplace software purchased and analyze those against existing entitlements"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
       }
     ],
     "inputs_outputs_md": "- Cloud provider billing and usage data\n- Licensing data from SAM/ITAM tools\n- SaaS contract details\n- Architecting for Cloud to adjust use of licenses and SaaS products in software over time\n- Marketplace data well integrated and tagged via Data Ingestion\n- Input from license servers/license tracking services in use\n- Tagging or other ways to identify where BYOL are being used independently of the licensed type of resource in the cloud billing data (where a virtual resource sold by the cloud provider without a license is running software or OS installed by the customer)",
@@ -3107,62 +2467,6 @@
           "Make recommendations to adjust forecasting models"
         ],
         "label": "Implementation plan"
-      },
-      {
-        "items": [
-          "Establish requirements and parameters for estimating done by product and engineering teams",
-          "Generate granular estimates with reasonable accuracy",
-          "Help to establish estimating KPIs that are in alignment with business goals",
-          "Provide estimates of cloud costs to enable stakeholders to create forecast models",
-          "Participate in implementation planning and scenario estimating pricing, policy, shared cost, and other impacts",
-          "Provide granular reporting to teams on estimated spend by different business-centric dimensions",
-          "Manage collaboration with Allied persona groups and other stakeholders throughout estimation process",
-          "Provide reporting on estimate accuracy trends"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Track product centric KPIs to measure the cost effectiveness in achieving my desired business outcomes",
-          "Collaborate with the FinOps Sustainability Persona to track KPIs at unit carbon level (Metric Tons of CO2 Equivalent MTCO2e) for product, department or workload . Carbon footprint measurements",
-          "Use these KPIs to inform estimating scenarios in collaboration with my engineering counterparts",
-          "Establish estimating parameters that are in alignment with the product-line that i own"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Establish requirements for estimate accuracy and level of detail",
-          "Help to establish estimating KPIs that are in alignment with business goals",
-          "Provide data for cloud costs to enable stakeholders to create forecasts to allow me to create budgets",
-          "Provide granular reporting to teams on forecasted spend by different business-centric dimensions",
-          "Provide reporting on budgets vs actuals vs forecast vs estimates to establish trends and compare against variance KPIs",
-          "Provide access to trial funding when appropriate to create more accurate estimates"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Monitor for cloud spend forecasts exceeding budgets to trigger estimating work",
-          "Monitor optimization, onboarding, architecture for triggers to estimate new resources",
-          "Work with FinOps Core and Allied Personas like FinOps Practitioners, Product, and Sustainability to create meaningful estimating scenarios in each case where they are called for",
-          "Work to understand the various estimating scenarios I should consider in each case",
-          "Get approval for planned changes which impact cloud spend projections / budgets",
-          "Lead estimating work in areas under my control and responsibility",
-          "In cases where forecast models are in place, understand when new estimates are required, and how those estimates will impact existing forecast models I’m responsible for",
-          "Design and architect infrastructure with cost, optimization and carbon in mind"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Be aware of cloud cost and impact estimation processes and support engineering personas in that work",
-          "Establish estimating threshold variances that are in alignment with business goals",
-          "Manage competing priorities for active project timelines when estimated spend impacts budgets for high-priority initiatives",
-          "Foster successful communication between all FinOps Core and Allied Personas to ensure technology spend and ESG priorities align with business objectives to create value",
-          "Manage tradeoffs and planning decisions when comparisons are required between different estimated scenarios"
-        ],
-        "label": "As someone in a Leadership role, I will…"
       }
     ],
     "inputs_outputs_md": "#### Inputs\n\n- Triggers to perform estimating from Workload Optimization\n- Triggers to perform estimating from Rate Optimization\n- Triggers to perform estimating from Reporting & Analytics\n- Triggers to perform estimating from Onboarding Workloads\n- Triggers to perform estimating from Forecasting requirement\n- System or workload details as currently built\n- System or workload functional and non-functional requirements in to-be location, model\n- Scenario details to be modeled\n- Desired state of system or workload, or future plans for modification\n- Current architectural guidelines (Architecting for Cloud)\n- Parameters of the estimate desired (time frame, level of accuracy, etc.)\n- FinOps Practitioner to stay aware of ESG regulations and standards\n- Data has to be validated for accuracy\n\n#### Outputs\n\n- Scenario cost carbon and delivery estimate(s) for the system or workload\n- Recommendations based on estimates among competitive scenarios\n- Likely risks and level of confidence\n- Data quality score card for validation (KPIs, frequency period, etc.)",
@@ -3316,64 +2620,6 @@
           "Architect to leverage cost effective technologies/services"
         ],
         "label": "Use other mechanisms to optimize rate"
-      },
-      {
-        "items": [
-          "Manage and oversee the central rate optimization activities overall, including discount purchasing",
-          "Deeply understand all of the options and impacts of all available rate optimization mechanisms, and assist all other personas to understand them to the level required",
-          "Work with Procurement to provide support in understanding past cloud use and future planned use, and important or impactful services use",
-          "Provide support to all personas to report on and analyze cloud costs appropriately for their persona",
-          "Create and manage the rate optimization strategy for the organization"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Collaborate with the FinOps team to provide information on current and future resource use plans, notifying them of changes that will substantially impact my usage, and highlighting important services",
-          "Understand and incorporate discounted cost data into my reporting and analysis as appropriate in the rate optimization strategy"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the various rate optimization strategies available, their impacts and benefits",
-          "Work closely with FinOps and Procurement personas to help set guidelines for the Rate Optimization strategy, reporting guidelines, and allocation of discounts",
-          "Model and support decision making with respect to prepayment for discounts, purchase levels, pre-approvals, and budget cost center impacts"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the various rate optimization strategies available, their impacts and benefits",
-          "Work closely with FinOps, Finance and Leadership personas to help set guidelines for the Rate Optimization strategy, reporting guidelines, and allocation of discounts",
-          "Work to understand clearly what current and future cloud use looks like and which services are critical or impactful",
-          "Work with vendors to negotiate agreements where appropriate"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Understand the cost and value impact of rate optimization activities",
-          "Work with the FinOps team to identify important or critical cloud services that can provide significant impact or benefit to my products",
-          "Coordinate with Engineering teams to understand impacts of spot use or scaling",
-          "Use appropriate pricing metrics when budgeting and analyzing my products to include (or not include) discounts as specified in the rate optimization strategy"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the impact and importance of the various rate optimization mechanisms",
-          "Work with Finance and FinOps teams to establish strategy and policies regarding rate optimization",
-          "Support central purchasing of commitment discounts, and promote collaboration with the FinOps team across all personas"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Understand the impact of rate optimization activities on my scope of responsibility",
-          "(ITAM) Work with FinOps team to coordinate on impacts of ITAM activities on rate optimization mechanisms"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
       }
     ],
     "inputs_outputs_md": "#### Inputs\n\n- [Usage Optimization](https://www.finops.org/framework/capabilities/workload-optimization/) recommendations\n- [Rate Optimization](https://www.finops.org/framework/capabilities/rate-optimization/) recommendations\n- [Architecting & Workload Placement](https://www.finops.org/framework/capabilities/architecting-for-cloud/) recommendations\n- [Sustainability](https://www.finops.org/framework/capabilities/cloud-sustainability/) recommendations\n\n#### Outputs\n\n- [Rate Optimization](https://www.finops.org/framework/capabilities/rate-optimization/) Strategy\n- [Rate optimization](https://www.finops.org/framework/capabilities/rate-optimization/) recommendations",
@@ -3528,67 +2774,6 @@
           "Distribute reports and analytic data to appropriate organizations, personas"
         ],
         "label": "Support reporting and analytics needs across personas"
-      },
-      {
-        "items": [
-          "Work with every group to determine the right metrics, measures and metadata that should be included in “official” output",
-          "Provide support to teams as they access reports in a self-service capacity",
-          "Develop the capability to enrich data and apply business logic to usage and billing data",
-          "Provide the organization with usage and billing data expertise"
-        ],
-        "label": "As someone in the FinOps team role, I will…"
-      },
-      {
-        "items": [
-          "Actively include cost as a consideration when evaluating solution options and services",
-          "Communicate with FinOps teams on the information that will best enable engineering with FinOps in mind",
-          "Learn and access reporting/dashboards provided by FinOps teams",
-          "Enable FinOps teams to put data into existing dashboards and work queues to lower the effort needed by engineers",
-          "Set achievable cost objectives for my teams, meet KPIs that are meaningful to my business partners",
-          "Manage development cycles in the context of both producing business capabilities and implementing optimizations"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Work to provide guidance on my reporting and data analytics use cases to the FinOps team, how that data should be presented and represented, sorted, summarized and delivered",
-          "Work to use the data analytics and reporting capabilities provided by the FinOps team in the performance of my job",
-          "Collaborate with the Finops team to determine the appropriate way to represent cost information to all other personas"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Work to provide guidance on my reporting and data analytics use cases to the FinOps team, how that data should be presented and represented, sorted, summarized and delivered",
-          "Work to use the data analytics and reporting capabilities provided by the FinOps team in the performance of my job",
-          "Collaborate with the FinOps team to determine appropriate ways to represent usage, cost and other data related to data sensitivity and sharing"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Work to provide guidance on my reporting and data analytics use cases to the FinOps team, how that data should be presented and represented, sorted, summarized and delivered",
-          "Work to use the data analytics and reporting capabilities provided by the FinOps team in the performance of my job"
-        ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Work to provide guidance on my reporting and data analytics use cases to the FinOps team, how that data should be presented and represented, sorted, summarized and delivered",
-          "Work to use the data analytics and reporting capabilities provided by the FinOps team in the performance of my job",
-          "Work with other personas to specify the type of reporting and data analytics which should be used and relied upon from this Capability",
-          "Set priorities for cost and carbon objectives for my organization in the context of overall business value",
-          "Establish business objectives that enable the team in making tradeoff decisions that have multiple competing priorities"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Work to provide guidance on my reporting and data analytics use cases to the FinOps team, how that data should be presented and represented, sorted, summarized and delivered",
-          "Work to use the data analytics and reporting capabilities provided by the FinOps team in the performance of my job",
-          "As a sustainability persona, I will actively provide guidance to the FinOps team to leverage and synchronize reporting and analytics to champion corporate sustainability targets"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
       }
     ],
     "inputs_outputs_md": "#### Inputs\n\n- Detailed data provider billing, usage, observability, license and carbon data\n- Service specific API for gathering utilization data and rate optimization data\n- Business intelligence and data visualization tools\n- Cost allocation metadata aligned with company cost center/department hierarchy\n- Cost allocation model for shared services\n- Defined tagging standards and strategy\n- Data from Allied Personas from their discipline to supplement FinOps reporting and analysis\n\n#### Outputs\n\n- Forecasts with variance thresholds\n- Allocated and unallocated resources coverage reports\n- Rate optimization threshold reports for commitment coverage and vacancy rates\n- Resource utilization reports include system attribute benchmarks (such as CPU, Memory, Storage)\n- Context specific analysis curated by Persona role/responsibility (Finance, Engineer, Product, Sustainability, Leadership, …etc)\n- Data exports that can be utilized by Allied Personas within their discipline activities\n- A centralized FinOps repository of data and reporting tool as the source of truth",
@@ -3735,81 +2920,19 @@
     "headline_groups": [
       {
         "items": [
-          "Collaborate with Sustainability Personas and other stakeholders to align FinOps activities with organizational sustainability goals",
-          "Work with technology providers, data providers, and other billing sources to define requirements that improve the granularity, quality, and auditability of Scope 1, 2, and 3 emissions data, and incorporate that data into a usable, consumable format that supports sustainable business decisions",
-          "Ensure engineering, product, and other relevant teams have a clear understanding of how elastic and efficient resource provisioning across all technology domains supports the organization’s sustainability goals",
-          "Ensure that sustainability optimizations are developed alongside usage and rate optimization recommendations, so that cost and carbon efficiency are considered together",
-          "Support organizational sustainability goals by aligning technology reporting and metrics to surface positive and negative sustainability impacts alongside financial cost impacts",
-          "Enable the organization to make more sustainable technology decisions by providing clear, relevant emissions data that is correlated with cost data and provided in near real time when available or through internally modelled estimates derived from usage telemetry and regional carbon intensity data",
-          "Establish and maintain a consistent methodology for allocating and reporting carbon emissions data across technology domains, enabling teams to understand and take accountability for their sustainability impact alongside their technology spend",
-          "Monitor and communicate progress against organizational sustainability targets by developing KPIs and benchmarks that track the carbon efficiency of technology use over time, and share findings with relevant stakeholders to drive continuous improvement"
+          "Assess technology carbon footprint across all technology categories: Identify and measure the environmental impact of technology use across cloud, data center, SaaS, AI, or end-user computing. Establish baseline emissions data even where coverage is incomplete, using directionally correct estimates where precise data is unavailable.",
+          "Align sustainability strategy with optimization goals: Treat usage efficiency as the primary lever for both cost and carbon reduction. Sustainability improvements are most durable when they emerge from the same optimization activities that reduce waste and improve resource utilization.",
+          "Identify and prioritize sustainability improvement opportunities: Surface tradeoffs where sustainability and financial goals align or conflict, and provide the data needed for engineering and product teams to make informed decisions."
         ],
-        "label": "As someone in the FinOps team role, I will…"
+        "label": "Understanding Sustainability Impact"
       },
       {
         "items": [
-          "Work with Leadership, Finance, and FinOps Practitioner Personas to understand the organizational sustainability strategy and guidelines, and incorporate them into product planning and prioritization decisions",
-          "Partner with Engineering teams to identify and drive sustainability optimizations that are appropriate for the products and workloads I am responsible for",
-          "Incorporate sustainability metrics alongside cost and performance metrics when evaluating the success and health of products I own, ensuring environmental impact is treated as a first-class consideration",
-          "Evaluate tradeoffs between sustainability, cost, and performance when making architectural and operational decisions, and escalate conflicts to appropriate stakeholders when necessary",
-          "Advocate for sustainability requirements during product development cycles, ensuring that carbon efficiency is considered at the design stage rather than as an afterthought"
+          "Integrate sustainability data into FinOps reporting: Incorporate carbon and related emissions data into cost allocation, forecasting, and unit economics so environmental impact is visible alongside financial spend.",
+          "Engage intersecting disciplines when they exist: Coordinate with organizational sustainability, procurement, and finance functions to align technology reporting with corporate mandates and regulatory requirements.",
+          "Support compliance and transparency: Document assumptions, estimation methodologies, and data quality limitations to ensure reporting integrity and reduce regulatory exposure."
         ],
-        "label": "As someone in a Product role, I will…"
-      },
-      {
-        "items": [
-          "Work with Engineering and Practitioner Personas to clarify, balance, and justify guidance for more sustainable technology options (e.g. lower carbon infrastructure, energy efficient locations) versus lower cost options, ensuring both financial and environmental considerations are represented in decision making",
-          "Ensure accurate and transparent financial statement disclosures related to technology use while maintaining integrity and adherence to sustainability regulatory standards and reporting requirements",
-          "Work with FinOps Practitioners and Sustainability Personas to develop and maintain a consistent process for quantifying and reporting the financial impact of carbon emissions, including carbon costs, penalties, and offsets, across all technology domains",
-          "Monitor evolving sustainability regulations and reporting mandates (e.g. Scope 1, 2, and 3 emissions requirements) to ensure the organization remains compliant and that financial disclosures accurately reflect technology-related environmental impacts",
-          "Incorporate sustainability cost drivers into budgeting, forecasting, and variance analysis processes, ensuring that carbon-related costs and savings are visible and accounted for alongside traditional technology spend"
-        ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Work with FinOps Practitioners and Sustainability Personas to incorporate technology sustainability reporting into corporate-wide sustainability reporting, and leverage that data to inform strategic vendor and sourcing decisions",
-          "Partner with Engineering and FinOps Practitioner Personas to balance the needs of the business with sustainable technology architecture and procurement choices across all technology domains",
-          "Define and communicate requirements to technology vendors and data providers for the sustainability data, emissions metrics, and reporting granularity needed to support the organization’s sustainability goals",
-          "Evaluate and incorporate sustainability criteria alongside cost and performance criteria when assessing, selecting, and renewing technology vendor contracts and agreements",
-          "Work with Finance and FinOps Practitioner Personas to understand the financial implications of sustainability-driven procurement decisions, including the cost impact of choosing more sustainable but potentially higher cost technology options",
-          "Track and report on vendor performance against sustainability commitments, ensuring accountability and driving continuous improvement in the sustainability profile of the organization’s technology supply chain"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Work to understand the organizational sustainability strategy, guidelines, and priorities as they apply to the systems, workloads, and technology domains I am responsible for",
-          "Be aware of the sustainability implications of my resource decisions alongside financial cost impacts, and work to deploy elastic, efficient solutions that minimize or eliminate wasted resources across all technology categories",
-          "Be aware of the sustainability impacts of the technology services and infrastructure options available to me, in order to incorporate sustainability considerations into my builds and identify opportunities to optimize existing workloads",
-          "Incorporate sustainability metrics alongside cost and performance metrics when designing, building, and operating systems, treating carbon efficiency as a first-class engineering consideration rather than an afterthought",
-          "Proactively identify and communicate architectural tradeoffs where sustainability and cost or performance goals conflict, and work with FinOps Practitioners, Product, and Sustainability Personas to evaluate and resolve those tradeoffs in alignment with organizational priorities",
-          "Stay informed of emerging tools, technologies, and best practices that can improve the carbon efficiency of the systems I build and operate, and advocate for their adoption where appropriate"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Set strategy and priority for sustainability decisions with respect to other competing business drivers",
-          "Establish and communicate a clear organizational sustainability strategy that encompasses all the organization’s technology categories, ensuring alignment between sustainability goals, business objectives, and technology investment decisions",
-          "Ensure that sustainability considerations are embedded into organizational culture, processes, and decision making, and that all relevant teams understand their role in achieving the organization’s sustainability goals",
-          "Work with Finance, Procurement, and FinOps Practitioner Personas to ensure that sustainability-related costs, risks, and opportunities are visible and accounted for in organizational budgeting, forecasting, and strategic planning processes",
-          "Champion the adoption of FinOps practices that drive carbon efficiency alongside cost efficiency, recognizing that sustainable technology use is both a financial and reputational imperative for the organization",
-          "Set measurable sustainability targets for technology use across all domains, and hold teams accountable for progress against those targets through regular executive-level reporting and governance reviews",
-          "Ensure the organization is positioned to meet current and emerging sustainability regulatory requirements by investing in the data, tooling, and organizational capabilities needed to report accurately and transparently on technology-related carbon emissions"
-        ],
-        "label": "As someone in a Leadership role, I will…"
-      },
-      {
-        "items": [
-          "Work with FinOps Practitioner Personas to coordinate on how technology usage across the organization impacts and informs the corporate sustainability strategy, ensuring that technology-related emissions are accurately represented in organizational sustainability reporting",
-          "Coordinate with FinOps Practitioner Personas to track and communicate technology sustainability performance over time, establishing shared metrics and reporting cadences that reflect progress against organizational sustainability targets",
-          "Serve as the primary source of expertise on sustainability regulations, and reporting standards(e.g. Scope 1, 2, and 3 emissions, GHG Protocol), ensuring FinOps and Engineering Personas have the guidance they need to align their activities with corporate sustainability mandates",
-          "Partner with Finance and Procurement Personas to ensure that sustainability criteria are consistently applied across vendor selection, contract negotiations, and technology investment decisions",
-          "Provide FinOps Practitioner and Engineering Personas with clear, actionable sustainability guidelines and priorities that can be incorporated into technology architecture, optimization, and operational decisions across all technology domains",
-          "Engage with external industry bodies and regulators on behalf of the organization, leveraging insights from FinOps Practitioner, Product, and Engineering Personas to accurately represent the organization’s sustainability posture and commitments"
-        ],
-        "label": "As someone in an Allied Persona role, I will…"
+        "label": "Governing and Reporting Sustainability"
       }
     ],
     "inputs_outputs_md": "#### Inputs to this Capability\n\n- Through the [Data Ingestion Capability](https://www.finops.org/framework/capabilities/data-ingestion/), obtain sustainability reporting and carbon emissions data from technology providers, data providers, and other billing and vendor sources across all technology domains\n- Technology provider and vendor sustainability contextual information and optimization recommendations (e.g. comparisons of the carbon impact of various infrastructure types, deployment locations, or architectural patterns) used to inform decision making across all technologies\n- Third party data, tools, and recommendations for carbon reduction opportunities across all technology domains, including benchmarking data that enables the organization to compare its sustainability performance against industry peers\n- Through the [Intersecting Disciplines Capability](https://www.finops.org/framework/capabilities/intersecting-disciplines/), coordinate with broader organizational sustainability functions that require specific reporting, data, or coordination to support corporate sustainability mandates and regulatory compliance requirements\n- Inputs from Leadership and Finance Personas on organizational sustainability strategy, regulatory compliance requirements, and carbon reduction targets that inform the prioritization and direction of sustainability optimization activities across all FinOps Scopes\n\n#### Outputs from this Capability\n\n- Through the [Reporting & Analytics Capability](https://www.finops.org/framework/capabilities/reporting-analytics/), ensure that available sustainability data is consistently included in cost reports and presented alongside financial metrics in a consumable format\n- Through the [Unit Economics Capability](https://www.finops.org/framework/capabilities/unit-economics/), ensure sustainability data is incorporated into key metrics, enabling teams to understand the carbon efficiency of their technology use on a per-unit basis\n- Through the [Allocation Capability](https://www.finops.org/framework/capabilities/allocation/), ensure carbon emissions data is attributed accurately to the appropriate teams, products, and workloads, enabling accountability and supporting chargeback or showback of sustainability costs\n- Through the [Forecasting Capability](https://www.finops.org/framework/capabilities/forecasting/), incorporate sustainability data and carbon emissions trends into forward-looking technology spend projections, enabling the organization to anticipate and plan for future sustainability impacts and obligations\n- Training and guidance to help all relevant FinOps Personas understand how to manage, view, and act on sustainability data at the appropriate level of granularity (e.g. by team, application, workload, or technology domain)\n- Sustainability optimization recommendations communicated to Engineering, Product, and other stakeholder Personas, identifying opportunities to reduce carbon emissions and improve the environmental efficiency of technology use across all FinOps Scopes\n- A documented and continuously refined Sustainability strategy that serves as a reference for all stakeholder Personas, guiding carbon reduction prioritization, tradeoff decision making, and progress reporting over time",
@@ -3938,66 +3061,29 @@
     "headline_groups": [
       {
         "items": [
-          "Connect technology-related spend, usage and adoption to the organization’s business strategy and priorities through Executive Strategy Alignment",
-          "Communicate the importance of using Unit Economics to tie technology cost to organizational value consistently",
-          "Build collaboration between other personas to understand the key metrics involved in the organization, for applicable FinOps Scopes",
-          "Define and document meaningful metrics in partnership with Leadership, Engineering and Product Personas that relate technology cost and usage to business value",
-          "Document metric definitions, assumptions, and cost inclusions for consistent interpretation",
-          "Provide visibility to unit metrics and KPIs in appropriate channels for each FinOps Persona, including point of consumption visibility where usage decisions occur",
-          "Align FinOps Personas on outcomes, demand drivers, and relevant unit metrics",
-          "Support governance cadence for metric review, changes, and retirement"
+          "Define and document goals the organization is trying to achieve through the investment in technology and its application",
+          "Define and document metrics which will drive the decisions, behaviors or outcomes needed",
+          "Define and document measurements that are appropriate to evaluate technology use and cost",
+          "Define unit metrics and KPIs which satisfy the needs of those organizational goals",
+          "Distinguish resource efficiency unit metrics from business unit metrics, and clarify how they relate"
         ],
-        "label": "As someone in the FinOps team role, I will…"
+        "label": "Define Unit Metrics which support Organizational Goals"
       },
       {
         "items": [
-          "Define outcome goals, demand assumptions, and sustainable cost to serve targets",
-          "Provide input to FinOps Practitioners regarding key organizational metrics and goals related to my area of responsibility",
-          "Co-define meaningful metrics that demonstrate business value from my products",
-          "Clarify business data sources, data points and unit definitions to reduce debate",
-          "Track defined metrics to demonstrate the value the products are bringing to the business",
-          "Work with FinOps teams to expand AI metrics beyond tokens toward outcome related measures"
+          "Provide feedback to Data Ingestion to gather appropriate information to calculate unit metrics and KPIs",
+          "Assess business data quality and validate terminology alignment early, leveraging FOCUS",
+          "Define a strategy for providing KPI data to all appropriate stakeholders in the channels they use for decision making",
+          "Document data sources, correlations, and unit metric calculations for all personas"
         ],
-        "label": "As someone in a Product role, I will…"
+        "label": "Ensure Unit Economic data is available"
       },
       {
         "items": [
-          "Provide input to FinOps Practitioners regarding key organizational metrics and goals related to my area of responsibility",
-          "Align unit metrics with organization wide budgeting, forecasting, reporting, and financial guardrails",
-          "Define allocation rules and cost structures supporting fully loaded business unit metrics",
-          "Incorporate unit metrics into variance narratives, explaining drivers, not just spend",
-          "Validate metric assumptions, reconciliation, and consistency across sources",
-          "Track and embed these into financial reporting to demonstrate our improved/worsened financial position in terms of technology investment/efficiency"
+          "Review impact of unit metrics on actual performance and other goals",
+          "Establish a cadence for metric review, adoption, modification, and refresh"
         ],
-        "label": "As someone in a Finance role, I will…"
-      },
-      {
-        "items": [
-          "Provide input to FinOps Practitioners regarding key organizational metrics and goals related to my area of responsibility",
-          "Incorporate the use of unit metrics into procurement planning and decision making",
-          "Use unit metrics to inform vendor selection, renewals, and commercial model choices",
-          "Consider terms affecting unit economics, including commitments, entitlements, and consumption exposure"
-        ],
-        "label": "As someone in a Procurement role, I will…"
-      },
-      {
-        "items": [
-          "Provide input to FinOps Practitioners regarding key organizational metrics and goals related to my area of responsibility",
-          "Support the ideation of unit economic metrics that support engineering making meaningful contributions to the organization.",
-          "Use Unit Economics metrics to drive better organizational efficiencies through architectural, performance, reliability and workload placement decisions",
-          "Define controllable drivers behind resource efficiency metrics, explain impacts on business metrics",
-          "Partner on data instrumentation to improve unit definitions and outcome correlation"
-        ],
-        "label": "As someone in an Engineering role, I will…"
-      },
-      {
-        "items": [
-          "Make clear to all Personas what unit economic metrics are meaningful to the organization’s success, aligned to strategic outcomes",
-          "Sponsor ownership, governance, and change control for metric definitions and cost inclusions",
-          "Provide specific guidance on timing, format, and scope of required unit economic metrics, including distinguishing between leadership business unit metrics from engineering control metrics",
-          "Use these delivered metrics to make better informed, data driven decisions aligning technology spend to business value"
-        ],
-        "label": "As someone in a Leadership role, I will…"
+        "label": "Validate Impact of Unit Metrics"
       }
     ],
     "inputs_outputs_md": "#### Inputs\n\n- Data Ingestion technology cost and usage data, business relevant value and demand data, and requirements for a common repository of usage and billing data that can span technology categories such as public cloud, data center, SaaS, AI etc.\n- Use of FOCUS (FinOps Open Cost and Usage Specification) as a standardized billing and usage schema that can simplify normalization of cost datasets as well as terminology used in unit economics reporting\n- Business Performance data from operational areas or FinOps Scopes being measured with Unit Economics\n\n#### Outputs\n\n- Unit Economic targets (ranges and thresholds) for each Scope of the FinOps practice\n- Unit metrics used to measure business outcomes may be consistent, but the target values expected for each Scope may differ",
@@ -4115,7 +3201,36 @@
         }
       }
     ],
-    "headline_groups": [],
+    "headline_groups": [
+      {
+        "items": [
+          "Evaluate workloads across all technology categories, like cloud, SaaS, and on-premises environments for optimization opportunities",
+          "Determine value versus risk thresholds for each workload to prioritize optimization efforts effectively",
+          "Define target optimization thresholds that align with organizational goals across cost, performance, and sustainability dimensions",
+          "Establish guidelines for balancing workload optimization against other optimization options, including rate and commitment-based approaches",
+          "Make conscious and informed tradeoff decisions among cost, quality, performance, and environmental impact when optimizing workloads"
+        ],
+        "label": "Creating a Usage Optimization Strategy"
+      },
+      {
+        "items": [
+          "Generate optimization recommendations for each area of usage, ensuring recommendations are actionable and relevant to stakeholder Personas",
+          "Prioritize optimization activities across both production and pre-production environments, balancing urgency with risk and business impact",
+          "Share recommendations with Engineering and other relevant personas, and collaborate to agree on realistic timelines and accountability for action",
+          "Align with Allied Personas such as Sustainability, and ITAM to ensure optimization targets reflect broader organizational goals and are coordinated across all relevant functions"
+        ],
+        "label": "Managing Usage Optimizations"
+      },
+      {
+        "items": [
+          "Evaluate the availability and suitability of modern, managed, and automated services that can reduce usage complexity and improve efficiency",
+          "Compare the optimization benefit of each opportunity in the context of Engineering time, organizational priorities, and the potential impact on cost, performance, and sustainability outcomes",
+          "Assess the return on investment of optimization activities by weighing the expected savings, cost avoidance or efficiency gains against the effort, risk, and disruption required to implement them",
+          "Establish a consistent methodology for ranking and prioritizing optimization opportunities, ensuring that the highest value opportunities are surfaced and acted upon first across all areas of usage"
+        ],
+        "label": "Understanding Where Opportunities Have Value"
+      }
+    ],
     "inputs_outputs_md": "#### Inputs to this Capability\n\n- Through the [Reporting & Analytics](https://www.finops.org/framework/capabilities/reporting-analytics/) Capability, understand where resources and usage across all [FinOps Scopes](https://www.finops.org/framework/scopes/) are underutilized, underperforming, idle, or require adjustment to better align with actual demand and organizational efficiency targets\n- Through the [Data Ingestion](https://www.finops.org/framework/capabilities/data-ingestion/) Capability, bring in performance, utilization, observability, and sustainability data needed to effectively measure and analyze individual resource and usage efficiency across all relevant technology categories. Adopting open billing schemas such as the FinOps Open Cost and Usage Specification (FOCUS) helps address these challenges.\n- Through the [Unit Economics](https://www.finops.org/framework/capabilities/unit-economics/) Capability, evaluate the effective efficiency rate and other metrics related to usage performance, enabling teams to assess optimization outcomes in the context of meaningful units of business value\n- Inputs from the Anomaly Management Capability identifying unexpected spikes or changes in usage patterns that may signal new optimization opportunities or indicate that existing optimization activities require review or adjustment\n- Organizational objectives from Finance and Product Personas related to required efficiency targets, thresholds, and business value expectations that inform and constrain usage optimization decisions\n- Finance approvals for purchases, purchase cadence, purchase amounts, and prepayment parameters that define the boundaries within which usage optimization recommendations are developed and acted upon\n- Third-party and provider-sourced carbon emissions factors, regional electrical grid carbon intensity data, regional water intensity data, and other sustainability data inputs that inform the environmental impact dimension of usage optimization decisions across all FinOps Scopes\n- Guidance to Engineering and Product Personas on anticipated resource rates and discount coverage for relevant usage, enabling informed decisions about resource selection and usage optimization in the context of available commercial arrangements\n\n#### Outputs from this Capability\n\n- Guidance to the Procurement Persona on future planned usage, historical usage patterns, and optimization-driven changes in consumption that may affect vendor negotiations, contract structures, and commitment-based discount strategies\n- Inputs to Planning & Estimating and Forecasting Capabilities reflecting the expected impact of optimization activities on future usage and spend, enabling more accurate and optimization-aware financial projections\n- Documentation of optimization opportunities in the form of lightweight business cases that clearly articulate the rationale, expected value, effort, and tradeoffs involved in proposed changes, including turning off idle resources, rightsizing, replacing with more efficient alternatives, or shifting to lower cost or lower carbon locations\n- Outputs to the Sustainability Capability reflecting the carbon and environmental impact of usage optimization activities, ensuring that sustainability reporting accurately captures the contribution of usage optimization to the organization’s broader environmental goals\n- A documented and continuously refined Usage Optimization strategy that serves as a reference for all FinOps Personas, guiding optimization prioritization, decision making, and tradeoff resolution across all FinOps Scopes over time",
     "kpi_bullets": [
       "Efficiency practices are applied consistently and value through optimization grows over time across all relevant technology categories and FinOps Scopes",

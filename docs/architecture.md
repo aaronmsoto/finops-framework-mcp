@@ -76,11 +76,17 @@ Outputs links.
 
 ### Relationship inference pass (restrained per M14)
 
-Inferred edges are limited to `related`/`informs`, each with a **quoted
-evidence sentence** from the source page and a named heuristic; `confidence`
-is the enum `strong|moderate|weak`. A `prerequisite` edge or any maturity
-constraint (`from_maturity`/`to_min_maturity`) is emitted **only** when the
-specific maturity bullet implying it is quoted in `evidence_quote`.
+Bare title mentions carry no reliable direction, so they emit **undirected
+`related` edges** (canonical from<to), each with a **quoted evidence
+sentence** and a named heuristic; `confidence` is the enum
+`strong|moderate|weak`. Single-word capability titles (Allocation,
+Forecasting, …) must appear in title case — lowercase common-noun usage
+("automated allocation of discounts") never creates an edge — and matches
+inside parenthetical lists (persona enumerations) are skipped. A directed
+`prerequisite` edge or any maturity constraint is emitted **only** when the
+quoted text uses explicit dependency language; with the current site content
+this yields zero prerequisite edges, which is the honest state (the
+Foundation publishes no prerequisite graph).
 Post-checks: cycle detection on prerequisites, degree sanity, full-list
 manual review recorded in the journal. Output:
 `derived/relationships-inferred.json`, never blended with official.
@@ -95,7 +101,7 @@ data/framework/
                        # maturity-levels (official 3), kpis
   derived/             # actions.json, maturity-extension.json (pre-crawl),
                        # relationships-official.json, relationships-inferred.json
-  changelog/           # rolling crawl-diff summaries (newest first, capped)
+  derived/changelog.json  # rolling crawl-diff summaries (newest first, capped at 20)
   manifest.json        # data_version, schema_version, crawled_at, source_urls,
                        # sha256 per file, counts, counts_mismatch?, parse_warnings
 ```
@@ -195,10 +201,11 @@ transport-free; Streamable HTTP later = a new entry point only.
 
 ### 5.5 Capability declarations (m4)
 
-`resources: {}` (no `subscribe`, no `listChanged` — artifact is immutable
-per process; refresh = restart), `tools: {}`, `prompts: {}` (no
-`listChanged`), `completions` declared. Rationale recorded here so the
-choice is deliberate, not SDK default drift.
+The artifact is immutable per process (refresh = restart), so no list ever
+changes and `resources.subscribe` is not offered. Note: the SDK's high-level
+McpServer force-advertises `listChanged: true` on resources/tools/prompts
+when handlers are registered; the notification is simply never emitted.
+`completions` is declared (resource-template and prompt arguments).
 
 ## 6. Crawler pipeline
 
