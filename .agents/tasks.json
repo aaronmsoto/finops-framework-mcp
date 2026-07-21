@@ -42,7 +42,7 @@
         "A spec file exists under .agents/specs/",
         ".agents/tasks.json contains the tasks decomposed from the spec"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
