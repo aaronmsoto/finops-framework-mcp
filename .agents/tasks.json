@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "chainHead": "genesis",
+  "tasks": [
+    {
+      "id": "T-001",
+      "title": "Replace the 'What this project is' sections in AGENTS.md and MEMORY.md with your project",
+      "acceptance": [
+        "AGENTS.md 'What this project is' section describes the real project in 3-6 lines (template placeholder text removed)",
+        ".agents/memory/MEMORY.md 'What this project is' and 'Current phase' sections describe the real project",
+        "./scripts/agentic memory lint passes"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-002",
+      "title": "Run ./scripts/agentic init with your project name, preset, and owner, and commit the result",
+      "acceptance": [
+        "./scripts/agentic init --name <project> --preset <typescript|python> --owner <@handle> completed without error",
+        "approvals.yaml owner field names the real owner and .github/CODEOWNERS was regenerated to match",
+        "./scripts/agentic gates passes with the preset's gate bindings",
+        "init output is committed in a single commit"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-003",
+      "title": "Write your first feature spec from .agents/specs/TEMPLATE.md and generate tasks with the plan-feature skill",
+      "acceptance": [
+        "A spec exists at .agents/specs/<feature>.md following TEMPLATE.md (Problem, Outcome, Non-goals, Acceptance criteria, Open questions; one page or less)",
+        "The spec was reviewed by a human before task generation",
+        "Tasks were added via ./scripts/agentic tasks add with concrete acceptance criteria and --spec references, and ./scripts/agentic tasks validate passes"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+*.log
+.agents/.cache/
+.claude/settings.local.json
+.env
+.env.*
+__pycache__/
+.venv/
+.pytest_cache/
+.ruff_cache/

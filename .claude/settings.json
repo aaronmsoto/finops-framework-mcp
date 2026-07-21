@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "ask": [
+      "Bash(git push origin main*)",
+      "Bash(git push * main)",
+      "Bash(gh workflow run *deploy*)",
+      "Bash(npm publish*)",
+      "Bash(gh release create*)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard origin*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && { [ -f .agentic/harness/dist/cli.js ] && node .agentic/harness/dist/cli.js memory show --session-start || cat .agents/memory/MEMORY.md .agents/memory/activeContext.md 2>/dev/null || true; }",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/protect-policy.mjs",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/loop-gate.mjs",
+            "timeout": 660
+          }
+        ]
+      }
+    ]
+  }
+}

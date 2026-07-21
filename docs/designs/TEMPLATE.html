@@ -1,0 +1,152 @@
+<!doctype html>
+<!--
+  Design-doc template. Scaffolded by `./scripts/agentic design new <slug> --title "..."`
+  ({{TITLE}} / {{SLUG}} / {{DATE}} tokens are replaced at scaffold time).
+
+  House rules (the `designs` gate enforces the mechanical ones):
+  - SELF-CONTAINED: inline all CSS/JS/SVG. No external scripts, styles, fonts,
+    images, or fetch calls — designs must render privately with zero network.
+  - This is the owner-facing thinking surface: rationale, alternatives,
+    interface mockups. The machine contract (acceptance criteria) lives in the
+    companion spec at .agents/specs/{{SLUG}}.md — keep them consistent.
+  - Replace the sample content in every tab; delete tabs you don't need.
+  - View locally: ./scripts/agentic serve  →  http://127.0.0.1:4177/docs/designs/{{SLUG}}.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}} — design</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1d21; --muted: #5c6570; --line: #d9dee3;
+    --accent: #0b6bcb; --accent-bg: #eaf2fb; --warn-bg: #fff7e0;
+    --code-bg: #f4f6f8; --max: 60rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171a; --fg: #e6e9ec; --muted: #9aa4ae; --line: #333a41;
+      --accent: #5ba3ea; --accent-bg: #1b2836; --warn-bg: #2e2a18;
+      --code-bg: #1d2226;
+    }
+  }
+  html { background: var(--bg); color: var(--fg); }
+  body { font: 16px/1.55 system-ui, sans-serif; margin: 2rem auto; max-width: var(--max); padding: 0 1.25rem; }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+  h2 { font-size: 1.15rem; border-bottom: 1px solid var(--line); padding-bottom: .25rem; margin-top: 2rem; }
+  code, pre { background: var(--code-bg); border-radius: 4px; font-size: .92em; }
+  code { padding: .1em .35em; }
+  pre { padding: .75rem 1rem; overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  th { background: var(--code-bg); }
+  figure { margin: 1.5rem 0; text-align: center; }
+  figcaption { color: var(--muted); font-size: .9em; margin-top: .5rem; }
+  details { border: 1px solid var(--line); border-radius: 6px; padding: .5rem .9rem; margin: .75rem 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  .meta { color: var(--muted); font-size: .9em; margin-bottom: 1.5rem; }
+  .meta .status { background: var(--accent-bg); color: var(--accent); border-radius: 999px; padding: .1em .7em; font-weight: 600; }
+  .callout { background: var(--accent-bg); border-left: 3px solid var(--accent); padding: .6rem 1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; }
+  .callout.warn { background: var(--warn-bg); border-left-color: #b58900; }
+
+  /* Radio-button tabs: pure CSS, no JS. Add a radio + label + panel per tab. */
+  .tabs { margin-top: 1.5rem; }
+  .tabs > input { position: absolute; opacity: 0; pointer-events: none; }
+  .tabs > label { display: inline-block; padding: .45rem 1rem; cursor: pointer; border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; color: var(--muted); margin-right: .25rem; }
+  .tabs > input:checked + label { color: var(--fg); font-weight: 600; background: var(--code-bg); }
+  .tabs > .panel { display: none; border: 1px solid var(--line); border-radius: 0 6px 6px 6px; padding: .25rem 1.25rem 1.25rem; }
+  #tab-1:checked ~ .panel-1, #tab-2:checked ~ .panel-2,
+  #tab-3:checked ~ .panel-3, #tab-4:checked ~ .panel-4 { display: block; }
+</style>
+</head>
+<body>
+
+<h1>{{TITLE}}</h1>
+<p class="meta">
+  <span class="status">draft</span>
+  &nbsp;·&nbsp; {{DATE}}
+  &nbsp;·&nbsp; spec: <a href="../../.agents/specs/{{SLUG}}.md">.agents/specs/{{SLUG}}.md</a>
+  &nbsp;·&nbsp; roadmap: <a href="../../.agents/roadmap.md">.agents/roadmap.md</a>
+</p>
+
+<div class="callout">
+  <strong>One-paragraph summary.</strong> What this feature is, who it serves, and
+  the single most important design decision. An owner should know whether to keep
+  reading after this paragraph.
+</div>
+
+<div class="tabs">
+  <input type="radio" name="tabs" id="tab-1" checked><label for="tab-1">Overview</label>
+  <input type="radio" name="tabs" id="tab-2"><label for="tab-2">Architecture</label>
+  <input type="radio" name="tabs" id="tab-3"><label for="tab-3">Interfaces</label>
+  <input type="radio" name="tabs" id="tab-4"><label for="tab-4">Alternatives</label>
+
+  <div class="panel panel-1">
+    <h2>Problem &amp; outcome</h2>
+    <p>What hurts today; what is true when this ships. Keep the normative
+    acceptance criteria in the spec — summarize them here.</p>
+    <h2>Scope</h2>
+    <table>
+      <tr><th>In</th><th>Out (non-goals)</th></tr>
+      <tr><td>…</td><td>…</td></tr>
+    </table>
+  </div>
+
+  <div class="panel panel-2">
+    <h2>How it works</h2>
+    <figure>
+      <!-- Inline SVG only. Sample diagram — replace. -->
+      <svg viewBox="0 0 520 120" width="520" height="120" role="img" aria-label="Sample flow diagram">
+        <defs>
+          <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0 0 L8 4 L0 8 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="10"  y="35" width="130" height="46" rx="8"/>
+          <rect x="195" y="35" width="130" height="46" rx="8"/>
+          <rect x="380" y="35" width="130" height="46" rx="8"/>
+          <line x1="140" y1="58" x2="192" y2="58" marker-end="url(#arr)"/>
+          <line x1="325" y1="58" x2="377" y2="58" marker-end="url(#arr)"/>
+        </g>
+        <g font-size="13" text-anchor="middle" fill="currentColor">
+          <text x="75"  y="62">input</text>
+          <text x="260" y="62">this feature</text>
+          <text x="445" y="62">outcome</text>
+        </g>
+      </svg>
+      <figcaption>Replace with the real architecture diagram.</figcaption>
+    </figure>
+    <details>
+      <summary>Data &amp; state details</summary>
+      <p>Schemas, files, invariants — the depth an implementer needs and a
+      skimming owner can skip.</p>
+    </details>
+    <details>
+      <summary>Failure modes &amp; edge cases</summary>
+      <p>What can go wrong and what the design does about it.</p>
+    </details>
+  </div>
+
+  <div class="panel panel-3">
+    <h2>User-facing surfaces</h2>
+    <p>CLI commands, APIs, screens. Mock UI states as inline SVG; show CLI
+    contracts as <code>pre</code> blocks with exact flags and output.</p>
+    <pre>$ example command --flag value</pre>
+  </div>
+
+  <div class="panel panel-4">
+    <h2>Alternatives considered</h2>
+    <table>
+      <tr><th>Option</th><th>Why not (or why)</th></tr>
+      <tr><td>…</td><td>…</td></tr>
+    </table>
+    <div class="callout warn">
+      <strong>Open questions for the owner.</strong> Decisions this design does
+      not make; resolve at the review checkpoint before <code>/plan-feature</code>.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

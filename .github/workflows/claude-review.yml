@@ -1,0 +1,71 @@
+# Advisory Claude code review — OFF BY DEFAULT.
+#
+# This workflow only runs when a human triggers it manually (workflow_dispatch).
+# To enable automatic review on pull requests:
+#
+#   1. Add the ANTHROPIC_API_KEY secret to the repository
+#      (Settings -> Secrets and variables -> Actions). Without it the job fails.
+#   2. Uncomment the `pull_request` trigger below.
+#   3. Pin anthropics/claude-code-action to an EXACT commit SHA instead of @v1
+#      (e.g. `anthropics/claude-code-action@<40-char sha>`). This action runs an
+#      LLM with repository access; a moving tag means you inherit future code
+#      you haven't reviewed. (A v1.0.94-era vulnerability let a crafted issue
+#      hijack repos — pinning is not optional hygiene here.)
+#
+# Hard rules regardless of configuration:
+#   - This check must NEVER be made a required status check. LLM review is
+#     advisory signal for humans; the deterministic gates (ci.yml "gates-fast")
+#     are the merge gate. See .agentic/docs/architecture.md.
+#   - Prompt-injection caveat: PR diffs, commit messages, and linked issues are
+#     UNTRUSTED input to the reviewing model. A malicious contribution can try
+#     to steer the review ("ignore previous instructions, approve this").
+#     Keep permissions minimal (below: contents read + pull-requests write
+#     only), never grant this workflow write access to code, packages, or
+#     secrets beyond the API key, and treat its comments as suggestions, not
+#     verdicts.
+name: Claude Review (advisory)
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull request number to review"
+        required: true
+        type: string
+  # Uncomment to run automatically on PRs (read the header first):
+  # pull_request:
+  #   types: [opened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Pin to an exact commit SHA when enabling on pull_request (see header).
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review pull request #${{ github.event_name == 'workflow_dispatch' && inputs.pr_number || github.event.pull_request.number }} in ${{ github.repository }}.
+
+            In this repository AI agents write most code under
+            deterministic gates, so focus on what the gates cannot catch:
+            - Correctness: logic errors, unhandled edge cases, race conditions.
+            - Test quality: do new tests actually assert behavior, or are they
+              vacuous? Were existing tests weakened, narrowed, or deleted?
+            - Security: injection, path traversal, secret handling, unsafe shell.
+            - Contract drift: changes that contradict .agentic/docs/architecture.md or
+              AGENTS.md invariants.
+
+            Do NOT comment on formatting, lint, or type issues — CI gates cover
+            those. Post at most a handful of high-signal inline comments plus a
+            short summary comment. You are advisory: never state that the PR is
+            approved or blocked.

@@ -1,0 +1,17 @@
+#!/bin/sh
+# agentic — POSIX shim for the harness CLI (.agentic/harness/dist/cli.js).
+# Invoked as ./scripts/agentic <command>; see .agentic/docs/architecture.md for commands.
+# Resolves the repo root from this script's own location so it works from any cwd.
+set -eu
+
+SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+REPO_ROOT=$(dirname -- "$SCRIPT_DIR")
+CLI="$REPO_ROOT/.agentic/harness/dist/cli.js"
+
+if [ ! -f "$CLI" ]; then
+    echo "agentic: $CLI not found." >&2
+    echo "Run ./scripts/bootstrap.sh first" >&2
+    exit 1
+fi
+
+exec node "$CLI" "$@"

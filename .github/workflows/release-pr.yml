@@ -1,0 +1,65 @@
+# Rolling "Release: dev -> main" PR (integration branching mode only).
+#
+# In integration mode (approvals.yaml branching.mode: integration), task
+# branches auto-merge into the integration branch on green CI, and THIS
+# workflow keeps one continuous human-review surface: a PR from dev to main
+# that opens itself when dev moves ahead and refreshes its body on every
+# push. Merging that PR remains a human approval point (main ruleset).
+#
+# In trunk mode this workflow never fires (the dev branch does not exist).
+# Caveat: PRs created with GITHUB_TOKEN don't trigger downstream workflows
+# on the creation event itself; gate checks still run on every dev push via
+# the pull_request synchronize event once the PR exists.
+name: Release PR
+
+on:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+# Parallel task PRs auto-merging in quick succession can trigger two runs
+# that both see "no open release PR" and race to create one.
+concurrency:
+  group: release-pr
+  cancel-in-progress: false
+
+jobs:
+  rolling-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Open or refresh the rolling PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          BODY_FILE=$(mktemp)
+          {
+            echo "Rolling release PR — auto-maintained on every push to dev."
+            echo
+            echo "## Commits ahead of main"
+            echo
+            git log --no-merges --format='- %h %s' origin/main..HEAD | head -100
+            echo
+            echo "## Diffstat"
+            echo
+            echo '```'
+            git diff --stat origin/main..HEAD | tail -20
+            echo '```'
+            echo
+            echo "Journal entries for these changes live in .agents/journal/."
+          } > "$BODY_FILE"
+          EXISTING=$(gh pr list --base main --head dev --state open --json number --jq '.[0].number' || true)
+          if [ -n "$EXISTING" ]; then
+            gh pr edit "$EXISTING" --body-file "$BODY_FILE"
+            echo "refreshed PR #$EXISTING"
+          else
+            gh pr create --base main --head dev \
+              --title "Release: dev -> main" --body-file "$BODY_FILE"
+          fi

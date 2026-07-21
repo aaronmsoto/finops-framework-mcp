@@ -1,0 +1,41 @@
+# Owner policy: where humans are required. Edit THIS file, then run
+# `./scripts/agentic approvals compile` — never edit the generated surfaces
+# (.claude/settings.json permissions, scripts/copilot.sh, .github/CODEOWNERS,
+# .github/rulesets/main-branch.json) by hand.
+version: 1
+owner: "@aaronmsoto"
+approvals:
+  merge_to_main: human
+  deploy_production: human
+  release: human
+  force_push: never
+protected_paths:
+  - "tests/**"
+  - ".agentic/harness/tests/**"
+  - ".github/workflows/**"
+  - "approvals.yaml"
+  - "agentic.config.json"
+  - ".claude/settings.json"
+# Feature-branch pushes and PR creation stay free: the human gate is the
+# merge (rulesets + CODEOWNERS), not the proposal.
+commands:
+  # NOTE: do not duplicate derived rules here. merge_to_main: human derives the
+  # default-branch push-ask rules (from branching.default_branch) and the
+  # gh-pr-merge ask (trunk mode only); release: human derives npm publish / gh
+  # release create. List only rules the compiler does not already generate.
+  ask: []
+  deny:
+    - "Bash(git push --force*)"
+    - "Bash(git push -f*)"
+    - "Bash(git reset --hard origin*)"
+loop:
+  max_iterations: 10
+  max_wall_minutes: 120
+  max_consecutive_failures: 3
+branching:
+  mode: integration
+  default_branch: main   # the protected branch; rename requires editing ci.yml + release-pr.yml
+  integration_branch: dev
+  task_branch_prefix: "task/"
+  integration_merge_method: squash   # task -> dev: one commit per task, linear dev
+  release_merge_method: merge        # dev -> main: real merge commit as the release point

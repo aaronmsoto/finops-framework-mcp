@@ -1,0 +1,33 @@
+#!/bin/sh
+# pre-push — run the fast-tier quality gates before every push.
+# Installed via `git config core.hooksPath scripts/git-hooks` (bootstrap.sh).
+#
+# Escape hatch (emergencies only, CI still enforces the gates):
+#   AGENTIC_SKIP_GATES=1 git push
+#
+# If the harness has not been built yet, the hook warns and allows the push —
+# a missing build must never brick pushes; CI remains the backstop.
+
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+cd "$REPO_ROOT" || exit 0
+
+if [ "${AGENTIC_SKIP_GATES:-}" = "1" ]; then
+    echo "pre-push: WARNING — AGENTIC_SKIP_GATES=1 set, skipping fast-tier gates. CI will still run them." >&2
+    exit 0
+fi
+
+if [ ! -f "$REPO_ROOT/.agentic/harness/dist/cli.js" ]; then
+    echo "pre-push: WARNING — harness not built (.agentic/harness/dist/cli.js missing); skipping gates." >&2
+    echo "pre-push: run ./scripts/bootstrap.sh to enable local gate enforcement. CI will still run the gates." >&2
+    exit 0
+fi
+
+if ./scripts/agentic gates --tier fast; then
+    exit 0
+fi
+
+echo "" >&2
+echo "pre-push: fast-tier gates FAILED — push blocked." >&2
+echo "pre-push: fix the failures above (./scripts/agentic gates --tier fast to re-run)." >&2
+echo "pre-push: emergency bypass: AGENTIC_SKIP_GATES=1 git push  (CI will still enforce the gates)." >&2
+exit 1

@@ -1,0 +1,36 @@
+#!/bin/sh
+# prepare-commit-msg — enforce the "no AI attribution in git artifacts" policy
+# (hard rule in AGENTS.md "Conventions").
+#
+# AI coding tools inject attribution trailers and footers into commit
+# messages (Co-Authored-By bots, session links, "Generated with ..." lines).
+# This repo keeps its git history free of them: the hook strips any such
+# lines before the commit lands, and the integrity gate fails new commits
+# that carry them (the deterministic twin — this hook is best-effort, the
+# gate is the enforcement).
+#
+# Functional references to agent tooling in code and docs are unaffected;
+# this filters commit MESSAGES only. Human Co-Authored-By trailers are
+# preserved — only known AI-tool identities are stripped.
+#
+# This hook must NEVER block a commit: every path exits 0.
+
+MSG_FILE="$1"
+
+[ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ] || exit 0
+
+TMP="${MSG_FILE}.noai"
+if grep -v -i \
+    -e '^co-authored-by:.*\(claude\|copilot\|anthropic\|openai\|gemini\|cursor\|aider\|devin\)' \
+    -e '^claude-session:' \
+    -e '^agent:[[:space:]]*\(claude\|copilot\)' \
+    -e 'generated with.*\(claude\|copilot\)' \
+    -e '🤖' \
+    "$MSG_FILE" > "$TMP" 2>/dev/null; then
+    mv "$TMP" "$MSG_FILE" 2>/dev/null || rm -f "$TMP" 2>/dev/null
+else
+    # grep exits 1 when EVERY line matched (empty result) — keep original.
+    rm -f "$TMP" 2>/dev/null
+fi
+
+exit 0

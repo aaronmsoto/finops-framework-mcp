@@ -1,0 +1,198 @@
+<!doctype html>
+<!-- Seed design doc: documents the design pipeline itself (dogfooding).
+     Self-contained per the designs gate: no external resources, inline SVG. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feature design pipeline — design</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1d21; --muted: #5c6570; --line: #d9dee3;
+    --accent: #0b6bcb; --accent-bg: #eaf2fb; --warn-bg: #fff7e0;
+    --code-bg: #f4f6f8; --max: 60rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171a; --fg: #e6e9ec; --muted: #9aa4ae; --line: #333a41;
+      --accent: #5ba3ea; --accent-bg: #1b2836; --warn-bg: #2e2a18;
+      --code-bg: #1d2226;
+    }
+  }
+  html { background: var(--bg); color: var(--fg); }
+  body { font: 16px/1.55 system-ui, sans-serif; margin: 2rem auto; max-width: var(--max); padding: 0 1.25rem; }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+  h2 { font-size: 1.15rem; border-bottom: 1px solid var(--line); padding-bottom: .25rem; margin-top: 2rem; }
+  code, pre { background: var(--code-bg); border-radius: 4px; font-size: .92em; }
+  code { padding: .1em .35em; }
+  pre { padding: .75rem 1rem; overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  th { background: var(--code-bg); }
+  figure { margin: 1.5rem 0; text-align: center; }
+  figcaption { color: var(--muted); font-size: .9em; margin-top: .5rem; }
+  details { border: 1px solid var(--line); border-radius: 6px; padding: .5rem .9rem; margin: .75rem 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  .meta { color: var(--muted); font-size: .9em; margin-bottom: 1.5rem; }
+  .meta .status { background: var(--accent-bg); color: var(--accent); border-radius: 999px; padding: .1em .7em; font-weight: 600; }
+  .callout { background: var(--accent-bg); border-left: 3px solid var(--accent); padding: .6rem 1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; }
+  .callout.warn { background: var(--warn-bg); border-left-color: #b58900; }
+  .tabs { margin-top: 1.5rem; }
+  .tabs > input { position: absolute; opacity: 0; pointer-events: none; }
+  .tabs > label { display: inline-block; padding: .45rem 1rem; cursor: pointer; border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; color: var(--muted); margin-right: .25rem; }
+  .tabs > input:checked + label { color: var(--fg); font-weight: 600; background: var(--code-bg); }
+  .tabs > .panel { display: none; border: 1px solid var(--line); border-radius: 0 6px 6px 6px; padding: .25rem 1.25rem 1.25rem; }
+  #tab-1:checked ~ .panel-1, #tab-2:checked ~ .panel-2,
+  #tab-3:checked ~ .panel-3, #tab-4:checked ~ .panel-4 { display: block; }
+</style>
+</head>
+<body>
+
+<h1>Feature design pipeline</h1>
+<p class="meta">
+  <span class="status">approved</span>
+  &nbsp;·&nbsp; 2026-07-13
+  &nbsp;·&nbsp; spec: <a href="../../.agents/specs/design-pipeline.md">.agents/specs/design-pipeline.md</a>
+  &nbsp;·&nbsp; roadmap: <a href="../../.agents/roadmap.md">.agents/roadmap.md</a>
+</p>
+
+<div class="callout">
+  <strong>Summary.</strong> A defined path from "owner wants a feature" to "loop
+  builds it": intent lands in <code>.agents/roadmap.md</code>, the
+  <code>/design-feature</code> skill produces a rich, self-contained HTML design
+  doc here plus a markdown spec (the machine contract), the owner reviews the
+  design privately (<code>./scripts/agentic serve</code>) — that review is the
+  human checkpoint — and only then does <code>/plan-feature</code> decompose the
+  spec into tasks. Key rule: <em>markdown for machine contracts, HTML for human
+  design surfaces.</em>
+</div>
+
+<div class="tabs">
+  <input type="radio" name="tabs" id="tab-1" checked><label for="tab-1">Overview</label>
+  <input type="radio" name="tabs" id="tab-2"><label for="tab-2">Architecture</label>
+  <input type="radio" name="tabs" id="tab-3"><label for="tab-3">Interfaces</label>
+  <input type="radio" name="tabs" id="tab-4"><label for="tab-4">Alternatives</label>
+
+  <div class="panel panel-1">
+    <h2>Problem &amp; outcome</h2>
+    <p>The template had execution covered (specs → tasks → loop) but nothing
+    upstream: no roadmap tier for product intent, and no home for architecture
+    and interface designs richer than a one-page spec. Prior-art harnesses used
+    a bare <code>GOALS.md</code> backlog and never solved design communication.
+    Outcome: every artifact in the feature lifecycle has a defined home, format,
+    and consumer, and design review happens on a rendered document without any
+    public hosting.</p>
+    <h2>Scope</h2>
+    <table>
+      <tr><th>In</th><th>Out (non-goals)</th></tr>
+      <tr>
+        <td>Roadmap file; design-doc tier + template; <code>design new/check/publish</code>
+            and <code>serve</code> harness commands; <code>designs</code> quality gate;
+            <code>/design-feature</code> skill; contract updates.</td>
+        <td>Public hosting of any kind; converting machine-facing markdown
+            (specs, memory, prompts, AGENTS.md) to HTML; WYSIWYG tooling;
+            GitHub Pages workflows.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="panel panel-2">
+    <h2>How it works</h2>
+    <figure>
+      <svg viewBox="0 0 700 150" width="700" height="150" role="img" aria-label="Pipeline: roadmap to design to spec checkpoint to tasks to loop">
+        <defs>
+          <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0 0 L8 4 L0 8 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="8"   y="30" width="110" height="44" rx="8"/>
+          <rect x="158" y="30" width="130" height="44" rx="8"/>
+          <rect x="328" y="30" width="120" height="44" rx="8"/>
+          <rect x="488" y="30" width="90"  height="44" rx="8"/>
+          <rect x="608" y="30" width="84"  height="44" rx="8"/>
+          <line x1="118" y1="52" x2="155" y2="52" marker-end="url(#arr)"/>
+          <line x1="288" y1="52" x2="325" y2="52" marker-end="url(#arr)"/>
+          <line x1="448" y1="52" x2="485" y2="52" marker-end="url(#arr)"/>
+          <line x1="578" y1="52" x2="605" y2="52" marker-end="url(#arr)"/>
+        </g>
+        <g font-size="13" text-anchor="middle" fill="currentColor">
+          <text x="63"  y="48">roadmap.md</text>
+          <text x="63"  y="66" font-size="11" opacity="0.7">intent</text>
+          <text x="223" y="48">design.html</text>
+          <text x="223" y="66" font-size="11" opacity="0.7">/design-feature</text>
+          <text x="388" y="48">spec.md</text>
+          <text x="388" y="66" font-size="11" opacity="0.7">machine contract</text>
+          <text x="533" y="48">tasks</text>
+          <text x="533" y="66" font-size="11" opacity="0.7">/plan-feature</text>
+          <text x="650" y="48">loop</text>
+          <text x="650" y="66" font-size="11" opacity="0.7">builds</text>
+        </g>
+        <g font-size="12" fill="currentColor" text-anchor="middle">
+          <text x="388" y="118">▲ owner reviews the DESIGN (agentic serve) — the human checkpoint sits</text>
+          <text x="388" y="134">between design and planning; nothing downstream starts unapproved</text>
+        </g>
+      </svg>
+      <figcaption>The feature lifecycle. Left of the checkpoint is thinking; right is supervised execution.</figcaption>
+    </figure>
+    <details>
+      <summary>Privacy model (why this renders nowhere public)</summary>
+      <p>Design docs are single self-contained files: all CSS/JS/SVG inline, and
+      the <code>designs</code> gate <em>fails</em> any external <code>src</code>/<code>href</code>/<code>url()</code>
+      resource or network call in inline script — so opening a design generates
+      zero network traffic. Viewing is via <code>file://</code>, any IDE preview,
+      or <code>agentic serve</code>, which binds strictly to <code>127.0.0.1</code>.
+      A <code>designs.publishCommand</code> config hook lets an owner push a file
+      to their own internal renderer; nothing publishes by default.</p>
+    </details>
+    <details>
+      <summary>Design doc vs. spec — who reads what</summary>
+      <p>The HTML design is owner-facing rationale (alternatives, diagrams,
+      mockups) and is <em>not</em> loaded into loop prompts. The markdown spec
+      carries the acceptance criteria the loop and verifier enforce. Agents may
+      read a design when a task references it, but the spec is the contract —
+      if they disagree, the spec wins and the design gets updated.</p>
+    </details>
+  </div>
+
+  <div class="panel panel-3">
+    <h2>CLI surface</h2>
+    <pre>$ ./scripts/agentic design new dark-mode --title "Dark mode"
+created docs/designs/dark-mode.html and .agents/specs/dark-mode.md
+
+$ ./scripts/agentic design check          # runs in the fast gate tier
+$ ./scripts/agentic serve                 # http://127.0.0.1:4177/ (localhost only)
+$ ./scripts/agentic design publish dark-mode   # optional: designs.publishCommand hook</pre>
+    <h2>Skill surface</h2>
+    <p><code>/design-feature</code> — researches the codebase, scaffolds via
+    <code>design new</code>, fills the design + spec, updates the roadmap entry
+    to <em>designing</em>, runs gates, and stops for the owner checkpoint.
+    Existing <code>/plan-feature</code> takes over after approval.</p>
+  </div>
+
+  <div class="panel panel-4">
+    <h2>Alternatives considered</h2>
+    <table>
+      <tr><th>Option</th><th>Verdict</th></tr>
+      <tr><td>Convert all docs/ to HTML</td>
+          <td>Rejected: GitHub renders .html as raw source, machine-facing docs
+              pay token overhead for zero layout benefit, and work orgs
+              (GitHub Enterprise) often can't enable Pages. HTML is reserved
+              for the design tier where layout genuinely matters.</td></tr>
+      <tr><td>GitHub Pages for rendering</td>
+          <td>Rejected as default: private, access-controlled Pages exists only
+              on Enterprise Cloud; on personal private repos Pages is
+              public-or-nothing, violating the no-public-content constraint.</td></tr>
+      <tr><td>Mermaid diagrams in markdown specs</td>
+          <td>Insufficient alone: fine for small flowcharts, but no layout
+              control, no tabs/mockups, and nothing for interface design.
+              Still usable inside specs where it fits.</td></tr>
+      <tr><td>GOALS.md-style single backlog file</td>
+          <td>Kept the good part (a lightweight intent file → roadmap.md) and
+              fixed the gap: designs get a real tier instead of living nowhere.</td></tr>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

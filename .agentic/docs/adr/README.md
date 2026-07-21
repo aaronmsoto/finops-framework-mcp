@@ -1,0 +1,2 @@
+Architecture Decision Records: short, immutable notes capturing each load-bearing decision, its context, and its consequences — new decisions get new ADRs rather than edits.
+Index: [0001 AGENTS.md is canonical](0001-agents-md-canonical.md) · [0002 Markdown memory bank](0002-markdown-memory-bank.md) · [0003 Harness-owned stop conditions](0003-harness-owned-stop-conditions.md) · [0004 Gates as data](0004-gates-as-data.md) · [0005 Approvals compiler](0005-approvals-compiler.md) · [0006 Node/TS harness](0006-node-ts-harness.md)

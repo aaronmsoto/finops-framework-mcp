@@ -1,0 +1,14 @@
+{
+  "name": "agentic-starter-repo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Starter template for agentic software projects: supervised autonomous loops, gates-as-data, compiled human approval points, and git-native agent memory — for Claude Code and GitHub Copilot CLI.",
+  "license": "MIT",
+  "scripts": {
+    "bootstrap": "./scripts/bootstrap.sh",
+    "agentic": "node .agentic/harness/dist/cli.js",
+    "gates": "node .agentic/harness/dist/cli.js gates",
+    "test": "cd .agentic/harness && npm run test"
+  },
+  "engines": { "node": ">=20" }
+}

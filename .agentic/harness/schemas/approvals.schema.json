@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/agentic-starter-repo/.agentic/harness/schemas/approvals.schema.json",
+  "title": "approvals.yaml",
+  "description": "Owner policy: where humans are required. This single file is compiled into every enforcement surface by `agentic approvals compile` (.claude/settings.json permissions, scripts/copilot.sh, .github/CODEOWNERS, .github/rulesets/main-branch.json, plus .github/rulesets/integration-branch.json when branching.mode is \"integration\"). Validated by hand-rolled checks in .agentic/harness/src/config.ts; this schema is documentation and editor tooling.",
+  "type": "object",
+  "required": [
+    "version",
+    "owner"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "description": "GitHub handle (e.g. \"@octocat\") used for CODEOWNERS generation."
+    },
+    "approvals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "merge_to_main": {
+          "enum": [
+            "human",
+            "auto"
+          ],
+          "default": "human",
+          "description": "human: PR + owner review required (CODEOWNERS, ruleset, ask rules)."
+        },
+        "deploy_production": {
+          "enum": [
+            "human",
+            "auto"
+          ],
+          "default": "human"
+        },
+        "release": {
+          "enum": [
+            "human",
+            "auto"
+          ],
+          "default": "human"
+        },
+        "force_push": {
+          "enum": [
+            "never",
+            "human"
+          ],
+          "default": "never",
+          "description": "never: compiled to deny rules; human: compiled to ask rules."
+        }
+      }
+    },
+    "protected_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Paths that get CODEOWNERS entries and edit-hook protection (e.g. tests/**, .github/workflows/**)."
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ask": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Verbatim Claude permission patterns compiled to .claude/settings.json permissions.ask (and denied in scripts/copilot.sh \u2014 Copilot has no ask tier)."
+        },
+        "deny": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Verbatim patterns compiled to permissions.deny and scripts/copilot.sh --deny-tool flags."
+        }
+      }
+    },
+    "loop": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "HARD caps enforced by the harness. CLI flags may lower these, never raise them.",
+      "properties": {
+        "max_iterations": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 10
+        },
+        "max_wall_minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 120
+        },
+        "max_consecutive_failures": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 3
+        }
+      }
+    },
+    "branching": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Branching model. trunk (default): PRs target main directly and merging asks a human. integration: task PRs auto-merge into the integration branch when CI is green (compiles .github/rulesets/integration-branch.json with no review rule and drops the derived gh-pr-merge ask rule); humans still gate main via the main-branch ruleset.",
+      "properties": {
+        "mode": {
+          "enum": [
+            "trunk",
+            "integration"
+          ],
+          "default": "trunk"
+        },
+        "default_branch": {
+          "type": "string",
+          "minLength": 1,
+          "default": "main",
+          "description": "The repository's default/protected branch. The main-branch ruleset targets refs/heads/<default_branch> and the derived push-ask rules guard it. Renaming this requires hand-editing .github/workflows/ci.yml and release-pr.yml (workflows are owner-owned)."
+        },
+        "integration_branch": {
+          "type": "string",
+          "minLength": 1,
+          "default": "dev",
+          "description": "Branch the integration ruleset targets (refs/heads/<integration_branch>)."
+        },
+        "task_branch_prefix": {
+          "type": "string",
+          "minLength": 1,
+          "default": "task/",
+          "description": "Prefix agents use for per-task branches."
+        },
+        "integration_merge_method": {
+          "type": "string",
+          "enum": [
+            "merge",
+            "squash",
+            "rebase"
+          ],
+          "default": "squash",
+          "description": "Ruleset-enforced merge method for PRs into the integration branch."
+        },
+        "release_merge_method": {
+          "type": "string",
+          "enum": [
+            "merge",
+            "squash",
+            "rebase"
+          ],
+          "default": "merge",
+          "description": "Ruleset-enforced merge method for the release PR into main (integration mode)."
+        }
+      }
+    }
+  }
+}

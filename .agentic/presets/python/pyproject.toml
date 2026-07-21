@@ -1,0 +1,13 @@
+# Shipped by the python preset — tool configuration scoped to src/ and tests/.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+src = ["src", "tests"]
+line-length = 100
+
+[tool.pyright]
+include = ["src", "tests"]
+typeCheckingMode = "basic"
