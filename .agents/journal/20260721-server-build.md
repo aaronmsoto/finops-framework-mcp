@@ -46,3 +46,23 @@
 - Server: 11 tools / 40+ resources + 4 templates / 4 prompts; stdio smoke
   test green; full gates (incl. build) PASS.
 - Workflow delivered as docs/proposed/refresh-data.yml only (protected path).
+
+## Phases 5-6: evals + final critique gate — 2026-07-21T23:50:00Z
+
+- Phase 5: eval.xml (10 tools-only Q&A) + mcp-call.mjs bridge; fresh-agent
+  run scored 10/10; friction notes drove get_kpis slug lookup + featured
+  semantics fix + get_maturity_model (parity gap the eval itself caught).
+- Phase 6 panel (5 critics, ~150 empirical checks) found 4 BLOCKERs the
+  happy-path eval missed: KPI formulas misfiled as data_sources (35/44!),
+  h3-style callouts dropped on 8 pages, "Measure(s)" heading variant losing
+  ESA bullets, get_kpis text not equivalent to structuredContent. All fixed
+  + 8 MAJORs (prompt completion dead under zod4 .describe; -32002 for
+  concrete typos; get_entity tools-parity; attribution on leaf tools;
+  undirected inference w/ title-case guard — now 19 edges, 0 prerequisite
+  edges which is the honest state; workflow dev-branch DOA; cwd-relative
+  artifact path). docs/critique-2.md has full dispositions. Artifact v1.1.0.
+- Lesson recorded: fixtures must sample structural VARIANTS, not just the
+  canonical page; happy-path evals don't test text-only hosts — the re-run
+  is text-block-only.
+- Template feedback for agentic-starter-repo: gates --tier full runs only
+  full-tier gates; use/alias --tier all before shipping.
