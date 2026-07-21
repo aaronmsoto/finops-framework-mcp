@@ -1,0 +1,10 @@
+.agentic/
+docs/
+.agents/
+.claude/
+.github/
+scripts/
+coverage/
+dist/
+node_modules/
+*.md

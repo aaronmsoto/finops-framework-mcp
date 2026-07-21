@@ -4,8 +4,9 @@ Canonical instructions for AI coding agents (Claude Code, GitHub Copilot CLI, an
 
 ## What this project is
 
-<!-- init: replace this section with 3-6 lines about YOUR project after running `./scripts/agentic init` -->
-This is the **agentic-starter-repo template itself**: a starter for new agentic software projects. The "product" is the harness (`.agentic/harness/`), the policy compiler, the skills, and the docs. Treat the harness like production code.
+finops-framework-mcp — replace this section (3-6 lines): what the project does,
+who it is for, how to run it. Agents read this every session; until it is
+real, they orient on a placeholder. (Seeded as onboarding task T-001.)
 
 ## Session protocol (every session, both tools)
 

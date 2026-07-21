@@ -1,14 +1,25 @@
 {
-  "name": "agentic-starter-repo",
+  "name": "finops-framework-mcp",
   "version": "0.1.0",
   "private": true,
-  "description": "Starter template for agentic software projects: supervised autonomous loops, gates-as-data, compiled human approval points, and git-native agent memory — for Claude Code and GitHub Copilot CLI.",
+  "description": "finops-framework-mcp",
   "license": "MIT",
   "scripts": {
     "bootstrap": "./scripts/bootstrap.sh",
     "agentic": "node .agentic/harness/dist/cli.js",
     "gates": "node .agentic/harness/dist/cli.js gates",
-    "test": "cd .agentic/harness && npm run test"
+    "test": "vitest run --coverage"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@vitest/coverage-v8": "^4.1.10",
+    "eslint": "^10.7.0",
+    "prettier": "^3.9.6",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^4.1.10"
+  }
 }
