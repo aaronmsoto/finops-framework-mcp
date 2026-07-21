@@ -495,8 +495,14 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     {
       title: "Get KPIs (full records)",
       description:
-        "Full KPI records: description, formula + candidate data sources (present for the ~44 KPIs the site details in capability-page popups), official related capabilities, and where each is featured. Filter by capability slug and/or featured_only. Without filters, pages through the whole 88-entry library.",
+        "Full KPI records: description, formula + candidate data sources (present for the ~44 KPIs the site details in capability-page popups), official related capabilities, and where each is featured. Look up one KPI with `slug`, or filter by capability and/or featured_only. Without filters, pages through the whole 88-entry library.",
       inputSchema: {
+        slug: z
+          .string()
+          .optional()
+          .describe(
+            "Exact KPI slug for a single-record lookup, e.g. 'allocation-accuracy-index-aai'",
+          ),
         capability: z
           .string()
           .optional()
@@ -506,7 +512,9 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
         featured_only: z
           .boolean()
           .default(false)
-          .describe("Only KPIs featured on some capability page"),
+          .describe(
+            "With `capability`: only KPIs featured on that capability's own page; alone: only KPIs featured on some page",
+          ),
         limit: z.number().int().min(1).max(100).default(25),
         cursor: z.string().optional(),
       },
@@ -528,18 +536,35 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
       },
       annotations: RO,
     },
-    ({ capability, featured_only, limit, cursor }) => {
+    ({ slug, capability, featured_only, limit, cursor }) => {
       let kpis = artifact.kpis;
+      if (slug) {
+        kpis = kpis.filter((k) => k.slug === slug.toLowerCase());
+        if (kpis.length === 0) {
+          const near = nearestMatches(
+            slug,
+            artifact.kpis.map((k) => k.slug),
+          );
+          return err(
+            `Unknown KPI slug "${slug}".` +
+              (near.length ? ` Did you mean: ${near.join(", ")}?` : "") +
+              ` Use search_framework(entity_types: ["kpi"]) to find KPIs by keyword.`,
+          );
+        }
+      }
       if (capability) {
         const c = findCapability(capability);
         if (isErr(c)) return c;
-        kpis = kpis.filter(
-          (k) =>
-            k.featured_on.includes(c.slug) ||
-            k.related_capability_slugs.includes(c.slug),
-        );
+        kpis = featured_only
+          ? kpis.filter((k) => k.featured_on.includes(c.slug))
+          : kpis.filter(
+              (k) =>
+                k.featured_on.includes(c.slug) ||
+                k.related_capability_slugs.includes(c.slug),
+            );
+      } else if (featured_only) {
+        kpis = kpis.filter((k) => k.featured_on.length > 0);
       }
-      if (featured_only) kpis = kpis.filter((k) => k.featured_on.length > 0);
       const pg = paginate(kpis, limit ?? 25, cursor);
       if (isErr(pg)) return pg;
       const rows = pg.page.map((k) => ({

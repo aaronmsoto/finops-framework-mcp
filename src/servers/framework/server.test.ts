@@ -169,6 +169,26 @@ describe("tools", () => {
     expect(kpis.some((k) => !!k.formula)).toBe(true);
   });
 
+  it("get_kpis slug lookup returns one record; unknown slug suggests", async () => {
+    const one = await call("get_kpis", {
+      slug: "allocation-accuracy-index-aai",
+    });
+    expect((one.structuredContent?.kpis as unknown[]).length).toBe(1);
+    const bad = await call("get_kpis", { slug: "allocation-accuracy-índex" });
+    expect(bad.isError).toBe(true);
+    expect(bad.content[0]?.text).toContain("allocation-accuracy-index-aai");
+  });
+
+  it("get_kpis featured_only with capability means featured on that page", async () => {
+    const res = await call("get_kpis", {
+      capability: "forecasting",
+      featured_only: true,
+    });
+    const kpis = res.structuredContent?.kpis as { featured_on: string[] }[];
+    expect(kpis.length).toBe(4);
+    expect(kpis.every((k) => k.featured_on.includes("forecasting"))).toBe(true);
+  });
+
   it("get_prerequisites marks inference explicitly in the summary", async () => {
     const res = await call("get_prerequisites", { capability: "forecasting" });
     expect(res.structuredContent?.summary).toMatch(/UNOFFICIAL/);
