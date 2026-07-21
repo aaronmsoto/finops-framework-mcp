@@ -1,0 +1,50 @@
+[
+  {
+    "description_md": "- Finance, technology, product, and leaders work together to manage each technology category at the speed and granularity each requires.\n- Coordination from executives to engineers, and across all Personas ensures everyone is focused on the most valuable strategic goals. \n- Teams work together to continuously improve for efficiency and innovation.",
+    "license": "CC-BY-4.0",
+    "order": 1,
+    "slug": "teams-need-to-collaborate",
+    "source_url": "https://www.finops.org/framework/principles/",
+    "title": "Teams need to collaborate"
+  },
+  {
+    "description_md": "- Unit economic and value-based metrics demonstrate business impact better than just aggregate or categorized technology spend.\n- Make conscious trade-off decisions among cost, quality, and speed.\n- Use the strengths of each technology category to derive value and support innovation.\n- Differentiate with [FinOps Scopes](https://www.finops.org/topic/scopes/) to target the business value of specific organizational goals.",
+    "license": "CC-BY-4.0",
+    "order": 2,
+    "slug": "business-value-drives-technology-decisions",
+    "source_url": "https://www.finops.org/framework/principles/",
+    "title": "Business value drives technology decisions"
+  },
+  {
+    "description_md": "- Accountability of usage and cost is pushed to the edge, with engineers taking ownership of costs from architecture design to ongoing operations.\n- Individual feature and product teams are empowered to manage their own mix of technology usage against budgets they help control.\n- Decentralize the decision making around cost-effective architecture, resource usage, and optimization.\n- Technical teams must consider cost as a first class metric from the beginning of the software development lifecycle.",
+    "license": "CC-BY-4.0",
+    "order": 3,
+    "slug": "everyone-takes-ownership-for-their-technology-usage",
+    "source_url": "https://www.finops.org/framework/principles/",
+    "title": "Everyone takes ownership for their technology usage"
+  },
+  {
+    "description_md": "- Process and share cost data as soon as it becomes available.\n- Real-time visibility autonomously drives better technology utilization.\n- Fast feedback loops result in more efficient behavior.\n- Consistent visibility into technology spend is provided to all levels of the organization.\n- Create, monitor, and improve real-time financial forecasting and planning.\n- Trending and variance analysis helps explain cost trends.\n- Internal team benchmarking drives best practices and celebrates wins.\n- Use FOCUS and other methods to continuously improve normalization, accuracy and consistency in data across technology categories.",
+    "license": "CC-BY-4.0",
+    "order": 4,
+    "slug": "finops-data-should-be-accessible-timely-and-accurate",
+    "source_url": "https://www.finops.org/framework/principles/",
+    "title": "FinOps data should be accessible, timely, and accurate"
+  },
+  {
+    "description_md": "- A centralized FinOps function encourages, evangelizes, and enables best practices in a shared accountability model.\n- Executive level communication and business and technology strategies alignment is better enabled through a central team or function.\n- Rate, commitment, and discount optimization are best centralized to take advantage of economies of scale and allows Engineers to stay focused on optimizing their usage.",
+    "license": "CC-BY-4.0",
+    "order": 5,
+    "slug": "finops-should-be-enabled-centrally",
+    "source_url": "https://www.finops.org/framework/principles/",
+    "title": "FinOps should be enabled centrally"
+  },
+  {
+    "description_md": "- Each technology category — public cloud, data center, SaaS, Licenses, Data Cloud Platforms, etc. — entails cost models that have pros and cons for any business. \n- An increasing amount of every technology category is becoming consumption-based, granular, and more variable. Use lessons learned in managing cloud in other categories.\n- The variable cost model of the cloud, the fixed cost model of the data center, or other models present opportunities to deliver more value.\n- Make technology decisions based not only on technical requirements, but also these cost model considerations.\n- Embrace just-in-time prediction, planning, and purchasing of capacity wherever valuable to reduce overall waste.\n- Agile iterative planning is preferred over static long-term planning in an increasing percentage of the technology estate.\n- Shift to more proactive system architecture and design with continuous adjustments over infrequent reactive cleanups.",
+    "license": "CC-BY-4.0",
+    "order": 6,
+    "slug": "take-advantage-of-the-variable-cost-model-of-the-cloud",
+    "source_url": "https://www.finops.org/framework/principles/",
+    "title": "Take advantage of the variable cost model of the cloud"
+  }
+]

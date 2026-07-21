@@ -1,0 +1,43 @@
+{
+  "$id": "finops-framework-mcp/domains",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "capability_slugs": {
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "type": "array"
+      },
+      "description_md": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "license": {
+        "const": "CC-BY-4.0"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "source_url": {
+        "format": "uri",
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "slug",
+      "title",
+      "description_md",
+      "capability_slugs",
+      "source_url",
+      "license"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

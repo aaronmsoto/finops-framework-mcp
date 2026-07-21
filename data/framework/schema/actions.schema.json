@@ -1,0 +1,48 @@
+{
+  "$id": "finops-framework-mcp/actions",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "capability_slug": {
+        "type": "string"
+      },
+      "maturity": {
+        "enum": [
+          "crawl",
+          "walk",
+          "run"
+        ]
+      },
+      "official": {
+        "const": false
+      },
+      "ordinal": {
+        "type": "integer"
+      },
+      "parent_ordinal": {
+        "type": "integer"
+      },
+      "parse_quality": {
+        "enum": [
+          "itemized",
+          "raw_fallback"
+        ]
+      },
+      "text": {
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "required": [
+      "capability_slug",
+      "maturity",
+      "text",
+      "ordinal",
+      "official",
+      "parse_quality"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

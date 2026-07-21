@@ -1,0 +1,106 @@
+{
+  "$id": "finops-framework-mcp/manifest",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "counts": {
+      "additionalProperties": false,
+      "properties": {
+        "capabilities": {
+          "type": "integer"
+        },
+        "domains": {
+          "type": "integer"
+        },
+        "kpis": {
+          "type": "integer"
+        },
+        "maturity_levels": {
+          "type": "integer"
+        },
+        "personas": {
+          "type": "integer"
+        },
+        "phases": {
+          "type": "integer"
+        },
+        "principles": {
+          "type": "integer"
+        },
+        "technology_categories": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "principles",
+        "phases",
+        "domains",
+        "capabilities",
+        "personas",
+        "technology_categories",
+        "maturity_levels",
+        "kpis"
+      ],
+      "type": "object"
+    },
+    "counts_mismatch": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "actual": {
+            "type": "integer"
+          },
+          "expected": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "expected",
+          "actual"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "crawled_at": {
+      "type": "string"
+    },
+    "data_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "parse_warnings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "sha256": {
+      "additionalProperties": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "source_urls": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "data_version",
+    "schema_version",
+    "crawled_at",
+    "source_urls",
+    "sha256",
+    "counts",
+    "parse_warnings"
+  ],
+  "type": "object"
+}

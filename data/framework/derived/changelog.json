@@ -1,0 +1,24 @@
+[
+  {
+    "added": [
+      "content/principles.json",
+      "content/phases.json",
+      "content/domains.json",
+      "content/capabilities.json",
+      "content/personas.json",
+      "content/scopes.json",
+      "content/technology-categories.json",
+      "content/maturity-levels.json",
+      "content/kpis.json",
+      "derived/actions.json",
+      "derived/maturity-extension.json",
+      "derived/relationships-official.json",
+      "derived/relationships-inferred.json"
+    ],
+    "changed": [],
+    "crawled_at": "2026-07-21T11:21:46.919Z",
+    "data_version": "1.0.0",
+    "removed": [],
+    "summary": "initial crawl"
+  }
+]

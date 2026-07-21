@@ -1,0 +1,63 @@
+{
+  "$id": "finops-framework-mcp/kpis",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "data_sources": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "description_md": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "featured_on": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "formula": {
+        "type": "string"
+      },
+      "license": {
+        "const": "CC-BY-4.0"
+      },
+      "related_capability_slugs": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "source_url": {
+        "format": "uri",
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "wp_id": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "slug",
+      "title",
+      "wp_id",
+      "description_md",
+      "data_sources",
+      "related_capability_slugs",
+      "featured_on",
+      "source_url",
+      "license"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

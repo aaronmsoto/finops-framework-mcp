@@ -1,0 +1,522 @@
+[
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/architecting-workload-placement/",
+    "from": "architecting-workload-placement",
+    "rationale": "The architecting-workload-placement Definition links to rate-optimization.",
+    "source": "official",
+    "to": "rate-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/automation-tools-services/",
+    "from": "automation-tools-services",
+    "rationale": "The automation-tools-services Definition links to finops-education-enablement.",
+    "source": "official",
+    "to": "finops-education-enablement",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/automation-tools-services/",
+    "from": "automation-tools-services",
+    "rationale": "The automation-tools-services Inputs & Outputs section links to reporting-analytics.",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/automation-tools-services/",
+    "from": "automation-tools-services",
+    "rationale": "The automation-tools-services Inputs & Outputs section links to data-ingestion.",
+    "source": "official",
+    "to": "data-ingestion",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/automation-tools-services/",
+    "from": "automation-tools-services",
+    "rationale": "The automation-tools-services Inputs & Outputs section links to finops-practice-operations.",
+    "source": "official",
+    "to": "finops-practice-operations",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/executive-strategy-alignment/",
+    "from": "executive-strategy-alignment",
+    "rationale": "The executive-strategy-alignment Definition links to unit-economics.",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/kpis-benchmarking/",
+    "from": "kpis-benchmarking",
+    "rationale": "The kpis-benchmarking Inputs & Outputs section links to unit-economics.",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/kpis-benchmarking/",
+    "from": "kpis-benchmarking",
+    "rationale": "The kpis-benchmarking Inputs & Outputs section links to reporting-analytics.",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/kpis-benchmarking/",
+    "from": "kpis-benchmarking",
+    "rationale": "The kpis-benchmarking Inputs & Outputs section links to data-ingestion.",
+    "source": "official",
+    "to": "data-ingestion",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/kpis-benchmarking/",
+    "from": "kpis-benchmarking",
+    "rationale": "The kpis-benchmarking Inputs & Outputs section links to forecasting.",
+    "source": "official",
+    "to": "forecasting",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/kpis-benchmarking/",
+    "from": "kpis-benchmarking",
+    "rationale": "The kpis-benchmarking Inputs & Outputs section links to rate-optimization.",
+    "source": "official",
+    "to": "rate-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/sustainability/",
+    "from": "sustainability",
+    "rationale": "The sustainability Definition links to intersecting-disciplines.",
+    "source": "official",
+    "to": "intersecting-disciplines",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/sustainability/",
+    "from": "sustainability",
+    "rationale": "The sustainability Definition links to usage-optimization.",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/sustainability/",
+    "from": "sustainability",
+    "rationale": "The sustainability Definition links to rate-optimization.",
+    "source": "official",
+    "to": "rate-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/sustainability/",
+    "from": "sustainability",
+    "rationale": "The sustainability Definition links to data-ingestion.",
+    "source": "official",
+    "to": "data-ingestion",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/sustainability/",
+    "from": "sustainability",
+    "rationale": "The sustainability Definition links to allocation.",
+    "source": "official",
+    "to": "allocation",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/sustainability/",
+    "from": "sustainability",
+    "rationale": "The sustainability Definition links to reporting-analytics.",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/sustainability/",
+    "from": "sustainability",
+    "rationale": "The sustainability Definition links to unit-economics.",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/sustainability/",
+    "from": "sustainability",
+    "rationale": "The sustainability Inputs & Outputs section links to forecasting.",
+    "source": "official",
+    "to": "forecasting",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/usage-optimization/",
+    "from": "usage-optimization",
+    "rationale": "The usage-optimization Inputs & Outputs section links to reporting-analytics.",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/usage-optimization/",
+    "from": "usage-optimization",
+    "rationale": "The usage-optimization Inputs & Outputs section links to data-ingestion.",
+    "source": "official",
+    "to": "data-ingestion",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/framework/capabilities/usage-optimization/",
+    "from": "usage-optimization",
+    "rationale": "The usage-optimization Inputs & Outputs section links to unit-economics.",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/active-to-provisioned-user-ratio/",
+    "from": "data-ingestion",
+    "rationale": "Both are officially linked to the KPI \"Active-to-Provisioned User Ratio\".",
+    "source": "official",
+    "to": "licensing-saas",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/active-to-provisioned-user-ratio/",
+    "from": "data-ingestion",
+    "rationale": "Both are officially linked to the KPI \"Active-to-Provisioned User Ratio\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/active-to-provisioned-user-ratio/",
+    "from": "data-ingestion",
+    "rationale": "Both are officially linked to the KPI \"Active-to-Provisioned User Ratio\".",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/active-to-provisioned-user-ratio/",
+    "from": "licensing-saas",
+    "rationale": "Both are officially linked to the KPI \"Active-to-Provisioned User Ratio\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/active-to-provisioned-user-ratio/",
+    "from": "licensing-saas",
+    "rationale": "Both are officially linked to the KPI \"Active-to-Provisioned User Ratio\".",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/active-to-provisioned-user-ratio/",
+    "from": "reporting-analytics",
+    "rationale": "Both are officially linked to the KPI \"Active-to-Provisioned User Ratio\".",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/allocation-accuracy-index-aai/",
+    "from": "allocation",
+    "rationale": "Both are officially linked to the KPI \"Allocation Accuracy Index (AAI)\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/allocation-accuracy-index-aai/",
+    "from": "allocation",
+    "rationale": "Both are officially linked to the KPI \"Allocation Accuracy Index (AAI)\".",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/anomaly-detection-rate/",
+    "from": "anomaly-management",
+    "rationale": "Both are officially linked to the KPI \"Anomaly Detection Rate\".",
+    "source": "official",
+    "to": "data-ingestion",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/anomaly-detection-rate/",
+    "from": "anomaly-management",
+    "rationale": "Both are officially linked to the KPI \"Anomaly Detection Rate\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/carbon-per-unit-of-cloud-service-sku/",
+    "from": "intersecting-disciplines",
+    "rationale": "Both are officially linked to the KPI \"Carbon per Unit of Cloud Service SKU\".",
+    "source": "official",
+    "to": "sustainability",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/carbon-per-unit-of-cloud-service-sku/",
+    "from": "intersecting-disciplines",
+    "rationale": "Both are officially linked to the KPI \"Carbon per Unit of Cloud Service SKU\".",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/consumption-versus-commitment/",
+    "from": "data-ingestion",
+    "rationale": "Both are officially linked to the KPI \"Consumption versus Commitment\".",
+    "source": "official",
+    "to": "forecasting",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/consumption-versus-commitment/",
+    "from": "data-ingestion",
+    "rationale": "Both are officially linked to the KPI \"Consumption versus Commitment\".",
+    "source": "official",
+    "to": "rate-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/consumption-versus-commitment/",
+    "from": "forecasting",
+    "rationale": "Both are officially linked to the KPI \"Consumption versus Commitment\".",
+    "source": "official",
+    "to": "licensing-saas",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/consumption-versus-commitment/",
+    "from": "forecasting",
+    "rationale": "Both are officially linked to the KPI \"Consumption versus Commitment\".",
+    "source": "official",
+    "to": "rate-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/consumption-versus-commitment/",
+    "from": "forecasting",
+    "rationale": "Both are officially linked to the KPI \"Consumption versus Commitment\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/consumption-versus-commitment/",
+    "from": "licensing-saas",
+    "rationale": "Both are officially linked to the KPI \"Consumption versus Commitment\".",
+    "source": "official",
+    "to": "rate-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/consumption-versus-commitment/",
+    "from": "rate-optimization",
+    "rationale": "Both are officially linked to the KPI \"Consumption versus Commitment\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/cost-optimization-index-coin/",
+    "from": "rate-optimization",
+    "rationale": "Both are officially linked to the KPI \"Cost Optimization Index (COIN)\".",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/cost-per-api-call/",
+    "from": "reporting-analytics",
+    "rationale": "Both are officially linked to the KPI \"Cost per API Call\".",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/cpi-cost-performance-indicator/",
+    "from": "planning-estimating",
+    "rationale": "Both are officially linked to the KPI \"CPI – Cost Performance Indicator\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/csp-cloud-carbon-budget-burn-rate/",
+    "from": "budgeting",
+    "rationale": "Both are officially linked to the KPI \"CSP Cloud Carbon Budget Burn Rate\".",
+    "source": "official",
+    "to": "intersecting-disciplines",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/csp-cloud-carbon-budget-burn-rate/",
+    "from": "budgeting",
+    "rationale": "Both are officially linked to the KPI \"CSP Cloud Carbon Budget Burn Rate\".",
+    "source": "official",
+    "to": "sustainability",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/data-center-power-usage-effectiveness/",
+    "from": "data-ingestion",
+    "rationale": "Both are officially linked to the KPI \"Data Center Power Usage Effectiveness\".",
+    "source": "official",
+    "to": "sustainability",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/data-center-power-usage-effectiveness/",
+    "from": "reporting-analytics",
+    "rationale": "Both are officially linked to the KPI \"Data Center Power Usage Effectiveness\".",
+    "source": "official",
+    "to": "sustainability",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/data-value-density/",
+    "from": "licensing-saas",
+    "rationale": "Both are officially linked to the KPI \"Data Value Density\".",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/data-value-density/",
+    "from": "rate-optimization",
+    "rationale": "Both are officially linked to the KPI \"Data Value Density\".",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/data-value-density/",
+    "from": "unit-economics",
+    "rationale": "Both are officially linked to the KPI \"Data Value Density\".",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/forecast-accuracy-rate-for-carbon-emissions/",
+    "from": "forecasting",
+    "rationale": "Both are officially linked to the KPI \"Forecast Accuracy Rate for Carbon Emissions\".",
+    "source": "official",
+    "to": "intersecting-disciplines",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/forecast-accuracy-rate-for-carbon-emissions/",
+    "from": "forecasting",
+    "rationale": "Both are officially linked to the KPI \"Forecast Accuracy Rate for Carbon Emissions\".",
+    "source": "official",
+    "to": "sustainability",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/optimizing-electricity-pue-wue-between-regions-or-cloud-service-providers/",
+    "from": "intersecting-disciplines",
+    "rationale": "Both are officially linked to the KPI \"Optimizing Electricity PUE, WUE, Between Regions, or Cloud Service Providers\".",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/redundant-application-coverage-percent/",
+    "from": "architecting-workload-placement",
+    "rationale": "Both are officially linked to the KPI \"Redundant Application Coverage Percent\".",
+    "source": "official",
+    "to": "data-ingestion",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/redundant-application-coverage-percent/",
+    "from": "architecting-workload-placement",
+    "rationale": "Both are officially linked to the KPI \"Redundant Application Coverage Percent\".",
+    "source": "official",
+    "to": "licensing-saas",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/redundant-application-coverage-percent/",
+    "from": "architecting-workload-placement",
+    "rationale": "Both are officially linked to the KPI \"Redundant Application Coverage Percent\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/redundant-application-coverage-percent/",
+    "from": "architecting-workload-placement",
+    "rationale": "Both are officially linked to the KPI \"Redundant Application Coverage Percent\".",
+    "source": "official",
+    "to": "usage-optimization",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/saas-optimization-roi/",
+    "from": "architecting-workload-placement",
+    "rationale": "Both are officially linked to the KPI \"SaaS Optimization ROI\".",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/saas-optimization-roi/",
+    "from": "data-ingestion",
+    "rationale": "Both are officially linked to the KPI \"SaaS Optimization ROI\".",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/saas-unit-cost/",
+    "from": "intersecting-disciplines",
+    "rationale": "Both are officially linked to the KPI \"SaaS Unit Cost\".",
+    "source": "official",
+    "to": "licensing-saas",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/saas-unit-cost/",
+    "from": "intersecting-disciplines",
+    "rationale": "Both are officially linked to the KPI \"SaaS Unit Cost\".",
+    "source": "official",
+    "to": "reporting-analytics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/time-to-achieve-business-value/",
+    "from": "forecasting",
+    "rationale": "Both are officially linked to the KPI \"Time to Achieve Business Value\".",
+    "source": "official",
+    "to": "planning-estimating",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/time-to-achieve-business-value/",
+    "from": "forecasting",
+    "rationale": "Both are officially linked to the KPI \"Time to Achieve Business Value\".",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  },
+  {
+    "evidence_url": "https://www.finops.org/kpi/time-to-achieve-business-value/",
+    "from": "planning-estimating",
+    "rationale": "Both are officially linked to the KPI \"Time to Achieve Business Value\".",
+    "source": "official",
+    "to": "unit-economics",
+    "type": "related"
+  }
+]

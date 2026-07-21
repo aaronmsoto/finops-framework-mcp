@@ -1,0 +1,29 @@
+[
+  {
+    "characteristics_md": "- Very little reporting and tooling\n- Measurements only provide insight into the benefits of maturing the capability\n- Basic KPIs set for the measurement of success\n- Basic processes and policies are defined around the capability\n- Capability is understood but not followed by all the major teams within the organization\n- Plans to address “low hanging fruit”",
+    "license": "CC-BY-4.0",
+    "official": true,
+    "sample_goals_md": "- Able to allocate at least 70% of cost to known owner\n- Commitments discount target coverage of approximately 60%\n- Forecast spend to actual spend accuracy variance is below 20%",
+    "slug": "crawl",
+    "source_url": "https://www.finops.org/framework/maturity-model/",
+    "title": "Crawl"
+  },
+  {
+    "characteristics_md": "- Capability is understood and followed within the organization\n- Difficult edge cases are identified but decision to not address them (informed ignoring) is adopted\n- Automation and/or processes cover most of the Capability requirements\n- Most difficult edge cases (ones that threaten the financial well-being of the organization) are identified and effort to resolve has been estimated\n- Medium to high goals/KPIs set on the measurement of success",
+    "license": "CC-BY-4.0",
+    "official": true,
+    "sample_goals_md": "- Able to allocate at least 85% of cost to known owner\n- Commitments discount target coverage is greater than 75%\n- Forecast spend to actual spend accuracy variance is less than 10%",
+    "slug": "walk",
+    "source_url": "https://www.finops.org/framework/maturity-model/",
+    "title": "Walk"
+  },
+  {
+    "characteristics_md": "- Capability is understood and followed by all teams within the organization\n- Difficult edge cases are being addressed\n- Very high goals/KPIs set on the measurement of success\n- Automation is the preferred approach",
+    "license": "CC-BY-4.0",
+    "official": true,
+    "sample_goals_md": "- Greater than 90% of spend can be allocated\n- Commitment discount target coverage is greater than 80\n- Forecast spend to actual spend accuracy variance is less than 5%",
+    "slug": "run",
+    "source_url": "https://www.finops.org/framework/maturity-model/",
+    "title": "Run"
+  }
+]
