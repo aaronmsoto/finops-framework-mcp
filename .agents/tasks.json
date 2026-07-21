@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "genesis",
+  "chainHead": "fb69a7ea1fba746208d323a8b205187ab8493e38ab86ba467f144e70eddfce66",
   "tasks": [
     {
       "id": "T-001",
@@ -9,9 +9,15 @@
         "AGENTS.md 'What this project is' and .agents/memory/MEMORY.md describe the real project, not the template",
         "./scripts/agentic memory lint passes"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "AGENTS.md 'What this project is' and MEMORY.md now describe the real project (owner-supplied: MCP server as agentic interface to the FinOps Framework at https://finops.org/framework); memory lint and fast gates pass",
+        "commit": "973ba3d0ca3dd5ab5daeaa32e7a300b696113c02",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-21T09:53:05.321Z"
+      },
+      "hash": "ad09987f8fe4f4194ea35f68db89997ae096772af6851a6716b2f8458c3b5ef1"
     },
     {
       "id": "T-002",
@@ -19,9 +25,15 @@
       "acceptance": [
         "./scripts/agentic gates --tier fast exits 0"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Preset deps installed; fast-tier gates exit 0 on merged main (format/lint/typecheck/test/designs/integrity/memory PASS; genesis integrity condition cleared after PR #1 merge)",
+        "commit": "8413d42e06d2dba007c31171d31464ee6555439d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-21T09:48:10.506Z"
+      },
+      "hash": "1266b875a4907228ccea0cbd1828eae57f6f6ec92c64eeaec6bf9d38916be1a5"
     },
     {
       "id": "T-003",
@@ -41,9 +53,15 @@
         "Root LICENSE reflects this project's owner and chosen license, or was deliberately removed",
         "Rerun ./scripts/agentic init with --license mit|apache-2.0|proprietary (+ --license-holder), or edit LICENSE by hand"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Root LICENSE confirmed by owner: MIT, Copyright (c) 2026 Aaron Soto (template author == project owner, deliberately kept as-is)",
+        "commit": "c5717cc9f3058072b561a227dad89c7e66534a79",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-21T09:53:19.719Z"
+      },
+      "hash": "fb69a7ea1fba746208d323a8b205187ab8493e38ab86ba467f144e70eddfce66"
     }
   ]
 }
