@@ -4,9 +4,12 @@ Canonical instructions for AI coding agents (Claude Code, GitHub Copilot CLI, an
 
 ## What this project is
 
-finops-framework-mcp — replace this section (3-6 lines): what the project does,
-who it is for, how to run it. Agents read this every session; until it is
-real, they orient on a placeholder. (Seeded as onboarding task T-001.)
+finops-framework-mcp is an MCP (Model Context Protocol) server that acts as an
+agentic interface to the FinOps Framework published at
+https://finops.org/framework — it lets AI agents and MCP clients query and
+navigate the framework's guidance through MCP tools. TypeScript project; the
+server entry point is `src/index.ts` (currently scaffold-stage), gates run via
+`./scripts/agentic gates`, tests via vitest.
 
 ## Session protocol (every session, both tools)
 

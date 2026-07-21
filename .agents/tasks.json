@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "1266b875a4907228ccea0cbd1828eae57f6f6ec92c64eeaec6bf9d38916be1a5",
+  "chainHead": "ad09987f8fe4f4194ea35f68db89997ae096772af6851a6716b2f8458c3b5ef1",
   "tasks": [
     {
       "id": "T-001",
@@ -9,9 +9,15 @@
         "AGENTS.md 'What this project is' and .agents/memory/MEMORY.md describe the real project, not the template",
         "./scripts/agentic memory lint passes"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "AGENTS.md 'What this project is' and MEMORY.md now describe the real project (owner-supplied: MCP server as agentic interface to the FinOps Framework at https://finops.org/framework); memory lint and fast gates pass",
+        "commit": "973ba3d0ca3dd5ab5daeaa32e7a300b696113c02",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-21T09:53:05.321Z"
+      },
+      "hash": "ad09987f8fe4f4194ea35f68db89997ae096772af6851a6716b2f8458c3b5ef1"
     },
     {
       "id": "T-002",

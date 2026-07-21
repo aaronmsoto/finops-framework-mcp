@@ -7,7 +7,10 @@
 ## Project
 
 - Name: finops-framework-mcp
-- Phase: freshly initialized from agentic-starter-repo
+- What: an MCP (Model Context Protocol) server acting as an agentic interface
+  to the FinOps Framework published at https://finops.org/framework.
+- Phase: onboarding — initialized from agentic-starter-repo; server not yet
+  implemented (src/index.ts is the preset scaffold).
 
 ## Invariants
 
@@ -15,4 +18,5 @@
 
 ## Current focus
 
-- (what the project is working toward right now)
+- Finish onboarding (T-003: first feature spec), then design/plan the MCP
+  server surface over the FinOps Framework content.
