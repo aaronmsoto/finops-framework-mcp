@@ -20,7 +20,6 @@ exec copilot "$@" \
   --deny-tool 'shell(git reset --hard origin*)' \
   --deny-tool 'shell(git push origin main*)' \
   --deny-tool 'shell(git push * main)' \
-  --deny-tool 'shell(gh pr merge*)' \
   --deny-tool 'shell(gh workflow run *deploy*)' \
   --deny-tool 'shell(npm publish*)' \
   --deny-tool 'shell(gh release create*)'

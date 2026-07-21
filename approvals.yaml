@@ -33,7 +33,7 @@ loop:
   max_wall_minutes: 120
   max_consecutive_failures: 3
 branching:
-  mode: trunk
+  mode: integration
   default_branch: main   # the protected branch; rename requires editing ci.yml + release-pr.yml
   integration_branch: dev
   task_branch_prefix: "task/"
