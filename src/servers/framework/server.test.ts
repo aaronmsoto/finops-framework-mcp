@@ -21,13 +21,11 @@ beforeAll(async () => {
   ]);
 });
 
-type Structured = Record<string, never> | undefined;
-
 async function call(name: string, args: Record<string, unknown> = {}) {
   const res = await client.callTool({ name, arguments: args });
   return res as {
     content: { type: string; text?: string; uri?: string }[];
-    structuredContent?: Record<string, Structured> & Record<string, unknown>;
+    structuredContent?: Record<string, unknown>;
     isError?: boolean;
   };
 }

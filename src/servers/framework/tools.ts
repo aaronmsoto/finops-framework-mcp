@@ -200,7 +200,13 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
       );
       const p = paginate(all, limit ?? 10, cursor);
       if (isErr(p)) return p;
-      const results = p.page.map(({ score: _score, ...r }) => r);
+      const results = p.page.map((r) => ({
+        entity_type: r.entity_type,
+        slug: r.slug,
+        title: r.title,
+        uri: r.uri,
+        snippet: r.snippet,
+      }));
       return ok(
         {
           results,

@@ -33,3 +33,16 @@
   MaturityCharacteristic (M11, accepted-with-rationale for now; semantics
   already fixed in descriptions).
 - Gate verdict: zero unresolved BLOCKERs. Phase 4 (implementation) begins.
+
+## Phase 4 complete — 2026-07-22T00:20:00Z
+
+- Crawler: fetch/cache/robots -> parse -> sanitize-scan -> infer -> validate
+  -> emit. Real artifact committed (v1.0.0: 22 caps, 489 items, 88 KPIs,
+  65 official + 38 inferred edges). Double refresh = byte-identical (tested).
+- Parse reality handled: htmlToMd multi-node bug found via principles=0;
+  ESA "As someone in an X role" h4s; ITAM/Sustainability named allied
+  personas; governance missing Definition h2 (id fallback); intersecting-
+  disciplines duplicate Maturity h2. All covered by fixture tests (63 total).
+- Server: 11 tools / 40+ resources + 4 templates / 4 prompts; stdio smoke
+  test green; full gates (incl. build) PASS.
+- Workflow delivered as docs/proposed/refresh-data.yml only (protected path).
