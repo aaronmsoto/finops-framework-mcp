@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "ad09987f8fe4f4194ea35f68db89997ae096772af6851a6716b2f8458c3b5ef1",
+  "chainHead": "fb69a7ea1fba746208d323a8b205187ab8493e38ab86ba467f144e70eddfce66",
   "tasks": [
     {
       "id": "T-001",
@@ -53,9 +53,15 @@
         "Root LICENSE reflects this project's owner and chosen license, or was deliberately removed",
         "Rerun ./scripts/agentic init with --license mit|apache-2.0|proprietary (+ --license-holder), or edit LICENSE by hand"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Root LICENSE confirmed by owner: MIT, Copyright (c) 2026 Aaron Soto (template author == project owner, deliberately kept as-is)",
+        "commit": "c5717cc9f3058072b561a227dad89c7e66534a79",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-21T09:53:19.719Z"
+      },
+      "hash": "fb69a7ea1fba746208d323a8b205187ab8493e38ab86ba467f144e70eddfce66"
     }
   ]
 }
