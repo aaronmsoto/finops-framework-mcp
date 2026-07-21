@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "genesis",
+  "chainHead": "1266b875a4907228ccea0cbd1828eae57f6f6ec92c64eeaec6bf9d38916be1a5",
   "tasks": [
     {
       "id": "T-001",
@@ -19,9 +19,15 @@
       "acceptance": [
         "./scripts/agentic gates --tier fast exits 0"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Preset deps installed; fast-tier gates exit 0 on merged main (format/lint/typecheck/test/designs/integrity/memory PASS; genesis integrity condition cleared after PR #1 merge)",
+        "commit": "8413d42e06d2dba007c31171d31464ee6555439d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-21T09:48:10.506Z"
+      },
+      "hash": "1266b875a4907228ccea0cbd1828eae57f6f6ec92c64eeaec6bf9d38916be1a5"
     },
     {
       "id": "T-003",
