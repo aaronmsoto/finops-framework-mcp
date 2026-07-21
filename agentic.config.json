@@ -1,20 +1,64 @@
 {
   "$schema": ".agentic/harness/schemas/agentic.config.schema.json",
-  "preset": "self",
+  "preset": "typescript",
   "project": {
-    "name": "agentic-starter-repo",
-    "srcDirs": [".agentic/harness/src"],
-    "testGlobs": [".agentic/harness/tests/**"]
+    "name": "finops-framework-mcp",
+    "srcDirs": [
+      "src"
+    ],
+    "testGlobs": [
+      "tests/**",
+      "src/**/*.test.ts"
+    ]
   },
   "gates": {
-    "lint": { "command": "cd .agentic/harness && npm run lint", "tier": "fast" },
-    "typecheck": { "command": "cd .agentic/harness && npm run typecheck", "tier": "fast" },
-    "test": { "command": "cd .agentic/harness && npm run test", "tier": "fast" },
-    "integrity": { "command": "node .agentic/harness/dist/cli.js integrity", "tier": "fast" },
-    "memory": { "command": "node .agentic/harness/dist/cli.js memory lint", "tier": "fast" },
-    "designs": { "command": "node .agentic/harness/dist/cli.js design check", "tier": "fast" },
-    "build": { "command": "cd .agentic/harness && npm run build", "tier": "full" }
+    "format": {
+      "command": "prettier --check src tests",
+      "tier": "fast"
+    },
+    "lint": {
+      "command": "eslint src tests",
+      "tier": "fast"
+    },
+    "typecheck": {
+      "command": "tsc --noEmit",
+      "tier": "fast"
+    },
+    "test": {
+      "command": "vitest run --coverage",
+      "tier": "fast"
+    },
+    "coverage": {
+      "tier": "fast",
+      "optional": true
+    },
+    "designs": {
+      "command": "node .agentic/harness/dist/cli.js design check",
+      "tier": "fast"
+    },
+    "integrity": {
+      "command": "node .agentic/harness/dist/cli.js integrity",
+      "tier": "fast"
+    },
+    "memory": {
+      "command": "node .agentic/harness/dist/cli.js memory lint",
+      "tier": "fast"
+    },
+    "build": {
+      "command": "npm run build --if-present",
+      "tier": "full"
+    },
+    "e2e": {
+      "tier": "full",
+      "optional": true
+    }
   },
-  "loop": { "runner": "claude" },
-  "memory": { "dir": ".agents/memory", "coreBudgetLines": 200, "staleDays": 45 }
+  "loop": {
+    "runner": "claude"
+  },
+  "memory": {
+    "dir": ".agents/memory",
+    "coreBudgetLines": 200,
+    "staleDays": 45
+  }
 }

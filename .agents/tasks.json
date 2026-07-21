@@ -4,10 +4,9 @@
   "tasks": [
     {
       "id": "T-001",
-      "title": "Replace the 'What this project is' sections in AGENTS.md and MEMORY.md with your project",
+      "title": "Replace the 'What this project is' section in AGENTS.md and MEMORY.md with your project",
       "acceptance": [
-        "AGENTS.md 'What this project is' section describes the real project in 3-6 lines (template placeholder text removed)",
-        ".agents/memory/MEMORY.md 'What this project is' and 'Current phase' sections describe the real project",
+        "AGENTS.md 'What this project is' and .agents/memory/MEMORY.md describe the real project, not the template",
         "./scripts/agentic memory lint passes"
       ],
       "status": "pending",
@@ -16,12 +15,9 @@
     },
     {
       "id": "T-002",
-      "title": "Run ./scripts/agentic init with your project name, preset, and owner, and commit the result",
+      "title": "Follow the preset setup steps until ./scripts/agentic gates is green",
       "acceptance": [
-        "./scripts/agentic init --name <project> --preset <typescript|python> --owner <@handle> completed without error",
-        "approvals.yaml owner field names the real owner and .github/CODEOWNERS was regenerated to match",
-        "./scripts/agentic gates passes with the preset's gate bindings",
-        "init output is committed in a single commit"
+        "./scripts/agentic gates --tier fast exits 0"
       ],
       "status": "pending",
       "evidence": null,
@@ -29,11 +25,21 @@
     },
     {
       "id": "T-003",
-      "title": "Write your first feature spec from .agents/specs/TEMPLATE.md and generate tasks with the plan-feature skill",
+      "title": "Write your first feature spec from .agents/specs/TEMPLATE.md and decompose it with plan-feature",
       "acceptance": [
-        "A spec exists at .agents/specs/<feature>.md following TEMPLATE.md (Problem, Outcome, Non-goals, Acceptance criteria, Open questions; one page or less)",
-        "The spec was reviewed by a human before task generation",
-        "Tasks were added via ./scripts/agentic tasks add with concrete acceptance criteria and --spec references, and ./scripts/agentic tasks validate passes"
+        "A spec file exists under .agents/specs/",
+        ".agents/tasks.json contains the tasks decomposed from the spec"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-004",
+      "title": "Choose the project's root LICENSE (it still carries the template author's copyright)",
+      "acceptance": [
+        "Root LICENSE reflects this project's owner and chosen license, or was deliberately removed",
+        "Rerun ./scripts/agentic init with --license mit|apache-2.0|proprietary (+ --license-holder), or edit LICENSE by hand"
       ],
       "status": "pending",
       "evidence": null,
