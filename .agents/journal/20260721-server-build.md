@@ -66,3 +66,12 @@
   is text-block-only.
 - Template feedback for agentic-starter-repo: gates --tier full runs only
   full-tier gates; use/alias --tier all before shipping.
+
+## Phase 6 closed + eval run 2 — 2026-07-22T00:40:00Z
+
+- Eval re-run post-fixes: 10/10 under a STRICTER protocol (text content
+  blocks only; probes aimed at the fixed surfaces: ESR formula exact,
+  get_entity full principle text, honestly-empty prerequisites). Recorded
+  as Run 2 in docs/eval-results.md.
+- Definition of done items all green. Shipping: PR to dev (recreated from
+  main), owner checklist in PR body.

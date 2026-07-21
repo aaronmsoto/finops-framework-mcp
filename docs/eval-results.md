@@ -62,3 +62,33 @@ sample goals existed only in the `finops://framework/maturity-model`
 resource. That gap produced the `get_maturity_model` tool *before* the fresh
 run, which then used it correctly. The suite thus already caught one
 resource/tool parity violation, which is exactly what it is for.
+
+## Run 2 — 2026-07-21 (post critique gate 2), artifact v1.1.0
+
+Same protocol, two hardenings: the agent was restricted to **text content
+blocks only** (ignoring structuredContent — the host class critique-2 B1'
+was about), and two questions were swapped to probe the fixed surfaces
+directly: Q5 → the Effective Savings Rate formula (the record most mangled
+by the formula-segmentation blocker), Q10 → full principle text via the new
+`get_entity` tool. Q2's expectation follows the corrected inference pass
+(zero prerequisite edges is the honest state).
+
+| # | Probe | Verdict | Notes |
+|---|---|---|---|
+| 1 | Ownership → allocation + Crawl characteristics | **PASS** | identical quality to Run 1, from text blocks |
+| 2 | Sustainability prerequisites (now honestly empty) | **PASS** | "0 official, 0 inferred" + no-official-graph caveat relayed |
+| 3 | Anomaly Management domain + siblings | **PASS** | |
+| 4 | Forecasting featured KPIs | **PASS** | exactly 4 (B1'/featured-filter fix verified) |
+| 5 | **ESR formula** + featured page | **PASS** | both formula options exact; rate-optimization (B2' fix verified) |
+| 6 | Crawl allocation sample goal | **PASS** | |
+| 7 | Principle enabled by Allocation | **PASS** | |
+| 8 | Procurement across 3 capabilities | **PASS** | |
+| 9 | KPI count + unit-economics KPIs | **PASS** | |
+| 10 | **Full data-principle text** via get_entity | **PASS** | exact title + bullet (M3' fix verified) |
+
+**Score: 10/10 (gate requires ≥9/10).** Friction notes: `get_entity`'s
+required field name was recovered from the validation error rather than the
+description (description now names it); Q8's singular "which" was ambiguous
+(question wording, not server); crawled typos ("Cost ALlocation") preserved
+verbatim — faithful crawling. The agent explicitly praised the
+provenance/license footers and official-vs-unofficial flags.

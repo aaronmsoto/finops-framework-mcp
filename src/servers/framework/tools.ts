@@ -1016,7 +1016,7 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     {
       title: "Get full text of a small framework entity",
       description:
-        "Full rendered markdown for entity types that have no dedicated tool: the 6 principles, 3 phases, 4 domains, 5 technology categories, the Scopes guidance document, or one persona. Omit `slug` to get the whole collection (they are small); pass a persona slug for a single persona document. For capabilities use get_capability; for KPIs get_kpis; for maturity levels get_maturity_model.",
+        "Full rendered markdown for entity types that have no dedicated tool. Required param: `entity_type` (principles | phases | domains | technology-categories | scopes | persona). Collections return whole (they are small); entity_type 'persona' also needs `slug`. For capabilities use get_capability; for KPIs get_kpis; for maturity levels get_maturity_model.",
       inputSchema: {
         entity_type: z.enum([
           "principles",
