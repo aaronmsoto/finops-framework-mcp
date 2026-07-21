@@ -89,31 +89,54 @@ against `capabilities-api`), `sitemap-partners.xml`.
 - KPI library: 88 pages at `/kpi/{slug}/` (same content that feeds capability
   page popups).
 
-### 2.5 Capability page anatomy (verified on `/framework/capabilities/allocation/`)
+### 2.5 Capability page anatomy (CORRECTED after critique gate 1)
 
-Server-rendered, consistent section skeleton via an "On this page" nav:
+> The first draft of this section mis-attributed the page-top callout's
+> bolded-group structure to the Maturity Assessment blocks and assumed one
+> skeleton for all pages. Both were empirically refuted by the critique
+> panel (docs/critique-1.md B1/B2) against allocation + forecasting +
+> finops-practice-operations. This section reflects the verified reality.
+
+Server-rendered, section skeleton discovered via an "On this page" nav, but
+**pages vary — anchor on normalized heading text, never exact strings/ids**:
 
 1. `<h1>` title, bolded one-line summary, and a `.callout-block` of headline
-   activity groups.
+   activity groups (`<p><b>group</b></p><ul>` — this pattern lives HERE and
+   only here → Capability `headline_groups`).
 2. `<h2>Definition</h2>` — prose, with inline links to Principles and other
    Capabilities (harvest as official `related` signals).
-3. `<h2>Maturity Assessment</h2>` — `<h4>Crawl|Walk|Run</h4>` blocks whose
-   content is `<p><b>group label</b></p><ul><li>…` — this is the **Action**
-   parsing target (group label + bullet text → Action records; fall back to
-   raw prose on structural surprises).
-4. `<h2>Functional Activities</h2>` — `<h4>` per Persona ("FinOps
-   Practitioner", "Product", …, "Allied Personas") with bullet lists → yields
-   the official capability↔persona mapping.
-5. `<h2 id="success-kpis">Measures of Success & KPIs</h2>` — (a) top-level
-   `<ul>` = inline KPI bullets; (b) `<h3>Examples</h3>` nested list of
-   Objective/KPI pairs; (c) **featured KPI cards** (`.ff-card`, `<h4>` title)
-   each paired with a *server-rendered hidden modal* `div.c-modal.ff-modal`
-   whose numeric DOM id equals the KPI-library post id. Modal contains: full
-   description, `Formula` block (formula text + candidate data sources),
-   **Related Capabilities** (official capability cross-links per KPI), and
-   Related Assets. No headless browser needed — plain HTTP fetch suffices.
-6. `<h2>Inputs & Outputs</h2>` — inputs/outputs prose/lists; primary fuel for
-   relationship inference.
+3. `<h2>Maturity Assessment</h2>` — `<h4>Crawl|Walk|Run</h4>` each followed
+   by a **flat `<ul>` that may nest one level** (no bold group labels, no
+   `<p>` wrappers). Nested `<li>`s are children of the preceding item. This
+   is the Action parsing target; raw-prose fallback on surprises.
+4. `<h2>Functional Activities</h2>` — `<h4>` per **core** Persona plus a
+   single `<h4>Allied Personas</h4>` bucket (allied personas are mapped at
+   group level only).
+5. Measures of Success & KPIs — (a) a top-level `<ul>` of inline KPI
+   bullets; (b) an optional `<h3>Examples</h3>` nested Objective/KPI list
+   (allocation has it; forecasting/practice-operations don't); (c)
+   **featured KPI cards** (`.ff-card`) paired with *server-rendered hidden
+   modals* `div.c-modal` whose numeric DOM id equals the KPI-library post
+   id — but cards/modals may sit under a **separate `<h2>KPIs</h2>`**
+   (forecasting) rather than inside this section, and some capabilities
+   have none (finops-practice-operations) → parse modals **page-wide**, not
+   section-scoped. Modal contains: description, Formula block (+ candidate
+   data sources), Related Capabilities (official cross-links), Related
+   Assets. No headless browser needed.
+6. Inputs & Outputs — heading renders as "Inputs & Outputs" OR "Inputs and
+   Outputs"; anchor ids flip between `inputs-outputs`/`inputs_outputs` and
+   live on wrapper divs, not headings. Primary fuel for relationship
+   inference.
+
+Domain→capability mapping comes from two official sources to cross-check:
+the domains index page's per-domain capability cards, and each capability
+page's breadcrumb ("Framework / Domains / {domain} / {capability}").
+
+**Scopes caveat (critique B3):** the current Scopes page is conceptual
+guidance with no enumerable scope list. The `/wp/v2/scope` CPT and the
+page's stale JSON-LD termset hold five *legacy* scopes that were renamed to
+today's five Technology Categories in 2025 — do not crawl them as Scope
+entities, ever.
 
 ### 2.6 Risks / defensive notes
 

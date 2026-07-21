@@ -14,3 +14,22 @@
   agentic.config.json gate definitions stay untouched while gates cover all
   code.
 - Next: Phase 3 adversarial critique panel (5 subagents) before any code.
+
+## Phase 3 gate: critique panel 1 — 2026-07-21T22:40:00Z
+
+- Did: 5 parallel critic subagents (MCP purist, agent-UX, data engineer,
+  FinOps practitioner, maintainer). 5 unique BLOCKERs, 16 MAJORs, 13+
+  MINORs -> docs/critique-1.md with dispositions; architecture.md rewritten;
+  research.md 2.5 corrected (maturity blocks are h4+flat/nested ul, NOT
+  p/b+ul; KPI modals can live under a separate h2; Scopes are NOT
+  enumerable — legacy /wp/v2/scope == today's Technology Categories).
+- Key decisions: drop npm workspaces (plain dirs + eslint boundaries);
+  cut diff_framework_versions (changelog in artifact + get_changelog);
+  dual licensing (code MIT, data CC BY 4.0); sanitize stage vs prompt
+  injection; workflow ships ONLY as docs/proposed/refresh-data.yml (owner
+  installs); tests only under src/**/*.test.ts (tests/ is protected);
+  inference restrained to evidence-quoted edges, enum confidence.
+- Owner morning item: approve renaming derived entity Action ->
+  MaturityCharacteristic (M11, accepted-with-rationale for now; semantics
+  already fixed in descriptions).
+- Gate verdict: zero unresolved BLOCKERs. Phase 4 (implementation) begins.

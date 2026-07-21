@@ -1,249 +1,285 @@
 # Architecture: finops-framework-mcp
 
-Status: proposed (Phase 2) — gated by the Phase 3 adversarial critique panel.
-Companion: `docs/research.md` (verified crawl surfaces, license, MCP spec notes).
+Status: **revised after critique gate 1** (`docs/critique-1.md` — 5 BLOCKERs
+and all but one MAJOR fixed; M11 accepted-with-rationale). Companion:
+`docs/research.md` (crawl surfaces; §2.5 corrected per critique B1/B2).
 
 ## 1. Goal
 
 An MCP server that lets an AI agent understand and reason about every
 top-level aspect of the FinOps Framework (finops.org/framework): Principles,
-Phases, Domains, Capabilities (with per-maturity Actions and KPIs), Maturity
-levels, Personas, Scopes, Technology Categories, and a queryable capability
-relationship graph. Crawler, data artifact, and server are fully decoupled.
+Phases, Domains, Capabilities (with per-maturity assessment items and KPIs),
+Maturity levels, Personas, Scopes (conceptual), Technology Categories, and a
+queryable capability relationship graph. Crawler, data artifact, and server
+are fully decoupled.
 
-## 2. Repository layout (adapted monorepo)
+## 2. Repository layout (plain directories, no workspaces)
 
-The build brief proposed top-level `packages/ crawlers/ servers/`. This repo's
-quality gates (`agentic.config.json`, a protected policy file) run
-prettier/eslint/tsc/vitest over `src` and `tests`. Rather than edit protected
-gate definitions, the same monorepo shape lives **under `src/`** as npm
-workspaces — every gate covers every line with zero policy changes:
+Critique M1: npm workspaces under the frozen gate commands only work via a
+fragile live-types pattern — dropped. Plain directories, relative imports,
+one root tsconfig; boundaries enforced by ESLint `no-restricted-imports`
+zones (crawler ⇸ server, server ⇸ crawler, both → shared only):
 
 ```
 src/
-  shared/              # @finops-mcp/shared — entity types, artifact loader+validator, slugs
-  crawlers/framework/  # @finops-mcp/crawler-framework — fetch → cache → parse → infer → emit
-  servers/framework/   # @finops-mcp/server-framework — the MCP server (reads artifact only)
-  index.ts             # repo entry: re-exports the framework server main
-data/framework/        # versioned data artifact (the decoupling seam)
+  shared/              # entity types, artifact loader + ajv validation, slug utils
+  crawlers/framework/  # fetch → cache → parse → sanitize → infer → validate → emit
+    fixtures/          # saved HTML: allocation, forecasting, finops-practice-operations, section pages
+  servers/framework/   # MCP server (reads the artifact only); bin entry for stdio
+  index.ts             # re-exports server main (repo scaffold entry)
+data/framework/        # versioned data artifact (decoupling seam)
 evals/framework/       # eval.xml + runner
-docs/                  # research, architecture, critiques, eval results
-tests/                 # repo-level tests (artifact contract, integration)
+docs/                  # research, architecture, critiques, eval results, proposed workflow
 ```
 
-Future siblings: `src/crawlers/focus`, `src/servers/focus`, `data/focus/`.
-Root `package.json` gains `"workspaces": ["src/shared", "src/crawlers/*",
-"src/servers/*"]`. Import boundaries (crawler ⇸ server, server ⇸ crawler,
-both → shared only) are enforced three ways: package dependency declarations
-(a workspace can only import what it declares), an ESLint
-`no-restricted-imports` rule per package, and code review. TypeScript strict
-everywhere; no `any` at package boundaries.
+All tests live under `src/**/*.test.ts` (repo `tests/**` is a protected
+path); `vitest.config.ts` includes them and excludes `fixtures/` from
+coverage. Future FOCUS sibling: `src/crawlers/focus`, `src/servers/focus`
+reuse `src/shared` directly; extract packages only if that day ever needs it.
 
-Toolchain: TypeScript ~6, `@modelcontextprotocol/sdk` (+`zod`), `cheerio`
-(HTML parsing), `ajv` (JSON Schema validation). All boring, replaceable.
+Toolchain: TypeScript strict, `@modelcontextprotocol/sdk` ^1.29 (+ zod),
+`cheerio`, `ajv`. No `any` at directory boundaries.
 
 ## 3. Domain model
 
-Entity types (JSON Schema in `data/framework/schema/`, TS types mirrored in
-`@finops-mcp/shared`). Every record embeds provenance:
-`{ source_url, retrieved_at, license: "CC-BY-4.0" }`.
+JSON Schema in `data/framework/schema/`, TS types mirrored in `src/shared`.
+Per-record provenance is `{ source_url, license: "CC-BY-4.0" }`; retrieval
+time lives **only** in `manifest.json` (`crawled_at`) so recrawls of
+unchanged content are byte-identical (critique M15).
 
 | Entity | Count | Key fields beyond id/slug/title/provenance |
 |---|---|---|
-| `Principle` | 6 | description, order |
-| `Phase` | 3 | description, tagline (Inform/Optimize/Operate) |
-| `Domain` | 4 | description, capability slugs |
-| `Capability` | 22 | domain, summary, definition_md, maturity assessments (raw prose per level), functional_activities (per persona), kpi_bullets[], example_kpis[] (objective/kpi pairs), inputs_outputs_md, featured_kpi_ids[], wp_id |
-| `Persona` | 6 core + 5 allied | category (core/allied), description_md, capability links |
-| `Scope` | crawled set | description_md |
-| `TechnologyCategory` | 5 | description_md (SaaS, Data Center, Data Cloud Platforms, AI, Public Cloud) |
-| `MaturityLevel` | 4 | `pre-crawl \| crawl \| walk \| run`; characteristics_md; **`official: false` on `pre-crawl`** (unofficial extension: "not even Crawl actions done consistently") |
-| `KPI` | 88 library + inline | description_md, formula, data_sources[], related_capability_slugs[] (official, from popup), featured_on[] (capability slugs), `featured: bool`, wp_id |
-| `Action` | derived | `{ capability_id, maturity, group_label?, text, ordinal, official: false, parse_quality: itemized \| raw_fallback }` |
-| `CapabilityRelationship` | derived + official | `{ from, to, type: prerequisite\|informs\|related, from_maturity?, to_min_maturity?, source: official\|inferred, evidence_url?, rationale, confidence }` |
+| `Principle` | 6 | description_md, order |
+| `Phase` | 3 | description_md (Inform/Optimize/Operate). No capability→phase mapping exists officially; none is invented (M12) |
+| `Domain` | 4 | description_md, capability_slugs — sourced from BOTH the domains-index cards and each capability's breadcrumb, cross-checked (m15) |
+| `Capability` | 22 | domain_slug, summary, definition_md, headline_groups (page-top callout: bolded group + bullets), maturity_raw (per level, verbatim), functional_activities (per core persona + allied-group, m16), kpi_bullets[], example_kpis[] (objective/kpi pairs, optional), inputs_outputs_md, featured_kpi_ids[], wp_id |
+| `Persona` | 6 core + 5 allied | category, description_md; allied capability mapping is group-level only, and labeled so |
+| `Scope` | **1 document** | conceptual guidance doc + illustrative examples labeled as examples. The legacy `/wp/v2/scope` CPT (pre-2025 scopes = today's Technology Categories) is never crawled (B3) |
+| `TechnologyCategory` | 5 | description_md (Public Cloud, SaaS, Data Center, Data Cloud Platforms, AI) |
+| `MaturityLevel` | 3 official + 1 extension | characteristics_md, sample_goals_md; `pre-crawl` has `official: false` AND display title "Pre-Crawl (unofficial extension)" (M13) |
+| `KPI` | 88 library | description_md, formula, data_sources[], related_capability_slugs[] (official, from modal), featured_on[] capability slugs, slug always present in outputs, wp_id |
+| `Action` | derived | `{ capability_slug, maturity, text, ordinal, parent_ordinal?, official: false, parse_quality }`. **Semantics: maturity assessment characteristics (rubric states), not to-do steps** — every description/output says so. Name kept per owner brief; rename to `MaturityCharacteristic` queued for owner approval (M11) |
+| `CapabilityRelationship` | official + inferred | `{ from, to, type: prerequisite\|informs\|related, from_maturity?, to_min_maturity?, source, evidence_url?, evidence_quote?, confidence?: strong\|moderate\|weak, rationale? }` |
 
-**Official vs. unofficial separation (standing order):**
+Maturity parsing reality (B1): each `<h4>Crawl|Walk|Run</h4>` is followed by
+a flat `<ul>` that may nest one level; child `<li>`s become their own Action
+records with `parent_ordinal` linking to the parent item. No group labels
+exist there; the bolded-group pattern is the page-top callout →
+`headline_groups`.
 
-- `content/` holds only crawled canonical content. `derived/` holds parsed
-  Actions, inferred relationships, and search indexes.
-- Schema-level flags: `official: false` on `pre-crawl`, every `Action`, and
-  every `source: inferred` edge. Server output includes an explicit
-  `"note": "unofficial extension"` marker on these.
-- Official relationship edges are harvested only from on-page evidence
-  (Definition prose links, KPI-modal Related Capabilities, Inputs & Outputs
-  links) and carry `evidence_url`.
+**Official vs. unofficial separation:** `content/` = crawled canonical only;
+`derived/` = Actions, inferred edges, changelog. Flags + display naming +
+explicit notes in every server output. Official edges carry `evidence_url`
+(and quote); they come from: Definition prose links, KPI-modal Related
+Capabilities (incl. shared-KPI co-links), domain co-membership, Inputs &
+Outputs links.
 
-### Relationship inference pass
+### Relationship inference pass (restrained per M14)
 
-After crawling: scan each capability's Actions, KPI text, and Inputs &
-Outputs for references to other capabilities' outputs (allocation metadata,
-budgets, forecasts, rates, tags, anomaly alerts …) via a curated
-term→capability lexicon. Propose `prerequisite`/`informs`/`related` edges
-with maturity constraints (e.g. "Reporting & Analytics at Walk requires
-Allocation ≥ Walk"), each with one-sentence rationale + confidence ∈ [0,1].
-Post-checks before acceptance: cycle detection on `prerequisite` edges,
-degree sanity (no node related to everything), and a manual review of the
-full edge list recorded in the journal. Written to
-`derived/relationships-inferred.json`, never blended with official edges.
+Inferred edges are limited to `related`/`informs`, each with a **quoted
+evidence sentence** from the source page and a named heuristic; `confidence`
+is the enum `strong|moderate|weak`. A `prerequisite` edge or any maturity
+constraint (`from_maturity`/`to_min_maturity`) is emitted **only** when the
+specific maturity bullet implying it is quoted in `evidence_quote`.
+Post-checks: cycle detection on prerequisites, degree sanity, full-list
+manual review recorded in the journal. Output:
+`derived/relationships-inferred.json`, never blended with official.
 
-## 4. Data artifact contract (the decoupling seam)
+## 4. Data artifact contract
 
 ```
 data/framework/
-  schema/              # JSON Schema per entity type + manifest schema (versioned)
-  content/             # principles.json, phases.json, domains.json, capabilities.json,
-                       # personas.json, scopes.json, technology-categories.json,
-                       # maturity-levels.json, kpis.json
-  derived/             # actions.json, relationships-official.json,
-                       # relationships-inferred.json, search-index.json
-  manifest.json        # { data_version (semver), schema_version, crawled_at,
-                       #   source_urls[], sha256 per file, counts per entity }
+  schema/              # JSON Schema per entity + manifest schema
+  content/             # principles, phases, domains, capabilities, personas,
+                       # scopes (single doc), technology-categories,
+                       # maturity-levels (official 3), kpis
+  derived/             # actions.json, maturity-extension.json (pre-crawl),
+                       # relationships-official.json, relationships-inferred.json
+  changelog/           # rolling crawl-diff summaries (newest first, capped)
+  manifest.json        # data_version, schema_version, crawled_at, source_urls,
+                       # sha256 per file, counts, counts_mismatch?, parse_warnings
 ```
 
-Rules (enforced by tests):
-- Server validates the artifact against `schema/` with ajv at startup;
-  refuses to start on failure with an error naming file, path, and mismatch.
-- Crawler never imports server code; server never imports crawler code;
-  shared types/loader live in `@finops-mcp/shared` only.
-- Re-crawl produces `diff-report.md` (added/removed/changed per entity, by
-  content hash) and bumps `data_version`: patch = text changes, minor =
-  entity add/remove or new optional field, major = schema break.
-- Content-only changes never require server code changes (verified in Phase 6
-  by running the server against two artifact versions).
+Rules (all enforced by tests):
+- Server validates against `schema/` at startup; refuses to start with an
+  error naming file, path, mismatch.
+- Crawler and server import only `src/shared`; the artifact is the sole
+  interface.
+- **Idempotence:** canonical content hashing excludes volatile fields; two
+  crawls of identical input produce byte-identical `content/`, an empty
+  diff, no version bump (M15/M16 test).
+- Version bumps — crawler auto-selects `max(patch: any content hash change,
+  minor: entity count delta)`; schema-affecting bumps are manual, tied to
+  `schema_version`, checked by a manifest-consistency test.
+- Search index is built at server startup from the artifact — never
+  committed (m10).
 
 ## 5. MCP surface
 
-Server name `finops-framework` (namespace); short element names inside.
-Spec revision target: 2025-11-25 via current TS SDK.
+Server `finops-framework`. Canonical-path rule (m2): **tools are the model's
+canonical path and return complete records at the leaf level; resources are
+the attachment/bulk-reading layer.** Every eval question must be answerable
+via tools alone (M6). One renderer per entity feeds both surfaces, and
+entity-returning tools attach a `resource_link` to the canonical URI (M10).
 
-### 5.1 Resources — the framework as addressable content
+### 5.1 Resources
 
-URI scheme `finops://`, concrete resources listed via `resources/list`,
-parameterized families via resource templates (RFC 6570):
+Single constant authority (m6): `finops://framework/...`, canonical form
+lowercase without trailing slash. `mimeType: text/markdown` for prose,
+`application/json` for graph/manifest/changelog. Annotations: `lastModified`
+= manifest `crawled_at` everywhere; `priority` 0.9 on the overview (m7).
+Every resource footer: attribution + license + **modification indication**
+(B5). Unknown slug/URI → JSON-RPC `-32002` with `data.uri` and nearest-match
+suggestions in the message (m5).
 
 | URI | Content |
 |---|---|
-| `finops://framework/overview` | orientation doc: what/how counts, how to navigate this server (markdown) |
-| `finops://principles` , `finops://phases` , `finops://domains` , `finops://scopes` , `finops://technology-categories` | full small collections (markdown with stable anchors) |
-| `finops://maturity-model` | levels incl. flagged `pre-crawl` extension |
-| `finops://personas` , `finops://personas/{slug}` | index + one per persona |
-| `finops://capabilities` | index: slug, domain, one-line summary |
-| `finops://capabilities/{slug}` | full capability doc (definition, maturity, activities, KPIs, inputs/outputs) |
-| `finops://capabilities/{slug}/maturity/{level}` | that level's assessment + parsed Actions (flagged unofficial) |
-| `finops://kpis/{slug}` | KPI library entry (description, formula, sources, related capabilities) |
-| `finops://graph/relationships` | full edge list, official + inferred clearly partitioned |
-| `finops://meta/manifest` | data version, crawl date, license/attribution |
+| `finops://framework/overview` | orientation + how to navigate this server |
+| `finops://framework/principles` , `/phases` , `/domains` , `/technology-categories` | full small collections |
+| `finops://framework/scopes` | the conceptual Scopes guidance document |
+| `finops://framework/maturity-model` | "Official levels (3)" + visibly separate "Unofficial extension: Pre-Crawl" section |
+| `finops://framework/personas` , `/personas/{slug}` | index + each persona (11 concrete entries + template) |
+| `finops://framework/capabilities` , `/capabilities/{slug}` | index + full capability doc (22 concrete entries + template) |
+| `finops://framework/capabilities/{slug}/maturity/{level}` | template: level assessment + parsed items (flagged) |
+| `finops://framework/kpis/{slug}` | template: full KPI library entry |
+| `finops://framework/graph/relationships` | full edge list, official/inferred partitioned (JSON) |
+| `finops://framework/meta/manifest` , `/meta/changelog` | version/attribution; rolling crawl diffs |
 
-Small enumerable sets are concrete list entries; `{slug}` families are
-templates with `completeCallback` for slug completion. Markdown
-(`text/markdown`) for prose resources, JSON for graph/manifest. Every
-resource footer carries attribution (CC BY 4.0, source URL, retrieved date).
+Concrete entries are listed for every capability and persona in addition to
+templates (m7); templates carry `completeCallback` slug completion.
 
-### 5.2 Tools — parameterized query & computation (all read-only)
+### 5.2 Tools
 
-All tools: `readOnlyHint: true`, `idempotentHint: true`, `openWorldHint:
-false`, Zod input schemas with descriptions + examples, `outputSchema` +
-`structuredContent`, in-band errors with nearest-match suggestions for
-unknown slugs, `cursor`/`limit` pagination on list-shaped outputs.
+All: `readOnlyHint: true`, `idempotentHint: true`, `openWorldHint: false`;
+Zod input schemas (maturity levels as an enum — m3) with examples;
+`outputSchema` + `structuredContent`; in-band `isError` with nearest-match
+suggestions for unknown slugs; descriptions enumerate exactly which fields
+are returned. Cursor (M9): opaque base64 `{data_version, offset}`, stale →
+in-band error instructing a restart; `nextCursor` optional in list
+outputSchemas; default limits fit every current list in one response
+(cursors matter only on `search_framework`/`get_kpis`/`list_capabilities`).
 
-| Tool | Signature (essentials) | Why a tool |
+| Tool | Signature (essentials) | Notes |
 |---|---|---|
-| `search_framework` | `(query, entity_types?, limit?, cursor?)` | ranked lookup over the search index |
-| `list_capabilities` | `(domain?, persona?, phase?, limit?, cursor?)` | filtered projection |
-| `get_capability` | `(slug, include?: [definition, maturity, activities, kpis, relationships])` | composed, size-controlled fetch |
-| `get_actions` | `(capability, maturity?)` | parsed Action records + parse_quality |
-| `get_kpis` | `(capability?, featured_only?, limit?, cursor?)` | KPI join across library + capability |
-| `get_prerequisites` | `(capability, target_maturity?, include_inferred?: default true)` | transitive closure over graph with min-maturity propagation |
-| `assess_maturity_path` | `(capability, current_level, target_level)` | Action gap between levels |
-| `map_personas` | `(capability? \| persona?)` | either direction of the persona↔capability matrix |
-| `diff_framework_versions` | `(from?, to?)` | change report between artifact versions (errors helpfully when only one version present) |
+| `search_framework` | `(query, entity_types?, limit?, cursor?)` | ranked index lookup; results carry slugs + resource URIs |
+| `list_capabilities` | `(domain?, persona?, limit?, cursor?)` | **no phase filter** (M12) |
+| `get_capability` | `(slug, include?)` | default `include = [summary, definition]` (m1); sections: maturity, activities (optionally `persona`-filtered), kpis, relationships, headline_groups, inputs_outputs |
+| `get_actions` | `(capability, maturity?)` | returns assessment-characteristic items + parse_quality + unofficial note; at `pre-crawl` returns the extension definition + "no official assessment content exists below Crawl" (M13) |
+| `get_kpis` | `(capability?, featured_only?, limit?, cursor?)` | **full records** (formula, data_sources, related capabilities, slug) (M6) |
+| `get_prerequisites` | `(capability, target_maturity?, include_inferred?=true)` | transitive closure; every edge carries `source/confidence/rationale/evidence`; top-level summary line ("N official, M inferred; maturity constraints are unofficial inferences") duplicated into text content; propagation: constraint = max over path, unknown treated as crawl (M7) |
+| `get_related` | `(capability, types?)` | non-prerequisite edges — informs/related, official + inferred partitioned (M6) |
+| `assess_maturity_path` | `(capability, current_level, target_level)` | "characteristics present at target but not current — evidence to look for, not steps to execute" (M11) |
+| `map_personas` | `(capability?, persona?)` | persona→capabilities returns persona-scoped activity bullets inline (M5); no args → full persona index (m3); allied persona → group-level data explicitly labeled (m16) |
+| `get_framework_info` | `()` | manifest + overview + navigation guide — tools-only parity for orientation (M6) |
+| `get_changelog` | `(limit?)` | rolling crawl-diff summaries (B4 replacement for diff_framework_versions) |
 
-Not tools: whole-entity static reads (those are resources); `explain_*`
-anything (prompts). Tool descriptions written for agents: when to use,
-when *not* to (pointer to the cheaper resource).
+### 5.3 Prompts
 
-### 5.3 Prompts — user-invoked workflows
+`prompts/get` renders messages **server-side with embedded-resource content
+blocks** (uri + mimeType + text from the artifact) so workflows survive
+hosts that never surface resources; bare URI mentions appear only for
+content the model should fetch via tools (M8). Single renderer shared with
+§5.1. Prompt arguments (capability/persona slugs) support completion (m4).
 
 | Prompt | Args | Orchestrates |
 |---|---|---|
-| `explain-framework` | audience? | overview resource + domain/capability indexes → guided tour |
-| `assess-capability-maturity` | capability | get_capability + get_actions → structured interview → level verdict with cited Actions |
-| `plan-maturity-roadmap` | capability, current, target | get_prerequisites + assess_maturity_path → ordered plan honoring prerequisite minima |
-| `map-personas-to-capabilities` | persona? | map_personas + persona resources → engagement guide |
-
-Prompts contain instructions + resource references, never duplicated content.
+| `explain-framework` | audience? | embedded overview + indexes → guided tour |
+| `assess-capability-maturity` | capability | embedded capability content + characteristic items → structured interview → level verdict citing items as evidence |
+| `plan-maturity-roadmap` | capability, current, target | prerequisites + path gap → ordered plan; **inferred-edge-derived steps labeled unofficial in rendered text** (M14) |
+| `map-personas-to-capabilities` | persona? | persona matrix → engagement guide |
 
 ### 5.4 Transport
 
-stdio primary (`servers/framework` `bin`). Server construction
-(`createServer(artifact)`) is transport-free; `main()` wires
-`StdioServerTransport`. Streamable HTTP later = new entry point only.
+stdio primary via `servers/framework` bin; `createServer(artifact)` is
+transport-free; Streamable HTTP later = a new entry point only.
+
+### 5.5 Capability declarations (m4)
+
+`resources: {}` (no `subscribe`, no `listChanged` — artifact is immutable
+per process; refresh = restart), `tools: {}`, `prompts: {}` (no
+`listChanged`), `completions` declared. Rationale recorded here so the
+choice is deliberate, not SDK default drift.
 
 ## 6. Crawler pipeline
 
-`npm run refresh` (root) → workspace script running stages, each restartable:
+`npm run refresh` → stages, each restartable; robots.txt fetched and honored
+**every run** (skips recorded; crawl-delay respected ≥ 1 rps throttle, m14).
 
-1. **fetch** — REST APIs (`capabilities-api`, `kpis-api`, `personas-api`) +
-   sitemap cross-check + HTML pages (~130 URLs). Politeness: 1 rps, retries
-   with backoff, honest UA `finops-framework-mcp-crawler/x.y (+repo URL)`,
-   on-disk cache (`.cache/crawl/`, keyed by URL hash, respected unless
-   `--no-cache`).
-2. **parse** — cheerio, anchored on heading text/ids per research.md §2.5.
-   Any structural surprise → `parse_quality: raw_fallback` + raw prose stored
-   + warning in crawl report. Never fabricate structure.
-3. **infer** — relationship pass (§3), separate stage, separate output file.
-4. **validate** — ajv against `schema/`; counts asserted (22 capabilities, 6
-   principles, …) with explicit override flag if the framework itself changes.
-5. **diff + emit** — compare against current artifact by content hash, write
-   `diff-report.md`, bump `data_version`, write manifest.
-
-Fixtures: representative saved HTML pages committed under
-`src/crawlers/framework/fixtures/` so parser unit tests never touch the
-network.
+1. **fetch** — REST APIs + sitemaps (incl. sitemap-domains.xml) + HTML pages
+   (~130 URLs; domain detail pages included, m15). Cache: only status-200
+   bodies passing a sanity check (expected `<h1>`/framework marker, length
+   floor); entries store fetch time + status; 7-day TTL; `--no-cache`
+   override (m12). Source disagreement (API vs sitemap) fails the stage
+   listing the symmetric difference (m13). Personas filtered by URL shape +
+   count-asserted.
+2. **parse** — cheerio; sections anchored on **normalized heading text**
+   (lowercase, strip tags, fold `&`/`and`, hyphen/underscore-insensitive
+   ids); featured KPI cards/modals parsed **page-wide** (`div.c-modal` with
+   numeric id in main content), joined to the library by wp_id with title
+   fallback (B2). Maturity blocks parsed as flat+nested `<ul>` per §3 (B1).
+   Structural surprise → `raw_fallback` + raw prose + warning. Per-capability
+   completeness assertions: non-empty definition, 3 maturity levels, ≥1
+   persona mapping; absent sections are reported warnings, never silent
+   empties.
+3. **sanitize** (M2) — strip scripts/comments/hidden content outside the
+   known modal schema; markdown-construct allowlist; drop `data:` URIs and
+   off-finops.org links from body text (kept as plain text); heuristic scan
+   for instruction-like insertions ("ignore previous", "you must",
+   base64-looking blobs) — hits fail the refresh with the offending excerpt
+   in the crawl report.
+4. **infer** — restrained pass per §3; separate output file.
+5. **validate** — ajv + counts. Local/CI on committed artifacts: hard-fail.
+   Automation (refresh): soft-fail with `counts_mismatch` in the manifest,
+   prominent in the diff report, PR still opens for human decision (m13).
+   Parse-quality budget: fail the refresh if raw_fallback exceeds threshold.
+6. **diff + emit** — canonical-hash diff vs current artifact →
+   `diff-report.md` (full content diffs for changed prose, M2) + changelog
+   entry + version bump per §4.
 
 ## 7. Refresh automation
 
-GitHub Actions workflow (monthly cron + `workflow_dispatch`): checkout → npm
-ci → `npm run refresh` → if diff non-empty, open PR with `diff-report.md` as
-body (base `dev`, human merges; the release train to `main` is the repo's
-existing rolling PR). Downstream consumers pin by using a git tag/release of
-this repo; floating = tracking `main`. Note: `.github/workflows/` is a
-protected path in this repo — the workflow lands in this change set under the
-owner-approved build brief; if the protection hook blocks the write, the file
-is staged at `docs/proposed/refresh-data.yml` for the owner to move.
+Delivery path (M3): the workflow ships as **`docs/proposed/refresh-data.yml`
+only** — `.github/workflows/` is a protected path and is not written. Owner
+install checklist lives in the README and journal. Until installed, the §9
+staleness mitigation is **inactive**.
+
+Workflow spec: monthly cron + `workflow_dispatch`; runs refresh; non-empty
+diff → PR (base `dev`) with the full diff report as body; **failure →
+auto-open/refresh a labeled issue** (M4); parse-quality budget enforced in
+the run; README documents GitHub's ~60-day scheduled-workflow auto-disable
+and the keepalive. Consumers pin via git tag/release; float by tracking main.
 
 ## 8. Testing strategy
 
-- Parser unit tests vs. fixtures (per capability page shape, KPI modal, each
-  section page) — the bulk of tests.
-- Artifact contract tests: schema validation of the committed artifact;
-  manifest hashes match files; official/derived separation (no `official:
-  false` records inside `content/`).
-- Server tests via SDK `Client` + `InMemoryTransport`: resource list/read per
-  URI family, each tool's happy path + unknown-slug error + pagination,
-  prompt rendering.
-- Graph tests: prerequisite closure correctness on a synthetic mini-graph;
-  cycle rejection.
-- Eval suite (Phase 5): 10 multi-step Q&A in `evals/framework/eval.xml`, run
-  by a fresh agent session against the built server, ≥9/10 to pass.
+All tests in `src/**/*.test.ts` (m9). Parser tests vs fixtures (three named
+capability pages + section pages) — no network. Artifact contract tests:
+schema validation; manifest hashes; official/derived separation; per-record
+`source_url`/`license` + NOTICE presence (B5); idempotence (double-crawl
+byte-identical, M15). Server tests via SDK `Client` + `InMemoryTransport`:
+resources (incl. `-32002` unknown-URI, m5), each tool (happy path,
+unknown-slug suggestions, cursor restart), prompts (embedded content
+present). Graph tests: closure + cycle rejection on a synthetic mini-graph.
+Evals per Phase 5, tools-only.
 
 ## 9. Risks & mitigations
 
 | Risk | Mitigation |
 |---|---|
-| finops.org redesign breaks selectors | heading-anchored parsing; raw_fallback degradation; fixtures pin current shape; monthly refresh surfaces breakage as a failing PR, not silent rot |
-| KPI modal structure varies | all popup fields optional; join by wp_id with title fallback; unresolved joins reported in crawl report |
-| Inferred edges are wrong/absurd | separate file, confidence + rationale, cycle/degree checks, panel review at both gates; `include_inferred: false` escape hatch |
-| Artifact drifts from schema | server refuses to start; CI validates artifact on every PR |
-| License compliance | CC BY 4.0 attribution in NOTICE.md, every record, every resource footer |
-| Count drift (e.g. 23rd capability) | validate stage asserts counts, fails loudly with override flag documented |
+| Site redesign | normalized-heading anchoring; page-wide modal parse; raw_fallback + completeness warnings; fixtures pin shapes; refresh (once installed) surfaces breakage as PR or failure-issue |
+| Prompt injection via crawled content | sanitize stage + heuristics + full-content-diff PRs (M2) |
+| Inferred edges wrong | restrained types, quoted evidence, enum confidence, cycle/degree checks, panel review, `include_inferred: false` |
+| Artifact/schema drift | startup refusal; CI validation; manifest-consistency test |
+| License compliance | dual licensing: code MIT, `data/framework/**` CC BY 4.0; NOTICE Modifications section; footer attribution + modification note; contract test |
+| Framework evolution (23rd capability) | count soft-fail in automation with human-decided PR; hard-fail locally |
+| Nobody watches automation | failure-issue + parse-quality budget + auto-disable documentation (M4) |
 
 ## 10. Definition-of-done mapping
 
-1. Entities queryable → §5.1 resources + §5.2 list/search tools.
-2. Capability detail incl. featured KPI popup content → Capability + KPI
-   entities (§3), `get_capability`/`get_kpis`.
-3. Graph queryable, inferred edges marked → §3 relationships, §5.1
-   `finops://graph/relationships`, §5.2 `get_prerequisites`.
-4. Decoupling → §4 contract + §8 contract tests + Phase 6 double-refresh.
-5. Evals + two critique gates → §8, Phases 3/5/6.
+1. All entities queryable → §5.1 + §5.2 (tools-only parity, M6).
+2. Capability detail incl. featured KPI popup content → §3 KPI entity +
+   `get_kpis` full records; page-wide modal parse (B2).
+3. Graph queryable, inferred clearly marked → §3 + `get_prerequisites`/
+   `get_related` output contracts (M7).
+4. Decoupling → §4 + idempotence tests + Phase 6 double-refresh.
+5. Evals ≥9/10 + two critique gates, zero unresolved BLOCKERs → §8,
+   `docs/critique-1.md` (this gate), Phase 6.

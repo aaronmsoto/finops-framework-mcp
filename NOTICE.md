@@ -13,8 +13,11 @@ International license (CC BY 4.0)**: <https://creativecommons.org/licenses/by/4.
 
 Required attribution: framework content in `data/framework/` is the work of
 the **FinOps Foundation** (<https://www.finops.org>). Every crawled record in
-`data/framework/content/` embeds its `source_url`, `retrieved_at` timestamp,
-and license identifier.
+`data/framework/content/` embeds its `source_url` and license identifier;
+the retrieval timestamp for the whole artifact is `crawled_at` in
+`data/framework/manifest.json`. Code in this repository is MIT-licensed
+(see `LICENSE`); the crawled content under `data/framework/**` remains
+CC BY 4.0.
 
 ### Modifications
 
