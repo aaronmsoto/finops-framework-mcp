@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Eval suite for the finops-framework MCP server (build brief Phase 5).
+  Constraints: every question must be answerable TOOLS-ONLY (critique M6),
+  read-only, independent of the others, and verifiable against the committed
+  data artifact. The runner gives a fresh agent ONLY the mcp-call.mjs bridge
+  and these questions; answers are graded against <expected>.
+-->
+<evals server="finops-framework" artifact="data/framework">
+  <eval id="1">
+    <question>Our teams can't tell who owns most of our cloud spend. Which single FinOps capability addresses assigning costs to responsible teams, and what are three characteristics of a Crawl-level practice in it?</question>
+    <expected>Capability: allocation. Any three Crawl characteristics, e.g.: simple allocation strategy mapping accounts/projects/subscriptions to business units or cost centers; allocation/tagging strategy defined but compliance inconsistent; shared costs not identified beyond common charges; a substantial portion of costs can be allocated directly. Must note these are assessment characteristics (unofficial parsing), not official steps — bonus, not required.</expected>
+    <expected_calls>search_framework then get_actions (or get_capability include maturity)</expected_calls>
+  </eval>
+  <eval id="2">
+    <question>Does the Sustainability capability have any prerequisite capability according to this server's relationship graph? If so, which capability, at what minimum maturity, and is that relationship official FinOps Foundation guidance?</question>
+    <expected>Yes: allocation is a prerequisite of sustainability (minimum maturity crawl / "present at any level"). It is NOT official — it is an unofficial inference (source: inferred, confidence moderate) backed by a quoted evidence sentence; the Foundation publishes no prerequisite graph.</expected>
+    <expected_calls>get_prerequisites(capability: "sustainability")</expected_calls>
+  </eval>
+  <eval id="3">
+    <question>Which FinOps Domain does Anomaly Management belong to, and which other capabilities live in the same domain?</question>
+    <expected>Domain: Understand Usage &amp; Cost (understand-usage-and-cost). Other capabilities: Data Ingestion, Allocation, Reporting &amp; Analytics.</expected>
+    <expected_calls>get_capability or list_capabilities(domain)</expected_calls>
+  </eval>
+  <eval id="4">
+    <question>List the featured KPIs on the Forecasting capability page (slugs or titles).</question>
+    <expected>Exactly four: Forecast Accuracy Rate for Carbon Emissions, Forecast Accuracy Rate (Spend), Forecast Accuracy Rate (Usage), Forecast Drift Rate (slugs: forecast-accuracy-rate-for-carbon-emissions, forecast-accuracy-rate-spend, forecast-accuracy-rate-usage, forecast-drift-rate).</expected>
+    <expected_calls>get_kpis(capability: "forecasting", featured_only: true) or get_capability include kpis</expected_calls>
+  </eval>
+  <eval id="5">
+    <question>What is the formula of the "Allocation Accuracy Index (AAI)" KPI, and which capabilities does the FinOps Foundation officially relate it to?</question>
+    <expected>Formula: AAI = (Directly Attributed Costs / Total Infrastructure Costs) × 100. Officially related capabilities: Reporting &amp; Analytics, Usage Optimization, Allocation.</expected>
+    <expected_calls>get_kpis(capability: "allocation") or search_framework then get_kpis</expected_calls>
+  </eval>
+  <eval id="6">
+    <question>According to the official FinOps maturity model, what sample goal does the FinOps community give for cost allocation coverage at Crawl level?</question>
+    <expected>Able to allocate at least 70% of cost to a known owner. (Context from the same level: ~60% commitment discount coverage; forecast variance below 20%.)</expected>
+    <expected_calls>search_framework(maturity) or get_framework_info then reading maturity content via get_actions is wrong — the maturity-model sample goals come from search_framework(entity_types:["maturity-level"]) or the maturity-model resource; tools-only path: search_framework</expected_calls>
+  </eval>
+  <eval id="7">
+    <question>Which FinOps Principle does the Allocation capability's definition explicitly say it enables?</question>
+    <expected>"Everyone takes ownership for their technology usage."</expected>
+    <expected_calls>get_capability(slug: "allocation") — default include contains the definition</expected_calls>
+  </eval>
+  <eval id="8">
+    <question>Among these three capabilities — Allocation, Budgeting, Rate Optimization — in which does the Procurement persona have individually named functional activities?</question>
+    <expected>Budgeting and Rate Optimization, but NOT Allocation (Allocation's activities name other core personas and the allied group, not Procurement).</expected>
+    <expected_calls>map_personas(persona: "procurement") — one call</expected_calls>
+  </eval>
+  <eval id="9">
+    <question>How many entries does this server's KPI library contain in total, and which KPIs officially related to Unit Economics measure (a) cost per API call and (b) cost per gigabyte stored?</question>
+    <expected>88 total. (a) cost-per-api-call ("Cost per API Call"); (b) cost-per-gigabytes-stored ("Cost per Gigabytes Stored").</expected>
+    <expected_calls>get_framework_info (counts.kpis) + get_kpis(capability: "unit-economics")</expected_calls>
+  </eval>
+  <eval id="10">
+    <question>Is "Pre-Crawl" an official FinOps Foundation maturity level? What does it mean in this server, and how many levels does the official model define?</question>
+    <expected>No — the official model defines exactly three levels (Crawl, Walk, Run). "Pre-Crawl" is this server's unofficial extension (official: false) meaning the capability's Crawl-level characteristics are not yet met consistently; no official assessment content exists below Crawl.</expected>
+    <expected_calls>get_actions(any capability, maturity: "pre-crawl") or get_framework_info/search_framework</expected_calls>
+  </eval>
+</evals>

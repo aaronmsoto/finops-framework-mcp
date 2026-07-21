@@ -898,6 +898,60 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     },
   );
 
+  // ---- get_maturity_model -------------------------------------------------
+  server.registerTool(
+    "get_maturity_model",
+    {
+      title: "Get the maturity model",
+      description:
+        "The official FinOps maturity model: Crawl/Walk/Run with each level's characteristics and the community's sample goals/KPIs (e.g. allocation coverage targets per level), plus this server's flagged unofficial Pre-Crawl extension. Capability-agnostic — for one capability's per-level assessment use get_actions.",
+      inputSchema: {},
+      outputSchema: {
+        official_levels: z.array(
+          z.object({
+            slug: z.string(),
+            title: z.string(),
+            characteristics_md: z.string(),
+            sample_goals_md: z.string(),
+            official: z.literal(true),
+          }),
+        ),
+        unofficial_extension: z.object({
+          slug: z.string(),
+          title: z.string(),
+          description_md: z.string(),
+          official: z.literal(false),
+        }),
+      },
+      annotations: RO,
+    },
+    () =>
+      ok(
+        {
+          official_levels: artifact.maturity_levels.map((l) => ({
+            slug: l.slug,
+            title: l.title,
+            characteristics_md: l.characteristics_md,
+            sample_goals_md: l.sample_goals_md,
+            official: true as const,
+          })),
+          unofficial_extension: {
+            slug: artifact.maturity_extension.slug,
+            title: artifact.maturity_extension.title,
+            description_md: artifact.maturity_extension.description_md,
+            official: false as const,
+          },
+        },
+        artifact.maturity_levels
+          .map(
+            (l) =>
+              `## ${l.title} (official)\n**Characteristics**\n${l.characteristics_md}\n**Sample goals/KPIs**\n${l.sample_goals_md}`,
+          )
+          .join("\n\n") +
+          `\n\n## ${artifact.maturity_extension.title}\n${artifact.maturity_extension.description_md}`,
+      ),
+  );
+
   // ---- get_changelog ------------------------------------------------------------------------------
   server.registerTool(
     "get_changelog",
