@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "2975e99cfd59a3f9775717fc030721847679671a5cd5ce7def6c80dce185f302",
+  "chainHead": "8af340cb717407c1d81caf2a04cee69417bd3595977721a15e194b2f39026113",
   "tasks": [
     {
       "id": "T-001",
@@ -216,9 +216,15 @@
         "Evidence write failure never fails the iteration",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Verifier transcripts persisted to .agents/.cache/verify/<task>-<ts>.md on pass and fail with path in IterationRecord and journal plus 500-char excerpt; write failures only warn. Harness: 228 tests, lint, typecheck green; 3 new/extended tests.",
+        "commit": "ce1d5dcb5f3ce8636ccdfcf9ceae74d9ca20e9eb",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T06:53:51.340Z"
+      },
+      "hash": "8af340cb717407c1d81caf2a04cee69417bd3595977721a15e194b2f39026113"
     },
     {
       "id": "T-013",
