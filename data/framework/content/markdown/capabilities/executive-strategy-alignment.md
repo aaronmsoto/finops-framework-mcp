@@ -9,6 +9,10 @@ warnings: [executive-strategy-alignment: no summary paragraph found]
 wp_id: 27438
 ---
 
+## Summary
+
+Executive Strategy Alignment connects technology-related spend, usage and adoption to the organization's business strategy and priorities, helping leaders compare options, make tradeoffs, and govern investment for value.
+
 ## Headline Groups
 
 ### Executive Priority Alignment

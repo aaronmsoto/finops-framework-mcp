@@ -9,6 +9,10 @@ warnings: [usage-optimization: no summary paragraph found]
 wp_id: 12475
 ---
 
+## Summary
+
+Analyze and optimize technology resources to match specific usage patterns while ensuring that workloads operate efficiently and generate sufficient business value for their cost.
+
 ## Headline Groups
 
 ### Creating a Usage Optimization Strategy

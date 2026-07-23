@@ -36,28 +36,35 @@ the v1 PR. The v0.1 state (all critique gates + 10/10 evals) is journaled in
 
 1. T-005 done: relationship functionality fully deleted (see
    20260723-t005-delete-relationships.md); artifact at 2.0.0.
-2. T-006 done (this session): markdown compose layer —
+2. T-006 done: markdown compose layer —
    `src/crawlers/framework/markdown/{frontmatter,compose}.ts` serialize
    `ParsedCapabilityPage`/section-parser records/`Persona`/`Kpi` to canonical
    markdown; `emit.ts` writes string payloads verbatim (whole-file diff/
    hash, not per-entity); `cli.ts refresh` composes and emits all 127 docs
    (22 capabilities + 11 personas + 88 kpis + 6 section docs) under
    `data/framework/content/markdown/`. Escaping guard (`ComposeError`) throws
-   on dialect-breaking plain-text items. Artifact regenerated offline (0
-   network fetches) — data_version 2.0.0 → 2.1.0 (minor, entity add);
-   double-refresh confirmed byte-idempotent ("No changes") by direct
-   observation, not just unit test. `./scripts/agentic gates --tier all`
-   green (format, lint, typecheck, 148/148 tests, designs, integrity — same
-   impl+tests-in-one-diff warning as T-005, expected —, memory, build).
-   IMPORTANT for T-007: this session had to invent the non-capability doc
-   layouts (spec only fully specifies the capability doc) — see
-   decisions.md 2026-07-23 entry and 20260723-t006-markdown-compose.md
-   before writing `derive.ts`'s parser.
-3. Loop: T-007 → T-009 next in order (spec sections §3-§5).
-4. Post-loop (supervising session): fresh-agent eval re-run ≥9/10, PR #4
+   on dialect-breaking plain-text items. See 20260723-t006-markdown-compose.md.
+3. T-007 done (this session): derive step —
+   `src/crawlers/framework/markdown/derive.ts` is the exact inverse parser
+   of compose.ts (per-doc derivers for every content/derived entity type,
+   including maturity-list → Action ordinal/parent_ordinal reconstruction).
+   `cli.ts`: new `derive` subcommand (zero network — reads
+   `content/markdown/` off disk only); `refresh` now composes markdown then
+   runs it through the SAME `deriveFromDocs` before validating/emitting, so
+   JSON is authoritatively derived, not taken from the HTML parse directly.
+   Fixed a real bug surfaced by this (not by inspection): two capabilities'
+   API-excerpt summary fallback wasn't mirrored onto `page.summary`, so it
+   was silently absent from markdown — see decisions.md. Verified live,
+   offline: refresh→refresh = no changes, refresh→derive = zero diff,
+   derive→derive = byte-identical (md5). `./scripts/agentic gates --tier
+   all` green (format, lint, typecheck, 169/169 tests, designs, integrity —
+   same impl+tests-in-one-diff warning as T-005/T-006, expected —, memory,
+   build). See 20260723-t007-derive-step.md.
+4. Loop: T-008 → T-009 next in order (spec sections §4-§5).
+5. Post-loop (supervising session): fresh-agent eval re-run ≥9/10, PR #4
    title/body update, final verification, owner runs npm publish.
-5. Owner: install docs/proposed/refresh-data.yml per its checklist.
-6. v1.1 candidates: Cloudflare Workers remote endpoint (artifact-from-memory
+6. Owner: install docs/proposed/refresh-data.yml per its checklist.
+7. v1.1 candidates: Cloudflare Workers remote endpoint (artifact-from-memory
    loader), Action rename decision (moot while hidden), cheerio slimming.
 
 ## Open questions
@@ -72,4 +79,4 @@ the v1 PR. The v0.1 state (all critique gates + 10/10 evals) is journaled in
 
 ## Last updated
 
-2026-07-23 — T-006 complete (markdown compose layer, artifact 2.1.0).
+2026-07-23 — T-007 complete (derive step, artifact 2.1.1).

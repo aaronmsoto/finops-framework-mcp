@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
@@ -11,6 +11,7 @@ import {
   type Capability,
   type EntityCounts,
   type Kpi,
+  type Manifest,
   type MaturityExtension,
   type Persona,
 } from "../../shared/index.js";
@@ -44,6 +45,11 @@ import {
   composeTechnologyCategoriesMd,
   type CapabilityRef,
 } from "./markdown/compose.js";
+import {
+  deriveArtifactPayload,
+  deriveFromDocs,
+  type DerivedEntities,
+} from "./markdown/derive.js";
 import { scanForInjection, type InjectionHit } from "./sanitize.js";
 import { ORIGIN, URLS } from "./urls.js";
 
@@ -89,6 +95,119 @@ function decodeEntities(s: string): string {
 function htmlFragmentToMd(html: string): string {
   const $ = cheerio.load(html);
   return htmlToMd($, $("body").children());
+}
+
+interface AssessResult {
+  errors: string[];
+  extraWarnings: string[];
+  counts: EntityCounts;
+  mismatch: Record<string, { expected: number; actual: number }>;
+}
+
+/**
+ * Completeness assertions, injection scan, and count checks — run against
+ * whichever entities are about to be emitted. Shared by `refresh` and
+ * `derive` (spec §3) so both routes enforce the same quality bar.
+ */
+function assessArtifact(
+  entities: DerivedEntities,
+  softCounts: boolean,
+): AssessResult {
+  const { capabilities, kpis, actions } = entities;
+  const errors: string[] = [];
+  for (const c of capabilities) {
+    if (!c.definition_md) errors.push(`${c.slug}: empty definition`);
+    for (const level of ["crawl", "walk", "run"] as const) {
+      if (!c.maturity_raw[level])
+        errors.push(`${c.slug}: missing maturity ${level}`);
+    }
+    if (c.functional_activities.length === 0)
+      errors.push(`${c.slug}: no functional activities`);
+  }
+  for (const k of kpis) {
+    if (
+      k.formula &&
+      (/:\s*$/.test(k.formula) || /data sources?:/i.test(k.formula))
+    ) {
+      errors.push(
+        `${k.slug}: formula looks mis-segmented ("${k.formula.slice(0, 60)}…")`,
+      );
+    }
+  }
+  const rawFallback = actions.filter(
+    (a) => a.parse_quality === "raw_fallback",
+  ).length;
+  if (actions.length === 0 || rawFallback / actions.length > 0.3) {
+    errors.push(
+      `parse-quality budget exceeded: ${rawFallback}/${actions.length} raw_fallback`,
+    );
+  }
+
+  const hits: InjectionHit[] = [];
+  const scan = (where: string, value: unknown) =>
+    hits.push(...scanForInjection(where, JSON.stringify(value)));
+  scan("principles", entities.principles);
+  scan("phases", entities.phases);
+  scan("domains", entities.domains);
+  scan("capabilities", capabilities);
+  scan("personas", entities.personas);
+  scan("scopes", entities.scopes);
+  scan("technology-categories", entities.technologyCategories);
+  scan("maturity-levels", entities.maturityLevels);
+  scan("kpis", kpis);
+  scan("actions", actions);
+  for (const h of hits) {
+    errors.push(
+      `possible injection (${h.pattern}) in ${h.where}: …${h.excerpt}…`,
+    );
+  }
+
+  const counts: EntityCounts = {
+    principles: entities.principles.length,
+    phases: entities.phases.length,
+    domains: entities.domains.length,
+    capabilities: capabilities.length,
+    personas: entities.personas.length,
+    technology_categories: entities.technologyCategories.length,
+    maturity_levels: entities.maturityLevels.length,
+    kpis: kpis.length,
+  };
+  const mismatch: Record<string, { expected: number; actual: number }> = {};
+  for (const [k, expected] of Object.entries(EXPECTED_COUNTS) as [
+    keyof EntityCounts,
+    number,
+  ][]) {
+    if (counts[k] !== expected) mismatch[k] = { expected, actual: counts[k] };
+  }
+  const extraWarnings: string[] = [];
+  if (Object.keys(mismatch).length > 0) {
+    const desc = Object.entries(mismatch)
+      .map(([k, v]) => `${k}: expected ${v.expected}, got ${v.actual}`)
+      .join("; ");
+    if (softCounts) extraWarnings.push(`count mismatch (soft): ${desc}`);
+    else
+      errors.push(`count mismatch: ${desc} (use --soft-counts to emit anyway)`);
+  }
+
+  return { errors, extraWarnings, counts, mismatch };
+}
+
+/** Ajv-validates every JSON file in `files` against its ARTIFACT_FILES schema
+ * (markdown payloads carry no schema entry and are skipped). */
+function validateSchemas(files: Map<string, unknown>): void {
+  const ajv = new Ajv2020({ allErrors: true, strict: false });
+  addFormats.default(ajv);
+  for (const [rel, data] of files) {
+    const schema = ARTIFACT_FILES[rel];
+    if (!schema) continue;
+    const validate = ajv.compile(schema as Record<string, unknown>);
+    if (!validate(data)) {
+      const first = validate.errors?.[0];
+      throw new Error(
+        `pre-emit validation failed for ${rel} at "${first?.instancePath}": ${first?.message}`,
+      );
+    }
+  }
 }
 
 export interface RefreshOptions {
@@ -182,9 +301,15 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
       );
       resolved = "unknown";
     }
-    pages.push(page);
     const cap = buildCapability(page, rec.id, resolved, rec.url);
-    if (!cap.summary) cap.summary = rec.excerpt; // API excerpt fallback
+    if (!cap.summary) {
+      // API excerpt fallback — also mirror it onto `page` so the composed
+      // markdown's Summary section carries it (spec §3: derive only sees
+      // markdown, never the live API, so this must not be parse-only state).
+      cap.summary = rec.excerpt;
+      page.summary = cap.summary;
+    }
+    pages.push(page);
     capabilities.push(cap);
     actions.push(...page.actions);
   }
@@ -267,117 +392,12 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
   }
   log(`KPIs assembled: ${kpis.length} (${featuredDetail.size} featured)`);
 
-  // --- completeness + parse-quality budget --------------------------------
-  const errors: string[] = [];
-  for (const c of capabilities) {
-    if (!c.definition_md) errors.push(`${c.slug}: empty definition`);
-    for (const level of ["crawl", "walk", "run"] as const) {
-      if (!c.maturity_raw[level])
-        errors.push(`${c.slug}: missing maturity ${level}`);
-    }
-    if (c.functional_activities.length === 0)
-      errors.push(`${c.slug}: no functional activities`);
-  }
-  for (const k of kpis) {
-    if (
-      k.formula &&
-      (/:\s*$/.test(k.formula) || /data sources?:/i.test(k.formula))
-    ) {
-      errors.push(
-        `${k.slug}: formula looks mis-segmented ("${k.formula.slice(0, 60)}…")`,
-      );
-    }
-  }
-  const rawFallback = actions.filter(
-    (a) => a.parse_quality === "raw_fallback",
-  ).length;
-  if (actions.length === 0 || rawFallback / actions.length > 0.3) {
-    errors.push(
-      `parse-quality budget exceeded: ${rawFallback}/${actions.length} raw_fallback`,
-    );
-  }
-
-  // --- injection scan -------------------------------------------------------
-  const hits: InjectionHit[] = [];
-  const scan = (where: string, value: unknown) =>
-    hits.push(...scanForInjection(where, JSON.stringify(value)));
-  scan("capabilities", capabilities);
-  scan("principles", principles);
-  scan("phases", phases);
-  scan("domains", domains);
-  scan("personas", personas);
-  scan("scopes", scopes);
-  scan("technology-categories", technologyCategories);
-  scan("maturity-levels", maturityLevels);
-  scan("kpis", kpis);
-  scan("actions", actions);
-  for (const h of hits) {
-    errors.push(
-      `possible injection (${h.pattern}) in ${h.where}: …${h.excerpt}…`,
-    );
-  }
-
-  // --- counts ---------------------------------------------------------------
-  const counts: EntityCounts = {
-    principles: principles.length,
-    phases: phases.length,
-    domains: domains.length,
-    capabilities: capabilities.length,
-    personas: personas.length,
-    technology_categories: technologyCategories.length,
-    maturity_levels: maturityLevels.length,
-    kpis: kpis.length,
-  };
-  const mismatch: Record<string, { expected: number; actual: number }> = {};
-  for (const [k, expected] of Object.entries(EXPECTED_COUNTS) as [
-    keyof EntityCounts,
-    number,
-  ][]) {
-    if (counts[k] !== expected) mismatch[k] = { expected, actual: counts[k] };
-  }
-  if (Object.keys(mismatch).length > 0) {
-    const desc = Object.entries(mismatch)
-      .map(([k, v]) => `${k}: expected ${v.expected}, got ${v.actual}`)
-      .join("; ");
-    if (opts.softCounts) warnings.push(`count mismatch (soft): ${desc}`);
-    else
-      errors.push(`count mismatch: ${desc} (use --soft-counts to emit anyway)`);
-  }
-
-  if (errors.length > 0) {
-    for (const e of errors) opts.log(`ERROR ${e}`);
-    return 1;
-  }
-
-  // --- validate against schemas ---------------------------------------------
-  const files = new Map<string, unknown>([
-    ["content/principles.json", principles],
-    ["content/phases.json", phases],
-    ["content/domains.json", domains],
-    ["content/capabilities.json", capabilities],
-    ["content/personas.json", personas],
-    ["content/scopes.json", scopes],
-    ["content/technology-categories.json", technologyCategories],
-    ["content/maturity-levels.json", maturityLevels],
-    ["content/kpis.json", kpis],
-    ["derived/actions.json", actions],
-    ["derived/maturity-extension.json", PRE_CRAWL],
-  ]);
-  const ajv = new Ajv2020({ allErrors: true, strict: false });
-  addFormats.default(ajv);
-  for (const [rel, data] of files) {
-    const validate = ajv.compile(
-      ARTIFACT_FILES[rel] as Record<string, unknown>,
-    );
-    if (!validate(data)) {
-      const first = validate.errors?.[0];
-      throw new Error(
-        `pre-emit validation failed for ${rel} at "${first?.instancePath}": ${first?.message}`,
-      );
-    }
-  }
-
   // --- compose canonical markdown (spec §2) -----------------------------------
+  // JSON is no longer taken from the values above directly — they only
+  // exist to feed the composer. Everything downstream (validation, counts,
+  // the emitted JSON) is re-derived FROM this markdown (spec §3), the same
+  // path the offline `derive` CLI command runs.
+  const mdDocs = new Map<string, string>();
   const capabilityRefs = new Map<string, CapabilityRef>(
     capabilities.map((c) => [c.slug, { title: c.title, url: c.source_url }]),
   );
@@ -385,8 +405,8 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
   for (const page of [...pages].sort((a, b) => a.slug.localeCompare(b.slug))) {
     const cap = capabilityBySlug.get(page.slug);
     if (!cap) continue;
-    files.set(
-      `content/markdown/capabilities/${page.slug}.md`,
+    mdDocs.set(
+      `capabilities/${page.slug}.md`,
       composeCapabilityMd(
         page,
         {
@@ -402,37 +422,44 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
   for (const persona of [...personas].sort((a, b) =>
     a.slug.localeCompare(b.slug),
   )) {
-    files.set(
-      `content/markdown/personas/${persona.slug}.md`,
-      composePersonaMd(persona),
-    );
+    mdDocs.set(`personas/${persona.slug}.md`, composePersonaMd(persona));
   }
   for (const kpi of [...kpis].sort((a, b) => a.slug.localeCompare(b.slug))) {
-    files.set(`content/markdown/kpis/${kpi.slug}.md`, composeKpiMd(kpi));
+    mdDocs.set(`kpis/${kpi.slug}.md`, composeKpiMd(kpi));
   }
-  files.set("content/markdown/principles.md", composePrinciplesMd(principles));
-  files.set("content/markdown/phases.md", composePhasesMd(phases));
-  files.set("content/markdown/domains.md", composeDomainsMd(domains));
-  files.set(
-    "content/markdown/maturity-model.md",
-    composeMaturityModelMd(maturityLevels),
-  );
-  files.set(
-    "content/markdown/technology-categories.md",
+  mdDocs.set("principles.md", composePrinciplesMd(principles));
+  mdDocs.set("phases.md", composePhasesMd(phases));
+  mdDocs.set("domains.md", composeDomainsMd(domains));
+  mdDocs.set("maturity-model.md", composeMaturityModelMd(maturityLevels));
+  mdDocs.set(
+    "technology-categories.md",
     composeTechnologyCategoriesMd(technologyCategories),
   );
-  files.set("content/markdown/scopes.md", composeScopesMd(scopes));
-  const markdownDocCount =
-    capabilities.length + personas.length + kpis.length + 6;
-  log(`markdown composed: ${markdownDocCount} docs`);
+  mdDocs.set("scopes.md", composeScopesMd(scopes));
+  log(`markdown composed: ${mdDocs.size} docs`);
+
+  // --- derive JSON from the composed markdown (spec §3) -----------------------
+  const derived = deriveFromDocs(mdDocs);
+  warnings.push(...derived.warnings);
+  const assessed = assessArtifact(derived.entities, opts.softCounts);
+  warnings.push(...assessed.extraWarnings);
+  if (assessed.errors.length > 0) {
+    for (const e of assessed.errors) opts.log(`ERROR ${e}`);
+    return 1;
+  }
+
+  const files = new Map<string, unknown>(derived.files);
+  files.set("derived/maturity-extension.json", PRE_CRAWL);
+  for (const [rel, data] of mdDocs) files.set(`content/markdown/${rel}`, data);
+  validateSchemas(files);
 
   // --- emit -------------------------------------------------------------------
   const sortedWarnings = [...warnings].sort();
   const result = emitArtifact(
     opts.artifactDir,
     files,
-    counts,
-    opts.softCounts ? mismatch : undefined,
+    assessed.counts,
+    opts.softCounts ? assessed.mismatch : undefined,
     sortedWarnings,
     [ORIGIN + "/framework/", ORIGIN + "/kpi/"],
   );
@@ -447,11 +474,69 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
   return 0;
 }
 
+export interface DeriveOptions {
+  artifactDir: string;
+  reportDir: string;
+  softCounts: boolean;
+  log: (msg: string) => void;
+}
+
+/**
+ * Offline `derive` CLI command (spec §3): rebuilds every content/derived
+ * JSON payload from `<artifactDir>/content/markdown/` with zero network or
+ * cache access — the markdown files themselves are never rewritten.
+ */
+export async function derive(opts: DeriveOptions): Promise<number> {
+  const { log } = opts;
+  const markdownDir = join(opts.artifactDir, "content/markdown");
+  const derived = deriveArtifactPayload(markdownDir);
+  log(
+    `derived ${derived.entities.capabilities.length} capabilities, ` +
+      `${derived.entities.kpis.length} kpis, ${derived.entities.actions.length} actions ` +
+      `from markdown (0 network)`,
+  );
+
+  const assessed = assessArtifact(derived.entities, opts.softCounts);
+  const warnings = [...derived.warnings, ...assessed.extraWarnings].sort();
+  if (assessed.errors.length > 0) {
+    for (const e of assessed.errors) log(`ERROR ${e}`);
+    return 1;
+  }
+
+  const files = new Map<string, unknown>(derived.files);
+  files.set("derived/maturity-extension.json", PRE_CRAWL);
+  validateSchemas(files);
+
+  const manifestPath = join(opts.artifactDir, "manifest.json");
+  const prevManifest: Manifest | null = existsSync(manifestPath)
+    ? (JSON.parse(readFileSync(manifestPath, "utf8")) as Manifest)
+    : null;
+  const sourceUrls = prevManifest?.source_urls ?? [
+    ORIGIN + "/framework/",
+    ORIGIN + "/kpi/",
+  ];
+
+  const result = emitArtifact(
+    opts.artifactDir,
+    files,
+    assessed.counts,
+    opts.softCounts ? assessed.mismatch : undefined,
+    warnings,
+    sourceUrls,
+  );
+  mkdirSync(opts.reportDir, { recursive: true });
+  const report = renderDiffReport(result, warnings);
+  writeFileSync(join(opts.reportDir, "diff-report.md"), report);
+  log(report.split("\n").slice(0, 8).join("\n"));
+  return 0;
+}
+
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  if (args[0] !== "refresh") {
+  const command = args[0];
+  if (command !== "refresh" && command !== "derive") {
     console.error(
-      "usage: cli.js refresh [--no-cache] [--soft-counts] [--artifact-dir DIR]",
+      "usage: cli.js <refresh|derive> [--no-cache] [--soft-counts] [--artifact-dir DIR]",
     );
     process.exit(2);
   }
@@ -460,14 +545,21 @@ async function main(): Promise<void> {
     const i = args.indexOf(name);
     return i >= 0 && args[i + 1] ? (args[i + 1] as string) : def;
   };
-  const code = await refresh({
-    artifactDir: value("--artifact-dir", "data/framework"),
-    cacheDir: value("--cache-dir", ".cache/crawl"),
-    reportDir: value("--report-dir", ".cache/crawl-report"),
-    useCache: !flag("--no-cache"),
-    softCounts: flag("--soft-counts"),
-    log: (m) => console.error(m),
-  });
+  const artifactDir = value("--artifact-dir", "data/framework");
+  const reportDir = value("--report-dir", ".cache/crawl-report");
+  const softCounts = flag("--soft-counts");
+  const log = (m: string) => console.error(m);
+  const code =
+    command === "refresh"
+      ? await refresh({
+          artifactDir,
+          cacheDir: value("--cache-dir", ".cache/crawl"),
+          reportDir,
+          useCache: !flag("--no-cache"),
+          softCounts,
+          log,
+        })
+      : await derive({ artifactDir, reportDir, softCounts, log });
   process.exit(code);
 }
 

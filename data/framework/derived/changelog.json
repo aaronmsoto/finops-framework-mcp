@@ -1,5 +1,16 @@
 [
   {
+    "added": [],
+    "changed": [
+      "content/markdown/capabilities/executive-strategy-alignment.md",
+      "content/markdown/capabilities/usage-optimization.md"
+    ],
+    "crawled_at": "2026-07-23T01:40:06.761Z",
+    "data_version": "2.1.1",
+    "removed": [],
+    "summary": "0 added, 0 removed, 2 changed"
+  },
+  {
     "added": [
       "content/markdown/capabilities/allocation.md",
       "content/markdown/capabilities/anomaly-management.md",
