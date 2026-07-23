@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "fca3d1e6dd5423b78e0959cb35efae812e44dad3427758f93170dc5a58ddcffc",
+  "chainHead": "2975e99cfd59a3f9775717fc030721847679671a5cd5ce7def6c80dce185f302",
   "tasks": [
     {
       "id": "T-001",
@@ -196,9 +196,15 @@
         "loop.max_total_tokens policy key (default null) triggers budget_exhausted when exceeded",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Token accounting: per-iteration and run totals journaled and in --json; optional loop.max_total_tokens cap (code default null) triggers resumable budget_exhausted only when work remains; mock runner usage marker for hermetic tests. Harness: 225 tests, lint, typecheck green; 8 new tests.",
+        "commit": "cd1add0c47294a2d789530b388d3c6323b307f17",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T06:51:22.011Z"
+      },
+      "hash": "2975e99cfd59a3f9775717fc030721847679671a5cd5ce7def6c80dce185f302"
     },
     {
       "id": "T-012",
