@@ -34,6 +34,8 @@ export interface IterationRecord {
   details: string[];
   /** Build + verify token usage for this iteration (zeros when the runner reports none). */
   tokens?: TokenTotals;
+  /** Repo-relative path of the persisted verifier transcript, when one was written. */
+  verifyEvidence?: string;
 }
 
 export interface LoopResult {
@@ -196,6 +198,47 @@ export function runnerOutputTail(res: RunnerResult, maxLines = 10): string {
     .map((line) => (line.length > 200 ? `${line.slice(0, 200)}…` : line));
   if (lines.length === 0) return "";
   return `\nrunner output (last ${lines.length} line(s)):\n  ${lines.join("\n  ")}`;
+}
+
+/**
+ * Persist the verifier's transcript so a rubber-stamping verifier is
+ * distinguishable from a rigorous one after the fact. Files live under the
+ * gitignored .agents/.cache/verify/; the journal carries the path plus a
+ * short excerpt as the durable trace. Never throws — evidence is best-effort
+ * and must not fail an otherwise-judged iteration.
+ */
+function writeVerifyEvidence(
+  rootDir: string,
+  taskId: string,
+  iteration: number,
+  verdict: string,
+  res: RunnerResult,
+): string | null {
+  try {
+    const dir = path.join(rootDir, ".agents", ".cache", "verify");
+    fs.mkdirSync(dir, { recursive: true });
+    const file = path.join(dir, `${taskId}-${Date.now()}.md`);
+    const lines = [
+      `# Verifier evidence — ${taskId} (iteration ${iteration})`,
+      "",
+      `- verdict: ${verdict}`,
+      `- recorded: ${nowIso()}`,
+      `- exit code: ${res.exitCode ?? "null"}`,
+      `- duration: ${res.durationMs}ms`,
+      `- timed out: ${res.timedOut}`,
+      `- usage: ${res.usage !== undefined ? JSON.stringify(res.usage) : "(none reported)"}`,
+      "",
+      "## Verifier transcript (finalText, verbatim)",
+      "",
+      res.finalText.trim() === "" ? "(empty)" : res.finalText,
+      "",
+    ];
+    fs.writeFileSync(file, lines.join("\n"));
+    return path.relative(rootDir, file);
+  } catch (err) {
+    logErr(`[loop] could not persist verifier evidence for ${taskId}: ${(err as Error).message}`);
+    return null;
+  }
 }
 
 /** Known-cause hints appended to preflight failures (currently: root refusal → IS_SANDBOX=1). */
@@ -453,6 +496,8 @@ export async function runLoop(
 
     let ok = details.length === 0;
     let verdict: IterationRecord["verdict"] = "skipped";
+    let verifyEvidence: string | null = null;
+    let verifyExcerpt: string | null = null;
 
     if (ok && verifyPrompt !== null && taskAfter !== undefined) {
       const verifyRemainingMs = Math.max(1_000, maxMinutes * 60_000 - (Date.now() - started));
@@ -472,6 +517,8 @@ export async function runLoop(
         ok = false;
         details.push(match ? "verifier returned VERDICT: fail" : "verifier output had no VERDICT line (treated as fail)");
       }
+      verifyEvidence = writeVerifyEvidence(rootDir, task.id, n, verdict, verifyRes);
+      verifyExcerpt = verifyRes.finalText.slice(0, 500);
     }
 
     // A completion that failed independent checks is not a completion:
@@ -498,6 +545,7 @@ export async function runLoop(
       durationMs: Date.now() - iterStarted,
       details,
       tokens: iterTokens,
+      ...(verifyEvidence !== null ? { verifyEvidence } : {}),
     };
     records.push(record);
     journal(`loop iteration ${n} — ${task.id} ${record.outcome}`, {
@@ -507,6 +555,8 @@ export async function runLoop(
       chain: chain.ok ? "valid" : `INVALID: ${chain.errors.join("; ")}`,
       commit: commitMade ? `yes (${postHead})` : "no",
       verification: verdict,
+      ...(verifyEvidence !== null ? { verifyEvidence } : {}),
+      ...(verifyExcerpt !== null && verifyExcerpt.trim() !== "" ? { verifyExcerpt } : {}),
       tokens: `${fmtTokens(iterTokens)} (run total ${runTokens.total})`,
       duration: `${record.durationMs}ms`,
       ...(details.length > 0 ? { details: details.join(" | ") } : {}),

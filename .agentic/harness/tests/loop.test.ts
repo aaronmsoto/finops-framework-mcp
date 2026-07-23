@@ -167,6 +167,40 @@ describe("loop terminal states (mock runner, hermetic)", () => {
 
     expect(result.state).toBe("success");
     expect(result.iterations[0]!.verdict).toBe("skipped");
+    expect(result.iterations[0]!.verifyEvidence).toBeUndefined();
+    expect(fs.existsSync(path.join(dir, ".agents", ".cache", "verify"))).toBe(false);
+  });
+
+  it("persists verifier evidence on pass with the path in the record and journal", async () => {
+    addTask(dir, { title: "verified work", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript();
+
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+
+    expect(result.state).toBe("success");
+    const evidence = result.iterations[0]!.verifyEvidence;
+    expect(evidence).toMatch(/^\.agents\/\.cache\/verify\/T-001-\d+\.md$/);
+    const content = readFileIn(dir, evidence!);
+    expect(content).toContain("# Verifier evidence — T-001 (iteration 1)");
+    expect(content).toContain("- verdict: pass");
+    expect(content).toContain("VERDICT: pass"); // verbatim transcript
+    const journal = readLoopJournal();
+    expect(journal).toContain(`verifyEvidence: ${evidence}`);
+    expect(journal).toMatch(/verifyExcerpt: .*VERDICT: pass/);
+  });
+
+  it("persists verifier evidence on fail too", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 1 });
+    addTask(dir, { title: "rejected", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript("VERDICT: fail");
+
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("blocked");
+    const evidence = result.iterations[0]!.verifyEvidence;
+    expect(evidence).toBeDefined();
+    expect(readFileIn(dir, evidence!)).toContain("- verdict: fail");
   });
 
   it("succeeds immediately when no tasks are pending and gates are green", async () => {
