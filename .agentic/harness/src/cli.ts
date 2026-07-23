@@ -13,7 +13,7 @@ import { runInit, initNextSteps, LICENSE_CHOICES, type InitOptions, type License
 import { isInteractive, promptInitOptions, ttyWizardIO } from "./wizard.js";
 import { runIntegrity, resolveDefaultBase } from "./integrity.js";
 import { journalTail } from "./journal.js";
-import { runLoop, type LoopMode } from "./loop.js";
+import { loopStatePath, runLoop, type LoopMode } from "./loop.js";
 import { lintMemory, memorySessionBanner, memorySummary } from "./memory.js";
 import { ClaudeRunner } from "./runners/claude.js";
 import { CopilotRunner } from "./runners/copilot.js";
@@ -408,6 +408,40 @@ function cmdIntegrity(root: string, config: AgenticConfig, args: string[], json:
   return failures.length === 0 ? 0 : 1;
 }
 
+/** Human-readable loop line from the heartbeat state file, or null when none exists. */
+export function describeLoopState(root: string): { line: string; state: Record<string, unknown> } | null {
+  const text = readTextIfExists(loopStatePath(root));
+  if (text === null) return null;
+  let state: Record<string, unknown>;
+  try {
+    state = JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    return { line: "loop: state file unreadable (malformed JSON)", state: {} };
+  }
+  const phase = typeof state.phase === "string" ? state.phase : "?";
+  const updatedAt = typeof state.updatedAt === "string" ? state.updatedAt : null;
+  const pid = typeof state.pid === "number" ? state.pid : null;
+  const iter = state.iteration as { n?: number; max?: number } | null;
+  const taskId = typeof state.taskId === "string" ? state.taskId : null;
+  const ageSec = updatedAt !== null ? Math.max(0, Math.round((Date.now() - Date.parse(updatedAt)) / 1000)) : null;
+  const age = ageSec !== null ? `${ageSec}s ago` : "unknown age";
+  if (phase.startsWith("terminal:")) {
+    return { line: `loop: last run ${phase.slice("terminal:".length)} at ${updatedAt ?? "?"}`, state };
+  }
+  let alive = false;
+  if (pid !== null) {
+    try {
+      process.kill(pid, 0);
+      alive = true;
+    } catch (err) {
+      alive = (err as NodeJS.ErrnoException).code === "EPERM"; // exists, not ours
+    }
+  }
+  const where = `${iter && typeof iter.n === "number" ? `iteration ${iter.n}/${iter.max ?? "?"}` : "starting"}${taskId !== null ? ` on ${taskId}` : ""} (${phase}, ${age})`;
+  if (alive) return { line: `loop: RUNNING ${where}`, state };
+  return { line: `loop: STALE — pid ${pid ?? "?"} not alive; last seen ${where} (crashed or killed)`, state };
+}
+
 function cmdStatus(root: string, config: AgenticConfig, json: boolean): number {
   const tasksFile = tryLoadTasks(root);
   const counts = tasksFile ? statusCounts(tasksFile) : null;
@@ -429,11 +463,19 @@ function cmdStatus(root: string, config: AgenticConfig, json: boolean): number {
     caps = null;
   }
   const tail = journalTail(root, 1);
+  const loopState = describeLoopState(root);
   if (json) {
-    logOut(JSON.stringify({ project: config.project.name, tasks: counts, lastGatesReport: gates, loopCaps: caps, integrityBase, lastJournalEntry: tail[0] ?? null }, null, 2));
+    logOut(
+      JSON.stringify(
+        { project: config.project.name, tasks: counts, lastGatesReport: gates, loopCaps: caps, integrityBase, loopState: loopState?.state ?? null, lastJournalEntry: tail[0] ?? null },
+        null,
+        2,
+      ),
+    );
     return 0;
   }
   logOut(`project: ${config.project.name} (preset: ${config.preset})`);
+  if (loopState !== null) logOut(loopState.line);
   logOut(counts ? `tasks: ${counts.pending} pending, ${counts.in_progress} in progress, ${counts.done} done, ${counts.blocked} blocked` : "tasks: no .agents/tasks.json yet");
   if (gates !== null && typeof gates === "object") {
     const g = gates as { generatedAt?: string; ok?: boolean; results?: Array<{ name: string; status: string }> };

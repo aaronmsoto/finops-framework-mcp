@@ -294,6 +294,62 @@ describe("loop token accounting", () => {
   });
 });
 
+describe("loop heartbeat state file", () => {
+  it("is written during build with pid, run id, iteration, and task; ends terminal:success", async () => {
+    addTask(dir, { title: "observed work", acceptance: ["a"] });
+    const captured = path.join(dir, "captured-state.json");
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'if [ "$AGENTIC_LOOP_PHASE" = "verify" ]; then echo "VERDICT: pass"; exit 0; fi',
+      // Capture the state file as the build phase sees it — mid-run.
+      `cp .agents/.cache/loop-state.json "${captured}"`,
+      `node "${CLI_PATH}" tasks start "$AGENTIC_TASK_ID" >&2`,
+      'echo "work" >> notes.txt',
+      `node "${CLI_PATH}" tasks complete "$AGENTIC_TASK_ID" --summary "done" >&2`,
+      "git add -A >&2",
+      'git commit -qm "complete $AGENTIC_TASK_ID"',
+    ].join("\n");
+
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+
+    const midRun = JSON.parse(fs.readFileSync(captured, "utf8")) as Record<string, unknown>;
+    expect(midRun.phase).toBe("build");
+    expect(midRun.pid).toBe(process.pid);
+    expect(midRun.taskId).toBe("T-001");
+    expect(midRun.iteration).toEqual({ n: 1, max: 3 }); // 1 pending + 2 derived budget
+    expect(midRun.runId).toMatch(/^loop-build-\d{6}$/);
+
+    const final = JSON.parse(readFileIn(dir, ".agents/.cache/loop-state.json")) as Record<string, unknown>;
+    expect(final.phase).toBe("terminal:success");
+  });
+
+  it("a preflight failure leaves the state stamped terminal:error", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = "exit 1";
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(/preflight/);
+    const state = JSON.parse(readFileIn(dir, ".agents/.cache/loop-state.json")) as Record<string, unknown>;
+    expect(state.phase).toBe("terminal:error");
+    expect(typeof state.error).toBe("string");
+  });
+
+  it("a blocked run ends terminal:blocked", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 1 });
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("blocked");
+    const state = JSON.parse(readFileIn(dir, ".agents/.cache/loop-state.json")) as Record<string, unknown>;
+    expect(state.phase).toBe("terminal:blocked");
+  });
+});
+
 describe("loop cap ergonomics", () => {
   it("--max-consecutive-failures lowers the policy cap: blocked after exactly one failure", async () => {
     addTask(dir, { title: "never done", acceptance: ["a"] }); // policy failure cap stays 3

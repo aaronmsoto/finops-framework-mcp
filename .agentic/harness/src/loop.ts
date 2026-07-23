@@ -64,6 +64,46 @@ export function blockedFilePath(rootDir: string): string {
   return path.join(rootDir, ".agents", "BLOCKED.md");
 }
 
+/** Heartbeat state file a running loop maintains for supervisors (`agentic status`). */
+export function loopStatePath(rootDir: string): string {
+  return path.join(rootDir, ".agents", ".cache", "loop-state.json");
+}
+
+export interface LoopStateFile {
+  version: 1;
+  pid: number;
+  runId: string;
+  mode: LoopMode;
+  startedAt: string;
+  updatedAt: string;
+  /** preflight | plan | build | verify | terminal:<state> | terminal:error */
+  phase: string;
+  iteration: { n: number; max: number } | null;
+  taskId: string | null;
+  caps: { maxIterations: number; maxMinutes: number; maxIterationMinutes: number; maxConsecutiveFailures: number; maxTotalTokens: number | null };
+  tokens: TokenTotals;
+  consecutiveFailures: number;
+}
+
+/**
+ * Best-effort terminal stamp for crashes: a thrown CliError must not leave
+ * the state file claiming the loop is still running. Never throws.
+ */
+function markLoopStateError(rootDir: string, message: string): void {
+  try {
+    const file = loopStatePath(rootDir);
+    const existing = readTextIfExists(file);
+    if (existing === null) return; // failed before the first heartbeat — nothing to correct
+    const state = JSON.parse(existing) as LoopStateFile;
+    if (state.pid !== process.pid) return; // stale file from another run — leave it alone
+    state.phase = "terminal:error";
+    state.updatedAt = nowIso();
+    fs.writeFileSync(file, `${JSON.stringify({ ...state, error: message }, null, 2)}\n`);
+  } catch {
+    // observability only — never mask the original error
+  }
+}
+
 function promptPath(rootDir: string, name: string): string {
   return path.join(rootDir, ".agents", "prompts", name);
 }
@@ -317,6 +357,21 @@ export async function runLoop(
   runner: AgentRunner,
   opts: LoopOptions = {},
 ): Promise<LoopResult> {
+  try {
+    return await runLoopInner(rootDir, config, policy, runner, opts);
+  } catch (err) {
+    markLoopStateError(rootDir, (err as Error).message);
+    throw err;
+  }
+}
+
+async function runLoopInner(
+  rootDir: string,
+  config: AgenticConfig,
+  policy: ApprovalsPolicy,
+  runner: AgentRunner,
+  opts: LoopOptions = {},
+): Promise<LoopResult> {
   const mode: LoopMode = opts.mode ?? "build";
   let maxIterations = effectiveCap(policy.loop.max_iterations, opts.maxIterations, "max-iterations");
   const maxMinutes = effectiveCap(policy.loop.max_wall_minutes, opts.maxMinutes, "max-minutes");
@@ -352,13 +407,6 @@ export async function runLoop(
   const basePrompt = readPrompt(rootDir, mode === "plan" ? "plan.md" : "build.md");
   const verifyPrompt = mode === "plan" || opts.noVerify ? null : readPrompt(rootDir, "verify.md");
 
-  // One-time preflight before any iteration or journal file is created, so a
-  // dead runner fails fast with guidance (throws CliError) instead of burning
-  // the consecutive-failure budget on identical "no new commit" iterations.
-  if (!opts.skipPreflight) {
-    await runPreflight(rootDir, runner, maxMinutes * 60_000);
-  }
-
   const started = Date.now();
   const records: IterationRecord[] = [];
   let consecutiveFailures = 0;
@@ -369,9 +417,54 @@ export async function runLoop(
   const fmtTokens = (t: TokenTotals): string =>
     `in=${t.input} out=${t.output} cacheRead=${t.cacheRead} cacheCreation=${t.cacheCreation} total=${t.total}`;
 
+  // The journal slug doubles as the run id in the heartbeat file — computed
+  // before preflight so even a preflight-failed run is identifiable.
+  const journalSlug = `loop-${mode}-${timeOfDayStamp()}`;
+
+  // Heartbeat: overwrite the state file on every phase transition so
+  // `agentic status` can tell a live loop (fresh updatedAt + alive pid)
+  // from a crashed or finished one. Best-effort; never fails the loop.
+  const heartbeat = (phase: string, iteration: { n: number; max: number } | null = null, taskId: string | null = null): void => {
+    const state: LoopStateFile = {
+      version: 1,
+      pid: process.pid,
+      runId: journalSlug,
+      mode,
+      startedAt: new Date(started).toISOString(),
+      updatedAt: nowIso(),
+      phase,
+      iteration,
+      taskId,
+      caps: {
+        maxIterations,
+        maxMinutes,
+        maxIterationMinutes: iterCapMs / 60_000,
+        maxConsecutiveFailures,
+        maxTotalTokens,
+      },
+      tokens: runTokens,
+      consecutiveFailures,
+    };
+    try {
+      const file = loopStatePath(rootDir);
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, `${JSON.stringify(state, null, 2)}\n`);
+    } catch (err) {
+      logErr(`[loop] could not write heartbeat state: ${(err as Error).message}`);
+    }
+  };
+
+  // One-time preflight before any iteration or journal file is created, so a
+  // dead runner fails fast with guidance (throws CliError) instead of burning
+  // the consecutive-failure budget on identical "no new commit" iterations.
+  // A preflight CliError surfaces as terminal:error via the runLoop wrapper.
+  if (!opts.skipPreflight) {
+    heartbeat("preflight");
+    await runPreflight(rootDir, runner, maxMinutes * 60_000);
+  }
+
   // This run owns ONE journal file (.agents/journal/<date>-loop-<mode>-<hhmmss>.md);
   // every iteration appends a section to it.
-  const journalSlug = `loop-${mode}-${timeOfDayStamp()}`;
   const journal = (title: string, fields: Record<string, string>): void => {
     appendJournalEntry(rootDir, {
       slug: journalSlug,
@@ -381,6 +474,7 @@ export async function runLoop(
   };
 
   const finish = (state: LoopState, reason: string): LoopResult => {
+    heartbeat(`terminal:${state}`);
     logErr(`[loop] terminal state: ${state} — ${reason}`);
     return { state, reason, iterations: records, durationMs: Date.now() - started, totalTokens: runTokens };
   };
@@ -394,6 +488,7 @@ export async function runLoop(
     const before = tryLoadTasks(rootDir);
     const pendingBefore = before === null ? 0 : statusCounts(before).pending;
     logErr(`[loop] plan iteration (runner: ${runner.name}, ${pendingBefore} pending task(s), ${maxMinutes} minute budget)`);
+    heartbeat("plan", { n: 1, max: 1 });
     const iterStarted = Date.now();
     const preHead = gitHead(rootDir);
 
@@ -488,6 +583,7 @@ export async function runLoop(
     }
 
     logErr(`[loop] iteration ${n}/${maxIterations}: ${task.id} — ${task.title} (runner: ${runner.name}, ${Math.round(remainingMs / 1000)}s budget left)`);
+    heartbeat("build", { n, max: maxIterations }, task.id);
     const iterStarted = Date.now();
     const preHead = gitHead(rootDir);
     const preStatuses = snapshotStatuses(tasksFile);
@@ -536,6 +632,7 @@ export async function runLoop(
     if (ok && verifyPrompt !== null && taskAfter !== undefined) {
       const verifyRemainingMs = Math.max(1_000, Math.min(maxMinutes * 60_000 - (Date.now() - started), iterCapMs));
       logErr(`[loop] verification pass for ${task.id} (independent fresh runner)`);
+      heartbeat("verify", { n, max: maxIterations }, task.id);
       const verifyRes = await runner.run({
         prompt: verifyPrompt + verifyFooter(taskAfter),
         cwd: rootDir,
