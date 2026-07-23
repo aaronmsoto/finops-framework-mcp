@@ -294,6 +294,57 @@ describe("loop token accounting", () => {
   });
 });
 
+describe("loop cap ergonomics", () => {
+  it("--max-consecutive-failures lowers the policy cap: blocked after exactly one failure", async () => {
+    addTask(dir, { title: "never done", acceptance: ["a"] }); // policy failure cap stays 3
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxConsecutiveFailures: 1 });
+    expect(result.state).toBe("blocked");
+    expect(result.reason).toMatch(/1 consecutive failed iterations \(cap: 1\)/);
+    expect(result.iterations).toHaveLength(1);
+  });
+
+  it("a zero cap value is rejected as not a positive number", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = 'echo "unused"';
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), { maxConsecutiveFailures: 0 })).rejects.toThrowError(
+      /--max-consecutive-failures must be a positive number/,
+    );
+  });
+
+  it("without --max-iterations the budget defaults to min(pending + 2, policy cap)", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 10 }); // keep the failure cap out of the way
+    addTask(dir, { title: "stubborn", acceptance: ["a"] }); // 1 pending -> derived budget 3
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("budget_exhausted");
+    expect(result.reason).toMatch(/iteration cap reached \(3\)/);
+    expect(result.iterations).toHaveLength(3);
+  });
+
+  it("an explicit --max-iterations disables the pending-based default", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 10 });
+    addTask(dir, { title: "stubborn", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxIterations: 5 });
+    expect(result.state).toBe("budget_exhausted");
+    expect(result.reason).toMatch(/iteration cap reached \(5\)/);
+  });
+});
+
 describe("loop per-iteration timeout", () => {
   it("a hung build iteration is killed at the per-iteration cap, fails, and the run continues to blocked", async () => {
     writeApprovals(dir, { maxConsecutiveFailures: 2 });

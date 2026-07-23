@@ -53,6 +53,7 @@ export interface LoopOptions {
   maxIterations?: number;
   maxMinutes?: number;
   maxIterationMinutes?: number;
+  maxConsecutiveFailures?: number;
   noVerify?: boolean;
   taskId?: string;
   /** Skip the one-time runner preflight probe (default: probe runs). */
@@ -317,10 +318,30 @@ export async function runLoop(
   opts: LoopOptions = {},
 ): Promise<LoopResult> {
   const mode: LoopMode = opts.mode ?? "build";
-  const maxIterations = effectiveCap(policy.loop.max_iterations, opts.maxIterations, "max-iterations");
+  let maxIterations = effectiveCap(policy.loop.max_iterations, opts.maxIterations, "max-iterations");
   const maxMinutes = effectiveCap(policy.loop.max_wall_minutes, opts.maxMinutes, "max-minutes");
-  const maxConsecutiveFailures = policy.loop.max_consecutive_failures;
+  const maxConsecutiveFailures = effectiveCap(
+    policy.loop.max_consecutive_failures,
+    opts.maxConsecutiveFailures,
+    "max-consecutive-failures",
+  );
   const iterCapMs = effectiveCap(policy.loop.max_iteration_minutes, opts.maxIterationMinutes, "max-iteration-minutes") * 60_000;
+
+  // Without an explicit --max-iterations, size the run to its queue instead
+  // of the raw policy ceiling: pending + 2 leaves headroom for one retry and
+  // the final no-work pass, and a small queue no longer inherits a 10-round
+  // failure budget.
+  if (mode === "build" && opts.maxIterations === undefined) {
+    const pendingNow = (() => {
+      const file = tryLoadTasks(rootDir);
+      return file === null ? 0 : statusCounts(file).pending + statusCounts(file).in_progress;
+    })();
+    const derived = Math.min(pendingNow + 2, policy.loop.max_iterations);
+    if (derived < maxIterations) {
+      logErr(`[loop] iteration budget defaulted to ${derived} (pending tasks ${pendingNow} + 2, policy cap ${policy.loop.max_iterations}) — pass --max-iterations to override.`);
+      maxIterations = derived;
+    }
+  }
 
   if (runner.name === "mock") {
     logErr(

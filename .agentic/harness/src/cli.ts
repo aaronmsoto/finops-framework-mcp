@@ -130,13 +130,14 @@ Commands:
         Explicit gate names run exactly those gates, ignoring tier.
         Default reports every failure; --fail-fast stops at the first.
   loop [--mode build|plan] [--runner claude|copilot|mock] [--max-iterations N]
-       [--max-minutes M] [--max-iteration-minutes M] [--no-verify]
-       [--skip-preflight] [--task <id>]
+       [--max-minutes M] [--max-iteration-minutes M] [--max-consecutive-failures N]
+       [--no-verify] [--skip-preflight] [--task <id>]
         Supervised autonomous loop. Caps come from approvals.yaml; flags may
         lower them, never raise them. --max-iteration-minutes bounds a single
         runner call (fractions allowed); a fired timeout fails that iteration,
-        not the run. A one-time preflight probes that the runner can edit
-        files (skip with --skip-preflight).
+        not the run. Without --max-iterations the budget defaults to
+        min(pending tasks + 2, policy cap). A one-time preflight probes that
+        the runner can edit files (skip with --skip-preflight).
   tasks <list|next|add|start|complete|block|validate>
         Manage .agents/tasks.json (hash-chained).
         add --title <t> --acceptance <c> [--acceptance <c> ...] [--spec <path>]
@@ -298,6 +299,7 @@ async function cmdLoop(root: string, config: AgenticConfig, args: string[], json
     "max-iterations": "string",
     "max-minutes": "string",
     "max-iteration-minutes": "string",
+    "max-consecutive-failures": "string",
     "no-verify": "boolean",
     "skip-preflight": "boolean",
     task: "string",
@@ -311,6 +313,7 @@ async function cmdLoop(root: string, config: AgenticConfig, args: string[], json
     maxIterations: parsePositiveInt(parsed.strings["max-iterations"], "max-iterations"),
     maxMinutes: parsePositiveInt(parsed.strings["max-minutes"], "max-minutes"),
     maxIterationMinutes: parsePositiveNumber(parsed.strings["max-iteration-minutes"], "max-iteration-minutes"),
+    maxConsecutiveFailures: parsePositiveInt(parsed.strings["max-consecutive-failures"], "max-consecutive-failures"),
     noVerify: parsed.booleans["no-verify"],
     skipPreflight: parsed.booleans["skip-preflight"],
     taskId: parsed.strings.task,
