@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "d0939df22cc33d6b5bf62c5ca9cc3277df66f24737b75d303096d68f984409c8",
+  "chainHead": "1944204f1e2676f669dd4d91ddad64948aaf003fd60f0b97385a8d046fa3bfbe",
   "tasks": [
     {
       "id": "T-001",
@@ -348,9 +348,15 @@
         "The flag is filtered from positional artifact-dir handling like --experimental",
         "A test covers the flag; gates pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "gates PASS 188/188; node dist/servers/framework/main.js --version prints 'finops-framework-mcp v1.0.0 (data v2.1.1)', exits 0, no server start",
+        "commit": "8494941b9861d496a55ddcfdca775e18c901e067",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:31:16.667Z"
+      },
+      "hash": "1944204f1e2676f669dd4d91ddad64948aaf003fd60f0b97385a8d046fa3bfbe"
     }
   ]
 }
