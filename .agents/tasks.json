@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "dabd1ef894b81d9c7292451a1f16eb8b0bfc18589ae41ad6554ab8b034f5a8e4",
+  "chainHead": "47d10e18475a266f5f4bc8f4b7884cf5180154706c3a01782ee8f78524fbb434",
   "tasks": [
     {
       "id": "T-001",
@@ -154,9 +154,15 @@
         "package.json un-privated with version 1.0.0, files whitelist, mcpName, repository, prepublishOnly; server.json added; npm pack --dry-run ships only dist+data+README+LICENSE+NOTICE",
         "gates --tier all pass; artifact manifest shows schema_version 2.0.0"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "docs/README rewritten for v1 surface, eval.xml Q1/Q2/Q10 revised, package.json npm-ready (1.0.0, files whitelist) + server.json added, npm pack --dry-run verified clean, gates --tier all green",
+        "commit": "042916c5208ac9d53d4b7dd0c759f36b25162757",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T02:10:09.321Z"
+      },
+      "hash": "47d10e18475a266f5f4bc8f4b7884cf5180154706c3a01782ee8f78524fbb434"
     }
   ]
 }
