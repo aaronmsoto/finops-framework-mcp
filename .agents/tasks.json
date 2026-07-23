@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "bed32170c32d505c3030d4ee3be4faa43da755151c2b82951cae969f4503573a",
+  "chainHead": "39b143feb38361ae6950cac8577fd278be366f41141f94889eaa2e8a857cc5e0",
   "tasks": [
     {
       "id": "T-001",
@@ -257,9 +257,15 @@
         "CLI help documents all new loop flags",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Cap ergonomics: --max-consecutive-failures lower-only flag; build-mode iteration budget defaults to min(pending+2, policy cap) with explanatory log, disabled by explicit --max-iterations; CLI help updated for all new loop flags. Harness: 235 tests, lint, typecheck green; 4 new tests.",
+        "commit": "31bf982e4b75117a08579d50619b8be9d91a0466",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:01:00.439Z"
+      },
+      "hash": "39b143feb38361ae6950cac8577fd278be366f41141f94889eaa2e8a857cc5e0"
     },
     {
       "id": "T-015",
