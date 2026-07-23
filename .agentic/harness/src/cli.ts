@@ -96,6 +96,14 @@ function parsePositiveInt(value: string | undefined, flag: string): number | und
   return n;
 }
 
+/** For minute-scale caps that legitimately accept fractions (e.g. 0.5 = 30s). */
+function parsePositiveNumber(value: string | undefined, flag: string): number | undefined {
+  if (value === undefined) return undefined;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) throw new UsageError(`--${flag} must be a positive number (got "${value}").`);
+  return n;
+}
+
 // ---------------------------------------------------------------------------
 // Help
 // ---------------------------------------------------------------------------
@@ -122,10 +130,13 @@ Commands:
         Explicit gate names run exactly those gates, ignoring tier.
         Default reports every failure; --fail-fast stops at the first.
   loop [--mode build|plan] [--runner claude|copilot|mock] [--max-iterations N]
-       [--max-minutes M] [--no-verify] [--skip-preflight] [--task <id>]
+       [--max-minutes M] [--max-iteration-minutes M] [--no-verify]
+       [--skip-preflight] [--task <id>]
         Supervised autonomous loop. Caps come from approvals.yaml; flags may
-        lower them, never raise them. A one-time preflight probes that the
-        runner can edit files (skip with --skip-preflight).
+        lower them, never raise them. --max-iteration-minutes bounds a single
+        runner call (fractions allowed); a fired timeout fails that iteration,
+        not the run. A one-time preflight probes that the runner can edit
+        files (skip with --skip-preflight).
   tasks <list|next|add|start|complete|block|validate>
         Manage .agents/tasks.json (hash-chained).
         add --title <t> --acceptance <c> [--acceptance <c> ...] [--spec <path>]
@@ -286,6 +297,7 @@ async function cmdLoop(root: string, config: AgenticConfig, args: string[], json
     runner: "string",
     "max-iterations": "string",
     "max-minutes": "string",
+    "max-iteration-minutes": "string",
     "no-verify": "boolean",
     "skip-preflight": "boolean",
     task: "string",
@@ -298,6 +310,7 @@ async function cmdLoop(root: string, config: AgenticConfig, args: string[], json
     mode: mode as LoopMode,
     maxIterations: parsePositiveInt(parsed.strings["max-iterations"], "max-iterations"),
     maxMinutes: parsePositiveInt(parsed.strings["max-minutes"], "max-minutes"),
+    maxIterationMinutes: parsePositiveNumber(parsed.strings["max-iteration-minutes"], "max-iteration-minutes"),
     noVerify: parsed.booleans["no-verify"],
     skipPreflight: parsed.booleans["skip-preflight"],
     taskId: parsed.strings.task,

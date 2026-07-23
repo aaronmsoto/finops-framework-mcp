@@ -294,6 +294,66 @@ describe("loop token accounting", () => {
   });
 });
 
+describe("loop per-iteration timeout", () => {
+  it("a hung build iteration is killed at the per-iteration cap, fails, and the run continues to blocked", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 2 });
+    addTask(dir, { title: "hangs forever", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      "sleep 60",
+    ].join("\n");
+
+    const { config, policy } = deps();
+    const started = Date.now();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxIterationMinutes: 0.05 });
+
+    expect(result.state).toBe("blocked"); // two timeout-failed iterations hit the failure cap
+    expect(result.iterations).toHaveLength(2);
+    expect(result.iterations[0]!.details.join(" ")).toMatch(/per-iteration cap, 0\.05 minute\(s\)/);
+    expect(Date.now() - started).toBeLessThan(30_000); // nowhere near the 60s hangs
+    expect(fs.existsSync(blockedFilePath(dir))).toBe(true);
+  });
+
+  it("a hung verify pass is also killed at the per-iteration cap and fails the iteration", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 1 });
+    addTask(dir, { title: "verify hangs", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'if [ "$AGENTIC_LOOP_PHASE" = "verify" ]; then sleep 60; fi',
+      `node "${CLI_PATH}" tasks start "$AGENTIC_TASK_ID" >&2`,
+      'echo "work" >> notes.txt',
+      `node "${CLI_PATH}" tasks complete "$AGENTIC_TASK_ID" --summary "done" >&2`,
+      "git add -A >&2",
+      'git commit -qm "complete $AGENTIC_TASK_ID"',
+    ].join("\n");
+
+    const { config, policy } = deps();
+    const started = Date.now();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxIterationMinutes: 0.1 });
+
+    expect(result.state).toBe("blocked");
+    // The verifier never printed a VERDICT (killed), so the iteration failed and reverted.
+    expect(result.iterations[0]!.verdict).toBe("fail");
+    expect(result.iterations[0]!.details.join(" ")).toMatch(/no VERDICT line/);
+    expect(Date.now() - started).toBeLessThan(45_000);
+  });
+
+  it("the CLI flag may lower but not raise the policy cap", async () => {
+    // Policy cap 0.05 min (3s); flag asks for 10 min — clamped to policy.
+    writeApprovals(dir, { maxConsecutiveFailures: 1, maxIterationMinutes: 0.05 });
+    addTask(dir, { title: "hang", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      "sleep 60",
+    ].join("\n");
+    const { config, policy } = deps();
+    const started = Date.now();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxIterationMinutes: 10 });
+    expect(result.state).toBe("blocked");
+    expect(Date.now() - started).toBeLessThan(30_000); // killed at the 3s policy cap, not 10 minutes
+  });
+});
+
 describe("loop preflight probe", () => {
   it("throws actionable guidance when the runner cannot write a file, before any iteration or journal", async () => {
     addTask(dir, { title: "would-be work", acceptance: ["a"] });

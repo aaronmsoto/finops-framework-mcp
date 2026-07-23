@@ -172,6 +172,12 @@ export interface LoopCaps {
   max_consecutive_failures: number;
   /** Optional third hard cap: total tokens across all runner calls (null = uncapped). */
   max_total_tokens: number | null;
+  /**
+   * Per-iteration runner timeout in minutes. Unlike the integer caps this
+   * accepts positive fractions (0.05 = 3s) so tests can exercise it without
+   * minute-scale waits. A fired timeout fails the iteration, not the run.
+   */
+  max_iteration_minutes: number;
 }
 
 export type MergeMethod = "merge" | "squash" | "rebase";
@@ -209,6 +215,7 @@ export const DEFAULT_LOOP_CAPS: LoopCaps = {
   max_wall_minutes: 120,
   max_consecutive_failures: 3,
   max_total_tokens: null,
+  max_iteration_minutes: 30,
 };
 
 export const DEFAULT_BRANCHING: BranchingPolicy = {
@@ -302,6 +309,13 @@ export function validateApprovals(raw: unknown): ApprovalsPolicy {
         fail(F, "loop.max_total_tokens", `must be a positive integer (got ${describe(tokens)})`);
       }
       loop.max_total_tokens = tokens;
+    }
+    const iterMinutes = raw.loop.max_iteration_minutes;
+    if (iterMinutes !== undefined) {
+      if (typeof iterMinutes !== "number" || !Number.isFinite(iterMinutes) || iterMinutes <= 0) {
+        fail(F, "loop.max_iteration_minutes", `must be a positive number (got ${describe(iterMinutes)})`);
+      }
+      loop.max_iteration_minutes = iterMinutes;
     }
   }
 

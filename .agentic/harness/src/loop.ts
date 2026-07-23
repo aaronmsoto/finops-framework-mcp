@@ -52,6 +52,7 @@ export interface LoopOptions {
   /** CLI flags may LOWER the approvals.yaml caps, never raise them. */
   maxIterations?: number;
   maxMinutes?: number;
+  maxIterationMinutes?: number;
   noVerify?: boolean;
   taskId?: string;
   /** Skip the one-time runner preflight probe (default: probe runs). */
@@ -77,6 +78,13 @@ function readPrompt(rootDir: string, name: string): string {
   return text;
 }
 
+/** Name which budget killed a timed-out runner so the failure is diagnosable. */
+function timeoutDetail(appliedMs: number, iterCapMs: number): string {
+  return appliedMs >= iterCapMs
+    ? `runner timed out (killed at the per-iteration cap, ${iterCapMs / 60_000} minute(s))`
+    : "runner timed out (killed at the wall-clock budget)";
+}
+
 /** LOCAL-time HHMMSS: keeps parallel same-day runs writing distinct journal files. */
 function timeOfDayStamp(date = new Date()): string {
   return [date.getHours(), date.getMinutes(), date.getSeconds()].map((n) => String(n).padStart(2, "0")).join("");
@@ -85,7 +93,7 @@ function timeOfDayStamp(date = new Date()): string {
 /** Clamp a CLI-provided cap to the policy cap: flags lower, never raise. */
 export function effectiveCap(policyCap: number, cliValue: number | undefined, label: string): number {
   if (cliValue === undefined) return policyCap;
-  if (cliValue <= 0) throw new CliError(`--${label} must be a positive integer.`);
+  if (cliValue <= 0) throw new CliError(`--${label} must be a positive number.`);
   if (cliValue > policyCap) {
     logErr(`[loop] --${label} ${cliValue} exceeds the approvals.yaml cap ${policyCap} — using ${policyCap} (flags may lower caps, never raise them).`);
     return policyCap;
@@ -312,6 +320,7 @@ export async function runLoop(
   const maxIterations = effectiveCap(policy.loop.max_iterations, opts.maxIterations, "max-iterations");
   const maxMinutes = effectiveCap(policy.loop.max_wall_minutes, opts.maxMinutes, "max-minutes");
   const maxConsecutiveFailures = policy.loop.max_consecutive_failures;
+  const iterCapMs = effectiveCap(policy.loop.max_iteration_minutes, opts.maxIterationMinutes, "max-iteration-minutes") * 60_000;
 
   if (runner.name === "mock") {
     logErr(
@@ -367,17 +376,18 @@ export async function runLoop(
     const iterStarted = Date.now();
     const preHead = gitHead(rootDir);
 
+    const planTimeoutMs = Math.min(maxMinutes * 60_000, iterCapMs);
     const runRes = await runner.run({
       prompt: basePrompt + planFooter(rootDir, pendingBefore),
       cwd: rootDir,
-      timeoutMs: maxMinutes * 60_000,
+      timeoutMs: planTimeoutMs,
       extraEnv: { AGENTIC_LOOP: "1", AGENTIC_LOOP_PHASE: "plan" },
     });
 
     const planTokens = tokenTotals(runRes.usage);
     runTokens = addTokens(runTokens, planTokens);
     const details: string[] = [];
-    if (runRes.timedOut) details.push("runner timed out (killed at the wall-clock budget)");
+    if (runRes.timedOut) details.push(timeoutDetail(planTimeoutMs, iterCapMs));
     if (runRes.exitCode !== 0) details.push(`runner exited with code ${runRes.exitCode}`);
     const after = tryLoadTasks(rootDir);
     const pendingAfter = after === null ? 0 : statusCounts(after).pending;
@@ -461,11 +471,14 @@ export async function runLoop(
     const preHead = gitHead(rootDir);
     const preStatuses = snapshotStatuses(tasksFile);
 
-    // Fresh runner process per iteration — never resume a session.
+    // Fresh runner process per iteration — never resume a session. The
+    // timeout is the smaller of the remaining wall budget and the
+    // per-iteration cap, so one hung task cannot eat the whole run.
+    const buildTimeoutMs = Math.min(remainingMs, iterCapMs);
     const runRes = await runner.run({
       prompt: basePrompt + taskFooter(task),
       cwd: rootDir,
-      timeoutMs: remainingMs,
+      timeoutMs: buildTimeoutMs,
       extraEnv: { AGENTIC_LOOP: "1", AGENTIC_TASK_ID: task.id, AGENTIC_LOOP_PHASE: "build" },
     });
 
@@ -473,7 +486,7 @@ export async function runLoop(
 
     // Independent checks — agent claims are ignored; only these count.
     const details: string[] = [];
-    if (runRes.timedOut) details.push("runner timed out (killed at the wall-clock budget)");
+    if (runRes.timedOut) details.push(timeoutDetail(buildTimeoutMs, iterCapMs));
     if (runRes.exitCode !== 0) details.push(`runner exited with code ${runRes.exitCode}`);
 
     const gates = await runGates(rootDir, config, { tier: "fast" });
@@ -500,7 +513,7 @@ export async function runLoop(
     let verifyExcerpt: string | null = null;
 
     if (ok && verifyPrompt !== null && taskAfter !== undefined) {
-      const verifyRemainingMs = Math.max(1_000, maxMinutes * 60_000 - (Date.now() - started));
+      const verifyRemainingMs = Math.max(1_000, Math.min(maxMinutes * 60_000 - (Date.now() - started), iterCapMs));
       logErr(`[loop] verification pass for ${task.id} (independent fresh runner)`);
       const verifyRes = await runner.run({
         prompt: verifyPrompt + verifyFooter(taskAfter),

@@ -237,7 +237,7 @@
         "A timed-out iteration fails, reverts, and counts toward consecutive failures; the run continues",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
