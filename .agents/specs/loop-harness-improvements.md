@@ -33,26 +33,26 @@ suites plus mock failure-path scenarios and one real mini loop run.
 
 ## Acceptance criteria
 
-- [ ] T-010..T-016 implemented, each with new harness vitest coverage;
+- [x] T-010..T-016 implemented, each with new harness vitest coverage;
       `npm run test|lint|typecheck` green in `.agentic/harness` after each.
-- [ ] Repo gates PASS before every commit; task hash chain valid through
+- [x] Repo gates PASS before every commit; task hash chain valid through
       T-017.
-- [ ] Mock scenarios A–D (below) executed with outputs captured; real mini
+- [x] Mock scenarios A–D (below) executed with outputs captured; real mini
       loop run (scenario E) executed on the improved harness.
-- [ ] Tracker table below filled with per-item status, evidence, and port
+- [x] Tracker table below filled with per-item status, evidence, and port
       verdict.
 
 ## Port-back tracker
 
-| Item | Task | Status | Evidence | Port verdict |
+| Item | Task / commit | Status | Evidence | Port verdict |
 |---|---|---|---|---|
-| 9 preflight output + hint | T-010 | pending | — | — |
-| 11 token accounting + cap | T-011 | pending | — | — |
-| 10 verifier evidence | T-012 | pending | — | — |
-| 12 per-iteration timeout | T-013 | pending | — | — |
-| 16b cap ergonomics | T-014 | pending | — | — |
-| 13 heartbeat + status | T-015 | pending | — | — |
-| 14 journal auto-commit | T-016 | pending | — | — |
+| 9 preflight output + hint | T-010 `4ca3317` | done | scenario A (verbatim stderr tail + IS_SANDBOX hint); 4 tests | **port** |
+| 11 token accounting + cap | T-011 `cd1add0` | done | scenarios C/D/E; real run revealed 10.18M tokens (98% cache reads); 8 tests | **port** |
+| 10 verifier evidence | T-012 `ce1d5dc` | done | scenarios C/E; evidence files + journal excerpts for real verifier transcripts; 3 tests | **port** |
+| 12 per-iteration timeout | T-013 `89f0119` | done | scenario B (blocked in 6s vs 600s wall); 5 tests | **port** (review fractional-minutes deviation) |
+| 16b cap ergonomics | T-014 `31bf982` | done | scenarios A/B/E logs show derived budget; flag lowered cap in B; 4 tests | **port** |
+| 13 heartbeat + status | T-015 `10ab095` | done | scenario E live: `status` showed preflight→build phases mid-run, terminal after; 6 tests | **port** |
+| 14 journal auto-commit | T-016 `249f444` | done | scenarios B/C/D/E all ended with clean trees and a pathspec-scoped journal commit | **port** |
 
 Port verdicts: **port** (copy as-is), **adjust** (port with noted changes),
 **drop** (didn't earn its keep — explain).
@@ -91,7 +91,49 @@ in this repo.
 
 ## Validation log
 
-(filled by T-017)
+Mock scenarios ran against the real built dist (`node
+.agentic/harness/dist/cli.js`) in scratch fixture repos mirroring
+`tests/helpers.ts` (single fast noop gate; caps 10/10/3; mock runner).
+
+- **A — preflight surfacing: PASS.** Root-refusal line on stderr + exit 1
+  produced: `runner output (last 2 line(s)):` with the verbatim refusal,
+  then the `IS_SANDBOX=1` hint pointing at operations.md;
+  `loop-state.json` stamped `terminal:error` with the error text. The
+  derived-budget log ("defaulted to 3 (pending 1 + 2, policy cap 10)")
+  appeared as designed.
+- **B — per-iteration timeout: PASS.** `sleep 60` build with
+  `--max-iteration-minutes 0.05 --max-consecutive-failures 2`: two
+  iterations killed at "per-iteration cap, 0.05 minute(s)", blocked in
+  **6s total** against a 600s wall budget; BLOCKED.md written; HEAD =
+  "Record loop run journal (blocked)"; heartbeat `terminal:blocked`.
+- **C — verifier fail → revert → blocked: PASS.** Evidence file carried
+  verdict, usage JSON, and the verbatim transcript; journal carried
+  `verifyEvidence` path + flattened excerpt + `tokens: ... total=1300`;
+  task reverted then blocked; journal committed alone; CLI summary
+  appended "1300 tokens".
+- **D — token cap: PASS.** Fixture policy `max_total_tokens: 1200`, honest
+  1300-token iterations → `budget_exhausted` "token cap reached (1300 >
+  1200 total tokens) with 1 task(s) remaining"; statuses done/pending
+  (resumable); `--json` carried `totalTokens`.
+- **E — real mini run: PASS.** `IS_SANDBOX=1
+  AGENTIC_CLAUDE_ARGS="--dangerously-skip-permissions" ./scripts/agentic
+  loop --max-iteration-minutes 20` over T-018/T-019 (claude runner):
+  preflight passed; derived budget 5 (3 open + 2); `agentic status`
+  showed `RUNNING starting (preflight, 5s ago)` then `RUNNING iteration
+  1/5 on T-018 (build, 11s ago)` live mid-run; **2/2 iterations
+  first-try verified in 1101s**; per-iteration journal tokens
+  `total=6364513` (T-018) and `total=3811398` (T-019), run total
+  **10,175,911** — 98% cache reads, confirming the all-fields `total`
+  design; verifier transcripts persisted for both tasks; run ended with
+  the harness committing its own journal ("Record loop run journal
+  (success)") and a clean tree; `status` now reports `loop: last run
+  success at 2026-07-23T07:33:16Z`. Products verified by hand:
+  `finops-framework-mcp --version` → "v1.0.0 (data v2.1.1)" exit 0;
+  cheerio in devDependencies with `derive` still byte-stable.
+
+Harness suite grew 211 → 245 tests; `npm run test|lint|typecheck` green
+after every task (T-012's completion summary says "228 tests" — the true
+count was 227; corrected here). Repo gates PASS before every commit.
 
 ## Open questions
 
