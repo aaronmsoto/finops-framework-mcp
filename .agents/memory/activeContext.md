@@ -4,7 +4,16 @@
   Format (keep all four sections, most recent truth only — this file is
   overwritten, not appended; history lives in .agents/journal/ and git):
     ## In flight
-    ## Next steps      — ordered, concrete, small
+
+Nothing — **v1 is built and shipped to PR #4**, awaiting owner review.
+The loop (T-005..T-009) delivered the owner-approved descope: relationship
+graph deleted, markdown-canonical pipeline (compose + offline derive),
+Actions/Pre-Crawl hidden behind FINOPS_MCP_EXPERIMENTAL, npm publish prep.
+Post-loop verification + eval run 3 (10/10, text-only) recorded in
+docs/eval-results.md and the 20260723 loop journal.
+
+## Next steps
+      — ordered, concrete, small
     ## Open questions  — things a future session must not silently re-decide
     ## Last updated    — ISO date + actor
   `memory lint` warns when this file goes stale while commits continue.
@@ -12,15 +21,15 @@
 
 ## In flight
 
-**v1 descope build — all five loop tasks (T-005..T-009) complete.**
-Owner-approved plan, 2026-07-22: delete relationship functionality, adopt a
-markdown-canonical pipeline (compose + derive), hide Actions and Pre-Crawl
-behind FINOPS_MCP_EXPERIMENTAL, npm publish prep. Spec:
-`.agents/specs/v1-official-only.md` (binding). Work lands on branch
-claude/session-k75rxy — open PR #4 becomes the v1 PR. The v0.1 state (all
-critique gates + 10/10 evals) is journaled in 20260721-server-build.md.
+Nothing — **v1 is built and shipped to PR #4**, awaiting owner review.
+The loop (T-005..T-009) delivered the owner-approved descope: relationship
+graph deleted, markdown-canonical pipeline (compose + offline derive),
+Actions/Pre-Crawl hidden behind FINOPS_MCP_EXPERIMENTAL, npm publish prep.
+Post-loop verification + eval run 3 (10/10, text-only) recorded in
+docs/eval-results.md and the 20260723 loop journal.
 
 ## Next steps
+
 
 1. T-005..T-008 done — see 20260723-t00{5,6,7,8}-*.md (relationships
    deleted, markdown compose layer, offline derive step, experimental flag +
