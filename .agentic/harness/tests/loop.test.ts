@@ -13,6 +13,7 @@ import {
   makeTempDir,
   readFileIn,
   rmDir,
+  sh,
   writeApprovals,
   writeConfig,
   writePrompts,
@@ -291,6 +292,83 @@ describe("loop token accounting", () => {
     const result = await runLoop(dir, config, policy, new MockRunner(), {});
     expect(result.state).toBe("success");
     expect(result.totalTokens.total).toBe(0);
+  });
+});
+
+describe("loop journal auto-commit", () => {
+  function journalRelPath(): string {
+    const journalDir = path.join(dir, ".agents", "journal");
+    const files = fs.readdirSync(journalDir).filter((f) => f.endsWith(".md") && f !== "README.md");
+    expect(files).toHaveLength(1);
+    return path.join(".agents", "journal", files[0]!);
+  }
+
+  it("a success run ends with the journal committed alone and a clean tree for it", async () => {
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+
+    const subject = sh(dir, "git", ["log", "-1", "--format=%s"]).stdout.trim();
+    expect(subject).toBe("Record loop run journal (success)");
+    const files = sh(dir, "git", ["show", "--name-only", "--format="]).stdout.trim().split("\n");
+    expect(files).toEqual([journalRelPath()]);
+    expect(sh(dir, "git", ["status", "--porcelain", "--", journalRelPath()]).stdout.trim()).toBe("");
+  });
+
+  it("a blocked run commits the journal while BLOCKED.md stays untracked", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 1 });
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("blocked");
+    expect(sh(dir, "git", ["log", "-1", "--format=%s"]).stdout.trim()).toBe("Record loop run journal (blocked)");
+    const porcelain = sh(dir, "git", ["status", "--porcelain"]).stdout;
+    expect(porcelain).toContain("BLOCKED.md"); // untouched by the journal commit
+  });
+
+  it("a 0-iteration terminal skips the commit silently", async () => {
+    // Only task already done elsewhere: immediate success, no journal file.
+    addTask(dir, { title: "pre-done", acceptance: ["a"] });
+    process.env.AGENTIC_SKIP_GATES = "1";
+    try {
+      const { completeTask } = await import("../src/tasks.js");
+      await completeTask(dir, loadAgenticConfig(dir), "T-001", "pre-done");
+    } finally {
+      delete process.env.AGENTIC_SKIP_GATES;
+    }
+    process.env.AGENTIC_MOCK_SCRIPT = "echo never invoked";
+    const { config, policy } = deps();
+    const before = sh(dir, "git", ["rev-parse", "HEAD"]).stdout.trim();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { skipPreflight: true });
+    expect(result.state).toBe("success");
+    expect(sh(dir, "git", ["rev-parse", "HEAD"]).stdout.trim()).toBe(before);
+  });
+
+  it("a failing commit hook downgrades to a warning without changing the terminal state", async () => {
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript();
+    // A pre-commit hook that rejects everything AFTER the mock's own commits:
+    // install it via core.hooksPath only for the harness's journal commit by
+    // pointing at a directory created between phases is racy — instead make
+    // the hook reject only commits whose message is the journal commit.
+    const hooksDir = path.join(dir, ".hooks");
+    fs.mkdirSync(hooksDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(hooksDir, "commit-msg"),
+      '#!/bin/sh\ngrep -q "Record loop run journal" "$1" && exit 1\nexit 0\n',
+      { mode: 0o755 },
+    );
+    sh(dir, "git", ["config", "core.hooksPath", ".hooks"]);
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success"); // terminal state unchanged
+    expect(sh(dir, "git", ["log", "-1", "--format=%s"]).stdout.trim()).not.toContain("Record loop run journal");
   });
 });
 

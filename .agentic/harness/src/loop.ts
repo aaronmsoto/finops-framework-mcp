@@ -16,7 +16,7 @@ import {
   type TasksFile,
   type TaskStatus,
 } from "./tasks.js";
-import { CliError, gitHead, logErr, nowIso, readTextIfExists } from "./util.js";
+import { CliError, git, gitHead, logErr, nowIso, readTextIfExists } from "./util.js";
 
 export type LoopState = "success" | "budget_exhausted" | "blocked";
 export type LoopMode = "build" | "plan";
@@ -83,6 +83,28 @@ export interface LoopStateFile {
   caps: { maxIterations: number; maxMinutes: number; maxIterationMinutes: number; maxConsecutiveFailures: number; maxTotalTokens: number | null };
   tokens: TokenTotals;
   consecutiveFailures: number;
+}
+
+/**
+ * Commit the run's own journal file at terminal state so a finished loop
+ * leaves a clean tree (previously every run ended with the journal dirty,
+ * tripping stop-hooks and the next verifier's cleanliness expectations).
+ * Pathspec-scoped add AND commit so nothing else — even runner-staged
+ * leftovers — can ride along. Best-effort: failures warn, never change the
+ * terminal state.
+ */
+function commitLoopJournal(rootDir: string, journalFile: string | null, state: LoopState): void {
+  if (journalFile === null) return; // 0-iteration terminal: no journal file was created
+  const rel = path.relative(rootDir, journalFile);
+  const status = git(rootDir, ["status", "--porcelain", "--", rel]);
+  if (!status.ok || status.stdout.trim() === "") return; // untouched or unknowable — nothing to do
+  const add = git(rootDir, ["add", "--", rel]);
+  const commit = add.ok ? git(rootDir, ["commit", "-m", `Record loop run journal (${state})`, "--", rel]) : add;
+  if (commit.ok) {
+    logErr(`[loop] committed run journal ${rel}`);
+  } else {
+    logErr(`[loop] could not commit run journal ${rel}: ${(commit.stderr || commit.stdout).trim()}`);
+  }
 }
 
 /**
@@ -465,8 +487,9 @@ async function runLoopInner(
 
   // This run owns ONE journal file (.agents/journal/<date>-loop-<mode>-<hhmmss>.md);
   // every iteration appends a section to it.
+  let journalFile: string | null = null;
   const journal = (title: string, fields: Record<string, string>): void => {
-    appendJournalEntry(rootDir, {
+    journalFile = appendJournalEntry(rootDir, {
       slug: journalSlug,
       title,
       lines: Object.entries(fields).map(([key, value]) => `- ${key}: ${value.replace(/\n/g, " / ")}`),
@@ -475,6 +498,7 @@ async function runLoopInner(
 
   const finish = (state: LoopState, reason: string): LoopResult => {
     heartbeat(`terminal:${state}`);
+    commitLoopJournal(rootDir, journalFile, state);
     logErr(`[loop] terminal state: ${state} — ${reason}`);
     return { state, reason, iterations: records, durationMs: Date.now() - started, totalTokens: runTokens };
   };

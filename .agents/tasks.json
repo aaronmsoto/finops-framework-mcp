@@ -296,7 +296,7 @@
         "Skips silently when no journal file or clean; warns without changing terminal state on commit failure",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
