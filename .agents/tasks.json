@@ -68,6 +68,71 @@
         "completedAt": "2026-07-21T09:53:19.719Z"
       },
       "hash": "fb69a7ea1fba746208d323a8b205187ab8493e38ab86ba467f144e70eddfce66"
+    },
+    {
+      "id": "T-005",
+      "title": "Delete relationship functionality and bump to schema 2.0.0 (spec §1)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "src has no infer.ts/graph.ts; no get_prerequisites/get_related tools; no graph resource; types/schemas/artifact loader carry no relationship entities; KPI related_capability_slugs kept",
+        "data/framework has no relationships-*.json or relationships schema; artifact regenerated offline with data_version 2.0.0 and schema_version 2.0.0",
+        "./scripts/agentic gates --tier all passes; npx vitest run passes with relationship tests removed"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-006",
+      "title": "Add markdown compose layer: crawler writes canonical per-page markdown (spec §2)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "refresh writes data/framework/content/markdown/ per spec §2 layout (22 capabilities, 11 personas, 88 kpis, 6 section docs) with sorted front-matter and canonical headings; files hashed in manifest sha256",
+        "compose escaping guard throws on dialect-breaking items; front-matter emit/parse unit tests and per-fixture compose tests pass",
+        "double refresh remains byte-idempotent (No changes on second run); gates --tier all pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-007",
+      "title": "Add derive step: all JSON regenerated from markdown, offline (spec §3)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "cli derive subcommand rebuilds every content/derived JSON from content/markdown with zero network; refresh routes JSON production through the same derive path",
+        "round-trip tests pass: derive(compose(parse(fixture))) deep-equals direct parser output for all capability fixtures; actions ordinals/parent_ordinal match allocation fixture",
+        "refresh then derive produces zero diff; double-derive byte-identical; gates --tier all pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-008",
+      "title": "Experimental flag: hide actions and pre-crawl; official maturity surface (spec §4)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "default server: tools/list lacks get_actions and includes get_maturity_assessment (verbatim official maturity markdown w/ attribution + resource_link); no pre-crawl in any enum, completion, resource level list, maturity model output, prompt, or instructions",
+        "FINOPS_MCP_EXPERIMENTAL=1 (or --experimental) restores get_actions (EXPERIMENTAL-labeled) and pre-crawl; assess_maturity_path serves gap as verbatim assessment_md per level with crawl/walk/run enums",
+        "flag-matrix tests pass via createServer(artifact,{experimental}); completable(z.string().describe()) pattern preserved; gates --tier all pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-009",
+      "title": "v1 docs, revised evals, npm publish prep (spec §5)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "architecture.md/README updated to v1 surface (no relationships, flag documented, npx quickstart); eval.xml Q1/Q2/Q10 rewritten per spec §5",
+        "package.json un-privated with version 1.0.0, files whitelist, mcpName, repository, prepublishOnly; server.json added; npm pack --dry-run ships only dist+data+README+LICENSE+NOTICE",
+        "gates --tier all pass; artifact manifest shows schema_version 2.0.0"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

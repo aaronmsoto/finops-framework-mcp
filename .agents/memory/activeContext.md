@@ -3,8 +3,19 @@
 <!--
   Format (keep all four sections, most recent truth only — this file is
   overwritten, not appended; history lives in .agents/journal/ and git):
-    ## In flight       — what is currently being worked on, by whom/what mode
-    ## Next steps      — ordered, concrete, small
+    ## In flight
+
+**v1 descope build, running via the autonomous loop** (owner-approved plan,
+2026-07-22): delete relationship functionality, adopt a markdown-canonical
+pipeline (compose + derive), hide Actions and Pre-Crawl behind
+FINOPS_MCP_EXPERIMENTAL, npm publish prep. Spec:
+`.agents/specs/v1-official-only.md` (binding; tasks T-005..T-009 cite its
+sections). Work lands on branch claude/session-k75rxy — open PR #4 becomes
+the v1 PR. The v0.1 state (all critique gates + 10/10 evals) is journaled in
+20260721-server-build.md.
+
+## Next steps
+      — ordered, concrete, small
     ## Open questions  — things a future session must not silently re-decide
     ## Last updated    — ISO date + actor
   `memory lint` warns when this file goes stale while commits continue.
@@ -12,29 +23,24 @@
 
 ## In flight
 
-The FinOps Framework MCP server is BUILT (owner build brief of 2026-07-21,
-executed overnight): crawler → versioned data artifact (v1.1.0: 22
-capabilities, 489 assessment items, 88 KPIs, 65 official + 19 inferred
-edges) → stdio MCP server (13 read-only tools, finops:// resources, 4
-prompts). Two adversarial critique gates passed with all blockers fixed
-(docs/critique-1.md, docs/critique-2.md); eval suite 10/10
-(docs/eval-results.md); 89 tests; gates --tier all green. PR to dev opened
-at the end of the overnight run — see the session journal
-(20260721-server-build.md) and the PR body for the definition-of-done
-checklist.
+**v1 descope build, running via the autonomous loop** (owner-approved plan,
+2026-07-22): delete relationship functionality, adopt a markdown-canonical
+pipeline (compose + derive), hide Actions and Pre-Crawl behind
+FINOPS_MCP_EXPERIMENTAL, npm publish prep. Spec:
+`.agents/specs/v1-official-only.md` (binding; tasks T-005..T-009 cite its
+sections). Work lands on branch claude/session-k75rxy — open PR #4 becomes
+the v1 PR. The v0.1 state (all critique gates + 10/10 evals) is journaled in
+20260721-server-build.md.
 
 ## Next steps
 
-1. Owner: review/merge the build PR (squash to dev, then release train).
-2. Owner decision (critique-1 M11): rename derived entity `Action` →
-   `MaturityCharacteristic`? Semantics already rubric-framed everywhere;
-   rename is mechanical (types, schema file name, tool name get_actions →
-   get_maturity_characteristics would be a breaking tool rename — decide).
-3. Owner: install docs/proposed/refresh-data.yml per its checklist to
-   activate monthly data refreshes (until then, refreshes are manual
-   `npm run refresh`).
-4. Optional next feature: streamable HTTP entry point (design keeps it a
-   new main only); FOCUS sibling server reusing src/shared.
+
+1. Loop: T-005 → T-009 in order (one per iteration; spec sections §1-§5).
+2. Post-loop (supervising session): fresh-agent eval re-run ≥9/10, PR #4
+   title/body update, final verification, owner runs npm publish.
+3. Owner: install docs/proposed/refresh-data.yml per its checklist.
+4. v1.1 candidates: Cloudflare Workers remote endpoint (artifact-from-memory
+   loader), Action rename decision (moot while hidden), cheerio slimming.
 
 ## Open questions
 
