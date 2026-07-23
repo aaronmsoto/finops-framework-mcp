@@ -17,6 +17,18 @@ export function canonicalJson(value: unknown): string {
   return `${JSON.stringify(sortKeys(value), null, 2)}\n`;
 }
 
+/** Markdown payloads are written verbatim (spec §2): exactly one trailing newline. */
+function canonicalMarkdown(value: string): string {
+  return `${value.replace(/\n+$/, "")}\n`;
+}
+
+/** Serialize an artifact file payload: markdown strings verbatim, else canonical JSON. */
+function serializeFile(data: unknown): string {
+  return typeof data === "string"
+    ? canonicalMarkdown(data)
+    : canonicalJson(data);
+}
+
 function sortKeys(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(sortKeys);
   if (value && typeof value === "object") {
@@ -68,6 +80,11 @@ export function diffArtifact(
     const oldRaw = existsSync(path) ? readFileSync(path, "utf8") : null;
     if (oldRaw === null) {
       added.push(rel);
+      continue;
+    }
+    // Markdown payloads are whole-file entities — never itemized (spec §2).
+    if (typeof data === "string") {
+      if (oldRaw !== canonicalMarkdown(data)) changed.push(rel);
       continue;
     }
     let oldData: unknown;
@@ -173,7 +190,7 @@ export function emitArtifact(
   const sha: Record<string, string> = {};
   for (const [rel, data] of all) {
     if (rel === "manifest.json") continue;
-    const text = canonicalJson(data);
+    const text = serializeFile(data);
     sha[rel] = sha256(text);
     const path = join(dir, rel);
     mkdirSync(dirname(path), { recursive: true });

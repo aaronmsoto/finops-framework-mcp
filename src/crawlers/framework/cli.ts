@@ -32,6 +32,18 @@ import {
   parseScopes,
   parseTechnologyCategories,
 } from "./parse/sections.js";
+import {
+  composeCapabilityMd,
+  composeDomainsMd,
+  composeKpiMd,
+  composeMaturityModelMd,
+  composePersonaMd,
+  composePhasesMd,
+  composePrinciplesMd,
+  composeScopesMd,
+  composeTechnologyCategoriesMd,
+  type CapabilityRef,
+} from "./markdown/compose.js";
 import { scanForInjection, type InjectionHit } from "./sanitize.js";
 import { ORIGIN, URLS } from "./urls.js";
 
@@ -364,6 +376,55 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
       );
     }
   }
+
+  // --- compose canonical markdown (spec §2) -----------------------------------
+  const capabilityRefs = new Map<string, CapabilityRef>(
+    capabilities.map((c) => [c.slug, { title: c.title, url: c.source_url }]),
+  );
+  const capabilityBySlug = new Map(capabilities.map((c) => [c.slug, c]));
+  for (const page of [...pages].sort((a, b) => a.slug.localeCompare(b.slug))) {
+    const cap = capabilityBySlug.get(page.slug);
+    if (!cap) continue;
+    files.set(
+      `content/markdown/capabilities/${page.slug}.md`,
+      composeCapabilityMd(
+        page,
+        {
+          wpId: cap.wp_id,
+          domainSlug: cap.domain_slug,
+          sourceUrl: cap.source_url,
+          license: LICENSE,
+        },
+        capabilityRefs,
+      ),
+    );
+  }
+  for (const persona of [...personas].sort((a, b) =>
+    a.slug.localeCompare(b.slug),
+  )) {
+    files.set(
+      `content/markdown/personas/${persona.slug}.md`,
+      composePersonaMd(persona),
+    );
+  }
+  for (const kpi of [...kpis].sort((a, b) => a.slug.localeCompare(b.slug))) {
+    files.set(`content/markdown/kpis/${kpi.slug}.md`, composeKpiMd(kpi));
+  }
+  files.set("content/markdown/principles.md", composePrinciplesMd(principles));
+  files.set("content/markdown/phases.md", composePhasesMd(phases));
+  files.set("content/markdown/domains.md", composeDomainsMd(domains));
+  files.set(
+    "content/markdown/maturity-model.md",
+    composeMaturityModelMd(maturityLevels),
+  );
+  files.set(
+    "content/markdown/technology-categories.md",
+    composeTechnologyCategoriesMd(technologyCategories),
+  );
+  files.set("content/markdown/scopes.md", composeScopesMd(scopes));
+  const markdownDocCount =
+    capabilities.length + personas.length + kpis.length + 6;
+  log(`markdown composed: ${markdownDocCount} docs`);
 
   // --- emit -------------------------------------------------------------------
   const sortedWarnings = [...warnings].sort();

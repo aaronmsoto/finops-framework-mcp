@@ -127,3 +127,111 @@ describe("emitArtifact idempotence and versioning (critique M15/M16)", () => {
     expect(result.dataVersion).toBe(`${currMajor}.0.0`);
   });
 });
+
+describe("emitArtifact — markdown payloads (spec §2)", () => {
+  function withMarkdown(md: string): Map<string, unknown> {
+    const files = payload("original");
+    files.set("content/markdown/capabilities/c1.md", md);
+    return files;
+  }
+
+  it("writes a markdown string verbatim with exactly one trailing newline", () => {
+    const dir = tmp();
+    emitArtifact(
+      dir,
+      withMarkdown("---\nkind: capability\n---\n\n## Summary\n"),
+      COUNTS,
+      undefined,
+      [],
+      [],
+    );
+    const written = readFileSync(
+      join(dir, "content/markdown/capabilities/c1.md"),
+      "utf8",
+    );
+    expect(written).toBe("---\nkind: capability\n---\n\n## Summary\n");
+  });
+
+  it("normalizes multiple trailing newlines to exactly one", () => {
+    const dir = tmp();
+    emitArtifact(
+      dir,
+      withMarkdown("---\nkind: capability\n---\n\nbody\n\n\n"),
+      COUNTS,
+      undefined,
+      [],
+      [],
+    );
+    const written = readFileSync(
+      join(dir, "content/markdown/capabilities/c1.md"),
+      "utf8",
+    );
+    expect(written.endsWith("body\n")).toBe(true);
+    expect(written.endsWith("body\n\n")).toBe(false);
+  });
+
+  it("is byte-idempotent: an unchanged markdown doc produces no diff on re-emit", () => {
+    const dir = tmp();
+    emitArtifact(
+      dir,
+      withMarkdown("---\nkind: capability\n---\n\nbody\n"),
+      COUNTS,
+      undefined,
+      [],
+      [],
+    );
+    const second = emitArtifact(
+      dir,
+      withMarkdown("---\nkind: capability\n---\n\nbody\n"),
+      COUNTS,
+      undefined,
+      [],
+      [],
+    );
+    expect(second.wrote).toBe(false);
+    expect(second.diff.hasChanges).toBe(false);
+  });
+
+  it("diffs a changed markdown doc as a whole file, not per-entity", () => {
+    const dir = tmp();
+    emitArtifact(
+      dir,
+      withMarkdown("---\nkind: capability\n---\n\nbody\n"),
+      COUNTS,
+      undefined,
+      [],
+      [],
+    );
+    const changed = emitArtifact(
+      dir,
+      withMarkdown("---\nkind: capability\n---\n\nedited\n"),
+      COUNTS,
+      undefined,
+      [],
+      [],
+    );
+    expect(changed.diff.changed).toContain(
+      "content/markdown/capabilities/c1.md",
+    );
+  });
+
+  it("hashes markdown files into the manifest sha256 map", () => {
+    const dir = tmp();
+    emitArtifact(
+      dir,
+      withMarkdown("---\nkind: capability\n---\n\nbody\n"),
+      COUNTS,
+      undefined,
+      [],
+      [],
+    );
+    const manifest = JSON.parse(
+      readFileSync(join(dir, "manifest.json"), "utf8"),
+    ) as {
+      sha256: Record<string, string>;
+    };
+    expect(manifest.sha256["content/markdown/capabilities/c1.md"]).toMatch(
+      /^[0-9a-f]{64}$/,
+    );
+  });
+});
