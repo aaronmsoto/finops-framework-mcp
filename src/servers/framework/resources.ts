@@ -235,32 +235,6 @@ export function registerResources(server: McpServer, artifact: Artifact): void {
   );
 
   server.registerResource(
-    "graph",
-    URI.graph,
-    {
-      title: "Capability relationship graph",
-      description:
-        "All edges, official and inferred strictly partitioned; inferred edges carry evidence quotes and confidence.",
-      mimeType: JSONM,
-      annotations: { lastModified },
-    },
-    (u) =>
-      text(
-        u.href,
-        JSON.stringify(
-          {
-            note: "official = harvested from finops.org page evidence; inferred = unofficial extension, see evidence_quote/confidence/heuristic per edge",
-            official: artifact.relationships_official,
-            inferred: artifact.relationships_inferred,
-          },
-          null,
-          2,
-        ),
-        JSONM,
-      ),
-  );
-
-  server.registerResource(
     "manifest",
     URI.manifest,
     {

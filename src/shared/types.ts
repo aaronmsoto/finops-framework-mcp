@@ -159,27 +159,6 @@ export interface Action {
   parse_quality: ParseQuality;
 }
 
-export type RelationshipType = "prerequisite" | "informs" | "related";
-export type RelationshipSource = "official" | "inferred";
-export type Confidence = "strong" | "moderate" | "weak";
-
-export interface CapabilityRelationship {
-  from: string;
-  to: string;
-  type: RelationshipType;
-  from_maturity?: OfficialMaturityLevel;
-  to_min_maturity?: OfficialMaturityLevel;
-  source: RelationshipSource;
-  /** Page the edge was harvested from (official) or inferred against. */
-  evidence_url?: string;
-  /** Verbatim sentence backing the edge; required on inferred edges. */
-  evidence_quote?: string;
-  /** Named heuristic that produced an inferred edge. */
-  heuristic?: string;
-  confidence?: Confidence;
-  rationale?: string;
-}
-
 export interface ChangelogEntry {
   data_version: string;
   crawled_at: string;
@@ -226,8 +205,6 @@ export interface Artifact {
   maturity_extension: MaturityExtension;
   kpis: Kpi[];
   actions: Action[];
-  relationships_official: CapabilityRelationship[];
-  relationships_inferred: CapabilityRelationship[];
   changelog: ChangelogEntry[];
 }
 

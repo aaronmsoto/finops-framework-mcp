@@ -2,7 +2,7 @@
 // emits these into data/framework/schema/ and the server validates the
 // artifact against them at startup (docs/architecture.md §4).
 
-export const SCHEMA_VERSION = "1.0.0";
+export const SCHEMA_VERSION = "2.0.0";
 
 const provenanceProps = {
   source_url: { type: "string", format: "uri" },
@@ -290,24 +290,6 @@ export const actionsSchema = collectionSchema(
   ],
 );
 
-export const relationshipsSchema = collectionSchema(
-  "relationships",
-  {
-    from: { type: "string" },
-    to: { type: "string" },
-    type: { enum: ["prerequisite", "informs", "related"] },
-    from_maturity: officialMaturity,
-    to_min_maturity: officialMaturity,
-    source: { enum: ["official", "inferred"] },
-    evidence_url: { type: "string", format: "uri" },
-    evidence_quote: { type: "string" },
-    heuristic: { type: "string" },
-    confidence: { enum: ["strong", "moderate", "weak"] },
-    rationale: { type: "string" },
-  },
-  ["from", "to", "type", "source"],
-);
-
 export const changelogSchema = collectionSchema(
   "changelog",
   {
@@ -395,8 +377,6 @@ export const ARTIFACT_FILES: Record<string, Record<string, unknown>> = {
   "content/kpis.json": kpisSchema,
   "derived/actions.json": actionsSchema,
   "derived/maturity-extension.json": maturityExtensionSchema,
-  "derived/relationships-official.json": relationshipsSchema,
-  "derived/relationships-inferred.json": relationshipsSchema,
   "derived/changelog.json": changelogSchema,
 };
 

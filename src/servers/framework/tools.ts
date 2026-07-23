@@ -6,7 +6,6 @@ import type {
   OfficialMaturityLevel,
 } from "../../shared/index.js";
 import { nearestMatches } from "../../shared/index.js";
-import { prerequisiteClosure, relatedEdges } from "./graph.js";
 import {
   UNOFFICIAL_ACTIONS_NOTE,
   collectionMd,
@@ -340,7 +339,6 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     "maturity",
     "activities",
     "kpis",
-    "relationships",
     "headline_groups",
     "inputs_outputs",
   ] as const;
@@ -349,7 +347,7 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     {
       title: "Get one capability",
       description:
-        "One capability's content, section-selectable via `include` to control size. Default include is [summary, definition] (~1-2k tokens). Approximate extra cost per section: maturity ~2.5k tokens, activities ~3k (filter with `persona`), kpis ~1k, relationships ~1k, headline_groups/inputs_outputs <1k; requesting ALL sections is roughly 8k tokens — prefer the finops://framework/capabilities/{slug} resource for the full document.",
+        "One capability's content, section-selectable via `include` to control size. Default include is [summary, definition] (~1-2k tokens). Approximate extra cost per section: maturity ~2.5k tokens, activities ~3k (filter with `persona`), kpis ~1k, headline_groups/inputs_outputs <1k; requesting ALL sections is roughly 7k tokens — prefer the finops://framework/capabilities/{slug} resource for the full document.",
       inputSchema: {
         slug: z.string().describe("Capability slug, e.g. 'allocation'"),
         include: z
@@ -410,17 +408,6 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
             title: k.title,
             has_formula: !!k.formula,
           }));
-      }
-      if (inc.includes("relationships")) {
-        const all = [
-          ...artifact.relationships_official,
-          ...artifact.relationships_inferred,
-        ];
-        sections.relationships = all.filter(
-          (r) => r.from === c.slug || r.to === c.slug,
-        );
-        sections.relationships_note =
-          "Edges with source:'inferred' are unofficial extensions (see evidence_quote/confidence).";
       }
       if (inc.includes("inputs_outputs"))
         sections.inputs_outputs_md = c.inputs_outputs_md;
@@ -661,143 +648,6 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     },
   );
 
-  // ---- get_prerequisites --------------------------------------------------------------
-  server.registerTool(
-    "get_prerequisites",
-    {
-      title: "Get prerequisite closure",
-      description:
-        "Transitive prerequisite closure for a capability: which other capabilities its practice builds on, with minimum-maturity constraints propagated along paths (rule: constraint = max over the path; unconstrained edges count as 'present at any level'). IMPORTANT: the FinOps Foundation publishes no formal prerequisite graph — prerequisite edges and all maturity constraints are unofficial inferences with quoted evidence; every edge carries source/confidence. include_inferred:false restricts to officially-evidenced edges (currently none are typed prerequisite, so expect an empty-but-honest result).",
-      inputSchema: {
-        capability: z
-          .string()
-          .describe("Capability slug whose prerequisites you want"),
-        target_maturity: z
-          .enum(OFFICIAL)
-          .optional()
-          .describe(
-            "Level you are aiming for (annotates the summary; default run)",
-          ),
-        include_inferred: z.boolean().default(true),
-      },
-      outputSchema: {
-        capability: z.string(),
-        summary: z.string(),
-        prerequisites: z.array(
-          z.object({
-            capability: z.string(),
-            min_maturity: z.string(),
-            depth: z.number(),
-            edges: z.array(
-              z.object({
-                from: z.string(),
-                to: z.string(),
-                source: z.string(),
-                confidence: z.string().optional(),
-                evidence_quote: z.string().optional(),
-                rationale: z.string().optional(),
-              }),
-            ),
-          }),
-        ),
-      },
-      annotations: RO,
-    },
-    ({ capability, target_maturity, include_inferred }) => {
-      const c = findCapability(capability);
-      if (isErr(c)) return c;
-      const closure = prerequisiteClosure(
-        artifact,
-        c.slug,
-        include_inferred ?? true,
-      );
-      const summary =
-        `${closure.nodes.length} prerequisite capability(ies) for ${c.slug}` +
-        (target_maturity ? ` at ${target_maturity}` : "") +
-        ` — ${closure.official_edges} official edge(s), ${closure.inferred_edges} inferred. ` +
-        `Prerequisite typing and all maturity constraints are UNOFFICIAL inferences ` +
-        `(the framework publishes no prerequisite graph); see per-edge evidence.`;
-      const prerequisites = closure.nodes.map((n) => ({
-        capability: n.capability,
-        min_maturity: n.min_maturity,
-        depth: n.depth,
-        edges: n.via.map((e) => ({
-          from: e.from,
-          to: e.to,
-          source: e.source,
-          ...(e.confidence ? { confidence: e.confidence } : {}),
-          ...(e.evidence_quote ? { evidence_quote: e.evidence_quote } : {}),
-          ...(e.rationale ? { rationale: e.rationale } : {}),
-        })),
-      }));
-      return ok(
-        { capability: c.slug, summary, prerequisites },
-        `${summary}\n` +
-          prerequisites
-            .map(
-              (p) =>
-                `- ${p.capability} (min maturity: ${p.min_maturity}, depth ${p.depth})`,
-            )
-            .join("\n") +
-          (prerequisites.length === 0
-            ? "\nNo prerequisite edges found. Try get_related for informs/related connections."
-            : ""),
-      );
-    },
-  );
-
-  // ---- get_related -----------------------------------------------------------------------
-  server.registerTool(
-    "get_related",
-    {
-      title: "Get related capabilities",
-      description:
-        "Non-prerequisite relationship edges (informs/related) touching a capability, partitioned into official (harvested from finops.org page links and shared-KPI references, with evidence URLs) and inferred (unofficial, with quoted evidence + confidence).",
-      inputSchema: {
-        capability: z.string().describe("Capability slug"),
-        types: z
-          .array(z.enum(["informs", "related"]))
-          .optional()
-          .describe("Edge types (default both)"),
-      },
-      outputSchema: {
-        capability: z.string(),
-        official: z.array(z.record(z.string(), z.unknown())),
-        inferred: z.array(z.record(z.string(), z.unknown())),
-        note: z.string(),
-      },
-      annotations: RO,
-    },
-    ({ capability, types }) => {
-      const c = findCapability(capability);
-      if (isErr(c)) return c;
-      const r = relatedEdges(
-        artifact,
-        c.slug,
-        (types as ("informs" | "related")[]) ?? ["informs", "related"],
-      );
-      const note =
-        "official = evidenced by finops.org links/shared KPIs; inferred = unofficial extension.";
-      return ok(
-        {
-          capability: c.slug,
-          official: r.official as unknown as Record<string, unknown>[],
-          inferred: r.inferred as unknown as Record<string, unknown>[],
-          note,
-        },
-        `official = evidenced by finops.org page links / shared-KPI references (the Foundation publishes no relationship graph); inferred = unofficial extension.\n` +
-          `${c.slug}: ${r.official.length} official, ${r.inferred.length} inferred edge(s).\n` +
-          [...r.official, ...r.inferred]
-            .slice(0, 30)
-            .map(
-              (e) =>
-                `- ${e.from} —${e.type}→ ${e.to} [${e.source}${e.confidence ? `, ${e.confidence}` : ""}]`,
-            )
-            .join("\n"),
-      );
-    },
-  );
-
   // ---- assess_maturity_path -------------------------------------------------------------------
   server.registerTool(
     "assess_maturity_path",
@@ -819,7 +669,6 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
             characteristics: z.array(z.string()),
           }),
         ),
-        related_prerequisites_hint: z.string(),
       },
       annotations: RO,
     },
@@ -847,18 +696,11 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
       const note =
         `Characteristics observed at each level above ${current_level} up to ${target_level} — ` +
         `use as assessment evidence, not as a to-do list. ${UNOFFICIAL_ACTIONS_NOTE}`;
-      const hasPrereqs = [
-        ...artifact.relationships_official,
-        ...artifact.relationships_inferred,
-      ].some((rel) => rel.type === "prerequisite" && rel.to === c.slug);
       return ok(
         {
           capability: c.slug,
           note,
           gap,
-          related_prerequisites_hint: hasPrereqs
-            ? `Run get_prerequisites(capability: "${c.slug}") to see which other capabilities this path leans on (inferred).`
-            : `No prerequisite edges exist for ${c.slug} (the framework publishes none); get_related(capability: "${c.slug}") shows related capabilities instead.`,
         },
         `${note}\n\n` +
           gap

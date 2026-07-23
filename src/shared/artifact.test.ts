@@ -51,16 +51,6 @@ describe("committed data artifact (contract tests)", () => {
   it("marks every derived record unofficial where applicable", () => {
     expect(artifact.maturity_extension.official).toBe(false);
     expect(artifact.actions.every((a) => a.official === false)).toBe(true);
-    expect(
-      artifact.relationships_inferred.every(
-        (r) => r.source === "inferred" && !!r.evidence_quote && !!r.confidence,
-      ),
-    ).toBe(true);
-    expect(
-      artifact.relationships_official.every(
-        (r) => r.source === "official" && !!r.evidence_url,
-      ),
-    ).toBe(true);
   });
 
   it("has every capability complete: definition, 3 maturity levels, activities", () => {

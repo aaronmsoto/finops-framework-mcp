@@ -100,20 +100,6 @@ describe("resources", () => {
     });
     expect(res.completion.values).toContain("allocation");
   });
-
-  it("separates official and inferred edges in the graph resource", async () => {
-    const res = await client.readResource({
-      uri: "finops://framework/graph/relationships",
-    });
-    const data = JSON.parse((res.contents[0] as { text: string }).text) as {
-      official: { source: string }[];
-      inferred: { source: string; evidence_quote?: string }[];
-    };
-    expect(data.official.every((e) => e.source === "official")).toBe(true);
-    expect(
-      data.inferred.every((e) => e.source === "inferred" && !!e.evidence_quote),
-    ).toBe(true);
-  });
 });
 
 describe("tools", () => {
@@ -256,11 +242,6 @@ describe("tools", () => {
     const kpis = res.structuredContent?.kpis as { featured_on: string[] }[];
     expect(kpis.length).toBe(4);
     expect(kpis.every((k) => k.featured_on.includes("forecasting"))).toBe(true);
-  });
-
-  it("get_prerequisites marks inference explicitly in the summary", async () => {
-    const res = await call("get_prerequisites", { capability: "forecasting" });
-    expect(res.structuredContent?.summary).toMatch(/UNOFFICIAL/);
   });
 
   it("map_personas(persona) answers Q3 in one call with inline activities", async () => {

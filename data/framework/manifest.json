@@ -9,14 +9,14 @@
     "principles": 6,
     "technology_categories": 5
   },
-  "crawled_at": "2026-07-21T11:58:25.560Z",
-  "data_version": "1.1.0",
+  "crawled_at": "2026-07-23T01:04:29.065Z",
+  "data_version": "2.0.0",
   "parse_warnings": [
     "executive-strategy-alignment: no summary paragraph found",
     "governance-policy-risk: Definition parsed via id fallback",
     "usage-optimization: no summary paragraph found"
   ],
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "sha256": {
     "content/capabilities.json": "8643d7fdcb71fcd4027da57f4f0b2285ef64688c9cb29c5b5dad7653ec636028",
     "content/domains.json": "e2620ee1c2b9eb42e9d42e8d64b4025f2f44cde1beded819ec9f43a1ac186fee",
@@ -28,10 +28,8 @@
     "content/scopes.json": "9b7b9c733b14c56f0f67e56a33712233a9485e3862265717d5d9a410d3bbf538",
     "content/technology-categories.json": "9e96f1efae9758905585cec8d4356038f24618713b3af7ea0617baabb0a9f1dd",
     "derived/actions.json": "af6b3e1dea1b4438941de263527191283432d4c9d3bf92ac18005ef475a3f855",
-    "derived/changelog.json": "0a48134d1cab3c2d178790ceb913b126f1a39d08fb98a5b97f5ff469894c1b5b",
-    "derived/maturity-extension.json": "1da07c5e53ede62328a6fce2798dfb9652004e041d59f8be5d923f84def1e2fa",
-    "derived/relationships-inferred.json": "dbb30920af98672c9e37e50922408653b3a08750c92a173ecc449ff533af95c1",
-    "derived/relationships-official.json": "7d8547be7bb60e955147ba0a4c753058b248a05b6865a5efd36af4c2a4631eb1"
+    "derived/changelog.json": "74c101ca726fdaffe925d4c507d789c1d0379cc4d142006568fe8f1f12580ca1",
+    "derived/maturity-extension.json": "1da07c5e53ede62328a6fce2798dfb9652004e041d59f8be5d923f84def1e2fa"
   },
   "source_urls": [
     "https://www.finops.org/framework/",

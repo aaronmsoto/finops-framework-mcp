@@ -17,7 +17,6 @@ import {
 import { CachedFetcher } from "./http.js";
 import { htmlToMd } from "./md.js";
 import { emitArtifact, renderDiffReport } from "./emit.js";
-import { inferredRelationships, officialRelationships } from "./infer.js";
 import {
   buildCapability,
   domainTitleToSlug,
@@ -256,17 +255,6 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
   }
   log(`KPIs assembled: ${kpis.length} (${featuredDetail.size} featured)`);
 
-  // --- relationships -------------------------------------------------------
-  const relOfficial = officialRelationships(
-    pages,
-    kpis,
-    (slug) => `${ORIGIN}/framework/capabilities/${slug}/`,
-  ).filter((r) => capSlugSet.has(r.from) && capSlugSet.has(r.to));
-  const relInferred = inferredRelationships(capabilities, actions);
-  log(
-    `relationships: ${relOfficial.length} official, ${relInferred.length} inferred`,
-  );
-
   // --- completeness + parse-quality budget --------------------------------
   const errors: string[] = [];
   for (const c of capabilities) {
@@ -362,8 +350,6 @@ export async function refresh(opts: RefreshOptions): Promise<number> {
     ["content/kpis.json", kpis],
     ["derived/actions.json", actions],
     ["derived/maturity-extension.json", PRE_CRAWL],
-    ["derived/relationships-official.json", relOfficial],
-    ["derived/relationships-inferred.json", relInferred],
   ]);
   const ajv = new Ajv2020({ allErrors: true, strict: false });
   addFormats.default(ajv);

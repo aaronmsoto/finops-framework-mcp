@@ -14,7 +14,6 @@ export const URI = {
   maturityModel: `${AUTHORITY}/maturity-model`,
   personasIndex: `${AUTHORITY}/personas`,
   capabilitiesIndex: `${AUTHORITY}/capabilities`,
-  graph: `${AUTHORITY}/graph/relationships`,
   manifest: `${AUTHORITY}/meta/manifest`,
   changelog: `${AUTHORITY}/meta/changelog`,
   persona: (slug: string) => `${AUTHORITY}/personas/${slug}`,

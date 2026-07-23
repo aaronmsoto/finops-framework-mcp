@@ -101,11 +101,16 @@ export function diffArtifact(
   };
 }
 
-function bumpVersion(prev: string, diff: DiffResult): string {
-  const [maj = 1, min = 0, pat = 0] = prev.split(".").map(Number);
+function bumpVersion(prevManifest: Manifest, diff: DiffResult): string {
+  const prevMajor = Number(prevManifest.schema_version.split(".")[0]);
+  const currMajor = Number(SCHEMA_VERSION.split(".")[0]);
+  if (prevMajor !== currMajor) return `${currMajor}.0.0`;
+  const [maj = 1, min = 0, pat = 0] = prevManifest.data_version
+    .split(".")
+    .map(Number);
   if (diff.added.length + diff.removed.length > 0) return `${maj}.${min + 1}.0`;
   if (diff.changed.length > 0) return `${maj}.${min}.${pat + 1}`;
-  return prev;
+  return prevManifest.data_version;
 }
 
 export interface EmitResult {
@@ -141,8 +146,7 @@ export function emitArtifact(
     return { wrote: false, dataVersion: prevManifest.data_version, diff };
   }
 
-  const prevVersion = prevManifest?.data_version ?? "0.0.0";
-  const dataVersion = prevManifest ? bumpVersion(prevVersion, diff) : "1.0.0";
+  const dataVersion = prevManifest ? bumpVersion(prevManifest, diff) : "1.0.0";
   const crawledAt = new Date().toISOString();
 
   const prevChangelog: ChangelogEntry[] = (() => {

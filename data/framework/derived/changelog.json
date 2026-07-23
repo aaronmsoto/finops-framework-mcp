@@ -1,5 +1,13 @@
 [
   {
+    "added": [],
+    "changed": [],
+    "crawled_at": "2026-07-23T01:04:29.065Z",
+    "data_version": "2.0.0",
+    "removed": [],
+    "summary": "0 added, 0 removed, 0 changed"
+  },
+  {
     "added": [
       "derived/relationships-inferred.json#related:architecting-workload-placement->budgeting#title-mention",
       "derived/relationships-inferred.json#related:architecting-workload-placement->forecasting#title-mention",

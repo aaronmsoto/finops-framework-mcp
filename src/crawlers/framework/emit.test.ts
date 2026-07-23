@@ -1,9 +1,9 @@
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
-import type { EntityCounts } from "../../shared/index.js";
-import { canonicalJson, diffArtifact, emitArtifact } from "./emit.js";
+import { SCHEMA_VERSION, type EntityCounts } from "../../shared/index.js";
+import { canonicalJson, emitArtifact } from "./emit.js";
 
 const COUNTS: EntityCounts = {
   principles: 1,
@@ -105,33 +105,25 @@ describe("emitArtifact idempotence and versioning (critique M15/M16)", () => {
     expect(added.diff.added).toEqual(["content/capabilities.json#c2"]);
   });
 
-  it("diffArtifact keys relationships stably regardless of property order", () => {
+  it("bumps data_version to <schema major>.0.0 on a schema major change (spec §1)", () => {
     const dir = tmp();
-    const rel = {
-      from: "a",
-      to: "b",
-      type: "related",
-      source: "official",
-      evidence_url: "https://www.finops.org/x",
+    emitArtifact(dir, payload("original"), COUNTS, undefined, [], []);
+    const manifestPath = join(dir, "manifest.json");
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8")) as {
+      schema_version: string;
     };
-    const files = new Map<string, unknown>([
-      ["derived/relationships-official.json", [rel]],
-    ]);
-    emitArtifact(dir, files, COUNTS, undefined, [], []);
-    // Same edge, different key insertion order.
-    const reordered = {
-      evidence_url: "https://www.finops.org/x",
-      source: "official",
-      type: "related",
-      to: "b",
-      from: "a",
-    };
-    const diff = diffArtifact(
+    const [currMajor] = SCHEMA_VERSION.split(".");
+    manifest.schema_version = `${Number(currMajor) - 1}.0.0`;
+    writeFileSync(manifestPath, JSON.stringify(manifest));
+
+    const result = emitArtifact(
       dir,
-      new Map<string, unknown>([
-        ["derived/relationships-official.json", [reordered]],
-      ]),
+      payload("original"),
+      COUNTS,
+      undefined,
+      [],
+      [],
     );
-    expect(diff.hasChanges).toBe(false);
+    expect(result.dataVersion).toBe(`${currMajor}.0.0`);
   });
 });

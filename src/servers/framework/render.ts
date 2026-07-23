@@ -1,7 +1,6 @@
 import type {
   Artifact,
   Capability,
-  CapabilityRelationship,
   Kpi,
   OfficialMaturityLevel,
   Persona,
@@ -52,15 +51,14 @@ export function overviewMd(artifact: Artifact): string {
     `- Browse: \`list_capabilities\` (filter by domain or persona), then ` +
     `\`get_capability\` with an \`include\` list to control size.\n` +
     `- Maturity work: \`get_actions\` (assessment characteristics per level), ` +
-    `\`assess_maturity_path\` (gap between levels), \`get_prerequisites\` ` +
-    `(dependency closure; inferred edges are marked).\n` +
+    `\`assess_maturity_path\` (gap between levels).\n` +
     `- KPIs: \`get_kpis\` (full records incl. formulas where published).\n` +
     `- People: \`map_personas\` (capability↔persona matrix).\n` +
     `- Full documents are also resources under \`finops://framework/…\`.\n\n` +
     `Official content vs. unofficial extensions: the \`pre-crawl\` maturity ` +
-    `level, parsed assessment items ("actions"), and inferred relationship ` +
-    `edges are extensions carrying \`official: false\`, separate files, and ` +
-    `explicit notes. Everything else is crawled verbatim from finops.org.\n` +
+    `level and parsed assessment items ("actions") are extensions carrying ` +
+    `\`official: false\`, separate files, and explicit notes. Everything else ` +
+    `is crawled verbatim from finops.org.\n` +
     `\nData version ${m.data_version}, crawled ${m.crawled_at.slice(0, 10)}.`
   );
 }
@@ -141,13 +139,6 @@ export function capabilityMd(
   if (include.includes("inputs_outputs") && c.inputs_outputs_md) {
     parts.push(`## Inputs & outputs\n\n${c.inputs_outputs_md}`);
   }
-  if (include.includes("relationships")) {
-    const rels = [
-      ...artifact.relationships_official,
-      ...artifact.relationships_inferred,
-    ].filter((r) => r.from === c.slug || r.to === c.slug);
-    parts.push(`## Relationships\n\n${relationshipList(rels)}`);
-  }
   return parts.join("\n\n") + footer(artifact, c.source_url);
 }
 
@@ -218,26 +209,6 @@ export function kpiMd(artifact: Artifact, k: Kpi): string {
           .join("\n")}`
       : "") +
     footer(artifact, k.source_url)
-  );
-}
-
-export function relationshipList(rels: CapabilityRelationship[]): string {
-  if (rels.length === 0) return "_none_";
-  const official = rels.filter((r) => r.source === "official");
-  const inferred = rels.filter((r) => r.source === "inferred");
-  const fmt = (r: CapabilityRelationship) =>
-    `- ${r.from} —${r.type}→ ${r.to}` +
-    (r.to_min_maturity ? ` (min maturity: ${r.to_min_maturity})` : "") +
-    (r.source === "inferred"
-      ? ` _[inferred, ${r.confidence}; "${(r.evidence_quote ?? "").slice(0, 80)}…"]_`
-      : "");
-  return (
-    (official.length
-      ? `**Official (${official.length})**\n${official.map(fmt).join("\n")}`
-      : "") +
-    (inferred.length
-      ? `\n\n**Inferred — unofficial extension (${inferred.length})**\n${inferred.map(fmt).join("\n")}`
-      : "")
   );
 }
 

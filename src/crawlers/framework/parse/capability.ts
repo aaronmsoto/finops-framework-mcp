@@ -34,7 +34,6 @@ export interface ParsedCapabilityPage {
   domain_title: string | null;
   summary: string;
   definition_md: string;
-  definition_capability_links: string[];
   headline_groups: HeadlineGroup[];
   maturity_raw: Record<OfficialMaturityLevel, string>;
   actions: Action[];
@@ -42,7 +41,6 @@ export interface ParsedCapabilityPage {
   kpi_bullets: string[];
   example_kpis: { objective: string; kpi: string }[];
   inputs_outputs_md: string;
-  inputs_outputs_capability_links: string[];
   featured_kpis: FeaturedKpiDetail[];
   warnings: string[];
 }
@@ -167,22 +165,12 @@ export function parseCapabilityPage(
   // Definition — heading-anchored, with a wrapper-id fallback for pages
   // that render the section without its h2 (e.g. governance-policy-risk).
   let definition_md = "";
-  const definition_capability_links: string[] = [];
   const defHeading = findHeading($, "h2", ["definition"]);
   const defContent = defHeading
     ? sectionContent($, defHeading)
     : $("[id=definition]").first().children().not("h1, h2");
   if (defContent.length) {
     definition_md = htmlToMd($, defContent);
-    defContent
-      .find("a")
-      .addBack("a")
-      .each((_, a) => {
-        const s = slugFromHref($(a).attr("href"), "/framework/capabilities");
-        if (s && s !== slug && !definition_capability_links.includes(s)) {
-          definition_capability_links.push(s);
-        }
-      });
     if (!defHeading)
       warnings.push(`${slug}: Definition parsed via id fallback`);
   } else {
@@ -355,20 +343,10 @@ export function parseCapabilityPage(
 
   // Inputs & Outputs ("&" or "and" — critique B2).
   let inputs_outputs_md = "";
-  const inputs_outputs_capability_links: string[] = [];
   const ioHeading = findHeading($, "h2", ["inputs and outputs"]);
   if (ioHeading) {
     const content = sectionContent($, ioHeading);
     inputs_outputs_md = htmlToMd($, content);
-    content
-      .find("a")
-      .addBack("a")
-      .each((_, a) => {
-        const s = slugFromHref($(a).attr("href"), "/framework/capabilities");
-        if (s && s !== slug && !inputs_outputs_capability_links.includes(s)) {
-          inputs_outputs_capability_links.push(s);
-        }
-      });
   } else {
     warnings.push(`${slug}: Inputs & Outputs section not found`);
   }
@@ -450,7 +428,6 @@ export function parseCapabilityPage(
     domain_title,
     summary,
     definition_md,
-    definition_capability_links,
     headline_groups,
     maturity_raw,
     actions,
@@ -458,7 +435,6 @@ export function parseCapabilityPage(
     kpi_bullets,
     example_kpis,
     inputs_outputs_md,
-    inputs_outputs_capability_links,
     featured_kpis,
     warnings,
   };

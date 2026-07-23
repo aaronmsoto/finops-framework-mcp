@@ -34,12 +34,26 @@ the v1 PR. The v0.1 state (all critique gates + 10/10 evals) is journaled in
 
 ## Next steps
 
-
-1. Loop: T-005 → T-009 in order (one per iteration; spec sections §1-§5).
-2. Post-loop (supervising session): fresh-agent eval re-run ≥9/10, PR #4
+1. T-005 done (this session): relationship functionality fully deleted —
+   `infer.ts`/`infer.test.ts`/`graph.ts` removed; `CapabilityRelationship`
+   and friends gone from types/schemas/artifact loader; `get_prerequisites`/
+   `get_related` tools and the `graph` resource removed; `relationships`
+   dropped from `get_capability` INCLUDE and `assess_maturity_path` lost
+   `related_prerequisites_hint`; `parse/capability.ts` no longer extracts
+   `definition_capability_links`/`inputs_outputs_capability_links` (KPI
+   `related_capability_slugs` untouched, as required). `emit.ts`
+   `bumpVersion` now takes the previous manifest and forces
+   `<new schema major>.0.0` on a schema major bump. Artifact regenerated
+   offline (seeded cache, zero network) at data_version/schema_version
+   2.0.0; `data/framework/derived|schema/relationships-*` removed via
+   `git rm`. `./scripts/agentic gates --tier all` green (format, lint,
+   typecheck, 79/79 tests, designs, integrity — 1 warning re: impl+tests in
+   one diff, expected for a deletion task —, memory, build).
+2. Loop: T-006 → T-009 next in order (spec sections §2-§5).
+3. Post-loop (supervising session): fresh-agent eval re-run ≥9/10, PR #4
    title/body update, final verification, owner runs npm publish.
-3. Owner: install docs/proposed/refresh-data.yml per its checklist.
-4. v1.1 candidates: Cloudflare Workers remote endpoint (artifact-from-memory
+4. Owner: install docs/proposed/refresh-data.yml per its checklist.
+5. v1.1 candidates: Cloudflare Workers remote endpoint (artifact-from-memory
    loader), Action rename decision (moot while hidden), cheerio slimming.
 
 ## Open questions
@@ -54,4 +68,4 @@ the v1 PR. The v0.1 state (all critique gates + 10/10 evals) is journaled in
 
 ## Last updated
 
-2026-07-21 — overnight build session (owner brief), phases 0-7 complete.
+2026-07-23 — T-005 complete (relationship deletion + schema 2.0.0 bump).

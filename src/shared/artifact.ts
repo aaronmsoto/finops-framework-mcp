@@ -8,7 +8,6 @@ import type {
   Action,
   Artifact,
   Capability,
-  CapabilityRelationship,
   ChangelogEntry,
   Domain,
   Kpi,
@@ -118,12 +117,6 @@ export function loadArtifact(dir: string): Artifact {
     ) as MaturityExtension,
     kpis: parsed.get("content/kpis.json") as Kpi[],
     actions: parsed.get("derived/actions.json") as Action[],
-    relationships_official: parsed.get(
-      "derived/relationships-official.json",
-    ) as CapabilityRelationship[],
-    relationships_inferred: parsed.get(
-      "derived/relationships-inferred.json",
-    ) as CapabilityRelationship[],
     changelog: parsed.get("derived/changelog.json") as ChangelogEntry[],
   };
 
@@ -150,39 +143,6 @@ function crossValidate(a: Artifact): void {
       throw new ArtifactValidationError(
         "content/capabilities.json",
         `capability "${c.slug}" references unknown domain "${c.domain_slug}"`,
-      );
-    }
-  }
-  for (const edges of [a.relationships_official, a.relationships_inferred]) {
-    for (const r of edges) {
-      for (const end of [r.from, r.to]) {
-        if (!capSlugs.has(end)) {
-          throw new ArtifactValidationError(
-            "derived/relationships-*.json",
-            `relationship ${r.from} -> ${r.to} references unknown capability "${end}"`,
-          );
-        }
-      }
-    }
-  }
-  for (const r of a.relationships_inferred) {
-    if (
-      r.source !== "inferred" ||
-      !r.evidence_quote ||
-      !r.heuristic ||
-      !r.confidence
-    ) {
-      throw new ArtifactValidationError(
-        "derived/relationships-inferred.json",
-        `inferred edge ${r.from} -> ${r.to} must carry source:"inferred", evidence_quote, heuristic, confidence`,
-      );
-    }
-  }
-  for (const r of a.relationships_official) {
-    if (r.source !== "official" || !r.evidence_url) {
-      throw new ArtifactValidationError(
-        "derived/relationships-official.json",
-        `official edge ${r.from} -> ${r.to} must carry source:"official" and evidence_url`,
       );
     }
   }

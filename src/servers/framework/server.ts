@@ -5,7 +5,7 @@ import { registerResources } from "./resources.js";
 import { registerTools } from "./tools.js";
 
 export const SERVER_NAME = "finops-framework";
-export const SERVER_VERSION = "0.1.0";
+export const SERVER_VERSION = "1.0.0";
 
 /**
  * Build the MCP server from a loaded artifact. Transport-free by design
@@ -29,10 +29,10 @@ export function createServer(artifact: Artifact): McpServer {
       },
       instructions:
         "FinOps Framework (finops.org) as structured data: 6 principles, 3 phases, 4 domains, " +
-        "22 capabilities with Crawl/Walk/Run maturity assessments, 11 personas, KPI library, and a " +
-        "relationship graph. Start with get_framework_info. Tools are the primary interface; " +
+        "22 capabilities with Crawl/Walk/Run maturity assessments, 11 personas, and a KPI library. " +
+        "Start with get_framework_info. Tools are the primary interface; " +
         "finops://framework/* resources hold the same content as full documents. Unofficial " +
-        "extensions (pre-crawl level, parsed assessment items, inferred graph edges) are always " +
+        "extensions (pre-crawl level, parsed assessment items) are always " +
         "flagged official:false. Content © FinOps Foundation, CC BY 4.0, adapted.",
     },
   );

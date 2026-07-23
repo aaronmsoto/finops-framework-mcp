@@ -147,9 +147,8 @@ export function registerPrompts(server: McpServer, artifact: Artifact): void {
           instruction(
             `Build a maturity roadmap for capability "${capability}" from "${current}" to "${target}".\n` +
               `1. Call assess_maturity_path(capability: "${capability}", current_level: "${current}", target_level: "${target}") — the gap characteristics are assessment evidence to aim for, not literal tasks.\n` +
-              `2. Call get_prerequisites(capability: "${capability}", target_maturity: "${target}") and check the org is not skipping foundations. ANY step you derive from a prerequisite edge must be labeled "(unofficial inference — evidence: <quote>)" because the framework publishes no prerequisite graph.\n` +
-              `3. Call get_kpis(capability: "${capability}") and attach 2-3 KPIs as progress measures per phase of the plan.\n` +
-              `Deliver: a phased roadmap (quarters or stages), each phase with target characteristics, dependency notes, owning personas (map_personas(capability: "${capability}")), and KPIs. Remind the reader that maturing beyond business value is explicitly discouraged by the framework's maturity model.`,
+              `2. Call get_kpis(capability: "${capability}") and attach 2-3 KPIs as progress measures per phase of the plan.\n` +
+              `Deliver: a phased roadmap (quarters or stages), each phase with target characteristics, owning personas (map_personas(capability: "${capability}")), and KPIs. Remind the reader that maturing beyond business value is explicitly discouraged by the framework's maturity model.`,
           ),
         ],
       };
