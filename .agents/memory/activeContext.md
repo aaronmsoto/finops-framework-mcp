@@ -21,8 +21,30 @@ docs/eval-results.md and the 20260723 loop journal.
 
 ## In flight
 
-T-018 done (this session, spec: loop-harness-improvements.md v1.1 candidate
-list): cheerio moved `dependencies` → `devDependencies` in package.json
+T-019 done (this session): `finops-framework-mcp --version` prints
+`finops-framework-mcp v<pkg version> (data v<manifest.data_version>)` to
+stdout and returns without starting the server. `src/servers/framework/
+main.ts` was refactored to export `runCli(cliArgs)` (parse/version/server
+logic, testable) and gated the previous unconditional `main().catch(...)`
+side effect behind `isDirectRun = process.argv[1]?.endsWith("main.js")` —
+same pattern the crawler's `cli.ts` already used, so importing main.ts in a
+test no longer starts a stdio server. `--version` is checked before the
+positional artifact-dir is picked but reuses the existing
+`cliArgs.find((a) => !a.startsWith("--"))` filter, so it's excluded from
+positional handling for free, same as `--experimental`. New
+`src/servers/framework/main.test.ts` mocks `./server.js`'s `createServer`
+and asserts it's never called on `--version`, and that the printed line
+matches `finops-framework-mcp vX.Y.Z (data vX.Y.Z)`.
+
+Verified beyond gates: `npm run build && node dist/servers/framework/
+main.js --version` printed `finops-framework-mcp v1.0.0 (data v2.1.1)` and
+exited 0 with no "ready on stdio" line (server never started); same with
+`--experimental --version` together, confirming flag order doesn't matter.
+`./scripts/agentic gates` green (188/188 tests, up from 186 — the 2 new
+main.test.ts cases).
+
+T-018 done (earlier this session, spec: loop-harness-improvements.md v1.1
+candidate list): cheerio moved `dependencies` → `devDependencies` in package.json
 (package-lock.json regenerated via `npm install --package-lock-only`; its
 transitive deps now carry `"dev": true`; incidentally also synced the
 lockfile's stale root `version` field 0.1.0 → 1.0.0 to match package.json).
@@ -59,8 +81,8 @@ recorded in docs/eval-results.md and the 20260723 loop journal.
 
 ## Next steps
 
-1. T-019 (`--version` flag) and other v1.1 candidates (Cloudflare Workers
-   remote endpoint, Action rename decision) remain pending/queued.
+1. Remaining v1.1 candidates (Cloudflare Workers remote endpoint, Action
+   rename decision) remain pending/queued.
 2. T-005..T-009 done — see 20260723-t00{5..9}-*.md for detail (relationships
    deleted, markdown compose layer, offline derive step, experimental flag +
    official-only maturity surface, v1 docs/evals/npm publish prep). Remaining
@@ -83,5 +105,4 @@ recorded in docs/eval-results.md and the 20260723 loop journal.
 
 ## Last updated
 
-2026-07-23 — T-018 complete (cheerio moved to devDependencies, loaded
-lazily).
+2026-07-23 — T-019 complete (`--version` flag on the bin).
