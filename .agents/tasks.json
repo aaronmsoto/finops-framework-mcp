@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "31514ba62fa340db6ee6eac1f71e0bc6f05093d98636ddff23ba2809f7201c2c",
+  "chainHead": "067b23c1b4f6bba2b5b3ec89fee342ebc6137aa239f0880e43081b3e5ac125e9",
   "tasks": [
     {
       "id": "T-001",
@@ -78,9 +78,15 @@
         "data/framework has no relationships-*.json or relationships schema; artifact regenerated offline with data_version 2.0.0 and schema_version 2.0.0",
         "./scripts/agentic gates --tier all passes; npx vitest run passes with relationship tests removed"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Relationship functionality deleted; artifact regenerated offline at data/schema v2.0.0; gates --tier all green (79/79 tests).",
+        "commit": "edf0588149c3006fcf8fcdce4a30d6dafec160e0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T01:06:54.136Z"
+      },
+      "hash": "067b23c1b4f6bba2b5b3ec89fee342ebc6137aa239f0880e43081b3e5ac125e9"
     },
     {
       "id": "T-006",
