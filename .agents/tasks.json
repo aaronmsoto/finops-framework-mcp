@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "39b143feb38361ae6950cac8577fd278be366f41141f94889eaa2e8a857cc5e0",
+  "chainHead": "eda2aa73a712f8ffd1f25e74243fcefd8af7ffc58360af340cc50ba6593f74bd",
   "tasks": [
     {
       "id": "T-001",
@@ -277,9 +277,15 @@
         "status --json includes loopState",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Heartbeat .agents/.cache/loop-state.json written at every phase transition with pid/runId/iteration/task/caps/tokens; terminal states stamped including CliError crashes (own-pid guard against stale files); status shows RUNNING/STALE/last-run with liveness probe and loopState in --json. Harness: 241 tests, lint, typecheck green; 6 new tests.",
+        "commit": "10ab095fbd44fd90ae087322bfd88bfa95d1f9f3",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:06:25.560Z"
+      },
+      "hash": "eda2aa73a712f8ffd1f25e74243fcefd8af7ffc58360af340cc50ba6593f74bd"
     },
     {
       "id": "T-016",
