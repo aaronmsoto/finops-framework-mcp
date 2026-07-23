@@ -92,3 +92,30 @@ description (description now names it); Q8's singular "which" was ambiguous
 (question wording, not server); crawled typos ("Cost ALlocation") preserved
 verbatim — faithful crawling. The agent explicitly praised the
 provenance/license footers and official-vs-unofficial flags.
+
+## Run 3 — 2026-07-23 (v1 surface, post-loop), artifact v2.1.1, server 1.0.0
+
+Context: the v1 descope build (loop tasks T-005..T-009) deleted the
+relationship graph, hid Actions/Pre-Crawl behind `FINOPS_MCP_EXPERIMENTAL`,
+and introduced `get_maturity_assessment` serving verbatim official prose.
+Same fresh-agent, text-blocks-only protocol; Q2/Q10 revised for the v1
+surface (verbatim official quotes; official-levels-only check).
+
+| # | Probe | Verdict | Notes |
+|---|---|---|---|
+| 1 | Ownership → allocation + Crawl characteristics | **PASS** | answered via the new get_maturity_assessment |
+| 2 | **Verbatim Walk-level Sustainability quotes** | **PASS** | both quotes byte-exact against maturity_raw |
+| 3 | Anomaly Management domain + siblings | **PASS** | |
+| 4 | Forecasting featured KPIs | **PASS** | exactly 4 |
+| 5 | AAI formula + related capabilities | **PASS** | used get_kpis slug lookup |
+| 6 | Crawl allocation sample goal | **PASS** | |
+| 7 | Principle enabled by Allocation | **PASS** | |
+| 8 | Procurement across 3 capabilities | **PASS** | |
+| 9 | KPI count + unit-economics KPIs | **PASS** | formulas included |
+| 10 | **Official levels only** | **PASS** | exactly Crawl/Walk/Run; no pre-crawl volunteered |
+
+**Score: 10/10 (gate requires ≥9/10).** Friction notes: source typos
+preserved verbatim (fidelity, not a bug); `get_capability` text block is
+serialized JSON rather than prose (by design — the markdown path is the
+resource/get_maturity_assessment/get_entity surface); map_personas conveys
+"no activities" by absence. No errors; every slug resolved first try.
