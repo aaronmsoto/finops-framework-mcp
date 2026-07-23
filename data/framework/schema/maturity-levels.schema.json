@@ -1,0 +1,47 @@
+{
+  "$id": "finops-framework-mcp/maturity-levels",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "characteristics_md": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "license": {
+        "const": "CC-BY-4.0"
+      },
+      "official": {
+        "const": true
+      },
+      "sample_goals_md": {
+        "type": "string"
+      },
+      "slug": {
+        "enum": [
+          "crawl",
+          "walk",
+          "run"
+        ]
+      },
+      "source_url": {
+        "format": "uri",
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "slug",
+      "title",
+      "characteristics_md",
+      "sample_goals_md",
+      "official",
+      "source_url",
+      "license"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

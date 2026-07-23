@@ -1,0 +1,27 @@
+{
+  "$id": "finops-framework-mcp/maturity-extension",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "description_md": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "official": {
+      "const": false
+    },
+    "slug": {
+      "const": "pre-crawl"
+    },
+    "title": {
+      "const": "Pre-Crawl (unofficial extension)"
+    }
+  },
+  "required": [
+    "slug",
+    "title",
+    "description_md",
+    "official"
+  ],
+  "type": "object"
+}

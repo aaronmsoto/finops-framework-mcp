@@ -1,0 +1,176 @@
+{
+  "$id": "finops-framework-mcp/capabilities",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "definition_md": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "domain_slug": {
+        "type": "string"
+      },
+      "example_kpis": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "kpi": {
+              "type": "string"
+            },
+            "objective": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "objective",
+            "kpi"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "featured_kpi_ids": {
+        "items": {
+          "type": "integer"
+        },
+        "type": "array"
+      },
+      "functional_activities": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "heading": {
+              "type": "string"
+            },
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "persona": {
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "core",
+                    "allied",
+                    "allied-group"
+                  ]
+                },
+                "persona_slug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "persona",
+            "heading",
+            "items"
+          ],
+          "type": "object"
+        },
+        "minItems": 1,
+        "type": "array"
+      },
+      "headline_groups": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label",
+            "items"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "inputs_outputs_md": {
+        "type": "string"
+      },
+      "kpi_bullets": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "license": {
+        "const": "CC-BY-4.0"
+      },
+      "maturity_raw": {
+        "additionalProperties": false,
+        "properties": {
+          "crawl": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "run": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "walk": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "crawl",
+          "walk",
+          "run"
+        ],
+        "type": "object"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "source_url": {
+        "format": "uri",
+        "type": "string"
+      },
+      "summary": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "wp_id": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "slug",
+      "title",
+      "wp_id",
+      "domain_slug",
+      "summary",
+      "definition_md",
+      "headline_groups",
+      "maturity_raw",
+      "functional_activities",
+      "kpi_bullets",
+      "example_kpis",
+      "inputs_outputs_md",
+      "featured_kpi_ids",
+      "source_url",
+      "license"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

@@ -1,0 +1,3916 @@
+[
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Simple Allocation strategy where costs of accounts, projects or subscriptions are allocated to the business units, portfolios or cost centers using a list of accounts known to belong to specific cost centers or business units"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Tagging strategy exists including"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parent_ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "resource naming standards"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parent_ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Account, Project, Subscription naming standards"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Tagging strategy compliance is inconsistent"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Monthly challenges identifying the owners of unknown, untagged, unidentified accounts"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "A significant portion of total costs can often be allocated directly without needing any adjustments or enhancements to the underlying metadata."
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Tags or labels are used for some allocation, but cannot be used consistently, or not used for a majority of spend"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Shared costs are not identified beyond common charges such as support, tax, etc."
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Shared costs are allocated to central budgets or platform teams directly and not charged back to cost centers or business units"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 11,
+    "parse_quality": "itemized",
+    "text": "Product and Engineering Personas primarily manage to direct costs only, resulting in reduction in accuracy of forecasting and budgets"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 12,
+    "parse_quality": "itemized",
+    "text": "Basic KPIs for Cost ALlocation are defined and manually created on an inconsistent cadence"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 13,
+    "parse_quality": "itemized",
+    "text": "Allocation tasks are primarily managed with data provider systems and tooling"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Well-documented Allocation strategy identifying multiple mechanisms for allocating cost has been implemented but may not be used consistently or universally"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Infrequent investigation to identify unallocated, untagged, or unidentified cost elements"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "A majority of total costs can often be allocated directly without needing any adjustments or enhancements to the underlying metadata."
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Cost allocation can be done to an application or service level"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Tagging strategy for resources and hierarchy groupings is well-documented and followed"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Tagging compliance is consistent in key areas or applications but not universal"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Allocation mechanisms will typically include a combination of factors, such as accounts, projects or subscriptions which are identified by metadata or naming standard as belonging to specific cost centers, resources within shared cost pools which can be identified as belonging to a particular cost center, and some mechanisms for the distribution of shared costs"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Legacy or less critical parts of the technology infrastructure which are not consistently using the allocation standards still exist and require some manual or estimation effort"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Shared cost strategy is well documented and understood for multiple elements of shared cost"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Shared costs are split using an appropriate distribution model(s) (proportional, fixed, even-split) across the entirety of the organization"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 11,
+    "parse_quality": "itemized",
+    "text": "Use of a combination of data provider and technology service provider tools, third party, or custom tooling to manage allocation and sharing"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 12,
+    "parse_quality": "itemized",
+    "text": "Discounts are spread proportionally across all teams technology spend"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 13,
+    "parse_quality": "itemized",
+    "text": "KPIs for cost allocation understood, but not automated"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 14,
+    "parse_quality": "itemized",
+    "text": "Shared platform owners are able to showback costs generated by internal customers"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 15,
+    "parse_quality": "itemized",
+    "text": "Product and Engineering Personas are aware of their portion of shared platform/service costs and include these costs when forecasting and budgeting"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 16,
+    "parse_quality": "itemized",
+    "text": "Shared cost process documented to enable and manage expectations of “fair share” onboarding of new cost centers/business units"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Costs are allocated at any level of granularity required by the organization"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Direct allocation or consistent mechanisms for distributing shared cost items, and strategies for metadata, hierarchy and naming standards are being used consistently and effectively universally"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Advanced practices reach consistently high levels of allocation coverage"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Automation allows for multiple sources of data to be used to allocate shared costs at the level they can be where important to the organization (e.g. using metering tools to capture usage and augment billing data to attribute shared costs with greater accuracy)"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "There are few scenarios where all cost is not allocated at the most granular level or is unidentified, requiring essentially no research or reporting generation time"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Use of technology/data provider tools, third party tools, custom tools integrated consistently"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Employing automation in the provisioning of resources to create consistency of resource and account tagging and metadata"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Using mechanisms to automatically correct for or augment service provider tagging capabilities after receipt of billing data to achieve high allocation percentage compliance"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "KPIs well understood and automated."
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Cost allocation is performed in near real time allowing for Product and Engineering Personas to better understand their monthly costs"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 11,
+    "parse_quality": "itemized",
+    "text": "Product and Engineering Personas are aware of their portion of shared platform/service costs and include all costs as part of their forecasting & budget planning"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 12,
+    "parse_quality": "itemized",
+    "text": "Shared platform/service owners are able to fully allocate and chargeback costs generated by internal customers"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 13,
+    "parse_quality": "itemized",
+    "text": "Shared platform/service owners are able to recover costs generated by internal customers and perform accurate forecasting/budget planning"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 14,
+    "parse_quality": "itemized",
+    "text": "Shared cost recovery reflects commercial discounts/commitment based discounts"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 15,
+    "parse_quality": "itemized",
+    "text": "Shared cost process automated to enable “fair share” onboarding of new cost centers/business units"
+  },
+  {
+    "capability_slug": "allocation",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 16,
+    "parse_quality": "itemized",
+    "text": "Shared costs are distinguished from dedicated costs"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Understanding that anomalous spending might occur among the FinOps team and organization generally"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Manually checking for anomalous spending using reporting"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Reacting to anomaly activity more than a week after it occurs (post receipt of billing data)"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Using budget alerts vs an anomaly detection service"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Limited granular detection (e.g. Account/Project level, not using tagging data or logical groupings) minimizing the context of insights from anomalous spending identified"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Anomaly alerts sent to a central team, or require manual action to look"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Unexpected spending is manually investigated by central team and routed when necessary to a suspected owner for resolution"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Some form of automated detection or reporting or tooling (usually provided by the technology service provider, third party, or custom tooling)"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Knowledge and use of anomaly detection tooling in most or all departments and teams"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Context-relevant thresholds are detected (percentage of spend change, single item spend amount ceilings, forecast breach alerts, etc.)"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Cost allocation metadata provides context to segment anomalies, allowing for easier analysis"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Unexpected spending automatically routed to responsible teams"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "KPIs associated with Anomaly Management set and in use by key teams in the organization"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Ability to document outcomes and capture some details of the outcomes of anomalies which alert"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Mature Anomaly detection tooling in use and embedded in tooling across the organization"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Automation created to detect, suggest resolution, or resolve anomalous spending alerts, with appropriate severity in appropriate environments"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Anomaly alerts of an appropriate scale or urgency can integrate to event management or ticketing systems and processes"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Granular context-related anomaly alert thresholds linked directly to service components"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Alert thresholds iteratively updated in line with service lifecycles"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Alerting and thresholds set differently for different personas and levels of responsibility (e.g. leadership, FinOps team, engineering, finance may see alerts from anomalous spending differently based on their own thresholds for action or information)"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Results and resolution of each anomaly alert is captured"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Analysis results in full root cause analysis post-mortem where appropriate"
+  },
+  {
+    "capability_slug": "anomaly-management",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Analysis of resolution of past anomalies improves alerting on future anomalies"
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Architecting and Workload Placement decisions are made case by case, primarily to meet immediate delivery needs, with limited linkage to business unit metrics and value outcomes."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Onboarding demand is small, collaboration across personas is light, and governance touchpoints are informal."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Architectural modernization is occasional rather than routine; reviews are triggered by specific needs (for example new demand, incidents, or cost concerns), not run on a regular cadence."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Budgeting and Forecasting are done case by case, and approvals for spend-impacting changes are informal. Cost and usage visibility is inconsistent and often relies on manual reporting."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Governance and policy compliance (for example landing zones or equivalent, tagging or allocation metadata) are manual or lightly scripted due to simplicity."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A structured, repeatable process exists to evaluate workloads for attention across new demand and existing change needs, with decisions increasingly connected to business goals through business unit metrics."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Required roles for stakeholder Personas participate in planning and reviews on a regular cadence, with defined governance touchpoints for major design, placement, and onboarding decisions."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Architectural modernization and workload placement reviews are conducted regularly (for example monthly, quarterly), or triggered by spend, usage, and value signals and known patterns for redesign."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Planning and Estimating, Forecasting, and Budgeting for onboarded or changed workloads is mandatory, but not yet standardized across all business units or product teams."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "More automation exists for policy compliance, governance, and shared services integration, with centralized usage reporting and workload-level reporting where feasible."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A continuous, scaled approach is in place for architecting, workload placement, and onboarding, covering both new workload demand and existing workload change, supported by clear decision rights, shared accountability, and consistent governance."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Formalized triage and review processes prioritize candidates using spend, usage, value, and adoption signals, and apply well-defined guidelines for both financial viability and technical feasibility."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Standardized Budgeting, Forecasting, and business unit measures are consistently applied across teams, enabling comparable tradeoffs and decision support for value and cost effectiveness."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "High levels of automation are used for consistency and compliance (for example infrastructure as code, policy-as-code, standardized patterns and templates), including required foundations and shared services."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Robust monitoring and reporting provide transparency to cost, usage, and impact throughout implementation, including baseline, change tracking, and outcome validation, supported by strong program management."
+  },
+  {
+    "capability_slug": "architecting-workload-placement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Post-change evaluation is systematic, lessons learned are captured and fed into standards, patterns, and future decisions, and decisions are revisited as usage, pricing, and constraints evolve."
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Little to no formal requirements gathering process exists for evaluating and selecting FinOps tools, or professional services, with decisions often made reactively or based on limited information"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Criteria for automation solutions are loosely defined or absent, making it difficult to objectively evaluate options or measure success post-implementation"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Little to no market research is performed prior to tools selection, with limited awareness of the full range of FinOps tools available to support the FinOps practice’s needs across all FinOps Scopes"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Few FinOps Personas are involved in requirements gathering or vendor selection, resulting in solutions that may not adequately address the needs of all relevant stakeholders across the organization"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "No build/buy/automate analysis is performed, with little consideration given to the relative merits of native technology provider tooling, third-party commercial solutions, or internally developed automation"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Little to no implementation planning exists, with limited thought given to how automation solutions and tools will be integrated into existing FinOps processes, workflows, and organizational structures"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Little to no training or enablement is provided to FinOps Personas who will use the selected tools or automation solutions, limiting adoption and the realization of value from investments made"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "No continuous evaluation of automation solutions, FinOps tools, or professional services activities against organizational requirements, resulting in solutions that may become misaligned with evolving needs over time"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A well-defined requirements gathering process is established for FinOps Practitioners, Finance, and Engineering Personas, capturing their needs and priorities for what activities should be automated, what features and functionality are needed from FinOps tools, and criteria for professional services activities in a consistent and repeatable way"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Basic requirements gathering is extended to other stakeholder Personas, ensuring that a broader range of organizational needs and constraints are represented in selection and evaluation decisions"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "A reasonable level of market research is performed prior to selection, with growing awareness of the range of FinOps tools and professional services available to support the FinOps practice across all FinOps Scopes and technology categories"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "A basic build/buy/automate analysis is completed for significant investment decisions, with initial consideration given to the relative merits of native technology provider tooling, third-party commercial solutions, and internally developed automation"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "A basic ROI methodology is in place to evaluate the expected benefits of meeting requirements gathered, enabling more informed and justified investment decisions for automation solutions, FinOps tools, and professional services"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Implementation planning is more structured and consistent, with initial consideration given to how automation solutions and tools will be integrated into existing FinOps processes, workflows, and organizational structures"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "A baseline level of training and enablement is provided to FinOps Personas who will use selected tools and automation solutions, with training incorporated as a standard component of onboarding for new stakeholder Personas"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Post-implementation evaluation of automation solutions, FinOps tools, and professional services activities is performed on a periodic basis, with outcomes used to inform future selection decisions and identify areas where solutions are becoming misaligned with evolving organizational needs"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A comprehensive and continuously refined requirements gathering process is in place across all stakeholder Personas, capturing detailed needs and priorities for automation solutions, FinOps tools, and professional services activities in a way that is fully aligned with organizational strategy, FinOps Framework Capabilities, and evolving FinOps Scopes"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Comprehensive market research is performed prior to selection, with deep awareness of the full range of FinOps tools and professional services available to support the FinOps practice, including emerging options"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "A detailed build/buy/automate analysis is completed for all significant investment decisions, with thorough consideration of the relative merits of native technology provider tooling, third-party commercial solutions, and internally developed automation, supported by clear and well-documented rationale"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "A mature ROI methodology is in place to evaluate the expected benefits of meeting requirements gathered within defined timeframes, with actual outcomes tracked and compared against initial projections to continuously improve investment decision making"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Detailed implementation planning is standard practice, with automation solutions and FinOps tools fully integrated into existing FinOps processes, workflows, and organizational structures, and implementation outcomes measured and reported to relevant stakeholder Personas and Leadership"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Comprehensive training and enablement programs are in place for all relevant FinOps Personas, with onboarding training provided as standard for new practitioners and ongoing refresher programs ensuring that knowledge remains current"
+  },
+  {
+    "capability_slug": "automation-tools-services",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Post-implementation evaluation of automation solutions, FinOps tools, and professional services activities is continuous and systematic, with regular comparison against emerging market alternatives, and evolving organizational requirements, ensuring that the organization’s automation and tooling investments remain aligned with its evolving FinOps practice"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Simple or stable technology environment does not require complex budget allocations or structure, so simple tools (spreadsheets) used to track budgets by budget owner and system"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Forecasts are reviewed and used to create budgets manually"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Budget variance analysis is done manually or using standard reporting"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Limited budget granularity (not consistently available by business unit, application) due to lack of allocation compliance or simplicity of environments"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Engineering not involved with the creation of cloud cost budgets or tracking of discrepancies from forecasts or against actuals"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Budget holdback managed centrally by Finance due to simple or stable cloud use"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Holdback designation processes manual and ad hoc"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Budgeting cycle is annual to match other IT budget cycles"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "More complex or dynamic technology environment requires more structured budget tracking structure and tools"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "More complex forecast models are used to establish budgets"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Budget cycle is established and done on a regular cadence but not automated"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Stakeholder teams (Product, Leadership, Engineering, Finance) have access to cloud cost forecasting data and budget allocations"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Regular review cadence by FinOps team of budget thresholds and trends with stakeholder teams and Finance"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Budget holdback managed by a small number of budget owners throughout the organization at BU level"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Holdback designation process and budget overage resolution processes exist, but are not automated or universally used"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Budgeting cycle is a hybrid of annual and shorter for some systems which are more dynamic or where cloud use is growing"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Complex organization and/or technology use requires structured and distributed budget tracking, and tool use"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Global policy for applying allocation metadata to prevent unallocated cost"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Complex forecast models aggregated from many system or application teams to create forecasts using a variety of metrics and parameters"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Budgets are aligned to the organization’s allocation constructs being used across the organization for reporting cloud costs and doing chargeback"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Granular budget visibility (by business unit, cost center, team, product, service, etc.) in the context of organizational KPIs"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Stakeholder teams (Executives, Engineering, Finance) have real-time visibility into a single source of truth for how cloud usage is impacting forecast trends and budgets"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Integration and automated data flow between cloud cost forecast data, budgeting systems or record and back-end accounting systems used for broader organizational reporting"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Budget holdback managed by multiple budget owners throughout the organization"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Holdback designation processes and budget overage resolution processes exist, with automation, universally required, streamlined"
+  },
+  {
+    "capability_slug": "budgeting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Budgeting cycle is short (rolling quarterly) with a consistent and automated approach to collecting forecasts, allocating budgets, and establishing holdback thresholds due to consistent activity"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Decision to use Cloud-provider tools which don’t require specific data ingestion"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Use of summarized cost and usage data file or aggregated data via API for individual data sources or cloud providers"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Data from different sources analyzed separately without normalizing"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Primarily ingesting cloud cost & usage data and few or no other sources"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Tags, labels, and naming standards being applied to hierarchy and resources in key areas across cloud providers and data sources to allow some manual correlation between sources"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Identified sources of utilization data, carbon data, internal metadata required to support Allocation and Analytics & Reporting"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Manual workflows and/or manual multi-step transforms required to aggregate data"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Ingesting data from multiple cloud providers, and/or other correlated data sources at a resource level"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Normalizing cost metrics between sources to provide consistent repository"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Use of one or more third party FinOps tools or platforms to normalize data, or use of FOCUS to normalize dimensions and metrics from providers"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Ability to create consistent reports for different clouds, possibly using different reports"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Data is mapped back to the business and is able to be changed as the needs of the business changes"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Most Historical data is captured and able to perform year over year trends"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Ingestion of performance/utilization data, carbon use data"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Data completeness checks and mechanisms"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Managing a unified data repository of cloud usage and cost data, performance, sustainability, utilization and other correlated data"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Data ingested at the most granular levels to support more complex data analytics or reporting needs"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Normalized dimensions and cost metrics across all data sources, supporting consistent reporting with multiple clouds through use of FOCUS or other specification"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Data is mapped back to the business and captures historical changes as the needs of the business evolves"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "All historical data is captured to allow for deeper trend analysis"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Ingestion of data beyond cloud data from SaaS, license provider or other content providers"
+  },
+  {
+    "capability_slug": "data-ingestion",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Data completeness, including quality checks and automated mechanisms in place"
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "An executive sponsor for FinOps is identified, with lightweight governance that is inconsistent across technology spend categories."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "At least one initial FinOps Scope exists (often public cloud), but Scope boundaries and executive priority alignment are informal."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Technology spend, usage, and adoption insights can be related to strategic initiatives in a limited, ad hoc way."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "FinOps, ITFM, Procurement, and ITAM share aligned cost and usage definitions for public cloud; other technology categories remain fragmented."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "FinOps decision support is typically brought in late, decision rights and spend guardrails are not consistently defined."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "FinOps Scopes span multiple technology categories and are explicitly aligned to executive priorities and strategic initiatives."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "A regular governance cadence is established, with FinOps providing decision support earlier in investment planning, architecture and workload placement."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Insights from pilot Scopes build trust and create executive pull for FinOps participation in technology investment governance and tradeoffs."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Cost and usage definitions are used consistently across the organization and are connected to broader finance processes, reporting, and ITFM practices."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Business outcomes and unit metrics improve within Scopes, with early Unit Economics and Forecasting tied to demand signals."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Demand signals inform multi-year planning and vendor commitment decisions in priority areas and associated Scopes."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "An established FinOps operating model supports executive decision-making, with clear intersections across ITFM, ITAM, and other relevant disciplines."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "FinOps Scopes are the standard lens to connect strategy, funding, adoption, and accountability across major technology spend areas."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "FinOps is a required input for strategic technology investments and executive-level tradeoffs, with clear decision rights, guardrails, and measurable outcomes."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Trusted FinOps insights are embedded in Leadership routines for portfolio governance, modernization sequencing, and long-term commitments."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Leaders can compare cost, speed, quality, and risk across competing initiatives, with standards and constraints informing build versus buy and investment tolerance."
+  },
+  {
+    "capability_slug": "executive-strategy-alignment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Strategy alignment and decision support remain effective through change events, restructuring, M&A, and senior leadership transitions, with continuity of measures and governance."
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "For organizations with relatively straightforward environments and infrastructure needs, complete an annual FinOps Assessment for the core FinOps team"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Future annual goals are defined based on FinOps assessment with clear KPI’s"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Assessments can be documented manually in the format convenient for the Finops team"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "When organizational technology use becomes more widespread and complex, complete a semi-annual or quarterly FinOps assessment with the core FinOps team"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Annual goals are tracked and measured against the output of the FinOps assessment. Goals are adjusted after each assessment if necessary"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Identify specific capabilities in the FinOps assessment, and evaluate where KPIs are not consistently meeting goals"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Assessment should have a consistent format which allows for easier comparisons between Target Groups and over time"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Appoint a FinOps assessor on the core FinOps team who has a documented question bank of key questions to ask in an assessment"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "FinOps Assessments are completed with Business Units or FinOps Champions teams but not on a regular cadence"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Very complex use, or very distributed environments by many teams in an organization requires completing more frequent, quarterly FinOps assessments within the core FinOps Team"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Annual goals are tracked and measured against the output of the FinOps assessment"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Goals are adjusted after each assessment if necessary,"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "More Capabilities are assessed, based on FinOps KPIs"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "The assessment has an internally consistent format which allows for meaningful comparisons over time"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "There are multiple trained FinOps Assessors on the core FinOps team and the FinOps Champions or Business Units have trained Assessors"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "There is a central repository of past FinOps Assessments with standard discovery questions organized by FinOps Capability"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "FinOps Assessments are completed in the Business Units by a dedicated FinOps Champions on a regular cadence."
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Results of Business Unit FinOps Assessments are shared back to the central team and with partner teams"
+  },
+  {
+    "capability_slug": "finops-assessment",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Assessment training and expectations shared proactively with Engineering and other persona teams"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Enablement occurs within specific teams/functions themselves and is based on the specific needs of each team"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Covers basic FinOps processes and principles, such as Metadata & Account Organization, Cost Allocation, Ownership & Accountability"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Education is generally directed towards Usage Optimization and Rate Optimization as the main vehicles for improving business value"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Team Leaders drive enablement by assigning responsibilities that challenge and develop FinOps capabilities"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Training or enablement is sought out by those who recognize they need it"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Some common terms are defined, but many terms are not well understood across disciplines or organizational silos"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Education initiatives extend across teams to promote mutual understanding, purpose and collaboration"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Covers a broader range of FinOps processes and practices, such as Forecasting, Managing shared costs, Budget Management and Environmental Impact"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Education targets Quantifying Business Value domain activities to provide context to cost management goals"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Functional Leaders drive enablement by assigning responsibilities that cross functional boundaries and emphasize collaboration"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Training and enablement is proactively provided to key persona stakeholders when they require it"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "FinOps team provides or defines recommendations for formal and informal training relevant to some personas from data providers, vendors, or external organizations"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "FinOps Champion programs to support the development of a FinOps culture throughout the organization"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Education is tailored to the organization to present FinOps in the organization’s context (tooling, roles and responsibilities, uses cases based on personas…) to ensure autonomy of personas into their activities"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "A common repository of FinOps terminology, sustainability terminology, and documentation is available to all personas"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Education & Enablement extends across the enterprise to promote alignment of value initiatives with organizational goals"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Covers the full range of FinOps processes and practices, including those intended to establish FinOps culture integration with other business disciplines and ESG practices in place at the organization"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Executives drive enablement by assigning responsibilities that emphasize alignment with strategic goals"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Training and enablement is required for all personas and specified in advance of when necessary"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "FinOps provides or recommends both formal and informal training relevant to all personas"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "FinOps provides or specifies access to data provider and vendor training, events, and opportunities"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "FinOps awareness, basic concepts of digital sustainability, and appropriate skills are incorporated in job requirements for FinOps personas and included in onboarding for new employees and contractors where appropriate"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Internal FinOps events are lasting and mobilize internal stakeholders"
+  },
+  {
+    "capability_slug": "finops-education-enablement",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Common repositories of FinOps deliverables, terminology, and processes is accessible and used by all personas"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "As technology landscape grows and becomes more complex, the organization uses initial assessments, to create an executive FinOps scope summary that will be provided to executives across the organization, and which provides clear details for each executive persona"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "The technology landscape complexity is low so general FinOps goals and KPIs can be used to measure progress"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "A list of resources is in place that will be necessary for the FinOps team and Include any budget needs for recommended resources"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "FinOps team lead(s) are identified as cloud use grows. FinOps leads should ideally have a combination of deep experience as a FinOps practitioner, Certified FinOps Professional certification, experience and influence within the organization, and complex project management experience. If no candidates within the organization are available, the FinOps Job Board may help find appropriate candidates"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "An initial staffing plan, list of resources, and proposed budget is in place for the FinOps team"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "A variety of virtual FinOps team support is in place rather than hiring onto the FinOps team with full-time resources. For instance, cloud engineers who can answer questions, finance support, reporting teams, training staff, etc."
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "An initial scope of work for the team, objectives, and timelines is created for first activities. If this is an adoption for a new part of the organization, they will benefit from meeting with or learning from other teams who are further along"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "There are few critical activities which require cross-discipline or urgent decision making are understood, and processes to manage these situations are immature"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "The technology landscape is more complex and more established, requiring a FinOps team that is well established in the organization, and its role is well understood across the majority of persona teams"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "FinOps teams work across personas at multiple levels of the organizational staff, communicating effectively, offering a variety of ways to interact with the FinOps team."
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "The technology strategy is well articulated and the FinOps strategy has been clearly spelled out, identifying specific goals and using agreed upon KPIs"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "The FinOps team regularly reviews its needs, size, roles, and placement and makes adjustments as needed"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "A majority of the organization has adopted FinOps as an operating model and are developing its cultural practices"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Regular, infrequent, cross-functional planning sessions to set goals, define tasks, allocate resources, and establish timelines for the FinOps practice"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Internal objectives and key results, intake processes, request triage, task tracking and regular status updates are provided by the FinOps team"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "A variety of activities require timely or cross-discipline decision making are understood and well documented, and need to be exercised regularly, requiring a more formal decision model"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "The organization’s technology use, and/or the organization itself is very complex and mature with a wide variety of services and architectures, requiring a larger FinOps team is well established in the organization, and its role is well understood across all personas and organizational hierarchies"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "FinOps teams work across personas at the highest and lowest levels of the organizational staff, communicating effectively, offering a variety of ways to interact with the FinOps team and employing FinOps champions and others to extend the reach of the FinOps team"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "The technology strategy is well articulated and the FinOps strategy has been clearly spelled out, identifying specific goals and using agreed upon KPIs that may differ across the wide variety of cloud use cases"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "The FinOps team regularly reviews its needs, size, roles, and placement and makes adjustments continuously, and works in established ways with virtual extensions of itself for specific edge cases"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "The FinOps team has a regular funding source, and the need for the team is well supported"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "The entire organization has adopted FinOps as an operating model and cultural practices"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Regular, frequent, cross-functional planning sessions to set goals, define tasks, allocate resources, and establish timelines for the FinOps practice"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "FinOps processes are incorporated into the activities and using channels appropriate to most teams in the organization"
+  },
+  {
+    "capability_slug": "finops-practice-operations",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "A comprehensive, well documented Decision model is required to manage very large or complex organizations making a large number of decisions that require multiple disciplines or very frequent access."
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "In organizations with simple implementation models or with limited technology spend, a limited variety of cost data-sources and tools are used for forecasting by stakeholders across the organization"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Forecast models are created manually and/or ad-hoc"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Forecast are primarily based on historical spending, as workloads tend to be more stable or simple"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Forecasting variance analysis is done manually"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Limited/aggregate forecasting visibility (only by business unit or cost center)"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Engineering/Operations teams are not involved with the creation of cost forecasts or tracking of discrepancies from forecasted spend"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Forecast costs tracked against actual usage and used to establish budgets"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Forecast is inclusive of rate optimization and commitment-based discounts"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Forecast models are rolling and trend-based"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Forecast updates are done on a regular cadence but not automated"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Stakeholder teams (Product, Leadership, Engineering, Finance) have access to cloud cost forecasting data"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Cost forecast data is used to supplement back-end accounting system data"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Regular review cadence by FinOps team of forecast thresholds and trends with stakeholder teams"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Global policy for applying allocation metadata to prevent unallocated cost"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Forecast tracked and updated against discount-adjusted, amortized cloud usage"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Forecast models are a combination of rolling, trend-based and driver-based"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Forecast is inclusive of usage optimization opportunities"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Forecasts aligned to the organization’s allocation constructs being used across the organization for reporting costs"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Granular forecasting visibility (by business unit, cost center, team, product, service, etc …) in the context of organizational KPIs"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Stakeholder teams (Executives, Engineering, Finance) have real-time visibility into a single source of truth for how technology category usage is impacting forecast trends and budgets"
+  },
+  {
+    "capability_slug": "forecasting",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Integration and automated data flow between technology cost forecast data and back-end accounting systems used for broader organizational reporting"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Policy and governance exist but are largely reactive and manually operated"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Policies focus on the most significant and visible risks — typically cost overruns and a small number of compliance obligations"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Creation and enforcement of policy is ad hoc"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Governance is informal, with no regular cadence or structured communication with FinOps and governance functions"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Risk awareness is present but not systematically managed"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Policy documentation is static and distributed manually"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "The FinOps team is aware of organizational governance structures but not yet deeply integrated with them"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Policies are broadened and standardized across technology categories"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "A regular review cadence exists"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "FinOps policies are proactively designed rather than created in response to incidents. Cross-functional collaboration with Finance, Engineering, Procurement, Security, and Risk functions is established"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Policy training is integrated into routine onboarding and persona-specific enablement"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Where available, vendor-provided and third-party tooling is used to automate governance monitoring and reporting"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Risk categories relevant to the organization’s FinOps Scope are documented and actively tracked"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Governance, Policy & Risk is fully integrated with enterprise technology strategy"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "All levels of the organization operate in ways that are visibly aligned to governance direction"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Policy compliance is continuously monitored through automated systems with trend analysis"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Recognised industry governance frameworks inform how FinOps governance connects to board-level IT governance bodies"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "FinOps risk inputs are incorporated into enterprise risk registers and management reporting"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Guardrails and automation cover the majority of routine technology decisions across all FinOps Scopes"
+  },
+  {
+    "capability_slug": "governance-policy-risk",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "The FinOps team is a recognized participant in enterprise governance, risk, and compliance processes"
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "FinOps and other teams may have separate reporting structures within the organization."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "FinOps Practitioners and other disciplines are aware of one another, but both own individual understanding of and responsibility for their areas of focus."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Education and Enablement or other coordination between disciplines takes place only when required."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Intersecting disciplines have individual understanding of how resources are being paid for and consumed. They possess in-depth knowledge of their respective frameworks, information sources, goals, and experiences. They can analyze and assess relevant information to determine outcomes specific to their disciplines."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "FinOps and the Intersecting Discipline share the same reporting structure."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Teams have a shared understanding / view of resource usage and cost and how these costs are forecasted, budgeted, reported upon, and charged back."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Allied Personas are consulted regularly for decision making. For example, FinOps team includes the Software Asset Management (SAM) teams when suggesting Bring Your Own License (BYOL) models because of the well-understood impact to existing contractual commitments with the software publishers."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "There is a shared understanding of organizational data related to cost, usage, and business context."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "FinOps teams have partnered with Allied Persona teams to achieve a shared understanding of usage and cost. They regularly coordinate to provide a comprehensive view of the organization."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "There is also a shared understanding of each other’s respective frameworks and processes, allowing for effective communication and analysis."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "FinOps and other discipline teams are integrated or operate within a single team or organization."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "There is a common data repository / source for the management of cost, usage, and context used across disciplines to enable the organization to build an understanding of the total cost of ownership (TCO) and return on investment (ROI) of technology investments."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "FinOps and other disciplines are closely aligned and work together to ensure an optimized IT investment landscape."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Considerations of cost, usage, performance, architecture, security, operations, reliability, and other factors are regularly considered by engineering teams with all inputs to decision making well understood."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Operational tools and processes are scaled to support agility and cooperation between functions."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "A common toolset including software applications and methodologies is used to enable either some or all FinOps & Allied Persona team processes."
+  },
+  {
+    "capability_slug": "intersecting-disciplines",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Recurring actions are performed consistently in a standardized manner by all involved."
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Technology spend is charged back to teams based on estimated spend month and there is typically a material variance (which is not material for the overall organization) from estimated spend to actual spend"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Ledger estimates with incomplete data are made without additional true-up entries once data is complete"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Shared costs like enterprise support are held centrally due to lack of strategy on how to provide visibility"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Commitment based purchases made in a specific sub-account are charged to the owner of the account and not based on the consumption of the discount"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Commitment based purchased made in a central billing account are held centrally and not charged back to teams based on the consumption of the discount"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Monthly invoice reconciliation is done at a macro-level ensuring total cost expected per service provider matches the total invoiced amounts"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Processing invoice payments and the chargeback process happen days or weeks apart from each other due to manual efforts"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "No tooling in place to automate data capture, data mediation or exception handling"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Chargeback is done using spreadsheets, manual journal entries, with no service catalog or cost center hierarchy tooling in place"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Chargeback file is high level with total costs per service provider across cost centers without shared cost or other costs split out for visibility"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 11,
+    "parse_quality": "itemized",
+    "text": "Cost center hierarchy is relatively flat with cost centers only assigned to leadership"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 12,
+    "parse_quality": "itemized",
+    "text": "The only consistent touchpoint for the Finance, central FinOps, and Accounting teams is the sharing of chargeback data to be posted"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Technology spend is charged back to teams based on estimated spend with some level of variance between estimates and actuals"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Placeholder ledger entries or incorrect charges are common due to manual effort"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Ledger estimates with incomplete data often require additional entries to true-up actual cost"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Initial strategy implemented on how to charge and show shared costs in the chargeback file"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Majority of all commitment based purchases are charged to teams based on their consumption of the discounts"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Centralized tooling is in place to for chargeback data and exported to a file that is manually edited before integrating into the company’s financial tooling"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Processing invoice payments and the chargeback process happen over the course of the financial close process (days)"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Chargeback file is expanded to include breakout some shared cost components and split out committed use or marketplace purchases"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Invoices are manually validated ensuring credits, discount rate, and one-off charges are all correct and received into the accounting system"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Cost center hierarchy is expanded to more granular parts of the organization for more detailed chargeback"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 11,
+    "parse_quality": "itemized",
+    "text": "Currency conversion is factored into chargeback file as a part of the monthly process"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 12,
+    "parse_quality": "itemized",
+    "text": "Finance, central FinOps, and accounting are actively collaborating on decisions related to maturing the chargeback file, level of detail, and determining initial strategy for shared cost charges."
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Teams understand their direct and allocated shared cost portion of technology spend based on their actual consumption"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "All commitment based purchases are charged to teams based on their consumption of the discounts"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Chargeback/Showback reporting is integrated automatically into the companies finance tooling"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Invoice reconciliation and the chargeback process happen simultaneously due to automation and integration of tooling"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Finance is self-sufficient in reconciling spend or answering questions regarding chargeback without intervention from the central FinOps team"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Ledger estimates with incomplete data are within a small enough error that additional entries are often not required but can be quickly mediated if necessary"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Chargeback data is fully automated each month into the financial system with the ability to support charging, mark-ups and allocation both in advance and in arrears"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Chargeback file is expanded in detail to show all types of charges split out"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Currency conversion is automated if possible and is distinct in the chargeback file to allow for additional analysis on any fluctuations not related to cloud usage"
+  },
+  {
+    "capability_slug": "invoicing-chargeback",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Finance, central FinOps, and accounting have finalized all associated processes for charging and showing shared cost and have expanded chargeback to the most granular levels of the organization"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Broad organizational KPIs or very technical KPIs are identified as initial benchmarks, but may not yet be consistently defined, documented, or aligned with business objectives"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Key internal teams are compared informally by FinOps Practitioners, with limited standardization of KPI metrics or reporting processes to support consistent and repeatable benchmarking activities"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "KPI and benchmarking activities are largely manual and ad hoc, driven by periodic reviews rather than automated data collection or reporting, and outcomes are shared informally with limited visibility beyond the core FinOps Personas"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Awareness of external benchmarking opportunities is emerging, but the organization has not yet established formal processes or relationships to enable meaningful comparison with industry peers"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A broader and more diverse set of KPIs are identified, defined, and documented across cost, performance, efficiency, and sustainability themes, reflecting a more comprehensive understanding of what drives technology value across the organization"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Consistent mechanisms are in place to compare internal team performance against one another across relevant FinOps Scopes and technology categories, with KPIs standardized sufficiently to enable meaningful and reliable comparisons"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Teams are able to self-serve KPI and benchmarking data through available reporting and analytics tools, enabling them to independently monitor their performance relative to peers within the organization"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "FinOps Practitioner and Leadership Personas are beginning to engage more deliberately with external benchmarking opportunities, selectively sharing and receiving benchmarking data through trusted channels such as the FinOps Foundation community and industry peer groups"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A curated and actively managed set of KPIs is maintained across all FinOps Scopes and technology categories, benchmarked at multiple levels, from individual teams and products to organizational and industry-wide comparisons, and are regularly reviewed to ensure continued relevance and alignment with evolving business objectives"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Internal KPI and benchmarking reporting is fully automated, consistently delivered, and available for self-service by all relevant stakeholder personas, with incentive and recognition programs in place to encourage and reward optimization behaviors and continuous improvement across the organization"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "The organization has established trusted networks of external contacts and peer organizations with whom it can openly explore and exchange benchmarking best practices in technology usage, efficiency, and FinOps practices"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "The organization actively participates in and contributes to industry programs and communities, such as FinOps Foundation Working Groups, using its maturity and benchmarking insights to help shape best practices and drive advancement of the FinOps discipline"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "KPI and benchmarking insights are fully integrated into executive-level reporting and strategic planning processes, with Leadership using benchmarking data to set organizational priorities, validate investment decisions, and communicate to stakeholders across the organization"
+  },
+  {
+    "capability_slug": "kpis-benchmarking",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "The organization continuously refines its KPI and benchmarking methodologies in response to changes in technology, business strategy, and industry trends, ensuring that its benchmarking practice remains forward-looking and capable of supporting informed decision making as new technology categories are adopted"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Software licenses and SaaS products are billed separately but complex cost sharing or allocation isn’t required in showback reporting"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "There is a general understanding of what licenses are used in cloud environments, and the use cases, variety, and terms are not complex"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "There is an understanding of what SaaS products are used that integrate with, deploy, monitor, provide analytics about or secure your applications and infrastructure"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Key contacts are identified in Procurement, Financial Planning & Analysis (FP&A)/Technology Business Management (TBM), Information Security, and SAM, and there is a basic understanding of the process to acquire licenses/software"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Existing tooling or reporting to track software assets is identified, or the need to use tools is minimal"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "There is an understanding of how overages are charged when consumption exceeds agreed-upon contract thresholds or when costs change (increase/decrease) due to tiered pricing models"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "License and SaaS product billing data are provided in FOCUS format, so that showback includes licensing/SaaS spend coming through cloud service provider (CSP) Marketplace or subscription, needed to support more complex sharing and allocation requirements"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Bring Your Own License (BYOL) or other more complex use cases are used, which require review and analysis to maintain"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "More mature use of licenses and SaaS requires FinOps to be consulted during the licensing/SaaS renewal process to provide data to help make decisions"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "ITAM/SAM personas collaborate when reviewing new workloads being built, migrating, or being upgraded in the cloud that require licensing"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "FinOps is included during the review/approval process when new licensing/SaaS is acquired outside of cloud service providers, or on strategies for altering the use of licenses from prior, data center based system design and architecture"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Forecasting is updated to include software costs to reflect the total cost of a service/application"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Licenses and SaaS products are procured through a variety of channels, and tracking is required to manage the use of licenses as they are added or removed in a variable way"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "For consumption-based software, usage is tracked against total contract dollar amount and against thresholds that, if exceeded, would result in overages"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "The cost of licenses and SaaS products are dynamically included in showback and chargeback, using FOCUS formats"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Licenses and SaaS products are procured using other methods of procurement (i.e. Marketplace, direct, value-added reseller), and/or with complex terms"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Automation of retrieving the billing data from the software provider is leveraged when possible"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "FinOps partners with others (i.e. Engineering, ITAM/SAM, Procurement) to perform usage analysis and identify optimization opportunities well ahead of the next renewal for each software product"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Forecasting/estimating the future contract is done after optimization is completed"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Showback for total cost of ownership (TCO) includes software spend"
+  },
+  {
+    "capability_slug": "licensing-saas",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "FinOps and SAM leverage the same tooling and data sources for software contract details, usage and spend"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Simple or consistent application build patterns are used, requiring fewer or more straightforward estimating techniques"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Estimates are not required to be extremely granular or extremely accurate, perhaps because the organization’s cloud spend is low or immature"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "A variety of cloud cost data-sources and tools are used for forecasting by stakeholders across the organization, and consistency is not required"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Estimates are documented manually and/or ad-hoc due to low volumes or simple scenario planning"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Higher reliance on trend-based, extrapolation than on more complex mechanisms"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Limited need for aggregate estimate visibility (perhaps by business unit or cost center)"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Few shared costs or added cost elements required to complete estimates"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Engineering teams are involved with the creation of estimates but little need to track discrepancies against actuals"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Use cloud service provider tools and dashboard to measure current carbon footprint"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 10,
+    "parse_quality": "itemized",
+    "text": "Awareness of the correlation between Cloud usage of resources and its impact on carbon footprint"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Wider variety of application build patterns used, or complex cloud use, requires more estimating techniques to be used"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Estimates are more granular, at the service level, and higher accuracy of estimates is required organizationally"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Estimates are inclusive of cloud rate optimization, commitment-based discounts and carbon targets"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Estimates are done on a regular cadence, documented consistently, but not automated"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "FinOps Core and Allied Personas (Product, Leadership, Engineering, Finance, Sustainability) have access to cloud cost estimate data"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Regular review cadence by FinOps team of estimate accuracy, and trends with stakeholder teams"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Complex and large scale collection of build patterns and cloud use requires complex estimating"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Estimates are extremely granular and include several types of shared cost elements, platform costs, support costs, sustainability and policy compliance elements"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Estimates are created using a variety of pricing models, discount-adjusted, amortized cloud usage pricing"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Estimating scenarios support rolling, trend-based and driver-based Forecasting capability"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Estimates are inclusive of optimization opportunities"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Estimates aligned to the organization’s allocation constructs being used across the organization for reporting cloud costs"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Granular estimating visibility (by business unit, cost center, team, product, service, etc …) in the context of organizational KPIs"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "FinOps Core and Allied Personas (Product, Leadership, Engineering, Finance, Sustainability) have real-time visibility into a single source of truth for how cloud usage is impacting estimates, forecasts, trends, carbon footprint and budgets"
+  },
+  {
+    "capability_slug": "planning-estimating",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "integration and automated data flow between cloud cost forecast data, ESG and back-end accounting systems used for broader organizational reporting"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A very basic rate optimization strategy is in place due to simple or limited technology usage"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Procurement persona manages any contractual arrangements with minimal input from Finops teams"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Analysis and purchases of commitment discounts may be performed by multiple teams who own their own budgets and take action without coordination"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Decisions to purchase commitment discounts is done in an ad hoc way when spending increases significantly"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Decisions about discount parameters made without full collaborative discussion with Finance, Procurement and FinOps teams"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Coverage rates or effective discounts are likely very low and raising them would not be a material financial impact to the business"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Situational use of interruptible Spot instances"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A more robust rate optimization strategy is in place due to a more complex mix of services or Engineering teams"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Procurement persona works in coordination with the FinOps team to understand likely demand for cloud services over time in making purchases and negotiating"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Analysis of purchase commitments and reporting of discounts conducted by the central FinOps team"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Primarily purchasing commitment discounts for compute or specific services important to the organization"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Centralized analysis and purchasing occurs in a regular cadence with input from both Engineering and Finance"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Alerting put in place when commitment utilization declines, stops being used, or needs attention due to deviation from established norms"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Regular evaluation of long term business technology plans"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Constant evaluation of new releases/updates from Cloud Providers"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Regular recommendation of Spot instance usage where appropriate"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A robust rate optimization strategy is in place outlining automation and thresholds, and establishing KPIs for effective management of rates"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Frequent purchase cycles occur, triggered by automated reporting"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Automated allocation of discounts according to business requirements"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Metrics driven management of when to make changes and a bi-drectional connection between rightsizing/utilization/refactoring and the proper commitment type and term"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Regular reporting occurs on KPI’s"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Incorporation of Spot instance usage into established use patterns where appropriate"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "FinOps team implements automation to identify use patterns that would benefit from scaling or Spot use"
+  },
+  {
+    "capability_slug": "rate-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Incorporation of Licensing & SaaS, Sustainability, and Architecting guidance when making rate optimization decisions"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Use of canned reports with only basic ability to filter and alter result view"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Reporting centered on high level cost and usage groupings with limited granularity"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Modifications to incoming billing data only supported via native service offerings"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Analytic results are being manually communicated to teams"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Teams lean largely on the central FinOps team to find the answers to questions they have on the billing data"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Reporting tools enable custom views and aggregations"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Granular reporting enabling KPI tracking and showback reporting"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Data enrichment and business logic added to incoming usage and billing datasets (e.g. synthetic tags, correcting values, combining other business datasets such as sustainability)"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Forecasts and anomaly detection processes implemented upon the data"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Dashboard reporting is provided centrally to teams"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Teams are starting to self-service to reports and analytics tools to find answers to questions they have on the usage and billing data"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Combining datasets into one source location (E.g. Using FOCUS)"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Complex business logic and data enrichment is possible"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Advanced forecast techniques including using ML models to incorporate indicators and relationship beyond usage and cost (eg. sustainability metrics)"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Analytics results are pushed into dashboards and work queues used by Engineering teams (Data in the path)"
+  },
+  {
+    "capability_slug": "reporting-analytics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Most—if not all—teams are finding value in self-service reporting and analytics"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Key teams involved in technology usage have a basic understanding of how technology infrastructure contributes to greenhouse gas emissions"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Technology teams understand how optimization of technology resources can impact carbon usage"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "There may be a corporate mandate for reporting on carbon or carbon reduction, but the strategy to apply this mandate to technology usage may not be mature"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Teams have some carbon emissions data but it is likely poorly integrated with other data sources"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Optimization activities are primarily centered on elasticity and turning off what is not being used"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Tradeoff decisions where cost and carbon usage conflict are evaluated broadly and often on existing workloads"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Enterprise functions (e.g. procurement, finance, and business teams) have a basic understanding of their involvement and a basic understanding of how technology usage impacts greenhouse gas emissions"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 8,
+    "parse_quality": "itemized",
+    "text": "Collaboration between FinOps Personas (Practitioner, Sustainability, Engineering) is informal and inconsistent, with no defined engagement model"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 9,
+    "parse_quality": "itemized",
+    "text": "Sustainability reporting is largely manual and ad hoc, with no repeatable processes or automation in place"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "All engineering teams and most other Personas involved in technology usage are aware of their potential impact on corporate sustainability goals"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Technology teams have a variety of mechanisms to reduce carbon use through optimization efforts across multiple technology domains"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Ingestion and reporting of carbon use data is shared with engineering and product teams, and is more granular but may not be fully integrated with cost data"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Optimization activities move towards re-architecting or re-factoring existing workloads to improve both cost and carbon efficiency"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Tradeoff decisions between carbon usage and cost are evaluated on a more granular level, and are sometimes considered ahead of technology migration or build decisions"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Collaboration between FinOps Personas (Practitioners, Sustainability, Engineering) is more structured, with defined touchpoints and shared reporting, though not yet fully formalized"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "Sustainability metrics are beginning to be incorporated into allocation and chargeback models, enabling teams to understand their carbon footprint alongside their technology spend"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "The entire organization is aware of technology’s impact on corporate sustainability goals, and understands how the technologies consumed contribute to that impact"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Sustainability is a standard consideration in all technology migration, build, and optimization activities across all domains"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Reporting is normalized across all technology providers and data sources, is at a granular level, fully integrated with cost data, and is allocatable and reportable to individual teams for further analysis and accountability. Practitioners must acknowledge that this normalization requires reconciling differing carbon accounting methodologies and emission factors (e.g., aligning with the GHG Protocol) to ensure a consistent ‘carbon ledger’ across varying provider reporting cadences"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Workloads and technology investments are architected and evaluated with sustainability in mind; teams use data to proactively consider where and how to deploy workloads across all available technology domains before deployment decisions are made"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Collaboration between FinOps Personas (Practitioners, Sustainability, Engineering) is fully formalized, with shared goals, joint planning cycles, and executive visibility into progress against sustainability targets"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Sustainability metrics are fully embedded into allocation, chargeback, and unit economics models, enabling teams to track and be accountable for their carbon footprint alongside their technology spend in a consistent and repeatable way"
+  },
+  {
+    "capability_slug": "sustainability",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 7,
+    "parse_quality": "itemized",
+    "text": "The organization actively contributes to industry sustainability standards and benchmarks, using its maturity and data to inform best practices and drive improvements beyond its own technology estate"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Unit economics at the total cost / organizational results level in basic ways"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Primarily working on technical unit cost metrics which are more concrete and centered on variable cost and use technology categories like public cloud"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Business outcome data, which may be harder to gather or correlate is not used at a granular level of detail"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Low organizational adoption or understanding of unit economics to drive decision making"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Unit economics focus on direct variable costs rather than TCO, ROI or shared costs more broadly"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Leadership, Product or Engineering teams develop unit economics with support of FinOps Practitioners, specific to their scope of work"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Unit economics used in other important technology categories to create visibility of cost across public cloud, SaaS use, data centers, etc. for important Scopes of spend"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Value and outcome data is used more often, leaders start referencing stable business unit metrics in decision making routines"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Moderate trust and decision use, typically in priority areas rather than across the technology investment and operational landscape"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Unit economics begin to account for fully loaded costs, or costs outside of direct technology use"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "All operational FinOps Scopes include defined unit metrics for related segments of technology spending and usage, aligned to business context for visibility and decision making at multiple levels of the organization"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Unit economics applied equally across all managed technology categories, consistently across different FinOps Scopes"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Unit metrics incorporate fully loaded costs across all applicable technology categories"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Unit metrics available at multiple levels of organizational and technical granularity"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "High trust and consistent use in investment and optimization decisions, with clear ownership and governance of definitions"
+  },
+  {
+    "capability_slug": "unit-economics",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Unit economics are defined and considered early, shaping build vs buy, architecture, workload placement, migration, sourcing, and pricing decisions"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Establishing a basic usage optimization strategy that identifies the highest priority areas of usage to target, defines basic prioritization criteria, and sets initial optimization KPI goals across cost and carbon dimensions"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Developing visibility into resource utilization and efficiency across available FinOps Scopes using one or more data sources such as billing data, infrastructure monitoring tools, data efficiency tools, and observability insights"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Defining a basic efficiency metric that is meaningful to the business and can be used to measure how efficiently a resource or service is being consumed relative to the value it generates"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Optimization efforts at this maturity level tend to focus on the most familiar and well-understood areas of usage, where data is most readily available and the path to action is clearest"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Optimization activities are largely manual and reactive, driven by periodic reviews rather than automated monitoring or alerting, and recommendations are shared informally with Engineering teams without a defined process for tracking action or outcomes"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "crawl",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Awareness of sustainability and carbon impact as a consideration in optimization decisions is emerging, but sustainability data is limited in availability and not yet consistently incorporated into usage optimization recommendations or prioritization"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "Establishing a more comprehensive usage optimization strategy that differentiates optimization approaches across different usage types and technology categories, with clear cadence and prioritization guidance for Engineering and other relevant personas"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Understanding the financial, operational, and sustainability value expected from specific optimization activities, and using that understanding to prioritize efforts that generate the greatest combined value across all three dimensions"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Able to estimate the potential savings or value that can be realized from a specific optimization opportunity, taking into account the nature of the usage type and the technology category being optimized (e.g. “rightsizing this resource is estimated to save $X per month with a Y% reduction in associated carbon emissions”)"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Able to estimate the costs and effort required to act on an optimization opportunity, including labor, operational impact, and any tooling or platform costs involved. For example: “it will cost 50 hours of Engineering time at an hourly rate of $X to implement this change“, or “it will cost $0.01/GB for a data efficiency platform to surface the savings potential of this data set“"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Optimization recommendations are documented consistently and tracked over time, enabling personas to monitor the status of recommendations and measure the actual impact of completed optimization activities against initial estimates"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "walk",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "Basic automation of simple and repeatable optimization processes is in place, reducing the manual effort required to identify and act on common optimization opportunities across available FinOps Scopes"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 1,
+    "parse_quality": "itemized",
+    "text": "A comprehensive usage optimization strategy is in place that provides clear guidance across all usage types and FinOps Scopes, defines multiple approaches to addressing waste and inefficiency, sets specific optimization expectations for Engineering, Sustainability, Product, and other relevant personas, and establishes measurable KPI targets that reflect financial, operational, and sustainability outcomes"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 2,
+    "parse_quality": "itemized",
+    "text": "Access to detailed, integrated cost, utilization, and sustainability data across all FinOps Scopes drives automated optimization processes, with data sourced from multiple providers and normalized to enable consistent analysis and decision making"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 3,
+    "parse_quality": "itemized",
+    "text": "Automation is broadly in place to alert on, action, or clean up idle and wasteful resources, implement rightsizing recommendations, and update the architecture or configuration of resources across all technology categories with minimal manual intervention"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 4,
+    "parse_quality": "itemized",
+    "text": "Automated triage and filtering of optimization notifications ensures that Engineering and other personas are focused only on opportunities that meet defined value and effort thresholds, reducing noise and improving the quality of optimization activities"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 5,
+    "parse_quality": "itemized",
+    "text": "Optimization recommendations and opportunities are systematically tracked from identification through to resolution, with analysis of actual versus estimated impact performed regularly to inform and continuously refine the usage optimization strategy over time"
+  },
+  {
+    "capability_slug": "usage-optimization",
+    "maturity": "run",
+    "official": false,
+    "ordinal": 6,
+    "parse_quality": "itemized",
+    "text": "The organization actively benchmarks against industry best practices for usage optimization, using maturity in data, automation, and cross-persona collaboration to drive continuous improvement across all FinOps Scopes and technology categories"
+  }
+]

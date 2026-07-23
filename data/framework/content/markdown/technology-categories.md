@@ -1,0 +1,25 @@
+---
+kind: technology-categories
+license: CC-BY-4.0
+source_url: https://www.finops.org/framework/technology-categories/
+---
+
+## FinOps for SaaS {slug=saas}
+
+Governing and optimizing managed software spending to support organizational value creation. FinOps Capabilities are applied to SaaS usage data to improve visibility, strengthen accountability, and enable data-driven decisions across decentralized purchasing models.
+
+## FinOps for Data Center {slug=data-center}
+
+Improving visibility and decision-making for on-premises infrastructure investments. FinOps Capabilities are applied to data center usage and costs to support planning, allocation, and optimization decisions that align capacity, consumption, and business demand.
+
+## FinOps for Data Cloud Platforms {slug=data-cloud-platforms}
+
+Governing and optimizing consumption based data and analytics spend to support organizational value creation. FinOps Capabilities are applied to workload telemetry (queries, jobs, pipelines, and platform metadata) to improve visibility, strengthen accountability across shared compute, and enable data driven decisions.
+
+## FinOps for AI {slug=ai}
+
+Addressing the cost complexity, faster development cycle, spend unpredictability, and the need for a greater degree of policy and governance to support innovation through allocation, forecasting, and optimization decisions that align consumption, investment, and business value.
+
+## FinOps for Public Cloud {slug=public-cloud}
+
+Managing and optimizing cloud-based consumption in support of business outcomes such as cost efficiency, scalability, and delivery velocity. FinOps Capabilities are applied to cloud usage to enable informed decisions, shared accountability, and continuous alignment between cloud investment and business value.

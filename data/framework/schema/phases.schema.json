@@ -1,0 +1,39 @@
+{
+  "$id": "finops-framework-mcp/phases",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "description_md": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "license": {
+        "const": "CC-BY-4.0"
+      },
+      "order": {
+        "type": "integer"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "source_url": {
+        "format": "uri",
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "slug",
+      "title",
+      "description_md",
+      "order",
+      "source_url",
+      "license"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

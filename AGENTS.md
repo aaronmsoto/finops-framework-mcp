@@ -7,8 +7,11 @@ Canonical instructions for AI coding agents (Claude Code, GitHub Copilot CLI, an
 finops-framework-mcp is an MCP (Model Context Protocol) server that acts as an
 agentic interface to the FinOps Framework published at
 https://finops.org/framework — it lets AI agents and MCP clients query and
-navigate the framework's guidance through MCP tools. TypeScript project; the
-server entry point is `src/index.ts` (currently scaffold-stage), gates run via
+navigate the framework's official guidance through MCP tools. TypeScript;
+pipeline: crawler → markdown-canonical data artifact (`data/framework/`,
+regenerable offline via `cli.js derive`) → stdio server
+(`src/servers/framework`, bin `finops-framework-mcp`). Unofficial extensions
+are gated behind `FINOPS_MCP_EXPERIMENTAL=1`. Gates run via
 `./scripts/agentic gates`, tests via vitest.
 
 ## Session protocol (every session, both tools)

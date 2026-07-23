@@ -1,10 +1,4 @@
-.agentic/
-docs/
-.agents/
-.claude/
-.github/
-scripts/
+src/crawlers/framework/fixtures/
+data/framework/
 coverage/
 dist/
-node_modules/
-*.md
