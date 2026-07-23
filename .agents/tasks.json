@@ -330,7 +330,7 @@
         "Server startup, tools, and cli.js derive work without cheerio present (derive is markdown-to-JSON only)",
         "Tests cover the missing-cheerio error path; gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
