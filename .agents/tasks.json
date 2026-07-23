@@ -135,7 +135,7 @@
         "FINOPS_MCP_EXPERIMENTAL=1 (or --experimental) restores get_actions (EXPERIMENTAL-labeled) and pre-crawl; assess_maturity_path serves gap as verbatim assessment_md per level with crawl/walk/run enums",
         "flag-matrix tests pass via createServer(artifact,{experimental}); completable(z.string().describe()) pattern preserved; gates --tier all pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

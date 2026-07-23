@@ -26,7 +26,7 @@ export function footer(artifact: Artifact, sourceUrl: string): string {
   );
 }
 
-export function overviewMd(artifact: Artifact): string {
+export function overviewMd(artifact: Artifact, experimental = false): string {
   const m = artifact.manifest;
   const domains = artifact.domains
     .map((d) => `- **${d.title}** (${d.capability_slugs.length} capabilities)`)
@@ -50,15 +50,22 @@ export function overviewMd(artifact: Artifact): string {
     `- Look up anything by keyword: \`search_framework\`.\n` +
     `- Browse: \`list_capabilities\` (filter by domain or persona), then ` +
     `\`get_capability\` with an \`include\` list to control size.\n` +
-    `- Maturity work: \`get_actions\` (assessment characteristics per level), ` +
-    `\`assess_maturity_path\` (gap between levels).\n` +
+    `- Maturity work: \`get_maturity_assessment\` (official assessment text ` +
+    `per level)` +
+    (experimental
+      ? `, \`get_actions\` (EXPERIMENTAL: unofficial parsed characteristics ` +
+        `per level)`
+      : "") +
+    `, \`assess_maturity_path\` (gap between levels).\n` +
     `- KPIs: \`get_kpis\` (full records incl. formulas where published).\n` +
     `- People: \`map_personas\` (capability↔persona matrix).\n` +
     `- Full documents are also resources under \`finops://framework/…\`.\n\n` +
-    `Official content vs. unofficial extensions: the \`pre-crawl\` maturity ` +
-    `level and parsed assessment items ("actions") are extensions carrying ` +
-    `\`official: false\`, separate files, and explicit notes. Everything else ` +
-    `is crawled verbatim from finops.org.\n` +
+    (experimental
+      ? `Official content vs. unofficial extensions: the \`pre-crawl\` maturity ` +
+        `level and parsed assessment items ("actions") are extensions carrying ` +
+        `\`official: false\`, separate files, and explicit notes. Everything else ` +
+        `is crawled verbatim from finops.org.\n`
+      : "") +
     `\nData version ${m.data_version}, crawled ${m.crawled_at.slice(0, 10)}.`
   );
 }
@@ -146,6 +153,7 @@ export function maturityLevelMd(
   artifact: Artifact,
   c: Capability,
   level: OfficialMaturityLevel | "pre-crawl",
+  experimental = false,
 ): string {
   if (level === "pre-crawl") {
     return (
@@ -153,6 +161,12 @@ export function maturityLevelMd(
       `${artifact.maturity_extension.description_md}\n\n` +
       `No official assessment content exists below Crawl. Assess against the ` +
       `Crawl characteristics: see ${URI.capabilityMaturity(c.slug, "crawl")}.` +
+      footer(artifact, c.source_url)
+    );
+  }
+  if (!experimental) {
+    return (
+      `# ${c.title} — Maturity: ${level}\n\n${c.maturity_raw[level]}` +
       footer(artifact, c.source_url)
     );
   }
@@ -223,6 +237,7 @@ export function collectionMd(
     | "personas-index"
     | "capabilities-index"
     | "scopes",
+  experimental = false,
 ): string {
   switch (which) {
     case "principles":
@@ -272,7 +287,9 @@ export function collectionMd(
               `**Sample goals/KPIs from the FinOps community**\n\n${l.sample_goals_md}`,
           )
           .join("\n\n") +
-        `\n\n## Unofficial extension: Pre-Crawl\n\n${artifact.maturity_extension.description_md}` +
+        (experimental
+          ? `\n\n## Unofficial extension: Pre-Crawl\n\n${artifact.maturity_extension.description_md}`
+          : "") +
         footer(artifact, artifact.maturity_levels[0]?.source_url ?? "")
       );
     case "personas-index":

@@ -98,3 +98,28 @@
   20/22 capabilities and duplicates `summary` for the other 2, for no
   benefit over just making the real value the one source of truth that
   flows through compose like every other field).
+
+## 2026-07-23 — `assess_maturity_path` drops pre-crawl unconditionally, not just by default (T-008)
+
+- Decision: `assess_maturity_path`'s `current_level`/`target_level` are both
+  `z.enum(["crawl","walk","run"])` in *every* mode, not gated behind
+  `experimental`. It now returns verbatim `assessment_md` (from
+  `capability.maturity_raw`) instead of parsed `Action` characteristics.
+- Why: the tool's only reason to accept `pre-crawl` was to describe a gap
+  starting below Crawl, and its only reason to depend on `artifact.actions`
+  was the lack of a verbatim per-level assessment tool. Both are gone now
+  that `get_maturity_assessment` exists and `maturity_raw` covers the
+  official levels directly — keeping `pre-crawl`/Actions on this tool behind
+  the flag would restore a capability nothing else needs, purely for
+  symmetry with `get_actions`. Confirmed by a flag-matrix test that calls
+  `assess_maturity_path` identically against both the default and
+  experimental server and asserts the same shape and the same rejection of
+  `current_level: "pre-crawl"`.
+- Alternatives considered: gate `pre-crawl` support on this tool behind
+  `experimental` too, matching `get_actions` symmetrically (rejected — it
+  would mean experimental mode's `assess_maturity_path` still can't express
+  "gap above pre-crawl" without also switching its content source back to
+  Actions, adding a second unofficial-content code path for a case the spec
+  doesn't actually ask for; the spec's T-008 bullet for this tool reads the
+  same under both flag states, which only makes sense if it's flag-
+  independent).

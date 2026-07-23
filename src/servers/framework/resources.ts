@@ -4,7 +4,12 @@ import {
 } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpError } from "@modelcontextprotocol/sdk/types.js";
 import type { Artifact } from "../../shared/index.js";
-import { nearestMatches } from "../../shared/index.js";
+import {
+  ALL_MATURITY_LEVELS,
+  nearestMatches,
+  OFFICIAL_MATURITY_LEVELS,
+} from "../../shared/index.js";
+import type { ServerOptions } from "./server.js";
 import {
   capabilityMd,
   collectionMd,
@@ -35,7 +40,12 @@ function notFound(
 const MD = "text/markdown";
 const JSONM = "application/json";
 
-export function registerResources(server: McpServer, artifact: Artifact): void {
+export function registerResources(
+  server: McpServer,
+  artifact: Artifact,
+  opts: ServerOptions = {},
+): void {
+  const experimental = opts.experimental ?? false;
   const lastModified = artifact.manifest.crawled_at;
   const std = (extra?: Record<string, unknown>) => ({
     mimeType: MD,
@@ -54,7 +64,7 @@ export function registerResources(server: McpServer, artifact: Artifact): void {
         "Start here: what the framework contains and how to navigate this server.",
       ...std({ priority: 0.9 }),
     },
-    (uri) => text(uri.href, overviewMd(artifact)),
+    (uri) => text(uri.href, overviewMd(artifact, experimental)),
   );
 
   const collections: [
@@ -85,7 +95,9 @@ export function registerResources(server: McpServer, artifact: Artifact): void {
     [
       "maturity-model",
       URI.maturityModel,
-      "Official Crawl/Walk/Run levels plus the flagged Pre-Crawl extension",
+      experimental
+        ? "Official Crawl/Walk/Run levels plus the flagged Pre-Crawl extension"
+        : "Official Crawl/Walk/Run maturity levels",
       "maturity-model",
     ],
     [
@@ -112,13 +124,15 @@ export function registerResources(server: McpServer, artifact: Artifact): void {
       name,
       uri,
       { title: description, description, ...std() },
-      (u) => text(u.href, collectionMd(artifact, which)),
+      (u) => text(u.href, collectionMd(artifact, which, experimental)),
     );
   }
 
   const capSlugs = artifact.capabilities.map((c) => c.slug);
   const kpiSlugs = artifact.kpis.map((k) => k.slug);
-  const levels = ["pre-crawl", "crawl", "walk", "run"];
+  const levels: string[] = experimental
+    ? [...ALL_MATURITY_LEVELS]
+    : [...OFFICIAL_MATURITY_LEVELS];
 
   // Capability and persona docs are templates WITH list callbacks: every
   // concrete entry still appears in resources/list (critique m7), and any
@@ -197,8 +211,9 @@ export function registerResources(server: McpServer, artifact: Artifact): void {
     }),
     {
       title: "Capability maturity level",
-      description:
-        "One capability's assessment at one level (pre-crawl|crawl|walk|run), with parsed characteristics.",
+      description: experimental
+        ? "One capability's assessment at one level (pre-crawl|crawl|walk|run), with parsed characteristics."
+        : "One capability's official assessment text at one level (crawl|walk|run).",
       ...std(),
     },
     (uri, vars) => {
@@ -208,7 +223,10 @@ export function registerResources(server: McpServer, artifact: Artifact): void {
       if (!c) notFound(uri.href, "capability", slug, capSlugs);
       if (!levels.includes(level))
         notFound(uri.href, "maturity level", level, levels);
-      return text(uri.href, maturityLevelMd(artifact, c, level as "crawl"));
+      return text(
+        uri.href,
+        maturityLevelMd(artifact, c, level as "crawl", experimental),
+      );
     },
   );
 

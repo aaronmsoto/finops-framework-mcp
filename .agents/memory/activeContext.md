@@ -34,37 +34,45 @@ the v1 PR. The v0.1 state (all critique gates + 10/10 evals) is journaled in
 
 ## Next steps
 
-1. T-005 done: relationship functionality fully deleted (see
-   20260723-t005-delete-relationships.md); artifact at 2.0.0.
-2. T-006 done: markdown compose layer —
-   `src/crawlers/framework/markdown/{frontmatter,compose}.ts` serialize
-   `ParsedCapabilityPage`/section-parser records/`Persona`/`Kpi` to canonical
-   markdown; `emit.ts` writes string payloads verbatim (whole-file diff/
-   hash, not per-entity); `cli.ts refresh` composes and emits all 127 docs
-   (22 capabilities + 11 personas + 88 kpis + 6 section docs) under
-   `data/framework/content/markdown/`. Escaping guard (`ComposeError`) throws
-   on dialect-breaking plain-text items. See 20260723-t006-markdown-compose.md.
-3. T-007 done (this session): derive step —
-   `src/crawlers/framework/markdown/derive.ts` is the exact inverse parser
-   of compose.ts (per-doc derivers for every content/derived entity type,
-   including maturity-list → Action ordinal/parent_ordinal reconstruction).
-   `cli.ts`: new `derive` subcommand (zero network — reads
-   `content/markdown/` off disk only); `refresh` now composes markdown then
-   runs it through the SAME `deriveFromDocs` before validating/emitting, so
-   JSON is authoritatively derived, not taken from the HTML parse directly.
-   Fixed a real bug surfaced by this (not by inspection): two capabilities'
-   API-excerpt summary fallback wasn't mirrored onto `page.summary`, so it
-   was silently absent from markdown — see decisions.md. Verified live,
-   offline: refresh→refresh = no changes, refresh→derive = zero diff,
-   derive→derive = byte-identical (md5). `./scripts/agentic gates --tier
-   all` green (format, lint, typecheck, 169/169 tests, designs, integrity —
-   same impl+tests-in-one-diff warning as T-005/T-006, expected —, memory,
-   build). See 20260723-t007-derive-step.md.
-4. Loop: T-008 → T-009 next in order (spec sections §4-§5).
-5. Post-loop (supervising session): fresh-agent eval re-run ≥9/10, PR #4
+1. T-005..T-007 done — see 20260723-t00{5,6,7}-*.md (relationships deleted,
+   markdown compose layer, offline derive step).
+2. T-008 done (this session): experimental flag + official-only maturity
+   surface. `createServer(artifact, {experimental})` threads an
+   `experimental` opt into `registerTools/registerResources/registerPrompts`;
+   `main.ts` reads `FINOPS_MCP_EXPERIMENTAL=1` or `--experimental` (argv
+   flags are filtered out before picking the positional artifact-dir arg —
+   a real bug caught by manually running `main.js --experimental`, not by
+   tests). Default surface: `get_actions` unregistered; new
+   `get_maturity_assessment(capability, level?)` returns verbatim
+   `capability.maturity_raw` per level + attribution + resource_link;
+   `assess_maturity_path` reshaped to `gap: [{maturity, assessment_md}]`
+   with crawl/walk/run-only enums **unconditionally** (it never needed
+   Actions/pre-crawl once `maturity_raw` was available — same behavior in
+   both modes, confirmed by a flag-matrix test); `get_maturity_model`'s
+   `unofficial_extension` field is optional and omitted by default;
+   `maturityLevelMd` no longer appends the parsed-Actions section for
+   official levels unless experimental (this was leaking unofficial content
+   into the default capability-maturity resource — found while implementing,
+   not in the original spec bullet list, fixed same as everything else here);
+   resource template `levels` list/completions, `overviewMd`,
+   `collectionMd("maturity-model")`, prompt texts, and server `instructions`
+   all drop pre-crawl/get_actions mentions unless experimental. Tests:
+   `server.test.ts` now builds both a default and an experimental
+   in-memory client (`client`/`expClient`), with a `describe("flag matrix")`
+   block asserting tools/list shape, `get_maturity_model` output shape, and
+   `assess_maturity_path`'s enum staying official-only in both modes.
+   `./scripts/agentic gates --tier all` green (format, lint, typecheck,
+   182/182 tests, designs, integrity — same impl+tests-in-one-diff warning,
+   expected —, memory, build). Manually ran the built server both ways
+   (`node dist/servers/framework/main.js` and `--experimental`) and via a
+   direct `createServer`+in-memory-client probe — tool lists and
+   `get_maturity_model.unofficial_extension` presence verified live. See
+   20260723-t008-experimental-flag.md.
+3. Loop: T-009 next (spec §5 — docs, artifact v2, evals, npm prep).
+4. Post-loop (supervising session): fresh-agent eval re-run ≥9/10, PR #4
    title/body update, final verification, owner runs npm publish.
-6. Owner: install docs/proposed/refresh-data.yml per its checklist.
-7. v1.1 candidates: Cloudflare Workers remote endpoint (artifact-from-memory
+5. Owner: install docs/proposed/refresh-data.yml per its checklist.
+6. v1.1 candidates: Cloudflare Workers remote endpoint (artifact-from-memory
    loader), Action rename decision (moot while hidden), cheerio slimming.
 
 ## Open questions

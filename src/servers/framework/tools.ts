@@ -14,6 +14,7 @@ import {
   personaMd,
 } from "./render.js";
 import { buildSearchIndex, search, type SearchEntityType } from "./search.js";
+import type { ServerOptions } from "./server.js";
 import { URI } from "./uris.js";
 
 // Tools are the model's canonical path and return complete records at the
@@ -86,7 +87,12 @@ function ok(structured: Record<string, unknown>, summary?: string): ToolResult {
   };
 }
 
-export function registerTools(server: McpServer, artifact: Artifact): void {
+export function registerTools(
+  server: McpServer,
+  artifact: Artifact,
+  opts: ServerOptions = {},
+): void {
+  const experimental = opts.experimental ?? false;
   const index = buildSearchIndex(artifact);
   // Tools are the canonical distribution path, so leaf-level content must
   // carry the same CC BY 4.0 attribution as resources (critique-2 M7').
@@ -167,9 +173,9 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
           counts: { ...artifact.manifest.counts },
           license:
             "Framework content © FinOps Foundation, CC BY 4.0; restructured by finops-framework-mcp; unofficial extensions marked official:false.",
-          overview_md: overviewMd(artifact),
+          overview_md: overviewMd(artifact, experimental),
         },
-        overviewMd(artifact),
+        overviewMd(artifact, experimental),
       ),
   );
 
@@ -434,87 +440,143 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     },
   );
 
-  // ---- get_actions ---------------------------------------------------------------
+  // ---- get_actions (EXPERIMENTAL: hidden unless FINOPS_MCP_EXPERIMENTAL) --
+  if (experimental) {
+    server.registerTool(
+      "get_actions",
+      {
+        title: "EXPERIMENTAL: Get maturity assessment characteristics",
+        description:
+          "EXPERIMENTAL (FINOPS_MCP_EXPERIMENTAL): The discrete items parsed from a capability's Crawl/Walk/Run maturity assessment. IMPORTANT: these are assessment CHARACTERISTICS (rubric states an assessor checks for), not official to-do steps — an unofficial parsing of official prose (official:false). At 'pre-crawl' (an unofficial extension level) there is no official content; the tool returns the extension's definition instead.",
+        inputSchema: {
+          capability: z.string().describe("Capability slug"),
+          maturity: z
+            .enum(LEVELS)
+            .optional()
+            .describe("One level; omit for all three official levels"),
+          level: z
+            .enum(LEVELS)
+            .optional()
+            .describe("Alias for `maturity` (same values)"),
+        },
+        outputSchema: {
+          capability: z.string(),
+          note: z.string(),
+          levels: z.array(
+            z.object({
+              maturity: z.string(),
+              items: z.array(
+                z.object({
+                  ordinal: z.number(),
+                  text: z.string(),
+                  parent_ordinal: z.number().optional(),
+                  parse_quality: z.string(),
+                }),
+              ),
+            }),
+          ),
+        },
+        annotations: RO,
+      },
+      ({ capability, maturity, level }) => {
+        const c = findCapability(capability);
+        if (isErr(c)) return c;
+        maturity = maturity ?? level;
+        if (maturity === "pre-crawl") {
+          return ok(
+            {
+              capability: c.slug,
+              note: artifact.maturity_extension.description_md,
+              levels: [],
+            },
+            `pre-crawl is an unofficial extension: ${artifact.maturity_extension.description_md}`,
+          );
+        }
+        const wanted: OfficialMaturityLevel[] = maturity
+          ? [maturity as OfficialMaturityLevel]
+          : [...OFFICIAL];
+        const levels = wanted.map((lvl) => ({
+          maturity: lvl,
+          items: artifact.actions
+            .filter((a) => a.capability_slug === c.slug && a.maturity === lvl)
+            .map((a) => ({
+              ordinal: a.ordinal,
+              text: a.text,
+              ...(a.parent_ordinal !== undefined
+                ? { parent_ordinal: a.parent_ordinal }
+                : {}),
+              parse_quality: a.parse_quality,
+            })),
+        }));
+        return ok(
+          { capability: c.slug, note: UNOFFICIAL_ACTIONS_NOTE, levels },
+          `${UNOFFICIAL_ACTIONS_NOTE}\n\n` +
+            levels
+              .map(
+                (l) =>
+                  `## ${c.slug} @ ${l.maturity}\n` +
+                  l.items
+                    .map((i) => `${i.parent_ordinal ? "  " : ""}- ${i.text}`)
+                    .join("\n"),
+              )
+              .join("\n\n") +
+            attribution(c.source_url),
+        );
+      },
+    );
+  }
+
+  // ---- get_maturity_assessment ---------------------------------------------
   server.registerTool(
-    "get_actions",
+    "get_maturity_assessment",
     {
-      title: "Get maturity assessment characteristics",
+      title: "Get official maturity assessment",
       description:
-        "The discrete items parsed from a capability's Crawl/Walk/Run maturity assessment. IMPORTANT: these are assessment CHARACTERISTICS (rubric states an assessor checks for), not official to-do steps — an unofficial parsing of official prose (official:false). At 'pre-crawl' (an unofficial extension level) there is no official content; the tool returns the extension's definition instead.",
+        "The official FinOps Framework maturity assessment prose for a capability, verbatim, at one level (crawl|walk|run) or all three. This is the Foundation's published assessment text, not a parsed breakdown.",
       inputSchema: {
-        capability: z.string().describe("Capability slug"),
-        maturity: z
-          .enum(LEVELS)
+        capability: z.string().describe("Capability slug, e.g. 'allocation'"),
+        level: z
+          .enum(OFFICIAL)
           .optional()
           .describe("One level; omit for all three official levels"),
-        level: z
-          .enum(LEVELS)
-          .optional()
-          .describe("Alias for `maturity` (same values)"),
       },
       outputSchema: {
         capability: z.string(),
-        note: z.string(),
         levels: z.array(
           z.object({
-            maturity: z.string(),
-            items: z.array(
-              z.object({
-                ordinal: z.number(),
-                text: z.string(),
-                parent_ordinal: z.number().optional(),
-                parse_quality: z.string(),
-              }),
-            ),
+            maturity: z.enum(OFFICIAL),
+            assessment_md: z.string(),
           }),
         ),
       },
       annotations: RO,
     },
-    ({ capability, maturity, level }) => {
+    ({ capability, level }) => {
       const c = findCapability(capability);
       if (isErr(c)) return c;
-      maturity = maturity ?? level;
-      if (maturity === "pre-crawl") {
-        return ok(
-          {
-            capability: c.slug,
-            note: artifact.maturity_extension.description_md,
-            levels: [],
-          },
-          `pre-crawl is an unofficial extension: ${artifact.maturity_extension.description_md}`,
-        );
-      }
-      const wanted: OfficialMaturityLevel[] = maturity
-        ? [maturity as OfficialMaturityLevel]
+      const wanted: OfficialMaturityLevel[] = level
+        ? [level as OfficialMaturityLevel]
         : [...OFFICIAL];
       const levels = wanted.map((lvl) => ({
         maturity: lvl,
-        items: artifact.actions
-          .filter((a) => a.capability_slug === c.slug && a.maturity === lvl)
-          .map((a) => ({
-            ordinal: a.ordinal,
-            text: a.text,
-            ...(a.parent_ordinal !== undefined
-              ? { parent_ordinal: a.parent_ordinal }
-              : {}),
-            parse_quality: a.parse_quality,
-          })),
+        assessment_md: c.maturity_raw[lvl],
       }));
-      return ok(
-        { capability: c.slug, note: UNOFFICIAL_ACTIONS_NOTE, levels },
-        `${UNOFFICIAL_ACTIONS_NOTE}\n\n` +
-          levels
-            .map(
-              (l) =>
-                `## ${c.slug} @ ${l.maturity}\n` +
-                l.items
-                  .map((i) => `${i.parent_ordinal ? "  " : ""}- ${i.text}`)
-                  .join("\n"),
-            )
-            .join("\n\n") +
-          attribution(c.source_url),
-      );
+      const structured = { capability: c.slug, levels };
+      return {
+        content: [
+          {
+            type: "text",
+            text:
+              levels
+                .map(
+                  (l) => `## ${c.slug} @ ${l.maturity}\n\n${l.assessment_md}`,
+                )
+                .join("\n\n") + attribution(c.source_url),
+          },
+          capLink(c.slug),
+        ],
+        structuredContent: structured,
+      } as ToolResult;
     },
   );
 
@@ -654,19 +716,18 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     {
       title: "Maturity gap between two levels",
       description:
-        "For one capability, the assessment characteristics present at each level between current and target — evidence to look for when maturing, NOT official steps to execute (unofficial parsing, official:false). current_level may be 'pre-crawl' (unofficial extension meaning below-Crawl); the gap then starts at Crawl.",
+        "For one capability, the official maturity assessment text at each level between current and target — evidence to look for when maturing.",
       inputSchema: {
         capability: z.string(),
-        current_level: z.enum(LEVELS),
+        current_level: z.enum(OFFICIAL),
         target_level: z.enum(OFFICIAL),
       },
       outputSchema: {
         capability: z.string(),
-        note: z.string(),
         gap: z.array(
           z.object({
-            maturity: z.string(),
-            characteristics: z.array(z.string()),
+            maturity: z.enum(OFFICIAL),
+            assessment_md: z.string(),
           }),
         ),
       },
@@ -675,39 +736,26 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     ({ capability, current_level, target_level }) => {
       const c = findCapability(capability);
       if (isErr(c)) return c;
-      const order = ["pre-crawl", "crawl", "walk", "run"];
-      const from = order.indexOf(current_level);
-      const to = order.indexOf(target_level);
+      const from = OFFICIAL.indexOf(current_level);
+      const to = OFFICIAL.indexOf(target_level);
       if (to <= from) {
         return err(
           `target_level (${target_level}) must be above current_level (${current_level}).`,
         );
       }
-      const gapLevels = order.slice(
-        from + 1,
-        to + 1,
-      ) as OfficialMaturityLevel[];
+      const gapLevels = OFFICIAL.slice(from + 1, to + 1);
       const gap = gapLevels.map((lvl) => ({
         maturity: lvl,
-        characteristics: artifact.actions
-          .filter((a) => a.capability_slug === c.slug && a.maturity === lvl)
-          .map((a) => a.text),
+        assessment_md: c.maturity_raw[lvl],
       }));
-      const note =
-        `Characteristics observed at each level above ${current_level} up to ${target_level} — ` +
-        `use as assessment evidence, not as a to-do list. ${UNOFFICIAL_ACTIONS_NOTE}`;
       return ok(
         {
           capability: c.slug,
-          note,
           gap,
         },
-        `${note}\n\n` +
+        `Official assessment text at each level above ${current_level} up to ${target_level}.\n\n` +
           gap
-            .map(
-              (g) =>
-                `## ${g.maturity}\n${g.characteristics.map((t) => `- ${t}`).join("\n")}`,
-            )
+            .map((g) => `## ${g.maturity}\n\n${g.assessment_md}`)
             .join("\n\n") +
           attribution(c.source_url),
       );
@@ -925,8 +973,9 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
     "get_maturity_model",
     {
       title: "Get the maturity model",
-      description:
-        "The official FinOps maturity model: Crawl/Walk/Run with each level's characteristics and the community's sample goals/KPIs (e.g. allocation coverage targets per level), plus this server's flagged unofficial Pre-Crawl extension. Capability-agnostic — for one capability's per-level assessment use get_actions.",
+      description: experimental
+        ? "The official FinOps maturity model: Crawl/Walk/Run with each level's characteristics and the community's sample goals/KPIs (e.g. allocation coverage targets per level), plus this server's flagged unofficial Pre-Crawl extension. Capability-agnostic — for one capability's per-level assessment use get_maturity_assessment or get_actions."
+        : "The official FinOps maturity model: Crawl/Walk/Run with each level's characteristics and the community's sample goals/KPIs (e.g. allocation coverage targets per level). Capability-agnostic — for one capability's per-level assessment use get_maturity_assessment.",
       inputSchema: {},
       outputSchema: {
         official_levels: z.array(
@@ -938,44 +987,53 @@ export function registerTools(server: McpServer, artifact: Artifact): void {
             official: z.literal(true),
           }),
         ),
-        unofficial_extension: z.object({
-          slug: z.string(),
-          title: z.string(),
-          description_md: z.string(),
-          official: z.literal(false),
-        }),
+        unofficial_extension: z
+          .object({
+            slug: z.string(),
+            title: z.string(),
+            description_md: z.string(),
+            official: z.literal(false),
+          })
+          .optional(),
       },
       annotations: RO,
     },
-    () =>
-      ok(
-        {
-          official_levels: artifact.maturity_levels.map((l) => ({
-            slug: l.slug,
-            title: l.title,
-            characteristics_md: l.characteristics_md,
-            sample_goals_md: l.sample_goals_md,
-            official: true as const,
-          })),
-          unofficial_extension: {
-            slug: artifact.maturity_extension.slug,
-            title: artifact.maturity_extension.title,
-            description_md: artifact.maturity_extension.description_md,
-            official: false as const,
-          },
-        },
+    () => {
+      const structured = {
+        official_levels: artifact.maturity_levels.map((l) => ({
+          slug: l.slug,
+          title: l.title,
+          characteristics_md: l.characteristics_md,
+          sample_goals_md: l.sample_goals_md,
+          official: true as const,
+        })),
+        ...(experimental
+          ? {
+              unofficial_extension: {
+                slug: artifact.maturity_extension.slug,
+                title: artifact.maturity_extension.title,
+                description_md: artifact.maturity_extension.description_md,
+                official: false as const,
+              },
+            }
+          : {}),
+      };
+      const text =
         artifact.maturity_levels
           .map(
             (l) =>
               `## ${l.title} (official)\n**Characteristics**\n${l.characteristics_md}\n**Sample goals/KPIs**\n${l.sample_goals_md}`,
           )
           .join("\n\n") +
-          `\n\n## ${artifact.maturity_extension.title}\n${artifact.maturity_extension.description_md}` +
-          attribution(
-            artifact.maturity_levels[0]?.source_url ??
-              "https://www.finops.org/framework/maturity-model/",
-          ),
-      ),
+        (experimental
+          ? `\n\n## ${artifact.maturity_extension.title}\n${artifact.maturity_extension.description_md}`
+          : "") +
+        attribution(
+          artifact.maturity_levels[0]?.source_url ??
+            "https://www.finops.org/framework/maturity-model/",
+        );
+      return ok(structured, text);
+    },
   );
 
   // ---- get_changelog ------------------------------------------------------------------------------

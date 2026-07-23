@@ -4,30 +4,50 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadArtifact } from "../../shared/index.js";
 import { createServer } from "./server.js";
+import { TEMPLATES } from "./uris.js";
 
 const ARTIFACT_DIR = join(import.meta.dirname, "../../../data/framework");
 
 let client: Client;
+let expClient: Client;
 
-beforeAll(async () => {
+async function connect(experimental: boolean): Promise<Client> {
   const artifact = loadArtifact(ARTIFACT_DIR);
-  const server = createServer(artifact);
+  const server = createServer(artifact, { experimental });
   const [clientTransport, serverTransport] =
     InMemoryTransport.createLinkedPair();
-  client = new Client({ name: "test-client", version: "0.0.0" });
+  const c = new Client({ name: "test-client", version: "0.0.0" });
   await Promise.all([
     server.connect(serverTransport),
-    client.connect(clientTransport),
+    c.connect(clientTransport),
   ]);
+  return c;
+}
+
+beforeAll(async () => {
+  client = await connect(false);
+  expClient = await connect(true);
 });
 
-async function call(name: string, args: Record<string, unknown> = {}) {
-  const res = await client.callTool({ name, arguments: args });
+async function callOn(
+  c: Client,
+  name: string,
+  args: Record<string, unknown> = {},
+) {
+  const res = await c.callTool({ name, arguments: args });
   return res as {
     content: { type: string; text?: string; uri?: string }[];
     structuredContent?: Record<string, unknown>;
     isError?: boolean;
   };
+}
+
+async function call(name: string, args: Record<string, unknown> = {}) {
+  return callOn(client, name, args);
+}
+
+async function callExp(name: string, args: Record<string, unknown> = {}) {
+  return callOn(expClient, name, args);
 }
 
 describe("resources", () => {
@@ -59,19 +79,22 @@ describe("resources", () => {
     expect(text).toContain("adapted");
   });
 
-  it("serves maturity-level template resources incl. flagged pre-crawl", async () => {
+  it("serves maturity-level template resources with official text only by default", async () => {
     const run = await client.readResource({
       uri: "finops://framework/capabilities/forecasting/maturity/run",
     });
-    expect((run.contents[0] as { text: string }).text).toContain(
-      "assessment characteristics",
-    );
-    const pre = await client.readResource({
-      uri: "finops://framework/capabilities/forecasting/maturity/pre-crawl",
-    });
-    expect((pre.contents[0] as { text: string }).text).toContain(
-      "unofficial extension",
-    );
+    const text = (run.contents[0] as { text: string }).text;
+    expect(text).toContain("Maturity: run");
+    expect(text).not.toMatch(/pre-crawl/i);
+    expect(text).not.toContain("assessment characteristics");
+  });
+
+  it("rejects the pre-crawl maturity resource by default (unknown level)", async () => {
+    await expect(
+      client.readResource({
+        uri: "finops://framework/capabilities/forecasting/maturity/pre-crawl",
+      }),
+    ).rejects.toMatchObject({ code: -32002 });
   });
 
   it("returns -32002 with suggestions for an unknown slug (critique m5)", async () => {
@@ -99,6 +122,41 @@ describe("resources", () => {
       argument: { name: "capability", value: "allo" },
     });
     expect(res.completion.values).toContain("allocation");
+  });
+
+  it("maturity-level resource template completions omit pre-crawl by default", async () => {
+    const res = await client.complete({
+      ref: { type: "ref/resource", uri: TEMPLATES.capabilityMaturity },
+      argument: { name: "level", value: "" },
+    });
+    expect(res.completion.values.sort()).toEqual(["crawl", "run", "walk"]);
+  });
+});
+
+describe("resources (experimental)", () => {
+  it("serves the pre-crawl maturity resource and includes it in completions", async () => {
+    const completions = await expClient.complete({
+      ref: { type: "ref/resource", uri: TEMPLATES.capabilityMaturity },
+      argument: { name: "level", value: "" },
+    });
+    expect(completions.completion.values.sort()).toEqual([
+      "crawl",
+      "pre-crawl",
+      "run",
+      "walk",
+    ]);
+    const pre = await expClient.readResource({
+      uri: "finops://framework/capabilities/forecasting/maturity/pre-crawl",
+    });
+    expect((pre.contents[0] as { text: string }).text).toContain(
+      "unofficial extension",
+    );
+    const run = await expClient.readResource({
+      uri: "finops://framework/capabilities/forecasting/maturity/run",
+    });
+    expect((run.contents[0] as { text: string }).text).toContain(
+      "assessment characteristics",
+    );
   });
 });
 
@@ -143,25 +201,38 @@ describe("tools", () => {
     expect(res.content[0]?.text).toContain("allocation");
   });
 
-  it("get_actions marks items as unofficial characteristics", async () => {
-    const res = await call("get_actions", {
+  it("get_maturity_assessment returns verbatim official text with attribution and a resource_link", async () => {
+    const res = await call("get_maturity_assessment", {
       capability: "allocation",
-      maturity: "crawl",
+      level: "crawl",
     });
-    expect(res.structuredContent?.note).toMatch(/unofficial/i);
-    const levels = res.structuredContent?.levels as { items: unknown[] }[];
-    expect(levels[0]?.items.length).toBeGreaterThan(3);
+    expect(res.isError).toBeFalsy();
+    const levels = res.structuredContent?.levels as {
+      maturity: string;
+      assessment_md: string;
+    }[];
+    expect(levels).toHaveLength(1);
+    expect(levels[0]?.maturity).toBe("crawl");
+    expect(levels[0]?.assessment_md.length).toBeGreaterThan(0);
+    const text = res.content.find((c) => c.type === "text")?.text ?? "";
+    expect(text).toContain("CC BY 4.0");
+    expect(res.content.some((c) => c.type === "resource_link")).toBe(true);
   });
 
-  it("get_actions at pre-crawl explains the extension instead of inventing data", async () => {
-    const res = await call("get_actions", {
+  it("get_maturity_assessment without a level returns all three official levels", async () => {
+    const res = await call("get_maturity_assessment", {
       capability: "allocation",
-      maturity: "pre-crawl",
     });
-    expect(res.structuredContent?.note).toMatch(
-      /not FinOps Foundation vocabulary/,
-    );
-    expect(res.structuredContent?.levels).toEqual([]);
+    const levels = res.structuredContent?.levels as { maturity: string }[];
+    expect(levels.map((l) => l.maturity)).toEqual(["crawl", "walk", "run"]);
+  });
+
+  it("get_maturity_assessment unknown capability suggests nearest matches", async () => {
+    const res = await call("get_maturity_assessment", {
+      capability: "allocaton",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toContain("allocation");
   });
 
   it("get_kpis returns full records with formulas where published", async () => {
@@ -191,7 +262,7 @@ describe("tools", () => {
   it("leaf tools carry CC BY attribution in text (critique-2 M7')", async () => {
     for (const [tool, args] of [
       ["get_capability", { slug: "allocation" }],
-      ["get_actions", { capability: "allocation", maturity: "crawl" }],
+      ["get_maturity_assessment", { capability: "allocation", level: "crawl" }],
       ["get_maturity_model", {}],
     ] as const) {
       const res = await call(tool, args as Record<string, unknown>);
@@ -212,16 +283,6 @@ describe("tools", () => {
     expect((persona.structuredContent?.markdown as string) ?? "").toContain(
       "Finance",
     );
-  });
-
-  it("get_actions honors the level alias", async () => {
-    const res = await call("get_actions", {
-      capability: "allocation",
-      level: "crawl",
-    });
-    const levels = res.structuredContent?.levels as { maturity: string }[];
-    expect(levels).toHaveLength(1);
-    expect(levels[0]?.maturity).toBe("crawl");
   });
 
   it("get_kpis slug lookup returns one record; unknown slug suggests", async () => {
@@ -270,6 +331,116 @@ describe("tools", () => {
   it("get_changelog reports the current version", async () => {
     const res = await call("get_changelog", {});
     expect(res.structuredContent?.current_version).toMatch(/^\d+\./);
+  });
+
+  it("assess_maturity_path returns verbatim assessment_md with official-only enums", async () => {
+    const res = await call("assess_maturity_path", {
+      capability: "allocation",
+      current_level: "crawl",
+      target_level: "run",
+    });
+    expect(res.isError).toBeFalsy();
+    const gap = res.structuredContent?.gap as {
+      maturity: string;
+      assessment_md: string;
+    }[];
+    expect(gap.map((g) => g.maturity)).toEqual(["walk", "run"]);
+    expect(gap.every((g) => g.assessment_md.length > 0)).toBe(true);
+    expect(res.structuredContent?.note).toBeUndefined();
+  });
+
+  it("assess_maturity_path rejects pre-crawl as an enum value", async () => {
+    const res = await call("assess_maturity_path", {
+      capability: "allocation",
+      current_level: "pre-crawl",
+      target_level: "run",
+    });
+    expect(res.isError).toBe(true);
+  });
+
+  it("get_maturity_model has exactly 3 official levels and no unofficial_extension by default", async () => {
+    const res = await call("get_maturity_model", {});
+    expect((res.structuredContent?.official_levels as unknown[]).length).toBe(
+      3,
+    );
+    expect(res.structuredContent?.unofficial_extension).toBeUndefined();
+    const text = res.content.find((c) => c.type === "text")?.text ?? "";
+    expect(text).not.toMatch(/pre-crawl/i);
+  });
+});
+
+describe("flag matrix", () => {
+  it("default tools/list lacks get_actions, includes get_maturity_assessment, and mentions no pre-crawl", async () => {
+    const { tools } = await client.listTools();
+    const names = tools.map((t) => t.name);
+    expect(names).not.toContain("get_actions");
+    expect(names).toContain("get_maturity_assessment");
+    expect(JSON.stringify(tools)).not.toMatch(/pre-crawl/i);
+  });
+
+  it("experimental tools/list restores get_actions, labeled EXPERIMENTAL", async () => {
+    const { tools } = await expClient.listTools();
+    const names = tools.map((t) => t.name);
+    expect(names).toContain("get_actions");
+    expect(names).toContain("get_maturity_assessment");
+    const getActions = tools.find((t) => t.name === "get_actions");
+    expect(getActions?.title ?? "").toMatch(/EXPERIMENTAL/);
+    expect(getActions?.description ?? "").toMatch(/EXPERIMENTAL/);
+  });
+
+  it("experimental get_maturity_model includes the unofficial extension alongside the 3 official levels", async () => {
+    const res = await callExp("get_maturity_model", {});
+    expect((res.structuredContent?.official_levels as unknown[]).length).toBe(
+      3,
+    );
+    expect(res.structuredContent?.unofficial_extension).toBeDefined();
+  });
+
+  it("experimental get_actions marks items as unofficial characteristics", async () => {
+    const res = await callExp("get_actions", {
+      capability: "allocation",
+      maturity: "crawl",
+    });
+    expect(res.structuredContent?.note).toMatch(/unofficial/i);
+    const levels = res.structuredContent?.levels as { items: unknown[] }[];
+    expect(levels[0]?.items.length).toBeGreaterThan(3);
+  });
+
+  it("experimental get_actions at pre-crawl explains the extension instead of inventing data", async () => {
+    const res = await callExp("get_actions", {
+      capability: "allocation",
+      maturity: "pre-crawl",
+    });
+    expect(res.structuredContent?.note).toMatch(
+      /not FinOps Foundation vocabulary/,
+    );
+    expect(res.structuredContent?.levels).toEqual([]);
+  });
+
+  it("experimental get_actions honors the level alias", async () => {
+    const res = await callExp("get_actions", {
+      capability: "allocation",
+      level: "crawl",
+    });
+    const levels = res.structuredContent?.levels as { maturity: string }[];
+    expect(levels).toHaveLength(1);
+    expect(levels[0]?.maturity).toBe("crawl");
+  });
+
+  it("assess_maturity_path is unchanged by the experimental flag (still official-only)", async () => {
+    const res = await callExp("assess_maturity_path", {
+      capability: "allocation",
+      current_level: "crawl",
+      target_level: "walk",
+    });
+    const gap = res.structuredContent?.gap as { maturity: string }[];
+    expect(gap.map((g) => g.maturity)).toEqual(["walk"]);
+    const bad = await callExp("assess_maturity_path", {
+      capability: "allocation",
+      current_level: "pre-crawl",
+      target_level: "run",
+    });
+    expect(bad.isError).toBe(true);
   });
 });
 
