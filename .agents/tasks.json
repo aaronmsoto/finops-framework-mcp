@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "24748a17569c2518dfb5c4756f3935c5ab4256e917f3b68fdb9e17cb43b3cd77",
+  "chainHead": "d0939df22cc33d6b5bf62c5ca9cc3277df66f24737b75d303096d68f984409c8",
   "tasks": [
     {
       "id": "T-001",
@@ -330,9 +330,15 @@
         "Server startup, tools, and cli.js derive work without cheerio present (derive is markdown-to-JSON only)",
         "Tests cover the missing-cheerio error path; gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "cheerio moved to devDependencies, loaded lazily via createRequire; gates PASS (189/189 tests), verified derive/server/refresh work correctly with cheerio hidden then restored",
+        "commit": "59792f80adbb78369eb4b6d33b73b1a98569e394",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:22:55.478Z"
+      },
+      "hash": "d0939df22cc33d6b5bf62c5ca9cc3277df66f24737b75d303096d68f984409c8"
     },
     {
       "id": "T-019",
