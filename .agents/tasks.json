@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "50e2c728ea4670dc4d370c9757cef8ed6d688421cb24d820b39d8edae23cfe72",
+  "chainHead": "dabd1ef894b81d9c7292451a1f16eb8b0bfc18589ae41ad6554ab8b034f5a8e4",
   "tasks": [
     {
       "id": "T-001",
@@ -135,9 +135,15 @@
         "FINOPS_MCP_EXPERIMENTAL=1 (or --experimental) restores get_actions (EXPERIMENTAL-labeled) and pre-crawl; assess_maturity_path serves gap as verbatim assessment_md per level with crawl/walk/run enums",
         "flag-matrix tests pass via createServer(artifact,{experimental}); completable(z.string().describe()) pattern preserved; gates --tier all pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "gates --tier all green (182/182 tests); manually verified default vs --experimental/FINOPS_MCP_EXPERIMENTAL=1 server behavior via built dist and in-memory client probes",
+        "commit": "f749866a0193cd5b4e2b79a7e24e71ce88a8e503",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T01:58:45.332Z"
+      },
+      "hash": "dabd1ef894b81d9c7292451a1f16eb8b0bfc18589ae41ad6554ab8b034f5a8e4"
     },
     {
       "id": "T-009",
