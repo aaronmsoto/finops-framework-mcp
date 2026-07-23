@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "8af340cb717407c1d81caf2a04cee69417bd3595977721a15e194b2f39026113",
+  "chainHead": "bed32170c32d505c3030d4ee3be4faa43da755151c2b82951cae969f4503573a",
   "tasks": [
     {
       "id": "T-001",
@@ -237,9 +237,15 @@
         "A timed-out iteration fails, reverts, and counts toward consecutive failures; the run continues",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Per-iteration timeout: loop.max_iteration_minutes (default 30, fractional allowed) with lower-only --max-iteration-minutes flag; build/verify/plan runner calls bounded by min(wall remaining, cap); timeout detail names which budget fired; hung iterations fail and the run continues. Harness: 231 tests, lint, typecheck green; 5 new tests.",
+        "commit": "89f01199c8d6e110b739d32aa72ef4aafb631a8f",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T06:58:11.350Z"
+      },
+      "hash": "bed32170c32d505c3030d4ee3be4faa43da755151c2b82951cae969f4503573a"
     },
     {
       "id": "T-014",
