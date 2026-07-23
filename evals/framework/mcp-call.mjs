@@ -5,7 +5,10 @@
 //   node evals/framework/mcp-call.mjs call <tool-name> '<json-arguments>'
 // Requires `npm run build` first (dist/ present) and the committed artifact.
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import {
+  StdioClientTransport,
+  getDefaultEnvironment,
+} from "@modelcontextprotocol/sdk/client/stdio.js";
 
 const [, , command, toolName, argsJson] = process.argv;
 
@@ -14,6 +17,14 @@ await client.connect(
   new StdioClientTransport({
     command: "node",
     args: ["dist/servers/framework/main.js"],
+    // SDK strips the parent env by default — forward the experimental flag
+    // so eval runs can exercise the gated surface.
+    env: {
+      ...getDefaultEnvironment(),
+      ...(process.env.FINOPS_MCP_EXPERIMENTAL
+        ? { FINOPS_MCP_EXPERIMENTAL: process.env.FINOPS_MCP_EXPERIMENTAL }
+        : {}),
+    },
     stderr: "ignore",
   }),
 );
