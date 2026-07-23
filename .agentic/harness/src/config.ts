@@ -170,6 +170,8 @@ export interface LoopCaps {
   max_iterations: number;
   max_wall_minutes: number;
   max_consecutive_failures: number;
+  /** Optional third hard cap: total tokens across all runner calls (null = uncapped). */
+  max_total_tokens: number | null;
 }
 
 export type MergeMethod = "merge" | "squash" | "rebase";
@@ -206,6 +208,7 @@ export const DEFAULT_LOOP_CAPS: LoopCaps = {
   max_iterations: 10,
   max_wall_minutes: 120,
   max_consecutive_failures: 3,
+  max_total_tokens: null,
 };
 
 export const DEFAULT_BRANCHING: BranchingPolicy = {
@@ -292,6 +295,13 @@ export function validateApprovals(raw: unknown): ApprovalsPolicy {
         }
         loop[key] = v;
       }
+    }
+    const tokens = raw.loop.max_total_tokens;
+    if (tokens !== undefined) {
+      if (typeof tokens !== "number" || !Number.isInteger(tokens) || tokens <= 0) {
+        fail(F, "loop.max_total_tokens", `must be a positive integer (got ${describe(tokens)})`);
+      }
+      loop.max_total_tokens = tokens;
     }
   }
 

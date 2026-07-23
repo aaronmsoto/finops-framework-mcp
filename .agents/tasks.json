@@ -196,7 +196,7 @@
         "loop.max_total_tokens policy key (default null) triggers budget_exhausted when exceeded",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

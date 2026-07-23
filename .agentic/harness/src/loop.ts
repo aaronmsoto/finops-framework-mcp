@@ -3,7 +3,7 @@ import path from "node:path";
 import type { AgenticConfig, ApprovalsPolicy } from "./config.js";
 import { runGates, summarizeReport, type GatesReport } from "./gates.js";
 import { appendJournalEntry } from "./journal.js";
-import type { AgentRunner, RunnerResult } from "./runners/types.js";
+import { addTokens, tokenTotals, ZERO_TOKENS, type AgentRunner, type RunnerResult, type TokenTotals } from "./runners/types.js";
 import {
   blockTask,
   loadTasks,
@@ -32,6 +32,8 @@ export interface IterationRecord {
   commitMade: boolean;
   durationMs: number;
   details: string[];
+  /** Build + verify token usage for this iteration (zeros when the runner reports none). */
+  tokens?: TokenTotals;
 }
 
 export interface LoopResult {
@@ -39,6 +41,8 @@ export interface LoopResult {
   reason: string;
   iterations: IterationRecord[];
   durationMs: number;
+  /** Cumulative token usage across every runner call in the run. */
+  totalTokens: TokenTotals;
 }
 
 export interface LoopOptions {
@@ -286,6 +290,11 @@ export async function runLoop(
   const records: IterationRecord[] = [];
   let consecutiveFailures = 0;
   let lastGates: GatesReport | null = null;
+  const maxTotalTokens = policy.loop.max_total_tokens;
+  let runTokens = ZERO_TOKENS;
+
+  const fmtTokens = (t: TokenTotals): string =>
+    `in=${t.input} out=${t.output} cacheRead=${t.cacheRead} cacheCreation=${t.cacheCreation} total=${t.total}`;
 
   // This run owns ONE journal file (.agents/journal/<date>-loop-<mode>-<hhmmss>.md);
   // every iteration appends a section to it.
@@ -300,7 +309,7 @@ export async function runLoop(
 
   const finish = (state: LoopState, reason: string): LoopResult => {
     logErr(`[loop] terminal state: ${state} — ${reason}`);
-    return { state, reason, iterations: records, durationMs: Date.now() - started };
+    return { state, reason, iterations: records, durationMs: Date.now() - started, totalTokens: runTokens };
   };
 
   // Plan mode: exactly ONE iteration. The initializer adds tasks through
@@ -322,6 +331,8 @@ export async function runLoop(
       extraEnv: { AGENTIC_LOOP: "1", AGENTIC_LOOP_PHASE: "plan" },
     });
 
+    const planTokens = tokenTotals(runRes.usage);
+    runTokens = addTokens(runTokens, planTokens);
     const details: string[] = [];
     if (runRes.timedOut) details.push("runner timed out (killed at the wall-clock budget)");
     if (runRes.exitCode !== 0) details.push(`runner exited with code ${runRes.exitCode}`);
@@ -348,12 +359,14 @@ export async function runLoop(
       commitMade: preHead !== null && postHead !== null && preHead !== postHead,
       durationMs: Date.now() - iterStarted,
       details,
+      tokens: planTokens,
     };
     records.push(record);
     journal(`loop plan iteration — ${record.outcome}`, {
       mode: "plan",
       pendingTasks: `${pendingBefore} -> ${pendingAfter}`,
       chain: chain.ok ? "valid" : `INVALID: ${chain.errors.join("; ")}`,
+      tokens: fmtTokens(planTokens),
       duration: `${record.durationMs}ms`,
       ...(details.length > 0 ? { details: details.join(" | ") } : {}),
     });
@@ -413,6 +426,8 @@ export async function runLoop(
       extraEnv: { AGENTIC_LOOP: "1", AGENTIC_TASK_ID: task.id, AGENTIC_LOOP_PHASE: "build" },
     });
 
+    let iterTokens = tokenTotals(runRes.usage);
+
     // Independent checks — agent claims are ignored; only these count.
     const details: string[] = [];
     if (runRes.timedOut) details.push("runner timed out (killed at the wall-clock budget)");
@@ -448,6 +463,7 @@ export async function runLoop(
         timeoutMs: verifyRemainingMs,
         extraEnv: { AGENTIC_LOOP: "1", AGENTIC_TASK_ID: task.id, AGENTIC_LOOP_PHASE: "verify" },
       });
+      iterTokens = addTokens(iterTokens, tokenTotals(verifyRes.usage));
       const match = /^VERDICT:\s*(pass|fail)/im.exec(verifyRes.finalText);
       if (match && match[1]!.toLowerCase() === "pass") {
         verdict = "pass";
@@ -469,6 +485,7 @@ export async function runLoop(
       }
     }
 
+    runTokens = addTokens(runTokens, iterTokens);
     const record: IterationRecord = {
       n,
       taskId: task.id,
@@ -480,6 +497,7 @@ export async function runLoop(
       commitMade,
       durationMs: Date.now() - iterStarted,
       details,
+      tokens: iterTokens,
     };
     records.push(record);
     journal(`loop iteration ${n} — ${task.id} ${record.outcome}`, {
@@ -489,6 +507,7 @@ export async function runLoop(
       chain: chain.ok ? "valid" : `INVALID: ${chain.errors.join("; ")}`,
       commit: commitMade ? `yes (${postHead})` : "no",
       verification: verdict,
+      tokens: `${fmtTokens(iterTokens)} (run total ${runTokens.total})`,
       duration: `${record.durationMs}ms`,
       ...(details.length > 0 ? { details: details.join(" | ") } : {}),
     });
@@ -496,20 +515,31 @@ export async function runLoop(
 
     if (ok) {
       consecutiveFailures = 0;
-      continue;
-    }
-    consecutiveFailures++;
-    if (consecutiveFailures >= maxConsecutiveFailures) {
-      try {
-        const current = loadTasks(rootDir);
-        const t = current.tasks.find((x) => x.id === task.id);
-        if (t && t.status !== "done" && t.status !== "blocked") blockTask(rootDir, task.id);
-      } catch (err) {
-        logErr(`[loop] could not mark ${task.id} blocked: ${(err as Error).message}`);
+    } else {
+      consecutiveFailures++;
+      if (consecutiveFailures >= maxConsecutiveFailures) {
+        try {
+          const current = loadTasks(rootDir);
+          const t = current.tasks.find((x) => x.id === task.id);
+          if (t && t.status !== "done" && t.status !== "blocked") blockTask(rootDir, task.id);
+        } catch (err) {
+          logErr(`[loop] could not mark ${task.id} blocked: ${(err as Error).message}`);
+        }
+        const reason = `${consecutiveFailures} consecutive failed iterations (cap: ${maxConsecutiveFailures}) on ${task.id}`;
+        writeBlockedMd(rootDir, task, records, lastGates, chain.ok ? [] : chain.errors, maxConsecutiveFailures, reason);
+        return finish("blocked", reason);
       }
-      const reason = `${consecutiveFailures} consecutive failed iterations (cap: ${maxConsecutiveFailures}) on ${task.id}`;
-      writeBlockedMd(rootDir, task, records, lastGates, chain.ok ? [] : chain.errors, maxConsecutiveFailures, reason);
-      return finish("blocked", reason);
+    }
+    // Third hard cap, checked after failure handling so `blocked` wins when
+    // both trip: budget_exhausted is resumable, a block needs human eyes.
+    // With nothing left pending the loop is allowed to finish normally —
+    // the next pass reports success/blocked on its own merits.
+    if (maxTotalTokens !== null && runTokens.total > maxTotalTokens) {
+      const pendingLeft = statusCounts(loadTasks(rootDir)).pending;
+      if (pendingLeft > 0) {
+        return finish("budget_exhausted", `token cap reached (${runTokens.total} > ${maxTotalTokens} total tokens) with ${pendingLeft} task(s) remaining`);
+      }
+      logErr(`[loop] token cap reached (${runTokens.total} > ${maxTotalTokens}) after the final task — finishing normally.`);
     }
   }
 }

@@ -303,7 +303,10 @@ async function cmdLoop(root: string, config: AgenticConfig, args: string[], json
     taskId: parsed.strings.task,
   });
   if (json) logOut(JSON.stringify(result, null, 2));
-  else logOut(`loop: ${result.state} — ${result.reason} (${result.iterations.length} iteration(s), ${Math.round(result.durationMs / 1000)}s)`);
+  else {
+    const tokens = result.totalTokens.total > 0 ? `, ${result.totalTokens.total} tokens` : "";
+    logOut(`loop: ${result.state} — ${result.reason} (${result.iterations.length} iteration(s), ${Math.round(result.durationMs / 1000)}s${tokens})`);
+  }
   return result.state === "success" ? 0 : 1;
 }
 

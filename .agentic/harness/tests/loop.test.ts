@@ -197,6 +197,69 @@ describe("loop terminal states (mock runner, hermetic)", () => {
   });
 });
 
+describe("loop token accounting", () => {
+  /** Honest agent that also reports usage from both phases via the mock marker. */
+  function honestScriptWithUsage(): string {
+    return [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'if [ "$AGENTIC_LOOP_PHASE" = "verify" ]; then echo "AGENTIC_MOCK_USAGE: {\\"input_tokens\\": 5, \\"output_tokens\\": 45, \\"cache_read_input_tokens\\": 250}"; echo "VERDICT: pass"; exit 0; fi',
+      `node "${CLI_PATH}" tasks start "$AGENTIC_TASK_ID" >&2`,
+      'echo "work for $AGENTIC_TASK_ID" >> notes.txt',
+      `node "${CLI_PATH}" tasks complete "$AGENTIC_TASK_ID" --summary "done by mock" >&2`,
+      "git add -A >&2",
+      'git commit -qm "complete $AGENTIC_TASK_ID"',
+      'echo "AGENTIC_MOCK_USAGE: {\\"input_tokens\\": 10, \\"output_tokens\\": 80, \\"cache_read_input_tokens\\": 900, \\"cache_creation_input_tokens\\": 10}"',
+    ].join("\n");
+  }
+
+  it("accumulates build+verify tokens per iteration and across the run; journals them", async () => {
+    addTask(dir, { title: "first", acceptance: ["a"] });
+    addTask(dir, { title: "second", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestScriptWithUsage();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+    // Per iteration: build 1000 + verify 300 = 1300; two iterations = 2600.
+    expect(result.iterations[0]!.tokens).toEqual({ input: 15, output: 125, cacheRead: 1150, cacheCreation: 10, total: 1300 });
+    expect(result.totalTokens.total).toBe(2600);
+    const journalText = readLoopJournal();
+    expect(journalText).toMatch(/tokens: in=15 out=125 cacheRead=1150 cacheCreation=10 total=1300 \(run total 1300\)/);
+    expect(journalText).toMatch(/run total 2600/);
+  });
+
+  it("stops with budget_exhausted when loop.max_total_tokens is exceeded with work remaining", async () => {
+    writeApprovals(dir, { maxTotalTokens: 1200 });
+    addTask(dir, { title: "first", acceptance: ["a"] });
+    addTask(dir, { title: "never reached", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestScriptWithUsage();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("budget_exhausted");
+    expect(result.reason).toMatch(/token cap reached \(1300 > 1200 total tokens\) with 1 task\(s\) remaining/);
+    expect(result.iterations).toHaveLength(1); // stopped after the first iteration crossed the cap
+    expect(loadTasks(dir).tasks.filter((t) => t.status === "pending")).toHaveLength(1);
+  });
+
+  it("a token cap crossed on the final task does not spoil a finished run", async () => {
+    writeApprovals(dir, { maxTotalTokens: 1200 });
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestScriptWithUsage();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+    expect(result.totalTokens.total).toBe(1300);
+  });
+
+  it("reports zero totals when the runner never reports usage", async () => {
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+    expect(result.totalTokens.total).toBe(0);
+  });
+});
+
 describe("loop preflight probe", () => {
   it("throws actionable guidance when the runner cannot write a file, before any iteration or journal", async () => {
     addTask(dir, { title: "would-be work", acceptance: ["a"] });
