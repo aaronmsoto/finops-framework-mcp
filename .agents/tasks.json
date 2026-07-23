@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "3944c7ee4ee8d71d5bb002bfb86cd58c74a72328ff7d956248f04d436ce95ee5",
+  "chainHead": "50e2c728ea4670dc4d370c9757cef8ed6d688421cb24d820b39d8edae23cfe72",
   "tasks": [
     {
       "id": "T-001",
@@ -116,9 +116,15 @@
         "round-trip tests pass: derive(compose(parse(fixture))) deep-equals direct parser output for all capability fixtures; actions ordinals/parent_ordinal match allocation fixture",
         "refresh then derive produces zero diff; double-derive byte-identical; gates --tier all pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "derive step implemented; gates --tier all pass (169/169 tests); refresh→derive zero diff and derive→derive byte-identical verified live offline",
+        "commit": "b83be93a9c61a82d82d82c4bed2ca5f38f1e91bc",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T01:43:26.897Z"
+      },
+      "hash": "50e2c728ea4670dc4d370c9757cef8ed6d688421cb24d820b39d8edae23cfe72"
     },
     {
       "id": "T-008",
