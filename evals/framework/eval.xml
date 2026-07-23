@@ -9,13 +9,13 @@
 <evals server="finops-framework" artifact="data/framework">
   <eval id="1">
     <question>Our teams can't tell who owns most of our cloud spend. Which single FinOps capability addresses assigning costs to responsible teams, and what are three characteristics of a Crawl-level practice in it?</question>
-    <expected>Capability: allocation. Any three Crawl characteristics, e.g.: simple allocation strategy mapping accounts/projects/subscriptions to business units or cost centers; allocation/tagging strategy defined but compliance inconsistent; shared costs not identified beyond common charges; a substantial portion of costs can be allocated directly. Must note these are assessment characteristics (unofficial parsing), not official steps — bonus, not required.</expected>
-    <expected_calls>search_framework then get_actions (or get_capability include maturity)</expected_calls>
+    <expected>Capability: allocation. Any three Crawl characteristics from the official maturity assessment, e.g.: simple allocation strategy mapping accounts/projects/subscriptions to business units or cost centers; allocation/tagging strategy defined but compliance inconsistent; shared costs not identified beyond common charges; a substantial portion of costs can be allocated directly.</expected>
+    <expected_calls>search_framework then get_maturity_assessment (or get_capability include maturity)</expected_calls>
   </eval>
   <eval id="2">
-    <question>Does the Sustainability capability have any prerequisite capability according to this server's relationship graph? If so, which capability, at what minimum maturity, and is that relationship official FinOps Foundation guidance?</question>
-    <expected>No prerequisite edges exist for sustainability (or any capability): the FinOps Foundation publishes no prerequisite graph, and this server's restrained inference pass found no dependency-language evidence strong enough to assert one. The correct answer states that explicitly (the tool's summary says prerequisite typing would be an unofficial inference) and may point to get_related, where allocation appears as an inferred *related* capability with a quoted evidence sentence.</expected>
-    <expected_calls>get_prerequisites(capability: "sustainability")</expected_calls>
+    <question>What does a Walk-level Sustainability practice look like? Quote two statements from the official maturity assessment.</question>
+    <expected>Two verbatim statements from the official Sustainability Walk-level assessment, e.g.: "All engineering teams and most other Personas involved in technology usage are aware of their potential impact on corporate sustainability goals"; "Technology teams have a variety of mechanisms to reduce carbon use through optimization efforts across multiple technology domains" (any two exact statements from that assessment text are acceptable, quoted verbatim).</expected>
+    <expected_calls>get_maturity_assessment(capability: "sustainability", level: "walk") or get_capability(slug: "sustainability", include: ["maturity"])</expected_calls>
   </eval>
   <eval id="3">
     <question>Which FinOps Domain does Anomaly Management belong to, and which other capabilities live in the same domain?</question>
@@ -53,8 +53,8 @@
     <expected_calls>get_framework_info (counts.kpis) + get_kpis(capability: "unit-economics")</expected_calls>
   </eval>
   <eval id="10">
-    <question>Is "Pre-Crawl" an official FinOps Foundation maturity level? What does it mean in this server, and how many levels does the official model define?</question>
-    <expected>No — the official model defines exactly three levels (Crawl, Walk, Run). "Pre-Crawl" is this server's unofficial extension (official: false) meaning the capability's Crawl-level characteristics are not yet met consistently; no official assessment content exists below Crawl.</expected>
-    <expected_calls>get_actions(any capability, maturity: "pre-crawl") or get_framework_info/search_framework</expected_calls>
+    <question>How many maturity levels does the official FinOps model define, and what are they?</question>
+    <expected>Exactly three: Crawl, Walk, Run. The server must not volunteer "Pre-Crawl" as part of the official model — it is an unofficial extension that only appears (labeled official: false) when FINOPS_MCP_EXPERIMENTAL is set, and the default surface should not mention it at all.</expected>
+    <expected_calls>get_maturity_model or get_framework_info</expected_calls>
   </eval>
 </evals>

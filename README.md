@@ -1,39 +1,49 @@
 # finops-framework-mcp
 
 An [MCP](https://modelcontextprotocol.io) server that gives AI agents a
-structured, queryable interface to the **FinOps Framework** published by the
-FinOps Foundation at <https://finops.org/framework>: 6 Principles, 3 Phases,
-4 Domains, 22 Capabilities (with Crawl/Walk/Run maturity assessments,
-per-persona activities, and KPIs), 11 Personas, 5 Technology Categories, the
-Scopes concept, an 88-entry KPI library, and a capability relationship graph.
+structured, queryable interface to the **official FinOps Framework**
+published by the FinOps Foundation at <https://finops.org/framework>: 6
+Principles, 3 Phases, 4 Domains, 22 Capabilities (with Crawl/Walk/Run
+maturity assessments, per-persona activities, and KPIs), 11 Personas, 5
+Technology Categories, the Scopes concept, and an 88-entry KPI library.
+
+v1 is deliberately **official-only by default** — no invented relationship
+graph, no parsed-out assessment items — with two unofficial extensions
+available opt-in behind a flag (see below).
 
 Three fully decoupled parts:
 
 ```
 crawler ──▶ data artifact ──▶ MCP server
 (src/crawlers/framework)   (data/framework/)   (src/servers/framework)
- fetch → parse → infer      versioned JSON +    resources + tools +
- → validate → diff → emit   JSON Schemas +      prompts over stdio
-                            manifest/changelog
+ fetch → parse → sanitize   versioned JSON +    resources + tools +
+ → compose → derive         markdown + JSON     prompts over stdio
+ → validate → diff → emit   Schemas + manifest
 ```
 
-A re-crawl refreshes the server with **zero code changes**; the server
-validates the artifact against its schemas at startup and refuses to start
-on a bad artifact. Official framework content and unofficial extensions (the
-`pre-crawl` maturity level, parsed assessment items, inferred relationship
-edges) are separated everywhere: different files (`content/` vs `derived/`),
-`official: false` flags, and explicit notes in every response.
+`content/markdown/` is the **canonical** intermediate: the crawler composes
+it from parsed HTML, and every JSON file is regenerated from that markdown
+by an offline `derive` step (no network access) — so a schema or JSON-only
+fix can be regenerated without recrawling finops.org. A re-crawl refreshes
+the server with **zero code changes**; the server validates the artifact
+against its schemas at startup and refuses to start on a bad artifact.
 
 ## Quickstart
 
 ```bash
-npm install && npm run build
+npx finops-framework-mcp
+```
+
+or, from a clone:
+
+```bash
+npm install && npm run build && npm run server
 ```
 
 Claude Code:
 
 ```bash
-claude mcp add finops-framework -- node /path/to/finops-framework-mcp/dist/servers/framework/main.js
+claude mcp add finops-framework -- npx finops-framework-mcp
 ```
 
 Claude Desktop (`claude_desktop_config.json`):
@@ -42,25 +52,49 @@ Claude Desktop (`claude_desktop_config.json`):
 {
   "mcpServers": {
     "finops-framework": {
-      "command": "node",
-      "args": ["/path/to/finops-framework-mcp/dist/servers/framework/main.js"],
-      "env": { "FINOPS_MCP_DATA": "/path/to/finops-framework-mcp/data/framework" }
+      "command": "npx",
+      "args": ["finops-framework-mcp"]
     }
   }
 }
 ```
 
-The artifact directory defaults to `./data/framework`; override with
-`FINOPS_MCP_DATA` or the first CLI argument.
+The artifact directory defaults to the one packaged with the npm release
+(`data/framework`); override with `FINOPS_MCP_DATA` or the first CLI
+argument if you're running against a locally-refreshed artifact.
 
-Surface: 13 read-only tools (`get_framework_info` is the entry point, then
-`search_framework`, `list_capabilities`, `get_capability`, `get_actions`,
-`get_kpis`, `get_entity`, `get_prerequisites`, `get_related`,
-`assess_maturity_path`, `map_personas`, `get_maturity_model`,
-`get_changelog`), `finops://framework/…`
-resources for full documents, and 4 prompts (`explain-framework`,
-`assess-capability-maturity`, `plan-maturity-roadmap`,
+Surface (default, official-only): 11 read-only tools —
+`get_framework_info` (entry point), `search_framework`, `list_capabilities`,
+`get_capability`, `get_maturity_assessment`, `get_kpis`, `assess_maturity_path`,
+`map_personas`, `get_entity`, `get_maturity_model`, `get_changelog` —
+`finops://framework/…` resources for full documents, and 4 prompts
+(`explain-framework`, `assess-capability-maturity`, `plan-maturity-roadmap`,
 `map-personas-to-capabilities`).
+
+### Experimental extensions (opt-in)
+
+Two things this server derives but the FinOps Foundation doesn't publish are
+hidden by default and served only when explicitly requested:
+
+- **`Pre-Crawl`** — an unofficial maturity level below Crawl (the official
+  model defines exactly three: Crawl, Walk, Run).
+- **Parsed assessment "Actions"** — the `get_actions` tool, itemized
+  characteristics parsed out of the official Crawl/Walk/Run prose (rubric
+  states an assessor checks for, not to-do steps).
+
+Enable both with an environment variable or flag:
+
+```bash
+FINOPS_MCP_EXPERIMENTAL=1 npx finops-framework-mcp
+# or
+npx finops-framework-mcp --experimental
+```
+
+Everything experimental is labeled `official: false` / EXPERIMENTAL wherever
+it appears, and the default surface never mentions it. The v0.1 capability
+relationship graph (`get_prerequisites`/`get_related`) was evaluated and
+**deleted outright** — see `.agents/specs/v1-official-only.md` — because
+neither the harvested nor the inferred edges cleared the accuracy bar.
 
 ## Refreshing the data
 

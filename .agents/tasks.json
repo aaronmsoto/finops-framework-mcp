@@ -154,7 +154,7 @@
         "package.json un-privated with version 1.0.0, files whitelist, mcpName, repository, prepublishOnly; server.json added; npm pack --dry-run ships only dist+data+README+LICENSE+NOTICE",
         "gates --tier all pass; artifact manifest shows schema_version 2.0.0"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }

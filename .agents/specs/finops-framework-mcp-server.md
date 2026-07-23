@@ -1,5 +1,11 @@
 # Spec: FinOps Framework MCP server (crawler + data artifact + server)
 
+> **Superseded (2026-07-22) by `.agents/specs/v1-official-only.md`.** The
+> capability relationship graph this spec describes was deleted in v1 (owner
+> decision — see that spec's Problem/Owner decisions sections); Actions and
+> the Pre-Crawl maturity extension moved behind `FINOPS_MCP_EXPERIMENTAL`.
+> Kept here for historical context on the v0.1 build this repo shipped first.
+
 ## Problem
 
 The FinOps Framework exists only as website prose at finops.org/framework.
