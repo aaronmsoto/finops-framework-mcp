@@ -223,6 +223,38 @@ describe("loop preflight probe", () => {
     await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(/preflight:.*not found on PATH/);
   });
 
+  it("failure message carries the runner's own output tail (stdout and stderr)", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = ['echo "stdout: something odd happened"', 'echo "stderr: the actual cause" >&2', "exit 1"].join("\n");
+    const { config, policy } = deps();
+    const err = await runLoop(dir, config, policy, new MockRunner(), {}).then(
+      () => null,
+      (e: Error) => e,
+    );
+    expect(err).not.toBeNull();
+    expect(err!.message).toMatch(/exited 1 on a trivial edit/);
+    expect(err!.message).toMatch(/runner output \(last \d+ line\(s\)\)/);
+    expect(err!.message).toContain("stderr: the actual cause");
+    expect(err!.message).toContain("stdout: something odd happened");
+  });
+
+  it("root-refusal output triggers the IS_SANDBOX=1 hint", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'echo "--dangerously-skip-permissions cannot be used with root/sudo privileges for security reasons" >&2',
+      "exit 1",
+    ].join("\n");
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(/IS_SANDBOX=1/);
+  });
+
+  it("sentinel-missing failure also carries the output tail", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = 'echo "policy denied the edit tool"';
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(/did not create the sentinel[\s\S]*policy denied the edit tool/);
+  });
+
   it("--skip-preflight bypasses the probe entirely", async () => {
     addTask(dir, { title: "real work", acceptance: ["a"] });
     // Records whether preflight ran; behaves honestly for build/verify.

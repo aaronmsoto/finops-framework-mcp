@@ -88,6 +88,13 @@ describe("mock runner", () => {
     expect(result.finalText).toContain(path.basename(dir));
   });
 
+  it("exposes the script's stderr on the result", async () => {
+    process.env.AGENTIC_MOCK_SCRIPT = 'echo "visible output"; echo "hidden cause" >&2';
+    const result = await new MockRunner().run({ prompt: "p", cwd: dir, timeoutMs: 10_000 });
+    expect(result.finalText).toContain("visible output");
+    expect(result.stderr).toContain("hidden cause");
+  });
+
   it("enforces timeoutMs by killing the process group", async () => {
     process.env.AGENTIC_MOCK_SCRIPT = "sleep 30";
     const started = Date.now();

@@ -3,7 +3,7 @@ import path from "node:path";
 import type { AgenticConfig, ApprovalsPolicy } from "./config.js";
 import { runGates, summarizeReport, type GatesReport } from "./gates.js";
 import { appendJournalEntry } from "./journal.js";
-import type { AgentRunner } from "./runners/types.js";
+import type { AgentRunner, RunnerResult } from "./runners/types.js";
 import {
   blockTask,
   loadTasks,
@@ -172,6 +172,40 @@ function selectTask(file: TasksFile, taskId: string | undefined): Task | null {
 const PREFLIGHT_TIMEOUT_MS = 120_000;
 
 /**
+ * Last N non-empty lines of what the runner actually said (stderr first —
+ * CLI-level refusals land there — then finalText, then raw events), so a
+ * preflight failure message carries the real cause instead of only an exit
+ * code. Lines are truncated to keep CliError messages bounded.
+ */
+export function runnerOutputTail(res: RunnerResult, maxLines = 10): string {
+  let combined = `${res.stderr ?? ""}\n${res.finalText}`;
+  if (combined.trim() === "") {
+    combined = res.events
+      .map((ev) => (typeof ev.text === "string" ? ev.text : ""))
+      .join("\n");
+  }
+  const lines = combined
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line !== "")
+    .slice(-maxLines)
+    .map((line) => (line.length > 200 ? `${line.slice(0, 200)}…` : line));
+  if (lines.length === 0) return "";
+  return `\nrunner output (last ${lines.length} line(s)):\n  ${lines.join("\n  ")}`;
+}
+
+/** Known-cause hints appended to preflight failures (currently: root refusal → IS_SANDBOX=1). */
+export function preflightHint(runner: AgentRunner, res: RunnerResult): string {
+  const output = `${res.stderr ?? ""}\n${res.finalText}`;
+  const rootRefusal = /--dangerously-skip-permissions[^\n]*(root|sudo)/i.test(output);
+  const claudeAsRoot = runner.name === "claude" && typeof process.getuid === "function" && process.getuid() === 0;
+  if (rootRefusal || claudeAsRoot) {
+    return `\nHint: the Claude CLI refuses --dangerously-skip-permissions as root — set IS_SANDBOX=1 in the environment for containerized root runs (see .agentic/docs/operations.md, "Headless container profile").`;
+  }
+  return "";
+}
+
+/**
  * One-time, before the first iteration: prove the runner can actually make a
  * file edit in this environment, so a dead runner (missing CLI, untrusted
  * workspace, a permission mode that denies edits in headless `-p`) fails fast
@@ -202,18 +236,19 @@ async function runPreflight(rootDir: string, runner: AgentRunner, remainingMs: n
     fs.rmSync(sentinel, { force: true });
   }
   const fix = `Fix the environment or rerun with --skip-preflight.`;
+  const detail = runnerOutputTail(res) + preflightHint(runner, res);
   if (res.timedOut) {
-    throw new CliError(`preflight: the ${runner.name} runner did not respond within ${Math.round(PREFLIGHT_TIMEOUT_MS / 1000)}s — it may be hung or awaiting interactive auth/login. ${fix}`);
+    throw new CliError(`preflight: the ${runner.name} runner did not respond within ${Math.round(PREFLIGHT_TIMEOUT_MS / 1000)}s — it may be hung or awaiting interactive auth/login. ${fix}${detail}`);
   }
   if (res.exitCode === 127) {
-    throw new CliError(`preflight: the ${runner.name} CLI was not found on PATH — install it (or fix PATH) before running the loop. ${fix}`);
+    throw new CliError(`preflight: the ${runner.name} CLI was not found on PATH — install it (or fix PATH) before running the loop. ${fix}${detail}`);
   }
   if (res.exitCode !== 0) {
-    throw new CliError(`preflight: the ${runner.name} runner exited ${res.exitCode ?? "null"} on a trivial edit — check it is logged in and authorized. ${fix}`);
+    throw new CliError(`preflight: the ${runner.name} runner exited ${res.exitCode ?? "null"} on a trivial edit — check it is logged in and authorized. ${fix}${detail}`);
   }
   if (!wrote) {
     throw new CliError(
-      `preflight: the ${runner.name} runner ran but did not create the sentinel file — the workspace is likely not trusted, or the permission mode denies edits in headless (-p) mode. Trust the workspace once interactively, pass a permission mode via AGENTIC_${runner.name === "copilot" ? "COPILOT" : "CLAUDE"}_ARGS, or rerun with --skip-preflight.`,
+      `preflight: the ${runner.name} runner ran but did not create the sentinel file — the workspace is likely not trusted, or the permission mode denies edits in headless (-p) mode. Trust the workspace once interactively, pass a permission mode via AGENTIC_${runner.name === "copilot" ? "COPILOT" : "CLAUDE"}_ARGS, or rerun with --skip-preflight.${detail}`,
     );
   }
   logErr(`[loop] preflight: ${runner.name} runner can edit files — proceeding.`);

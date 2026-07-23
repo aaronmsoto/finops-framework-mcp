@@ -20,6 +20,8 @@ export interface RunnerResult {
   finalText: string;
   events: RunnerEvent[];
   usage?: Record<string, unknown>;
+  /** Raw stderr from the runner process; CLI-level failures often land only here. */
+  stderr?: string;
 }
 
 export interface AgentRunner {

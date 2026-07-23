@@ -27,6 +27,7 @@ export class MockRunner implements AgentRunner {
       timedOut: res.timedOut,
       finalText: res.stdout,
       events: [{ type: "raw", text: res.stdout }],
+      stderr: res.stderr,
     };
   }
 }
