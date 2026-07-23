@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "067b23c1b4f6bba2b5b3ec89fee342ebc6137aa239f0880e43081b3e5ac125e9",
+  "chainHead": "3944c7ee4ee8d71d5bb002bfb86cd58c74a72328ff7d956248f04d436ce95ee5",
   "tasks": [
     {
       "id": "T-001",
@@ -97,9 +97,15 @@
         "compose escaping guard throws on dialect-breaking items; front-matter emit/parse unit tests and per-fixture compose tests pass",
         "double refresh remains byte-idempotent (No changes on second run); gates --tier all pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "127 markdown docs composed (22 caps + 11 personas + 88 kpis + 6 section docs); gates --tier all green; double-refresh byte-idempotent (No changes) confirmed live",
+        "commit": "1068f7df5d8224481516290f6d6c5ffe169e0b1a",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T01:18:45.294Z"
+      },
+      "hash": "3944c7ee4ee8d71d5bb002bfb86cd58c74a72328ff7d956248f04d436ce95ee5"
     },
     {
       "id": "T-007",
