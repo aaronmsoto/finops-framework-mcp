@@ -316,6 +316,32 @@
         ".agents/specs/loop-harness-improvements.md tracker has per-item status, evidence, and port verdict",
         "Memory bank and session journal updated"
       ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-018",
+      "title": "Slim runtime deps: load cheerio lazily in the crawler",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "cheerio moves to devDependencies; crawl/parse code imports it dynamically",
+        "A crawl attempt without cheerio installed fails with an actionable error naming the dev install command",
+        "Server startup, tools, and cli.js derive work without cheerio present (derive is markdown-to-JSON only)",
+        "Tests cover the missing-cheerio error path; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-019",
+      "title": "Add --version flag to the finops-framework-mcp bin",
+      "acceptance": [
+        "finops-framework-mcp --version prints the package version and artifact data_version, exits 0, never starts the server",
+        "The flag is filtered from positional artifact-dir handling like --experimental",
+        "A test covers the flag; gates pass"
+      ],
       "status": "pending",
       "evidence": null,
       "hash": null
