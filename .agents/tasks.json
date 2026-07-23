@@ -163,6 +163,120 @@
         "completedAt": "2026-07-23T02:10:09.321Z"
       },
       "hash": "47d10e18475a266f5f4bc8f4b7884cf5180154706c3a01782ee8f78524fbb434"
+    },
+    {
+      "id": "T-010",
+      "title": "Surface runner output and root hint in loop preflight failures",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "Preflight failure messages include the last ~10 lines of runner stderr/finalText",
+        "RunnerResult exposes stderr; claude/copilot/mock runners populate it",
+        "Root-refusal output or claude-as-root triggers an IS_SANDBOX=1 hint",
+        "operations.md gains a headless container profile section",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-011",
+      "title": "Track per-iteration token usage and enforce optional loop token cap",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "TokenTotals plumbing sums input/output/cacheRead/cacheCreation into total",
+        "Mock runner parses AGENTIC_MOCK_USAGE stdout marker into usage",
+        "Journal shows per-iteration tokens and run total; loop --json includes totalTokens",
+        "loop.max_total_tokens policy key (default null) triggers budget_exhausted when exceeded",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-012",
+      "title": "Persist verifier evidence to .agents/.cache/verify with journal excerpt",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "Verifier finalText+usage+verdict written to .agents/.cache/verify/<task>-<ts>.md on pass and fail",
+        "IterationRecord and journal cite the evidence path plus a 500-char excerpt",
+        "Evidence write failure never fails the iteration",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-013",
+      "title": "Add per-iteration timeout with policy key and lower-only CLI flag",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "loop.max_iteration_minutes policy key, default 30, positive number (fractions allowed)",
+        "--max-iteration-minutes flag lowers but never raises the policy cap",
+        "Build and verify runner timeouts are min(remaining wall, iteration cap); timeout detail names which cap fired",
+        "A timed-out iteration fails, reverts, and counts toward consecutive failures; the run continues",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-014",
+      "title": "Add consecutive-failures flag and pending-based iteration budget default",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "--max-consecutive-failures flag goes through effectiveCap (lower-only)",
+        "Without --max-iterations, build-mode budget defaults to min(pending+2, policy cap) with an explanatory log",
+        "CLI help documents all new loop flags",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-015",
+      "title": "Emit loop heartbeat file and surface live loop state in status",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "Loop writes .agents/.cache/loop-state.json at preflight/build/verify and terminal states including thrown errors",
+        "agentic status shows running iteration N/M on task (phase, age), STALE for dead pid, or last-run terminal state",
+        "status --json includes loopState",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-016",
+      "title": "Commit the loop run journal at terminal state",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "At terminal state the run journal file is committed alone via pathspec add+commit 'Record loop run journal (<state>)'",
+        "Skips silently when no journal file or clean; warns without changing terminal state on commit failure",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-017",
+      "title": "Record loop harness validation evidence and port-back tracker",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "Mock scenarios A-D executed in a scratch fixture repo with outputs captured",
+        "Real mini loop run executed with the improved harness; heartbeat, tokens, journal commit observed",
+        ".agents/specs/loop-harness-improvements.md tracker has per-item status, evidence, and port verdict",
+        "Memory bank and session journal updated"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
