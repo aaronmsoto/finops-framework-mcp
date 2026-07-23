@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "eda2aa73a712f8ffd1f25e74243fcefd8af7ffc58360af340cc50ba6593f74bd",
+  "chainHead": "24748a17569c2518dfb5c4756f3935c5ab4256e917f3b68fdb9e17cb43b3cd77",
   "tasks": [
     {
       "id": "T-001",
@@ -296,9 +296,15 @@
         "Skips silently when no journal file or clean; warns without changing terminal state on commit failure",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Run journal auto-committed at terminal state, pathspec-scoped so BLOCKED.md and runner leftovers never ride along; skips when no journal exists; commit failures warn only. Harness: 245 tests, lint, typecheck green; 4 new tests.",
+        "commit": "249f444dee1b64d37687886146f7c54b2ea780c5",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:10:43.677Z"
+      },
+      "hash": "24748a17569c2518dfb5c4756f3935c5ab4256e917f3b68fdb9e17cb43b3cd77"
     },
     {
       "id": "T-017",
