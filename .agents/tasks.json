@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "47d10e18475a266f5f4bc8f4b7884cf5180154706c3a01782ee8f78524fbb434",
+  "chainHead": "fca3d1e6dd5423b78e0959cb35efae812e44dad3427758f93170dc5a58ddcffc",
   "tasks": [
     {
       "id": "T-001",
@@ -175,9 +175,15 @@
         "operations.md gains a headless container profile section",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Preflight failures now carry the runner's last output lines (stderr threaded through all three runners) plus an IS_SANDBOX=1 hint for the root-refusal case; headless container profile documented in operations.md. Harness: 215 tests, lint, typecheck green; 4 new tests.",
+        "commit": "4ca3317fa6722f98bc053735fe8e27deb02a5e3c",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T06:44:31.759Z"
+      },
+      "hash": "fca3d1e6dd5423b78e0959cb35efae812e44dad3427758f93170dc5a58ddcffc"
     },
     {
       "id": "T-011",
