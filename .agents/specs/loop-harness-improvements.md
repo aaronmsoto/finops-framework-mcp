@@ -52,7 +52,7 @@ suites plus mock failure-path scenarios and one real mini loop run.
 | 12 per-iteration timeout | T-013 `89f0119` | done | scenario B (blocked in 6s vs 600s wall); 5 tests | **port** (review fractional-minutes deviation) |
 | 16b cap ergonomics | T-014 `31bf982` | done | scenarios A/B/E logs show derived budget; flag lowered cap in B; 4 tests | **port** |
 | 13 heartbeat + status | T-015 `10ab095` | done | scenario E live: `status` showed preflight→build phases mid-run, terminal after; 6 tests | **port** |
-| 14 journal auto-commit | T-016 `249f444` | done | scenarios B/C/D/E all ended with clean trees and a pathspec-scoped journal commit | **port** |
+| 14 journal auto-commit | T-016 `249f444` | done | scenarios B/C/D/E all ended with a pathspec-scoped journal commit; success/exhausted runs leave a clean tree (blocked runs keep BLOCKED.md + blocked task state dirty by design — they need human eyes) | **port** |
 
 Port verdicts: **port** (copy as-is), **adjust** (port with noted changes),
 **drop** (didn't earn its keep — explain).
