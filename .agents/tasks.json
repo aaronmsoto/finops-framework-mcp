@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "43286de4db3344acc705a211defc7b19601fe55afe838952fed0f4fec2458855",
+  "chainHead": "711da5d54258b920378b809743339361133f31c112f0dcca398f559385b433f5",
   "tasks": [
     {
       "id": "T-001",
@@ -467,9 +467,15 @@
         "When a token cap is set and a runner reports no usage, the loop warns that the cap cannot see that iteration",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "IterationRecord gains buildTokens/verifyTokens; journal line shows build/verify/iteration/run totals; usage-invisible warning fires when a cap is set and usage is missing (build and verify paths). 2 new/extended tests; 246 harness tests green.",
+        "commit": "4f3841ad410200ac3288134c45f5380072b75061",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T08:08:01.830Z"
+      },
+      "hash": "711da5d54258b920378b809743339361133f31c112f0dcca398f559385b433f5"
     },
     {
       "id": "T-026",
