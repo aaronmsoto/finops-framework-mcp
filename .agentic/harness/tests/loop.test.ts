@@ -256,10 +256,34 @@ describe("loop token accounting", () => {
     expect(result.state).toBe("success");
     // Per iteration: build 1000 + verify 300 = 1300; two iterations = 2600.
     expect(result.iterations[0]!.tokens).toEqual({ input: 15, output: 125, cacheRead: 1150, cacheCreation: 10, total: 1300 });
+    // Build/verify reported separately so verification overhead is measurable
+    // without conflation (necessity-review B3-economics-3).
+    expect(result.iterations[0]!.buildTokens!.total).toBe(1000);
+    expect(result.iterations[0]!.verifyTokens!.total).toBe(300);
     expect(result.totalTokens.total).toBe(2600);
     const journalText = readLoopJournal();
-    expect(journalText).toMatch(/tokens: in=15 out=125 cacheRead=1150 cacheCreation=10 total=1300 \(run total 1300\)/);
+    expect(journalText).toMatch(/tokens: build in=10 out=80 cacheRead=900 cacheCreation=10 total=1000; verify in=5 out=45 cacheRead=250 cacheCreation=0 total=300; iteration total=1300 \(run total 1300\)/);
     expect(journalText).toMatch(/run total 2600/);
+  });
+
+  it("warns when a token cap is set but the runner reports no usage", async () => {
+    writeApprovals(dir, { maxTotalTokens: 1000000 });
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript(); // no usage markers
+    const { config, policy } = deps();
+    const errSpy: string[] = [];
+    const orig = process.stderr.write.bind(process.stderr);
+    process.stderr.write = ((chunk: string | Uint8Array) => {
+      errSpy.push(String(chunk));
+      return true;
+    }) as typeof process.stderr.write;
+    try {
+      const result = await runLoop(dir, config, policy, new MockRunner(), {});
+      expect(result.state).toBe("success");
+    } finally {
+      process.stderr.write = orig;
+    }
+    expect(errSpy.join("")).toMatch(/reported no usage[\s\S]*max_total_tokens cannot see/);
   });
 
   it("stops with budget_exhausted when loop.max_total_tokens is exceeded with work remaining", async () => {

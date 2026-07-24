@@ -34,6 +34,13 @@ export interface IterationRecord {
   details: string[];
   /** Build + verify token usage for this iteration (zeros when the runner reports none). */
   tokens?: TokenTotals;
+  /**
+   * Build-phase and verify-phase tokens reported separately: conflating them
+   * misattributed verification cost (measured ~12% of a run, not the ~2x a
+   * combined number suggested — necessity-review B3-economics-3).
+   */
+  buildTokens?: TokenTotals;
+  verifyTokens?: TokenTotals;
   /** Repo-relative path of the persisted verifier transcript, when one was written. */
   verifyEvidence?: string;
 }
@@ -623,7 +630,13 @@ async function runLoopInner(
       extraEnv: { AGENTIC_LOOP: "1", AGENTIC_TASK_ID: task.id, AGENTIC_LOOP_PHASE: "build" },
     });
 
-    let iterTokens = tokenTotals(runRes.usage);
+    const buildTokens = tokenTotals(runRes.usage);
+    let verifyTokens = ZERO_TOKENS;
+    if (maxTotalTokens !== null && runRes.usage === undefined) {
+      logErr(
+        `[loop] warning: the ${runner.name} runner reported no usage for iteration ${n} — loop.max_total_tokens cannot see this iteration's spend (CLI output format may have changed).`,
+      );
+    }
 
     // Independent checks — agent claims are ignored; only these count.
     const details: string[] = [];
@@ -663,7 +676,12 @@ async function runLoopInner(
         timeoutMs: verifyRemainingMs,
         extraEnv: { AGENTIC_LOOP: "1", AGENTIC_TASK_ID: task.id, AGENTIC_LOOP_PHASE: "verify" },
       });
-      iterTokens = addTokens(iterTokens, tokenTotals(verifyRes.usage));
+      verifyTokens = tokenTotals(verifyRes.usage);
+      if (maxTotalTokens !== null && verifyRes.usage === undefined) {
+        logErr(
+          `[loop] warning: the ${runner.name} runner reported no usage for iteration ${n}'s verify pass — loop.max_total_tokens cannot see it.`,
+        );
+      }
       const match = /^VERDICT:\s*(pass|fail)/im.exec(verifyRes.finalText);
       if (match && match[1]!.toLowerCase() === "pass") {
         verdict = "pass";
@@ -687,6 +705,7 @@ async function runLoopInner(
       }
     }
 
+    const iterTokens = addTokens(buildTokens, verifyTokens);
     runTokens = addTokens(runTokens, iterTokens);
     const record: IterationRecord = {
       n,
@@ -700,6 +719,8 @@ async function runLoopInner(
       durationMs: Date.now() - iterStarted,
       details,
       tokens: iterTokens,
+      buildTokens,
+      verifyTokens,
       ...(verifyEvidence !== null ? { verifyEvidence } : {}),
     };
     records.push(record);
@@ -712,7 +733,7 @@ async function runLoopInner(
       verification: verdict,
       ...(verifyEvidence !== null ? { verifyEvidence } : {}),
       ...(verifyExcerpt !== null && verifyExcerpt.trim() !== "" ? { verifyExcerpt } : {}),
-      tokens: `${fmtTokens(iterTokens)} (run total ${runTokens.total})`,
+      tokens: `build ${fmtTokens(buildTokens)}; verify ${fmtTokens(verifyTokens)}; iteration total=${iterTokens.total} (run total ${runTokens.total})`,
       duration: `${record.durationMs}ms`,
       ...(details.length > 0 ? { details: details.join(" | ") } : {}),
     });
