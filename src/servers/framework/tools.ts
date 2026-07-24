@@ -672,6 +672,8 @@ export function registerTools(
             related_capability_slugs: z.array(z.string()),
             featured_on: z.array(z.string()),
             uri: z.string(),
+            source_url: z.string(),
+            license: z.string(),
           }),
         ),
         total: z.number(),

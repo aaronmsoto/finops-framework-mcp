@@ -448,7 +448,7 @@
         "outputSchema matches emitted structuredContent for get_kpis",
         "A test asserts every tool's structuredContent keys are a subset of its declared outputSchema"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }

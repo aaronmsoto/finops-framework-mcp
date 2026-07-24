@@ -412,6 +412,94 @@ describe("tools", () => {
     expect(page2[0]?.slug).not.toBe(page1[0]?.slug);
   });
 
+  it("every tool's structuredContent conforms to its declared outputSchema (critique-3 A1-protocol-3)", async () => {
+    const { tools } = await client.listTools();
+    const schemaByName = new Map(
+      tools.map((t) => [t.name, t.outputSchema as Record<string, unknown>]),
+    );
+    // One representative successful call per structured tool.
+    const calls: [string, Record<string, unknown>][] = [
+      ["get_framework_info", {}],
+      ["search_framework", { query: "allocation" }],
+      ["list_capabilities", {}],
+      ["get_capability", { slug: "allocation" }],
+      ["get_maturity_assessment", { capability: "allocation" }],
+      ["get_kpis", { slug: "allocation-accuracy-index-aai" }],
+      [
+        "assess_maturity_path",
+        {
+          capability: "allocation",
+          current_level: "crawl",
+          target_level: "run",
+        },
+      ],
+      ["map_personas", { persona: "finance" }],
+      ["get_entity", { entity_type: "principles" }],
+      ["get_maturity_model", {}],
+      ["get_changelog", {}],
+    ];
+    const checkAgainst = (
+      value: unknown,
+      schema: Record<string, unknown> | undefined,
+      path: string,
+    ): string[] => {
+      if (!schema || typeof value !== "object" || value === null) return [];
+      const type = schema.type as string | undefined;
+      if (type === "array" && Array.isArray(value)) {
+        return value.flatMap((item, i) =>
+          checkAgainst(
+            item,
+            schema.items as Record<string, unknown> | undefined,
+            `${path}[${i}]`,
+          ),
+        );
+      }
+      if (type !== "object" || Array.isArray(value)) return [];
+      const declared = Object.keys(
+        (schema.properties as Record<string, unknown> | undefined) ?? {},
+      );
+      // z.record() compiles to additionalProperties: {...} — open by design.
+      const additional = schema.additionalProperties;
+      const problems: string[] = [];
+      for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+        if (!declared.includes(k)) {
+          if (additional === true || typeof additional === "object") {
+            problems.push(
+              ...checkAgainst(
+                v,
+                typeof additional === "object"
+                  ? (additional as Record<string, unknown>)
+                  : undefined,
+                `${path}.${k}`,
+              ),
+            );
+          } else {
+            problems.push(`${path}.${k} emitted but not declared`);
+          }
+        } else {
+          problems.push(
+            ...checkAgainst(
+              v,
+              (schema.properties as Record<string, Record<string, unknown>>)[k],
+              `${path}.${k}`,
+            ),
+          );
+        }
+      }
+      return problems;
+    };
+    for (const [name, args] of calls) {
+      const res = await call(name, args);
+      expect(res.isError, `${name} errored`).toBeFalsy();
+      const problems = checkAgainst(
+        res.structuredContent,
+        schemaByName.get(name),
+        name,
+      );
+      expect(problems, problems.join("; ")).toEqual([]);
+    }
+  });
+
   it("get_changelog reports the current version", async () => {
     const res = await call("get_changelog", {});
     expect(res.structuredContent?.current_version).toMatch(/^\d+\./);
