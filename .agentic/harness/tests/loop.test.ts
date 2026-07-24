@@ -13,6 +13,7 @@ import {
   makeTempDir,
   readFileIn,
   rmDir,
+  sh,
   writeApprovals,
   writeConfig,
   writePrompts,
@@ -167,6 +168,40 @@ describe("loop terminal states (mock runner, hermetic)", () => {
 
     expect(result.state).toBe("success");
     expect(result.iterations[0]!.verdict).toBe("skipped");
+    expect(result.iterations[0]!.verifyEvidence).toBeUndefined();
+    expect(fs.existsSync(path.join(dir, ".agents", ".cache", "verify"))).toBe(false);
+  });
+
+  it("persists verifier evidence on pass with the path in the record and journal", async () => {
+    addTask(dir, { title: "verified work", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript();
+
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+
+    expect(result.state).toBe("success");
+    const evidence = result.iterations[0]!.verifyEvidence;
+    expect(evidence).toMatch(/^\.agents\/\.cache\/verify\/T-001-\d+\.md$/);
+    const content = readFileIn(dir, evidence!);
+    expect(content).toContain("# Verifier evidence — T-001 (iteration 1)");
+    expect(content).toContain("- verdict: pass");
+    expect(content).toContain("VERDICT: pass"); // verbatim transcript
+    const journal = readLoopJournal();
+    expect(journal).toContain(`verifyEvidence: ${evidence}`);
+    expect(journal).toMatch(/verifyExcerpt: .*VERDICT: pass/);
+  });
+
+  it("persists verifier evidence on fail too", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 1 });
+    addTask(dir, { title: "rejected", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript("VERDICT: fail");
+
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("blocked");
+    const evidence = result.iterations[0]!.verifyEvidence;
+    expect(evidence).toBeDefined();
+    expect(readFileIn(dir, evidence!)).toContain("- verdict: fail");
   });
 
   it("succeeds immediately when no tasks are pending and gates are green", async () => {
@@ -197,6 +232,313 @@ describe("loop terminal states (mock runner, hermetic)", () => {
   });
 });
 
+describe("loop token accounting", () => {
+  /** Honest agent that also reports usage from both phases via the mock marker. */
+  function honestScriptWithUsage(): string {
+    return [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'if [ "$AGENTIC_LOOP_PHASE" = "verify" ]; then echo "AGENTIC_MOCK_USAGE: {\\"input_tokens\\": 5, \\"output_tokens\\": 45, \\"cache_read_input_tokens\\": 250}"; echo "VERDICT: pass"; exit 0; fi',
+      `node "${CLI_PATH}" tasks start "$AGENTIC_TASK_ID" >&2`,
+      'echo "work for $AGENTIC_TASK_ID" >> notes.txt',
+      `node "${CLI_PATH}" tasks complete "$AGENTIC_TASK_ID" --summary "done by mock" >&2`,
+      "git add -A >&2",
+      'git commit -qm "complete $AGENTIC_TASK_ID"',
+      'echo "AGENTIC_MOCK_USAGE: {\\"input_tokens\\": 10, \\"output_tokens\\": 80, \\"cache_read_input_tokens\\": 900, \\"cache_creation_input_tokens\\": 10}"',
+    ].join("\n");
+  }
+
+  it("accumulates build+verify tokens per iteration and across the run; journals them", async () => {
+    addTask(dir, { title: "first", acceptance: ["a"] });
+    addTask(dir, { title: "second", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestScriptWithUsage();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+    // Per iteration: build 1000 + verify 300 = 1300; two iterations = 2600.
+    expect(result.iterations[0]!.tokens).toEqual({ input: 15, output: 125, cacheRead: 1150, cacheCreation: 10, total: 1300 });
+    expect(result.totalTokens.total).toBe(2600);
+    const journalText = readLoopJournal();
+    expect(journalText).toMatch(/tokens: in=15 out=125 cacheRead=1150 cacheCreation=10 total=1300 \(run total 1300\)/);
+    expect(journalText).toMatch(/run total 2600/);
+  });
+
+  it("stops with budget_exhausted when loop.max_total_tokens is exceeded with work remaining", async () => {
+    writeApprovals(dir, { maxTotalTokens: 1200 });
+    addTask(dir, { title: "first", acceptance: ["a"] });
+    addTask(dir, { title: "never reached", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestScriptWithUsage();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("budget_exhausted");
+    expect(result.reason).toMatch(/token cap reached \(1300 > 1200 total tokens\) with 1 task\(s\) remaining/);
+    expect(result.iterations).toHaveLength(1); // stopped after the first iteration crossed the cap
+    expect(loadTasks(dir).tasks.filter((t) => t.status === "pending")).toHaveLength(1);
+  });
+
+  it("a token cap crossed on the final task does not spoil a finished run", async () => {
+    writeApprovals(dir, { maxTotalTokens: 1200 });
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestScriptWithUsage();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+    expect(result.totalTokens.total).toBe(1300);
+  });
+
+  it("reports zero totals when the runner never reports usage", async () => {
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+    expect(result.totalTokens.total).toBe(0);
+  });
+});
+
+describe("loop journal auto-commit", () => {
+  function journalRelPath(): string {
+    const journalDir = path.join(dir, ".agents", "journal");
+    const files = fs.readdirSync(journalDir).filter((f) => f.endsWith(".md") && f !== "README.md");
+    expect(files).toHaveLength(1);
+    return path.join(".agents", "journal", files[0]!);
+  }
+
+  it("a success run ends with the journal committed alone and a clean tree for it", async () => {
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript();
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+
+    const subject = sh(dir, "git", ["log", "-1", "--format=%s"]).stdout.trim();
+    expect(subject).toBe("Record loop run journal (success)");
+    const files = sh(dir, "git", ["show", "--name-only", "--format="]).stdout.trim().split("\n");
+    expect(files).toEqual([journalRelPath()]);
+    expect(sh(dir, "git", ["status", "--porcelain", "--", journalRelPath()]).stdout.trim()).toBe("");
+  });
+
+  it("a blocked run commits the journal while BLOCKED.md stays untracked", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 1 });
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("blocked");
+    expect(sh(dir, "git", ["log", "-1", "--format=%s"]).stdout.trim()).toBe("Record loop run journal (blocked)");
+    const porcelain = sh(dir, "git", ["status", "--porcelain"]).stdout;
+    expect(porcelain).toContain("BLOCKED.md"); // untouched by the journal commit
+  });
+
+  it("a 0-iteration terminal skips the commit silently", async () => {
+    // Only task already done elsewhere: immediate success, no journal file.
+    addTask(dir, { title: "pre-done", acceptance: ["a"] });
+    process.env.AGENTIC_SKIP_GATES = "1";
+    try {
+      const { completeTask } = await import("../src/tasks.js");
+      await completeTask(dir, loadAgenticConfig(dir), "T-001", "pre-done");
+    } finally {
+      delete process.env.AGENTIC_SKIP_GATES;
+    }
+    process.env.AGENTIC_MOCK_SCRIPT = "echo never invoked";
+    const { config, policy } = deps();
+    const before = sh(dir, "git", ["rev-parse", "HEAD"]).stdout.trim();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { skipPreflight: true });
+    expect(result.state).toBe("success");
+    expect(sh(dir, "git", ["rev-parse", "HEAD"]).stdout.trim()).toBe(before);
+  });
+
+  it("a failing commit hook downgrades to a warning without changing the terminal state", async () => {
+    addTask(dir, { title: "only", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = honestAgentScript();
+    // A pre-commit hook that rejects everything AFTER the mock's own commits:
+    // install it via core.hooksPath only for the harness's journal commit by
+    // pointing at a directory created between phases is racy — instead make
+    // the hook reject only commits whose message is the journal commit.
+    const hooksDir = path.join(dir, ".hooks");
+    fs.mkdirSync(hooksDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(hooksDir, "commit-msg"),
+      '#!/bin/sh\ngrep -q "Record loop run journal" "$1" && exit 1\nexit 0\n',
+      { mode: 0o755 },
+    );
+    sh(dir, "git", ["config", "core.hooksPath", ".hooks"]);
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success"); // terminal state unchanged
+    expect(sh(dir, "git", ["log", "-1", "--format=%s"]).stdout.trim()).not.toContain("Record loop run journal");
+  });
+});
+
+describe("loop heartbeat state file", () => {
+  it("is written during build with pid, run id, iteration, and task; ends terminal:success", async () => {
+    addTask(dir, { title: "observed work", acceptance: ["a"] });
+    const captured = path.join(dir, "captured-state.json");
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'if [ "$AGENTIC_LOOP_PHASE" = "verify" ]; then echo "VERDICT: pass"; exit 0; fi',
+      // Capture the state file as the build phase sees it — mid-run.
+      `cp .agents/.cache/loop-state.json "${captured}"`,
+      `node "${CLI_PATH}" tasks start "$AGENTIC_TASK_ID" >&2`,
+      'echo "work" >> notes.txt',
+      `node "${CLI_PATH}" tasks complete "$AGENTIC_TASK_ID" --summary "done" >&2`,
+      "git add -A >&2",
+      'git commit -qm "complete $AGENTIC_TASK_ID"',
+    ].join("\n");
+
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("success");
+
+    const midRun = JSON.parse(fs.readFileSync(captured, "utf8")) as Record<string, unknown>;
+    expect(midRun.phase).toBe("build");
+    expect(midRun.pid).toBe(process.pid);
+    expect(midRun.taskId).toBe("T-001");
+    expect(midRun.iteration).toEqual({ n: 1, max: 3 }); // 1 pending + 2 derived budget
+    expect(midRun.runId).toMatch(/^loop-build-\d{6}$/);
+
+    const final = JSON.parse(readFileIn(dir, ".agents/.cache/loop-state.json")) as Record<string, unknown>;
+    expect(final.phase).toBe("terminal:success");
+  });
+
+  it("a preflight failure leaves the state stamped terminal:error", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = "exit 1";
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(/preflight/);
+    const state = JSON.parse(readFileIn(dir, ".agents/.cache/loop-state.json")) as Record<string, unknown>;
+    expect(state.phase).toBe("terminal:error");
+    expect(typeof state.error).toBe("string");
+  });
+
+  it("a blocked run ends terminal:blocked", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 1 });
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("blocked");
+    const state = JSON.parse(readFileIn(dir, ".agents/.cache/loop-state.json")) as Record<string, unknown>;
+    expect(state.phase).toBe("terminal:blocked");
+  });
+});
+
+describe("loop cap ergonomics", () => {
+  it("--max-consecutive-failures lowers the policy cap: blocked after exactly one failure", async () => {
+    addTask(dir, { title: "never done", acceptance: ["a"] }); // policy failure cap stays 3
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxConsecutiveFailures: 1 });
+    expect(result.state).toBe("blocked");
+    expect(result.reason).toMatch(/1 consecutive failed iterations \(cap: 1\)/);
+    expect(result.iterations).toHaveLength(1);
+  });
+
+  it("a zero cap value is rejected as not a positive number", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = 'echo "unused"';
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), { maxConsecutiveFailures: 0 })).rejects.toThrowError(
+      /--max-consecutive-failures must be a positive number/,
+    );
+  });
+
+  it("without --max-iterations the budget defaults to min(pending + 2, policy cap)", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 10 }); // keep the failure cap out of the way
+    addTask(dir, { title: "stubborn", acceptance: ["a"] }); // 1 pending -> derived budget 3
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), {});
+    expect(result.state).toBe("budget_exhausted");
+    expect(result.reason).toMatch(/iteration cap reached \(3\)/);
+    expect(result.iterations).toHaveLength(3);
+  });
+
+  it("an explicit --max-iterations disables the pending-based default", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 10 });
+    addTask(dir, { title: "stubborn", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'echo "did nothing"',
+    ].join("\n");
+    const { config, policy } = deps();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxIterations: 5 });
+    expect(result.state).toBe("budget_exhausted");
+    expect(result.reason).toMatch(/iteration cap reached \(5\)/);
+  });
+});
+
+describe("loop per-iteration timeout", () => {
+  it("a hung build iteration is killed at the per-iteration cap, fails, and the run continues to blocked", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 2 });
+    addTask(dir, { title: "hangs forever", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      "sleep 60",
+    ].join("\n");
+
+    const { config, policy } = deps();
+    const started = Date.now();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxIterationMinutes: 0.05 });
+
+    expect(result.state).toBe("blocked"); // two timeout-failed iterations hit the failure cap
+    expect(result.iterations).toHaveLength(2);
+    expect(result.iterations[0]!.details.join(" ")).toMatch(/per-iteration cap, 0\.05 minute\(s\)/);
+    expect(Date.now() - started).toBeLessThan(30_000); // nowhere near the 60s hangs
+    expect(fs.existsSync(blockedFilePath(dir))).toBe(true);
+  });
+
+  it("a hung verify pass is also killed at the per-iteration cap and fails the iteration", async () => {
+    writeApprovals(dir, { maxConsecutiveFailures: 1 });
+    addTask(dir, { title: "verify hangs", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      'if [ "$AGENTIC_LOOP_PHASE" = "verify" ]; then sleep 60; fi',
+      `node "${CLI_PATH}" tasks start "$AGENTIC_TASK_ID" >&2`,
+      'echo "work" >> notes.txt',
+      `node "${CLI_PATH}" tasks complete "$AGENTIC_TASK_ID" --summary "done" >&2`,
+      "git add -A >&2",
+      'git commit -qm "complete $AGENTIC_TASK_ID"',
+    ].join("\n");
+
+    const { config, policy } = deps();
+    const started = Date.now();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxIterationMinutes: 0.1 });
+
+    expect(result.state).toBe("blocked");
+    // The verifier never printed a VERDICT (killed), so the iteration failed and reverted.
+    expect(result.iterations[0]!.verdict).toBe("fail");
+    expect(result.iterations[0]!.details.join(" ")).toMatch(/no VERDICT line/);
+    expect(Date.now() - started).toBeLessThan(45_000);
+  });
+
+  it("the CLI flag may lower but not raise the policy cap", async () => {
+    // Policy cap 0.05 min (3s); flag asks for 10 min — clamped to policy.
+    writeApprovals(dir, { maxConsecutiveFailures: 1, maxIterationMinutes: 0.05 });
+    addTask(dir, { title: "hang", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      "sleep 60",
+    ].join("\n");
+    const { config, policy } = deps();
+    const started = Date.now();
+    const result = await runLoop(dir, config, policy, new MockRunner(), { maxIterationMinutes: 10 });
+    expect(result.state).toBe("blocked");
+    expect(Date.now() - started).toBeLessThan(30_000); // killed at the 3s policy cap, not 10 minutes
+  });
+});
+
 describe("loop preflight probe", () => {
   it("throws actionable guidance when the runner cannot write a file, before any iteration or journal", async () => {
     addTask(dir, { title: "would-be work", acceptance: ["a"] });
@@ -221,6 +563,38 @@ describe("loop preflight probe", () => {
     process.env.AGENTIC_MOCK_SCRIPT = "exit 127";
     const { config, policy } = deps();
     await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(/preflight:.*not found on PATH/);
+  });
+
+  it("failure message carries the runner's own output tail (stdout and stderr)", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = ['echo "stdout: something odd happened"', 'echo "stderr: the actual cause" >&2', "exit 1"].join("\n");
+    const { config, policy } = deps();
+    const err = await runLoop(dir, config, policy, new MockRunner(), {}).then(
+      () => null,
+      (e: Error) => e,
+    );
+    expect(err).not.toBeNull();
+    expect(err!.message).toMatch(/exited 1 on a trivial edit/);
+    expect(err!.message).toMatch(/runner output \(last \d+ line\(s\)\)/);
+    expect(err!.message).toContain("stderr: the actual cause");
+    expect(err!.message).toContain("stdout: something odd happened");
+  });
+
+  it("root-refusal output triggers the IS_SANDBOX=1 hint", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'echo "--dangerously-skip-permissions cannot be used with root/sudo privileges for security reasons" >&2',
+      "exit 1",
+    ].join("\n");
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(/IS_SANDBOX=1/);
+  });
+
+  it("sentinel-missing failure also carries the output tail", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    process.env.AGENTIC_MOCK_SCRIPT = 'echo "policy denied the edit tool"';
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(/did not create the sentinel[\s\S]*policy denied the edit tool/);
   });
 
   it("--skip-preflight bypasses the probe entirely", async () => {

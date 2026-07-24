@@ -1,10 +1,37 @@
-import * as cheerio from "cheerio";
+import { createRequire } from "node:module";
 import type { Cheerio, CheerioAPI } from "cheerio";
 import type { AnyNode } from "domhandler";
 import { normalizeHeading } from "../md.js";
 
+type CheerioModule = typeof import("cheerio");
+
+/**
+ * cheerio is a devDependency (spec: only `cli.js refresh` parses HTML —
+ * `cli.js derive` and the MCP server never touch it), so it must not be
+ * required until HTML parsing actually happens.
+ */
+export const CHEERIO_MISSING_MESSAGE =
+  "cheerio is required to crawl and parse FinOps framework HTML, but it is " +
+  "not installed. cheerio is a devDependency (not needed by `cli.js derive` " +
+  "or the MCP server) — run `npm install --save-dev cheerio` and retry.";
+
+let cheerioModule: CheerioModule | undefined;
+
+/** Exported so the missing-cheerio error path can be exercised without
+ * actually uninstalling the package. */
+export function resolveCheerio(
+  requireFn: (id: string) => unknown = createRequire(import.meta.url),
+): CheerioModule {
+  try {
+    return requireFn("cheerio") as CheerioModule;
+  } catch {
+    throw new Error(CHEERIO_MISSING_MESSAGE);
+  }
+}
+
 export function load(html: string): CheerioAPI {
-  return cheerio.load(html);
+  cheerioModule ??= resolveCheerio();
+  return cheerioModule.load(html);
 }
 
 /**

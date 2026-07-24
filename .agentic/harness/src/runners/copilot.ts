@@ -40,6 +40,7 @@ export class CopilotRunner implements AgentRunner {
       finalText: extractFinalText(events),
       events,
       usage: extractUsage(events),
+      stderr: res.stderr,
     };
   }
 }

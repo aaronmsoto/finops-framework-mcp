@@ -99,6 +99,24 @@
   benefit over just making the real value the one source of truth that
   flows through compose like every other field).
 
+## 2026-07-23 — Lazy cheerio load via `createRequire`, not `await import()` (T-018)
+
+- Decision: `parse/helpers.ts`'s `resolveCheerio()` lazily requires cheerio
+  with `createRequire(import.meta.url)("cheerio")` on first `load()` call,
+  memoized module-locally, keeping `load()` and every parser function
+  synchronous.
+- Why: `load()` is called synchronously from 9 sites across
+  `parse/sections.ts`/`parse/capability.ts`, whose callers and existing
+  tests (`capability.test.ts`, `sections.test.ts`) are all synchronous too.
+  cheerio ships a dual ESM/CJS package (its `exports` map has a `require`
+  condition), so `createRequire` is a legitimate, still-lazy resolution
+  path — nothing touches the cheerio module graph until HTML actually needs
+  parsing, matching the task's "load lazily" goal without an async refactor.
+- Alternatives considered: `await import("cheerio")` (true ESM dynamic
+  import) — rejected because it would force `load()` async, cascading to
+  every section/capability parser and both of their existing test files, a
+  much larger diff than a devDependency packaging change calls for.
+
 ## 2026-07-23 — `assess_maturity_path` drops pre-crawl unconditionally, not just by default (T-008)
 
 - Decision: `assess_maturity_path`'s `current_level`/`target_level` are both

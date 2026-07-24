@@ -102,7 +102,14 @@ export function writeConfig(dir: string, overrides: TempConfigOverrides = {}): v
 
 export function writeApprovals(
   dir: string,
-  opts: { maxIterations?: number; maxWallMinutes?: number; maxConsecutiveFailures?: number } = {},
+  opts: {
+    maxIterations?: number;
+    maxWallMinutes?: number;
+    maxConsecutiveFailures?: number;
+    /** Emitted only when provided, so key-absence stays covered by every other suite. */
+    maxTotalTokens?: number;
+    maxIterationMinutes?: number;
+  } = {},
 ): void {
   const text = [
     "version: 1",
@@ -123,6 +130,8 @@ export function writeApprovals(
     `  max_iterations: ${opts.maxIterations ?? 10}`,
     `  max_wall_minutes: ${opts.maxWallMinutes ?? 10}`,
     `  max_consecutive_failures: ${opts.maxConsecutiveFailures ?? 3}`,
+    ...(opts.maxTotalTokens !== undefined ? [`  max_total_tokens: ${opts.maxTotalTokens}`] : []),
+    ...(opts.maxIterationMinutes !== undefined ? [`  max_iteration_minutes: ${opts.maxIterationMinutes}`] : []),
     "",
   ].join("\n");
   fs.writeFileSync(path.join(dir, "approvals.yaml"), text);

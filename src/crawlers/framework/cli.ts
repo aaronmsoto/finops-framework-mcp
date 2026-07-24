@@ -2,7 +2,6 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { Ajv2020 } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import * as cheerio from "cheerio";
 import {
   ARTIFACT_FILES,
   EXPECTED_COUNTS,
@@ -24,6 +23,7 @@ import {
   parseCapabilityPage,
   type ParsedCapabilityPage,
 } from "./parse/capability.js";
+import { load as loadHtml } from "./parse/helpers.js";
 import {
   parseDomains,
   parseMaturityModel,
@@ -93,7 +93,7 @@ function decodeEntities(s: string): string {
 }
 
 function htmlFragmentToMd(html: string): string {
-  const $ = cheerio.load(html);
+  const $ = loadHtml(html);
   return htmlToMd($, $("body").children());
 }
 
