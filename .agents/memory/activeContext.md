@@ -12,25 +12,17 @@
 
 ## In flight
 
-Nothing. Two deliveries complete on branch `claude/session-k75rxy`
-(restarted from dev after PR #4's squash-merge), awaiting a PR to dev:
-
-1. **Loop-harness improvements (T-010..T-016)** — retro items 9-14+16b
-   implemented in `.agentic/harness/`: preflight surfaces runner
-   stderr (+IS_SANDBOX hint), token accounting + optional
-   `loop.max_total_tokens`, verifier-evidence persistence, per-iteration
-   timeout `loop.max_iteration_minutes` (+flag), `--max-consecutive-failures`
-   + pending-based iteration default, heartbeat `loop-state.json` +
-   live `agentic status`, terminal journal auto-commit. Harness suite
-   211→245; all proven by mock scenarios A-D plus a real run. Contract,
-   evidence, and port-back verdicts (all **port**):
-   `.agents/specs/loop-harness-improvements.md`.
-2. **v1.1 mini-batch (T-018, T-019)** — built BY the improved loop as its
-   validation run (success, 2/2 first-try verified, 1101s, 10.18M tokens
-   journaled): cheerio lazy-loaded and moved to devDependencies (derive/
-   server unaffected, missing-cheerio path tested); `--version` flag on the
-   bin. Details: this file's history at `2b2199b^` and the two task
-   journals.
+Critique gate 3 (publish gate) passed: SHIP-after-fixes verdict executed —
+BLOCKER (npm bin guard broke every install path), 3 MAJORs (cursor
+context binding, full summaries, map_personas attribution), and the
+get_kpis schema fix all landed as T-020..T-024 with regression tests;
+eval Run 4: 10/10. Gate report: docs/critique-3-publish-gate.md. MINOR
+queue (9 items) lives in that report — not publish-gating. The branch
+(restarted from main after PR #6/#5 merged) holds only the gate doc +
+T-020..T-024 fixes, awaiting a PR to dev. Earlier deliveries (harness
+batch T-010..T-016, v1.1 mini-batch T-018/T-019) are merged to main; the
+port-back tracker `.agents/specs/loop-harness-improvements.md` still
+drives the template port.
 
 ## Next steps
 
@@ -60,4 +52,4 @@ Nothing. Two deliveries complete on branch `claude/session-k75rxy`
 
 ## Last updated
 
-2026-07-23 — harness improvement batch validated (mock A-D + real run E); handoff to PR.
+2026-07-24 — critique-3 publish gate: fixes T-020..T-024 landed, Run 4 10/10, PR to dev.

@@ -319,6 +319,32 @@ describe("tools", () => {
     expect((res.structuredContent?.personas as unknown[]).length).toBe(11);
   });
 
+  it("map_personas carries CC BY attribution in all modes (critique-3 A3-fidelity-2)", async () => {
+    for (const args of [
+      {},
+      { persona: "finance" },
+      { capability: "allocation" },
+    ]) {
+      const res = await call("map_personas", args);
+      expect(res.isError).toBeFalsy();
+      expect(res.content[0]?.text).toMatch(
+        /Source: https:\/\/www\.finops\.org\/.+© FinOps Foundation, licensed CC BY 4\.0/s,
+      );
+      expect(res.structuredContent?.license).toBe("CC-BY-4.0");
+      const entries = res.structuredContent?.entries as
+        { uri: string; source_url: string }[] | undefined;
+      if (entries) {
+        expect(
+          entries.every(
+            (e) =>
+              e.uri.startsWith("finops://framework/") &&
+              e.source_url.startsWith("https://www.finops.org/"),
+          ),
+        ).toBe(true);
+      }
+    }
+  });
+
   it("rejects a stale cursor with a restart instruction", async () => {
     const stale = Buffer.from(JSON.stringify({ v: "0.0.1", o: 10 })).toString(
       "base64url",
@@ -326,6 +352,152 @@ describe("tools", () => {
     const res = await call("get_kpis", { cursor: stale });
     expect(res.isError).toBe(true);
     expect(res.content[0]?.text).toMatch(/Stale cursor/);
+  });
+
+  it("serves complete capability summaries — no mid-word cuts (critique-3 A3-fidelity-1)", async () => {
+    const res = await call("list_capabilities", {});
+    const rows = res.structuredContent?.capabilities as {
+      slug: string;
+      summary: string;
+    }[];
+    expect(rows.length).toBe(22);
+    const source = loadArtifact(ARTIFACT_DIR);
+    for (const r of rows) {
+      const cap = source.capabilities.find((c) => c.slug === r.slug)!;
+      expect(r.summary).toBe(cap.summary); // full, not a prefix cut
+    }
+    // The text block includes summaries per the tool description.
+    const text = res.content[0]?.text as string;
+    const esa = rows.find((r) => r.slug === "executive-strategy-alignment")!;
+    if (esa.summary) expect(text).toContain(esa.summary.slice(0, 80));
+  });
+
+  it("rejects a cursor reused with a different query (critique-3 A1-protocol-1)", async () => {
+    const first = await call("search_framework", {
+      query: "cost allocation",
+      limit: 3,
+    });
+    const cursor = first.structuredContent?.nextCursor as string;
+    expect(cursor).toBeDefined();
+    const reused = await call("search_framework", {
+      query: "kubernetes",
+      cursor,
+    });
+    expect(reused.isError).toBe(true);
+    expect(reused.content[0]?.text).toMatch(/Cursor mismatch/);
+  });
+
+  it("rejects a cursor reused across tools", async () => {
+    const first = await call("get_kpis", {});
+    const cursor = first.structuredContent?.nextCursor as string;
+    expect(cursor).toBeDefined();
+    const reused = await call("list_capabilities", { cursor });
+    expect(reused.isError).toBe(true);
+    expect(reused.content[0]?.text).toMatch(/Cursor mismatch/);
+  });
+
+  it("accepts its own cursor for the same query and pages correctly", async () => {
+    const first = await call("search_framework", { query: "cost", limit: 3 });
+    const cursor = first.structuredContent?.nextCursor as string;
+    expect(cursor).toBeDefined();
+    const second = await call("search_framework", {
+      query: "cost",
+      limit: 3,
+      cursor,
+    });
+    expect(second.isError).toBeFalsy();
+    const page1 = first.structuredContent?.results as { slug: string }[];
+    const page2 = second.structuredContent?.results as { slug: string }[];
+    expect(page2.length).toBeGreaterThan(0);
+    expect(page2[0]?.slug).not.toBe(page1[0]?.slug);
+  });
+
+  it("every tool's structuredContent conforms to its declared outputSchema (critique-3 A1-protocol-3)", async () => {
+    const { tools } = await client.listTools();
+    const schemaByName = new Map(
+      tools.map((t) => [t.name, t.outputSchema as Record<string, unknown>]),
+    );
+    // One representative successful call per structured tool.
+    const calls: [string, Record<string, unknown>][] = [
+      ["get_framework_info", {}],
+      ["search_framework", { query: "allocation" }],
+      ["list_capabilities", {}],
+      ["get_capability", { slug: "allocation" }],
+      ["get_maturity_assessment", { capability: "allocation" }],
+      ["get_kpis", { slug: "allocation-accuracy-index-aai" }],
+      [
+        "assess_maturity_path",
+        {
+          capability: "allocation",
+          current_level: "crawl",
+          target_level: "run",
+        },
+      ],
+      ["map_personas", { persona: "finance" }],
+      ["get_entity", { entity_type: "principles" }],
+      ["get_maturity_model", {}],
+      ["get_changelog", {}],
+    ];
+    const checkAgainst = (
+      value: unknown,
+      schema: Record<string, unknown> | undefined,
+      path: string,
+    ): string[] => {
+      if (!schema || typeof value !== "object" || value === null) return [];
+      const type = schema.type as string | undefined;
+      if (type === "array" && Array.isArray(value)) {
+        return value.flatMap((item, i) =>
+          checkAgainst(
+            item,
+            schema.items as Record<string, unknown> | undefined,
+            `${path}[${i}]`,
+          ),
+        );
+      }
+      if (type !== "object" || Array.isArray(value)) return [];
+      const declared = Object.keys(
+        (schema.properties as Record<string, unknown> | undefined) ?? {},
+      );
+      // z.record() compiles to additionalProperties: {...} — open by design.
+      const additional = schema.additionalProperties;
+      const problems: string[] = [];
+      for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+        if (!declared.includes(k)) {
+          if (additional === true || typeof additional === "object") {
+            problems.push(
+              ...checkAgainst(
+                v,
+                typeof additional === "object"
+                  ? (additional as Record<string, unknown>)
+                  : undefined,
+                `${path}.${k}`,
+              ),
+            );
+          } else {
+            problems.push(`${path}.${k} emitted but not declared`);
+          }
+        } else {
+          problems.push(
+            ...checkAgainst(
+              v,
+              (schema.properties as Record<string, Record<string, unknown>>)[k],
+              `${path}.${k}`,
+            ),
+          );
+        }
+      }
+      return problems;
+    };
+    for (const [name, args] of calls) {
+      const res = await call(name, args);
+      expect(res.isError, `${name} errored`).toBeFalsy();
+      const problems = checkAgainst(
+        res.structuredContent,
+        schemaByName.get(name),
+        name,
+      );
+      expect(problems, problems.join("; ")).toEqual([]);
+    }
   });
 
   it("get_changelog reports the current version", async () => {

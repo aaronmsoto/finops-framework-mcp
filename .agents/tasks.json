@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "0f165088db5ff11d8ebd398503891a6d7b46aecbd3eb5de9a701841755db461b",
+  "chainHead": "43286de4db3344acc705a211defc7b19601fe55afe838952fed0f4fec2458855",
   "tasks": [
     {
       "id": "T-001",
@@ -363,6 +363,100 @@
         "completedAt": "2026-07-23T07:31:16.667Z"
       },
       "hash": "1944204f1e2676f669dd4d91ddad64948aaf003fd60f0b97385a8d046fa3bfbe"
+    },
+    {
+      "id": "T-020",
+      "title": "Fix npm bin guard so installed entry points start the server",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "isDirectRun uses realpath comparison, not argv[1] string suffix",
+        "A test invokes dist main via a symlink (npm .bin simulation) and asserts --version output and an initialize response",
+        "npm pack + temp-dir install smoke test rerun manually and cited"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "isDirectRun now realpath-compares argv[1] to the module path; symlink unit tests + dist-conditional spawn test added; npm pack/install smoke test rerun — .bin entry prints version and serves initialize (was: silent exit 0).",
+        "commit": "e04aecdcb58274a7c65eb1f176130aa13336a1f0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:04:45.189Z"
+      },
+      "hash": "14cf0d3cfb1a798f3caee0de933f8e7611dfd24b3fe8f98b74af86ba953fcb10"
+    },
+    {
+      "id": "T-021",
+      "title": "Bind pagination cursors to their query context",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "Cursor carries a context fingerprint; mismatched reuse is rejected with actionable -32602 style text",
+        "Empty-page text distinguishes no-hits from page-beyond-results",
+        "Tests cover cross-query and cross-tool cursor reuse"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Cursor now carries a sha256 context fingerprint (tool + normalized filters, limit excluded); mismatched reuse rejected with restart instruction; page-past-end text distinct from no-hits. 3 new tests; live probe confirms the exact critique repro now errors instead of lying.",
+        "commit": "fbcafd9cb6294111fb547ecd3f6035e7d3532459",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:08:04.741Z"
+      },
+      "hash": "0c4029d43558d89efc973d14ba4324842a0cd2701afd64e8ecb6e78793d41cfc"
+    },
+    {
+      "id": "T-022",
+      "title": "Serve full capability summaries instead of 200-char mid-word cuts",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "list_capabilities structuredContent carries complete official summaries",
+        "Text block includes summaries per the tool description",
+        "Test asserts no served summary is a strict prefix cut of the source"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Summaries served complete in structuredContent and text block; test asserts byte-equality with the artifact for all 22; live probe shows every summary now ends with sentence punctuation (was 14 mid-word cuts).",
+        "commit": "fc58d06f840bfa75a05b26333234ae2def34827b",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:09:57.964Z"
+      },
+      "hash": "e360b9ffe9f7f915004ca86a5d9ec91e78e7304847bd87568755cb896e0559cc"
+    },
+    {
+      "id": "T-023",
+      "title": "Add CC BY attribution to map_personas responses",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "Both persona and capability modes append the standard source/license footer",
+        "structuredContent entries carry uri or source_url",
+        "Test asserts attribution presence"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Attribution footer on index/persona/capability modes via the shared footer helper; per-entry uri+source_url; license field declared in outputSchema. Test covers all modes; live probe shows the footer and entry fields.",
+        "commit": "0e417ea7362718ddb5bf5d9da5b935568fe6b64f",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:12:29.259Z"
+      },
+      "hash": "286d0f242577592eac1470414f9b67ab95b242d6645b1f40a5ea6fd28b1a2247"
+    },
+    {
+      "id": "T-024",
+      "title": "Declare source_url and license in get_kpis outputSchema",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "outputSchema matches emitted structuredContent for get_kpis",
+        "A test asserts every tool's structuredContent keys are a subset of its declared outputSchema"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "get_kpis outputSchema declares source_url+license; new all-tools conformance test (caught and now guards the whole class); wire probe with the validating SDK client accepts the call and shows declared==emitted keys.",
+        "commit": "576439f4c42dc3012e00ae9cd73fd5c7b7693242",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:14:44.284Z"
+      },
+      "hash": "43286de4db3344acc705a211defc7b19601fe55afe838952fed0f4fec2458855"
     }
   ]
 }
