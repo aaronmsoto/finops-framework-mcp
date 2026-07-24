@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "e360b9ffe9f7f915004ca86a5d9ec91e78e7304847bd87568755cb896e0559cc",
+  "chainHead": "286d0f242577592eac1470414f9b67ab95b242d6645b1f40a5ea6fd28b1a2247",
   "tasks": [
     {
       "id": "T-001",
@@ -430,9 +430,15 @@
         "structuredContent entries carry uri or source_url",
         "Test asserts attribution presence"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Attribution footer on index/persona/capability modes via the shared footer helper; per-entry uri+source_url; license field declared in outputSchema. Test covers all modes; live probe shows the footer and entry fields.",
+        "commit": "0e417ea7362718ddb5bf5d9da5b935568fe6b64f",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:12:29.259Z"
+      },
+      "hash": "286d0f242577592eac1470414f9b67ab95b242d6645b1f40a5ea6fd28b1a2247"
     },
     {
       "id": "T-024",
