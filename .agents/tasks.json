@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "14cf0d3cfb1a798f3caee0de933f8e7611dfd24b3fe8f98b74af86ba953fcb10",
+  "chainHead": "0c4029d43558d89efc973d14ba4324842a0cd2701afd64e8ecb6e78793d41cfc",
   "tasks": [
     {
       "id": "T-001",
@@ -392,9 +392,15 @@
         "Empty-page text distinguishes no-hits from page-beyond-results",
         "Tests cover cross-query and cross-tool cursor reuse"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Cursor now carries a sha256 context fingerprint (tool + normalized filters, limit excluded); mismatched reuse rejected with restart instruction; page-past-end text distinct from no-hits. 3 new tests; live probe confirms the exact critique repro now errors instead of lying.",
+        "commit": "fbcafd9cb6294111fb547ecd3f6035e7d3532459",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:08:04.741Z"
+      },
+      "hash": "0c4029d43558d89efc973d14ba4324842a0cd2701afd64e8ecb6e78793d41cfc"
     },
     {
       "id": "T-022",
