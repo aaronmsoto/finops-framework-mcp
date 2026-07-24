@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "0f165088db5ff11d8ebd398503891a6d7b46aecbd3eb5de9a701841755db461b",
+  "chainHead": "14cf0d3cfb1a798f3caee0de933f8e7611dfd24b3fe8f98b74af86ba953fcb10",
   "tasks": [
     {
       "id": "T-001",
@@ -373,9 +373,15 @@
         "A test invokes dist main via a symlink (npm .bin simulation) and asserts --version output and an initialize response",
         "npm pack + temp-dir install smoke test rerun manually and cited"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "isDirectRun now realpath-compares argv[1] to the module path; symlink unit tests + dist-conditional spawn test added; npm pack/install smoke test rerun — .bin entry prints version and serves initialize (was: silent exit 0).",
+        "commit": "e04aecdcb58274a7c65eb1f176130aa13336a1f0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:04:45.189Z"
+      },
+      "hash": "14cf0d3cfb1a798f3caee0de933f8e7611dfd24b3fe8f98b74af86ba953fcb10"
     },
     {
       "id": "T-021",
