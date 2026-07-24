@@ -430,7 +430,7 @@
         "structuredContent entries carry uri or source_url",
         "Test asserts attribution presence"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

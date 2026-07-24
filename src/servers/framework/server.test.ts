@@ -319,6 +319,32 @@ describe("tools", () => {
     expect((res.structuredContent?.personas as unknown[]).length).toBe(11);
   });
 
+  it("map_personas carries CC BY attribution in all modes (critique-3 A3-fidelity-2)", async () => {
+    for (const args of [
+      {},
+      { persona: "finance" },
+      { capability: "allocation" },
+    ]) {
+      const res = await call("map_personas", args);
+      expect(res.isError).toBeFalsy();
+      expect(res.content[0]?.text).toMatch(
+        /Source: https:\/\/www\.finops\.org\/.+© FinOps Foundation, licensed CC BY 4\.0/s,
+      );
+      expect(res.structuredContent?.license).toBe("CC-BY-4.0");
+      const entries = res.structuredContent?.entries as
+        { uri: string; source_url: string }[] | undefined;
+      if (entries) {
+        expect(
+          entries.every(
+            (e) =>
+              e.uri.startsWith("finops://framework/") &&
+              e.source_url.startsWith("https://www.finops.org/"),
+          ),
+        ).toBe(true);
+      }
+    }
+  });
+
   it("rejects a stale cursor with a restart instruction", async () => {
     const stale = Buffer.from(JSON.stringify({ v: "0.0.1", o: 10 })).toString(
       "base64url",

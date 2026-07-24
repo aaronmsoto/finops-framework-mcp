@@ -839,6 +839,7 @@ export function registerTools(
               slug: z.string(),
               title: z.string(),
               category: z.string(),
+              uri: z.string(),
             }),
           )
           .optional(),
@@ -850,13 +851,20 @@ export function registerTools(
               heading: z.string(),
               activities: z.array(z.string()),
               group_level: z.boolean(),
+              uri: z.string(),
+              source_url: z.string(),
             }),
           )
           .optional(),
+        license: z.string(),
       },
       annotations: RO,
     },
     ({ capability, persona }) => {
+      // Persona activities are verbatim Foundation prose — this tool must
+      // carry the same CC BY 4.0 attribution as every other content tool
+      // (critique-3 MAJOR A3-fidelity-2).
+      const LICENSE = "CC-BY-4.0";
       if (capability && persona) {
         return err(
           "Pass capability OR persona, not both (or neither for the index).",
@@ -867,12 +875,14 @@ export function registerTools(
           slug: p.slug,
           title: p.title,
           category: p.category,
+          uri: URI.persona(p.slug),
         }));
         return ok(
-          { mode: "index", personas },
+          { mode: "index", personas, license: LICENSE },
           personas
             .map((p) => `- ${p.title} (${p.slug}) [${p.category}]`)
-            .join("\n"),
+            .join("\n") +
+            attribution("https://www.finops.org/framework/personas/"),
         );
       }
       if (persona) {
@@ -914,6 +924,8 @@ export function registerTools(
                     })
                   : f.items,
               group_level: f.persona.kind === "allied-group",
+              uri: URI.capability(c.slug),
+              source_url: c.source_url,
             })),
         );
         const note =
@@ -921,7 +933,7 @@ export function registerTools(
             ? `${p.title} is an allied persona: the framework maps capability activities to Allied Personas collectively (group_level: true) except where named individually.`
             : `Activities ${p.title} performs, per capability.`;
         return ok(
-          { mode: "persona", note, entries },
+          { mode: "persona", note, entries, license: LICENSE },
           `${note}\n\n` +
             entries
               .map(
@@ -929,7 +941,8 @@ export function registerTools(
                   `## ${e.capability}${e.group_level ? " (group-level)" : ""}\n` +
                   e.activities.map((a) => `- ${a}`).join("\n"),
               )
-              .join("\n\n"),
+              .join("\n\n") +
+            attribution(p.source_url),
         );
       }
       const c = findCapability(capability as string);
@@ -942,15 +955,17 @@ export function registerTools(
         heading: f.heading,
         activities: f.items,
         group_level: f.persona.kind === "allied-group",
+        uri: URI.capability(c.slug),
+        source_url: c.source_url,
       }));
       return ok(
-        { mode: "capability", entries },
+        { mode: "capability", entries, license: LICENSE },
         entries
           .map(
             (e) =>
               `## ${e.persona}\n${e.activities.map((a) => `- ${a}`).join("\n")}`,
           )
-          .join("\n\n"),
+          .join("\n\n") + attribution(c.source_url),
       );
     },
   );
