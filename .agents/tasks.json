@@ -457,6 +457,32 @@
         "completedAt": "2026-07-24T07:14:44.284Z"
       },
       "hash": "43286de4db3344acc705a211defc7b19601fe55afe838952fed0f4fec2458855"
+    },
+    {
+      "id": "T-025",
+      "title": "Split build/verify token accounting and add usage canary",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "IterationRecord and journal report build-phase and verify-phase tokens separately (combined totals kept)",
+        "When a token cap is set and a runner reports no usage, the loop warns that the cap cannot see that iteration",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-026",
+      "title": "Assert loop branch stability and write tasks.json atomically",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "The loop records its starting branch and terminates with an actionable error if HEAD moves to a different branch mid-run",
+        "saveTasks writes via temp file + rename (no torn tasks.json on kill)",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
