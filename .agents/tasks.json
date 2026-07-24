@@ -411,7 +411,7 @@
         "Text block includes summaries per the tool description",
         "Test asserts no served summary is a strict prefix cut of the source"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

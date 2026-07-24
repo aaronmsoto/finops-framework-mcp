@@ -357,11 +357,14 @@ export function registerTools(
         cursorContext("list_capabilities", { domain, persona }),
       );
       if (isErr(pg)) return pg;
+      // Summaries are the Foundation's own curated one-liners (max ~410
+      // chars) — serve them whole; a mid-word cut corrupts official prose
+      // (critique-3 MAJOR A3-fidelity-1).
       const rows = pg.page.map((c) => ({
         slug: c.slug,
         title: c.title,
         domain: c.domain_slug,
-        summary: c.summary.slice(0, 200),
+        summary: c.summary,
       }));
       const alliedNote =
         persona &&
@@ -377,7 +380,12 @@ export function registerTools(
           ...(pg.nextCursor ? { nextCursor: pg.nextCursor } : {}),
         },
         alliedNote +
-          rows.map((r) => `- ${r.title} (${r.slug}) [${r.domain}]`).join("\n"),
+          rows
+            .map(
+              (r) =>
+                `- ${r.title} (${r.slug}) [${r.domain}]${r.summary ? `\n  ${r.summary}` : ""}`,
+            )
+            .join("\n"),
       );
     },
   );

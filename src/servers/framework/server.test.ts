@@ -328,6 +328,24 @@ describe("tools", () => {
     expect(res.content[0]?.text).toMatch(/Stale cursor/);
   });
 
+  it("serves complete capability summaries — no mid-word cuts (critique-3 A3-fidelity-1)", async () => {
+    const res = await call("list_capabilities", {});
+    const rows = res.structuredContent?.capabilities as {
+      slug: string;
+      summary: string;
+    }[];
+    expect(rows.length).toBe(22);
+    const source = loadArtifact(ARTIFACT_DIR);
+    for (const r of rows) {
+      const cap = source.capabilities.find((c) => c.slug === r.slug)!;
+      expect(r.summary).toBe(cap.summary); // full, not a prefix cut
+    }
+    // The text block includes summaries per the tool description.
+    const text = res.content[0]?.text as string;
+    const esa = rows.find((r) => r.slug === "executive-strategy-alignment")!;
+    if (esa.summary) expect(text).toContain(esa.summary.slice(0, 80));
+  });
+
   it("rejects a cursor reused with a different query (critique-3 A1-protocol-1)", async () => {
     const first = await call("search_framework", {
       query: "cost allocation",
