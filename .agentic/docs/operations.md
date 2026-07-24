@@ -63,6 +63,24 @@ The live runners inherit whatever permission state the machine already has — t
 - **Copilot runner**: spawns `./scripts/copilot.sh -p <prompt> --output-format json -s --no-ask-user`; requires `copilot` logged in and org-enabled. Extras go in `AGENTIC_COPILOT_ARGS`.
 - **Both**: git identity must be configured (the loop's commit-per-task check fails without it), and headless runs consume real API/subscription usage.
 
+##### Headless container profile
+
+Running the claude runner as **root inside an isolated container** (CI images,
+cloud agent sandboxes) needs two things together:
+
+```sh
+IS_SANDBOX=1 AGENTIC_CLAUDE_ARGS="--dangerously-skip-permissions" ./scripts/agentic loop ...
+```
+
+`--dangerously-skip-permissions` alone is refused when running as root/sudo
+("cannot be used with root/sudo privileges for security reasons") — that
+refusal prints to stderr and surfaces in the preflight failure message.
+`IS_SANDBOX=1` tells the CLI it is inside a disposable sandbox, which lifts
+the root restriction. Use this profile **only** in containers whose blast
+radius you accept: the flag disables all permission prompts. On a trusted
+developer machine, prefer trusting the workspace once interactively and a
+narrower permission mode in `AGENTIC_CLAUDE_ARGS` instead.
+
 **The preflight probe catches these first.** Before the first iteration, the loop runs a one-time probe (phase `preflight`): it asks the runner to write a gitignored sentinel file and checks it appeared. If the CLI is missing, hangs, or runs but cannot edit (untrusted workspace / edit-denying permission mode), the loop stops immediately with a `CliError` that names the exact symptom and the fix — instead of burning the full consecutive-failure budget on identical "no new commit" iterations. Pass `--skip-preflight` to bypass it (e.g. when you have already proven the runner this session). The probe costs one cheap agent call; it is far cheaper than the failures it prevents.
 
 Before the first long run, prove the chain with one `--max-iterations 1` live iteration and read the journal entry it writes.

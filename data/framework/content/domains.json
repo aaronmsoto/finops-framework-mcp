@@ -1,0 +1,60 @@
+[
+  {
+    "capability_slugs": [
+      "data-ingestion",
+      "allocation",
+      "reporting-analytics",
+      "anomaly-management"
+    ],
+    "description_md": "The outcome of this Domain is a better understanding of an organization's use of technology. Within this Domain, organizations work to gather all the information required to perform FinOps. This includes direct and imputed technology costs and usage, contract commitment, observability, utilization, sustainability data, and other contextual datasets required by any FinOps Domain. Activities in this Domain also define the organizational metadata to categorize, allocate and summarize technology cost and usage, and define the reporting and analytics processes making that data available for use by all FinOps Personas.",
+    "license": "CC-BY-4.0",
+    "slug": "understand-usage-and-cost",
+    "source_url": "https://www.finops.org/framework/domains/",
+    "title": "Understand Usage & Cost"
+  },
+  {
+    "capability_slugs": [
+      "planning-estimating",
+      "forecasting",
+      "budgeting",
+      "kpis-benchmarking",
+      "unit-economics"
+    ],
+    "description_md": "Organizations develop Capabilities in this Domain to connect the usage and cost data with the business value it creates, helping ensure value is transparent and within expectations. Within this Domain, organizations map monetary and non-monetary cloud costs to budgets, use historical information and future plans to forecast, establish and measure technical and organizational KPIs, and perform benchmarking across teams, business units and with other organizations.",
+    "license": "CC-BY-4.0",
+    "slug": "quantify-business-value",
+    "source_url": "https://www.finops.org/framework/domains/",
+    "title": "Quantify Business Value"
+  },
+  {
+    "capability_slugs": [
+      "architecting-workload-placement",
+      "rate-optimization",
+      "usage-optimization",
+      "sustainability",
+      "licensing-saas"
+    ],
+    "description_md": "This Domain focuses on value through optimization, ensuring organizations only use the resources when they provide value to the organization; and that resources used are purchased at the lowest acceptable cost and impact to meet the organization’s goals. Organizations will measure efficiency in a variety of ways, including monetary cost, carbon usage, or more traditional IT operational efficiency measures. Capabilities in this Domain allow the organization to manage the types, timing and amounts of cloud and technology resources used, and the rates that are paid for those resources. Capabilities here also address architecture modernization, sustainability considerations for FinOps teams, and the use of licensed and consumption-based SaaS products.",
+    "license": "CC-BY-4.0",
+    "slug": "optimize-usage-and-cost",
+    "source_url": "https://www.finops.org/framework/domains/",
+    "title": "Optimize Usage & Cost"
+  },
+  {
+    "capability_slugs": [
+      "finops-practice-operations",
+      "governance-policy-risk",
+      "finops-assessment",
+      "automation-tools-services",
+      "finops-education-enablement",
+      "invoicing-chargeback",
+      "intersecting-disciplines",
+      "executive-strategy-alignment"
+    ],
+    "description_md": "This Domain enables continuous improvement to change and align the entire organization - its people, processes and technology - to adopt FinOps and apply the Framework to its FinOps Scopes in ways that create value for the company. Capabilities here are centered on effective FinOps operation, enablement of the whole organization, improved interaction with all other personas and business functions to support and represent technology use more effectively.",
+    "license": "CC-BY-4.0",
+    "slug": "manage-the-finops-practice",
+    "source_url": "https://www.finops.org/framework/domains/",
+    "title": "Manage the FinOps Practice"
+  }
+]

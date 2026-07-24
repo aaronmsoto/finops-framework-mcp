@@ -13,7 +13,7 @@ import { runInit, initNextSteps, LICENSE_CHOICES, type InitOptions, type License
 import { isInteractive, promptInitOptions, ttyWizardIO } from "./wizard.js";
 import { runIntegrity, resolveDefaultBase } from "./integrity.js";
 import { journalTail } from "./journal.js";
-import { runLoop, type LoopMode } from "./loop.js";
+import { loopStatePath, runLoop, type LoopMode } from "./loop.js";
 import { lintMemory, memorySessionBanner, memorySummary } from "./memory.js";
 import { ClaudeRunner } from "./runners/claude.js";
 import { CopilotRunner } from "./runners/copilot.js";
@@ -96,6 +96,14 @@ function parsePositiveInt(value: string | undefined, flag: string): number | und
   return n;
 }
 
+/** For minute-scale caps that legitimately accept fractions (e.g. 0.5 = 30s). */
+function parsePositiveNumber(value: string | undefined, flag: string): number | undefined {
+  if (value === undefined) return undefined;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) throw new UsageError(`--${flag} must be a positive number (got "${value}").`);
+  return n;
+}
+
 // ---------------------------------------------------------------------------
 // Help
 // ---------------------------------------------------------------------------
@@ -122,10 +130,14 @@ Commands:
         Explicit gate names run exactly those gates, ignoring tier.
         Default reports every failure; --fail-fast stops at the first.
   loop [--mode build|plan] [--runner claude|copilot|mock] [--max-iterations N]
-       [--max-minutes M] [--no-verify] [--skip-preflight] [--task <id>]
+       [--max-minutes M] [--max-iteration-minutes M] [--max-consecutive-failures N]
+       [--no-verify] [--skip-preflight] [--task <id>]
         Supervised autonomous loop. Caps come from approvals.yaml; flags may
-        lower them, never raise them. A one-time preflight probes that the
-        runner can edit files (skip with --skip-preflight).
+        lower them, never raise them. --max-iteration-minutes bounds a single
+        runner call (fractions allowed); a fired timeout fails that iteration,
+        not the run. Without --max-iterations the budget defaults to
+        min(pending tasks + 2, policy cap). A one-time preflight probes that
+        the runner can edit files (skip with --skip-preflight).
   tasks <list|next|add|start|complete|block|validate>
         Manage .agents/tasks.json (hash-chained).
         add --title <t> --acceptance <c> [--acceptance <c> ...] [--spec <path>]
@@ -286,6 +298,8 @@ async function cmdLoop(root: string, config: AgenticConfig, args: string[], json
     runner: "string",
     "max-iterations": "string",
     "max-minutes": "string",
+    "max-iteration-minutes": "string",
+    "max-consecutive-failures": "string",
     "no-verify": "boolean",
     "skip-preflight": "boolean",
     task: "string",
@@ -298,12 +312,17 @@ async function cmdLoop(root: string, config: AgenticConfig, args: string[], json
     mode: mode as LoopMode,
     maxIterations: parsePositiveInt(parsed.strings["max-iterations"], "max-iterations"),
     maxMinutes: parsePositiveInt(parsed.strings["max-minutes"], "max-minutes"),
+    maxIterationMinutes: parsePositiveNumber(parsed.strings["max-iteration-minutes"], "max-iteration-minutes"),
+    maxConsecutiveFailures: parsePositiveInt(parsed.strings["max-consecutive-failures"], "max-consecutive-failures"),
     noVerify: parsed.booleans["no-verify"],
     skipPreflight: parsed.booleans["skip-preflight"],
     taskId: parsed.strings.task,
   });
   if (json) logOut(JSON.stringify(result, null, 2));
-  else logOut(`loop: ${result.state} — ${result.reason} (${result.iterations.length} iteration(s), ${Math.round(result.durationMs / 1000)}s)`);
+  else {
+    const tokens = result.totalTokens.total > 0 ? `, ${result.totalTokens.total} tokens` : "";
+    logOut(`loop: ${result.state} — ${result.reason} (${result.iterations.length} iteration(s), ${Math.round(result.durationMs / 1000)}s${tokens})`);
+  }
   return result.state === "success" ? 0 : 1;
 }
 
@@ -389,6 +408,40 @@ function cmdIntegrity(root: string, config: AgenticConfig, args: string[], json:
   return failures.length === 0 ? 0 : 1;
 }
 
+/** Human-readable loop line from the heartbeat state file, or null when none exists. */
+export function describeLoopState(root: string): { line: string; state: Record<string, unknown> } | null {
+  const text = readTextIfExists(loopStatePath(root));
+  if (text === null) return null;
+  let state: Record<string, unknown>;
+  try {
+    state = JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    return { line: "loop: state file unreadable (malformed JSON)", state: {} };
+  }
+  const phase = typeof state.phase === "string" ? state.phase : "?";
+  const updatedAt = typeof state.updatedAt === "string" ? state.updatedAt : null;
+  const pid = typeof state.pid === "number" ? state.pid : null;
+  const iter = state.iteration as { n?: number; max?: number } | null;
+  const taskId = typeof state.taskId === "string" ? state.taskId : null;
+  const ageSec = updatedAt !== null ? Math.max(0, Math.round((Date.now() - Date.parse(updatedAt)) / 1000)) : null;
+  const age = ageSec !== null ? `${ageSec}s ago` : "unknown age";
+  if (phase.startsWith("terminal:")) {
+    return { line: `loop: last run ${phase.slice("terminal:".length)} at ${updatedAt ?? "?"}`, state };
+  }
+  let alive = false;
+  if (pid !== null) {
+    try {
+      process.kill(pid, 0);
+      alive = true;
+    } catch (err) {
+      alive = (err as NodeJS.ErrnoException).code === "EPERM"; // exists, not ours
+    }
+  }
+  const where = `${iter && typeof iter.n === "number" ? `iteration ${iter.n}/${iter.max ?? "?"}` : "starting"}${taskId !== null ? ` on ${taskId}` : ""} (${phase}, ${age})`;
+  if (alive) return { line: `loop: RUNNING ${where}`, state };
+  return { line: `loop: STALE — pid ${pid ?? "?"} not alive; last seen ${where} (crashed or killed)`, state };
+}
+
 function cmdStatus(root: string, config: AgenticConfig, json: boolean): number {
   const tasksFile = tryLoadTasks(root);
   const counts = tasksFile ? statusCounts(tasksFile) : null;
@@ -410,11 +463,19 @@ function cmdStatus(root: string, config: AgenticConfig, json: boolean): number {
     caps = null;
   }
   const tail = journalTail(root, 1);
+  const loopState = describeLoopState(root);
   if (json) {
-    logOut(JSON.stringify({ project: config.project.name, tasks: counts, lastGatesReport: gates, loopCaps: caps, integrityBase, lastJournalEntry: tail[0] ?? null }, null, 2));
+    logOut(
+      JSON.stringify(
+        { project: config.project.name, tasks: counts, lastGatesReport: gates, loopCaps: caps, integrityBase, loopState: loopState?.state ?? null, lastJournalEntry: tail[0] ?? null },
+        null,
+        2,
+      ),
+    );
     return 0;
   }
   logOut(`project: ${config.project.name} (preset: ${config.preset})`);
+  if (loopState !== null) logOut(loopState.line);
   logOut(counts ? `tasks: ${counts.pending} pending, ${counts.in_progress} in progress, ${counts.done} done, ${counts.blocked} blocked` : "tasks: no .agents/tasks.json yet");
   if (gates !== null && typeof gates === "object") {
     const g = gates as { generatedAt?: string; ok?: boolean; results?: Array<{ name: string; status: string }> };

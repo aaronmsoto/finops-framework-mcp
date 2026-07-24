@@ -88,6 +88,28 @@ describe("approvals.yaml loading", () => {
     );
   });
 
+  it("max_total_tokens: defaults to null, accepts a positive integer, rejects junk", () => {
+    expect(validateApprovals({ version: 1, owner: "@me" }).loop.max_total_tokens).toBeNull();
+    expect(validateApprovals({ version: 1, owner: "@me", loop: { max_total_tokens: 500000 } }).loop.max_total_tokens).toBe(500000);
+    expect(() => validateApprovals({ version: 1, owner: "@me", loop: { max_total_tokens: 0 } })).toThrowError(
+      /loop\.max_total_tokens must be a positive integer/,
+    );
+    expect(() => validateApprovals({ version: 1, owner: "@me", loop: { max_total_tokens: "lots" } })).toThrowError(
+      /loop\.max_total_tokens must be a positive integer/,
+    );
+  });
+
+  it("max_iteration_minutes: defaults to 30, accepts positive fractions, rejects junk", () => {
+    expect(validateApprovals({ version: 1, owner: "@me" }).loop.max_iteration_minutes).toBe(30);
+    expect(validateApprovals({ version: 1, owner: "@me", loop: { max_iteration_minutes: 0.05 } }).loop.max_iteration_minutes).toBe(0.05);
+    expect(() => validateApprovals({ version: 1, owner: "@me", loop: { max_iteration_minutes: 0 } })).toThrowError(
+      /loop\.max_iteration_minutes must be a positive number/,
+    );
+    expect(() => validateApprovals({ version: 1, owner: "@me", loop: { max_iteration_minutes: "fast" } })).toThrowError(
+      /loop\.max_iteration_minutes must be a positive number/,
+    );
+  });
+
   it("applies branching defaults when the section is absent", () => {
     const policy = validateApprovals({ version: 1, owner: "@me" });
     expect(policy.branching).toEqual(DEFAULT_BRANCHING);

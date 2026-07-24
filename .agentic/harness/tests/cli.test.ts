@@ -193,6 +193,55 @@ describe("agentic CLI", () => {
     expect(JSON.parse(json.stdout).tasks.pending).toBe(1);
   });
 
+  it("status reports a RUNNING loop from a live-pid heartbeat and includes it in --json", () => {
+    writeFileIn(
+      dir,
+      ".agents/.cache/loop-state.json",
+      JSON.stringify({
+        version: 1,
+        pid: process.pid, // this test process is alive
+        runId: "loop-build-123456",
+        mode: "build",
+        startedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        phase: "build",
+        iteration: { n: 2, max: 5 },
+        taskId: "T-007",
+        caps: {},
+        tokens: { input: 0, output: 0, cacheRead: 0, cacheCreation: 0, total: 0 },
+        consecutiveFailures: 0,
+      }),
+    );
+    const res = runCli(dir, ["status"]);
+    expect(res.stdout).toMatch(/loop: RUNNING iteration 2\/5 on T-007 \(build, \d+s ago\)/);
+    const json = runCli(dir, ["status", "--json"]);
+    expect(JSON.parse(json.stdout).loopState.taskId).toBe("T-007");
+  });
+
+  it("status flags a dead-pid heartbeat as STALE and a terminal one as last run", () => {
+    const deadPid = sh(dir, "sh", ["-c", "echo $$"]).stdout.trim(); // shell already exited
+    writeFileIn(
+      dir,
+      ".agents/.cache/loop-state.json",
+      JSON.stringify({ version: 1, pid: Number(deadPid), runId: "r", mode: "build", updatedAt: new Date().toISOString(), phase: "verify", iteration: { n: 1, max: 3 }, taskId: "T-001" }),
+    );
+    expect(runCli(dir, ["status"]).stdout).toMatch(/loop: STALE — pid \d+ not alive.*T-001.*(crashed or killed)/);
+
+    writeFileIn(
+      dir,
+      ".agents/.cache/loop-state.json",
+      JSON.stringify({ version: 1, pid: 1, runId: "r", mode: "build", updatedAt: "2026-07-23T05:00:00.000Z", phase: "terminal:success", iteration: null, taskId: null }),
+    );
+    expect(runCli(dir, ["status"]).stdout).toContain("loop: last run success at 2026-07-23T05:00:00.000Z");
+  });
+
+  it("status survives a malformed heartbeat file", () => {
+    writeFileIn(dir, ".agents/.cache/loop-state.json", "{not json");
+    const res = runCli(dir, ["status"]);
+    expect(res.status).toBe(0);
+    expect(res.stdout).toContain("loop: state file unreadable");
+  });
+
   it("loop --runner mock works end-to-end through the CLI with --json state", () => {
     writeFileIn(dir, ".agents/prompts/build.md", "build preamble\n");
     writeFileIn(dir, ".agents/prompts/plan.md", "plan preamble\n");

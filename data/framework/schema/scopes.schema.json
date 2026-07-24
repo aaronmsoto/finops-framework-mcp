@@ -1,0 +1,44 @@
+{
+  "$id": "finops-framework-mcp/scopes",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "license": {
+      "const": "CC-BY-4.0"
+    },
+    "sections": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "body_md": {
+            "type": "string"
+          },
+          "heading": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "heading",
+          "body_md"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "source_url": {
+      "format": "uri",
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "sections",
+    "source_url",
+    "license"
+  ],
+  "type": "object"
+}

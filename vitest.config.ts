@@ -4,10 +4,11 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ["tests/**/*.test.ts"],
+    include: ["tests/**/*.test.ts", "src/**/*.test.ts"],
     exclude: ["harness/**", "node_modules/**"],
     coverage: {
       include: ["src/**"],
+      exclude: ["src/**/fixtures/**", "src/**/*.test.ts"],
       reporter: ["text", "lcov"],
     },
   },

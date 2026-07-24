@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { claudeArgs, extractFinalText, parseJsonlEvents } from "../src/runners/claude.js";
 import { copilotArgs, copilotCommand } from "../src/runners/copilot.js";
 import { MockRunner } from "../src/runners/mock.js";
+import { addTokens, tokenTotals, ZERO_TOKENS } from "../src/runners/types.js";
 import { shellWordSplit } from "../src/util.js";
 import { makeTempDir, rmDir, writeFileIn } from "./helpers.js";
 
@@ -88,6 +89,30 @@ describe("mock runner", () => {
     expect(result.finalText).toContain(path.basename(dir));
   });
 
+  it("parses the last AGENTIC_MOCK_USAGE marker into usage; malformed markers are ignored", async () => {
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'echo "AGENTIC_MOCK_USAGE: {not json}"',
+      'echo "AGENTIC_MOCK_USAGE: {\\"input_tokens\\": 10, \\"output_tokens\\": 80, \\"cache_read_input_tokens\\": 900}"',
+      'echo "done"',
+    ].join("\n");
+    const result = await new MockRunner().run({ prompt: "p", cwd: dir, timeoutMs: 10_000 });
+    expect(result.usage).toEqual({ input_tokens: 10, output_tokens: 80, cache_read_input_tokens: 900 });
+    expect(result.finalText).toContain("done");
+  });
+
+  it("returns undefined usage when no marker is printed", async () => {
+    process.env.AGENTIC_MOCK_SCRIPT = 'echo "no marker here"';
+    const result = await new MockRunner().run({ prompt: "p", cwd: dir, timeoutMs: 10_000 });
+    expect(result.usage).toBeUndefined();
+  });
+
+  it("exposes the script's stderr on the result", async () => {
+    process.env.AGENTIC_MOCK_SCRIPT = 'echo "visible output"; echo "hidden cause" >&2';
+    const result = await new MockRunner().run({ prompt: "p", cwd: dir, timeoutMs: 10_000 });
+    expect(result.finalText).toContain("visible output");
+    expect(result.stderr).toContain("hidden cause");
+  });
+
   it("enforces timeoutMs by killing the process group", async () => {
     process.env.AGENTIC_MOCK_SCRIPT = "sleep 30";
     const started = Date.now();
@@ -99,5 +124,23 @@ describe("mock runner", () => {
   it("fails clearly when AGENTIC_MOCK_SCRIPT is unset", async () => {
     delete process.env.AGENTIC_MOCK_SCRIPT;
     await expect(new MockRunner().run({ prompt: "p", cwd: dir, timeoutMs: 1000 })).rejects.toThrowError(/AGENTIC_MOCK_SCRIPT/);
+  });
+});
+
+describe("token totals", () => {
+  it("maps all four claude usage fields and sums them into total", () => {
+    const t = tokenTotals({ input_tokens: 10, output_tokens: 80, cache_read_input_tokens: 900, cache_creation_input_tokens: 7 });
+    expect(t).toEqual({ input: 10, output: 80, cacheRead: 900, cacheCreation: 7, total: 997 });
+  });
+
+  it("treats missing, negative, and non-numeric fields as zero", () => {
+    expect(tokenTotals(undefined)).toEqual(ZERO_TOKENS);
+    expect(tokenTotals({ input_tokens: -5, output_tokens: "x" }).total).toBe(0);
+  });
+
+  it("addTokens sums field-wise", () => {
+    const a = tokenTotals({ input_tokens: 1, output_tokens: 2 });
+    const b = tokenTotals({ input_tokens: 3, cache_read_input_tokens: 4 });
+    expect(addTokens(a, b)).toEqual({ input: 4, output: 2, cacheRead: 4, cacheCreation: 0, total: 10 });
   });
 });

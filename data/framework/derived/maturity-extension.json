@@ -1,0 +1,6 @@
+{
+  "description_md": "**Unofficial extension — not FinOps Foundation vocabulary.** The official FinOps Maturity Model defines three levels: Crawl, Walk, and Run. This server adds `pre-crawl` to describe the state *below* Crawl: the capability's Crawl-level characteristics are not yet met consistently (little or no process, tooling, or shared understanding). No official assessment content exists below Crawl; use the Crawl characteristics as the target when assessing a pre-crawl capability.",
+  "official": false,
+  "slug": "pre-crawl",
+  "title": "Pre-Crawl (unofficial extension)"
+}

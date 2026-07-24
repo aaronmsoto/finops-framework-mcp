@@ -9,14 +9,23 @@
 - Name: finops-framework-mcp
 - What: an MCP (Model Context Protocol) server acting as an agentic interface
   to the FinOps Framework published at https://finops.org/framework.
-- Phase: onboarding — initialized from agentic-starter-repo; server not yet
-  implemented (src/index.ts is the preset scaffold).
+- Phase: v0.1 built — crawler + versioned data artifact (data/framework/) +
+  stdio MCP server (src/servers/framework); two critique gates + eval suite
+  passed 2026-07-21.
 
 ## Invariants
 
-- (record hard facts agents must never violate)
+- Crawler and server never import each other; the data artifact is the only
+  interface (ESLint boundaries enforce).
+- Official content lives in data/framework/content/; everything unofficial
+  (pre-crawl level, parsed Actions, inferred edges) is official:false in
+  derived/ and labeled in every server output. Never blend or invent.
+- Framework content is CC BY 4.0 (FinOps Foundation): attribution +
+  modification notice must ride on every served surface (NOTICE.md).
+- Never crawl /wp/v2/scope (legacy pre-2025 scopes = Technology Categories).
+- Tests live under src/**/*.test.ts (tests/** is a protected path).
 
 ## Current focus
 
-- Finish onboarding (T-003: first feature spec), then design/plan the MCP
-  server surface over the FinOps Framework content.
+- Ship the v0.1 build PR; then owner decisions (Action rename, refresh
+  workflow install) — see activeContext.md.

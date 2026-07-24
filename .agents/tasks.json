@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "fb69a7ea1fba746208d323a8b205187ab8493e38ab86ba467f144e70eddfce66",
+  "chainHead": "0f165088db5ff11d8ebd398503891a6d7b46aecbd3eb5de9a701841755db461b",
   "tasks": [
     {
       "id": "T-001",
@@ -42,9 +42,15 @@
         "A spec file exists under .agents/specs/",
         ".agents/tasks.json contains the tasks decomposed from the spec"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "First feature spec written: .agents/specs/finops-framework-mcp-server.md, backed by docs/architecture.md and docs/research.md from the owner build brief; decomposition handled by the brief's phased plan (owner-approved deviation from plan-feature).",
+        "commit": "e5dc84a1d5a1f69674e96d6ab074181cefe9c857",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-21T10:50:39.192Z"
+      },
+      "hash": "31514ba62fa340db6ee6eac1f71e0bc6f05093d98636ddff23ba2809f7201c2c"
     },
     {
       "id": "T-004",
@@ -62,6 +68,301 @@
         "completedAt": "2026-07-21T09:53:19.719Z"
       },
       "hash": "fb69a7ea1fba746208d323a8b205187ab8493e38ab86ba467f144e70eddfce66"
+    },
+    {
+      "id": "T-005",
+      "title": "Delete relationship functionality and bump to schema 2.0.0 (spec §1)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "src has no infer.ts/graph.ts; no get_prerequisites/get_related tools; no graph resource; types/schemas/artifact loader carry no relationship entities; KPI related_capability_slugs kept",
+        "data/framework has no relationships-*.json or relationships schema; artifact regenerated offline with data_version 2.0.0 and schema_version 2.0.0",
+        "./scripts/agentic gates --tier all passes; npx vitest run passes with relationship tests removed"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Relationship functionality deleted; artifact regenerated offline at data/schema v2.0.0; gates --tier all green (79/79 tests).",
+        "commit": "edf0588149c3006fcf8fcdce4a30d6dafec160e0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T01:06:54.136Z"
+      },
+      "hash": "067b23c1b4f6bba2b5b3ec89fee342ebc6137aa239f0880e43081b3e5ac125e9"
+    },
+    {
+      "id": "T-006",
+      "title": "Add markdown compose layer: crawler writes canonical per-page markdown (spec §2)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "refresh writes data/framework/content/markdown/ per spec §2 layout (22 capabilities, 11 personas, 88 kpis, 6 section docs) with sorted front-matter and canonical headings; files hashed in manifest sha256",
+        "compose escaping guard throws on dialect-breaking items; front-matter emit/parse unit tests and per-fixture compose tests pass",
+        "double refresh remains byte-idempotent (No changes on second run); gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "127 markdown docs composed (22 caps + 11 personas + 88 kpis + 6 section docs); gates --tier all green; double-refresh byte-idempotent (No changes) confirmed live",
+        "commit": "1068f7df5d8224481516290f6d6c5ffe169e0b1a",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T01:18:45.294Z"
+      },
+      "hash": "3944c7ee4ee8d71d5bb002bfb86cd58c74a72328ff7d956248f04d436ce95ee5"
+    },
+    {
+      "id": "T-007",
+      "title": "Add derive step: all JSON regenerated from markdown, offline (spec §3)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "cli derive subcommand rebuilds every content/derived JSON from content/markdown with zero network; refresh routes JSON production through the same derive path",
+        "round-trip tests pass: derive(compose(parse(fixture))) deep-equals direct parser output for all capability fixtures; actions ordinals/parent_ordinal match allocation fixture",
+        "refresh then derive produces zero diff; double-derive byte-identical; gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "derive step implemented; gates --tier all pass (169/169 tests); refresh→derive zero diff and derive→derive byte-identical verified live offline",
+        "commit": "b83be93a9c61a82d82d82c4bed2ca5f38f1e91bc",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T01:43:26.897Z"
+      },
+      "hash": "50e2c728ea4670dc4d370c9757cef8ed6d688421cb24d820b39d8edae23cfe72"
+    },
+    {
+      "id": "T-008",
+      "title": "Experimental flag: hide actions and pre-crawl; official maturity surface (spec §4)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "default server: tools/list lacks get_actions and includes get_maturity_assessment (verbatim official maturity markdown w/ attribution + resource_link); no pre-crawl in any enum, completion, resource level list, maturity model output, prompt, or instructions",
+        "FINOPS_MCP_EXPERIMENTAL=1 (or --experimental) restores get_actions (EXPERIMENTAL-labeled) and pre-crawl; assess_maturity_path serves gap as verbatim assessment_md per level with crawl/walk/run enums",
+        "flag-matrix tests pass via createServer(artifact,{experimental}); completable(z.string().describe()) pattern preserved; gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "gates --tier all green (182/182 tests); manually verified default vs --experimental/FINOPS_MCP_EXPERIMENTAL=1 server behavior via built dist and in-memory client probes",
+        "commit": "f749866a0193cd5b4e2b79a7e24e71ce88a8e503",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T01:58:45.332Z"
+      },
+      "hash": "dabd1ef894b81d9c7292451a1f16eb8b0bfc18589ae41ad6554ab8b034f5a8e4"
+    },
+    {
+      "id": "T-009",
+      "title": "v1 docs, revised evals, npm publish prep (spec §5)",
+      "spec": ".agents/specs/v1-official-only.md",
+      "acceptance": [
+        "architecture.md/README updated to v1 surface (no relationships, flag documented, npx quickstart); eval.xml Q1/Q2/Q10 rewritten per spec §5",
+        "package.json un-privated with version 1.0.0, files whitelist, mcpName, repository, prepublishOnly; server.json added; npm pack --dry-run ships only dist+data+README+LICENSE+NOTICE",
+        "gates --tier all pass; artifact manifest shows schema_version 2.0.0"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "docs/README rewritten for v1 surface, eval.xml Q1/Q2/Q10 revised, package.json npm-ready (1.0.0, files whitelist) + server.json added, npm pack --dry-run verified clean, gates --tier all green",
+        "commit": "042916c5208ac9d53d4b7dd0c759f36b25162757",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T02:10:09.321Z"
+      },
+      "hash": "47d10e18475a266f5f4bc8f4b7884cf5180154706c3a01782ee8f78524fbb434"
+    },
+    {
+      "id": "T-010",
+      "title": "Surface runner output and root hint in loop preflight failures",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "Preflight failure messages include the last ~10 lines of runner stderr/finalText",
+        "RunnerResult exposes stderr; claude/copilot/mock runners populate it",
+        "Root-refusal output or claude-as-root triggers an IS_SANDBOX=1 hint",
+        "operations.md gains a headless container profile section",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Preflight failures now carry the runner's last output lines (stderr threaded through all three runners) plus an IS_SANDBOX=1 hint for the root-refusal case; headless container profile documented in operations.md. Harness: 215 tests, lint, typecheck green; 4 new tests.",
+        "commit": "4ca3317fa6722f98bc053735fe8e27deb02a5e3c",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T06:44:31.759Z"
+      },
+      "hash": "fca3d1e6dd5423b78e0959cb35efae812e44dad3427758f93170dc5a58ddcffc"
+    },
+    {
+      "id": "T-011",
+      "title": "Track per-iteration token usage and enforce optional loop token cap",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "TokenTotals plumbing sums input/output/cacheRead/cacheCreation into total",
+        "Mock runner parses AGENTIC_MOCK_USAGE stdout marker into usage",
+        "Journal shows per-iteration tokens and run total; loop --json includes totalTokens",
+        "loop.max_total_tokens policy key (default null) triggers budget_exhausted when exceeded",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Token accounting: per-iteration and run totals journaled and in --json; optional loop.max_total_tokens cap (code default null) triggers resumable budget_exhausted only when work remains; mock runner usage marker for hermetic tests. Harness: 225 tests, lint, typecheck green; 8 new tests.",
+        "commit": "cd1add0c47294a2d789530b388d3c6323b307f17",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T06:51:22.011Z"
+      },
+      "hash": "2975e99cfd59a3f9775717fc030721847679671a5cd5ce7def6c80dce185f302"
+    },
+    {
+      "id": "T-012",
+      "title": "Persist verifier evidence to .agents/.cache/verify with journal excerpt",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "Verifier finalText+usage+verdict written to .agents/.cache/verify/<task>-<ts>.md on pass and fail",
+        "IterationRecord and journal cite the evidence path plus a 500-char excerpt",
+        "Evidence write failure never fails the iteration",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Verifier transcripts persisted to .agents/.cache/verify/<task>-<ts>.md on pass and fail with path in IterationRecord and journal plus 500-char excerpt; write failures only warn. Harness: 228 tests, lint, typecheck green; 3 new/extended tests.",
+        "commit": "ce1d5dcb5f3ce8636ccdfcf9ceae74d9ca20e9eb",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T06:53:51.340Z"
+      },
+      "hash": "8af340cb717407c1d81caf2a04cee69417bd3595977721a15e194b2f39026113"
+    },
+    {
+      "id": "T-013",
+      "title": "Add per-iteration timeout with policy key and lower-only CLI flag",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "loop.max_iteration_minutes policy key, default 30, positive number (fractions allowed)",
+        "--max-iteration-minutes flag lowers but never raises the policy cap",
+        "Build and verify runner timeouts are min(remaining wall, iteration cap); timeout detail names which cap fired",
+        "A timed-out iteration fails, reverts, and counts toward consecutive failures; the run continues",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Per-iteration timeout: loop.max_iteration_minutes (default 30, fractional allowed) with lower-only --max-iteration-minutes flag; build/verify/plan runner calls bounded by min(wall remaining, cap); timeout detail names which budget fired; hung iterations fail and the run continues. Harness: 231 tests, lint, typecheck green; 5 new tests.",
+        "commit": "89f01199c8d6e110b739d32aa72ef4aafb631a8f",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T06:58:11.350Z"
+      },
+      "hash": "bed32170c32d505c3030d4ee3be4faa43da755151c2b82951cae969f4503573a"
+    },
+    {
+      "id": "T-014",
+      "title": "Add consecutive-failures flag and pending-based iteration budget default",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "--max-consecutive-failures flag goes through effectiveCap (lower-only)",
+        "Without --max-iterations, build-mode budget defaults to min(pending+2, policy cap) with an explanatory log",
+        "CLI help documents all new loop flags",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Cap ergonomics: --max-consecutive-failures lower-only flag; build-mode iteration budget defaults to min(pending+2, policy cap) with explanatory log, disabled by explicit --max-iterations; CLI help updated for all new loop flags. Harness: 235 tests, lint, typecheck green; 4 new tests.",
+        "commit": "31bf982e4b75117a08579d50619b8be9d91a0466",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:01:00.439Z"
+      },
+      "hash": "39b143feb38361ae6950cac8577fd278be366f41141f94889eaa2e8a857cc5e0"
+    },
+    {
+      "id": "T-015",
+      "title": "Emit loop heartbeat file and surface live loop state in status",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "Loop writes .agents/.cache/loop-state.json at preflight/build/verify and terminal states including thrown errors",
+        "agentic status shows running iteration N/M on task (phase, age), STALE for dead pid, or last-run terminal state",
+        "status --json includes loopState",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Heartbeat .agents/.cache/loop-state.json written at every phase transition with pid/runId/iteration/task/caps/tokens; terminal states stamped including CliError crashes (own-pid guard against stale files); status shows RUNNING/STALE/last-run with liveness probe and loopState in --json. Harness: 241 tests, lint, typecheck green; 6 new tests.",
+        "commit": "10ab095fbd44fd90ae087322bfd88bfa95d1f9f3",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:06:25.560Z"
+      },
+      "hash": "eda2aa73a712f8ffd1f25e74243fcefd8af7ffc58360af340cc50ba6593f74bd"
+    },
+    {
+      "id": "T-016",
+      "title": "Commit the loop run journal at terminal state",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "At terminal state the run journal file is committed alone via pathspec add+commit 'Record loop run journal (<state>)'",
+        "Skips silently when no journal file or clean; warns without changing terminal state on commit failure",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Run journal auto-committed at terminal state, pathspec-scoped so BLOCKED.md and runner leftovers never ride along; skips when no journal exists; commit failures warn only. Harness: 245 tests, lint, typecheck green; 4 new tests.",
+        "commit": "249f444dee1b64d37687886146f7c54b2ea780c5",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:10:43.677Z"
+      },
+      "hash": "24748a17569c2518dfb5c4756f3935c5ab4256e917f3b68fdb9e17cb43b3cd77"
+    },
+    {
+      "id": "T-017",
+      "title": "Record loop harness validation evidence and port-back tracker",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "Mock scenarios A-D executed in a scratch fixture repo with outputs captured",
+        "Real mini loop run executed with the improved harness; heartbeat, tokens, journal commit observed",
+        ".agents/specs/loop-harness-improvements.md tracker has per-item status, evidence, and port verdict",
+        "Memory bank and session journal updated"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Scenarios A-E all PASS with outputs quoted in the spec's validation log; tracker verdicts: all seven items port (fractional-minutes deviation flagged); session journal + activeContext handoff written. Real run: success 2/2, 1101s, 10175911 tokens.",
+        "commit": "a8bf61ad3020ce4f9027a59e13fe25d90128e33a",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:36:16.245Z"
+      },
+      "hash": "0f165088db5ff11d8ebd398503891a6d7b46aecbd3eb5de9a701841755db461b"
+    },
+    {
+      "id": "T-018",
+      "title": "Slim runtime deps: load cheerio lazily in the crawler",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "cheerio moves to devDependencies; crawl/parse code imports it dynamically",
+        "A crawl attempt without cheerio installed fails with an actionable error naming the dev install command",
+        "Server startup, tools, and cli.js derive work without cheerio present (derive is markdown-to-JSON only)",
+        "Tests cover the missing-cheerio error path; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "cheerio moved to devDependencies, loaded lazily via createRequire; gates PASS (189/189 tests), verified derive/server/refresh work correctly with cheerio hidden then restored",
+        "commit": "59792f80adbb78369eb4b6d33b73b1a98569e394",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:22:55.478Z"
+      },
+      "hash": "d0939df22cc33d6b5bf62c5ca9cc3277df66f24737b75d303096d68f984409c8"
+    },
+    {
+      "id": "T-019",
+      "title": "Add --version flag to the finops-framework-mcp bin",
+      "acceptance": [
+        "finops-framework-mcp --version prints the package version and artifact data_version, exits 0, never starts the server",
+        "The flag is filtered from positional artifact-dir handling like --experimental",
+        "A test covers the flag; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "gates PASS 188/188; node dist/servers/framework/main.js --version prints 'finops-framework-mcp v1.0.0 (data v2.1.1)', exits 0, no server start",
+        "commit": "8494941b9861d496a55ddcfdca775e18c901e067",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-23T07:31:16.667Z"
+      },
+      "hash": "1944204f1e2676f669dd4d91ddad64948aaf003fd60f0b97385a8d046fa3bfbe"
     }
   ]
 }

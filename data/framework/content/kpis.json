@@ -1,0 +1,1399 @@
+[
+  {
+    "data_sources": [
+      "Vendor activity or audit logs",
+      "Identity and access management systems",
+      "SaaS usage reports"
+    ],
+    "description_md": "Measures how effectively provisioned user accounts translate into active usage by comparing the number of active users to the total number of provisioned users. The formula quantifies the proportion of accounts that are delivering ongoing value rather than simply existing in an enabled state. Higher ratios indicate strong engagement and efficient access management, while lower ratios highlight dormant or unused accounts that may be candidates for deprovisioning or licence reduction. This KPI was developed by the [FinOps for SaaS Working Group](https://www.finops.org/wg/finops-for-software-as-a-service-saas/#acknowledgments).",
+    "featured_on": [
+      "licensing-saas"
+    ],
+    "formula": "Active-to-Provisioned User Ratio = (Active Users / Provisioned Users) x 100",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "data-ingestion",
+      "licensing-saas",
+      "reporting-analytics",
+      "usage-optimization"
+    ],
+    "slug": "active-to-provisioned-user-ratio",
+    "source_url": "https://www.finops.org/kpi/active-to-provisioned-user-ratio/",
+    "title": "Active-to-Provisioned User Ratio",
+    "wp_id": 25782
+  },
+  {
+    "data_sources": [
+      "On-Premises Cost Data",
+      "Resource Metadata",
+      "ERP / Accounting Systems",
+      "Audit logs"
+    ],
+    "description_md": "Measures the effectiveness of cost attribution practices across an organization’s infrastructure. The formula calculates the percentage of total infrastructure costs that are directly and accurately attributed to the responsible teams, projects, or business units. A higher AAI indicates better financial transparency, more reliable Chargeback or Showback, and stronger alignment between costs and consumption, supporting accurate budgeting, forecasting, and FinOps decision-making. This KPI was developed by the [FinOps for Data Center Working Group](https://www.finops.org/wg/finops-for-data-center-creating-a-finops-practice-profile/#acknowledgments).",
+    "featured_on": [
+      "allocation"
+    ],
+    "formula": "Allocation Accuracy Index (AAI) = (Directly Attributed Costs / Total Infrastructure Costs) × 100",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "allocation",
+      "reporting-analytics",
+      "usage-optimization"
+    ],
+    "slug": "allocation-accuracy-index-aai",
+    "source_url": "https://www.finops.org/kpi/allocation-accuracy-index-aai/",
+    "title": "Allocation Accuracy Index (AAI)",
+    "wp_id": 25779
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures amount of carbon avoided as a result of identifying and correcting an anomaly.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "anomaly-detected-carbon-avoidance",
+    "source_url": "https://www.finops.org/kpi/anomaly-detected-carbon-avoidance/",
+    "title": "Anomaly-Detected Carbon Avoidance",
+    "wp_id": 17869
+  },
+  {
+    "data_sources": [
+      "Monitoring Tools"
+    ],
+    "description_md": "Measures amount of cost avoidance as a result of identifying and correcting an anomaly. [See Playbook for more details](https://www.finops.org/wg/measuring-anomaly-detected-cost-avoidance-playbook/).",
+    "featured_on": [
+      "anomaly-management"
+    ],
+    "formula": "Total cost of the unpredicted & correctable amount of spend * Projected Amount of Days the anomaly could have occurred if the underlying issue was not addressed",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "anomaly-management"
+    ],
+    "slug": "anomaly-detected-cost-avoidance",
+    "source_url": "https://www.finops.org/kpi/anomaly-detected-cost-avoidance/",
+    "title": "Anomaly-Detected Cost Avoidance",
+    "wp_id": 9641
+  },
+  {
+    "data_sources": [
+      "API usage reports",
+      "Dashboards from AI platforms",
+      "Logs from AI platforms",
+      "Cloud billing data"
+    ],
+    "description_md": "Measures the frequency and cost impact of anomalies in AI spending, such as sudden cost spikes or unexpected usage patterns. This KPI enables proactive identification and mitigation of runaway costs.",
+    "featured_on": [
+      "anomaly-management"
+    ],
+    "formula": "Total Cost of Anomaly Spikes / Total AI Spend = Anomaly Cost %\nwhere (adjust for your needs):\nGreen (< 2%): Healthy. Normal fluctuations.\nYellow (2-7%): Warning. Minor anomaly trend\nRed (> 7%): Critical. You have a “runaway” costs.",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "anomaly-management",
+      "data-ingestion",
+      "reporting-analytics"
+    ],
+    "slug": "anomaly-detection-rate",
+    "source_url": "https://www.finops.org/kpi/anomaly-detection-rate/",
+    "title": "Anomaly Detection Rate",
+    "wp_id": 26638
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures effectiveness of an auto-scaling system.\n\nThe goal of auto-scaling efficiency is to ensure that the right amount of resources are provisioned and de-provisioned in response to changes in demand, in order to achieve a balance between performance, cost, and resource utilization.",
+    "featured_on": [
+      "usage-optimization"
+    ],
+    "formula": "Auto-scaling efficiency rate = Maximum capacity cost of running workload to meet workload demand / Cost of running workload with auto-scaling to meet same workload demand. The higher the efficiency rate the more effective the auto-scaling is. Effective Cost can be used in this formula, or the List Cost metric can be used to eliminate the effect of discounts and focus entirely on the scaling effect.",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "sustainability",
+      "usage-optimization"
+    ],
+    "slug": "auto-scaling-efficiency-rate",
+    "source_url": "https://www.finops.org/kpi/auto-scaling-efficiency-rate/",
+    "title": "Auto-scaling Efficiency Rate",
+    "wp_id": 9647
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the percentage of tokens used from cache. Cached tokens are significantly cheaper. A low cache hit rate signals an optimization opportunity for FinOps Practitioner and Engineering [Personas](https://www.finops.org/framework/personas/).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "cache-hit-rate",
+    "source_url": "https://www.finops.org/kpi/cache-hit-rate/",
+    "title": "Cache Hit Rate",
+    "wp_id": 29467
+  },
+  {
+    "data_sources": [],
+    "description_md": "Companies will define the criteria for a low carbon region—such as areas where electricity is over 80% renewable—and assess the percentage of their resources located in these low carbon and high renewable regions.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "carbon-efficient-locations",
+    "source_url": "https://www.finops.org/kpi/carbon-efficient-locations/",
+    "title": "Carbon Efficient Locations",
+    "wp_id": 17883
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measure of carbon emissions (CO2e) for a period of time for compute. This metric helps organizations understand the environmental impact of cloud compute usage and make decisions to reduce their carbon footprint by choosing more efficient or renewable-energy-powered compute options.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "carbon-per-time-compute-category",
+    "source_url": "https://www.finops.org/kpi/carbon-per-time-compute-category/",
+    "title": "Carbon per [Time] Compute Category",
+    "wp_id": 17881
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measure of carbon emissions (CO2e) for a period of time by gigabytes of storage capacity. This metric helps organizations understand the environmental impact of cloud storage usage and make decisions to reduce their carbon footprint by choosing more efficient or renewable-energy-powered storage options.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "carbon-per-time-storage-category",
+    "source_url": "https://www.finops.org/kpi/carbon-per-time-storage-category/",
+    "title": "Carbon per [Time] Storage Category",
+    "wp_id": 17872
+  },
+  {
+    "data_sources": [
+      "Total Carbon Emissions: CSP Carbon Footprint Tool/Dashboard or Sustainability Calculator",
+      "Total Resource Usage: CSP Billing & Cost Management Tool/Dashboard"
+    ],
+    "description_md": "Carbon emissions per unit of cloud service SKU measure the amount of carbon dioxide equivalent (CO2e) emitted to deliver a specific unit of cloud services, such as compute, storage, and/or networking. This metric allows businesses and consumers to track the environmental impact of cloud usage by resource and make decisions to reduce their carbon footprint by choosing more efficient or renewable-energy-powered solutions.",
+    "featured_on": [
+      "sustainability"
+    ],
+    "formula": "Carbon per unit (kgCO2e) = Total Carbon Emissions (kgCO2e) / Total Resource Usage (SKU)\nAdditional Guidance:\nTotal Carbon Emissions: The total emissions generated by the datacenter operations, including energy usage, cooling, hardware production, and more, typically reported in kilograms of CO2 equivalent (kgCO2e). Can be identified by location or region, depending if CSP supports carbon reporting as market-based or location-based.\nTotal Resource Usage: This represents the total consumption of the specific cloud resource, such as CPU hours, GB of storage, or data transfer in GB, for the specific cloud services with a SKU.",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "intersecting-disciplines",
+      "sustainability",
+      "unit-economics"
+    ],
+    "slug": "carbon-per-unit-of-cloud-service-sku",
+    "source_url": "https://www.finops.org/kpi/carbon-per-unit-of-cloud-service-sku/",
+    "title": "Carbon per Unit of Cloud Service SKU",
+    "wp_id": 17882
+  },
+  {
+    "data_sources": [
+      "Carbon consumption data source,",
+      "CSP Billing data,",
+      "CSP FOCUS files"
+    ],
+    "description_md": "Measure of carbon emissions (CO2e) per unit of cloud spend. Ideally, this measure would be drillable by scope and service categories, such as compute, storage, or networking.\n\nThis metric helps organizations understand the environmental impact of cloud usage and make decisions to reduce their carbon footprint by choosing more efficient or renewable-energy-powered cloud services.",
+    "featured_on": [
+      "sustainability"
+    ],
+    "formula": "CO2e/unit of currency = Effective Cost / CO2e",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "intersecting-disciplines",
+      "sustainability",
+      "unit-economics"
+    ],
+    "slug": "carbon-per-unit-of-cloud-spend",
+    "source_url": "https://www.finops.org/kpi/carbon-per-unit-of-cloud-spend/",
+    "title": "Carbon per Unit of Cloud Spend",
+    "wp_id": 17871
+  },
+  {
+    "data_sources": [
+      "Optimization tooling such as Compute Optimizer (AWS) to gather utilisation vs allocation",
+      "Resource to Carbon unit conversion"
+    ],
+    "description_md": "These 2 KPIs measure carbon inefficiency in workload utilization. It quantifies the difference in carbon emissions between a fully optimized resource allocation and the current allocation. This approach aligns directly with the FinOps principle of optimizing workloads to maximize resource utilization by selecting the most suitable resource size and type. The optimized allocation considers factors such as architecture type (e.g., x86 vs. AMD), as well as specific resource attributes like type and size.",
+    "featured_on": [
+      "sustainability"
+    ],
+    "formula": "Carbon Waste Formula:\n(Carbon of currently allocated resource) – (Carbon of optimised resource for utilisation need)\nCarbon Efficiency Formula:\n(Carbon of optimized resource for utilization need) / (Carbon of currently allocated resource)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "intersecting-disciplines",
+      "sustainability"
+    ],
+    "slug": "carbon-waste-carbon-efficiency",
+    "source_url": "https://www.finops.org/kpi/carbon-waste-carbon-efficiency/",
+    "title": "Carbon Waste / Carbon Efficiency",
+    "wp_id": 17890
+  },
+  {
+    "data_sources": [],
+    "description_md": "Leadership and Finance can use this KPI to measure actual cloud expenses vs. company revenue, on a monthly and/or annual basis – formula options for both are provided below.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "cloud-spend-percentage-of-recurring-revenue",
+    "source_url": "https://www.finops.org/kpi/cloud-spend-percentage-of-recurring-revenue/",
+    "title": "Cloud Spend Percentage of Recurring Revenue",
+    "wp_id": 25117
+  },
+  {
+    "data_sources": [
+      "Resource event logs (Active vs. Idle state)",
+      "System performance metrics (Spillage/Memory telemetry)",
+      "Usage and activity reports"
+    ],
+    "description_md": "Measures the health of contractual agreements by tracking the “burndown” of pre-purchased capacity against actual consumption. This provides a clear signal for renewal negotiations. A value near 100% indicates perfect forecasting and rate optimization; significantly lower values signal “shelfware” (wasted capital), while values exceeding 100% reveal exposure to expensive on-demand rates.",
+    "featured_on": [
+      "rate-optimization"
+    ],
+    "formula": "Commitment Utilization Score = (Used Commitment / Total Commitment) x 100",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "rate-optimization"
+    ],
+    "slug": "commitment-utilization-score",
+    "source_url": "https://www.finops.org/kpi/commitment-utilization-score/",
+    "title": "Commitment Utilization Score",
+    "wp_id": 26647
+  },
+  {
+    "data_sources": [],
+    "description_md": "Quantifies technical debt and operational inefficiency in data cloud platforms by isolating spend that provided zero business utility. This includes credits/units consumed by failed jobs, resources idling before auto-suspension, or “technical spillage” due to over-provisioning. A higher percentage reveals systemic architectural inefficiency or poor guardrails, whereas a lower percentage indicates a highly tuned environment where spend is strictly aligned with successful processing.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "computational-waste-percentage",
+    "source_url": "https://www.finops.org/kpi/computational-waste-percentage/",
+    "title": "Computational Waste Percentage",
+    "wp_id": 26646
+  },
+  {
+    "data_sources": [
+      "Contract and entitlement records",
+      "Vendor usage reports",
+      "Billing and commitment schedules"
+    ],
+    "description_md": "Measures how actual SaaS usage compares to contracted or committed consumption levels by relating consumed units to the committed amount. The formula quantifies the degree to which usage is tracking against contractual expectations over a given period. Values above the committed level indicate potential overage risk or faster-than-planned consumption, while lower values suggest underutilisation and may signal opportunities to adjust future commitments or renegotiate terms. This KPI was developed by the [FinOps for SaaS Working Group](https://www.finops.org/wg/finops-for-software-as-a-service-saas/#acknowledgments).",
+    "featured_on": [
+      "rate-optimization"
+    ],
+    "formula": "Consumption versus Commitment = Actual Consumption Units / Committed Units",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "data-ingestion",
+      "forecasting",
+      "licensing-saas",
+      "rate-optimization",
+      "reporting-analytics"
+    ],
+    "slug": "consumption-versus-commitment",
+    "source_url": "https://www.finops.org/kpi/consumption-versus-commitment/",
+    "title": "Consumption versus Commitment",
+    "wp_id": 25783
+  },
+  {
+    "data_sources": [
+      "CSP or Vendor Billing Report",
+      "Resource Utilization Metric Data Store"
+    ],
+    "description_md": "The Cost Optimization Index score, or COIN, is a quantitative measure designed to assess cloud cost efficiency. COIN applies to any breakdown of infrastructure cost: Team, service, account, etc. COIN is calculated using the savings opportunity and overall total cost for the infrastructure in question to assess efficiency. Think of it as the inverse of waste.",
+    "featured_on": [
+      "usage-optimization"
+    ],
+    "formula": "COIN Score = [1 – (Total Savings Opportunity / Total Cost)] * 100\nThe resulting score from 0-100 serves as an objective benchmark for cost efficiency. Total Cost is based on the aggregate cost of any relevant scope of infrastructure and measured in any desired currency.\nTotal Savings Opportunity is based on the sum of individual Savings Opportunities. Savings Opportunities are usage patterns within that scope of infrastructure which indicate expected areas of inefficiency and waste. These are calculated as projected savings in the same currency as Total Cost. Each Savings Opportunity will need it’s own cost model to identify potential savings.\nThis scoring system can help:\nIdentify areas to save money within run rate\nCompare teams, services, org or organizations cost efficiency\nIdentify priority savings opportunities to target across the broader organization\nExample:\nAcme Corp has identified 3 potential areas of savings which they wish to drive through their organization.\nSavings Area #1 is defined as the use of older generation storage technologies.\nAcmeCorp’s FinOps team has identified a 20% savings for each dollar spent on legacy storage by upgrading to the latest generation.\nSavings opportunity #1 is calculated as 20% multiplied by the current spend on legacy storage.\nSavings Opportunity = (Legacy Gadget Spend) * 20%\nSavings Area #2 is defined as low CPU utilization.\nAcmeCorp’s FinOps team has identified a 30% P95 utilization target for compute.\nSavings Opportunity #2 is calculated as the portion of infrastructure spend wasted on resources below that 30% benchmark.\nSavings Opportunity = Compute spend * (1- (P95 Utilization (%) / 30%)\nSavings Area #3 is defined as turning on a vendor’s network cost-savings option.\nAcmeCorp’s FinOps team has identified a 25% savings from turning on the vendor feature.\nSavings Opportunity = (Network Spend) * 25%\nFor a given Team Rocket, the FinOps team has calculated the following:\nTeam Rocket’s Total Cost = $500\nLegacy Storage Spend = $100\nCompute Spend = $100\nP95 Compute Utilization = 25%\nNetwork Spend = $100\nFirst, calculate the expected savings from each savings opportunity.\n#1 – Storage = $100 * 20% = $20\n#2 – CPU utilization = $100 * (1 – 25%/30%) = $100 * .1666 = $16.67\n#3 – Network = $100 * .25 = $25\nNext, calculate the total savings opportunity by summing the individual savings opportunities:\n$20 + $16.67 + 25 = $61.67\nThe COIN Score for Team Rocket then is calculated:\n1 – ($61.67 / $500) =\n1 – .12334 =\n87.66\nTeam Rocket’s COIN score reflects that ~12% of their spend is known waste and that overall, based on their aggregate spend and defined patterns of waste, their spend is ~88% efficient.",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "rate-optimization",
+      "usage-optimization"
+    ],
+    "slug": "cost-optimization-index-coin",
+    "source_url": "https://www.finops.org/kpi/cost-optimization-index-coin/",
+    "title": "Cost Optimization Index (COIN)",
+    "wp_id": 21748
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the cost of one agent reasoning cycle focusing on agentic workloads where multi-step reasoning drives cost enabling Engineering, Product, and FinOps Practitioner [Personas](https://www.finops.org/framework/personas/) a metric for tracking spending across complex agent workloads. This KPI excludes simple single-call workloads.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "cost-per-agent-cycle",
+    "source_url": "https://www.finops.org/kpi/cost-per-agent-cycle/",
+    "title": "Cost per Agent Cycle",
+    "wp_id": 29466
+  },
+  {
+    "data_sources": [
+      "API usage reports",
+      "Dashboards from AI platforms",
+      "Logs from AI platforms",
+      "Cloud billing data"
+    ],
+    "description_md": "Measures the average cost for each API call made to AI services. This KPI helps track the efficiency of managed AI services like AWS SageMaker or Google Vertex AI.",
+    "featured_on": [
+      "unit-economics"
+    ],
+    "formula": "Cost Per API Call = Total API Costs / Number of API Calls\nExample:\nIf the total API costs are $1,200 and the number of API calls made is 240,000, the cost per API call is: $1,200/240,000 = $0.005 per API call",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "reporting-analytics",
+      "unit-economics"
+    ],
+    "slug": "cost-per-api-call",
+    "source_url": "https://www.finops.org/kpi/cost-per-api-call/",
+    "title": "Cost per API Call",
+    "wp_id": 26640
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data and Cloud Console"
+    ],
+    "description_md": "Measures the average cost per GB stored, impacted through storage tiers and by maximizing data life-cycle management. This average cost can be categorized by specific or combination of the following FOCUS fields to gain more insights and map them to business units : Region ID, Account ID, Service Category ID, SKU ID.",
+    "featured_on": [
+      "unit-economics"
+    ],
+    "formula": "Cloud Storage Costs / Number of GB stored",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "unit-economics"
+    ],
+    "slug": "cost-per-gigabytes-stored",
+    "source_url": "https://www.finops.org/kpi/cost-per-gigabytes-stored/",
+    "title": "Cost per Gigabytes Stored",
+    "wp_id": 9639
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the cost incurred for a single inference (i.e., when an AI model processes an input and generates an output). Useful for applications like chatbots, recommendation engines, or image recognition systems. Used for tracking the operational efficiency of deployed AI models, especially for high-volume applications. Helps optimize resource allocation and identify cost spikes due to inefficient code or infrastructure.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "cost-per-inference",
+    "source_url": "https://www.finops.org/kpi/cost-per-inference/",
+    "title": "Cost per Inference",
+    "wp_id": 26634
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the fully-loaded cost of one unit of AI work represented by one end-to-end AI request cost, including all infrastructure overhead, giving a single number for budgeting to Leadership and FinOps Practitioner [Personas](https://www.finops.org/framework/personas/).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "cost-per-thought-full-stack",
+    "source_url": "https://www.finops.org/kpi/cost-per-thought-full-stack/",
+    "title": "Cost per Thought (Full Stack)",
+    "wp_id": 29464
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the self-contained LLM inference, excluding infrastructure cost, of one unit of AI work represented by an AI request within the observability platform. Use SDK cost estimates from the token counts x model pricing. Best for comparing efficiency between applications when used by Engineering, Product, and FinOps Practitioner [Personas](https://www.finops.org/framework/personas/).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "cost-per-thought-llm-only",
+    "source_url": "https://www.finops.org/kpi/cost-per-thought-llm-only/",
+    "title": "Cost per Thought (LLM Only)",
+    "wp_id": 29465
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "ETL system"
+    ],
+    "description_md": "Time (hours/days) between the cost occurring and the cost being ingested, normalized, and displayed back to cloud stakeholders.\n\nThis time is shorter at higher levels of maturity. At the Crawl phase, it may be around one month. At the Run phase, internal cost updates happen as frequently as the CSP can provide accurate data (e.g. AWS = 2 days).",
+    "featured_on": [
+      "data-ingestion"
+    ],
+    "formula": "Cost Visibility Delay = Time of Displaying Cost – Time of Cost Generation",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "data-ingestion"
+    ],
+    "slug": "cost-visibility-delay",
+    "source_url": "https://www.finops.org/kpi/cost-visibility-delay/",
+    "title": "Cost Visibility Delay",
+    "wp_id": 9667
+  },
+  {
+    "data_sources": [
+      "Self Reporting",
+      "Internal Training",
+      "Learning Management Systems"
+    ],
+    "description_md": "Measure of the number of FinOps courses developed and offered to primary and supporting personas (e.g. monthly, quarterly, annually).",
+    "featured_on": [
+      "finops-education-enablement"
+    ],
+    "formula": "Target number of courses grouped by time period",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "finops-education-enablement"
+    ],
+    "slug": "count-of-finops-learning-opportunities-offered-monthly-quarterly-annually",
+    "source_url": "https://www.finops.org/kpi/count-of-finops-learning-opportunities-offered-monthly-quarterly-annually/",
+    "title": "Count of FinOps Learning Opportunities Offered",
+    "wp_id": 9637
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Internal Finance Metrics"
+    ],
+    "description_md": "CPI, or Cost Performance Indicator, is a valuable KPI for all the FinOps Capabilities within the ‘Quantify Business Value’ domain. Unlike an ‘actual vs budget’ comparison, CPI focuses on tracking the value delivered compared to the cost spent on cloud. This metric is derived from Earned Value Management (EVM), a project management technique that integrates cost, schedule, and performance data. It provides insights into how efficiently a project or initiative is utilizing its budget. \n\nCPI on FinOps Business Value context should be interpreted as follows:\n\n- If CPI > 1: Business Value is higher, compared to budgeted cloud cost.\n- If CPI = 1: Business Value is expected compared to budgeted cloud cost.\n- If CPI < 1: Business Value is lower, compared to budgeted cloud cost.\n\n**Note:** Unit Economic metrics are required to compute this KPI, both a planned/expected and an actual/realized. Unit Economics metrics are specific to each business and should be determined according to the business goals that the cloud investment is designed to achieve. To learn more about Unit Economics, check Introduction to Cloud Unit Economics. \n\nFor CPI calculation, here are the necessary inputs:\n\n- Budgeted Cost per selected time period*\n- Expected Unit Economic per selected time period*\n- Actual Unit Economic per selected time period*\n- Effective Cost per selected time period*\n\n*Considerations about the selected time period: The selected period can be day, week, month, quarter, etc. and all time periods must have matching start and end dates.",
+    "featured_on": [
+      "planning-estimating"
+    ],
+    "formula": "CPI = Earned Value / Effective Cost at time period\nWhere,\nEarned Value = Budgeted Cost per selected time period * % Complete\nAnd where,\n% Complete = Expected Unit Economic per selected time period / Actual Unit Economic per selected time period * 100",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "reporting-analytics"
+    ],
+    "slug": "cpi-cost-performance-indicator",
+    "source_url": "https://www.finops.org/kpi/cpi-cost-performance-indicator/",
+    "title": "CPI – Cost Performance Indicator",
+    "wp_id": 17476
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Internal Finance Metrics"
+    ],
+    "description_md": "The rate at which an organization is consuming or spending its allocated budget for cloud services from a CSP.\n\nThis rate provides insights into how quickly the organization is using up its budgeted funds for cloud resources and services. A higher burn rate indicates that the organization is consuming its budgeted cloud funds at a faster pace. This might be due to increased resource usage, additional projects, or unexpected costs. It can prompt the need for adjustments in resource allocation, optimization efforts, or budget reconsideration.\n\nLower Burn Rate: A lower burn rate suggests that the organization is spending its cloud budget at a slower pace than anticipated. This could mean that the allocated budget is sufficient, resources are being used efficiently, or cost-saving measures are effective.\n\nMatching Burn Rate to Budget: If the burn rate closely matches the budget allocation over the specified time period, it indicates that the organization is on track with its spending plans.\n\nMeasure of success: Matching burn rate to budget.",
+    "featured_on": [
+      "budgeting"
+    ],
+    "formula": "(Actual Cloud Spending / Time Period)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "budgeting"
+    ],
+    "slug": "csp-cloud-budget-burn-rate",
+    "source_url": "https://www.finops.org/kpi/csp-cloud-budget-burn-rate/",
+    "title": "CSP Cloud Budget Burn Rate",
+    "wp_id": 9669
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data,",
+      "Internal ESG Metrics,",
+      "Sustainability OKRs"
+    ],
+    "description_md": "The rate at which an organization is consuming its allocated carbon budget for cloud services from a CSP.\n\nThis rate provides insights into how quickly the organization is using up its budgeted emissions for cloud resources and services. A higher burn rate indicates that the organization is consuming its budgeted cloud carbon at a faster pace. This might be due to increased resource usage, additional projects, or unexpected emissions. It can prompt the need for adjustments in resource allocation, optimization efforts, or carbon budget reconsideration.\n\nLower Burn Rate: A lower burn rate suggests that the organization is consuming its carbon budget at a slower pace than anticipated. This could mean that the allocated budget is sufficient, resources are being used efficiently, or carbon-saving measures are effective.\n\nMatching Burn Rate to Budget: If the burn rate closely matches the budget allocation over the specified time period, it indicates that the organization is on track with its consumption plans.\n\nMeasure of success: Matching burn rate to budget.",
+    "featured_on": [
+      "budgeting"
+    ],
+    "formula": "(Allocated Cloud Emissions / Time Period)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "budgeting",
+      "intersecting-disciplines",
+      "sustainability"
+    ],
+    "slug": "csp-cloud-carbon-budget-burn-rate",
+    "source_url": "https://www.finops.org/kpi/csp-cloud-carbon-budget-burn-rate/",
+    "title": "CSP Cloud Carbon Budget Burn Rate",
+    "wp_id": 17870
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the cost efficiency of the human resources required to manage data center operations relative to the value of the infrastructure being managed. The formula calculates the total full-time equivalent labor cost, multiplied by their hourly rate, and divides it by the total value of the managed infrastructure. A lower Operational Load Factor indicates that the data center is being managed efficiently with less human resource overhead per unit of infrastructure value. This KPI was developed by the [FinOps for Data Center Working Group](https://www.finops.org/wg/finops-for-data-center-creating-a-finops-practice-profile/#acknowledgments).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "data-center-management-efficiency",
+    "source_url": "https://www.finops.org/kpi/data-center-management-efficiency/",
+    "title": "Data Center Management Efficiency",
+    "wp_id": 25777
+  },
+  {
+    "data_sources": [
+      "Facility Power Metering Systems",
+      "Data Center Infrastructure Management (DCIM) Tools",
+      "Utility Provider Billing or Interval Data"
+    ],
+    "description_md": "Measures how efficiently a data center uses energy by comparing the total power consumed by the facility to the power consumed by IT equipment. The formula quantifies the overhead required to support IT operations such as cooling, power distribution, and lighting relative to the energy directly used for compute, storage, and networking. A PUE value closer to 1.0 indicates higher energy efficiency, meaning a greater proportion of facility power is delivered to IT equipment rather than supporting infrastructure. This KPI was developed by the [FinOps for Data Center Working Group](https://www.finops.org/wg/finops-for-data-center-creating-a-finops-practice-profile/#acknowledgments).",
+    "featured_on": [
+      "usage-optimization"
+    ],
+    "formula": "Power Usage Effectiveness (PUE) = Total Facility Power / IT Equipment Power",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "data-ingestion",
+      "reporting-analytics",
+      "sustainability"
+    ],
+    "slug": "data-center-power-usage-effectiveness",
+    "source_url": "https://www.finops.org/kpi/data-center-power-usage-effectiveness/",
+    "title": "Data Center Power Usage Effectiveness",
+    "wp_id": 25772
+  },
+  {
+    "data_sources": [
+      "End-to-end Data Cloud Platform cost reports",
+      "Product analytics or user engagement telemetry",
+      "Finance or capital allocation systems"
+    ],
+    "description_md": "Measures the strategic ROI of data cloud platform assets by comparing the business value generated to the total cost of ownership (TCO) of the data product. This KPI shifts the focus from cost-cutting to value-maximization. A higher ratio indicates a high-margin data product that generates significant business utility, while a ratio approaching or falling below 1.0 signals a “value leak” where the cost of maintaining the data exceeds its benefit.",
+    "featured_on": [
+      "unit-economics"
+    ],
+    "formula": "Data Value Density = Total Business Revenue or Value Index / Total Data Platform TCO",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "licensing-saas",
+      "rate-optimization",
+      "unit-economics",
+      "usage-optimization"
+    ],
+    "slug": "data-value-density",
+    "source_url": "https://www.finops.org/kpi/data-value-density/",
+    "title": "Data Value Density",
+    "wp_id": 26645
+  },
+  {
+    "data_sources": [],
+    "description_md": "Average cost, after amortization of unused commitment discounts, of each Core per calendar month.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "effective-average-compute-cost-per-core",
+    "source_url": "https://www.finops.org/kpi/effective-average-compute-cost-per-core/",
+    "title": "Effective Average Compute Cost per Core",
+    "wp_id": 9649
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data"
+    ],
+    "description_md": "Return on investment metric of all commitment discounts by commitmentDiscountId / commitmentDiscountName, commitmentDiscountStatus, commitmentDiscountType, etc..",
+    "featured_on": [
+      "rate-optimization"
+    ],
+    "formula": "Option 1: (CB Discount Savings – Cost to achieve CB Discount Savings) / Compute On-Demand Equivalent Spend\nOption 2: 1 – (Actual Spend with Discounts / Equivalent Spend at On Demand Rate)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "rate-optimization"
+    ],
+    "slug": "effective-savings-rate-percentage",
+    "source_url": "https://www.finops.org/kpi/effective-savings-rate-percentage/",
+    "title": "Effective Savings Rate Percentage",
+    "wp_id": 9650
+  },
+  {
+    "data_sources": [],
+    "description_md": "This KPI measures architectural precision by comparing the data/partitions scanned for a query against the total volume in the table for data cloud platforms. It identifies where partitioning or clustering strategies have failed. A lower percentage indicates mature architectural design and effective data pruning, while a higher percentage signals inefficient queries that are scanning more data than necessary, driving up compute costs.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "effective-scan-efficiency",
+    "source_url": "https://www.finops.org/kpi/effective-scan-efficiency/",
+    "title": "Effective Scan Efficiency",
+    "wp_id": 26650
+  },
+  {
+    "data_sources": [
+      "Cost Savings Data",
+      "Performance Gains Data",
+      "Financial / Accounting Records"
+    ],
+    "description_md": "Measures the return on investment of optimization initiatives by comparing the combined financial and operational benefits to the cost of implementing the optimization. The formula evaluates whether optimization efforts such as infrastructure right-sizing, efficiency improvements, or performance tuning deliver sufficient value through reduced costs and improved performance relative to the resources required to implement them. This KPI was developed by the [FinOps for Data Center Working Group](https://www.finops.org/wg/finops-for-data-center-creating-a-finops-practice-profile/#acknowledgments).",
+    "featured_on": [
+      "usage-optimization"
+    ],
+    "formula": "Optimization ROI = (Cost Savings + Performance Gains) / Implementation Cost",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "reporting-analytics",
+      "unit-economics",
+      "usage-optimization"
+    ],
+    "slug": "efficiency-performance-roi",
+    "source_url": "https://www.finops.org/kpi/efficiency-performance-roi/",
+    "title": "Efficiency & Performance ROI",
+    "wp_id": 25773
+  },
+  {
+    "data_sources": [
+      "ETL system logs",
+      "ETL interface for process timestamps"
+    ],
+    "description_md": "This measures the cycle time taken to complete the ETL (Extract, Transform, Load) processes.\n\nIt should be faster than the frequency of data updates to avoid obsolete data being presented.",
+    "featured_on": [
+      "data-ingestion"
+    ],
+    "formula": "Processing Time = End Time – Start Time",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "data-ingestion"
+    ],
+    "slug": "etl-processing-time",
+    "source_url": "https://www.finops.org/kpi/etl-processing-time/",
+    "title": "ETL Processing Time",
+    "wp_id": 9665
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures whether users assigned to premium tiers or add ons are actively using the features that justify the higher cost by comparing feature usage to the number of users licensed for those capabilities. The formula quantifies how much of the purchased premium functionality is actually being consumed. Higher adoption rates indicate good alignment between licence tiers and user needs, while lower rates highlight tier bloat and support decisions to downgrade licences, remove add ons or restructure entitlements. This KPI was developed by the [FinOps for SaaS Working Group](https://www.finops.org/wg/finops-for-software-as-a-service-saas/#acknowledgments).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "feature-adoption-rate",
+    "source_url": "https://www.finops.org/kpi/feature-adoption-rate/",
+    "title": "Feature Adoption Rate",
+    "wp_id": 25784
+  },
+  {
+    "data_sources": [],
+    "description_md": "Method of apportioning shared costs based on Fixed Percentage.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "fixed-percentage-apportionment-validation",
+    "source_url": "https://www.finops.org/kpi/fixed-percentage-apportionment-validation/",
+    "title": "Fixed Percentage Apportionment Validation",
+    "wp_id": 9656
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data,",
+      "carbon emission data source,",
+      "Organizational forecast documents"
+    ],
+    "description_md": "This metric compares forecasted vs. actual cloud emissions over a specific period (e.g., day, month, quarter).\n While percentage variance is the primary metric, carbon differences can also be informative. Each organization defines its acceptable variance.",
+    "featured_on": [
+      "forecasting",
+      "sustainability"
+    ],
+    "formula": "((Forecasted Public Cloud emissions – Actual Public Cloud emissions) / Forecasted Public Cloud emissions)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "intersecting-disciplines",
+      "sustainability"
+    ],
+    "slug": "forecast-accuracy-rate-for-carbon-emissions",
+    "source_url": "https://www.finops.org/kpi/forecast-accuracy-rate-for-carbon-emissions/",
+    "title": "Forecast Accuracy Rate for Carbon Emissions",
+    "wp_id": 17868
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Organizational forecast documents"
+    ],
+    "description_md": "This metric compares forecasted vs. actual cloud spend over a specific period (e.g., day, month, quarter).\n\nWhile percentage variance is the primary metric, dollar differences can also be informative. Each organization defines its acceptable variance.",
+    "featured_on": [
+      "forecasting"
+    ],
+    "formula": "((Forecasted Public Cloud Spend – Actual Public Cloud Spend) / Forecasted Public Cloud Spend)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "forecasting"
+    ],
+    "slug": "forecast-accuracy-rate-spend",
+    "source_url": "https://www.finops.org/kpi/forecast-accuracy-rate-spend/",
+    "title": "Forecast Accuracy Rate (Spend)",
+    "wp_id": 9660
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Organizational forecast documents"
+    ],
+    "description_md": "Compare forecast vs. actual cloud usage (serviceName, serviceCategory, serviceSubCategory, etc) over a specific period (e.g., day, month, quarter).\n\nThis should be specific to service types (ex, measure by a specific serviceName, SKU, serviceCategory, serviceSubCategory etc). Percent variance is recommended, although the scale of usage should also be considered. Each organization defines its acceptable variance",
+    "featured_on": [
+      "forecasting"
+    ],
+    "formula": "Formula : For specific ServiceName or ServiceCategory or SKU\n((Forecasted Resource Utilization – Actual Resource Utilization) / Forecasted Resource Utilization)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "forecasting",
+      "sustainability"
+    ],
+    "slug": "forecast-accuracy-rate-usage",
+    "source_url": "https://www.finops.org/kpi/forecast-accuracy-rate-usage/",
+    "title": "Forecast Accuracy Rate (Usage)",
+    "wp_id": 9661
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Organizational forecast documents"
+    ],
+    "description_md": "Evaluates how cloud infrastructure forecasts change over time due to various factors such as priority shifts, workload variations, rightsizing, and CUD impacts.\n\nThough percentage variance is prioritized, measuring in dollars is also valuable. Organizations set their own standards for acceptable variances.",
+    "featured_on": [
+      "forecasting"
+    ],
+    "formula": "((New Forecasted Cloud Infrastructure Spend – Previous Historic Forecasted Cloud Infrastructure Spend) / Previous Forecasted Cloud Infrastructure Spend)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "forecasting"
+    ],
+    "slug": "forecast-drift-rate",
+    "source_url": "https://www.finops.org/kpi/forecast-drift-rate/",
+    "title": "Forecast Drift Rate",
+    "wp_id": 9662
+  },
+  {
+    "data_sources": [],
+    "description_md": "This metric compares present forecasted vs. actual cloud emissions over a specific period (e.g., day, month, quarter). While percentage variance is the primary metric, carbon differences can also be informative. Each organization defines its acceptable variance.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "forecast-present-actual-rate-carbon",
+    "source_url": "https://www.finops.org/kpi/forecast-present-actual-rate-carbon/",
+    "title": "Forecast (Present) Actual Rate (Carbon)",
+    "wp_id": 17887
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "ETL system"
+    ],
+    "description_md": "Time (hours/days) between updates of cost data, e.g. the time since the last ETL run or sharing of data.\n\nThis time will become shorter at higher levels of maturity. It may be days or a month when done manually at the Crawl phase. At the Run phase, internal cost updates may happen as frequently as the CSP provides new data (e.g. AWS = up to 3x/day) or intentionally slower to reduce ETL execution cost.",
+    "featured_on": [
+      "data-ingestion"
+    ],
+    "formula": "Data Update Frequency = Time of Latest Cost Update – Time of Previous Cost Update",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "data-ingestion"
+    ],
+    "slug": "frequency-of-data-updates",
+    "source_url": "https://www.finops.org/kpi/frequency-of-data-updates/",
+    "title": "Frequency of Data Updates",
+    "wp_id": 9666
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Internal Finance Metric"
+    ],
+    "description_md": "This measures total cloud spend in the cloud management tool vs. amount charged in General Ledger (Finance application).",
+    "featured_on": [
+      "invoicing-chargeback"
+    ],
+    "formula": "(Total CSP Cloud Spend recorded as a Journal in the General Ledger) / (Total CSP* cloud spend for the month)\nExample: ACME Global Limited monthly cloud spend for July is $1,000,000. ACME Global Limited Finance application records the total cloud spend to the General Ledger as $1,000,000 Income Statement Recharge Rate = 100% Note: * CSP = Cloud Service Provider",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "invoicing-chargeback"
+    ],
+    "slug": "general-ledger-recharge-rate",
+    "source_url": "https://www.finops.org/kpi/general-ledger-recharge-rate/",
+    "title": "General Ledger Recharge Rate",
+    "wp_id": 9663
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Internal Finance Metric"
+    ],
+    "description_md": "Total cloud spend in the cloud management tool per Cost Center vs. amount charged in General Ledger (Finance application) per Cost center.",
+    "featured_on": [
+      "invoicing-chargeback"
+    ],
+    "formula": "(Total CSP* Cloud Spend per Cost Center recorded as a Journal in the General Ledger) / (Total CSP* cloud spend per Cost center for the month)\nExample: ACME Global Limited monthly cloud spend for July is $1,000,000. The total chargeback amount per various cost center was:\nFinance = $200,000 ACME Global Limited Finance application records the total cloud spend to the General Ledger for Finance as $180,000 Income Statement Recharge Rate per Cost center = 90% Note: * CSP = Cloud Service Provider",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "invoicing-chargeback"
+    ],
+    "slug": "general-ledger-recharge-rate-per-cost-center",
+    "source_url": "https://www.finops.org/kpi/general-ledger-recharge-rate-per-cost-center/",
+    "title": "General Ledger Recharge Rate per Cost Center",
+    "wp_id": 9664
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the average cost per CPU core, delivering insight into unit cost per CPU core.\n\nCan be improved through reservations, or migrating to instance types with better price/performance.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "hourly-cost-per-cpu-core",
+    "source_url": "https://www.finops.org/kpi/hourly-cost-per-cpu-core/",
+    "title": "Hourly Cost per CPU Core",
+    "wp_id": 9638
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the effectiveness of an organization’s waste management and decommissioning processes by quantifying the proportion of potential cost savings from properly identifying and handling deprecated hardware relative to the total IT spend in scope. This includes decommissioned servers, racks, batteries, cables, and other IT assets. A higher value indicates that the organization is successfully capturing value and reducing waste in its physical IT lifecycle. This KPI supports sustainable operations and can inform both financial planning and environmental stewardship initiatives. This KPI was developed by the [FinOps for Data Center Working Group](https://www.finops.org/wg/finops-for-data-center-creating-a-finops-practice-profile/#acknowledgments).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "it-lifecycle-waste-efficiency",
+    "source_url": "https://www.finops.org/kpi/it-lifecycle-waste-efficiency/",
+    "title": "IT Lifecycle Waste Efficiency",
+    "wp_id": 25778
+  },
+  {
+    "data_sources": [
+      "Vendor licence management portals",
+      "SaaS management platforms",
+      "ITAM or SAM tools",
+      "Identity and access management systems"
+    ],
+    "description_md": "Measures how effectively purchased SaaS licences are assigned by comparing the number of licences in use to the number purchased. The formula quantifies the proportion of entitlements that are actively allocated, providing visibility into unused or over-provisioned licences. Higher utilisation rates indicate closer alignment between purchased capacity and assigned users, while lower rates highlight opportunities for rightsizing, licence reclamation or cost avoidance, particularly in seat based SaaS models. This KPI was developed by the [FinOps for SaaS Working Group](https://www.finops.org/wg/finops-for-software-as-a-service-saas/#acknowledgments).",
+    "featured_on": [
+      "licensing-saas"
+    ],
+    "formula": "License Utilisation Rate = (Assigned Licenses / Purchased Licenses) x 100",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "data-ingestion",
+      "licensing-saas",
+      "rate-optimization",
+      "reporting-analytics"
+    ],
+    "slug": "license-utilisation-rate",
+    "source_url": "https://www.finops.org/kpi/license-utilisation-rate/",
+    "title": "License Utilisation Rate",
+    "wp_id": 25781
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the error rate for failed LLM calls. This is a direct proxy for retry waste since tokens are still consumed. A high error rate signals an optimization opportunity for FinOps Practitioner and Engineering [Personas](https://www.finops.org/framework/personas/).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "llm-error-rate",
+    "source_url": "https://www.finops.org/kpi/llm-error-rate/",
+    "title": "LLM Error Rate",
+    "wp_id": 29468
+  },
+  {
+    "data_sources": [],
+    "description_md": "This measures any one single user accessing any insight Cost Insight Products.\n\nThis can be any company-internal user experience where costs are surfaced to consumers: Analytic dashboards, reports, developer portal, etc. (Caveat: Users are not possible to track in company-external CSP Cost/Billing portals!)",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "number-of-monthly-active-users-mau-for-cost-insight-products",
+    "source_url": "https://www.finops.org/kpi/number-of-monthly-active-users-mau-for-cost-insight-products/",
+    "title": "Number of Monthly Active Users (MAU) for Cost Insight Products",
+    "wp_id": 9658
+  },
+  {
+    "data_sources": [
+      "CSP annual Sustainability reports"
+    ],
+    "description_md": "Power Usage Effectiveness (PUE) is a metric that evaluates the energy efficiency of a data center by measuring the ratio between the total energy consumed by the data center and the energy used specifically by its IT equipment, such as servers, storage, and network devices. Similarly, Water Usage Effectiveness (WUE) quantifies water usage efficiency in a data center by calculating the ratio of total water usage, measured in liters, to the total IT energy consumption, measured in kilowatt-hours (kWh).",
+    "featured_on": [
+      "usage-optimization"
+    ],
+    "formula": "PUE = Total Facility Energy / IT Equiment Energy\nWUE = Total Water Used by the Data Center / Total IT Equipment Energy Consumption (in kWh)\nAdditional Guidance:\nThis KPI is beyond public cloud\nSome Cloud providers publish their WUE and PUE per region and this should be taken into account in calculations, when choosing regions & when choosing cloud providers\nAlways be aware of your organization data compliance and legal requirements and abide by them\nRegion selection based on your organization’s data confidentiality agreement",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "intersecting-disciplines",
+      "sustainability"
+    ],
+    "slug": "optimizing-electricity-pue-wue-between-regions-or-cloud-service-providers",
+    "source_url": "https://www.finops.org/kpi/optimizing-electricity-pue-wue-between-regions-or-cloud-service-providers/",
+    "title": "Optimizing Electricity PUE, WUE, Between Regions, or Cloud Service Providers",
+    "wp_id": 17885
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the percentage of compute effective cost (excluding Spot) covered by commitment discount for the previous month.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percent-of-compute-spend-covered-by-commitment-based-discounts",
+    "source_url": "https://www.finops.org/kpi/percent-of-compute-spend-covered-by-commitment-based-discounts/",
+    "title": "Percent of Compute Spend Covered by Commitment Discounts",
+    "wp_id": 9648
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measure of unused cloud resources, e.g., unattached/orphaned storage volumes, load balancers, EIPS, Network gateways, snapshots.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percent-of-unused-resources",
+    "source_url": "https://www.finops.org/kpi/percent-of-unused-resources/",
+    "title": "Percent of Unused Resources",
+    "wp_id": 9643
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measure of the percent of object storage stored on a Frequent Access Tier.\n\nThe ideal percentage is not standard across all cloud environments, but measuring the percentage of total storage in a frequent access tier (ex: S3 Standard) can help organizations spot-check. Storage costs consist of a tradeoff between persistent storage costs vs. access and data transfer fees. Many companies can host 50%+ (sometimes, much higher!) in infrequent or “cold” storage (ie.g. AWS Glacier).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percent-storage-on-frequent-access-tier",
+    "source_url": "https://www.finops.org/kpi/percent-storage-on-frequent-access-tier/",
+    "title": "Percent Storage on Frequent Access Tier",
+    "wp_id": 9644
+  },
+  {
+    "data_sources": [],
+    "description_md": "Calculate the percentage of untagged cloud resources using an established organizational tagging policy.\n The sophistication of determining what is acceptable tag criteria and the stringency of the KPI should evolve with the organization’s FinOps maturity.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percentage-of-carbon-associated-with-untagged-csp-cloud-resources",
+    "source_url": "https://www.finops.org/kpi/percentage-of-carbon-associated-with-untagged-csp-cloud-resources/",
+    "title": "Percentage of Carbon Associated with Untagged CSP Cloud Resources",
+    "wp_id": 17867
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data"
+    ],
+    "description_md": "The percentage of commitments not applied to on-demand spend.",
+    "featured_on": [
+      "rate-optimization"
+    ],
+    "formula": "(Cost of Commitment Discount unused / total cost Commitment Discount) x 100",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "rate-optimization"
+    ],
+    "slug": "percentage-of-commitment-based-discount-waste",
+    "source_url": "https://www.finops.org/kpi/percentage-of-commitment-based-discount-waste/",
+    "title": "Percentage of Commitment Discount Waste",
+    "wp_id": 9651
+  },
+  {
+    "data_sources": [],
+    "description_md": "Unallocated cost refers to expenses incurred for resources or services that are not directly attributed to specific projects, departments, or applications.\n\nThese costs can arise due to shared resources, lack of proper cost allocation mechanisms, or simply inefficiencies in resource management. Unallocated costs can contribute to cloud wastage and make it difficult to accurately track and manage expenses. Identifying unallocated cost and reducing them by allocating, improves the cost allocation",
+    "featured_on": [
+      "allocation"
+    ],
+    "formula": "(Total Effective Costs Associated w/Unallocated CSP Cloud Resources During a Period of Time / Total CSP Cloud Costs During a Period of Time)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "allocation"
+    ],
+    "slug": "percentage-of-costs-associated-with-unallocated-csp-cloud-resources",
+    "source_url": "https://www.finops.org/kpi/percentage-of-costs-associated-with-unallocated-csp-cloud-resources/",
+    "title": "Percentage of Costs Associated with Unallocated CSP Cloud Resources",
+    "wp_id": 9652
+  },
+  {
+    "data_sources": [],
+    "description_md": "Calculate percentage of untagged cloud resources using an established organizational tagging policy.\n\nThe sophistication of determining what is acceptable tag criteria and the stringency of the KPI should evolve with the organization’s FinOps maturity.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percentage-of-costs-associated-with-untagged-csp-cloud-resources",
+    "source_url": "https://www.finops.org/kpi/percentage-of-costs-associated-with-untagged-csp-cloud-resources/",
+    "title": "Percentage of Costs Associated with Untagged CSP Cloud Resources",
+    "wp_id": 8115
+  },
+  {
+    "data_sources": [
+      "CSP billing data,",
+      "Cloud Console,",
+      "carbon emission data source"
+    ],
+    "description_md": "This KPI measures the amount of compliance for cloud sustainability tagging, and requires an established organizational tagging policy.\n The sophistication of determining what acceptable tag criteria are, and the stringency of the KPI should evolve with the organization’s FinOps maturity.",
+    "featured_on": [
+      "sustainability"
+    ],
+    "formula": "(Total emissions Associated with Tagging Policy Compliant CSP Cloud Resources During a Period of Time / Total CSP Cloud Emissions During a Period of Time) x 100",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "intersecting-disciplines",
+      "sustainability"
+    ],
+    "slug": "percentage-of-csp-cloud-carbon-that-is-tagging-policy-compliant",
+    "source_url": "https://www.finops.org/kpi/percentage-of-csp-cloud-carbon-that-is-tagging-policy-compliant/",
+    "title": "Percentage of CSP Cloud Carbon that is Tagging Policy Compliant",
+    "wp_id": 17866
+  },
+  {
+    "data_sources": [],
+    "description_md": "This KPI measures the amount of compliance for cloud cost tagging, and requires an established organizational tagging policy.\n\nThe sophistication of determining what acceptable tag criteria are and the stringency of the KPI should evolve with the organization’s FinOps maturity.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percentage-of-csp-cloud-costs-that-are-tagging-policy-compliant",
+    "source_url": "https://www.finops.org/kpi/percentage-of-csp-cloud-costs-that-are-tagging-policy-compliant/",
+    "title": "Percentage of CSP Cloud Costs that are Tagging Policy Compliant",
+    "wp_id": 9653
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measure of the percentage of resources running on ‘modern’ types (e.g. instance types, volume type).\n\nIn general, cloud service providers come out with modern resource types that often come with improved price/performance.\n\n**NOTE:** Always compare the actual cost impact of a migration vs. level of effort required. Not all modernizations will result in cost savings. Always consider your active reservations before migrating workloads.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percentage-of-legacy-resource",
+    "source_url": "https://www.finops.org/kpi/percentage-of-legacy-resource/",
+    "title": "Percentage of Legacy Resource",
+    "wp_id": 9645
+  },
+  {
+    "data_sources": [],
+    "description_md": "Calculate percentage of normalized and queryable data in data warehouse, repository, or similar, vs Accounts Payable Invoice.\n\nThe main output of this capability is a data repository of normalized, queryable data from which reporting, analysis, and visualization of cloud cost and usage will occur. This KPI is about organizing the foundation for insights and making it accessible for cost-insight products.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percentage-of-normalized-queryable-data-within-repository",
+    "source_url": "https://www.finops.org/kpi/percentage-of-normalized-queryable-data-within-repository/",
+    "title": "Percentage of Normalized, Queryable Data within Repository",
+    "wp_id": 9659
+  },
+  {
+    "data_sources": [
+      "Credly",
+      "LinkedIn",
+      "Employee Surveys",
+      "Self Reporting",
+      "Internal Training / Development"
+    ],
+    "description_md": "Percentage of all FinOps-related personas and resources who have completed training and/or certification. This includes internal and/or external training and certification.",
+    "featured_on": [
+      "finops-education-enablement"
+    ],
+    "formula": "(Target for certification – actual count certified ) / target for certification * 100",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "finops-education-enablement"
+    ],
+    "slug": "percentage-of-stakeholders-all-finops-personas-who-have-completed-finops-training",
+    "source_url": "https://www.finops.org/kpi/percentage-of-stakeholders-all-finops-personas-who-have-completed-finops-training/",
+    "title": "Percentage of FinOps Personas Who Have Completed Training",
+    "wp_id": 9636
+  },
+  {
+    "data_sources": [],
+    "description_md": "This measurement refers to expenses that cannot be directly attributed to a specific project, team, or department within an organization.\n\nAn organization should select a cost model to distribute shared costs. Example shared cost models include, shared costs are evenly chargedback across all cloud consumers, proportionally charged back based on cloud consumption, or charged back based on another metric used to determine allocation. The goal is to reduce the percent of shared costs not being chargedback overtime.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percentage-of-unallocated-shared-csp-cloud-cost",
+    "source_url": "https://www.finops.org/kpi/percentage-of-unallocated-shared-csp-cloud-cost/",
+    "title": "Percentage of Unallocated Shared CSP Cloud Cost",
+    "wp_id": 9657
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measure of cloud compute resource utilization, e.g. Compute (EC2), Block Storage (EBS), or Object Storage (S3).\n\nFor each resource type, calculate the amount of resources utilized as a percentage of the the total capacity allocated. Resource utilization rates should be considered over time, and as compared to the expected utilization based on the workloads running. Practitioners should also consider average vs. peak utilization rates.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percentage-resource-utilization",
+    "source_url": "https://www.finops.org/kpi/percentage-resource-utilization/",
+    "title": "Percentage Resource Utilization",
+    "wp_id": 9642
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measurement that assesses the variance or difference between the estimated or budgeted costs for using public cloud services and the actual costs incurred.\n\nThis metric helps organizations understand how closely their budget projections align with the real-world expenses associated with using cloud resources. Percent variance is recommended over measuring actual dollar amounts, although both measures may provide valuable insight. Organizations must decide what is considered an acceptable variance when defining the KPI.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "percentage-variance-of-budgeted-vs-actual-csp-cloud-spend",
+    "source_url": "https://www.finops.org/kpi/percentage-variance-of-budgeted-vs-actual-csp-cloud-spend/",
+    "title": "Percentage Variance of Budgeted vs. Actual CSP Cloud Spend",
+    "wp_id": 9668
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Internal Finance Metrics"
+    ],
+    "description_md": "Measures the difference between budgeted effective costs and the forecasted effective costs for using CSP cloud services.\n\nThis metric provides insights into how well an organization’s initial budget aligns with subsequent forecasts of cloud expenses. This also measures the difference between budgeted cloud spending, which is fairly static and often used to set spending limits, vs. forecasted cloud spending, which should use close to real-time data to project and anticipate actual spending on a rolling basis.\n\nThis KPI requires an organization to establish a methodology for forecasting in order to compare results to the established budget. Forecasting methodology should consider past cloud consumption, anticipated changes in cloud utilization or rates (e.g. commitment-based discounts).",
+    "featured_on": [
+      "budgeting"
+    ],
+    "formula": "((Budgeted CSP Effective Cost for a Time Period – Forecasted CSP Effective Cost for that Time Period) / Budgeted CSP Effective Cost for that Time Period)",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "budgeting"
+    ],
+    "slug": "percentage-variance-of-budgeted-vs-forecasted-csp-cloud-spend",
+    "source_url": "https://www.finops.org/kpi/percentage-variance-of-budgeted-vs-forecasted-csp-cloud-spend/",
+    "title": "Percentage Variance of Budgeted vs. Forecasted CSP Cloud Spend",
+    "wp_id": 9670
+  },
+  {
+    "data_sources": [],
+    "description_md": "In the context of public cloud, the terms “jobs” and “pipelines” often refer to specific cloud services designed for automation and orchestration.\n\nThis is a quantitative measure for understanding “jobs waste” in the context of cloud services. It quantifies the proportion of total job costs that were attributed to jobs that didn’t complete successfully (failed, errored, cancelled, or timed out).\n\nTo effectively use this formula, you would need:\n\n1. Cost data for each job: This would typically come from the billing or cost management tools provided by the cloud vendor.\n2. Status of each job: You’d need to know whether each job ended in a “Failed,” “Error,” “Cancelled,” “Timed_out,” or a successful state.\n\n \n\nFailed jobs are sunk costs which represent waste to an organization. The intent is to lower your waste percentage in production.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "pipeline-jobs-waste",
+    "source_url": "https://www.finops.org/kpi/pipeline-jobs-waste/",
+    "title": "Pipeline Jobs Waste",
+    "wp_id": 23008
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the practice of adhering to predefined schedules, e.g. automated starting, stopping, or modifying the power state of virtual machines (VMs) or other cloud resources.\n\nCSPs offer the ability to control the power state of these resources, allowing users to conserve resources, reduce costs, and optimize performance by dynamically adjusting their availability based on demand.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "power-schedule-adherence-rate",
+    "source_url": "https://www.finops.org/kpi/power-schedule-adherence-rate/",
+    "title": "Power Schedule Adherence Rate",
+    "wp_id": 9646
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measure cost per output token to help correlate efficiency changes with cost-per-thought movements. Reasoning tokens are often billed at a premium. A rising ratio means cost per output token increases even if volume stays flat signaling an optimization opportunity for FinOps Practitioner and Engineering [Personas](https://www.finops.org/framework/personas/).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "reasoning-token-ratio",
+    "source_url": "https://www.finops.org/kpi/reasoning-token-ratio/",
+    "title": "Reasoning Token Ratio",
+    "wp_id": 29469
+  },
+  {
+    "data_sources": [
+      "SaaS application inventory",
+      "SaaS management platforms",
+      "Vendor admin consoles",
+      "Product analytics tools",
+      "Feature level usage or telemetry reports",
+      "Vendor licence management portals",
+      "Identity and access management systems",
+      "Procurement and contract records"
+    ],
+    "description_md": "Measures the extent to which SaaS spend is concentrated in overlapping or duplicative applications that support similar business functions. The formula quantifies the proportion of total SaaS costs associated with redundant tools within the application portfolio. Higher percentages indicate greater duplication and consolidation opportunity, while lower percentages reflect a more rationalised SaaS estate with clearer tool ownership and reduced vendor overlap, supporting improved cost efficiency and SaaS portfolio governance. This KPI was developed by the [FinOps for SaaS Working Group](https://www.finops.org/wg/finops-for-software-as-a-service-saas/#acknowledgments).",
+    "featured_on": [
+      "architecting-workload-placement"
+    ],
+    "formula": "Redundant Application Coverage Percent = Spend on Overlapping Tools / Total SaaS Spend",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "architecting-workload-placement",
+      "data-ingestion",
+      "licensing-saas",
+      "reporting-analytics",
+      "usage-optimization"
+    ],
+    "slug": "redundant-application-coverage-percent",
+    "source_url": "https://www.finops.org/kpi/redundant-application-coverage-percent/",
+    "title": "Redundant Application Coverage Percent",
+    "wp_id": 25785
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the efficiency of hardware resources like GPUs and TPUs during AI training and inference. This KPI identifies underutilized or over-provisioned resources, ensuring cost savings, and tracks the performance of autoscaling mechanisms.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "resource-utilization-efficiency",
+    "source_url": "https://www.finops.org/kpi/resource-utilization-efficiency/",
+    "title": "Resource Utilization Efficiency",
+    "wp_id": 26637
+  },
+  {
+    "data_sources": [
+      "Cost Savings Data",
+      "Finance/ Account Records"
+    ],
+    "description_md": "Measures the effectiveness of SaaS optimisation efforts by comparing realised cost savings to the cost of implementing those actions. The formula quantifies the return generated from optimisation activities such as licence rightsizing, deprovisioning, tier adjustments or application rationalisation. Higher ROI values indicate that optimisation efforts are delivering proportionally greater financial benefit relative to their cost, while lower values may signal limited impact, poor prioritisation or the need to adjust optimisation approaches. This KPI was developed by the [FinOps for SaaS Working Group](https://www.finops.org/wg/finops-for-software-as-a-service-saas/#acknowledgments).",
+    "featured_on": [
+      "architecting-workload-placement",
+      "licensing-saas"
+    ],
+    "formula": "Optimization ROI = Savings from SaaS Optimization Actions / Implementation Cost",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "architecting-workload-placement",
+      "data-ingestion",
+      "licensing-saas",
+      "reporting-analytics",
+      "unit-economics",
+      "usage-optimization"
+    ],
+    "slug": "saas-optimization-roi",
+    "source_url": "https://www.finops.org/kpi/saas-optimization-roi/",
+    "title": "SaaS Optimization ROI",
+    "wp_id": 25786
+  },
+  {
+    "data_sources": [
+      "Vendor billing invoices or APIs",
+      "Usage and activity reports",
+      "Product analytics or telemetry",
+      "Finance or cost management systems"
+    ],
+    "description_md": "Measures the efficiency of SaaS spend by comparing total SaaS cost to a defined unit of consumption. The formula quantifies the amount of cost required to deliver a single unit of value, such as an active user, transaction, API call or data volume, rather than relying on licence counts alone. Lower unit cost values indicate more efficient usage and better alignment between consumption and spend, while higher values may signal over-licensing, under-utilisation or inefficient configuration. This KPI was developed by the [FinOps for SaaS Working Group](https://www.finops.org/wg/finops-for-software-as-a-service-saas/#acknowledgments).",
+    "featured_on": [
+      "licensing-saas"
+    ],
+    "formula": "SaaS Unit Cost = Total SaaS Cost / Total Units of Consumption",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "intersecting-disciplines",
+      "licensing-saas",
+      "reporting-analytics",
+      "usage-optimization"
+    ],
+    "slug": "saas-unit-cost",
+    "source_url": "https://www.finops.org/kpi/saas-unit-cost/",
+    "title": "SaaS Unit Cost",
+    "wp_id": 25780
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the growth of “Dark Data” and the effectiveness of data lifecycle policies for data cloud platforms. This KPI identifies storage costs attributed to data that has not been accessed or queried within a set window (e.g., 90 days). A higher percentage reveals a failure in data governance and lifecycle automation, indicating that the organization is paying premium prices for stagnant data, while a lower percentage indicates healthy data hygiene.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "storage-decay-ratio",
+    "source_url": "https://www.finops.org/kpi/storage-decay-ratio/",
+    "title": "Storage Decay Ratio",
+    "wp_id": 26649
+  },
+  {
+    "data_sources": [],
+    "description_md": "A composite score that captures how efficiently an application converts LLM calls into completed work. Most useful for relative comparison between apps over time, not as an absolute benchmark connecting spend to value for Leadership, Finance, and FinOps Practitioner [Personas](https://www.finops.org/framework/personas/).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "thought-efficiency-index-tei",
+    "source_url": "https://www.finops.org/kpi/thought-efficiency-index-tei/",
+    "title": "Thought Efficiency Index (TEI)",
+    "wp_id": 29470
+  },
+  {
+    "data_sources": [
+      "API usage reports",
+      "Dashboards from AI platforms",
+      "Logs from AI platforms",
+      "Cloud billing data"
+    ],
+    "description_md": "Measures the time it takes to achieve measurable business value from AI initiatives. This KPI uses a “breakeven point” of doing a function with AI versus the cost of performing it some other way (like with labor). It provides the awareness around the forecasted days to achieve the full business benefit vs the actual business results achieved and understanding the opportunity costs and value per month.",
+    "featured_on": [
+      "planning-estimating",
+      "unit-economics"
+    ],
+    "formula": "Time to Value (days) = Total Value associated with AI Service / daily Cost of Alternative solution\nExample:\nIf an AI initiative starts on January 1, 2024, and the model is successfully deployed on April 1, 2024, the Time to Value is: April 1, 2024−January 1, 2024=3 months.\nForecast to get $100k/mo of business within 1 month, but it actually took 5 months and only achieved $50k/mo business benefit, 5 months was the time to business value metric to track and seek to improve.",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "forecasting",
+      "planning-estimating",
+      "reporting-analytics",
+      "unit-economics"
+    ],
+    "slug": "time-to-achieve-business-value",
+    "source_url": "https://www.finops.org/kpi/time-to-achieve-business-value/",
+    "title": "Time to Achieve Business Value",
+    "wp_id": 26641
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the elapsed engineering calendar time it takes to ready a service for first use. Or time to get from POC/Experiment into production use. Mature AI patterns and tooling automations help engineers deliver more features faster, this KPI provides awareness of how fast your engineers can take ideas and user stories and turn them into production deliverables. Highlights the tradeoffs of using different methods of developing the service with accurate (quality) or less expensive (cost).\n\nExample:\n\n- If an AI initiative starts on January 1, 2024, and the model is successfully deployed on April 1, 2024, the Time to First Prompt is: April 1, 2024−January 1, 2024=3 months",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "time-to-first-prompt",
+    "source_url": "https://www.finops.org/kpi/time-to-first-prompt/",
+    "title": "Time to First Prompt",
+    "wp_id": 26643
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the cost of token-based models (e.g., OpenAI GPT) based on input/output token usage. This KPI helps predict and control costs for LLMs, which charge per token. Facilitates prompt engineering to reduce token consumption without degrading output quality.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "token-consumption-metrics",
+    "source_url": "https://www.finops.org/kpi/token-consumption-metrics/",
+    "title": "Token Consumption Metrics",
+    "wp_id": 26636
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the average cost associated with running an individual workload over its full lifecycle. The formula divides the total costs covering infrastructure, software, labor, and any other relevant expenses by the number of workloads in scope. This KPI helps organizations understand the cost efficiency of their workloads, compare workloads of different types or environments, and make informed decisions about optimization, budgeting, and resource allocation. This KPI was developed by the [FinOps for Data Center Working Group](https://www.finops.org/wg/finops-for-data-center-creating-a-finops-practice-profile/#acknowledgments).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "total-cost-of-ownership-per-workload",
+    "source_url": "https://www.finops.org/kpi/total-cost-of-ownership-per-workload/",
+    "title": "Total Cost of Ownership per Workload",
+    "wp_id": 25776
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measure of cost efficiency gains by moving workloads to the cloud by comparing existing infrastructure costs to the cost on targeted cloud platform.\n\nIn addition to the infrastructure costs, shared costs for maintaining operations should be considered to calculate/understand overall efficiency gains with the move to the target platform.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "total-migration-cost-savings",
+    "source_url": "https://www.finops.org/kpi/total-migration-cost-savings/",
+    "title": "Total Migration Cost Savings",
+    "wp_id": 9635
+  },
+  {
+    "data_sources": [
+      "Monitoring Tools"
+    ],
+    "description_md": "Measures the unpredicted variance of effective cost associated with CSP Cloud usage recorded over a given period of time.",
+    "featured_on": [
+      "anomaly-management"
+    ],
+    "formula": "Total effective cost associated with all anomalies events detected less the predicted spend of the services related to the identified anomalies.",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "anomaly-management"
+    ],
+    "slug": "total-unpredicted-variance-of-spend",
+    "source_url": "https://www.finops.org/kpi/total-unpredicted-variance-of-spend/",
+    "title": "Total Unpredicted Variance of Spend",
+    "wp_id": 9640
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the total cost to train a machine learning (ML) model divided by the model’s performance metrics (e.g., accuracy, precision). Training costs for large AI models like GPT can be significant. Measuring efficiency ensures cost-effective resource usage while maintaining acceptable performance.\n\nCandidate Data Sources:\n\n- API usage reports\n- Dashboards from AI platforms\n- Logs from AI platforms\n- Cloud billing data\n\nExample:\n\n- A 95% accurate model trained at $10,000 yields an efficiency of $105 per percentage point of accuracy.",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "training-cost-efficiency",
+    "source_url": "https://www.finops.org/kpi/training-cost-efficiency/",
+    "title": "Training Cost Efficiency",
+    "wp_id": 26635
+  },
+  {
+    "data_sources": [],
+    "description_md": "Measures the extent to which an organization has integrated all relevant usage and cost data sources into a unified reporting and analytics system. The formula quantifies the percentage of total usage and cost sources that are actively incorporated into the reporting framework, providing visibility across hybrid estates. This KPI was developed by the [FinOps for Data Center Working Group](https://www.finops.org/wg/finops-for-data-center-creating-a-finops-practice-profile/#acknowledgments).",
+    "featured_on": [],
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [],
+    "slug": "unified-cost-usage-visibility",
+    "source_url": "https://www.finops.org/kpi/unified-cost-usage-visibility/",
+    "title": "Unified Cost & Usage Visibility",
+    "wp_id": 25774
+  },
+  {
+    "data_sources": [
+      "CSP Billing Data",
+      "Internal Finance Metrics"
+    ],
+    "description_md": "Method of apportioning shared effective costs based on usage or spend proportional amount.",
+    "featured_on": [
+      "allocation"
+    ],
+    "formula": "Total apportionment of Shared Costs / Total shared costs\nExample: ACME Global Limited Shared effective cost for the month of July was $200,000 on cloud monitoring tools, security tools, cloud costs management tools, CSP (Cloud Service Provider) Premium Support Fees. ACME Global Cloud bill for July came to $1,200,000, broken down per Cost center/Product/Department as:\nFinance = $225,000\nLogistics = $225,000\nCommercial = $300,000\nMarketing = $450,000\nMethod for apportionment Shared effective cost in cloud spend:\nFinance = $225,000 / $1,2000,000 * $200,000 = $37,500\nLogistics = $225,000 / $1,2000,000 * $200,000 = $37,500\nCommercial = $300,000 / $1,2000,000 * $200,000 = $50,000\nMarketing = $450,000 / $1,2000,000 * $200,000 = $75,000\n($37,500 +$37,500+$50,000 +$75,000) / $200,000 x 100 = 100%",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "allocation"
+    ],
+    "slug": "usage-or-spend-apportionment-validation",
+    "source_url": "https://www.finops.org/kpi/usage-or-spend-apportionment-validation/",
+    "title": "Usage or Spend Apportionment Validation",
+    "wp_id": 9655
+  },
+  {
+    "data_sources": [
+      "API usage reports",
+      "Dashboards from AI platforms",
+      "Logs from AI platforms",
+      "Cloud billing data"
+    ],
+    "description_md": "Measures the financial or value return generated by AI initiatives relative to their cost. This KPI helps to justify the investment in AI services and aligns them with business outcomes.",
+    "featured_on": [
+      "unit-economics"
+    ],
+    "formula": "Return On Investment = (Financial Benefits – Costs) / Costs * 100\nExample:\nIf the financial benefits from an AI project are $50,000 and the total costs incurred are $20,000, the ROI is: (50,000−20,000)/20,000 * 100 = 150%",
+    "license": "CC-BY-4.0",
+    "related_capability_slugs": [
+      "kpis-benchmarking",
+      "reporting-analytics",
+      "unit-economics"
+    ],
+    "slug": "value-for-ai-initiatives",
+    "source_url": "https://www.finops.org/kpi/value-for-ai-initiatives/",
+    "title": "Value for AI Initiatives",
+    "wp_id": 26639
+  }
+]
