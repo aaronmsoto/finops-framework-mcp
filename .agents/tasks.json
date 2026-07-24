@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "711da5d54258b920378b809743339361133f31c112f0dcca398f559385b433f5",
+  "chainHead": "a2157049eac31b8d210757f03585d5bf61c1e44b3d78faa31d1f0d10d75f3d10",
   "tasks": [
     {
       "id": "T-001",
@@ -486,9 +486,15 @@
         "saveTasks writes via temp file + rename (no torn tasks.json on kill)",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Branch recorded at loop start and asserted per iteration and post-build; rogue-branch test proves actionable termination with terminal:error state. saveTasks now temp+rename; no temp residue. 248 harness tests green.",
+        "commit": "63d0d3cdb9749353d2f12bfc6a3dacd69c76290a",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T08:10:44.497Z"
+      },
+      "hash": "a2157049eac31b8d210757f03585d5bf61c1e44b3d78faa31d1f0d10d75f3d10"
     }
   ]
 }
