@@ -363,6 +363,70 @@
         "completedAt": "2026-07-23T07:31:16.667Z"
       },
       "hash": "1944204f1e2676f669dd4d91ddad64948aaf003fd60f0b97385a8d046fa3bfbe"
+    },
+    {
+      "id": "T-020",
+      "title": "Fix npm bin guard so installed entry points start the server",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "isDirectRun uses realpath comparison, not argv[1] string suffix",
+        "A test invokes dist main via a symlink (npm .bin simulation) and asserts --version output and an initialize response",
+        "npm pack + temp-dir install smoke test rerun manually and cited"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-021",
+      "title": "Bind pagination cursors to their query context",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "Cursor carries a context fingerprint; mismatched reuse is rejected with actionable -32602 style text",
+        "Empty-page text distinguishes no-hits from page-beyond-results",
+        "Tests cover cross-query and cross-tool cursor reuse"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-022",
+      "title": "Serve full capability summaries instead of 200-char mid-word cuts",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "list_capabilities structuredContent carries complete official summaries",
+        "Text block includes summaries per the tool description",
+        "Test asserts no served summary is a strict prefix cut of the source"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-023",
+      "title": "Add CC BY attribution to map_personas responses",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "Both persona and capability modes append the standard source/license footer",
+        "structuredContent entries carry uri or source_url",
+        "Test asserts attribution presence"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-024",
+      "title": "Declare source_url and license in get_kpis outputSchema",
+      "spec": "docs/critique-3-publish-gate.md",
+      "acceptance": [
+        "outputSchema matches emitted structuredContent for get_kpis",
+        "A test asserts every tool's structuredContent keys are a subset of its declared outputSchema"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
