@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "0c4029d43558d89efc973d14ba4324842a0cd2701afd64e8ecb6e78793d41cfc",
+  "chainHead": "e360b9ffe9f7f915004ca86a5d9ec91e78e7304847bd87568755cb896e0559cc",
   "tasks": [
     {
       "id": "T-001",
@@ -411,9 +411,15 @@
         "Text block includes summaries per the tool description",
         "Test asserts no served summary is a strict prefix cut of the source"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Summaries served complete in structuredContent and text block; test asserts byte-equality with the artifact for all 22; live probe shows every summary now ends with sentence punctuation (was 14 mid-word cuts).",
+        "commit": "fc58d06f840bfa75a05b26333234ae2def34827b",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:09:57.964Z"
+      },
+      "hash": "e360b9ffe9f7f915004ca86a5d9ec91e78e7304847bd87568755cb896e0559cc"
     },
     {
       "id": "T-023",
