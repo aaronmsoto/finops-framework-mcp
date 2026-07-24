@@ -373,7 +373,7 @@
         "A test invokes dist main via a symlink (npm .bin simulation) and asserts --version output and an initialize response",
         "npm pack + temp-dir install smoke test rerun manually and cited"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
