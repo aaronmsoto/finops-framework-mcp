@@ -148,6 +148,12 @@ function readPrompt(rootDir: string, name: string): string {
   return text;
 }
 
+/** Current branch name ("HEAD" when detached); null if git fails. */
+function gitBranch(rootDir: string): string | null {
+  const res = git(rootDir, ["rev-parse", "--abbrev-ref", "HEAD"]);
+  return res.ok ? res.stdout.trim() : null;
+}
+
 /** Name which budget killed a timed-out runner so the failure is diagnosable. */
 function timeoutDetail(appliedMs: number, iterCapMs: number): string {
   return appliedMs >= iterCapMs
@@ -450,6 +456,20 @@ async function runLoopInner(
   // before preflight so even a preflight-failed run is identifiable.
   const journalSlug = `loop-${mode}-${timeOfDayStamp()}`;
 
+  // A runner that switches branches corrupts every subsequent independent
+  // check (commits, chain, integrity all assume one branch). Record the
+  // starting branch and refuse to continue if HEAD moves off it
+  // (necessity-review B2-soundness-4).
+  const startBranch = gitBranch(rootDir);
+  const assertBranchStable = (): void => {
+    const now = gitBranch(rootDir);
+    if (startBranch !== null && now !== null && now !== startBranch) {
+      throw new CliError(
+        `loop: the working tree switched from branch "${startBranch}" to "${now}" mid-run — a runner or concurrent session moved HEAD. Return to ${startBranch} and resume with a fresh loop invocation.`,
+      );
+    }
+  };
+
   // Heartbeat: overwrite the state file on every phase transition so
   // `agentic status` can tell a live loop (fresh updatedAt + alive pid)
   // from a crashed or finished one. Best-effort; never fails the loop.
@@ -577,6 +597,7 @@ async function runLoopInner(
   }
 
   for (let n = 1; ; n++) {
+    assertBranchStable();
     const tasksFile = loadTasks(rootDir);
 
     // A --task target that is blocked is not "finished": tell the operator
@@ -630,6 +651,7 @@ async function runLoopInner(
       extraEnv: { AGENTIC_LOOP: "1", AGENTIC_TASK_ID: task.id, AGENTIC_LOOP_PHASE: "build" },
     });
 
+    assertBranchStable(); // before trusting gates/chain checks run on this tree
     const buildTokens = tokenTotals(runRes.usage);
     let verifyTokens = ZERO_TOKENS;
     if (maxTotalTokens !== null && runRes.usage === undefined) {

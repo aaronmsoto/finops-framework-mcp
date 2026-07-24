@@ -66,7 +66,11 @@ export function loadTasks(rootDir: string): TasksFile {
 export function saveTasks(rootDir: string, file: TasksFile): void {
   const p = tasksPath(rootDir);
   ensureDir(path.dirname(p));
-  fs.writeFileSync(p, JSON.stringify(file, null, 2) + "\n");
+  // Temp-file + rename so a killed process (loop timeouts SIGKILL the group)
+  // can never leave a torn tasks.json (necessity-review B2-soundness-4).
+  const tmp = `${p}.tmp-${process.pid}`;
+  fs.writeFileSync(tmp, JSON.stringify(file, null, 2) + "\n");
+  fs.renameSync(tmp, p);
 }
 
 const TASK_STATUSES: TaskStatus[] = ["pending", "in_progress", "done", "blocked"];

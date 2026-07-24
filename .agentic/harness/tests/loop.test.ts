@@ -319,6 +319,33 @@ describe("loop token accounting", () => {
   });
 });
 
+describe("loop branch stability", () => {
+  it("terminates with an actionable error when a runner switches branches mid-run", async () => {
+    addTask(dir, { title: "sneaky", acceptance: ["a"] });
+    // Build phase switches to a new branch instead of completing the task.
+    process.env.AGENTIC_MOCK_SCRIPT = [
+      'if [ "$AGENTIC_LOOP_PHASE" = "preflight" ]; then printf OK > "$AGENTIC_PREFLIGHT_FILE"; exit 0; fi',
+      "git checkout -qb rogue-branch",
+      'echo "switched"',
+    ].join("\n");
+    const { config, policy } = deps();
+    await expect(runLoop(dir, config, policy, new MockRunner(), {})).rejects.toThrowError(
+      /switched from branch .* to "rogue-branch" mid-run/,
+    );
+    const state = JSON.parse(readFileIn(dir, ".agents/.cache/loop-state.json")) as Record<string, unknown>;
+    expect(state.phase).toBe("terminal:error");
+  });
+});
+
+describe("atomic tasks.json writes", () => {
+  it("saveTasks leaves no temp file behind and the file parses after save", async () => {
+    addTask(dir, { title: "t", acceptance: ["a"] });
+    const dirents = fs.readdirSync(path.join(dir, ".agents"));
+    expect(dirents.filter((f) => f.includes("tasks.json.tmp"))).toEqual([]);
+    expect(loadTasks(dir).tasks).toHaveLength(1);
+  });
+});
+
 describe("loop journal auto-commit", () => {
   function journalRelPath(): string {
     const journalDir = path.join(dir, ".agents", "journal");

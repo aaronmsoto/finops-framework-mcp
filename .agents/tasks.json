@@ -486,7 +486,7 @@
         "saveTasks writes via temp file + rename (no torn tasks.json on kill)",
         "Harness npm run test, lint, typecheck green with new tests"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }
