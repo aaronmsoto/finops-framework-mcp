@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { readFileSync } from "node:fs";
+import { readFileSync, realpathSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { loadArtifact } from "../../shared/index.js";
 import { createServer } from "./server.js";
@@ -43,8 +44,19 @@ export async function runCli(cliArgs: string[]): Promise<void> {
 }
 
 // Only run as a side effect when executed directly (bin invocation), not when
-// imported by tests.
-const isDirectRun = process.argv[1]?.endsWith("main.js");
+// imported by tests. npm installs the bin as a node_modules/.bin symlink whose
+// argv[1] is the UNRESOLVED link path (critique-3 BLOCKER A4-community-1), so
+// compare realpaths instead of a string suffix.
+export function detectDirectRun(): boolean {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return realpathSync(entry) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
+}
+const isDirectRun = detectDirectRun();
 if (isDirectRun) {
   runCli(process.argv.slice(2)).catch((err) => {
     console.error(String(err instanceof Error ? err.message : err));

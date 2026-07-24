@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import type {
@@ -43,6 +44,8 @@ const RO = {
 interface Cursor {
   v: string;
   o: number;
+  /** Context fingerprint binding the cursor to its tool + query/filter set. */
+  h: string;
 }
 
 function encodeCursor(c: Cursor): string {
@@ -56,6 +59,23 @@ function decodeCursor(raw: string): Cursor | null {
   } catch {
     return null;
   }
+}
+
+/**
+ * Stable fingerprint of the pagination context. A cursor is only valid for
+ * the exact tool + query/filter combination that issued it; reusing one
+ * across queries used to silently apply the stale offset to the new result
+ * set (critique-3 A1-protocol-1). `limit` is deliberately excluded — page
+ * size may change between pages of the same listing.
+ */
+function cursorContext(tool: string, params: Record<string, unknown>): string {
+  const entries = Object.entries(params)
+    .filter(([, v]) => v !== undefined)
+    .sort(([a], [b]) => (a < b ? -1 : 1));
+  return createHash("sha256")
+    .update(`${tool}\n${JSON.stringify(entries)}`)
+    .digest("base64url")
+    .slice(0, 12);
 }
 
 type ContentBlock =
@@ -115,6 +135,7 @@ export function registerTools(
     items: T[],
     limit: number,
     cursorRaw: string | undefined,
+    context: string,
   ): { page: T[]; nextCursor?: string } | ToolResult {
     let offset = 0;
     if (cursorRaw) {
@@ -126,13 +147,24 @@ export function registerTools(
           `Stale cursor: it was issued for data version ${c.v} but the server now serves ${dataVersion}. Restart the listing without a cursor.`,
         );
       }
+      if (c.h !== context) {
+        return err(
+          "Cursor mismatch: this cursor was issued for a different query, filter set, or tool. Restart the listing without a cursor.",
+        );
+      }
       offset = c.o;
     }
     const page = items.slice(offset, offset + limit);
     return {
       page,
       ...(offset + limit < items.length
-        ? { nextCursor: encodeCursor({ v: dataVersion, o: offset + limit }) }
+        ? {
+            nextCursor: encodeCursor({
+              v: dataVersion,
+              o: offset + limit,
+              h: context,
+            }),
+          }
         : {}),
     };
   }
@@ -222,7 +254,12 @@ export function registerTools(
         query,
         entity_types as SearchEntityType[] | undefined,
       );
-      const p = paginate(all, limit ?? 10, cursor);
+      const p = paginate(
+        all,
+        limit ?? 10,
+        cursor,
+        cursorContext("search_framework", { query, entity_types }),
+      );
       if (isErr(p)) return p;
       const results = p.page.map((r) => ({
         entity_type: r.entity_type,
@@ -246,7 +283,9 @@ export function registerTools(
                     `- [${r.entity_type}] ${r.title} (${r.slug}): ${r.snippet.slice(0, 100)}`,
                 )
                 .join("\n")
-            : ". Try broader terms or search_framework without entity_types."),
+            : all.length > 0
+              ? " — but this page is past the end of the results. Restart without a cursor."
+              : ". Try broader terms or search_framework without entity_types."),
       );
     },
   );
@@ -311,13 +350,21 @@ export function registerTools(
           ),
         );
       }
-      const pg = paginate(caps, limit ?? 50, cursor);
+      const pg = paginate(
+        caps,
+        limit ?? 50,
+        cursor,
+        cursorContext("list_capabilities", { domain, persona }),
+      );
       if (isErr(pg)) return pg;
+      // Summaries are the Foundation's own curated one-liners (max ~410
+      // chars) — serve them whole; a mid-word cut corrupts official prose
+      // (critique-3 MAJOR A3-fidelity-1).
       const rows = pg.page.map((c) => ({
         slug: c.slug,
         title: c.title,
         domain: c.domain_slug,
-        summary: c.summary.slice(0, 200),
+        summary: c.summary,
       }));
       const alliedNote =
         persona &&
@@ -333,7 +380,12 @@ export function registerTools(
           ...(pg.nextCursor ? { nextCursor: pg.nextCursor } : {}),
         },
         alliedNote +
-          rows.map((r) => `- ${r.title} (${r.slug}) [${r.domain}]`).join("\n"),
+          rows
+            .map(
+              (r) =>
+                `- ${r.title} (${r.slug}) [${r.domain}]${r.summary ? `\n  ${r.summary}` : ""}`,
+            )
+            .join("\n"),
       );
     },
   );
@@ -620,6 +672,8 @@ export function registerTools(
             related_capability_slugs: z.array(z.string()),
             featured_on: z.array(z.string()),
             uri: z.string(),
+            source_url: z.string(),
+            license: z.string(),
           }),
         ),
         total: z.number(),
@@ -656,7 +710,12 @@ export function registerTools(
       } else if (featured_only) {
         kpis = kpis.filter((k) => k.featured_on.length > 0);
       }
-      const pg = paginate(kpis, limit ?? 25, cursor);
+      const pg = paginate(
+        kpis,
+        limit ?? 25,
+        cursor,
+        cursorContext("get_kpis", { capability, featured_only }),
+      );
       if (isErr(pg)) return pg;
       const rows = pg.page.map((k) => ({
         slug: k.slug,
@@ -782,6 +841,7 @@ export function registerTools(
               slug: z.string(),
               title: z.string(),
               category: z.string(),
+              uri: z.string(),
             }),
           )
           .optional(),
@@ -793,13 +853,20 @@ export function registerTools(
               heading: z.string(),
               activities: z.array(z.string()),
               group_level: z.boolean(),
+              uri: z.string(),
+              source_url: z.string(),
             }),
           )
           .optional(),
+        license: z.string(),
       },
       annotations: RO,
     },
     ({ capability, persona }) => {
+      // Persona activities are verbatim Foundation prose — this tool must
+      // carry the same CC BY 4.0 attribution as every other content tool
+      // (critique-3 MAJOR A3-fidelity-2).
+      const LICENSE = "CC-BY-4.0";
       if (capability && persona) {
         return err(
           "Pass capability OR persona, not both (or neither for the index).",
@@ -810,12 +877,14 @@ export function registerTools(
           slug: p.slug,
           title: p.title,
           category: p.category,
+          uri: URI.persona(p.slug),
         }));
         return ok(
-          { mode: "index", personas },
+          { mode: "index", personas, license: LICENSE },
           personas
             .map((p) => `- ${p.title} (${p.slug}) [${p.category}]`)
-            .join("\n"),
+            .join("\n") +
+            attribution("https://www.finops.org/framework/personas/"),
         );
       }
       if (persona) {
@@ -857,6 +926,8 @@ export function registerTools(
                     })
                   : f.items,
               group_level: f.persona.kind === "allied-group",
+              uri: URI.capability(c.slug),
+              source_url: c.source_url,
             })),
         );
         const note =
@@ -864,7 +935,7 @@ export function registerTools(
             ? `${p.title} is an allied persona: the framework maps capability activities to Allied Personas collectively (group_level: true) except where named individually.`
             : `Activities ${p.title} performs, per capability.`;
         return ok(
-          { mode: "persona", note, entries },
+          { mode: "persona", note, entries, license: LICENSE },
           `${note}\n\n` +
             entries
               .map(
@@ -872,7 +943,8 @@ export function registerTools(
                   `## ${e.capability}${e.group_level ? " (group-level)" : ""}\n` +
                   e.activities.map((a) => `- ${a}`).join("\n"),
               )
-              .join("\n\n"),
+              .join("\n\n") +
+            attribution(p.source_url),
         );
       }
       const c = findCapability(capability as string);
@@ -885,15 +957,17 @@ export function registerTools(
         heading: f.heading,
         activities: f.items,
         group_level: f.persona.kind === "allied-group",
+        uri: URI.capability(c.slug),
+        source_url: c.source_url,
       }));
       return ok(
-        { mode: "capability", entries },
+        { mode: "capability", entries, license: LICENSE },
         entries
           .map(
             (e) =>
               `## ${e.persona}\n${e.activities.map((a) => `- ${a}`).join("\n")}`,
           )
-          .join("\n\n"),
+          .join("\n\n") + attribution(c.source_url),
       );
     },
   );

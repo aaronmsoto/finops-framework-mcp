@@ -119,3 +119,32 @@ preserved verbatim (fidelity, not a bug); `get_capability` text block is
 serialized JSON rather than prose (by design — the markdown path is the
 resource/get_maturity_assessment/get_entity surface); map_personas conveys
 "no activities" by absence. No errors; every slug resolved first try.
+
+## Run 4 — 2026-07-24 (post critique gate 3), artifact v2.1.1, server 1.0.0
+
+Context: critique-3 (docs/critique-3-publish-gate.md, verdict SHIP-after-fixes)
+required five fixes before publish: the npm bin guard BLOCKER, cursor
+context binding, full capability summaries, map_personas attribution, and
+the get_kpis outputSchema declaration. All landed as T-020..T-024. Same
+fresh-agent, tools-only, text-blocks-only protocol as Runs 1-3. Grading
+note: graded by the supervising session against the pre-registered
+`<expected>` answers (all objective factual matches); an independent
+re-grade pass is queued in the template's review backlog.
+
+| # | Probe | Verdict | Notes |
+|---|---|---|---|
+| 1 | Ownership → allocation + Crawl characteristics | **PASS** | routed by search on first try |
+| 2 | Verbatim Walk-level Sustainability quotes | **PASS** | both quotes exact |
+| 3 | Anomaly Management domain + siblings | **PASS** | |
+| 4 | Forecasting featured KPIs | **PASS** | exactly 4 |
+| 5 | AAI formula + related capabilities | **PASS** | slug guessed correctly first try |
+| 6 | Crawl allocation sample goal | **PASS** | "at least 70% to known owner" |
+| 7 | Principle enabled by Allocation | **PASS** | verbatim |
+| 8 | Procurement across 3 capabilities | **PASS** | one map_personas call |
+| 9 | KPI count + unit-economics KPIs | **PASS** | 88; both KPIs |
+| 10 | Official levels only | **PASS** | exactly Crawl/Walk/Run |
+
+**Score: 10/10 (gate requires ≥9/10).** Friction: only KPI slug guessing
+(worked first try; a miss costs one search round-trip — the critique-3
+MINOR queue covers slug discoverability). Zero errors, zero wrong-tool
+detours, zero pagination problems on the fixed surfaces.
