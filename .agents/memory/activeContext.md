@@ -12,17 +12,13 @@
 
 ## In flight
 
-Critique gate 3 (publish gate) passed: SHIP-after-fixes verdict executed —
-BLOCKER (npm bin guard broke every install path), 3 MAJORs (cursor
-context binding, full summaries, map_personas attribution), and the
-get_kpis schema fix all landed as T-020..T-024 with regression tests;
-eval Run 4: 10/10. Gate report: docs/critique-3-publish-gate.md. MINOR
-queue (9 items) lives in that report — not publish-gating. The branch
-(restarted from main after PR #6/#5 merged) holds only the gate doc +
-T-020..T-024 fixes, awaiting a PR to dev. Earlier deliveries (harness
-batch T-010..T-016, v1.1 mini-batch T-018/T-019) are merged to main; the
-port-back tracker `.agents/specs/loop-harness-improvements.md` still
-drives the template port.
+Critique-3 fixes are MERGED to main (PRs #7/#8); publish is go. This
+branch (restarted from post-release main) adds the last review-driven
+harness fixes T-025 (build/verify token split + usage canary) and T-026
+(branch assert + atomic tasks.json), awaiting PR to dev. Owner decision
+2026-07-24: harness moves to npm as @aaronsoto/agentic-harness — the
+template packages it; this repo swaps its vendored copy for the package
+after the owner publishes (tracker has the note).
 
 ## Next steps
 
@@ -52,4 +48,4 @@ drives the template port.
 
 ## Last updated
 
-2026-07-24 — critique-3 publish gate: fixes T-020..T-024 landed, Run 4 10/10, PR to dev.
+2026-07-24 — T-025/T-026 harness fixes; npm distribution decision recorded; port to template next.
