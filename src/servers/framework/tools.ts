@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import type {
@@ -43,6 +44,8 @@ const RO = {
 interface Cursor {
   v: string;
   o: number;
+  /** Context fingerprint binding the cursor to its tool + query/filter set. */
+  h: string;
 }
 
 function encodeCursor(c: Cursor): string {
@@ -56,6 +59,23 @@ function decodeCursor(raw: string): Cursor | null {
   } catch {
     return null;
   }
+}
+
+/**
+ * Stable fingerprint of the pagination context. A cursor is only valid for
+ * the exact tool + query/filter combination that issued it; reusing one
+ * across queries used to silently apply the stale offset to the new result
+ * set (critique-3 A1-protocol-1). `limit` is deliberately excluded — page
+ * size may change between pages of the same listing.
+ */
+function cursorContext(tool: string, params: Record<string, unknown>): string {
+  const entries = Object.entries(params)
+    .filter(([, v]) => v !== undefined)
+    .sort(([a], [b]) => (a < b ? -1 : 1));
+  return createHash("sha256")
+    .update(`${tool}\n${JSON.stringify(entries)}`)
+    .digest("base64url")
+    .slice(0, 12);
 }
 
 type ContentBlock =
@@ -115,6 +135,7 @@ export function registerTools(
     items: T[],
     limit: number,
     cursorRaw: string | undefined,
+    context: string,
   ): { page: T[]; nextCursor?: string } | ToolResult {
     let offset = 0;
     if (cursorRaw) {
@@ -126,13 +147,24 @@ export function registerTools(
           `Stale cursor: it was issued for data version ${c.v} but the server now serves ${dataVersion}. Restart the listing without a cursor.`,
         );
       }
+      if (c.h !== context) {
+        return err(
+          "Cursor mismatch: this cursor was issued for a different query, filter set, or tool. Restart the listing without a cursor.",
+        );
+      }
       offset = c.o;
     }
     const page = items.slice(offset, offset + limit);
     return {
       page,
       ...(offset + limit < items.length
-        ? { nextCursor: encodeCursor({ v: dataVersion, o: offset + limit }) }
+        ? {
+            nextCursor: encodeCursor({
+              v: dataVersion,
+              o: offset + limit,
+              h: context,
+            }),
+          }
         : {}),
     };
   }
@@ -222,7 +254,12 @@ export function registerTools(
         query,
         entity_types as SearchEntityType[] | undefined,
       );
-      const p = paginate(all, limit ?? 10, cursor);
+      const p = paginate(
+        all,
+        limit ?? 10,
+        cursor,
+        cursorContext("search_framework", { query, entity_types }),
+      );
       if (isErr(p)) return p;
       const results = p.page.map((r) => ({
         entity_type: r.entity_type,
@@ -246,7 +283,9 @@ export function registerTools(
                     `- [${r.entity_type}] ${r.title} (${r.slug}): ${r.snippet.slice(0, 100)}`,
                 )
                 .join("\n")
-            : ". Try broader terms or search_framework without entity_types."),
+            : all.length > 0
+              ? " — but this page is past the end of the results. Restart without a cursor."
+              : ". Try broader terms or search_framework without entity_types."),
       );
     },
   );
@@ -311,7 +350,12 @@ export function registerTools(
           ),
         );
       }
-      const pg = paginate(caps, limit ?? 50, cursor);
+      const pg = paginate(
+        caps,
+        limit ?? 50,
+        cursor,
+        cursorContext("list_capabilities", { domain, persona }),
+      );
       if (isErr(pg)) return pg;
       const rows = pg.page.map((c) => ({
         slug: c.slug,
@@ -656,7 +700,12 @@ export function registerTools(
       } else if (featured_only) {
         kpis = kpis.filter((k) => k.featured_on.length > 0);
       }
-      const pg = paginate(kpis, limit ?? 25, cursor);
+      const pg = paginate(
+        kpis,
+        limit ?? 25,
+        cursor,
+        cursorContext("get_kpis", { capability, featured_only }),
+      );
       if (isErr(pg)) return pg;
       const rows = pg.page.map((k) => ({
         slug: k.slug,

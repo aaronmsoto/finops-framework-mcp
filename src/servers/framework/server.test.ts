@@ -328,6 +328,46 @@ describe("tools", () => {
     expect(res.content[0]?.text).toMatch(/Stale cursor/);
   });
 
+  it("rejects a cursor reused with a different query (critique-3 A1-protocol-1)", async () => {
+    const first = await call("search_framework", {
+      query: "cost allocation",
+      limit: 3,
+    });
+    const cursor = first.structuredContent?.nextCursor as string;
+    expect(cursor).toBeDefined();
+    const reused = await call("search_framework", {
+      query: "kubernetes",
+      cursor,
+    });
+    expect(reused.isError).toBe(true);
+    expect(reused.content[0]?.text).toMatch(/Cursor mismatch/);
+  });
+
+  it("rejects a cursor reused across tools", async () => {
+    const first = await call("get_kpis", {});
+    const cursor = first.structuredContent?.nextCursor as string;
+    expect(cursor).toBeDefined();
+    const reused = await call("list_capabilities", { cursor });
+    expect(reused.isError).toBe(true);
+    expect(reused.content[0]?.text).toMatch(/Cursor mismatch/);
+  });
+
+  it("accepts its own cursor for the same query and pages correctly", async () => {
+    const first = await call("search_framework", { query: "cost", limit: 3 });
+    const cursor = first.structuredContent?.nextCursor as string;
+    expect(cursor).toBeDefined();
+    const second = await call("search_framework", {
+      query: "cost",
+      limit: 3,
+      cursor,
+    });
+    expect(second.isError).toBeFalsy();
+    const page1 = first.structuredContent?.results as { slug: string }[];
+    const page2 = second.structuredContent?.results as { slug: string }[];
+    expect(page2.length).toBeGreaterThan(0);
+    expect(page2[0]?.slug).not.toBe(page1[0]?.slug);
+  });
+
   it("get_changelog reports the current version", async () => {
     const res = await call("get_changelog", {});
     expect(res.structuredContent?.current_version).toMatch(/^\d+\./);

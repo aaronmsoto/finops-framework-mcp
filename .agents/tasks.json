@@ -392,7 +392,7 @@
         "Empty-page text distinguishes no-hits from page-beyond-results",
         "Tests cover cross-query and cross-tool cursor reuse"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
