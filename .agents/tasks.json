@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "286d0f242577592eac1470414f9b67ab95b242d6645b1f40a5ea6fd28b1a2247",
+  "chainHead": "43286de4db3344acc705a211defc7b19601fe55afe838952fed0f4fec2458855",
   "tasks": [
     {
       "id": "T-001",
@@ -448,9 +448,15 @@
         "outputSchema matches emitted structuredContent for get_kpis",
         "A test asserts every tool's structuredContent keys are a subset of its declared outputSchema"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "get_kpis outputSchema declares source_url+license; new all-tools conformance test (caught and now guards the whole class); wire probe with the validating SDK client accepts the call and shows declared==emitted keys.",
+        "commit": "576439f4c42dc3012e00ae9cd73fd5c7b7693242",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T07:14:44.284Z"
+      },
+      "hash": "43286de4db3344acc705a211defc7b19601fe55afe838952fed0f4fec2458855"
     }
   ]
 }
