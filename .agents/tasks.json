@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "fda3d77f33cd42e15ca9a94fcdf0722e4efdbde0fdc399c2ed8e276af47ab13e",
+  "chainHead": "0ef16168a45816c63580044032e519df55f35a3e961d888615703dd8a5597d35",
   "tasks": [
     {
       "id": "T-001",
@@ -582,9 +582,15 @@
         "scripts/fetch-official-sample.mjs fetches FOCUS-1.0/focus_sample.csv once and records PROVENANCE.json (URL, date, sha256); the 1,000-row sample is committed as a test fixture with NOTICE.md attribution; no network in tests",
         "Official sample passes 1.0 validation with 0 errors (test); at least 5 deliberately corrupted fixtures fail with column-addressed errors; gates green"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "FOCUS 1.0 validator built (columns.json-derived rules); official sample passes with 0 errors (8 real-data warnings); 8 corrupted fixtures fail with column-addressed errors; gates green, 284/284 tests",
+        "commit": "8b6418c7785e72429f3b48e178569b645c0e7385",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T08:15:12.498Z"
+      },
+      "hash": "0ef16168a45816c63580044032e519df55f35a3e961d888615703dd8a5597d35"
     },
     {
       "id": "T-032",
