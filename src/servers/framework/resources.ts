@@ -4,11 +4,11 @@ import {
 } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpError } from "@modelcontextprotocol/sdk/types.js";
 import type { Artifact } from "../../shared/index.js";
+import { nearestMatches } from "../../shared/slugs.js";
 import {
   ALL_MATURITY_LEVELS,
-  nearestMatches,
   OFFICIAL_MATURITY_LEVELS,
-} from "../../shared/index.js";
+} from "../../shared/types.js";
 import type { ServerOptions } from "./server.js";
 import {
   capabilityMd,

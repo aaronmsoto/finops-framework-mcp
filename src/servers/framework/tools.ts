@@ -5,7 +5,7 @@ import type {
   Capability,
   OfficialMaturityLevel,
 } from "../../shared/index.js";
-import { nearestMatches } from "../../shared/index.js";
+import { nearestMatches } from "../../shared/slugs.js";
 import {
   cursorContext,
   err,

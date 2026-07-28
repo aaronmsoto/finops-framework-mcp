@@ -13,71 +13,70 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027..T-036 are DONE.
+T-027..T-038) is underway. T-027..T-037 are DONE.
 
-T-036 this session: `packages/focus-spec-mcp/` publish shim — package.json
-(name `focus-spec-mcp`, bin → `dist/servers/focus/main.js`, `files`
-[dist, data/focus, README, LICENSE, NOTICE], `dependencies` pinned to the
-4 packages the focus server's module graph actually touches:
-`@modelcontextprotocol/sdk`, `ajv`, `ajv-formats`, `zod` — confirmed by
-grepping non-test imports under `src/servers/focus/` + `src/shared/focus/`
-+ what `shared/index.ts` barrel-reexports; `cheerio`/`domhandler` (used by
-`shared/md.ts`) are crawler-only and never reached), README.md, NOTICE.md
-(FOCUS spec text + official sample CC BY 4.0 attribution, no-endorsement
-note), server.json (MCP registry). `scripts/pack-focus.mjs` is the
-package's `prepack`: copies `dist/servers/focus` + `dist/shared` (the
-server's relative imports need shared/, incl. its `focus/` subfolder) +
-`data/focus` into the package dir (rebuilds root `dist/` first if
-missing); logs to **stderr** not stdout so it never corrupts `npm pack
---json`'s machine-readable stdout when prepack runs inline with it (found
-by running the packaging test before assuming it would just work). Root
-`package.json` `files` narrowed from bare `"dist"` to explicit
-`dist/index.js` + `dist/servers/framework` + `dist/crawlers/framework` +
-`dist/shared` — excludes `dist/servers/focus` and `dist/crawlers/focus`,
-data/focus was already absent. `dist/shared/focus/*` (schemas/types, a few
-KB) ships in BOTH tarballs unavoidably: `shared/index.ts`'s `export *`
-barrel is evaluated in full by ESM on any import from it (confirmed: Node
-loads the whole reachable module graph, not just the destructured name),
-and untangling that barrel across every framework/crawler importer is a
-refactor beyond this task's scope — recorded as an open question below.
-Packaging test (`src/packaging.test.ts`, matches `src/**/*.test.ts` so no
-vitest.config.ts change needed) asserts both tarball directions via `npm
-pack --dry-run --json` (no disk writes), then does a REAL `npm pack` +
-`npm install <tgz> --offline` into two mktemp scratch dirs + runs the
-installed bin `--version` — offline works because the shim's 4 deps are
-already-resolved root project dependencies at the same versions, already
-in the local npm cache (verified: `npm install zod@^4.4.3 --offline`
-succeeds standalone). Observed: focus tarball 235KB packed / 1.56MB
-unpacked (well under the 1MB *packed* budget the acceptance criterion
-means); `focus-spec-mcp --version` printed
-`focus-spec-mcp v1.0.0 (FOCUS spec versions: 1.0, 1.2; latest 1.2)` from
-the installed `.bin` symlink. `packages/focus-spec-mcp/{dist,data}/` are
-prepack-generated, not committed (`.gitignore` +=
-`packages/*/data/`; `dist/` was already ignored repo-wide). Gates green
-(`--tier all`: format/lint/typecheck/test 339 passed/coverage/designs/
-integrity/memory/build all pass). Full detail:
-`.agents/journal/20260728-t036-focus-pack-shim.md`.
+T-037 this session: Cloudflare Worker (`src/workers/`) serving both MCP
+servers over HTTPS. `src/workers/app.ts` exports `createFetchHandler` — a
+factory routing `/mcp/framework` + `/mcp/focus`, building a fresh
+`McpServer` + `WebStandardStreamableHTTPServerTransport`
+(`sessionIdGenerator: undefined`, `enableJsonResponse: true` — stateless)
+per request, plus an Origin allowlist (absent Origin always allowed;
+present-but-unlisted → 403 before any server work). `src/workers/index.ts`
+is the actual Worker entry (`wrangler.toml`'s `main`): loads both data
+artifacts once per isolate via `src/workers/data.ts` and reads
+`ALLOWED_ORIGINS` from a `[vars]`/env binding. `scripts/bundle-worker-data.mjs`
+is the build-time bundler — reuses `loadArtifact`/`loadFocusStore` from
+`dist/shared/` (same ajv schema + manifest sha256 validation the stdio
+servers use, so no separate ajv dependency needed in the worker bundle) and
+re-emits the two artifacts as committed TypeScript modules under
+`src/workers/generated/` (`framework-artifact.ts` is the `Artifact` object
+literal as-is; `focus-store.ts` serializes `FocusStore`'s two `Map` fields
+— `versions`, `sampleCsv` — as plain objects, since Maps aren't
+JSON-representable; `data.ts` rehydrates them into real `Map`s at read
+time). The bundler self-formats its output with prettier so re-running it
+never breaks the format gate.
 
-T-035 (earlier session): eval design, no source changes. `evals/focus/eval.xml`
-— 10 version-aware, tools-only questions against the live focus server (2
-require `compare_versions`, 2 require `get_kpi_mapping`, per the acceptance
-minimum); every answer solved live first via `evals/framework/mcp-call.mjs
---server=focus` and copy-verified from the raw JSON (values in the journal).
-`evals/focus/combined-scenario.xml` — the spec's Rate Optimization
-walkthrough (capability → KPIs → FOCUS columns per version → calculate on
-sample) as one ordered scenario spanning BOTH bridges (`--server=framework`
-+ `--server=focus`): framework's 4 featured KPIs on rate-optimization come
-back as the exact same 4 slugs from focus's `get_kpi_mapping(capability:
-"rate-optimization")` — the cross-server bridge the spec's Problem section
-says exists nowhere else. Includes one step marked
-`mode="author-annotation"` (explicitly NOT part of the tools-only graded
-walkthrough) explaining a real finding: the official 1.0 sample has zero
-`ChargeCategory = "Purchase"` rows, so `commitment-utilization-score`/
-`percentage-of-commitment-based-discount-waste` compute to a correct-but-
-extreme 0%/100% pair — same class as T-034's noted AAI observation, not a
-bug, verified by reading the committed CSV directly (out of bridge scope,
-hence the annotation). Gates green (336/336, no source changed). Full
-detail: `.agents/journal/20260728-t035-focus-eval-suite.md`.
+Key fix required to satisfy "no node:fs reachable from src/workers/index.ts":
+`src/servers/{framework,focus}/tools.ts` and `resources.ts` imported
+`nearestMatches` (and, in framework/resources.ts, `ALL_MATURITY_LEVELS`/
+`OFFICIAL_MATURITY_LEVELS`) from the `../../shared/index.js` **barrel**,
+which does `export * from "./artifact.js"` / `export { loadFocusStore }
+from "./focus/artifact.js"` — both of which import `node:fs` at module top
+level. ANY import from the barrel (even of an fs-free name) pulls the
+whole barrel's static import graph in per ESM semantics. Fixed by importing
+`nearestMatches` directly from `../../shared/slugs.js` and the maturity
+constants from `../../shared/types.js` (both genuinely fs-free) in all four
+files — no behavior change, pure import-path fix. `src/workers/fs-boundary.test.ts`
+statically walks the real import graph from `src/workers/index.ts`
+(following non-type-only `import`/`export ... from` statements — re-exports
+matter because that's exactly the barrel's own shape, and a naive
+`import`-only regex would silently miss it, verified by deliberately
+reintroducing the barrel import and confirming the test failed with the
+exact chain before re-fixing it) and fails if anything resolves to
+`node:fs`; a second "sanity" test in the same file guards against the walk
+passing vacuously by asserting it actually reaches
+`servers/{framework,focus}/tools.ts`. `src/workers/bundle-data.test.ts`
+guards the two committed generated files against drifting from
+`data/framework`/`data/focus` (re-derives via the same loaders, `toEqual`).
+`src/workers/app.test.ts` drives initialize/tools-list/tools-call on both
+routes with native `Request` objects (no wrangler), plus 403 (unlisted
+Origin)/404 (unknown path)/405 (unsupported method, via the transport's own
+handling). `wrangler.toml`: `main = "src/workers/index.ts"`,
+`compatibility_flags = ["nodejs_compat"]` (needed for `shared/tools.ts`'s
+`node:crypto` cursor hashing — unrelated to the fs-free data path),
+`[vars] ALLOWED_ORIGINS = ""` default. `docs/deploy-worker.md`: owner
+checklist (regenerate bundle → configure allowlist → `wrangler login` →
+`wrangler deploy` → curl smoke test → rollback). Independently verified by
+the `reviewer` subagent (traced the import graph by hand, ran gates and the
+worker test suite directly). Gates green (`--tier all`: format/lint/
+typecheck/test 354 passed/coverage/designs/integrity/memory/build all
+pass). Full detail: `.agents/journal/20260728-t037-cloudflare-worker.md`.
+
+T-036 (earlier session): `packages/focus-spec-mcp/` publish shim. See
+`.agents/journal/20260728-t036-focus-pack-shim.md` for detail.
+
+T-035 (earlier session): eval design (`evals/focus/`), no source changes.
+See `.agents/journal/20260728-t035-focus-eval-suite.md`.
 
 Earlier (T-027..T-034, condensed): T-029 ingested FOCUS spec text for
 versions 1.0/1.2 into `data/focus/`; T-030 built `src/servers/focus/` (the
@@ -90,18 +89,20 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. T-037: Cloudflare Worker serving both MCP servers over HTTPS
-   (`src/workers/app.ts`, build-time bundled data, Origin allowlist).
-2. T-038: static demo web app for the combined walkthrough — can reuse
-   `evals/focus/combined-scenario.xml`'s step sequence directly.
-3. Then critique gate #4 (`docs/critique-4-focus-gate.md`) per the spec's v1
+1. T-038: static demo web app for the combined walkthrough — can reuse
+   `evals/focus/combined-scenario.xml`'s step sequence directly, and can
+   point at the Worker's `/mcp/framework` + `/mcp/focus` routes (T-037).
+2. Then critique gate #4 (`docs/critique-4-focus-gate.md`) per the spec's v1
    acceptance gate, and packaging/tarball/worker acceptance checks.
-4. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
+3. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
-5. Owner: npm publish + mcp-publisher registry submit remain pending from
+4. Owner: npm publish + mcp-publisher registry submit remain pending from
    v1 (PR #4 merged to dev; publish happens from main after release) —
    T-036 gives `packages/focus-spec-mcp/` a second, independent publish
    target (own `server.json`, own version line) alongside root.
+5. Owner: deploying the Cloudflare Worker itself (T-037) is a human
+   approval point — `docs/deploy-worker.md` has the checklist; nothing in
+   this repo's automation runs `wrangler deploy`.
 6. Port-back session in agentic-starter-repo: copy the harness diff per the
    tracker's port-back notes (deviations: fractional max_iteration_minutes,
    RunnerResult.stderr, AGENTIC_MOCK_USAGE contract) + consider harness-CI.
@@ -114,11 +115,17 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
   runtime by either server) ships in the focus tarball — both are
   consequences of `src/shared/index.ts`'s `export *` barrel, which every
   server/crawler entry point imports from and which ESM evaluates in full
-  regardless of which name is destructured. Harmless (small, unreachable
-  code, doesn't affect the 1MB focus budget) but not a clean boundary;
-  splitting the barrel so each server's tarball carries only the shared
-  code it actually uses would be a real (multi-file) refactor, out of
-  scope for T-036's packaging-only mandate.
+  regardless of which name is destructured. T-037 worked around the same
+  root cause for the worker (see "In flight" above) by importing specific
+  fs-free modules directly instead of the barrel in the four affected
+  server files — but the barrel itself is unchanged, so any *new* server
+  code that imports a real (non-type) binding from `shared/index.js` can
+  silently reintroduce fs-reachability; `src/workers/fs-boundary.test.ts`
+  will catch it if that new code is itself reachable from
+  `src/workers/index.ts`, but won't catch it otherwise. Splitting the
+  barrel so each server's tarball/bundle carries only the shared code it
+  actually uses would be a real (multi-file) refactor, out of scope for
+  T-037's worker-only mandate.
 - Root `NOTICE.md` has no attribution section for the FOCUS spec text
   itself (data/focus/{1.0,1.2}/, ingested T-029) — only the T-031 sample
   fixture is covered. Should be added (mirrors the FinOps Framework
@@ -142,5 +149,5 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-28 — T-036 done (focus-spec-mcp publish shim + packaging test);
-focus-mcp-v1 loop underway.
+2026-07-28 — T-037 done (Cloudflare Worker + fetch-handler factory +
+build-time data bundler + deploy doc); focus-mcp-v1 loop underway.

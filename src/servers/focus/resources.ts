@@ -4,7 +4,7 @@ import {
 } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpError } from "@modelcontextprotocol/sdk/types.js";
 import type { FocusStore } from "../../shared/focus/artifact.js";
-import { nearestMatches } from "../../shared/index.js";
+import { nearestMatches } from "../../shared/slugs.js";
 import {
   attributeMd,
   columnMd,

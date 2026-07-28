@@ -14,7 +14,7 @@ import type {
   KpiMappingEntry,
 } from "../../shared/focus/types.js";
 import { parseCsv } from "../../shared/focus/validate.js";
-import { nearestMatches } from "../../shared/index.js";
+import { nearestMatches } from "../../shared/slugs.js";
 import {
   cursorContext,
   err,

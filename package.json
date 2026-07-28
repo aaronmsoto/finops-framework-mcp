@@ -37,6 +37,7 @@
     "build": "tsc -p tsconfig.build.json",
     "refresh": "npm run build && node dist/crawlers/framework/cli.js refresh",
     "server": "npm run build && node dist/servers/framework/main.js",
+    "bundle:worker": "npm run build && node scripts/bundle-worker-data.mjs",
     "prepublishOnly": "npm run build && npm test"
   },
   "engines": {
