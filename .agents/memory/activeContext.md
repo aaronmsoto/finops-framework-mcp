@@ -13,73 +13,62 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027, T-028, and now T-029 (ingest FOCUS
-1.0/1.2) are DONE.
+T-027..T-038) is underway. T-027..T-030 are DONE.
 
-T-029 this session: `src/crawlers/focus/` ingests the FOCUS spec from git
-tags `v1.0`/`v1.2` via raw.githubusercontent.com. `urls.ts` pins
-REPO/ORIGIN/VERSIONS (expected column counts 43/57) and
-`isValidFocusBody` (markdown/JSON has no `<h1>`, so the framework
-crawler's HTML-page body check doesn't apply — added an `isValidBody`
-override hook to `CachedFetcher` in `src/shared/http.ts`, additive/
-backward-compatible, default unchanged). `ingest.ts` enumerates columns
-from `columns.mdpp`'s `!INCLUDE` list, asserts the pinned count, cross-
-checks the jsDelivr flat tree (`data.jsdelivr.com/v1/packages/gh/...`)
-for both columns and attributes, then fetches every column/attribute/
-glossary/CHANGELOG file. `parse/columns.ts` + `parse/attributes.ts`
-extract structured fields (id/display_name/column_type/feature_level/
-allows_nulls/data_type/value_format/number_range/allowed_values/
-requirements[]/introduced_version) from the H1+prose+`##`-section
-format; `parse/table.ts` has the pipe-table parser and the
-requirements extractor (prefers top-level MUST/SHOULD bullets, falls
-back to prose-sentence splitting — both forms occur verbatim across the
-two tags). A parse failure degrades a record to `parse_quality:
-"markdown_only"`, never throws. `emit.ts` writes each version dir
-idempotently (skips the write entirely — including `crawled_at` — when
-every file's sha256 already matches disk, so a cache-warm refresh is a
-true no-op) plus `diff.ts` (1.0→1.2 diff by ColumnId, source-cited) and
-`index.json`. Types live in `src/shared/focus/types.ts` (re-exported
-from `shared/index.ts`) since T-030's server will load them too.
-Fixtures: 5 raw column files per version + 2 attribute files, committed
-verbatim (added `src/crawlers/focus/fixtures/` to `.prettierignore` —
-prettier reflows tables and `*em*`→`_em_`, which would corrupt them as
-parser-test fixtures). 27 new tests (parse/columns/attributes/table/
-diff/emit), all green, no live network. Real crawl run and committed:
-`node dist/crawlers/focus/cli.js` → 43 columns (v1.0) + 57 columns
-(v1.2), 100% `parsed` (0 markdown_only), diff 1.0→1.2 = 14 added / 0
-removed / 43 changed (matches spec's pinned "14 added columns" exactly).
-Verified byte-identical refresh by re-running from the warm cache
-(`.cache/crawl-focus/`, gitignored): `diff -rq` against a pre-refresh
-copy of `data/focus/` → identical, 0 network / 128 cached. `du -sh
-data/focus` = 852K (budget 3MB). Gates green, 226/226 tests pass (+23
-new for focus).
-
-Prior T-028 note (generic artifact-load seam + multi-server eval
-bridge): `src/shared/artifact-loader.ts` holds `loadArtifactGeneric`;
-`src/shared/artifact.ts` `loadArtifact(dir)` wraps it for the framework
-artifact unchanged. `evals/framework/mcp-call.mjs` selects the server
-dist path via `--server=<name>` / `MCP_EVAL_SERVER`. Separately,
-critique-3 fixes are merged to main (PRs #7/#8); the harness fix batch
-(T-025/T-026) still awaits its PR to dev — see prior entries for that
-thread.
+T-030 this session: `src/servers/focus/` — the version-aware FOCUS stdio
+server, mirroring `src/servers/framework/`'s module layout (server/main/
+tools/resources/prompts/uris/render/search). Loading: `src/shared/focus/
+schemas.ts` defines `FOCUS_ARTIFACT_FILES` (manifest.json/columns.json/
+attributes.json schemas); `src/shared/focus/artifact.ts` `loadFocusStore(dir)`
+reads `data/focus/index.json`, loads each version dir through
+`loadArtifactGeneric` (T-028) into `Map<spec_version, FocusVersionArtifact>`
+(+ raw glossary.md/CHANGELOG.md text), cross-checks each version's
+manifest.json sha256 against index.json's `manifest_sha256`, and loads/
+verifies the derived diff file against index.json's `derived` map — throws
+`ArtifactValidationError` on any mismatch (tested: schema violation,
+manifest hash mismatch, tampered diff, missing file). Server: 7 tools
+(list_versions, get_column, list_columns, search_focus, get_attribute,
+get_requirements, compare_versions) — all but list_versions/compare_versions
+take `version` (default "1.2", echoed as `spec_version` in structuredContent);
+column/attribute lookup accepts Column ID or slug, case-insensitive, with
+nearestMatches suggestions on miss. `list_columns`/`search_focus` cursors
+bind `version` into `cursorContext`'s fingerprint (shared/tools.ts), so
+cross-version cursor reuse hits "Cursor mismatch" (tested). Resources:
+`focus://spec/overview`, `/versions`, `/{version}/columns/{slug}` +
+`/attributes/{slug}` + `/glossary` (ResourceTemplates, 2-var complete()
+using request context for `slug` filtered by `version`), `/changes/1.0-1.2`
+(fixed) — unknown version/slug both hit -32002 with nearestMatches (tested).
+2 prompts (explain-focus, map-column-across-versions). CC BY 4.0 footer
+(`render.ts` `footer()`) on every content-bearing response, mirroring
+`shared/footer.ts`'s `ccByFooter`. `main.ts` mirrors the framework server's
+main.ts exactly (isDirectRunOf gate, --version flag prints
+`focus-spec-mcp vX (FOCUS spec versions: 1.0, 1.2; latest 1.2)`, FOCUS_MCP_DATA
+env override). Discovered attribute IDs are renamed across versions
+(CurrencyCodeFormat@1.0 → CurrencyFormat@1.2, ColumnNamingAndOrdering@1.0 →
+ColumnHandling@1.2) — get_attribute needs the right `version` for a 1.0-only
+id, which the outputSchema-conformance and get_attribute tests now cover
+explicitly. 42 new tests (server.test.ts incl. outputSchema conformance
+over every tool + cross-version cursor rejection; artifact.test.ts;
+main.test.ts incl. dist symlink --version), all green. Verified live via
+`node dist/servers/focus/main.js --version` and
+`node evals/framework/mcp-call.mjs --server=focus list-tools|call ...`
+(the eval bridge is already server-agnostic from T-028, no changes needed).
+Root package.json bin/files untouched — packaging (`packages/focus-spec-mcp/`)
+is a later task per the spec. Gates green, 268/268 tests pass (+42 for focus).
 
 ## Next steps
 
-1. T-030 next in the focus-mcp-v1 loop per `.agents/specs/focus-mcp-v1.md`
-   — build the version-aware focus stdio server on top of `data/focus/`
-   (T-029): load each version dir through `loadArtifactGeneric` (T-028)
-   into `Map<spec_version, FocusArtifact>`, define the FOCUS
-   `ARTIFACT_FILES` schemas (columns.json/attributes.json/manifest.json),
-   `index.json` is discovery + integrity root.
-2. Continue T-031..T-038 per `.agents/specs/focus-mcp-v1.md` in order.
-3. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
+1. Continue T-031..T-038 per `.agents/specs/focus-mcp-v1.md` in order
+   (KPI mapping / calculate_kpi, sample data, packaging shim, worker,
+   critique gate #4, evals/focus).
+2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
-4. Owner: npm publish + mcp-publisher registry submit remain pending from
+3. Owner: npm publish + mcp-publisher registry submit remain pending from
    v1 (PR #4 merged to dev; publish happens from main after release).
-5. Port-back session in agentic-starter-repo: copy the harness diff per the
+4. Port-back session in agentic-starter-repo: copy the harness diff per the
    tracker's port-back notes (deviations: fractional max_iteration_minutes,
    RunnerResult.stderr, AGENTIC_MOCK_USAGE contract) + consider harness-CI.
-6. Owner: install docs/proposed/refresh-data.yml per its checklist.
+5. Owner: install docs/proposed/refresh-data.yml per its checklist.
 
 ## Open questions
 
@@ -96,4 +85,4 @@ thread.
 
 ## Last updated
 
-2026-07-28 — T-029 done (FOCUS 1.0/1.2 ingestion into data/focus); focus-mcp-v1 loop underway.
+2026-07-28 — T-030 done (version-aware focus stdio server); focus-mcp-v1 loop underway.

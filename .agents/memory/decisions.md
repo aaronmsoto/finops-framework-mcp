@@ -185,3 +185,24 @@
   modulo a documented exception"; a real diff-on-disk after every refresh
   would also be confusing operationally, showing churn with no content
   change).
+
+## 2026-07-28 — search_focus indexes per version, not merged (T-030)
+
+- Decision: `buildSearchIndex(version, artifact)` builds one search index per
+  loaded FOCUS version; `search_focus` always searches within a single
+  resolved `version`, never across all loaded versions at once.
+- Why: columns are renamed/re-semanticized across FOCUS releases (e.g. the
+  1.0→1.2 diff renames/re-defines several columns; attribute ids are
+  literally renamed — `CurrencyCodeFormat`@1.0 vs `CurrencyFormat`@1.2). A
+  merged cross-version index would surface a hit without making clear which
+  version's semantics apply, and a caller can't act on a search result
+  (feed its slug into get_column/get_attribute) without knowing the version
+  anyway. Per-version indexing keeps every hit's `uri` unambiguous and
+  matches the spec's version model ("every tool takes a version param").
+- Alternatives considered: one merged index tagged with `spec_version` per
+  doc (rejected — doubles memory for ~2x duplicate/renamed docs for no
+  query benefit, since `search_focus` still needs a resolved version to
+  build get_column/get_attribute follow-up calls); building the index at
+  call time instead of once at server startup (rejected — startup cost is
+  trivial at this data size, ~2×100 docs, and framework's search.ts already
+  establishes "build once at startup" as the pattern).

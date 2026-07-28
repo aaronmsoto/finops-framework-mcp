@@ -5,3 +5,6 @@ export { loadArtifactGeneric } from "./artifact-loader.js";
 export * from "./artifact.js";
 export * from "./slugs.js";
 export * from "./focus/types.js";
+export * from "./focus/schemas.js";
+export type { FocusStore, FocusVersionArtifact } from "./focus/artifact.js";
+export { loadFocusStore } from "./focus/artifact.js";
