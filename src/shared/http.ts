@@ -1,7 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { ORIGIN, URLS, USER_AGENT } from "./urls.js";
 
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const MIN_HTML_LENGTH = 2000;
@@ -53,6 +52,13 @@ export interface FetchReport {
   skippedByRobots: string[];
 }
 
+export interface CachedFetcherOptions {
+  /** Site origin, e.g. "https://www.finops.org" — used for the robots.txt
+   * URL and to scope which fetched URLs robots.txt disallow rules apply to. */
+  origin: string;
+  userAgent: string;
+}
+
 /**
  * Polite cached fetcher: honors robots.txt on every run, throttles to 1 rps
  * (or the site's crawl-delay if larger), caches only validated 200 responses,
@@ -61,6 +67,8 @@ export interface FetchReport {
 export class CachedFetcher {
   private robots: RobotsRules | null = null;
   private lastRequestAt = 0;
+  private readonly origin: string;
+  private readonly userAgent: string;
   readonly report: FetchReport = {
     fromCache: [],
     fetched: [],
@@ -69,9 +77,12 @@ export class CachedFetcher {
 
   constructor(
     private readonly cacheDir: string,
-    private readonly useCache = true,
+    private readonly useCache: boolean,
+    opts: CachedFetcherOptions,
   ) {
     mkdirSync(cacheDir, { recursive: true });
+    this.origin = opts.origin;
+    this.userAgent = opts.userAgent;
   }
 
   private cachePath(url: string): string {
@@ -102,15 +113,15 @@ export class CachedFetcher {
 
   private async ensureRobots(): Promise<RobotsRules> {
     if (this.robots) return this.robots;
-    const res = await fetch(URLS.robots, {
-      headers: { "User-Agent": USER_AGENT },
+    const res = await fetch(`${this.origin}/robots.txt`, {
+      headers: { "User-Agent": this.userAgent },
     });
     this.robots = parseRobots(res.ok ? await res.text() : "");
     return this.robots;
   }
 
   private isDisallowed(url: string): boolean {
-    if (!url.startsWith(ORIGIN)) return false;
+    if (!url.startsWith(this.origin)) return false;
     const path = new URL(url).pathname;
     return (this.robots?.disallow ?? []).some((rule) => path.startsWith(rule));
   }
@@ -130,7 +141,9 @@ export class CachedFetcher {
     for (let attempt = 0; attempt < 3; attempt++) {
       await this.throttle();
       try {
-        const res = await fetch(url, { headers: { "User-Agent": USER_AGENT } });
+        const res = await fetch(url, {
+          headers: { "User-Agent": this.userAgent },
+        });
         const body = await res.text();
         if (res.status === 200 && bodyLooksValid(url, body)) {
           const entry: CacheEntry = {

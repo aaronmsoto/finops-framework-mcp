@@ -12,26 +12,32 @@
 
 ## In flight
 
-Critique-3 fixes are MERGED to main (PRs #7/#8); publish is go. This
-branch (restarted from post-release main) adds the last review-driven
-harness fixes T-025 (build/verify token split + usage canary) and T-026
-(branch assert + atomic tasks.json), awaiting PR to dev. Owner decision
-2026-07-24: harness moves to npm as @aaronsoto/agentic-harness — the
-template packages it; this repo swaps its vendored copy for the package
-after the owner publishes (tracker has the note).
+focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
+T-027..T-038) is underway. T-027 (lift shared crawler/server infra into
+src/shared) is DONE this session: frontmatter, compose infra
+(guard/heading/bullet/assemble), derive splitters, md (origin-parameterized
+htmlToMd), sanitize, http (origin/UA-parameterized CachedFetcher), search
+core, tool helpers (cursor/paginate/ok/err/RO), footer (parameterized
+attribution), and detectDirectRun all now live under `src/shared/`;
+framework code re-imports them. Gates green, 197/197 tests pass, `cli.js
+derive` reproduces the committed artifact byte-identically, `npm pack
+--dry-run` diffs clean (dist internals only). Separately, critique-3 fixes
+are merged to main (PRs #7/#8); the harness fix batch (T-025/T-026) still
+awaits its PR to dev — see prior entries for that thread.
 
 ## Next steps
 
-1. Open PR (branch → dev) for the harness batch + v1.1 mini-batch; owner
-   review/squash-merge; rolling PR #5 (dev → main) then refreshes.
-2. Owner: npm publish + mcp-publisher registry submit remain pending from
+1. T-028 next in the focus-mcp-v1 loop: generic artifact-load seam,
+   building on the shared/markdown + shared/http modules T-027 just lifted.
+2. Continue T-029..T-038 per `.agents/specs/focus-mcp-v1.md` in order.
+3. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
+   mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
+4. Owner: npm publish + mcp-publisher registry submit remain pending from
    v1 (PR #4 merged to dev; publish happens from main after release).
-3. Port-back session in agentic-starter-repo: copy the harness diff per the
+5. Port-back session in agentic-starter-repo: copy the harness diff per the
    tracker's port-back notes (deviations: fractional max_iteration_minutes,
    RunnerResult.stderr, AGENTIC_MOCK_USAGE contract) + consider harness-CI.
-4. Remaining v1.1 candidates: Cloudflare Workers remote endpoint; Action
-   rename decision (moot while hidden).
-5. Owner: install docs/proposed/refresh-data.yml per its checklist.
+6. Owner: install docs/proposed/refresh-data.yml per its checklist.
 
 ## Open questions
 
@@ -48,4 +54,4 @@ after the owner publishes (tracker has the note).
 
 ## Last updated
 
-2026-07-24 — T-025/T-026 harness fixes; npm distribution decision recorded; port to template next.
+2026-07-28 — T-027 done (shared crawler/server infra lifted to src/shared); focus-mcp-v1 loop underway.

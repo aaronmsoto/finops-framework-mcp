@@ -505,7 +505,7 @@
         "All existing tests pass with assertion content unmodified; moved symbols are no longer defined under src/crawlers/framework or src/servers/framework (grep evidence)",
         "npm pack --dry-run file list unchanged apart from dist internals; gates green"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
