@@ -125,6 +125,7 @@ describe("tools", () => {
     };
     expect(attribute.id).toBe("CurrencyFormat");
     expect(attribute.requirements.length).toBeGreaterThan(0);
+    expect(res.content[0]?.text).toContain("CC BY 4.0");
   });
 
   it("get_attribute resolves version-specific attribute ids (renamed across versions)", async () => {

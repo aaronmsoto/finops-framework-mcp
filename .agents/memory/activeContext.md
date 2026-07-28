@@ -56,6 +56,14 @@ main.test.ts incl. dist symlink --version), all green. Verified live via
 Root package.json bin/files untouched — packaging (`packages/focus-spec-mcp/`)
 is a later task per the spec. Gates green, 268/268 tests pass (+42 for focus).
 
+**Rework (same task, next iteration):** the independent verifier failed the
+first pass of T-030 — `get_attribute` built its markdown inline instead of
+calling `render.ts`'s `attributeMd()`, so it was the one tool missing the CC
+BY footer (see `.agents/.cache/verify/T-030-1785225144803.md`). Fixed:
+`get_attribute` now calls `attributeMd(...)` like `get_column` calls
+`columnMd(...)`; added the missing footer assertion to its test. Reproduced
+live via the eval bridge post-fix. Gates green again, 268/268 tests.
+
 ## Next steps
 
 1. Continue T-031..T-038 per `.agents/specs/focus-mcp-v1.md` in order
@@ -85,4 +93,5 @@ is a later task per the spec. Gates green, 268/268 tests pass (+42 for focus).
 
 ## Last updated
 
-2026-07-28 — T-030 done (version-aware focus stdio server); focus-mcp-v1 loop underway.
+2026-07-28 — T-030 done (version-aware focus stdio server, incl. verifier-flagged
+CC BY footer fix on get_attribute); focus-mcp-v1 loop underway.

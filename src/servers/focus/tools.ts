@@ -14,7 +14,7 @@ import {
   RO,
   type ToolResult,
 } from "../../shared/tools.js";
-import { columnMd } from "./render.js";
+import { attributeMd, columnMd } from "./render.js";
 import { buildSearchIndex, search } from "./search.js";
 import { URI } from "./uris.js";
 
@@ -436,10 +436,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
       };
       return ok(
         structured,
-        `# ${a.display_name} (\`${a.id}\`)\n\n${a.description_md}` +
-          (a.requirements.length
-            ? `\n\n## Requirements\n\n${a.requirements.map((r) => `- ${r}`).join("\n")}`
-            : ""),
+        attributeMd(resolved.artifact, resolved.version, a),
       );
     },
   );
