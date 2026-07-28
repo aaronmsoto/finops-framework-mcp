@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "a2157049eac31b8d210757f03585d5bf61c1e44b3d78faa31d1f0d10d75f3d10",
+  "chainHead": "9f1e9af30ed75db20272870beafd356db688d5b98cb6d6f1ce3fdbf345ee5d7a",
   "tasks": [
     {
       "id": "T-001",
@@ -505,9 +505,15 @@
         "All existing tests pass with assertion content unmodified; moved symbols are no longer defined under src/crawlers/framework or src/servers/framework (grep evidence)",
         "npm pack --dry-run file list unchanged apart from dist internals; gates green"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Shared infra (frontmatter/compose/derive-splitters/md/sanitize/http/search/tools/footer/direct-run) moved to src/shared; framework re-imports; gates green, 197/197 tests pass, derive reproduces artifact byte-identically, npm pack diff shows only dist-internal moves",
+        "commit": "316ea59c16b79794b49f0388eb76bc814ab0a913",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T07:02:48.281Z"
+      },
+      "hash": "9f1e9af30ed75db20272870beafd356db688d5b98cb6d6f1ce3fdbf345ee5d7a"
     },
     {
       "id": "T-028",
