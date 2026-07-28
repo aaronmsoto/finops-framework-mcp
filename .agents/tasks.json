@@ -495,6 +495,163 @@
         "completedAt": "2026-07-24T08:10:44.497Z"
       },
       "hash": "a2157049eac31b8d210757f03585d5bf61c1e44b3d78faa31d1f0d10d75f3d10"
+    },
+    {
+      "id": "T-027",
+      "title": "Lift shared crawler and server infrastructure into src/shared",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "frontmatter, compose infra (guard/heading/bullet/assemble), derive splitters, md, sanitize, http (origin/UA parameterized), search core (buildIndex split out), tool helpers (cursor/paginate/ok/err/RO), footer (attribution parameterized), detectDirectRun all live under src/shared and framework code re-imports them",
+        "All existing tests pass with assertion content unmodified; moved symbols are no longer defined under src/crawlers/framework or src/servers/framework (grep evidence)",
+        "npm pack --dry-run file list unchanged apart from dist internals; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-028",
+      "title": "Add generic artifact-loading seam and multi-server eval bridge",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "loadArtifactGeneric(dir, {files, assemble, crossValidate, remediation}) exists with its own synthetic-spec test; loadArtifact(dir) remains a thin framework wrapper with unchanged signature and error text (main.ts/emit.ts/tests untouched)",
+        "evals/framework/mcp-call.mjs (or a generalized evals/mcp-call.mjs) selects the server dist path via flag/env, defaulting to framework; framework list-tools output unchanged",
+        "Gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-029",
+      "title": "Ingest FOCUS v1.0 and v1.2 from git tags into data/focus",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "src/crawlers/focus enumerates columns from each tag's columns.mdpp !INCLUDE list, asserts counts 43 (v1.0) and 57 (v1.2), cross-checks the jsDelivr flat tree, and fetches columns/attributes/glossary/CHANGELOG via raw.githubusercontent with the shared CachedFetcher",
+        "Emits data/focus/{1.0,1.2}/ markdown-canonical artifacts + manifests, data/focus/derived/diff-1.0-1.2.json (14 added columns, source-cited, plus changed records), and data/focus/index.json per the spec's version model",
+        "Refresh from cache is byte-identical (test or cited run); every column record carries id/display_name/feature_level/column_type/requirements[] with committed fixture-based parser tests; parse failures degrade to markdown-only, never block",
+        "du -s data/focus is 3MB or less; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-030",
+      "title": "Build the version-aware focus stdio server",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "src/servers/focus serves list_versions, get_column, list_columns (feature_level/column_type filters), search_focus, get_attribute, get_requirements, compare_versions with version param defaulting to 1.2 and spec_version echoed in structuredContent",
+        "focus://spec/{version}/... resources and prompts registered; unknown slugs get -32002 nearest-match; CC BY attribution footers on content responses; outputSchema conformance test covers every tool",
+        "Cross-version cursor reuse is rejected (test); dist main.js --version prints spec versions; eval bridge lists the tool surface; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-031",
+      "title": "Add FOCUS conformance validator with official 1.0 ground truth",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "Per-version validator library + CLI checks column presence by feature level, data types, nullability, and value formats derived from the artifact",
+        "scripts/fetch-official-sample.mjs fetches FOCUS-1.0/focus_sample.csv once and records PROVENANCE.json (URL, date, sha256); the 1,000-row sample is committed as a test fixture with NOTICE.md attribution; no network in tests",
+        "Official sample passes 1.0 validation with 0 errors (test); at least 5 deliberately corrupted fixtures fail with column-addressed errors; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-032",
+      "title": "Add seeded synthetic FOCUS data generator",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "Deterministic seeded generator emits spec-conformant CSV per version; same seed produces byte-identical output (test)",
+        "Generated 1.0 data passes the 1.0 validator and generated 1.2 data passes the 1.2 validator (tests); headers exactly match each version's column list",
+        "Committed synthetic samples total 200KB or less and are clearly labeled synthetic; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-033",
+      "title": "Derive the unofficial KPI-to-FOCUS-column mapping",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "data/focus/derived/kpi-mapping.json maps 15-20 high-impact framework KPIs (ESR, commitment set, unit-economics set) to required FOCUS columns per version with FOCUS-terms formula translations and a methodology note; every record official:false",
+        "Tests cross-validate every mapped framework KPI slug against data/framework content and every referenced column against the target version artifact",
+        "get_kpi_mapping tool serves the mapping with an UNOFFICIAL banner in text content and framework finops:// URI cross-references (tests); artifact hashed in index.json; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-034",
+      "title": "Add calculate_kpi over bundled sample data",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "Formula registry computes at least ESR (and 2+ more mapped KPIs) over the bundled official and synthetic samples, selected by version; user-supplied data is NOT accepted",
+        "ESR over a hand-computed 10-row fixture matches the expected value exactly (test); KPIs without formulas error cleanly with guidance",
+        "Responses carry the unofficial-calculation disclaimer and sample provenance; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-035",
+      "title": "Author focus eval suite and combined two-server scenario",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "evals/focus/eval.xml holds 10 version-aware tools-only questions (including at least 2 requiring compare_versions and 2 requiring the KPI mapping) answerable against the committed artifact",
+        "A combined scenario eval documents the Rate Optimization walkthrough answered using only the framework and focus bridges",
+        "Eval design verified by answering every question through the live server and citing the calls in the journal; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-036",
+      "title": "Package focus-spec-mcp as its own npm publish shim",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "packages/focus-spec-mcp/ has package.json (name focus-spec-mcp, bin, files whitelist, prepack runs scripts/pack-focus.mjs), README.md, NOTICE.md with FOCUS CC BY attribution and no-endorsement note, and server.json for the MCP registry",
+        "Root package.json files narrowed so the framework tarball contains no focus dist or data (packaging test asserts both directions); focus tarball is under 1MB and contains dist/servers/focus/main.js + data/focus",
+        "A test packs the shim into scratch, installs it, and runs the bin --version successfully; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-037",
+      "title": "Build the Cloudflare Worker serving both MCP servers over HTTPS",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "src/workers/app.ts exports a fetch-handler factory routing /mcp/framework and /mcp/focus with per-request server + WebStandardStreamableHTTPServerTransport (stateless, enableJsonResponse) and an Origin allowlist (absent Origin allowed, unlisted Origin 403)",
+        "scripts/bundle-worker-data.mjs ajv-validates artifacts at build time and emits JSON modules; no node:fs reachable from src/workers/index.ts (grep test); wrangler.toml has nodejs_compat and main src/workers/index.ts",
+        "app.test.ts drives initialize, tools/list, and a tools/call on BOTH routes using native Request objects plus the 403/404/405 cases; docs/deploy-worker.md gives the owner deploy checklist; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-038",
+      "title": "Build the static demo web app for the combined walkthrough",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "demo/ is a static app (no build step) with one endpoint-config object, walking Rate Optimization -> KPIs -> FOCUS columns per version -> calculate_kpi against the worker endpoints",
+        "A node test validates the demo's JSON-RPC request bodies against the worker fetch handler from the previous task",
+        "docs/deploy-demo.md covers Cloudflare Pages (or equivalent static) deployment; gates green"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
