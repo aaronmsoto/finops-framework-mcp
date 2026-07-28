@@ -13,46 +13,43 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027..T-033 are DONE.
+T-027..T-038) is underway. T-027..T-034 are DONE.
 
-T-033 this session: unofficial KPI-to-FOCUS-column mapping.
-`data/focus/derived/kpi-mapping.json` (18 records: ESR, 4 commitment-
-discount KPIs, 2 forecast-accuracy KPIs, 6 unit-economics KPIs, 4
-allocation/tagging KPIs, 1 variance KPI) — every record `official: false`,
-each with a `focus_formula` (FOCUS ColumnIds + SQL-like WHERE/GROUP BY
-pseudocode), `columns_by_version` (both 1.0 and 1.2 today — all chosen
-columns are present under the same id in both), `related_capability_slugs`
-(copied from the framework KPI, for the tool's `capability` filter), and a
-`caveat` where FOCUS alone can't fully compute it (forecast/budget KPIs —
-FOCUS only supplies the actual/effective-spend side). Authored as a static
-TS literal (`src/crawlers/focus/kpi-mapping-data.ts`, no source page to
-parse from) and emitted by `cli.ts`'s `ingest()` via a new
-`emitDerivedKpiMapping`, hashed into `index.json`'s `derived` map next to
-the diff. `loadFocusStore` (`src/shared/focus/artifact.ts`) now reads every
-`derived/` entry generically (was hardcoded to the single diff file),
-verifies each sha256, and cross-validates every `columns_by_version` column
-id against its version's loaded columns at load time (throws
-`ArtifactValidationError` on an unknown column/version). `get_kpi_mapping`
-tool (`src/servers/focus/tools.ts`): `kpi?`/`capability?`/`version?`
-params, UNOFFICIAL banner in text content, `kpi_uri` =
-`finops://framework/kpis/{slug}` per record (built via a new
-`FRAMEWORK_KPI_URI` helper in `src/servers/focus/uris.ts` — duplicates,
-does not import, the framework server's `URI.kpi`, to keep the two
-packages' compiled code uncoupled ahead of packaging (T-035); see
-decisions.md). Tests: `src/shared/focus/kpi-mapping.test.ts` (record count
-15-20, every kpi_slug found in `data/framework/content/kpis.json`,
-kpi_title matches, every related_capability_slugs found in
-`data/framework/content/capabilities.json`, every columns_by_version column
-id found in its version's `columns.json`); `artifact.test.ts` additions
-(loads kpiMapping, refuses a tampered kpi-mapping.json, refuses an unknown-
-column entry); `server.test.ts` additions (banner, URI cross-references,
-kpi/capability/version filters, unknown-kpi nearest-match error, empty-
-capability non-error, outputSchema conformance). Verified live: built +
-ran `node dist/crawlers/focus/cli.js` (0 network fetches, cache-only,
-byte-identical) then called `get_kpi_mapping` via an in-memory MCP client
-— confirmed the UNOFFICIAL banner, 18 total records, and the ESR record's
-formula/columns/finops:// URI. Gates green, 315/315 tests (+18). Artifact
-still 868K on disk (cap 3MB).
+T-034 this session: `calculate_kpi` over bundled sample data. New
+`data/focus/samples/` artifact section (manifest + one CSV per
+version/kind: official 1.0 FOCUS-Sample-Data 1000 rows, seeded synthetic
+1.0/1.2 60 rows each), hash-verified via a new `index.json.samples` map the
+same way `derived/` already is; `FocusStore.sampleManifest` +
+`sampleCsv: Map<"version:kind", text>`. Bundled by a new standalone
+`scripts/bundle-focus-samples.mjs` (not folded into `cli.ts`'s `ingest()` —
+that runs from `dist/` with no path back to the source fixtures once
+packaged); `ingest()` now carries forward any existing `index.json.samples`
+so a routine refresh doesn't wipe it (verified live, byte-identical).
+`src/shared/focus/kpi-calc.ts`: explicit formula registry for 9 of the
+mapping's ~18 KPIs (ESR + 8 more with no external input and no ambiguous
+unit-string matching) over `{header, rows}` (reuses `parseCsv`). New
+`calculate_kpi(kpi, version?, sample?)` tool — no dataset-input param
+exists, so user data structurally cannot enter; `UNOFFICIAL CALCULATION:`
+banner + full sample provenance in every response; no-formula KPIs get a
+clean error naming the caveat + calculable-KPI list. `data/focus` grew
+868K -> 1.8M (cap 3MB). Gates green, 336/336 tests (+21). Verified live
+over the real stdio server: ESR/1.0 = 26.552972346576816% (official
+sample), ESR/1.2 = 17.858936132116433% (falls back to synthetic — no
+official 1.2 sample exists), no-formula and unknown-kpi errors both clean.
+Full detail in `.agents/journal/20260728-t034-calculate-kpi.md` and
+decisions.md (includes a noted-not-fixed observation: AAI computes >100%
+over the official sample due to real negative-cost credit/refund rows —
+correct per the formula, not a bug).
+
+T-033 (condensed): unofficial KPI-to-FOCUS-column mapping —
+`data/focus/derived/kpi-mapping.json` (18 records, every `official: false`,
+each with `focus_formula`/`columns_by_version`/`related_capability_slugs`/
+`caveat`), authored as a static TS literal (no source page to parse from;
+no official mapping exists) and served by `get_kpi_mapping`
+(`kpi?`/`capability?`/`version?`, UNOFFICIAL banner, `finops://framework/
+kpis/{slug}` cross-reference via a duplicated, not imported, URI helper —
+keeps focus/framework packages uncoupled). Full detail:
+`.agents/journal/20260728-t033-focus-kpi-mapping.md`.
 
 Earlier (T-027..T-032, condensed): T-029 ingested FOCUS spec text for
 versions 1.0/1.2 into `data/focus/`; T-030 built `src/servers/focus/` (the
@@ -67,9 +64,9 @@ and `.agents/journal/`.
 
 ## Next steps
 
-1. Continue T-034..T-038 per `.agents/specs/focus-mcp-v1.md` in order
-   (calculate_kpi — ESR must match a hand-computed fixture exactly —
-   packaging shim, worker, critique gate #4, evals/focus).
+1. Continue T-035..T-038 per `.agents/specs/focus-mcp-v1.md` in order
+   (evals/focus + combined two-server scenario, packaging shim, worker,
+   critique gate #4).
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -104,5 +101,5 @@ and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-28 — T-033 done (unofficial KPI-to-FOCUS-column mapping +
-get_kpi_mapping tool); focus-mcp-v1 loop underway.
+2026-07-28 — T-034 done (calculate_kpi over bundled sample data);
+focus-mcp-v1 loop underway.

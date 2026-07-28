@@ -1,8 +1,10 @@
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { isDirectRunOf } from "../../shared/direct-run.js";
 import { CachedFetcher } from "../../shared/http.js";
 import type {
   FocusColumn,
+  FocusIndex,
   FocusIndexVersionEntry,
 } from "../../shared/focus/types.js";
 import { diffColumns } from "./diff.js";
@@ -101,10 +103,25 @@ export async function ingest(opts: IngestOptions): Promise<number> {
   const derivedKpiMapping = emitDerivedKpiMapping(opts.dataDir, KPI_MAPPING);
   opts.log(`kpi mapping: ${KPI_MAPPING.kpis.length} KPIs (unofficial)`);
 
-  emitIndex(opts.dataDir, last.spec_version, indexVersions, {
-    [derivedDiff.filename]: derivedDiff.sha256,
-    [derivedKpiMapping.filename]: derivedKpiMapping.sha256,
-  });
+  // Bundled sample CSVs (data/focus/samples/) are registered separately by
+  // scripts/bundle-focus-samples.mjs, not this ingest pipeline — carry
+  // forward whatever index.json already has so an ingest-only refresh
+  // (no network fetch touches samples) never wipes that registration.
+  const indexPath = join(opts.dataDir, "index.json");
+  const existingSamples: Record<string, string> = existsSync(indexPath)
+    ? (JSON.parse(readFileSync(indexPath, "utf8")) as FocusIndex).samples
+    : {};
+
+  emitIndex(
+    opts.dataDir,
+    last.spec_version,
+    indexVersions,
+    {
+      [derivedDiff.filename]: derivedDiff.sha256,
+      [derivedKpiMapping.filename]: derivedKpiMapping.sha256,
+    },
+    existingSamples,
+  );
 
   opts.log(
     `fetch: ${fetcher.report.fetched.length} network, ${fetcher.report.fromCache.length} cached, ` +

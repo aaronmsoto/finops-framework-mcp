@@ -5,6 +5,8 @@ import type {
   FocusDiff,
   FocusIndex,
   FocusIndexVersionEntry,
+  FocusSampleEntry,
+  FocusSampleManifest,
   FocusVersionManifest,
   KpiMapping,
 } from "../../shared/focus/types.js";
@@ -165,6 +167,7 @@ export function emitIndex(
   latest: string,
   versions: FocusIndexVersionEntry[],
   derived: Record<string, string>,
+  samples: Record<string, string> = {},
 ): void {
   const index: FocusIndex = {
     latest,
@@ -174,6 +177,48 @@ export function emitIndex(
       }),
     ),
     derived,
+    samples,
   };
   writeFileSync(join(focusDir, "index.json"), canonicalJson(index));
+}
+
+export interface SampleInput {
+  entry: Omit<FocusSampleEntry, "file">;
+  csvText: string;
+}
+
+/** Writes data/focus/samples/{version}/{kind}/focus_sample.csv per input
+ * plus data/focus/samples/manifest.json describing all of them (T-034,
+ * calculate_kpi's bundled-samples-only source: official FOCUS-Sample-Data
+ * where it exists, this project's seeded synthetic generator otherwise —
+ * never user-supplied). Returns the sha256 map for index.json's `samples`
+ * field, keyed by path relative to data/focus/samples/. */
+export function emitSamples(
+  focusDir: string,
+  inputs: SampleInput[],
+): Record<string, string> {
+  const dir = join(focusDir, "samples");
+  const sha: Record<string, string> = {};
+  const entries: FocusSampleEntry[] = [];
+
+  for (const { entry, csvText } of inputs) {
+    const file = `${entry.version}/${entry.kind}/focus_sample.csv`;
+    const text = csvText.endsWith("\n") ? csvText : `${csvText}\n`;
+    const path = join(dir, file);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, text);
+    sha[file] = sha256(text);
+    entries.push({ ...entry, file });
+  }
+
+  const manifest: FocusSampleManifest = {
+    samples: [...entries].sort((a, b) =>
+      a.file.localeCompare(b.file, undefined, { numeric: true }),
+    ),
+  };
+  const manifestText = canonicalJson(manifest);
+  writeFileSync(join(dir, "manifest.json"), manifestText);
+  sha["manifest.json"] = sha256(manifestText);
+
+  return sha;
 }

@@ -59,6 +59,22 @@ describe("committed FOCUS data artifact (contract tests)", () => {
       expect(entry.official).toBe(false);
     }
   });
+
+  it("loads the bundled sample manifest: an official 1.0 sample and a synthetic sample per version", () => {
+    const byVersion = new Map(
+      store.sampleManifest.samples.map((s) => [`${s.version}:${s.kind}`, s]),
+    );
+    expect(byVersion.get("1.0:official")?.row_count).toBe(1000);
+    expect(byVersion.get("1.0:synthetic")).toBeDefined();
+    expect(byVersion.get("1.2:synthetic")).toBeDefined();
+    expect(byVersion.has("1.2:official")).toBe(false); // no official 1.2 sample exists
+    for (const entry of store.sampleManifest.samples) {
+      expect(entry.license).toBe("CC-BY-4.0");
+      expect(
+        store.sampleCsv.get(`${entry.version}:${entry.kind}`)?.length,
+      ).toBeGreaterThan(0);
+    }
+  });
 });
 
 describe("loadFocusStore failure modes", () => {
@@ -146,5 +162,31 @@ describe("loadFocusStore failure modes", () => {
       rmSync(join(dir, "1.0/attributes.json"));
     });
     expect(load).toThrowError(/cannot read file/);
+  });
+
+  it("refuses a tampered bundled sample CSV", () => {
+    const load = corruptCopy((dir) => {
+      const p = join(dir, "samples/1.0/official/focus_sample.csv");
+      writeFileSync(p, `${readFileSync(p, "utf8")}tampered\n`);
+    });
+    expect(load).toThrowError(/sha256 mismatch/);
+  });
+
+  it("refuses a samples/manifest.json entry referencing an unknown FOCUS version", () => {
+    const load = corruptCopy((dir) => {
+      const p = join(dir, "samples/manifest.json");
+      const manifest = JSON.parse(readFileSync(p, "utf8")) as {
+        samples: { version: string }[];
+      };
+      manifest.samples[0]!.version = "9.9";
+      writeFileSync(p, `${JSON.stringify(manifest, null, 2)}\n`);
+      const idxPath = join(dir, "index.json");
+      const idx = JSON.parse(readFileSync(idxPath, "utf8")) as {
+        samples: Record<string, string>;
+      };
+      idx.samples["manifest.json"] = sha256(readFileSync(p, "utf8"));
+      writeFileSync(idxPath, `${JSON.stringify(idx, null, 2)}\n`);
+    });
+    expect(load).toThrowError(/unknown FOCUS version "9.9"/);
   });
 });

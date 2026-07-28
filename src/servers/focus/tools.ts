@@ -4,7 +4,16 @@ import type {
   FocusStore,
   FocusVersionArtifact,
 } from "../../shared/focus/artifact.js";
-import type { KpiMappingEntry } from "../../shared/focus/types.js";
+import {
+  calculableKpiSlugs,
+  calculateKpi,
+  hasFormula,
+} from "../../shared/focus/kpi-calc.js";
+import type {
+  FocusSampleKind,
+  KpiMappingEntry,
+} from "../../shared/focus/types.js";
+import { parseCsv } from "../../shared/focus/validate.js";
 import { nearestMatches } from "../../shared/index.js";
 import {
   cursorContext,
@@ -41,6 +50,23 @@ const KPI_CATEGORIES = [
 const KPI_MAPPING_BANNER =
   "UNOFFICIAL: this KPI→FOCUS column mapping is derived by this server " +
   "— it is not published or endorsed by the FinOps Foundation or the FOCUS project.";
+
+const SAMPLE_KINDS = ["official", "synthetic"] as const;
+
+const CALCULATION_BANNER =
+  "UNOFFICIAL CALCULATION: this value is computed by this server from its own derived FOCUS-terms " +
+  "formula (see get_kpi_mapping) — not published, reviewed, or endorsed by the FinOps Foundation or " +
+  "the FOCUS project. Computed over bundled sample data only, never user-supplied data.";
+
+const sampleProvenanceSchema = {
+  kind: z.enum(SAMPLE_KINDS),
+  version: z.string(),
+  row_count: z.number(),
+  license: z.literal("CC-BY-4.0"),
+  source_url: z.string().nullable(),
+  seed: z.number().nullable(),
+  note: z.string(),
+};
 
 const kpiMappingRowSchema = {
   kpi_slug: z.string(),
@@ -743,6 +769,155 @@ export function registerTools(server: McpServer, store: FocusStore): void {
                 )
                 .join("\n")
             : "."),
+      );
+    },
+  );
+
+  // ---- calculate_kpi -------------------------------------------------------
+  server.registerTool(
+    "calculate_kpi",
+    {
+      title: "Calculate a mapped KPI over bundled sample data",
+      description:
+        "UNOFFICIAL: computes one of the KPIs from get_kpi_mapping using this server's own derived FOCUS-terms " +
+        "formula, over a bundled sample dataset (the official FOCUS-Sample-Data 1.0 sample where available, " +
+        "otherwise this project's seeded synthetic sample) — never user-supplied data. Not every mapped KPI has " +
+        "a registered formula: some need an external input (a forecast or budget figure) FOCUS doesn't carry, or " +
+        "ambiguous free-text unit matching this server won't guess at; those error with guidance instead.",
+      inputSchema: {
+        kpi: z
+          .string()
+          .describe(
+            "Framework KPI slug, e.g. 'effective-savings-rate-percentage'",
+          ),
+        version: z
+          .string()
+          .optional()
+          .describe(
+            `FOCUS spec version (${versionSlugs.join("|")}); default "${DEFAULT_VERSION}"`,
+          ),
+        sample: z
+          .enum(SAMPLE_KINDS)
+          .optional()
+          .describe(
+            "Which bundled sample to compute over; defaults to 'official' where one exists, else 'synthetic'",
+          ),
+      },
+      outputSchema: {
+        spec_version: z.string(),
+        official: z.literal(false),
+        kpi_slug: z.string(),
+        kpi_title: z.string(),
+        kpi_uri: z.string(),
+        value: z.number(),
+        unit: z.enum(["percent", "ratio"]),
+        focus_formula: z.string(),
+        caveat: z.string().nullable(),
+        sample: z.object(sampleProvenanceSchema),
+      },
+      annotations: RO,
+    },
+    ({ kpi, version, sample }) => {
+      const resolved = resolveVersion(version);
+      if (isErr(resolved)) return resolved;
+
+      const entry = store.kpiMapping.kpis.find(
+        (k) => k.kpi_slug.toLowerCase() === kpi.toLowerCase(),
+      );
+      if (!entry) {
+        const near = nearestMatches(
+          kpi,
+          store.kpiMapping.kpis.map((k) => k.kpi_slug),
+        );
+        return err(
+          `Unknown KPI "${kpi}" in the mapping.` +
+            (near.length ? ` Did you mean: ${near.join(", ")}?` : "") +
+            ` Call get_kpi_mapping with no \`kpi\` to list every mapped KPI.`,
+        );
+      }
+      if (!entry.columns_by_version[resolved.version]) {
+        return err(
+          `KPI "${entry.kpi_slug}" has no FOCUS ${resolved.version} mapping. ` +
+            `Mapped versions: ${Object.keys(entry.columns_by_version).join(", ")}.`,
+        );
+      }
+      if (!hasFormula(entry.kpi_slug)) {
+        return err(
+          `No calculable formula is registered for KPI "${entry.kpi_slug}": ` +
+            `${entry.caveat ?? "its FOCUS-terms formula needs ambiguous free-text unit matching this server does not attempt to resolve automatically"}. ` +
+            `Call get_kpi_mapping with kpi="${entry.kpi_slug}" for the FOCUS-terms formula to compute manually. ` +
+            `Calculable KPIs: ${calculableKpiSlugs().join(", ")}.`,
+        );
+      }
+
+      const available = store.sampleManifest.samples.filter(
+        (s) => s.version === resolved.version,
+      );
+      if (available.length === 0) {
+        return err(`No bundled sample data for FOCUS ${resolved.version}.`);
+      }
+      let sampleEntry;
+      if (sample) {
+        sampleEntry = available.find((s) => s.kind === sample);
+        if (!sampleEntry) {
+          return err(
+            `No "${sample}" bundled sample for FOCUS ${resolved.version}. ` +
+              `Available: ${available.map((s) => s.kind).join(", ")}.`,
+          );
+        }
+      } else {
+        sampleEntry =
+          available.find((s) => s.kind === "official") ??
+          (available[0] as (typeof available)[number]);
+      }
+
+      const csvText = store.sampleCsv.get(
+        `${resolved.version}:${sampleEntry.kind}`,
+      ) as string;
+      const { header, rows } = parseCsv(csvText);
+
+      let result;
+      try {
+        result = calculateKpi(entry.kpi_slug, { header, rows });
+      } catch (e) {
+        return err(
+          `Could not calculate "${entry.kpi_slug}" over the FOCUS ${resolved.version} ` +
+            `${sampleEntry.kind} sample: ${e instanceof Error ? e.message : String(e)}.`,
+        );
+      }
+
+      const kindLabel: FocusSampleKind = sampleEntry.kind;
+      const structured = {
+        spec_version: resolved.version,
+        official: false as const,
+        kpi_slug: entry.kpi_slug,
+        kpi_title: entry.kpi_title,
+        kpi_uri: FRAMEWORK_KPI_URI(entry.kpi_slug),
+        value: result.value,
+        unit: result.unit,
+        focus_formula: entry.focus_formula,
+        caveat: entry.caveat,
+        sample: {
+          kind: kindLabel,
+          version: sampleEntry.version,
+          row_count: sampleEntry.row_count,
+          license: sampleEntry.license,
+          source_url: sampleEntry.source_url,
+          seed: sampleEntry.seed,
+          note: sampleEntry.note,
+        },
+      };
+      const provenance =
+        kindLabel === "official"
+          ? `official FOCUS-Sample-Data (${sampleEntry.row_count} rows, source ${sampleEntry.source_url})`
+          : `synthetic sample (${sampleEntry.row_count} rows, seed ${sampleEntry.seed}) — ${sampleEntry.note}`;
+      return ok(
+        structured,
+        `${CALCULATION_BANNER}\n\n# ${entry.kpi_title} (FOCUS ${resolved.version})\n\n` +
+          `${result.value}${result.unit === "percent" ? "%" : ""}\n\n` +
+          `Formula: ${entry.focus_formula}\n\nSample: ${provenance}` +
+          (entry.caveat ? `\n\nCaveat: ${entry.caveat}` : "") +
+          `\n\nFramework KPI: ${FRAMEWORK_KPI_URI(entry.kpi_slug)}`,
       );
     },
   );

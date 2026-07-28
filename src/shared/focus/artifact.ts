@@ -16,6 +16,7 @@ import type {
   FocusColumn,
   FocusDiff,
   FocusIndex,
+  FocusSampleManifest,
   FocusVersionManifest,
   KpiMapping,
 } from "./types.js";
@@ -36,6 +37,9 @@ export interface FocusStore {
   versions: Map<string, FocusVersionArtifact>;
   diff: FocusDiff;
   kpiMapping: KpiMapping;
+  sampleManifest: FocusSampleManifest;
+  /** Raw CSV text for each bundled sample, keyed by `${version}:${kind}`. */
+  sampleCsv: Map<string, string>;
 }
 
 const REMEDIATION =
@@ -172,5 +176,49 @@ export function loadFocusStore(focusDir: string): FocusStore {
     }
   }
 
-  return { index, versions, diff, kpiMapping };
+  const sampleTexts = new Map<string, string>();
+  for (const [rel, expectedSha] of Object.entries(index.samples)) {
+    const path = join(focusDir, "samples", rel);
+    const text = readFileSync(path, "utf8");
+    const actual = sha256(text);
+    if (actual !== expectedSha) {
+      throw new ArtifactValidationError(
+        `samples/${rel}`,
+        `sha256 mismatch (index.json ${expectedSha.slice(0, 12)}…, file ${actual.slice(0, 12)}…)`,
+        REMEDIATION,
+      );
+    }
+    sampleTexts.set(rel, text);
+  }
+
+  const sampleManifestText = sampleTexts.get("manifest.json");
+  if (!sampleManifestText) {
+    throw new ArtifactValidationError(
+      "index.json",
+      "no samples/manifest.json listed in index.json's samples map",
+      REMEDIATION,
+    );
+  }
+  const sampleManifest = JSON.parse(sampleManifestText) as FocusSampleManifest;
+  const sampleCsv = new Map<string, string>();
+  for (const entry of sampleManifest.samples) {
+    if (!versions.has(entry.version)) {
+      throw new ArtifactValidationError(
+        "samples/manifest.json",
+        `sample entry references unknown FOCUS version "${entry.version}"`,
+        REMEDIATION,
+      );
+    }
+    const csvText = sampleTexts.get(entry.file);
+    if (!csvText) {
+      throw new ArtifactValidationError(
+        "samples/manifest.json",
+        `sample entry's file "${entry.file}" is not listed in index.json's samples map`,
+        REMEDIATION,
+      );
+    }
+    sampleCsv.set(`${entry.version}:${entry.kind}`, csvText);
+  }
+
+  return { index, versions, diff, kpiMapping, sampleManifest, sampleCsv };
 }

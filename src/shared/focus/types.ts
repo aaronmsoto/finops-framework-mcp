@@ -82,6 +82,33 @@ export interface FocusIndex {
   versions: FocusIndexVersionEntry[];
   /** sha256 of each file in data/focus/derived/, keyed by filename. */
   derived: Record<string, string>;
+  /** sha256 of each file in data/focus/samples/ (manifest.json + every CSV),
+   * keyed by path relative to data/focus/samples/. */
+  samples: Record<string, string>;
+}
+
+export type FocusSampleKind = "official" | "synthetic";
+
+/** One bundled sample CSV calculate_kpi (T-034) may compute against:
+ * `official` is real published FOCUS-Sample-Data (only exists for 1.0 —
+ * spec "Sources"); `synthetic` is this project's deterministic seeded
+ * generator (T-032), available for every version. Never user-supplied. */
+export interface FocusSampleEntry {
+  version: string;
+  kind: FocusSampleKind;
+  /** Path relative to data/focus/samples/, e.g. "1.0/official/focus_sample.csv". */
+  file: string;
+  row_count: number;
+  license: typeof LICENSE;
+  /** Upstream URL for `official`; null for `synthetic` (nothing to cite). */
+  source_url: string | null;
+  /** Generator seed for `synthetic`; null for `official`. */
+  seed: number | null;
+  note: string;
+}
+
+export interface FocusSampleManifest {
+  samples: FocusSampleEntry[];
 }
 
 export interface FocusColumnRef {

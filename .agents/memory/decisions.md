@@ -312,3 +312,56 @@
   `src/servers/framework/uris.ts` directly from the focus server (rejected
   — couples the two packages' compiled output ahead of the packaging task
   that is supposed to keep them separate).
+
+- Decision (T-034, calculate_kpi): bundled the 3 existing sample fixtures
+  (official 1.0 FOCUS-Sample-Data, seeded synthetic 1.0/1.2) into a new
+  `data/focus/samples/` artifact section — `manifest.json` (row_count,
+  license, source_url|seed, note) plus one CSV per (version, kind) — hashed
+  into a new `index.json.samples` map, loaded/verified by `loadFocusStore`
+  the same way `derived/` already is (`FocusStore.sampleManifest` +
+  `sampleCsv: Map<"version:kind", csvText>`). A new
+  `scripts/bundle-focus-samples.mjs` (mirrors `generate-focus-synthetic-
+  samples.mjs`'s own-script pattern, not folded into `cli.ts`'s `ingest()`)
+  reads the three fixture files from `src/crawlers/focus/fixtures/samples/`
+  and re-invokes `emitIndex`/a new `emitSamples`. `cli.ts`'s `ingest()` now
+  reads any existing `index.json.samples` and carries it forward
+  (verified live: `node dist/crawlers/focus/cli.js`, 0 network fetches,
+  `samples` map byte-identical after) so a routine refresh never wipes the
+  sample registration just because it doesn't itself touch samples.
+  `data/focus` grew 868K -> 1.8M (cap 3MB, spec acceptance).
+  `src/shared/focus/kpi-calc.ts` is a small, explicit formula registry (9 of
+  the mapping's ~18 KPIs: ESR + 8 more whose formula is a pure aggregation
+  with no external input and no ambiguous unit-string matching) operating
+  on `{header, rows}` from the existing `parseCsv` (validate.ts, T-031).
+  The `calculate_kpi` tool takes only `kpi`/`version`/`sample` — no dataset
+  input parameter exists, so user-supplied data cannot enter (spec non-goal).
+- Why: reuses the artifact's existing integrity model (hash-verified,
+  loader throws actionable errors on tamper) instead of inventing a
+  parallel one for samples; keeps `ingest()` network-only-when-needed while
+  still making samples byte-identical/regenerable via a standalone script,
+  consistent with how the two existing sample-fixture scripts already work
+  outside the crawler pipeline. Restricting the formula registry to
+  unambiguous KPIs (rather than attempting all ~18 with heuristics for
+  free-text unit matching or synthesizing external forecast/budget inputs)
+  keeps every computed value traceable to an exact, reviewable formula —
+  the acceptance criterion is "error cleanly with guidance" for the rest,
+  not "guess at every KPI."
+- Alternatives considered: embedding the sample CSVs as TS literals in
+  `kpi-mapping-data.ts`-style source (rejected — a 755KB string literal in
+  source is worse than a committed CSV, which is already the existing
+  convention for these fixtures). Folding sample-bundling into `cli.ts`'s
+  `ingest()` directly (rejected — `ingest()` runs from the compiled
+  `dist/`, which has no path back to `src/crawlers/focus/fixtures/` once
+  packaged; the existing sample-fixture scripts already establish the
+  standalone-script pattern for this exact reason). Attempting every
+  mapped KPI with best-guess heuristics (e.g., matching `ConsumedUnit`
+  strings for core-hours) — rejected as unverifiable and against the
+  project's never-invent-unofficial-data-silently posture.
+- Observed (not fixed): `calculate_kpi` for `allocation-accuracy-index-aai`
+  over the official 1.0 sample returns ~108.3% — mathematically correct
+  per the registered formula, but >100% because the official sample
+  contains real negative-cost rows (credits/refunds) outside the
+  `SubAccountId`/`Tags`-allocated subset, pulling the unfiltered
+  denominator below the filtered numerator. Not a bug to fix in the
+  formula; flagged here so a future reader doesn't "fix" it into an
+  incorrect clamp.

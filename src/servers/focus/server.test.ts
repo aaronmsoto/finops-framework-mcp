@@ -261,6 +261,94 @@ describe("get_kpi_mapping", () => {
   });
 });
 
+describe("calculate_kpi", () => {
+  it("computes ESR over the official 1.0 sample by default, with the unofficial-calculation banner and sample provenance", async () => {
+    const res = await call("calculate_kpi", {
+      kpi: "effective-savings-rate-percentage",
+      version: "1.0",
+    });
+    expect(res.isError).toBeFalsy();
+    expect(res.content[0]?.text).toMatch(/^UNOFFICIAL CALCULATION/);
+    expect(res.structuredContent?.official).toBe(false);
+    expect(res.structuredContent?.spec_version).toBe("1.0");
+    expect(res.structuredContent?.unit).toBe("percent");
+    expect(typeof res.structuredContent?.value).toBe("number");
+    const sample = res.structuredContent?.sample as {
+      kind: string;
+      row_count: number;
+      source_url: string | null;
+    };
+    expect(sample.kind).toBe("official");
+    expect(sample.row_count).toBe(1000);
+    expect(typeof sample.source_url).toBe("string");
+  });
+
+  it("falls back to the synthetic sample for 1.2 (no official 1.2 sample exists)", async () => {
+    const res = await call("calculate_kpi", {
+      kpi: "effective-savings-rate-percentage",
+      version: "1.2",
+    });
+    expect(res.isError).toBeFalsy();
+    const sample = res.structuredContent?.sample as {
+      kind: string;
+      seed: number | null;
+      source_url: string | null;
+    };
+    expect(sample.kind).toBe("synthetic");
+    expect(sample.source_url).toBeNull();
+    expect(typeof sample.seed).toBe("number");
+  });
+
+  it("rejects an explicit official sample request for 1.2", async () => {
+    const res = await call("calculate_kpi", {
+      kpi: "effective-savings-rate-percentage",
+      version: "1.2",
+      sample: "official",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(/No "official" bundled sample/);
+  });
+
+  it("computes a second and third mapped KPI over the bundled sample", async () => {
+    for (const kpi of [
+      "allocation-accuracy-index-aai",
+      "percentage-of-costs-associated-with-untagged-csp-cloud-resources",
+    ]) {
+      const res = await call("calculate_kpi", { kpi, version: "1.0" });
+      expect(res.isError, `${kpi} errored`).toBeFalsy();
+      expect(res.structuredContent?.kpi_slug).toBe(kpi);
+      expect(typeof res.structuredContent?.value).toBe("number");
+    }
+  });
+
+  it("errors cleanly with guidance for a mapped KPI that has no registered formula", async () => {
+    const res = await call("calculate_kpi", {
+      kpi: "forecast-accuracy-rate-spend",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(/No calculable formula is registered/);
+    expect(res.content[0]?.text).toMatch(/get_kpi_mapping/);
+  });
+
+  it("returns a nearest-match error for an unknown kpi slug", async () => {
+    const res = await call("calculate_kpi", {
+      kpi: "effective-savings-rate-percent",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(/Unknown KPI/);
+  });
+
+  it("does not accept a user-supplied dataset (no such input exists)", async () => {
+    const { tools } = await client.listTools();
+    const tool = tools.find((t) => t.name === "calculate_kpi");
+    const props = Object.keys(
+      (tool?.inputSchema as { properties?: Record<string, unknown> })
+        .properties ?? {},
+    );
+    expect(props).toEqual(["kpi", "version", "sample"]);
+  });
+});
+
 describe("cursors", () => {
   it("accepts its own cursor for the same version/query and pages correctly", async () => {
     const first = await call("list_columns", { version: "1.2", limit: 5 });
@@ -421,6 +509,10 @@ describe("outputSchema conformance", () => {
       ["compare_versions", { column: "BillingAccountType" }],
       ["get_kpi_mapping", {}],
       ["get_kpi_mapping", { kpi: "effective-savings-rate-percentage" }],
+      [
+        "calculate_kpi",
+        { kpi: "effective-savings-rate-percentage", version: "1.0" },
+      ],
     ];
     const checkAgainst = (
       value: unknown,

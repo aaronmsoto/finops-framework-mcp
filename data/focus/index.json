@@ -4,6 +4,12 @@
     "kpi-mapping.json": "788c334c705e59a06b2338ec3a1c1f7a7890c27db28a36b5d78bcf8f7b3abca8"
   },
   "latest": "1.2",
+  "samples": {
+    "1.0/official/focus_sample.csv": "e91e5ac7edf01ed2c9d926f37ef7dc1ae2aae97956fea8da6c9ee488b1c2839e",
+    "1.0/synthetic/focus_sample.csv": "5026beae17fb11eca40c476332e8f8ddcd9eccd440f58a01f0735d7265b6e2bb",
+    "1.2/synthetic/focus_sample.csv": "71f47f0a89d006e1942a25f1496f0eb7f2bf6be6d9041ea607fcad4367cda6fa",
+    "manifest.json": "3a03a404bb2d098b184bdc3a43cf0ee7aff0e3d95c83199884bf50d7564e9d0b"
+  },
   "versions": [
     {
       "data_version": "1.0.0",
