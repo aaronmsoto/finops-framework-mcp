@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "be8da81f0a587fef533b498a388929f1b3263414789d1188ad578e511c3a25bf",
+  "chainHead": "559f56d7ad8044a99af00f5e9aa3c3db47ada9c9154687c1d90c290802b1cf8a",
   "tasks": [
     {
       "id": "T-001",
@@ -544,9 +544,15 @@
         "Refresh from cache is byte-identical (test or cited run); every column record carries id/display_name/feature_level/column_type/requirements[] with committed fixture-based parser tests; parse failures degrade to markdown-only, never block",
         "du -s data/focus is 3MB or less; gates green"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "FOCUS 1.0/1.2 ingested: 43/57 columns matching spec, 14-column diff matching spec, byte-identical refresh verified, 852K/3MB, gates green",
+        "commit": "a11989d93d0b5adb026fc12bb928636a09d5066e",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T07:32:55.694Z"
+      },
+      "hash": "559f56d7ad8044a99af00f5e9aa3c3db47ada9c9154687c1d90c290802b1cf8a"
     },
     {
       "id": "T-030",
