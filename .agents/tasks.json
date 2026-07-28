@@ -715,7 +715,7 @@
         "A node test validates the demo's JSON-RPC request bodies against the worker fetch handler from the previous task",
         "docs/deploy-demo.md covers Cloudflare Pages (or equivalent static) deployment; gates green"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }

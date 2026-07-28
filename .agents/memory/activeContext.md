@@ -13,9 +13,43 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027..T-037 are DONE.
+T-027..T-038) is underway. **All of T-027..T-038 are now DONE** — this was
+the last task in the batch.
 
-T-037 this session: Cloudflare Worker (`src/workers/`) serving both MCP
+T-038 this session: static demo web app (`demo/`) for the combined
+Rate Optimization walkthrough — capability → featured KPIs →
+`get_kpi_mapping` (FOCUS columns per version, 1.0 and 1.2) →
+`compare_versions` → `calculate_kpi` per featured KPI, against the T-037
+Worker's `/mcp/framework` + `/mcp/focus` routes. No build step: plain ESM
+`.js` files (`demo/config.js` — the one endpoint-config object;
+`demo/requests.js` — pure JSON-RPC request-body builders, no fetch/DOM,
+mirrors `evals/focus/combined-scenario.xml` steps 1-5 which that file's own
+header says doubles as this demo's source script; `demo/client.js` — thin
+`fetch()` wrapper; `demo/app.js` — the browser driver, which reads step 2's
+`featured_kpis` at runtime rather than hardcoding the KPI list, so the
+walkthrough is a real capability→KPI→column→calculate chain, not a canned
+script) plus `demo/index.html`. `demo/requests.d.ts` is a hand-written
+ambient-types shim (TS resolves a sibling `.d.ts` for a same-named `.js`
+without `allowJs`) so `src/workers/demo-requests.test.ts` gets real types
+without pulling `demo/` into tsconfig's `include` (format/lint/typecheck
+gates are `src tests`-scoped, so `demo/`'s plain JS is untouched by them —
+confirmed against `agentic.config.json`/`tsconfig.json` before relying on
+it). That test imports `demo/requests.js` directly and drives the exact
+request bodies through T-037's `createFetchHandler` with the real
+`data/framework`/`data/focus` fixtures, asserting against
+combined-scenario.xml's fixture numbers (ESR 26.552972346576816%, etc.) —
+all matched on first run, no drift since that eval was written. Also ran a
+throwaway (uncommitted, scratchpad) Node script standing up a real
+`http.createServer` in front of the same handler and driving
+`demo/client.js`'s actual `fetch()` calls over a real socket end-to-end, as
+the closest substitute for a browser in this headless environment.
+`docs/deploy-demo.md`: owner checklist (point `demo/config.js` at the
+deployed Worker → add the demo's deployed origin to the Worker's
+`ALLOWED_ORIGINS` → `wrangler pages deploy demo` → smoke test → rollback).
+Gates green (`--tier all`). Full detail:
+`.agents/journal/20260728-t038-demo-webapp.md`.
+
+T-037 (earlier session): Cloudflare Worker (`src/workers/`) serving both MCP
 servers over HTTPS. `src/workers/app.ts` exports `createFetchHandler` — a
 factory routing `/mcp/framework` + `/mcp/focus`, building a fresh
 `McpServer` + `WebStandardStreamableHTTPServerTransport`
@@ -89,24 +123,29 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. T-038: static demo web app for the combined walkthrough — can reuse
-   `evals/focus/combined-scenario.xml`'s step sequence directly, and can
-   point at the Worker's `/mcp/framework` + `/mcp/focus` routes (T-037).
-2. Then critique gate #4 (`docs/critique-4-focus-gate.md`) per the spec's v1
-   acceptance gate, and packaging/tarball/worker acceptance checks.
-3. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
-   mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
-4. Owner: npm publish + mcp-publisher registry submit remain pending from
+1. **T-027..T-038 are all DONE.** Next: critique gate #4
+   (`docs/critique-4-focus-gate.md`) per the spec's v1 acceptance-criteria
+   list — this is the last unchecked item in that list before the batch is
+   considered fully shipped (data artifact/refresh-idempotence checks,
+   server test coverage incl. cross-version cursor rejection, sample
+   validator pass, KPI-mapping cross-validation, evals ≥9/10 + combined
+   scenario pass, tarball/worker acceptance checks). Most of these already
+   have evidence scattered across T-027..T-038's journals/tests; critique
+   gate #4 is where that gets assembled and any remaining BLOCKERs found.
+2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
+   mini-batch once critique gate #4 closes out.
+3. Owner: npm publish + mcp-publisher registry submit remain pending from
    v1 (PR #4 merged to dev; publish happens from main after release) —
    T-036 gives `packages/focus-spec-mcp/` a second, independent publish
    target (own `server.json`, own version line) alongside root.
-5. Owner: deploying the Cloudflare Worker itself (T-037) is a human
-   approval point — `docs/deploy-worker.md` has the checklist; nothing in
-   this repo's automation runs `wrangler deploy`.
-6. Port-back session in agentic-starter-repo: copy the harness diff per the
+4. Owner: deploying the Cloudflare Worker (T-037) and the demo (T-038) are
+   both human approval points — `docs/deploy-worker.md` and
+   `docs/deploy-demo.md` have the checklists; nothing in this repo's
+   automation runs `wrangler deploy` or `wrangler pages deploy`.
+5. Port-back session in agentic-starter-repo: copy the harness diff per the
    tracker's port-back notes (deviations: fractional max_iteration_minutes,
    RunnerResult.stderr, AGENTIC_MOCK_USAGE contract) + consider harness-CI.
-7. Owner: install docs/proposed/refresh-data.yml per its checklist.
+6. Owner: install docs/proposed/refresh-data.yml per its checklist.
 
 ## Open questions
 
@@ -149,5 +188,5 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-28 — T-037 done (Cloudflare Worker + fetch-handler factory +
-build-time data bundler + deploy doc); focus-mcp-v1 loop underway.
+2026-07-28 — T-038 done (static demo web app + demo-vs-worker-handler Node
+test + deploy doc); focus-mcp-v1's T-027..T-038 task batch is now complete.
