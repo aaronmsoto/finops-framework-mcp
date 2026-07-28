@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "559f56d7ad8044a99af00f5e9aa3c3db47ada9c9154687c1d90c290802b1cf8a",
+  "chainHead": "c5ddbcf3e789a6c5dec5b70ba89dc93ebc47d129afd2fa9df17cde3f3499c45d",
   "tasks": [
     {
       "id": "T-001",
@@ -563,9 +563,15 @@
         "focus://spec/{version}/... resources and prompts registered; unknown slugs get -32002 nearest-match; CC BY attribution footers on content responses; outputSchema conformance test covers every tool",
         "Cross-version cursor reuse is rejected (test); dist main.js --version prints spec versions; eval bridge lists the tool surface; gates green"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Focus stdio server: 7 tools + resources/prompts, version defaulting/echo, cross-version cursor rejection, outputSchema conformance test; 268/268 tests, gates green",
+        "commit": "a79c09d5e152133fcb13e52a80d821595aec78b3",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T07:48:43.336Z"
+      },
+      "hash": "c5ddbcf3e789a6c5dec5b70ba89dc93ebc47d129afd2fa9df17cde3f3499c45d"
     },
     {
       "id": "T-031",
