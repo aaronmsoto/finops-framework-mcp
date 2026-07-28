@@ -13,9 +13,52 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027..T-035 are DONE.
+T-027..T-038) is underway. T-027..T-036 are DONE.
 
-T-035 this session: eval design, no source changes. `evals/focus/eval.xml`
+T-036 this session: `packages/focus-spec-mcp/` publish shim — package.json
+(name `focus-spec-mcp`, bin → `dist/servers/focus/main.js`, `files`
+[dist, data/focus, README, LICENSE, NOTICE], `dependencies` pinned to the
+4 packages the focus server's module graph actually touches:
+`@modelcontextprotocol/sdk`, `ajv`, `ajv-formats`, `zod` — confirmed by
+grepping non-test imports under `src/servers/focus/` + `src/shared/focus/`
++ what `shared/index.ts` barrel-reexports; `cheerio`/`domhandler` (used by
+`shared/md.ts`) are crawler-only and never reached), README.md, NOTICE.md
+(FOCUS spec text + official sample CC BY 4.0 attribution, no-endorsement
+note), server.json (MCP registry). `scripts/pack-focus.mjs` is the
+package's `prepack`: copies `dist/servers/focus` + `dist/shared` (the
+server's relative imports need shared/, incl. its `focus/` subfolder) +
+`data/focus` into the package dir (rebuilds root `dist/` first if
+missing); logs to **stderr** not stdout so it never corrupts `npm pack
+--json`'s machine-readable stdout when prepack runs inline with it (found
+by running the packaging test before assuming it would just work). Root
+`package.json` `files` narrowed from bare `"dist"` to explicit
+`dist/index.js` + `dist/servers/framework` + `dist/crawlers/framework` +
+`dist/shared` — excludes `dist/servers/focus` and `dist/crawlers/focus`,
+data/focus was already absent. `dist/shared/focus/*` (schemas/types, a few
+KB) ships in BOTH tarballs unavoidably: `shared/index.ts`'s `export *`
+barrel is evaluated in full by ESM on any import from it (confirmed: Node
+loads the whole reachable module graph, not just the destructured name),
+and untangling that barrel across every framework/crawler importer is a
+refactor beyond this task's scope — recorded as an open question below.
+Packaging test (`src/packaging.test.ts`, matches `src/**/*.test.ts` so no
+vitest.config.ts change needed) asserts both tarball directions via `npm
+pack --dry-run --json` (no disk writes), then does a REAL `npm pack` +
+`npm install <tgz> --offline` into two mktemp scratch dirs + runs the
+installed bin `--version` — offline works because the shim's 4 deps are
+already-resolved root project dependencies at the same versions, already
+in the local npm cache (verified: `npm install zod@^4.4.3 --offline`
+succeeds standalone). Observed: focus tarball 235KB packed / 1.56MB
+unpacked (well under the 1MB *packed* budget the acceptance criterion
+means); `focus-spec-mcp --version` printed
+`focus-spec-mcp v1.0.0 (FOCUS spec versions: 1.0, 1.2; latest 1.2)` from
+the installed `.bin` symlink. `packages/focus-spec-mcp/{dist,data}/` are
+prepack-generated, not committed (`.gitignore` +=
+`packages/*/data/`; `dist/` was already ignored repo-wide). Gates green
+(`--tier all`: format/lint/typecheck/test 339 passed/coverage/designs/
+integrity/memory/build all pass). Full detail:
+`.agents/journal/20260728-t036-focus-pack-shim.md`.
+
+T-035 (earlier session): eval design, no source changes. `evals/focus/eval.xml`
 — 10 version-aware, tools-only questions against the live focus server (2
 require `compare_versions`, 2 require `get_kpi_mapping`, per the acceptance
 minimum); every answer solved live first via `evals/framework/mcp-call.mjs
@@ -47,26 +90,35 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. T-036: package `focus-spec-mcp` as its own npm publish shim
-   (`packages/focus-spec-mcp/`, narrowed root `files`, packaging test both
-   directions).
-2. T-037: Cloudflare Worker serving both MCP servers over HTTPS
+1. T-037: Cloudflare Worker serving both MCP servers over HTTPS
    (`src/workers/app.ts`, build-time bundled data, Origin allowlist).
-3. T-038: static demo web app for the combined walkthrough — can reuse
+2. T-038: static demo web app for the combined walkthrough — can reuse
    `evals/focus/combined-scenario.xml`'s step sequence directly.
-4. Then critique gate #4 (`docs/critique-4-focus-gate.md`) per the spec's v1
+3. Then critique gate #4 (`docs/critique-4-focus-gate.md`) per the spec's v1
    acceptance gate, and packaging/tarball/worker acceptance checks.
-5. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
+4. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
-6. Owner: npm publish + mcp-publisher registry submit remain pending from
-   v1 (PR #4 merged to dev; publish happens from main after release).
-7. Port-back session in agentic-starter-repo: copy the harness diff per the
+5. Owner: npm publish + mcp-publisher registry submit remain pending from
+   v1 (PR #4 merged to dev; publish happens from main after release) —
+   T-036 gives `packages/focus-spec-mcp/` a second, independent publish
+   target (own `server.json`, own version line) alongside root.
+6. Port-back session in agentic-starter-repo: copy the harness diff per the
    tracker's port-back notes (deviations: fractional max_iteration_minutes,
    RunnerResult.stderr, AGENTIC_MOCK_USAGE contract) + consider harness-CI.
-8. Owner: install docs/proposed/refresh-data.yml per its checklist.
+7. Owner: install docs/proposed/refresh-data.yml per its checklist.
 
 ## Open questions
 
+- `dist/shared/focus/*` (schemas/types only, a few KB) ships in the
+  framework tarball, and `dist/shared/md.ts` (crawler-only, unused at
+  runtime by either server) ships in the focus tarball — both are
+  consequences of `src/shared/index.ts`'s `export *` barrel, which every
+  server/crawler entry point imports from and which ESM evaluates in full
+  regardless of which name is destructured. Harmless (small, unreachable
+  code, doesn't affect the 1MB focus budget) but not a clean boundary;
+  splitting the barrel so each server's tarball carries only the shared
+  code it actually uses would be a real (multi-file) refactor, out of
+  scope for T-036's packaging-only mandate.
 - Root `NOTICE.md` has no attribution section for the FOCUS spec text
   itself (data/focus/{1.0,1.2}/, ingested T-029) — only the T-031 sample
   fixture is covered. Should be added (mirrors the FinOps Framework
@@ -90,5 +142,5 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-28 — T-035 done (focus eval suite + combined two-server scenario);
+2026-07-28 — T-036 done (focus-spec-mcp publish shim + packaging test);
 focus-mcp-v1 loop underway.

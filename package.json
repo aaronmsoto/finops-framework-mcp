@@ -20,7 +20,10 @@
     "finops-framework-mcp": "dist/servers/framework/main.js"
   },
   "files": [
-    "dist",
+    "dist/index.js",
+    "dist/servers/framework",
+    "dist/crawlers/framework",
+    "dist/shared",
     "data/framework",
     "README.md",
     "LICENSE",
