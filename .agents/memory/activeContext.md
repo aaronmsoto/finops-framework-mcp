@@ -13,97 +13,51 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027..T-031 are DONE.
+T-027..T-038) is underway. T-027..T-032 are DONE.
 
-T-031 this session: FOCUS CSV conformance validator. `src/shared/focus/
-validate.ts` — `validateFocusCsv(columns, csvText)` checks, purely from a
-version's `columns.json` (no hardcoded per-version rules): Mandatory-column
-header presence, per-row nullability, data type (Decimal/Date-Time/JSON),
-`allowed_values` membership (case-insensitive), currency-code format, and
-non-negative range. Returns `{errors, warnings}` — see decisions.md
-2026-07-28 entry for why nullability/range violations are warnings, not
-errors (the official 1.0 sample genuinely contains a few, being real
-anonymized provider data, not an idealized fixture). `parseCsv` is a small
-hand-rolled RFC4180 parser (quoted fields, `""` escaping, embedded commas).
-CLI: `src/crawlers/focus/validate-cli.ts` (`runValidate` exported for
-testing; `node dist/crawlers/focus/validate-cli.js <file.csv> --version
-1.0|1.2 [--data-dir data/focus]`), exit 1 only on hard errors.
-`scripts/fetch-official-sample.mjs` fetches FOCUS-Sample-Data's
-`FOCUS-1.0/focus_sample.csv` (raw.githubusercontent.com; api.github.com is
-proxy-blocked) once, guarded by an existing `PROVENANCE.json` (url,
-fetched_at, sha256, row_count) unless `--force`; committed fixture at
-`src/crawlers/focus/fixtures/samples/1.0/` with its own `NOTICE.md`
-attribution (root `NOTICE.md` also got a new CC BY 4.0 section for it).
-Tests: `validate.test.ts` — official sample passes with 0 errors (8
-warnings, all real: 7× ContractedCost null, 1× ContractedUnitPrice
-negative), a hand-built spec-conformant baseline round-trips clean, and 8
-deliberately corrupted variants (missing Mandatory column, bad Decimal,
-invalid enum, bad Date/Time, malformed JSON, bad currency code, plus 2
-warning-only cases) each produce column-addressed errors/warnings;
-`validate-cli.test.ts` covers the CLI wrapper incl. unknown-version exit 1.
-No network in any test — all read the committed fixture. Verified live:
-`node dist/crawlers/focus/validate-cli.js .../focus_sample.csv --version
-1.0` → "1000 rows, 44 columns, 0 errors, 8 warnings", exit 0. Gates green,
-284/284 tests (+16 for this task). Noted, not fixed (out of T-031's scope):
-root NOTICE.md still has no attribution section for the FOCUS spec text
-itself ingested in T-029 (`data/focus/{1.0,1.2}/columns.json` etc.) — only
-this task's sample-data fixture is covered now; a future task should add
-that section too.
+T-032 this session: seeded synthetic FOCUS CSV generator.
+`src/shared/focus/synthetic.ts` — `generateFocusCsv(columns, {rows, seed})`
+derives every value purely from a version's `columns.json` metadata
+(`data_type`, `allowed_values`, `value_format_md`, `number_range`,
+`allows_nulls`) via a `mulberry32` seeded PRNG, same "no hardcoded
+per-version table" principle as the T-031 validator — same seed always
+byte-identical. One metadata combination (JSON `data_type` + `allowed_values`
+naming embedded keys, e.g. 1.2's `SkuPriceDetails`) can't satisfy the
+validator's independent type-and-enum checks with any single value, so the
+generator always emits `NULL` for it (nullable in both pinned versions
+today) rather than hardcoding the column by name — see decisions.md
+2026-07-28 entry. CLI: `src/crawlers/focus/generate-cli.ts` (`runGenerate`,
+mirrors `validate-cli.ts`'s shape: `node dist/crawlers/focus/generate-cli.js
+--version 1.2 --rows N --seed S --out file.csv`). `scripts/
+generate-focus-synthetic-samples.mjs` (no network, imports built dist/)
+regenerates the committed fixtures at `src/crawlers/focus/fixtures/samples/
+synthetic/{1.0,1.2}/focus_synthetic_sample.csv` (seed 42, 60 rows each;
+43/57 columns; ~52KB/~68KB, 140KB total on disk, well under the 200KB cap),
+each with its own `NOTICE.md` explicitly labeling the file synthetic
+(not official FOCUS data) and naming the generator/seed. Tests:
+`synthetic.test.ts` (determinism — same seed byte-identical, different seed
+differs; header exactly matches `columns.map(c => c.id)` for both versions;
+generated output passes its own version's validator with 0 errors AND 0
+warnings; the committed fixtures themselves re-validated as a regression
+guard) and `generate-cli.test.ts` (CLI wrapper incl. cross-run determinism,
+unknown-version exit 1). Verified live: `node dist/crawlers/focus/
+validate-cli.js .../synthetic/1.2/focus_synthetic_sample.csv --version 1.2`
+→ "60 rows, 57 columns, 0 errors, 0 warnings", exit 0 (same for 1.0). Gates
+green, 297/297 tests (+13 for this task).
 
-T-030 this session: `src/servers/focus/` — the version-aware FOCUS stdio
-server, mirroring `src/servers/framework/`'s module layout (server/main/
-tools/resources/prompts/uris/render/search). Loading: `src/shared/focus/
-schemas.ts` defines `FOCUS_ARTIFACT_FILES` (manifest.json/columns.json/
-attributes.json schemas); `src/shared/focus/artifact.ts` `loadFocusStore(dir)`
-reads `data/focus/index.json`, loads each version dir through
-`loadArtifactGeneric` (T-028) into `Map<spec_version, FocusVersionArtifact>`
-(+ raw glossary.md/CHANGELOG.md text), cross-checks each version's
-manifest.json sha256 against index.json's `manifest_sha256`, and loads/
-verifies the derived diff file against index.json's `derived` map — throws
-`ArtifactValidationError` on any mismatch (tested: schema violation,
-manifest hash mismatch, tampered diff, missing file). Server: 7 tools
-(list_versions, get_column, list_columns, search_focus, get_attribute,
-get_requirements, compare_versions) — all but list_versions/compare_versions
-take `version` (default "1.2", echoed as `spec_version` in structuredContent);
-column/attribute lookup accepts Column ID or slug, case-insensitive, with
-nearestMatches suggestions on miss. `list_columns`/`search_focus` cursors
-bind `version` into `cursorContext`'s fingerprint (shared/tools.ts), so
-cross-version cursor reuse hits "Cursor mismatch" (tested). Resources:
-`focus://spec/overview`, `/versions`, `/{version}/columns/{slug}` +
-`/attributes/{slug}` + `/glossary` (ResourceTemplates, 2-var complete()
-using request context for `slug` filtered by `version`), `/changes/1.0-1.2`
-(fixed) — unknown version/slug both hit -32002 with nearestMatches (tested).
-2 prompts (explain-focus, map-column-across-versions). CC BY 4.0 footer
-(`render.ts` `footer()`) on every content-bearing response, mirroring
-`shared/footer.ts`'s `ccByFooter`. `main.ts` mirrors the framework server's
-main.ts exactly (isDirectRunOf gate, --version flag prints
-`focus-spec-mcp vX (FOCUS spec versions: 1.0, 1.2; latest 1.2)`, FOCUS_MCP_DATA
-env override). Discovered attribute IDs are renamed across versions
-(CurrencyCodeFormat@1.0 → CurrencyFormat@1.2, ColumnNamingAndOrdering@1.0 →
-ColumnHandling@1.2) — get_attribute needs the right `version` for a 1.0-only
-id, which the outputSchema-conformance and get_attribute tests now cover
-explicitly. 42 new tests (server.test.ts incl. outputSchema conformance
-over every tool + cross-version cursor rejection; artifact.test.ts;
-main.test.ts incl. dist symlink --version), all green. Verified live via
-`node dist/servers/focus/main.js --version` and
-`node evals/framework/mcp-call.mjs --server=focus list-tools|call ...`
-(the eval bridge is already server-agnostic from T-028, no changes needed).
-Root package.json bin/files untouched — packaging (`packages/focus-spec-mcp/`)
-is a later task per the spec. Gates green, 268/268 tests pass (+42 for focus).
-
-**Rework (same task, next iteration):** the independent verifier failed the
-first pass of T-030 — `get_attribute` built its markdown inline instead of
-calling `render.ts`'s `attributeMd()`, so it was the one tool missing the CC
-BY footer (see `.agents/.cache/verify/T-030-1785225144803.md`). Fixed:
-`get_attribute` now calls `attributeMd(...)` like `get_column` calls
-`columnMd(...)`; added the missing footer assertion to its test. Reproduced
-live via the eval bridge post-fix. Gates green again, 268/268 tests.
+Earlier (T-027..T-031, condensed): T-029 ingested FOCUS spec text for
+versions 1.0/1.2 into `data/focus/`; T-030 built `src/servers/focus/` (the
+version-aware FOCUS stdio server, 7 tools, mirrors `src/servers/framework/`'s
+module layout — reworked once post-verification to fix a missing CC BY
+footer on `get_attribute`); T-031 built `src/shared/focus/validate.ts`
+(`validateFocusCsv`, errors-vs-warnings split, official 1.0 sample fixture
+at `src/crawlers/focus/fixtures/samples/1.0/`). Full detail in git history
+and `.agents/journal/`.
 
 ## Next steps
 
-1. Continue T-032..T-038 per `.agents/specs/focus-mcp-v1.md` in order
-   (seeded synthetic data generator — must pass the T-031 validator;
-   KPI mapping / calculate_kpi, packaging shim, worker, critique gate #4,
+1. Continue T-033..T-038 per `.agents/specs/focus-mcp-v1.md` in order (KPI
+   mapping / calculate_kpi, packaging shim, worker, critique gate #4,
    evals/focus).
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
@@ -120,6 +74,12 @@ live via the eval bridge post-fix. Gates green again, 268/268 tests.
   itself (data/focus/{1.0,1.2}/, ingested T-029) — only the T-031 sample
   fixture is covered. Should be added (mirrors the FinOps Framework
   section) but is out of scope for the tasks that found the gap.
+- `validateFocusCsv` (T-031) can't validate a JSON-typed column that also
+  declares `allowed_values` as embedded-key names rather than literal
+  values (today: 1.2's `SkuPriceDetails`, per KeyValueFormat) — the
+  generator works around it by always emitting null (decisions.md
+  2026-07-28); a future task could teach the validator to parse
+  KeyValueFormat keys against the enum instead.
 - M11 rename (Action → MaturityCharacteristic) — owner call; moot while
   Actions stay behind FINOPS_MCP_EXPERIMENTAL.
 - Known limitation: MCP SDK zod validation silently strips unknown tool
@@ -133,5 +93,5 @@ live via the eval bridge post-fix. Gates green again, 268/268 tests.
 
 ## Last updated
 
-2026-07-28 — T-031 done (FOCUS CSV conformance validator + official 1.0
-ground-truth fixture); focus-mcp-v1 loop underway.
+2026-07-28 — T-032 done (seeded synthetic FOCUS data generator + committed
+1.0/1.2 synthetic sample fixtures); focus-mcp-v1 loop underway.

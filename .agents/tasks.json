@@ -601,7 +601,7 @@
         "Generated 1.0 data passes the 1.0 validator and generated 1.2 data passes the 1.2 validator (tests); headers exactly match each version's column list",
         "Committed synthetic samples total 200KB or less and are clearly labeled synthetic; gates green"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

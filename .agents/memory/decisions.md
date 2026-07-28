@@ -238,3 +238,35 @@
   enum matching (rejected — same official sample would then need casing
   fixed via a warning-only carve-out too, which is less honest than fixing
   the comparison since the values are unambiguously the same word).
+
+## 2026-07-28 — synthetic generator forces null for JSON+allowed_values columns (T-032)
+
+- Decision: the seeded synthetic FOCUS CSV generator
+  (`src/shared/focus/synthetic.ts`) derives every value purely from a
+  column's metadata (`data_type`, `allowed_values`, `value_format_md`,
+  `number_range`, `allows_nulls`) — same principle as the T-031 validator,
+  no hardcoded per-column/per-version table. One combination needed a
+  special rule: a `data_type: "JSON"` column that also declares
+  `allowed_values` (today, only 1.2's `SkuPriceDetails` — its enum lists
+  valid property *keys* per `KeyValueFormat`, not the literal column
+  value). `validateFocusCsv` checks `data_type` and `allowed_values`
+  independently, so no single raw string can satisfy "valid JSON" and
+  "exact match to an enum entry" at once. The generator always emits
+  `NULL` for that combination (checked to be nullable in both pinned
+  versions today; if a future non-nullable column ever hit it, generation
+  would fall through to the type-driven default and could produce a
+  validator error — acceptable since it doesn't occur in 1.0/1.2).
+- Why: this is a real gap in the T-031 validator, not something to route
+  around by loosening the generator's fidelity. Fixing the validator to
+  understand KeyValueFormat-style embedded-key enums was out of scope for
+  T-032 (touches shared validation code another task's acceptance criteria
+  already locked down) and the only affected column is nullable in both
+  shipped versions, so forcing null is a safe, fully generic rule rather
+  than a per-column carve-out.
+- Alternatives considered: hardcode `SkuPriceDetails` by name to always
+  null (rejected — violates the "no hardcoded per-column table" invariant
+  the validator itself established, and wouldn't generalize if a future
+  spec version adds another JSON+enum column); fix `validateFocusCsv` to
+  parse KeyValueFormat keys against the enum (rejected for this task —
+  real scope creep into T-031's shipped, tested contract; noted as an open
+  question below for a future task instead).
