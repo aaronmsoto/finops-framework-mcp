@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "7b75f40a472f39a6ffa47f2312aed32f62f0feea9425cd3b2fd14e5c8b0e0603",
+  "chainHead": "9378cc2cc3a9c4e5d1088560beb48580e980ff14fafdc87126c68b6fa90d69e0",
   "tasks": [
     {
       "id": "T-001",
@@ -658,9 +658,15 @@
         "A combined scenario eval documents the Rate Optimization walkthrough answered using only the framework and focus bridges",
         "Eval design verified by answering every question through the live server and citing the calls in the journal; gates green"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "evals/focus/eval.xml (10 version-aware Qs, 2 compare_versions + 2 get_kpi_mapping) and combined-scenario.xml (Rate Optimization walkthrough, both bridges) authored and verified live; gates green",
+        "commit": "83fb4ed9744a13d135defee880afcfa8624aa408",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T09:16:13.968Z"
+      },
+      "hash": "9378cc2cc3a9c4e5d1088560beb48580e980ff14fafdc87126c68b6fa90d69e0"
     },
     {
       "id": "T-036",
