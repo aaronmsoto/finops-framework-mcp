@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "97f179d883b5a554df1d23b882f2dced4697d71fadf32dde9da84eaca6611995",
+  "chainHead": "7b75f40a472f39a6ffa47f2312aed32f62f0feea9425cd3b2fd14e5c8b0e0603",
   "tasks": [
     {
       "id": "T-001",
@@ -639,9 +639,15 @@
         "ESR over a hand-computed 10-row fixture matches the expected value exactly (test); KPIs without formulas error cleanly with guidance",
         "Responses carry the unofficial-calculation disclaimer and sample provenance; gates green"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "calculate_kpi over bundled samples: 9 mapped KPIs computed (ESR exact on 10-row fixture), no-formula KPIs error with guidance, unofficial-calculation banner + sample provenance in every response, gates green (336/336 tests)",
+        "commit": "5d010769df62231abea6c4a3ca7944f6a2381f47",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T09:04:32.228Z"
+      },
+      "hash": "7b75f40a472f39a6ffa47f2312aed32f62f0feea9425cd3b2fd14e5c8b0e0603"
     },
     {
       "id": "T-035",
