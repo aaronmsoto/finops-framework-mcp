@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "9f1e9af30ed75db20272870beafd356db688d5b98cb6d6f1ce3fdbf345ee5d7a",
+  "chainHead": "be8da81f0a587fef533b498a388929f1b3263414789d1188ad578e511c3a25bf",
   "tasks": [
     {
       "id": "T-001",
@@ -524,9 +524,15 @@
         "evals/framework/mcp-call.mjs (or a generalized evals/mcp-call.mjs) selects the server dist path via flag/env, defaulting to framework; framework list-tools output unchanged",
         "Gates green"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "loadArtifactGeneric extracted with synthetic-spec test; loadArtifact thin wrapper unchanged; mcp-call.mjs --server/env selects dist path, framework list-tools byte-identical; gates green 203/203",
+        "commit": "d9d33946eb1a105809d81052b1abd99c3b1f970d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T07:11:13.015Z"
+      },
+      "hash": "be8da81f0a587fef533b498a388929f1b3263414789d1188ad578e511c3a25bf"
     },
     {
       "id": "T-029",
