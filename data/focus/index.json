@@ -1,6 +1,7 @@
 {
   "derived": {
-    "diff-1.0-1.2.json": "6b52d8d77374ac703472f807ce3e7ebc55cf9e80df0f1b4bca13d1c193aad9cb"
+    "diff-1.0-1.2.json": "6b52d8d77374ac703472f807ce3e7ebc55cf9e80df0f1b4bca13d1c193aad9cb",
+    "kpi-mapping.json": "788c334c705e59a06b2338ec3a1c1f7a7890c27db28a36b5d78bcf8f7b3abca8"
   },
   "latest": "1.2",
   "versions": [

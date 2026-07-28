@@ -6,8 +6,14 @@ import type {
   FocusIndexVersionEntry,
 } from "../../shared/focus/types.js";
 import { diffColumns } from "./diff.js";
-import { emitDerivedDiff, emitIndex, emitVersionArtifact } from "./emit.js";
+import {
+  emitDerivedDiff,
+  emitDerivedKpiMapping,
+  emitIndex,
+  emitVersionArtifact,
+} from "./emit.js";
 import { ingestVersion } from "./ingest.js";
+import { KPI_MAPPING } from "./kpi-mapping-data.js";
 import { ORIGIN, USER_AGENT, VERSIONS, isValidFocusBody } from "./urls.js";
 
 export interface IngestOptions {
@@ -92,8 +98,12 @@ export async function ingest(opts: IngestOptions): Promise<number> {
       `${diff.removed_columns.length} removed, ${diff.changed_columns.length} changed`,
   );
 
+  const derivedKpiMapping = emitDerivedKpiMapping(opts.dataDir, KPI_MAPPING);
+  opts.log(`kpi mapping: ${KPI_MAPPING.kpis.length} KPIs (unofficial)`);
+
   emitIndex(opts.dataDir, last.spec_version, indexVersions, {
     [derivedDiff.filename]: derivedDiff.sha256,
+    [derivedKpiMapping.filename]: derivedKpiMapping.sha256,
   });
 
   opts.log(

@@ -8,6 +8,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
+import { sha256 } from "../artifact-loader.js";
 import { ArtifactValidationError, loadFocusStore } from "./artifact.js";
 
 const FOCUS_DIR = join(import.meta.dirname, "../../../data/focus");
@@ -47,6 +48,15 @@ describe("committed FOCUS data artifact (contract tests)", () => {
     expect(store.diff.added_columns).toHaveLength(14);
     for (const added of store.diff.added_columns) {
       expect(typeof added.source_url).toBe("string");
+    }
+  });
+
+  it("loads the unofficial KPI mapping, 15-20 entries, every record official:false", () => {
+    expect(store.kpiMapping.official).toBe(false);
+    expect(store.kpiMapping.kpis.length).toBeGreaterThanOrEqual(15);
+    expect(store.kpiMapping.kpis.length).toBeLessThanOrEqual(20);
+    for (const entry of store.kpiMapping.kpis) {
+      expect(entry.official).toBe(false);
     }
   });
 });
@@ -99,6 +109,36 @@ describe("loadFocusStore failure modes", () => {
       writeFileSync(p, `${JSON.stringify(diff, null, 2)}\n`);
     });
     expect(load).toThrowError(/sha256 mismatch/);
+  });
+
+  it("refuses a tampered kpi-mapping.json", () => {
+    const load = corruptCopy((dir) => {
+      const p = join(dir, "derived/kpi-mapping.json");
+      const mapping = JSON.parse(readFileSync(p, "utf8")) as {
+        methodology: string;
+      };
+      mapping.methodology = "tampered";
+      writeFileSync(p, `${JSON.stringify(mapping, null, 2)}\n`);
+    });
+    expect(load).toThrowError(/sha256 mismatch/);
+  });
+
+  it("refuses a kpi-mapping.json entry referencing an unknown column", () => {
+    const load = corruptCopy((dir) => {
+      const p = join(dir, "derived/kpi-mapping.json");
+      const mapping = JSON.parse(readFileSync(p, "utf8")) as {
+        kpis: { columns_by_version: Record<string, string[]> }[];
+      };
+      mapping.kpis[0]!.columns_by_version["1.2"] = ["NotAColumn"];
+      writeFileSync(p, `${JSON.stringify(mapping, null, 2)}\n`);
+      const idxPath = join(dir, "index.json");
+      const idx = JSON.parse(readFileSync(idxPath, "utf8")) as {
+        derived: Record<string, string>;
+      };
+      idx.derived["kpi-mapping.json"] = sha256(readFileSync(p, "utf8"));
+      writeFileSync(idxPath, `${JSON.stringify(idx, null, 2)}\n`);
+    });
+    expect(load).toThrowError(/unknown column "NotAColumn"/);
   });
 
   it("refuses a missing content file", () => {

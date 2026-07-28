@@ -175,6 +175,92 @@ describe("tools", () => {
   });
 });
 
+describe("get_kpi_mapping", () => {
+  it("lists every mapped KPI by default, with an UNOFFICIAL banner and framework finops:// cross-references", async () => {
+    const res = await call("get_kpi_mapping");
+    expect(res.isError).toBeFalsy();
+    expect(res.content[0]?.text).toMatch(/^UNOFFICIAL/);
+    expect(res.structuredContent?.official).toBe(false);
+    expect(res.structuredContent?.spec_version).toBe("1.2");
+    const kpis = res.structuredContent?.kpis as {
+      kpi_slug: string;
+      kpi_uri: string;
+      official: boolean;
+    }[];
+    expect(kpis.length).toBeGreaterThanOrEqual(15);
+    expect(kpis.length).toBeLessThanOrEqual(20);
+    expect(res.structuredContent?.total).toBe(kpis.length);
+    for (const k of kpis) {
+      expect(k.official).toBe(false);
+      expect(k.kpi_uri).toBe(`finops://framework/kpis/${k.kpi_slug}`);
+    }
+    expect(
+      kpis.some((k) => k.kpi_slug === "effective-savings-rate-percentage"),
+    ).toBe(true);
+  });
+
+  it("filters to one KPI by slug and includes its FOCUS-terms formula and columns", async () => {
+    const res = await call("get_kpi_mapping", {
+      kpi: "effective-savings-rate-percentage",
+    });
+    expect(res.isError).toBeFalsy();
+    const kpis = res.structuredContent?.kpis as {
+      kpi_slug: string;
+      focus_formula: string;
+      columns: string[];
+    }[];
+    expect(kpis).toHaveLength(1);
+    expect(kpis[0]?.kpi_slug).toBe("effective-savings-rate-percentage");
+    expect(kpis[0]?.columns).toEqual(
+      expect.arrayContaining(["ListCost", "EffectiveCost"]),
+    );
+    expect(kpis[0]?.focus_formula).toContain("ListCost");
+  });
+
+  it("returns a nearest-match error for an unknown kpi slug", async () => {
+    const res = await call("get_kpi_mapping", {
+      kpi: "effective-savings-rate-percent",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(/Unknown KPI/);
+  });
+
+  it("filters by capability slug", async () => {
+    const res = await call("get_kpi_mapping", { capability: "forecasting" });
+    expect(res.isError).toBeFalsy();
+    const kpis = res.structuredContent?.kpis as {
+      kpi_slug: string;
+      related_capability_slugs: string[];
+    }[];
+    expect(kpis.length).toBeGreaterThan(0);
+    for (const k of kpis) {
+      expect(k.related_capability_slugs).toContain("forecasting");
+    }
+  });
+
+  it("an unknown capability slug returns an empty, non-error result", async () => {
+    const res = await call("get_kpi_mapping", {
+      capability: "not-a-real-capability",
+    });
+    expect(res.isError).toBeFalsy();
+    expect(res.structuredContent?.total).toBe(0);
+  });
+
+  it("honors an explicit version and defaults to 1.2", async () => {
+    const res = await call("get_kpi_mapping", { version: "1.0" });
+    expect(res.isError).toBeFalsy();
+    expect(res.structuredContent?.spec_version).toBe("1.0");
+  });
+
+  it("methodology text is included in structuredContent", async () => {
+    const res = await call("get_kpi_mapping");
+    expect(typeof res.structuredContent?.methodology).toBe("string");
+    expect(
+      (res.structuredContent?.methodology as string).length,
+    ).toBeGreaterThan(50);
+  });
+});
+
 describe("cursors", () => {
   it("accepts its own cursor for the same version/query and pages correctly", async () => {
     const first = await call("list_columns", { version: "1.2", limit: 5 });
@@ -333,6 +419,8 @@ describe("outputSchema conformance", () => {
       ["get_requirements", { column: "BilledCost" }],
       ["compare_versions", {}],
       ["compare_versions", { column: "BillingAccountType" }],
+      ["get_kpi_mapping", {}],
+      ["get_kpi_mapping", { kpi: "effective-savings-rate-percentage" }],
     ];
     const checkAgainst = (
       value: unknown,

@@ -6,6 +6,7 @@ import type {
   FocusIndex,
   FocusIndexVersionEntry,
   FocusVersionManifest,
+  KpiMapping,
 } from "../../shared/focus/types.js";
 
 function sortKeys(value: unknown): unknown {
@@ -134,6 +135,22 @@ export function emitDerivedDiff(
 ): { filename: string; sha256: string } {
   const filename = `diff-${diff.from}-${diff.to}.json`;
   const text = canonicalJson(diff);
+  const path = join(focusDir, "derived", filename);
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, text);
+  return { filename, sha256: sha256(text) };
+}
+
+/** Writes data/focus/derived/kpi-mapping.json; returns its filename and
+ * sha256 for index.json's `derived` hash map. `mapping` is static curated
+ * data (kpi-mapping-data.ts), so this is naturally byte-identical run to
+ * run regardless of network/cache state. */
+export function emitDerivedKpiMapping(
+  focusDir: string,
+  mapping: KpiMapping,
+): { filename: string; sha256: string } {
+  const filename = "kpi-mapping.json";
+  const text = canonicalJson(mapping);
   const path = join(focusDir, "derived", filename);
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, text);

@@ -620,7 +620,7 @@
         "Tests cross-validate every mapped framework KPI slug against data/framework content and every referenced column against the target version artifact",
         "get_kpi_mapping tool serves the mapping with an UNOFFICIAL banner in text content and framework finops:// URI cross-references (tests); artifact hashed in index.json; gates green"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

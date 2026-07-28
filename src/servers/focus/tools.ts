@@ -4,6 +4,7 @@ import type {
   FocusStore,
   FocusVersionArtifact,
 } from "../../shared/focus/artifact.js";
+import type { KpiMappingEntry } from "../../shared/focus/types.js";
 import { nearestMatches } from "../../shared/index.js";
 import {
   cursorContext,
@@ -16,7 +17,7 @@ import {
 } from "../../shared/tools.js";
 import { attributeMd, columnMd } from "./render.js";
 import { buildSearchIndex, search } from "./search.js";
-import { URI } from "./uris.js";
+import { FRAMEWORK_KPI_URI, URI } from "./uris.js";
 
 export const DEFAULT_VERSION = "1.2";
 
@@ -28,6 +29,30 @@ const FEATURE_LEVELS = [
 ] as const;
 const COLUMN_TYPES = ["Metric", "Dimension", "unknown"] as const;
 const ENTITY_TYPES = ["column", "attribute"] as const;
+const KPI_CATEGORIES = [
+  "effective_savings_rate",
+  "commitment_discounts",
+  "forecast_accuracy",
+  "unit_economics",
+  "allocation",
+  "variance",
+] as const;
+
+const KPI_MAPPING_BANNER =
+  "UNOFFICIAL: this KPI→FOCUS column mapping is derived by this server " +
+  "— it is not published or endorsed by the FinOps Foundation or the FOCUS project.";
+
+const kpiMappingRowSchema = {
+  kpi_slug: z.string(),
+  kpi_title: z.string(),
+  kpi_uri: z.string(),
+  official: z.literal(false),
+  category: z.enum(KPI_CATEGORIES),
+  related_capability_slugs: z.array(z.string()),
+  focus_formula: z.string(),
+  columns: z.array(z.string()),
+  caveat: z.string().nullable(),
+};
 
 const columnRecordSchema = {
   id: z.string(),
@@ -591,6 +616,133 @@ export function registerTools(server: McpServer, store: FocusStore): void {
       return ok(
         { from: diff.from, to: diff.to, column, status: "unchanged" },
         `${note}\n\n\`${column}\` is unchanged between ${diff.from} and ${diff.to} (or not a recognized column in either version).`,
+      );
+    },
+  );
+
+  // ---- get_kpi_mapping ------------------------------------------------------
+  server.registerTool(
+    "get_kpi_mapping",
+    {
+      title: "Get the KPI-to-FOCUS-column mapping",
+      description:
+        "UNOFFICIAL, derived-by-this-server mapping from framework KPIs (effective savings rate, commitment " +
+        "discounts, forecast accuracy, unit economics, allocation) to the FOCUS columns needed to compute each, " +
+        "with a FOCUS-terms formula translation. Not published or endorsed by the FinOps Foundation or the FOCUS " +
+        "project. Filter by `kpi` slug, `capability` slug, or list everything for a `version`.",
+      inputSchema: {
+        kpi: z
+          .string()
+          .optional()
+          .describe(
+            "Framework KPI slug, e.g. 'effective-savings-rate-percentage'",
+          ),
+        capability: z
+          .string()
+          .optional()
+          .describe(
+            "Framework capability slug to filter by, e.g. 'rate-optimization'",
+          ),
+        version: z
+          .string()
+          .optional()
+          .describe(
+            `FOCUS spec version (${versionSlugs.join("|")}); default "${DEFAULT_VERSION}"`,
+          ),
+      },
+      outputSchema: {
+        spec_version: z.string(),
+        official: z.literal(false),
+        methodology: z.string(),
+        total: z.number(),
+        kpis: z.array(z.object(kpiMappingRowSchema)),
+      },
+      annotations: RO,
+    },
+    ({ kpi, capability, version }) => {
+      const resolved = resolveVersion(version);
+      if (isErr(resolved)) return resolved;
+
+      const toRow = (entry: KpiMappingEntry, columns: string[]) => ({
+        kpi_slug: entry.kpi_slug,
+        kpi_title: entry.kpi_title,
+        kpi_uri: FRAMEWORK_KPI_URI(entry.kpi_slug),
+        official: false as const,
+        category: entry.category,
+        related_capability_slugs: entry.related_capability_slugs,
+        focus_formula: entry.focus_formula,
+        columns,
+        caveat: entry.caveat,
+      });
+
+      if (kpi) {
+        const needle = kpi.toLowerCase();
+        const entry = store.kpiMapping.kpis.find(
+          (k) => k.kpi_slug.toLowerCase() === needle,
+        );
+        if (!entry) {
+          const near = nearestMatches(
+            kpi,
+            store.kpiMapping.kpis.map((k) => k.kpi_slug),
+          );
+          return err(
+            `Unknown KPI "${kpi}" in the mapping.` +
+              (near.length ? ` Did you mean: ${near.join(", ")}?` : "") +
+              ` Call get_kpi_mapping with no \`kpi\` to list every mapped KPI.`,
+          );
+        }
+        const columns = entry.columns_by_version[resolved.version];
+        if (!columns) {
+          return err(
+            `KPI "${entry.kpi_slug}" has no FOCUS ${resolved.version} mapping. ` +
+              `Mapped versions: ${Object.keys(entry.columns_by_version).join(", ")}.`,
+          );
+        }
+        const row = toRow(entry, columns);
+        return ok(
+          {
+            spec_version: resolved.version,
+            official: false,
+            methodology: store.kpiMapping.methodology,
+            total: 1,
+            kpis: [row],
+          },
+          `${KPI_MAPPING_BANNER}\n\n# ${row.kpi_title} (FOCUS ${resolved.version})\n\n` +
+            `${row.focus_formula}\n\nColumns: ${columns.join(", ")}` +
+            (row.caveat ? `\n\nCaveat: ${row.caveat}` : "") +
+            `\n\nFramework KPI: ${row.kpi_uri}`,
+        );
+      }
+
+      let entries = store.kpiMapping.kpis;
+      if (capability) {
+        entries = entries.filter((k) =>
+          k.related_capability_slugs.includes(capability),
+        );
+      }
+      const rows = entries
+        .filter((k) => k.columns_by_version[resolved.version])
+        .map((k) =>
+          toRow(k, k.columns_by_version[resolved.version] as string[]),
+        );
+      return ok(
+        {
+          spec_version: resolved.version,
+          official: false,
+          methodology: store.kpiMapping.methodology,
+          total: rows.length,
+          kpis: rows,
+        },
+        `${KPI_MAPPING_BANNER}\n\n${store.kpiMapping.methodology}\n\n` +
+          `FOCUS ${resolved.version}: ${rows.length} KPI mapping(s)` +
+          (rows.length
+            ? ":\n" +
+              rows
+                .map(
+                  (r) => `- ${r.kpi_title} (${r.kpi_uri}): ${r.focus_formula}`,
+                )
+                .join("\n")
+            : "."),
       );
     },
   );

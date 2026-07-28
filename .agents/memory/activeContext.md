@@ -13,52 +13,63 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027..T-032 are DONE.
+T-027..T-038) is underway. T-027..T-033 are DONE.
 
-T-032 this session: seeded synthetic FOCUS CSV generator.
-`src/shared/focus/synthetic.ts` — `generateFocusCsv(columns, {rows, seed})`
-derives every value purely from a version's `columns.json` metadata
-(`data_type`, `allowed_values`, `value_format_md`, `number_range`,
-`allows_nulls`) via a `mulberry32` seeded PRNG, same "no hardcoded
-per-version table" principle as the T-031 validator — same seed always
-byte-identical. One metadata combination (JSON `data_type` + `allowed_values`
-naming embedded keys, e.g. 1.2's `SkuPriceDetails`) can't satisfy the
-validator's independent type-and-enum checks with any single value, so the
-generator always emits `NULL` for it (nullable in both pinned versions
-today) rather than hardcoding the column by name — see decisions.md
-2026-07-28 entry. CLI: `src/crawlers/focus/generate-cli.ts` (`runGenerate`,
-mirrors `validate-cli.ts`'s shape: `node dist/crawlers/focus/generate-cli.js
---version 1.2 --rows N --seed S --out file.csv`). `scripts/
-generate-focus-synthetic-samples.mjs` (no network, imports built dist/)
-regenerates the committed fixtures at `src/crawlers/focus/fixtures/samples/
-synthetic/{1.0,1.2}/focus_synthetic_sample.csv` (seed 42, 60 rows each;
-43/57 columns; ~52KB/~68KB, 140KB total on disk, well under the 200KB cap),
-each with its own `NOTICE.md` explicitly labeling the file synthetic
-(not official FOCUS data) and naming the generator/seed. Tests:
-`synthetic.test.ts` (determinism — same seed byte-identical, different seed
-differs; header exactly matches `columns.map(c => c.id)` for both versions;
-generated output passes its own version's validator with 0 errors AND 0
-warnings; the committed fixtures themselves re-validated as a regression
-guard) and `generate-cli.test.ts` (CLI wrapper incl. cross-run determinism,
-unknown-version exit 1). Verified live: `node dist/crawlers/focus/
-validate-cli.js .../synthetic/1.2/focus_synthetic_sample.csv --version 1.2`
-→ "60 rows, 57 columns, 0 errors, 0 warnings", exit 0 (same for 1.0). Gates
-green, 297/297 tests (+13 for this task).
+T-033 this session: unofficial KPI-to-FOCUS-column mapping.
+`data/focus/derived/kpi-mapping.json` (18 records: ESR, 4 commitment-
+discount KPIs, 2 forecast-accuracy KPIs, 6 unit-economics KPIs, 4
+allocation/tagging KPIs, 1 variance KPI) — every record `official: false`,
+each with a `focus_formula` (FOCUS ColumnIds + SQL-like WHERE/GROUP BY
+pseudocode), `columns_by_version` (both 1.0 and 1.2 today — all chosen
+columns are present under the same id in both), `related_capability_slugs`
+(copied from the framework KPI, for the tool's `capability` filter), and a
+`caveat` where FOCUS alone can't fully compute it (forecast/budget KPIs —
+FOCUS only supplies the actual/effective-spend side). Authored as a static
+TS literal (`src/crawlers/focus/kpi-mapping-data.ts`, no source page to
+parse from) and emitted by `cli.ts`'s `ingest()` via a new
+`emitDerivedKpiMapping`, hashed into `index.json`'s `derived` map next to
+the diff. `loadFocusStore` (`src/shared/focus/artifact.ts`) now reads every
+`derived/` entry generically (was hardcoded to the single diff file),
+verifies each sha256, and cross-validates every `columns_by_version` column
+id against its version's loaded columns at load time (throws
+`ArtifactValidationError` on an unknown column/version). `get_kpi_mapping`
+tool (`src/servers/focus/tools.ts`): `kpi?`/`capability?`/`version?`
+params, UNOFFICIAL banner in text content, `kpi_uri` =
+`finops://framework/kpis/{slug}` per record (built via a new
+`FRAMEWORK_KPI_URI` helper in `src/servers/focus/uris.ts` — duplicates,
+does not import, the framework server's `URI.kpi`, to keep the two
+packages' compiled code uncoupled ahead of packaging (T-035); see
+decisions.md). Tests: `src/shared/focus/kpi-mapping.test.ts` (record count
+15-20, every kpi_slug found in `data/framework/content/kpis.json`,
+kpi_title matches, every related_capability_slugs found in
+`data/framework/content/capabilities.json`, every columns_by_version column
+id found in its version's `columns.json`); `artifact.test.ts` additions
+(loads kpiMapping, refuses a tampered kpi-mapping.json, refuses an unknown-
+column entry); `server.test.ts` additions (banner, URI cross-references,
+kpi/capability/version filters, unknown-kpi nearest-match error, empty-
+capability non-error, outputSchema conformance). Verified live: built +
+ran `node dist/crawlers/focus/cli.js` (0 network fetches, cache-only,
+byte-identical) then called `get_kpi_mapping` via an in-memory MCP client
+— confirmed the UNOFFICIAL banner, 18 total records, and the ESR record's
+formula/columns/finops:// URI. Gates green, 315/315 tests (+18). Artifact
+still 868K on disk (cap 3MB).
 
-Earlier (T-027..T-031, condensed): T-029 ingested FOCUS spec text for
+Earlier (T-027..T-032, condensed): T-029 ingested FOCUS spec text for
 versions 1.0/1.2 into `data/focus/`; T-030 built `src/servers/focus/` (the
 version-aware FOCUS stdio server, 7 tools, mirrors `src/servers/framework/`'s
 module layout — reworked once post-verification to fix a missing CC BY
 footer on `get_attribute`); T-031 built `src/shared/focus/validate.ts`
 (`validateFocusCsv`, errors-vs-warnings split, official 1.0 sample fixture
-at `src/crawlers/focus/fixtures/samples/1.0/`). Full detail in git history
+at `src/crawlers/focus/fixtures/samples/1.0/`); T-032 built the seeded
+synthetic FOCUS CSV generator (`src/shared/focus/synthetic.ts`) plus
+committed 1.0/1.2 synthetic sample fixtures. Full detail in git history
 and `.agents/journal/`.
 
 ## Next steps
 
-1. Continue T-033..T-038 per `.agents/specs/focus-mcp-v1.md` in order (KPI
-   mapping / calculate_kpi, packaging shim, worker, critique gate #4,
-   evals/focus).
+1. Continue T-034..T-038 per `.agents/specs/focus-mcp-v1.md` in order
+   (calculate_kpi — ESR must match a hand-computed fixture exactly —
+   packaging shim, worker, critique gate #4, evals/focus).
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -93,5 +104,5 @@ and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-28 — T-032 done (seeded synthetic FOCUS data generator + committed
-1.0/1.2 synthetic sample fixtures); focus-mcp-v1 loop underway.
+2026-07-28 — T-033 done (unofficial KPI-to-FOCUS-column mapping +
+get_kpi_mapping tool); focus-mcp-v1 loop underway.

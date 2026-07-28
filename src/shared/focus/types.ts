@@ -106,3 +106,38 @@ export interface FocusDiff {
   removed_columns: FocusColumnRef[];
   changed_columns: FocusColumnChanged[];
 }
+
+/** One framework KPI mapped to the FOCUS columns needed to compute it
+ * (spec "KPI->FOCUS mapping methodology"): unofficial derivation, never
+ * endorsed by the FinOps Foundation or the FOCUS project. `kpi_slug` must
+ * match a slug in data/framework/content/kpis.json (cross-validated in
+ * tests, not at runtime — the FOCUS artifact never depends on the
+ * framework artifact). `columns_by_version` keys are FOCUS spec versions;
+ * every column id must exist in that version's columns.json (cross-
+ * validated both by loadFocusStore and by tests). */
+export interface KpiMappingEntry {
+  kpi_slug: string;
+  kpi_title: string;
+  official: false;
+  category:
+    | "effective_savings_rate"
+    | "commitment_discounts"
+    | "forecast_accuracy"
+    | "unit_economics"
+    | "allocation"
+    | "variance";
+  /** Copied from the framework KPI's related_capability_slugs, for the
+   * get_kpi_mapping `capability` filter — may be empty. */
+  related_capability_slugs: string[];
+  focus_formula: string;
+  columns_by_version: Record<string, string[]>;
+  /** Non-null when FOCUS alone cannot fully compute the KPI (e.g. it needs
+   * an external forecast or budget figure). */
+  caveat: string | null;
+}
+
+export interface KpiMapping {
+  official: false;
+  methodology: string;
+  kpis: KpiMappingEntry[];
+}

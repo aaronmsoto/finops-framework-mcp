@@ -270,3 +270,45 @@
   parse KeyValueFormat keys against the enum (rejected for this task —
   real scope creep into T-031's shipped, tested contract; noted as an open
   question below for a future task instead).
+
+## 2026-07-28 — KPI mapping is curated static data, focus/uris.ts duplicates the finops:// KPI URI (T-033)
+
+- Decision: `data/focus/derived/kpi-mapping.json` (18 KPIs: ESR, the
+  4-KPI commitment-discount set, 2 forecast-accuracy KPIs, 6 unit-economics
+  KPIs, 4 allocation/tagging KPIs, 1 variance KPI) is authored as a plain TS
+  literal (`src/crawlers/focus/kpi-mapping-data.ts`), not computed from
+  crawled pages — there is no source page to parse a KPI→column mapping
+  from (verified none exists). `cli.ts`'s `ingest()` emits it alongside the
+  1.0→1.2 diff via a new `emitDerivedKpiMapping`, hashed into
+  `index.json`'s `derived` map the same way. `loadFocusStore`'s single-diff-
+  file assumption (`Object.entries(index.derived)[0]`) was generalized to
+  read every `derived/` entry, verify each one's sha256, then route by
+  filename (`diff-*` / `kpi-mapping.json`) — so adding more derived files
+  later doesn't require touching the loader's shape again. Every
+  `columns_by_version` entry is cross-checked against its version's loaded
+  `columns.json` at load time (throws `ArtifactValidationError`, mirroring
+  the framework artifact's domain/capability crossValidate); `kpi_slug` is
+  cross-checked against `data/framework/content/kpis.json` only in tests
+  (`kpi-mapping.test.ts`), never at runtime, so the FOCUS artifact/package
+  keeps no dependency on framework data (packaging spec: focus tarball must
+  contain no framework data). The `get_kpi_mapping` tool's `finops://framework/kpis/{slug}`
+  URI is built by a small `FRAMEWORK_KPI_URI` helper in
+  `src/servers/focus/uris.ts` that duplicates (does not import)
+  `src/servers/framework/uris.ts`'s `URI.kpi` — the two servers package
+  separately and ESLint's `no-restricted-imports` doesn't forbid
+  server-to-server imports, but importing framework code into focus/tools.ts
+  would drag framework code into the focus tarball once packaging (T-035)
+  lands.
+- Why: keeps the derived-file loading seam generic instead of hardcoding a
+  second special case, keeps the KPI mapping data itself easy to review and
+  extend (it's just an array literal), and keeps the focus package's only
+  coupling to the framework package at the *data* layer (tests reading both
+  data/ dirs), never a compiled-code import.
+- Alternatives considered: give kpi-mapping.json its own ajv JSON Schema
+  like the per-version artifact files (rejected for now — the existing
+  diff-1.0-1.2.json derived file has no ajv schema either, so this follows
+  that precedent; the runtime column crossValidate plus thorough tests
+  cover the referential integrity that matters most). Importing
+  `src/servers/framework/uris.ts` directly from the focus server (rejected
+  — couples the two packages' compiled output ahead of the packaging task
+  that is supposed to keep them separate).

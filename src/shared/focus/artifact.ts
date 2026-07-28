@@ -17,6 +17,7 @@ import type {
   FocusDiff,
   FocusIndex,
   FocusVersionManifest,
+  KpiMapping,
 } from "./types.js";
 import { FOCUS_ARTIFACT_FILES } from "./schemas.js";
 
@@ -34,6 +35,7 @@ export interface FocusStore {
   index: FocusIndex;
   versions: Map<string, FocusVersionArtifact>;
   diff: FocusDiff;
+  kpiMapping: KpiMapping;
 }
 
 const REMEDIATION =
@@ -107,24 +109,68 @@ export function loadFocusStore(focusDir: string): FocusStore {
     versions.set(entry.spec_version, loadVersionArtifact(versionDir));
   }
 
-  const [diffFilename, diffSha] = Object.entries(index.derived)[0] ?? [];
-  if (!diffFilename || !diffSha) {
+  const derivedTexts = new Map<string, string>();
+  for (const [filename, expectedSha] of Object.entries(index.derived)) {
+    const path = join(focusDir, "derived", filename);
+    const text = readFileSync(path, "utf8");
+    const actual = sha256(text);
+    if (actual !== expectedSha) {
+      throw new ArtifactValidationError(
+        filename,
+        `sha256 mismatch (index.json ${expectedSha.slice(0, 12)}…, file ${actual.slice(0, 12)}…)`,
+        REMEDIATION,
+      );
+    }
+    derivedTexts.set(filename, text);
+  }
+
+  const diffFilename = [...derivedTexts.keys()].find((f) =>
+    f.startsWith("diff-"),
+  );
+  if (!diffFilename) {
     throw new ArtifactValidationError(
       "index.json",
       "no derived diff file listed in index.json's derived map",
       REMEDIATION,
     );
   }
-  const diffPath = join(focusDir, "derived", diffFilename);
-  const diffText = readFileSync(diffPath, "utf8");
-  const actualDiffSha = sha256(diffText);
-  if (actualDiffSha !== diffSha) {
+  const diff = JSON.parse(
+    derivedTexts.get(diffFilename) as string,
+  ) as FocusDiff;
+
+  const kpiMappingText = derivedTexts.get("kpi-mapping.json");
+  if (!kpiMappingText) {
     throw new ArtifactValidationError(
-      diffFilename,
-      `sha256 mismatch (index.json ${diffSha.slice(0, 12)}…, file ${actualDiffSha.slice(0, 12)}…)`,
+      "index.json",
+      "no kpi-mapping.json listed in index.json's derived map",
       REMEDIATION,
     );
   }
+  const kpiMapping = JSON.parse(kpiMappingText) as KpiMapping;
+  for (const entry of kpiMapping.kpis) {
+    for (const [version, columnIds] of Object.entries(
+      entry.columns_by_version,
+    )) {
+      const artifact = versions.get(version);
+      if (!artifact) {
+        throw new ArtifactValidationError(
+          "derived/kpi-mapping.json",
+          `KPI "${entry.kpi_slug}" references unknown FOCUS version "${version}"`,
+          REMEDIATION,
+        );
+      }
+      const knownIds = new Set(artifact.columns.map((c) => c.id));
+      for (const id of columnIds) {
+        if (!knownIds.has(id)) {
+          throw new ArtifactValidationError(
+            "derived/kpi-mapping.json",
+            `KPI "${entry.kpi_slug}" references unknown column "${id}" for FOCUS ${version}`,
+            REMEDIATION,
+          );
+        }
+      }
+    }
+  }
 
-  return { index, versions, diff: JSON.parse(diffText) as FocusDiff };
+  return { index, versions, diff, kpiMapping };
 }

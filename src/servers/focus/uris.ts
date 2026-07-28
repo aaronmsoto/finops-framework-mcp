@@ -20,3 +20,11 @@ export const TEMPLATES = {
   column: `${AUTHORITY}/{version}/columns/{slug}`,
   attribute: `${AUTHORITY}/{version}/attributes/{slug}`,
 } as const;
+
+// The framework server's finops://framework/kpis/{slug} URI, duplicated
+// (not imported) intentionally: the two servers package separately
+// (spec "Packaging"), and this authority is a fixed public contract
+// (src/servers/framework/uris.ts's URI.kpi) cross-validated in tests, not
+// a shared runtime dependency.
+export const FRAMEWORK_KPI_URI = (slug: string) =>
+  `finops://framework/kpis/${slug}`;
