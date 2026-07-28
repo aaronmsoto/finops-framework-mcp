@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "2c464a00dc1e920b2073c271de8658ecfdaecad90cab198a4b38a623b1684e95",
+  "chainHead": "3eab27b5f86c1648727dd66229dd019ffa2198000bbaceb06c7361f8b226e9e2",
   "tasks": [
     {
       "id": "T-001",
@@ -715,9 +715,15 @@
         "A node test validates the demo's JSON-RPC request bodies against the worker fetch handler from the previous task",
         "docs/deploy-demo.md covers Cloudflare Pages (or equivalent static) deployment; gates green"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "demo/ static walkthrough app + Node test validating its request bodies against the T-037 worker handler (values match combined-scenario.xml exactly); docs/deploy-demo.md; gates green --tier all",
+        "commit": "f1c1bb39f94a24c48fb92418a719190d3fde2709",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T10:06:50.110Z"
+      },
+      "hash": "3eab27b5f86c1648727dd66229dd019ffa2198000bbaceb06c7361f8b226e9e2"
     }
   ]
 }
