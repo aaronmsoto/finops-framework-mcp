@@ -13,23 +13,40 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027 (lift shared crawler/server infra into
-src/shared) is DONE this session: frontmatter, compose infra
-(guard/heading/bullet/assemble), derive splitters, md (origin-parameterized
-htmlToMd), sanitize, http (origin/UA-parameterized CachedFetcher), search
-core, tool helpers (cursor/paginate/ok/err/RO), footer (parameterized
-attribution), and detectDirectRun all now live under `src/shared/`;
-framework code re-imports them. Gates green, 197/197 tests pass, `cli.js
-derive` reproduces the committed artifact byte-identically, `npm pack
---dry-run` diffs clean (dist internals only). Separately, critique-3 fixes
-are merged to main (PRs #7/#8); the harness fix batch (T-025/T-026) still
-awaits its PR to dev — see prior entries for that thread.
+T-027..T-038) is underway. T-027 (lift shared crawler/server infra) and
+T-028 (generic artifact-load seam + multi-server eval bridge) are DONE.
+T-028 this session: `src/shared/artifact-loader.ts` now holds the generic
+seam — `ArtifactValidationError` (remediation text is now a constructor
+arg, not hardcoded), `loadArtifactGeneric(dir, {files, assemble,
+crossValidate, remediation})` (schema validation via ajv, manifest sha256
+integrity check, optional referential crossValidate hook), with its own
+synthetic-spec test (`artifact-loader.test.ts`, a fake widgets/groups
+artifact unrelated to the framework domain). `src/shared/artifact.ts`
+`loadArtifact(dir)` is now a thin wrapper calling `loadArtifactGeneric`
+with the framework's `ARTIFACT_FILES`/assemble/crossValidate and the
+original remediation string verbatim — signature and every error message
+unchanged (`main.ts`, `emit.ts` — which imports `sha256` from
+`artifact.js` — and `artifact.test.ts` all untouched, confirmed via `git
+diff --stat`). `evals/framework/mcp-call.mjs` now selects the server dist
+path via `--server=<name>` flag or `MCP_EVAL_SERVER` env var
+(`dist/servers/<name>/main.js`), defaulting to `framework`; confirmed
+`list-tools` output byte-identical before/after (diffed old vs new via
+`git stash`). Gates green, 203/203 tests pass (was 197; +6 new). Behavior
+checked: rebuilt `dist/`, ran `node dist/servers/framework/main.js
+--version` (prints `v1.0.0 (data v2.1.1)`), ran `mcp-call.mjs list-tools`
+with no flag (unchanged) and with `--server=doesnotexist` / env var
+(correctly attempts `dist/servers/doesnotexist/main.js` and fails with
+`Connection closed`, proving the selection logic works). Separately,
+critique-3 fixes are merged to main (PRs #7/#8); the harness fix batch
+(T-025/T-026) still awaits its PR to dev — see prior entries for that
+thread.
 
 ## Next steps
 
-1. T-028 next in the focus-mcp-v1 loop: generic artifact-load seam,
-   building on the shared/markdown + shared/http modules T-027 just lifted.
-2. Continue T-029..T-038 per `.agents/specs/focus-mcp-v1.md` in order.
+1. T-029 next in the focus-mcp-v1 loop per `.agents/specs/focus-mcp-v1.md`
+   — builds on `loadArtifactGeneric` (T-028) and the shared/markdown +
+   shared/http modules (T-027) for the FOCUS ingestion pipeline.
+2. Continue T-030..T-038 per `.agents/specs/focus-mcp-v1.md` in order.
 3. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
 4. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -54,4 +71,4 @@ awaits its PR to dev — see prior entries for that thread.
 
 ## Last updated
 
-2026-07-28 — T-027 done (shared crawler/server infra lifted to src/shared); focus-mcp-v1 loop underway.
+2026-07-28 — T-028 done (generic artifact-load seam + multi-server eval bridge); focus-mcp-v1 loop underway.
