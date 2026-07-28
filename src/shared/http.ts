@@ -57,6 +57,9 @@ export interface CachedFetcherOptions {
    * URL and to scope which fetched URLs robots.txt disallow rules apply to. */
   origin: string;
   userAgent: string;
+  /** Overrides the default HTML-page validity check (min length + <h1>) —
+   * e.g. for crawlers fetching raw markdown/JSON instead of rendered pages. */
+  isValidBody?: (url: string, body: string) => boolean;
 }
 
 /**
@@ -69,6 +72,7 @@ export class CachedFetcher {
   private lastRequestAt = 0;
   private readonly origin: string;
   private readonly userAgent: string;
+  private readonly isValidBody: (url: string, body: string) => boolean;
   readonly report: FetchReport = {
     fromCache: [],
     fetched: [],
@@ -83,6 +87,7 @@ export class CachedFetcher {
     mkdirSync(cacheDir, { recursive: true });
     this.origin = opts.origin;
     this.userAgent = opts.userAgent;
+    this.isValidBody = opts.isValidBody ?? bodyLooksValid;
   }
 
   private cachePath(url: string): string {
@@ -145,7 +150,7 @@ export class CachedFetcher {
           headers: { "User-Agent": this.userAgent },
         });
         const body = await res.text();
-        if (res.status === 200 && bodyLooksValid(url, body)) {
+        if (res.status === 200 && this.isValidBody(url, body)) {
           const entry: CacheEntry = {
             url,
             status: 200,

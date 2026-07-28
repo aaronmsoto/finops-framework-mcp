@@ -13,40 +13,65 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027 (lift shared crawler/server infra) and
-T-028 (generic artifact-load seam + multi-server eval bridge) are DONE.
-T-028 this session: `src/shared/artifact-loader.ts` now holds the generic
-seam — `ArtifactValidationError` (remediation text is now a constructor
-arg, not hardcoded), `loadArtifactGeneric(dir, {files, assemble,
-crossValidate, remediation})` (schema validation via ajv, manifest sha256
-integrity check, optional referential crossValidate hook), with its own
-synthetic-spec test (`artifact-loader.test.ts`, a fake widgets/groups
-artifact unrelated to the framework domain). `src/shared/artifact.ts`
-`loadArtifact(dir)` is now a thin wrapper calling `loadArtifactGeneric`
-with the framework's `ARTIFACT_FILES`/assemble/crossValidate and the
-original remediation string verbatim — signature and every error message
-unchanged (`main.ts`, `emit.ts` — which imports `sha256` from
-`artifact.js` — and `artifact.test.ts` all untouched, confirmed via `git
-diff --stat`). `evals/framework/mcp-call.mjs` now selects the server dist
-path via `--server=<name>` flag or `MCP_EVAL_SERVER` env var
-(`dist/servers/<name>/main.js`), defaulting to `framework`; confirmed
-`list-tools` output byte-identical before/after (diffed old vs new via
-`git stash`). Gates green, 203/203 tests pass (was 197; +6 new). Behavior
-checked: rebuilt `dist/`, ran `node dist/servers/framework/main.js
---version` (prints `v1.0.0 (data v2.1.1)`), ran `mcp-call.mjs list-tools`
-with no flag (unchanged) and with `--server=doesnotexist` / env var
-(correctly attempts `dist/servers/doesnotexist/main.js` and fails with
-`Connection closed`, proving the selection logic works). Separately,
+T-027..T-038) is underway. T-027, T-028, and now T-029 (ingest FOCUS
+1.0/1.2) are DONE.
+
+T-029 this session: `src/crawlers/focus/` ingests the FOCUS spec from git
+tags `v1.0`/`v1.2` via raw.githubusercontent.com. `urls.ts` pins
+REPO/ORIGIN/VERSIONS (expected column counts 43/57) and
+`isValidFocusBody` (markdown/JSON has no `<h1>`, so the framework
+crawler's HTML-page body check doesn't apply — added an `isValidBody`
+override hook to `CachedFetcher` in `src/shared/http.ts`, additive/
+backward-compatible, default unchanged). `ingest.ts` enumerates columns
+from `columns.mdpp`'s `!INCLUDE` list, asserts the pinned count, cross-
+checks the jsDelivr flat tree (`data.jsdelivr.com/v1/packages/gh/...`)
+for both columns and attributes, then fetches every column/attribute/
+glossary/CHANGELOG file. `parse/columns.ts` + `parse/attributes.ts`
+extract structured fields (id/display_name/column_type/feature_level/
+allows_nulls/data_type/value_format/number_range/allowed_values/
+requirements[]/introduced_version) from the H1+prose+`##`-section
+format; `parse/table.ts` has the pipe-table parser and the
+requirements extractor (prefers top-level MUST/SHOULD bullets, falls
+back to prose-sentence splitting — both forms occur verbatim across the
+two tags). A parse failure degrades a record to `parse_quality:
+"markdown_only"`, never throws. `emit.ts` writes each version dir
+idempotently (skips the write entirely — including `crawled_at` — when
+every file's sha256 already matches disk, so a cache-warm refresh is a
+true no-op) plus `diff.ts` (1.0→1.2 diff by ColumnId, source-cited) and
+`index.json`. Types live in `src/shared/focus/types.ts` (re-exported
+from `shared/index.ts`) since T-030's server will load them too.
+Fixtures: 5 raw column files per version + 2 attribute files, committed
+verbatim (added `src/crawlers/focus/fixtures/` to `.prettierignore` —
+prettier reflows tables and `*em*`→`_em_`, which would corrupt them as
+parser-test fixtures). 27 new tests (parse/columns/attributes/table/
+diff/emit), all green, no live network. Real crawl run and committed:
+`node dist/crawlers/focus/cli.js` → 43 columns (v1.0) + 57 columns
+(v1.2), 100% `parsed` (0 markdown_only), diff 1.0→1.2 = 14 added / 0
+removed / 43 changed (matches spec's pinned "14 added columns" exactly).
+Verified byte-identical refresh by re-running from the warm cache
+(`.cache/crawl-focus/`, gitignored): `diff -rq` against a pre-refresh
+copy of `data/focus/` → identical, 0 network / 128 cached. `du -sh
+data/focus` = 852K (budget 3MB). Gates green, 226/226 tests pass (+23
+new for focus).
+
+Prior T-028 note (generic artifact-load seam + multi-server eval
+bridge): `src/shared/artifact-loader.ts` holds `loadArtifactGeneric`;
+`src/shared/artifact.ts` `loadArtifact(dir)` wraps it for the framework
+artifact unchanged. `evals/framework/mcp-call.mjs` selects the server
+dist path via `--server=<name>` / `MCP_EVAL_SERVER`. Separately,
 critique-3 fixes are merged to main (PRs #7/#8); the harness fix batch
 (T-025/T-026) still awaits its PR to dev — see prior entries for that
 thread.
 
 ## Next steps
 
-1. T-029 next in the focus-mcp-v1 loop per `.agents/specs/focus-mcp-v1.md`
-   — builds on `loadArtifactGeneric` (T-028) and the shared/markdown +
-   shared/http modules (T-027) for the FOCUS ingestion pipeline.
-2. Continue T-030..T-038 per `.agents/specs/focus-mcp-v1.md` in order.
+1. T-030 next in the focus-mcp-v1 loop per `.agents/specs/focus-mcp-v1.md`
+   — build the version-aware focus stdio server on top of `data/focus/`
+   (T-029): load each version dir through `loadArtifactGeneric` (T-028)
+   into `Map<spec_version, FocusArtifact>`, define the FOCUS
+   `ARTIFACT_FILES` schemas (columns.json/attributes.json/manifest.json),
+   `index.json` is discovery + integrity root.
+2. Continue T-031..T-038 per `.agents/specs/focus-mcp-v1.md` in order.
 3. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
 4. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -71,4 +96,4 @@ thread.
 
 ## Last updated
 
-2026-07-28 — T-028 done (generic artifact-load seam + multi-server eval bridge); focus-mcp-v1 loop underway.
+2026-07-28 — T-029 done (FOCUS 1.0/1.2 ingestion into data/focus); focus-mcp-v1 loop underway.

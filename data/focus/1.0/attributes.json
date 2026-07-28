@@ -1,0 +1,158 @@
+[
+  {
+    "description_md": "Naming and ordering convention for columns appearing in billing data.",
+    "display_name": "Column Naming and Ordering",
+    "exceptions_md": "* Identifiers will use the \"Id\" abbreviation since this is a standard pattern across the industry.\n* Product offerings that incur charges will use the \"Sku\" abbreviation because it is a well-understood term both within and outside the industry.",
+    "id": "ColumnNamingAndOrdering",
+    "introduced_version": "0.5",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "All columns defined by FOCUS MUST follow the following rules:",
+      "All custom columns MUST be prefixed with a consistent `x_` prefix to identify them as external, custom columns and distinguish them from FOCUS columns to avoid conflicts in future releases.",
+      "Columns that have an ID and a Name MUST have the `Id` or `Name` suffix in the Column ID. Display Name for a Column MAY avoid the `Name` suffix if it is considered superfluous.",
+      "Columns with the `Category` suffix MUST be normalized.",
+      "Custom (e.g., provider-defined) columns SHOULD follow the same rules listed above for FOCUS columns.",
+      "All FOCUS columns SHOULD be first in the provided dataset.",
+      "Custom columns SHOULD be listed after all FOCUS columns and SHOULD NOT be intermixed.",
+      "Columns MAY be sorted alphabetically, but custom columns SHOULD be after all FOCUS columns."
+    ],
+    "slug": "column_naming_and_ordering",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/column_naming_and_ordering.md"
+  },
+  {
+    "description_md": "Formatting for currency columns appearing in billing data.",
+    "display_name": "Currency Code Format",
+    "exceptions_md": "None",
+    "id": "CurrencyCodeFormat",
+    "introduced_version": "0.5",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "Currency-related columns MUST be represented as a three-letter alphabetic code as dictated in the governing document [ISO 4217:2015](https://www.iso.org/standard/64758.html)."
+    ],
+    "slug": "currency_code_format",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/currency_code_format.md"
+  },
+  {
+    "description_md": "Rules and formatting requirements for date/time-related columns appearing in billing data.",
+    "display_name": "Date/Time Format",
+    "exceptions_md": "None",
+    "id": "DateTimeFormat",
+    "introduced_version": "0.5",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "Date/time values MUST be in UTC (Coordinated Universal Time) to avoid ambiguity and ensure consistency across different time zones.",
+      "Date/time values format MUST be aligned with ISO 8601 standard, which provides a globally recognized format for representing dates and times (see [ISO 8601-1:2019](https://www.iso.org/standard/70907.html) governing document for details).",
+      "Values providing information about a specific moment in time MUST be represented in the extended ISO 8601 format with UTC offset ('YYYY-MM-DDTHH:mm:ssZ') and conform to the following guidelines:"
+    ],
+    "slug": "datetime_format",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/datetime_format.md"
+  },
+  {
+    "description_md": "Indicates how to include and apply discounts to usage charges or rows.",
+    "display_name": "Discount Handling",
+    "exceptions_md": "None",
+    "id": "DiscountHandling",
+    "introduced_version": "1.0-preview",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "All applicable discounts SHOULD be applied to each row they pertain to and SHOULD NOT be negated in a separate row.",
+      "All discounts applied to a row MUST apply to the entire charge.",
+      "Purchased discounts (e.g., commitment-based discounts) MUST be amortized.",
+      "Credits that are applied after the fact MUST use a ChargeCategory of \"Credit\"."
+    ],
+    "slug": "discount_handling",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/discount_handling.md"
+  },
+  {
+    "description_md": "Rules and formatting requirements for columns appearing in billing data that convey data as key-value pairs.",
+    "display_name": "Key-Value Format",
+    "exceptions_md": "None",
+    "id": "KeyValueFormat",
+    "introduced_version": "1.0-preview",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "Key-Value Format columns MUST contain a serialized JSON string, consistent with the [ECMA 404](https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf) definition of an object.",
+      "Keys in a key-value pair MUST be unique within an object.",
+      "Values in a key-value pair MUST be one of the following types: number, string, `true`, `false`, or `null`.",
+      "Values in a key-value pair MUST NOT be an object or an array."
+    ],
+    "slug": "key_value_format",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/key_value_format.md"
+  },
+  {
+    "description_md": "Indicates how to handle columns that don't have a value.",
+    "display_name": "Null Handling",
+    "exceptions_md": "None",
+    "id": "NullHandling",
+    "introduced_version": "0.5",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "Columns MUST use NULL when there isn't a value that can be specified for a nullable column.",
+      "Columns MUST NOT use empty strings or placeholder values such as 0 for numeric columns or \"Not Applicable\" for string columns to represent a null or not having a value, regardless of whether the column allows nulls or not."
+    ],
+    "slug": "null_handling",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/null_handling.md"
+  },
+  {
+    "description_md": "Rules and formatting requirements for numeric columns appearing in billing data.",
+    "display_name": "Numeric Format",
+    "exceptions_md": "None",
+    "id": "NumericFormat",
+    "introduced_version": "1.0-preview",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "Columns with a Numeric value format MUST contain a single numeric value.",
+      "Numeric values MUST be expressed as an integer value, a decimal value, or a value expressed in scientific notation. Fractional notation MUST NOT be used.",
+      "Numeric values expressed using scientific notation MUST be expressed using E notation \"mEn\" with a real number m and an integer n indicating a value of \"m x 10^n\".   The sign of the exponent MUST only be expressed as part of the exponent value if n is negative.",
+      "Numeric values MUST NOT be expressed with mathematical symbols, functions, or operators.",
+      "Numeric values MUST NOT contain qualifiers or additional characters (e.g., currency symbols, units of measure, etc.).",
+      "Numeric values MUST NOT contain commas or punctuation marks except for a single decimal point (\".\") if required to express a decimal value.",
+      "Numeric values MUST NOT include a character to represent a sign for a positive value. A negative sign (-) MUST indicate a negative value.",
+      "Columns with a Numeric value format MUST present one of the following values as the \"Data type\" in the column definition.",
+      "Providers SHOULD define precision and scale for Numeric Format columns using one of the following precision values in a data definition document that providers publish."
+    ],
+    "slug": "numeric_format",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/numeric_format.md"
+  },
+  {
+    "description_md": "Requirements for string-capturing columns appearing in billing data.",
+    "display_name": "String Handling",
+    "exceptions_md": "* When a record is provided after a change to a mutable string value and the [ChargeClass](#chargeclass) is \"Correction\", the record MAY contain the altered value.",
+    "id": "StringHandling",
+    "introduced_version": "1.0",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "String values MUST maintain the original casing, spacing, and other relevant consistency factors as specified by providers and end-users.",
+      "[*Charges*](#glossary:charge) to mutable entities (e.g., resource names) MUST be accurately reflected in corresponding *charges* incurred after the change and MUST NOT alter *charges* incurred before the change, preserving data integrity and auditability for all *charge* records.",
+      "Immutable string values that refer to the same entity (e.g., resource identifiers, region identifiers, etc.) MUST remain consistent and unchanged across all [*billing periods*](#glossary:billing-period).",
+      "Empty strings and strings consisting solely of spaces SHOULD NOT be used in not-nullable string columns."
+    ],
+    "slug": "string_handling",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/string_handling.md"
+  },
+  {
+    "description_md": "Indicates standards for expressing measurement units in columns appearing in billing data.",
+    "display_name": "Unit Format",
+    "exceptions_md": "None",
+    "id": "UnitFormat",
+    "introduced_version": "1.0-preview",
+    "license": "CC-BY-4.0",
+    "parse_quality": "parsed",
+    "requirements": [
+      "Units SHOULD be expressed as a single unit of measure adhering to one of the following three formats.",
+      "Units MAY be expressed with a unit quantity or time interval.  If a unit quantity or time interval is used, the unit quantity or time interval MUST be expressed as a whole number.  The following formats are valid:",
+      "Unit values and components of columns using the Unit Format MUST use a capitalization scheme that is consistent with the capitalization scheme used in this attribute if that term is listed in this section. For example, a value of \"gigabyte-seconds\" would not be compliant with this specification as the terms \"gigabyte\" and \"second\" are listed in this section with the appropriate capitalization.  If the unit is not listed in the table, it is to be used over a functional equivalent with a similar meaning with the same capitalization scheme.",
+      "Units SHOULD be composed of the list of recommended units listed in this section unless the unit value covers a *dimension* not listed in the recommended unit set, or if the unit covers a count-based unit distinct from recommended values in the count *dimension* listed in this section."
+    ],
+    "slug": "unit_format",
+    "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/attributes/unit_format.md"
+  }
+]

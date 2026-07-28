@@ -141,3 +141,47 @@
   doesn't actually ask for; the spec's T-008 bullet for this tool reads the
   same under both flag states, which only makes sense if it's flag-
   independent).
+
+## 2026-07-28 — CachedFetcher gets a pluggable `isValidBody`, not a FOCUS-specific fetcher (T-029)
+
+- Decision: `CachedFetcherOptions` grew an optional `isValidBody?: (url,
+  body) => boolean`, defaulting to the existing HTML-page check
+  (`bodyLooksValid` — min length + `<h1>`). The FOCUS crawler passes
+  `isValidFocusBody` (`body.length > 0`); the framework crawler passes
+  nothing and is byte-for-byte unaffected.
+- Why: the spec requires FOCUS ingestion to "reuse CachedFetcher", but its
+  entire body is raw markdown/JSON from raw.githubusercontent.com/
+  data.jsdelivr.com — never HTML, so the hardcoded `<h1>` check would reject
+  every fetch. A constructor-level override keeps `CachedFetcher` a single
+  shared class (robots/throttle/cache/retry logic stays common) rather than
+  forking it, and is additive so it can't regress the framework crawler
+  (confirmed: `http.test.ts` unchanged and green, framework refresh path
+  untouched).
+- Alternatives considered: a second `CachedFetcher`-like class in
+  `src/crawlers/focus/` (rejected — duplicates robots/throttle/retry/cache
+  logic the spec explicitly says to reuse); relaxing `bodyLooksValid`
+  itself to accept non-HTML bodies globally (rejected — weakens the
+  framework crawler's actual validity signal for its real failure mode,
+  truncated/error HTML pages, for no benefit to that crawler).
+
+## 2026-07-28 — data/focus version dirs skip the write entirely when unchanged (T-029)
+
+- Decision: `emitVersionArtifact` compares the newly computed sha256 map
+  against the on-disk `manifest.json` and, if every hash matches, returns
+  without touching any file — including `manifest.json` itself, so
+  `crawled_at` is only ever updated by an actual content change.
+- Why: the acceptance criterion is "refresh from cache is byte-identical."
+  `crawled_at: new Date().toISOString()` is the only source of
+  nondeterminism between two runs off the same warm cache; skip-if-
+  unchanged makes a second run a true no-op rather than requiring the
+  byte-identity check to special-case one timestamp field. Mirrors the
+  framework crawler's `emitArtifact` idempotence (`emit.ts`
+  `diff.hasChanges` gate) rather than inventing a different pattern.
+  Verified directly: copied `data/focus/` aside, re-ran the CLI against the
+  warm cache, `diff -rq` reported zero differences.
+- Alternatives considered: always rewrite and exclude `crawled_at` from the
+  "byte-identical" comparison in tests only (rejected — the acceptance
+  criterion says the *refresh* is byte-identical, not "byte-identical
+  modulo a documented exception"; a real diff-on-disk after every refresh
+  would also be confusing operationally, showing churn with no content
+  change).

@@ -1,4 +1,6 @@
 src/crawlers/framework/fixtures/
+src/crawlers/focus/fixtures/
 data/framework/
+data/focus/
 coverage/
 dist/
