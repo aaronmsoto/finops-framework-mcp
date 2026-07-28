@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "9378cc2cc3a9c4e5d1088560beb48580e980ff14fafdc87126c68b6fa90d69e0",
+  "chainHead": "2228b3c6b3a5c785074379de4e62cdd8d839bcf166c4d7271ba570d2588f8cab",
   "tasks": [
     {
       "id": "T-001",
@@ -677,9 +677,15 @@
         "Root package.json files narrowed so the framework tarball contains no focus dist or data (packaging test asserts both directions); focus tarball is under 1MB and contains dist/servers/focus/main.js + data/focus",
         "A test packs the shim into scratch, installs it, and runs the bin --version successfully; gates green"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "packages/focus-spec-mcp/ shim built, packed+installed+run --version verified offline, gates green (--tier all)",
+        "commit": "83a286e2b2488f031502321402ec332379071345",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T09:32:36.331Z"
+      },
+      "hash": "2228b3c6b3a5c785074379de4e62cdd8d839bcf166c4d7271ba570d2588f8cab"
     },
     {
       "id": "T-037",
