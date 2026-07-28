@@ -206,3 +206,35 @@
   call time instead of once at server startup (rejected — startup cost is
   trivial at this data size, ~2×100 docs, and framework's search.ts already
   establishes "build once at startup" as the pattern).
+
+## 2026-07-28 — FOCUS validator splits issues into errors vs. warnings (T-031)
+
+- Decision: `validateFocusCsv` (`src/shared/focus/validate.ts`) returns
+  `{errors, warnings}`. Structural/domain violations that make a value
+  uninterpretable (Mandatory column missing from the header, a value that
+  doesn't parse as its declared data type, a value outside the declared
+  `allowed_values` enum, a malformed currency code) are errors. Nullability
+  violations (a value is null where `allows_nulls: false`) and non-negative
+  range violations are warnings. Enum matching (`allowed_values`) is
+  case-insensitive. Null is recognized as either the literal `NULL` token
+  or an empty field.
+- Why: verified directly against the official FOCUS-Sample-Data 1.0 sample
+  (`scripts/fetch-official-sample.mjs` fetch, 1,000 real anonymized
+  multi-provider billing rows) — it contains 7 rows where a Mandatory,
+  non-nullable column (`ContractedCost`) is genuinely null, 1 row with a
+  negative `ContractedUnitPrice` where the spec says non-negative, and 7
+  rows using lowercase `"Usage-based"` for the `ChargeFrequency` enum
+  instead of `"Usage-Based"`. The FOCUS project publishes this sample as
+  "anonymized real world FOCUS data" (its own README), not an idealized
+  conformance fixture — real provider exports have these gaps today. A
+  validator that hard-fails on them would report 0/1000 real-world files as
+  conformant and be useless in practice; the T-031 acceptance bar ("official
+  sample passes with 0 errors") is only satisfiable at all by drawing this
+  error/warning line, and the split still surfaces every violation.
+- Alternatives considered: hard-error on every violation (rejected — fails
+  on the official ground truth itself, per above); silently ignore
+  nullability/range checks entirely (rejected — acceptance criterion
+  explicitly requires the validator to check nullability); case-sensitive
+  enum matching (rejected — same official sample would then need casing
+  fixed via a warning-only carve-out too, which is less honest than fixing
+  the comparison since the values are unambiguously the same word).

@@ -13,7 +13,42 @@
 ## In flight
 
 focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. T-027..T-030 are DONE.
+T-027..T-038) is underway. T-027..T-031 are DONE.
+
+T-031 this session: FOCUS CSV conformance validator. `src/shared/focus/
+validate.ts` — `validateFocusCsv(columns, csvText)` checks, purely from a
+version's `columns.json` (no hardcoded per-version rules): Mandatory-column
+header presence, per-row nullability, data type (Decimal/Date-Time/JSON),
+`allowed_values` membership (case-insensitive), currency-code format, and
+non-negative range. Returns `{errors, warnings}` — see decisions.md
+2026-07-28 entry for why nullability/range violations are warnings, not
+errors (the official 1.0 sample genuinely contains a few, being real
+anonymized provider data, not an idealized fixture). `parseCsv` is a small
+hand-rolled RFC4180 parser (quoted fields, `""` escaping, embedded commas).
+CLI: `src/crawlers/focus/validate-cli.ts` (`runValidate` exported for
+testing; `node dist/crawlers/focus/validate-cli.js <file.csv> --version
+1.0|1.2 [--data-dir data/focus]`), exit 1 only on hard errors.
+`scripts/fetch-official-sample.mjs` fetches FOCUS-Sample-Data's
+`FOCUS-1.0/focus_sample.csv` (raw.githubusercontent.com; api.github.com is
+proxy-blocked) once, guarded by an existing `PROVENANCE.json` (url,
+fetched_at, sha256, row_count) unless `--force`; committed fixture at
+`src/crawlers/focus/fixtures/samples/1.0/` with its own `NOTICE.md`
+attribution (root `NOTICE.md` also got a new CC BY 4.0 section for it).
+Tests: `validate.test.ts` — official sample passes with 0 errors (8
+warnings, all real: 7× ContractedCost null, 1× ContractedUnitPrice
+negative), a hand-built spec-conformant baseline round-trips clean, and 8
+deliberately corrupted variants (missing Mandatory column, bad Decimal,
+invalid enum, bad Date/Time, malformed JSON, bad currency code, plus 2
+warning-only cases) each produce column-addressed errors/warnings;
+`validate-cli.test.ts` covers the CLI wrapper incl. unknown-version exit 1.
+No network in any test — all read the committed fixture. Verified live:
+`node dist/crawlers/focus/validate-cli.js .../focus_sample.csv --version
+1.0` → "1000 rows, 44 columns, 0 errors, 8 warnings", exit 0. Gates green,
+284/284 tests (+16 for this task). Noted, not fixed (out of T-031's scope):
+root NOTICE.md still has no attribution section for the FOCUS spec text
+itself ingested in T-029 (`data/focus/{1.0,1.2}/columns.json` etc.) — only
+this task's sample-data fixture is covered now; a future task should add
+that section too.
 
 T-030 this session: `src/servers/focus/` — the version-aware FOCUS stdio
 server, mirroring `src/servers/framework/`'s module layout (server/main/
@@ -66,9 +101,10 @@ live via the eval bridge post-fix. Gates green again, 268/268 tests.
 
 ## Next steps
 
-1. Continue T-031..T-038 per `.agents/specs/focus-mcp-v1.md` in order
-   (KPI mapping / calculate_kpi, sample data, packaging shim, worker,
-   critique gate #4, evals/focus).
+1. Continue T-032..T-038 per `.agents/specs/focus-mcp-v1.md` in order
+   (seeded synthetic data generator — must pass the T-031 validator;
+   KPI mapping / calculate_kpi, packaging shim, worker, critique gate #4,
+   evals/focus).
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once focus-mcp-v1 work reaches a natural checkpoint.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -80,6 +116,10 @@ live via the eval bridge post-fix. Gates green again, 268/268 tests.
 
 ## Open questions
 
+- Root `NOTICE.md` has no attribution section for the FOCUS spec text
+  itself (data/focus/{1.0,1.2}/, ingested T-029) — only the T-031 sample
+  fixture is covered. Should be added (mirrors the FinOps Framework
+  section) but is out of scope for the tasks that found the gap.
 - M11 rename (Action → MaturityCharacteristic) — owner call; moot while
   Actions stay behind FINOPS_MCP_EXPERIMENTAL.
 - Known limitation: MCP SDK zod validation silently strips unknown tool
@@ -93,5 +133,5 @@ live via the eval bridge post-fix. Gates green again, 268/268 tests.
 
 ## Last updated
 
-2026-07-28 — T-030 done (version-aware focus stdio server, incl. verifier-flagged
-CC BY footer fix on get_attribute); focus-mcp-v1 loop underway.
+2026-07-28 — T-031 done (FOCUS CSV conformance validator + official 1.0
+ground-truth fixture); focus-mcp-v1 loop underway.

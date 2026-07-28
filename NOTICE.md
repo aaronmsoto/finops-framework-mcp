@@ -31,6 +31,20 @@ capability relationships — are marked `official: false` and/or stored under
 The FinOps Foundation does not endorse this project or its use of the
 material.
 
+## FOCUS official sample data — FOCUS project contributors (CC BY 4.0)
+
+`src/crawlers/focus/fixtures/samples/1.0/focus_sample.csv` is the official
+1,000-row sample dataset published by the FOCUS Open Cost and Usage
+Specification project at
+<https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS-Sample-Data>
+(`FOCUS-1.0/focus_sample.csv`), retrieved unmodified via
+`scripts/fetch-official-sample.mjs` and licensed under **CC BY 4.0**
+(<https://creativecommons.org/licenses/by/4.0/>). See
+`src/crawlers/focus/fixtures/samples/1.0/NOTICE.md` and the accompanying
+`PROVENANCE.json` for retrieval details. It is committed solely as a test
+fixture for the FOCUS conformance validator; the FOCUS project does not
+endorse this repository or its use of the data.
+
 ## This repository's code
 
 The source code of finops-framework-mcp is licensed under the MIT license —
