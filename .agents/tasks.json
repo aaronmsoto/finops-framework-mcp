@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "c5ddbcf3e789a6c5dec5b70ba89dc93ebc47d129afd2fa9df17cde3f3499c45d",
+  "chainHead": "fda3d77f33cd42e15ca9a94fcdf0722e4efdbde0fdc399c2ed8e276af47ab13e",
   "tasks": [
     {
       "id": "T-001",
@@ -566,12 +566,12 @@
       "status": "done",
       "evidence": {
         "gates": "pass",
-        "summary": "Focus stdio server: 7 tools + resources/prompts, version defaulting/echo, cross-version cursor rejection, outputSchema conformance test; 268/268 tests, gates green",
-        "commit": "a79c09d5e152133fcb13e52a80d821595aec78b3",
+        "summary": "Fixed verifier-flagged CC BY footer gap on get_attribute (attributeMd routing + test assertion); gates green, 268/268 tests",
+        "commit": "d5a38c10c1bb71864284af3824a4b2e100e8c9a0",
         "verifiedBy": "gates",
-        "completedAt": "2026-07-28T07:48:43.336Z"
+        "completedAt": "2026-07-28T07:56:14.903Z"
       },
-      "hash": "c5ddbcf3e789a6c5dec5b70ba89dc93ebc47d129afd2fa9df17cde3f3499c45d"
+      "hash": "fda3d77f33cd42e15ca9a94fcdf0722e4efdbde0fdc399c2ed8e276af47ab13e"
     },
     {
       "id": "T-031",
