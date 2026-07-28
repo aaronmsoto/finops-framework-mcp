@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "2228b3c6b3a5c785074379de4e62cdd8d839bcf166c4d7271ba570d2588f8cab",
+  "chainHead": "2c464a00dc1e920b2073c271de8658ecfdaecad90cab198a4b38a623b1684e95",
   "tasks": [
     {
       "id": "T-001",
@@ -696,9 +696,15 @@
         "scripts/bundle-worker-data.mjs ajv-validates artifacts at build time and emits JSON modules; no node:fs reachable from src/workers/index.ts (grep test); wrangler.toml has nodejs_compat and main src/workers/index.ts",
         "app.test.ts drives initialize, tools/list, and a tools/call on BOTH routes using native Request objects plus the 403/404/405 cases; docs/deploy-worker.md gives the owner deploy checklist; gates green"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Worker (src/workers/) routes /mcp/framework + /mcp/focus over WebStandardStreamableHTTPServerTransport, stateless, Origin-allowlisted; scripts/bundle-worker-data.mjs ajv-validates + emits committed data modules; fs-boundary test proves no node:fs reachable; app.test.ts covers both routes + 403/404/405; docs/deploy-worker.md; gates --tier all green (354 tests)",
+        "commit": "bdc29614aa2802ae361d5cfe73a5ea2a3a67a57a",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T09:54:04.324Z"
+      },
+      "hash": "2c464a00dc1e920b2073c271de8658ecfdaecad90cab198a4b38a623b1684e95"
     },
     {
       "id": "T-038",
