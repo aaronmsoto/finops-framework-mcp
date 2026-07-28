@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "c9785e798e6bb305fac655e2b4cc124ea52747079d7904306435b954b32b2ba7",
+  "chainHead": "97f179d883b5a554df1d23b882f2dced4697d71fadf32dde9da84eaca6611995",
   "tasks": [
     {
       "id": "T-001",
@@ -620,9 +620,15 @@
         "Tests cross-validate every mapped framework KPI slug against data/framework content and every referenced column against the target version artifact",
         "get_kpi_mapping tool serves the mapping with an UNOFFICIAL banner in text content and framework finops:// URI cross-references (tests); artifact hashed in index.json; gates green"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "18 unofficial KPI-to-FOCUS-column mappings + get_kpi_mapping tool; 315/315 tests, gates green",
+        "commit": "3b880b37a3c07d049bd588060e184abfa7667191",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T08:44:10.528Z"
+      },
+      "hash": "97f179d883b5a554df1d23b882f2dced4697d71fadf32dde9da84eaca6611995"
     },
     {
       "id": "T-034",
