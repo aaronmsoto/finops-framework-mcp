@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "0ef16168a45816c63580044032e519df55f35a3e961d888615703dd8a5597d35",
+  "chainHead": "c9785e798e6bb305fac655e2b4cc124ea52747079d7904306435b954b32b2ba7",
   "tasks": [
     {
       "id": "T-001",
@@ -601,9 +601,15 @@
         "Generated 1.0 data passes the 1.0 validator and generated 1.2 data passes the 1.2 validator (tests); headers exactly match each version's column list",
         "Committed synthetic samples total 200KB or less and are clearly labeled synthetic; gates green"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Seeded generator (mulberry32) derives values purely from columns.json metadata; 297/297 tests incl. determinism + 0-error/0-warning validator pass for both versions; synthetic fixtures 140KB total, clearly labeled",
+        "commit": "9bf337175935a83bb87fe7c9e66b31eeec8f6ce2",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T08:26:45.449Z"
+      },
+      "hash": "c9785e798e6bb305fac655e2b4cc124ea52747079d7904306435b954b32b2ba7"
     },
     {
       "id": "T-033",
