@@ -1124,7 +1124,7 @@
         "docs/guide/index.html exists per spec page 1: repo intro, both servers side by side with live-probed counts, getting-started (both bins, Claude Code + Claude Desktop config, Worker endpoints), one real first-call transcript per server, next-page map; self-contained, shared chrome, light/dark, six-link nav",
         "Every fact/number/transcript live-probed (spec Hard content rules); gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
