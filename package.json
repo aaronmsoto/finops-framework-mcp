@@ -10,6 +10,11 @@
     "finops-framework"
   ],
   "license": "MIT",
+  "author": "Aaron Soto",
+  "homepage": "https://github.com/aaronmsoto/finops-framework-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/aaronmsoto/finops-framework-mcp/issues"
+  },
   "type": "module",
   "repository": {
     "type": "git",
@@ -42,7 +47,7 @@
     "prepublishOnly": "npm run build && npm test"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

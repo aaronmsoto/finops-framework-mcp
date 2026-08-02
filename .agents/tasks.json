@@ -1051,7 +1051,7 @@
         "Both package.json files gain author, homepage, bugs; engines bumped to >=22 in both (CI tests node 22 only; no workflow edits); focus package README 'contribution docs' promise now resolves to real files",
         "npm pack for both packages still succeeds; gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

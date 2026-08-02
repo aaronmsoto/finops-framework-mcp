@@ -10,6 +10,11 @@
     "cost-and-usage-spec"
   ],
   "license": "MIT",
+  "author": "Aaron Soto",
+  "homepage": "https://github.com/aaronmsoto/finops-framework-mcp/tree/main/packages/finops-focus-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/aaronmsoto/finops-framework-mcp/issues"
+  },
   "type": "module",
   "repository": {
     "type": "git",
@@ -31,7 +36,7 @@
     "prepack": "node ../../scripts/pack-focus.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

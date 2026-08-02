@@ -12,6 +12,17 @@
 
 ## In flight
 
+**T-056 done** (2026-08-02, this session): dual-launch hygiene (review
+L3/L4) — see `.agents/journal/20260802-t056-dual-launch-hygiene.md` for full
+detail. Added root `SECURITY.md` (GitHub Security Advisories as the report
+channel, no personal email published) and `CONTRIBUTING.md` (points at
+AGENTS.md), plus `.github/ISSUE_TEMPLATE/bug_report.md`
+(`.github/workflows/` untouched). Both `package.json`s gained
+`author`/`homepage`/`bugs` and `engines.node` bumped `>=20` → `>=22`
+(confirmed CI already only tests node 22). Verified: `./scripts/agentic
+gates` all green (392 tests); `npm pack --dry-run` succeeds from both repo
+root and `packages/finops-focus-mcp/` (prepack staging still works).
+
 **T-055 done** (2026-08-02, this session): docs coherence pass (review
 DOC-1/3/4, L5) — see `.agents/journal/20260802-t055-docs-coherence.md` for
 full detail. MEMORY.md rewritten for v1 reality via the `update-memory`
@@ -144,10 +155,9 @@ owner-gated.** State as of 2026-08-02:
 3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
-4. Next agent session: T-056 next (dual-launch hygiene), then T-057..T-059
-   (architecture periphery, derive integration test, demo format-gate).
-   Regenerate `docs/mcp-surface.md` (`npm run gen:mcp-surface`) if any of
-   those touch a prompt/resource/tool.
+4. Next agent session: T-057..T-059 (architecture periphery, derive
+   integration test, demo format-gate). Regenerate `docs/mcp-surface.md`
+   (`npm run gen:mcp-surface`) if any of those touch a prompt/resource/tool.
 
 ## Open questions
 
@@ -178,6 +188,5 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — T-055 session (docs coherence: MEMORY.md rewrite,
-combined-scenario.xml step 4, architecture.md/AGENTS.md "Now built"
-pointers, deploy-worker.md no-auth posture).
+2026-08-02 — T-056 session (dual-launch hygiene: SECURITY.md,
+CONTRIBUTING.md, issue template, npm author/homepage/bugs, engines >=22).
