@@ -644,9 +644,35 @@ export function registerTools(server: McpServer, store: FocusStore): void {
           `${note}\n\n\`${changed.id}\` changed fields: ${changed.changed_fields.join(", ")}.`,
         );
       }
+      const fromArtifact = store.versions.get(diff.from);
+      const toArtifact = store.versions.get(diff.to);
+      const matches = (x: { id: string; slug: string }) =>
+        x.id.toLowerCase() === needle || x.slug === needle;
+      const fromMatch = fromArtifact?.columns.find(matches);
+      const toMatch = toArtifact?.columns.find(matches);
+      if (!fromMatch && !toMatch) {
+        const slugs = [
+          ...new Set([
+            ...(fromArtifact?.columns.map((x) => x.slug) ?? []),
+            ...(toArtifact?.columns.map((x) => x.slug) ?? []),
+          ]),
+        ];
+        const near = nearestMatches(column, slugs);
+        return err(
+          `Unknown column "${column}" in FOCUS ${diff.from} or ${diff.to}.` +
+            (near.length ? ` Did you mean: ${near.join(", ")}?` : "") +
+            ` Use list_columns for the full list.`,
+        );
+      }
+      const canonicalId = (fromMatch ?? toMatch)!.id;
       return ok(
-        { from: diff.from, to: diff.to, column, status: "unchanged" },
-        `${note}\n\n\`${column}\` is unchanged between ${diff.from} and ${diff.to} (or not a recognized column in either version).`,
+        {
+          from: diff.from,
+          to: diff.to,
+          column: canonicalId,
+          status: "unchanged",
+        },
+        `${note}\n\n\`${canonicalId}\` is unchanged between ${diff.from} and ${diff.to}.`,
       );
     },
   );

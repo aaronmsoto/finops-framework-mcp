@@ -791,7 +791,7 @@
         "compare_versions with a column that resolves in neither served version returns isError true with the same did-you-mean suggester get_column uses; status 'unchanged' is reserved for columns present in both versions with no diff entry",
         "Live probe: column BilledCosts errors with suggestions; column BilledCost still reports changed; a genuinely-both-versions-no-diff case (if none exists in the current diff, a unit test constructs one) reports unchanged; gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

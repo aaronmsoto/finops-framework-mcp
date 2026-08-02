@@ -3,14 +3,16 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadFocusStore } from "../../shared/index.js";
+import type { FocusStore } from "../../shared/focus/artifact.js";
 import { createServer } from "./server.js";
 
 const FOCUS_DIR = join(import.meta.dirname, "../../../data/focus");
 
 let client: Client;
+let store: FocusStore;
 
 beforeAll(async () => {
-  const store = loadFocusStore(FOCUS_DIR);
+  store = loadFocusStore(FOCUS_DIR);
   const server = createServer(store);
   const [clientTransport, serverTransport] =
     InMemoryTransport.createLinkedPair();
@@ -181,7 +183,52 @@ describe("tools", () => {
 
   it("compare_versions reports 'changed' for a column present in both with different content", async () => {
     const res = await call("compare_versions", { column: "BilledCost" });
-    expect(["changed", "unchanged"]).toContain(res.structuredContent?.status);
+    expect(res.structuredContent?.status).toBe("changed");
+  });
+
+  it("compare_versions errors on an unrecognized column instead of reporting 'unchanged'", async () => {
+    const res = await call("compare_versions", { column: "BilledCosts" });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(/Unknown column "BilledCosts"/);
+    expect(res.content[0]?.text).toMatch(/Did you mean/);
+  });
+
+  it("compare_versions reports 'unchanged' for a column present in both versions with no diff entry", async () => {
+    const pickId = store.diff.changed_columns[0]?.id;
+    expect(pickId).toBeTruthy();
+    const syntheticStore: FocusStore = {
+      ...store,
+      diff: {
+        ...store.diff,
+        changed_columns: store.diff.changed_columns.filter(
+          (c) => c.id !== pickId,
+        ),
+      },
+    };
+    const syntheticServer = createServer(syntheticStore);
+    const [clientTransport, serverTransport] =
+      InMemoryTransport.createLinkedPair();
+    const syntheticClient = new Client({
+      name: "test-client-synthetic",
+      version: "0.0.0",
+    });
+    await Promise.all([
+      syntheticServer.connect(serverTransport),
+      syntheticClient.connect(clientTransport),
+    ]);
+    const res = await syntheticClient.callTool({
+      name: "compare_versions",
+      arguments: { column: pickId },
+    });
+    expect(res.isError).toBeFalsy();
+    expect(
+      (res as { structuredContent?: Record<string, unknown> }).structuredContent
+        ?.status,
+    ).toBe("unchanged");
+    expect(
+      (res as { structuredContent?: Record<string, unknown> }).structuredContent
+        ?.column,
+    ).toBe(pickId);
   });
 });
 

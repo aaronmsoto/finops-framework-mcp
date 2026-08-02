@@ -13,7 +13,33 @@
 ## In flight
 
 Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
-is underway. **T-041 done this session** (C1-protocol-1, MAJOR):
+is underway. **T-042 done this session** (C1-protocol-2, MAJOR):
+`compare_versions`'s fallthrough branch (`src/servers/focus/tools.ts`)
+returned `status: "unchanged"` for *any* column not in the diff's added/
+removed/changed lists — including typos, since with today's data (14
+added, 0 removed, 43 changed, i.e. every real overlapping column already
+flagged changed) "unchanged" was reachable *exclusively* via bad input.
+Fixed: before falling through to "unchanged", the column is looked up
+against both `store.versions.get(diff.from)`/`get(diff.to)`'s column sets
+(same matcher `findColumn` uses); if it resolves in neither, returns
+`err(...)` with the same `nearestMatches` did-you-mean suggester
+`get_column` uses, `isError: true`. Only resolving in at least one artifact
+falls through to `status: "unchanged"`, now reporting the canonical id
+(mirrors added/removed/changed already doing so) instead of the raw input.
+`server.test.ts`: tightened the pre-existing BilledCost test from
+`toContain(["changed","unchanged"])` to `.toBe("changed")` (the loose
+assertion was the old bug's cover); added a typo'd-column error test; and
+since the real diff has zero naturally-unchanged columns, added a
+synthetic-store test (clone real store, drop one real `changed_columns`
+entry from the clone's diff, confirm `status: "unchanged"` for that real,
+both-versions column). Gates green (367 tests, up from 365). Live-probed:
+`compare_versions '{"column":"BilledCosts"}'` → isError true, "Did you
+mean: billedcost?"; `'{"column":"BilledCost"}'` → still "changed"
+unaffected. Independently verified by the `reviewer` subagent (traced
+logic, live-probed the built server, ran gates itself): pass, no defects.
+Full detail: `.agents/journal/20260730-t042-compare-versions-unknown-column.md`.
+
+**T-041 done in an earlier session this batch** (C1-protocol-1, MAJOR):
 `get_requirements` (`src/servers/focus/tools.ts`) built its bullet list
 directly and returned it with no attribution, unlike every other
 content-bearing tool which routes through `render.ts`'s `footer()`. Fixed:
@@ -229,13 +255,12 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-039, T-040, T-041 done.** Next: T-042..T-047 (gate 4's 6 remaining
-   MAJOR/MINOR fixes — compare_versions unknown-column status,
-   README "official" phrasing, compare_versions materiality caveat,
-   calculate_kpi 0/0 guard, KPI mapping version differentiation,
-   cross-version unknown-column hints, diff artifact official:false
-   marker, package trademark naming), one task at a time per the task
-   queue.
+1. **T-039, T-040, T-041, T-042 done.** Next: T-043..T-047 (gate 4's
+   remaining MAJOR/MINOR fixes — README "official" phrasing,
+   compare_versions materiality caveat, calculate_kpi 0/0 guard, KPI
+   mapping version differentiation, cross-version unknown-column hints,
+   diff artifact official:false marker, package trademark naming), one
+   task at a time per the task queue.
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -292,7 +317,11 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-30 — T-041 done (get_requirements gains the same CC BY footer +
+2026-07-30 — T-042 done (compare_versions errors with did-you-mean
+suggestions on columns unknown to both versions instead of reporting
+"unchanged", gate 4 C1-protocol-2; new tests incl. a synthetic
+genuinely-unchanged case; gates green, live-probed, reviewer-verified).
+T-041 done earlier same day (get_requirements gains the same CC BY footer +
 source_url/license get_column uses, gate 4 C1-protocol-1; new test, gates
 green, live-probed). T-040 done earlier same day (Worker CORS: OPTIONS
 preflight + ACAO on every allowed-Origin response, gate 4 C4-community-1;
