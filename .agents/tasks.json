@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "0033df447166e26ea8013a917d3130d7619aadb2138fd48530e2ed6771f7cb4b",
+  "chainHead": "4b336cc8c48d51eef2dfd8af6295889262ed09a2e710ad390570be56eeb18a60",
   "tasks": [
     {
       "id": "T-001",
@@ -903,9 +903,15 @@
         ".agents/memory/decisions.md records the owner decision: finops-focus-mcp for family consistency with finops-framework-mcp, LF trademark-policy quote, knowingly-accepted descriptive-use risk with mitigations",
         "gates --tier all pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Renamed focus-spec-mcp to finops-focus-mcp everywhere live (shim dir, package/bin/mcpName, server.json id, server identity + schema $ids, pack script, demo, deploy doc, eval header, spec, memory); tarball re-packed (241KB) and temp-install bin prints 'finops-focus-mcp v1.0.0 (FOCUS spec versions: 1.0, 1.2; latest 1.2)'; decision + LF-policy risk rationale in decisions.md; gates --tier all PASS",
+        "commit": "0bd490beb3e6aa9eceaa84cf54538d1d83382ae5",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T05:48:58.365Z"
+      },
+      "hash": "4b336cc8c48d51eef2dfd8af6295889262ed09a2e710ad390570be56eeb18a60"
     }
   ]
 }
