@@ -92,9 +92,11 @@ describe("packaging: finops-focus-mcp shim (T-036)", () => {
         path.join(installScratch, "package.json"),
         JSON.stringify({ name: "focus-pack-scratch", version: "0.0.0" }),
       );
-      // --offline: @modelcontextprotocol/sdk, ajv, ajv-formats, and zod are
-      // already resolved dependencies of the root project at these exact
-      // versions, so they're in the local npm cache — no network needed.
+      // --prefer-offline: @modelcontextprotocol/sdk, ajv, ajv-formats, and
+      // zod are resolved dependencies of the root project, so a warm local
+      // npm cache serves them without network; strict --offline breaks in
+      // CI (ENOTCACHED) because `npm ci` installs from the lockfile without
+      // caching packuments, which offline range resolution needs.
       execFileSync(
         "npm",
         [
@@ -103,7 +105,7 @@ describe("packaging: finops-focus-mcp shim (T-036)", () => {
           "--no-save",
           "--no-audit",
           "--no-fund",
-          "--offline",
+          "--prefer-offline",
         ],
         { cwd: installScratch, stdio: "inherit" },
       );
