@@ -13,7 +13,33 @@
 ## In flight
 
 Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
-is underway. **T-040 done this session** (the batch's other BLOCKER,
+is underway. **T-041 done this session** (C1-protocol-1, MAJOR):
+`get_requirements` (`src/servers/focus/tools.ts`) built its bullet list
+directly and returned it with no attribution, unlike every other
+content-bearing tool which routes through `render.ts`'s `footer()`. Fixed:
+the handler now appends `footer(resolved.artifact, c.source_url)` to the
+text response (same helper, same trailing line `get_column` uses) and its
+`outputSchema`/structured payload gain `source_url: z.string()` and
+`license: z.literal("CC-BY-4.0")` alongside the existing `spec_version`/
+`column`/`requirements` fields — mirrors `columnRecordSchema`'s existing
+`source_url`/`license` pair. `render.js` needed a new import (`footer`
+alongside the existing `attributeMd`/`columnMd`); no change to `render.ts`
+itself. `server.test.ts` gained a new case
+("get_requirements carries the same CC BY attribution as get_column")
+asserting the footer's licensed-CC-BY-4.0 substring in the text and
+`source_url`/`license` in structuredContent; the pre-existing
+"returns the verbatim MUST/SHOULD bullets" test wasn't pinning the old
+footer-less text (it only asserted on `requirements`), so no rewrite was
+needed there. Gates green (`--tier` default: 365 tests, up from 364).
+Live-probed via `node evals/framework/mcp-call.mjs --server=focus call
+get_requirements '{"column":"BilledCost"}'`: text now ends "...Source:
+https://raw.githubusercontent.com/.../billedcost.md — © FinOps Foundation,
+licensed CC BY 4.0 (...). Content restructured and adapted by
+focus-spec-mcp..."; structuredContent gained
+`"source_url":"https://raw.githubusercontent.com/.../billedcost.md"` and
+`"license":"CC-BY-4.0"`, matching get_column's attribution verbatim.
+
+**T-040 done in an earlier session this batch** (the batch's other BLOCKER,
 C4-community-1): `src/workers/app.ts`'s `createFetchHandler` never
 answered OPTIONS preflights and never emitted `Access-Control-Allow-
 Origin`, so no browser (including the T-038 demo) could ever read a
@@ -203,9 +229,13 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-039 and T-040 done** (both BLOCKERs closed). Next: T-041..T-047
-   (gate 4's 7 remaining MAJOR/MINOR fixes listed above under
-   "In flight"), one task at a time per the task queue.
+1. **T-039, T-040, T-041 done.** Next: T-042..T-047 (gate 4's 6 remaining
+   MAJOR/MINOR fixes — compare_versions unknown-column status,
+   README "official" phrasing, compare_versions materiality caveat,
+   calculate_kpi 0/0 guard, KPI mapping version differentiation,
+   cross-version unknown-column hints, diff artifact official:false
+   marker, package trademark naming), one task at a time per the task
+   queue.
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -262,8 +292,11 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-30 — T-040 done (Worker CORS: OPTIONS preflight + ACAO on every
-allowed-Origin response, gate 4 C4-community-1; deploy doc + demo hint
-fixed; gates --tier all green, live-probed). T-039 done earlier same day
-(requirements parser keeps nested normative bullets + RECOMMENDED/MAY,
-gate 4 C2-fidelity-1/2; data/focus + worker bundle re-derived).
+2026-07-30 — T-041 done (get_requirements gains the same CC BY footer +
+source_url/license get_column uses, gate 4 C1-protocol-1; new test, gates
+green, live-probed). T-040 done earlier same day (Worker CORS: OPTIONS
+preflight + ACAO on every allowed-Origin response, gate 4 C4-community-1;
+deploy doc + demo hint fixed; gates --tier all green, live-probed). T-039
+done earlier same day (requirements parser keeps nested normative bullets
++ RECOMMENDED/MAY, gate 4 C2-fidelity-1/2; data/focus + worker bundle
+re-derived).

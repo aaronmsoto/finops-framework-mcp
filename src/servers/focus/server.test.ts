@@ -152,6 +152,16 @@ describe("tools", () => {
     expect(requirements.every((r) => /MUST|SHOULD/.test(r))).toBe(true);
   });
 
+  it("get_requirements carries the same CC BY attribution as get_column", async () => {
+    const res = await call("get_requirements", { column: "BilledCost" });
+    expect(res.isError).toBeFalsy();
+    expect(res.content[0]?.text).toMatch(
+      /licensed CC BY 4\.0 \(https:\/\/creativecommons\.org\/licenses\/by\/4\.0\/\)/,
+    );
+    expect(res.structuredContent?.source_url).toMatch(/^https:\/\//);
+    expect(res.structuredContent?.license).toBe("CC-BY-4.0");
+  });
+
   it("compare_versions without a column returns the full 1.0->1.2 diff", async () => {
     const res = await call("compare_versions");
     expect(res.isError).toBeFalsy();

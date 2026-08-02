@@ -24,7 +24,7 @@ import {
   RO,
   type ToolResult,
 } from "../../shared/tools.js";
-import { attributeMd, columnMd } from "./render.js";
+import { attributeMd, columnMd, footer } from "./render.js";
 import { buildSearchIndex, search } from "./search.js";
 import { FRAMEWORK_KPI_URI, URI } from "./uris.js";
 
@@ -512,6 +512,8 @@ export function registerTools(server: McpServer, store: FocusStore): void {
         spec_version: z.string(),
         column: z.string(),
         requirements: z.array(z.string()),
+        source_url: z.string(),
+        license: z.literal("CC-BY-4.0"),
       },
       annotations: RO,
     },
@@ -520,15 +522,18 @@ export function registerTools(server: McpServer, store: FocusStore): void {
       if (isErr(resolved)) return resolved;
       const c = findColumn(resolved.artifact, column);
       if (isErr(c)) return c;
+      const body = c.requirements.length
+        ? c.requirements.map((r) => `- ${r}`).join("\n")
+        : `No normative requirements bullets parsed for ${c.id}.`;
       return ok(
         {
           spec_version: resolved.version,
           column: c.id,
           requirements: c.requirements,
+          source_url: c.source_url,
+          license: "CC-BY-4.0",
         },
-        c.requirements.length
-          ? c.requirements.map((r) => `- ${r}`).join("\n")
-          : `No normative requirements bullets parsed for ${c.id}.`,
+        body + footer(resolved.artifact, c.source_url),
       );
     },
   );
