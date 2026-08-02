@@ -948,6 +948,119 @@
         "completedAt": "2026-08-02T06:51:52.390Z"
       },
       "hash": "90a5bc639063b3b836c59e63778e00fbd56ecbdfb35c207676cefc47ffa20933"
+    },
+    {
+      "id": "T-051",
+      "title": "Tool description fixes: exact params, cross-refs, live counts (review TN-1/2/3)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "list_capabilities description names the exact filter param 'domain' (no 'domain slug' prose trap); assess_maturity_path has .describe() on every param and cross-references get_maturity_assessment; the four hardcoded corpus counts (framework tools.ts ~203,545; focus tools.ts ~307,568) are interpolated from the loaded artifact/store at registration time (focus version-list pattern) or pinned by a test asserting description matches artifact counts",
+        "Live probes: list-tools shows the new descriptions; list_capabilities with domain filter works and prose matches; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-052",
+      "title": "MCP protocol polish: pagination parity, Worker 405s, listChanged docs (review MCP-1/2/3)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "Every paginated tool's TEXT block reports 'Showing X of Y' + next-cursor presence, mirroring get_kpis (list_capabilities, list_columns, search_framework, and any others found); existing text-snapshot tests updated as part of this behavior change (authorized)",
+        "Worker short-circuits GET and DELETE on /mcp/* with 405 + Allow header instead of opening an eternal silent SSE stream; app.test.ts cases added for both",
+        "listChanged comment/doc mismatch resolved: server.ts comments (framework ~20-23 and focus equivalent) corrected to note the SDK advertises listChanged though the artifact is immutable per process, or the flag suppressed if the SDK allows; gates --tier all pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-053",
+      "title": "Add map-kpi-to-focus-columns prompt to the focus server (review MCP-4)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "src/servers/focus/prompts.ts registers a third prompt guiding the KPI->FOCUS-columns workflow (completable kpi/capability + version args, embedded resource or tool-call guidance, UNOFFICIAL framing) mirroring the existing prompt structure; prompt list/get covered by a test; live probe shows it in prompts/list with working completion"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-054",
+      "title": "Generate docs/mcp-surface.md: per-server prompts/resources/tools hierarchy",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "evals/framework/mcp-call.mjs gains list-resources, list-resource-templates, and list-prompts commands (same client bridge pattern as list-tools)",
+        "docs/mcp-surface.md documents BOTH servers as a hierarchy: server -> prompts (name, args) -> resources (fixed URIs + templates with completion notes) -> tools (name, one-line purpose, params with defaults/limits), generated from LIVE bridge output after all sibling tasks land, with resource/tool counts and an UNOFFICIAL-marking legend; both READMEs link to it",
+        "A test or generation script (scripts/gen-mcp-surface.mjs) makes the doc reproducible; doc content matches live output at commit time; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-055",
+      "title": "Docs coherence: MEMORY.md, combined-scenario step 4, architecture/AGENTS framing, Worker posture (review DOC-1/3/4, L5)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "MEMORY.md rewritten per the update-memory protocol: current phase (v1 + finops-focus-mcp built, four critique gates + final review passed, publish owner-gated), FOCUS/Worker/demo invariants, 'inferred edges' invariant dropped; under 200 lines (memory lint hard limit)",
+        "evals/focus/combined-scenario.xml step-4 expected text matches the T-045 reality (1.2 commitment mappings include CommitmentDiscountQuantity/Unit with version-differentiated caveat)",
+        "docs/architecture.md and AGENTS.md project framing updated: two MCP servers, Worker Streamable HTTP + demo now built (short 'now built' pointers, no rewrite of historical design rationale); AGENTS.md stays ~150 lines",
+        "docs/deploy-worker.md Notes/limits documents the deliberate no-auth/no-rate-limit posture for stateless read-only public data and points at Cloudflare rate limiting; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-056",
+      "title": "Dual-launch hygiene: SECURITY/CONTRIBUTING/issue template, npm metadata, engines (review L3/L4)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "SECURITY.md (report channel + supported-versions note), CONTRIBUTING.md (short; points at AGENTS.md, gates, PR flow), and one .github/ISSUE_TEMPLATE bug template exist; .github/workflows NOT touched",
+        "Both package.json files gain author, homepage, bugs; engines bumped to >=22 in both (CI tests node 22 only; no workflow edits); focus package README 'contribution docs' promise now resolves to real files",
+        "npm pack for both packages still succeeds; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-057",
+      "title": "Architecture periphery: worker entry tests, direct-run guard, notFound dedup, dead code (review R2/3/4/5)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "Pure-function tests for parseAllowedOrigins and loadWorkerData (src/workers/index.ts, data.ts — currently 0% covered)",
+        "src/crawlers/framework/cli.ts direct-run check uses isDirectRunOf(import.meta.url) from src/shared/direct-run.ts instead of endsWith('cli.js')",
+        "The byte-identical notFound() helper (framework/resources.ts ~23-42 = focus/resources.ts ~18-37) is hoisted into src/shared with both servers importing it; existing typo tests still pass",
+        "Dead code deleted: parseOverview() in parse/sections.ts (+ its orphaned tests) and the template greet() scaffold in src/index.ts (+ tests/index.test.ts adjusted or removed as part of this authorized cleanup); gates --tier all pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-058",
+      "title": "Derive pipeline integration test (review R1)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "An integration test runs deriveFromDocs/deriveArtifactPayload against the committed data/framework/content/markdown and asserts the result equals the committed artifact JSON (byte or deep-equal), closing the 0%-covered derive orchestration gap; runtime stays reasonable for the fast tier or is bound to the full tier; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-059",
+      "title": "Bring demo/ under the format gate (review R6; protected-path edit AUTHORIZED)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "This task EXPLICITLY authorizes editing the agentic.config.json format gate command (hard-rule escape hatch) to include demo/ in prettier check scope; demo/ files prettier-formatted once via --write",
+        "If the PreToolUse hook or integrity gate still blocks the config edit, mark this task blocked with the hook message in the journal and leave the demo prettier-write as the landed portion; gates pass either way"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
