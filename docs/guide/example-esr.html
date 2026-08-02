@@ -6,7 +6,7 @@
   "From Capability to Calculation") into the shared six-page guide chrome. Content,
   structure and every number are unchanged from that artifact; only the header/nav/
   footer and page framing are new. Base CSS reused verbatim from framework-server.html /
-  focus-server.html (header.site/nav.site/footer.site convention); page-specific
+  focus-server.html (header.guide/nav.guide/footer.guide convention); page-specific
   additions (esr-card, toggle-wrap/.vt) appended at the end of the style block, as
   those two reference pages do.
 
@@ -115,20 +115,25 @@
   .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
   a { color: var(--moss); }
 
-  /* --- shared chrome: header/nav/footer --- */
-  header.site { max-width: 78ch; margin: 0 auto; padding: 1.6rem 1.25rem 1rem; }
-  header.site h1 { font-size: 1.5rem; margin: 0 0 0.7rem; }
-  nav.site { display: flex; flex-wrap: wrap; gap: 0.4rem 0.3rem; font-size: 0.82rem; }
-  nav.site a { text-decoration: none; color: var(--slate); padding: 0.3rem 0.6rem;
-    border-radius: 999px; border: 1px solid var(--line); background: var(--panel-2); }
-  nav.site a[aria-current="page"] { color: var(--paper); background: var(--moss);
+  /* --- shared chrome: guide header + nav + footer (identical on all six pages) --- */
+  header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+  header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
+    font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+  nav.guide { margin-top: 0.6rem; border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
+  nav.guide ol { list-style: none; display: flex; flex-wrap: wrap;
+    gap: 0.3rem 0.55rem; margin: 0; padding: 0; }
+  nav.guide a { font-size: 0.76rem; text-decoration: none; color: var(--slate);
+    border: 1px solid transparent; border-radius: 999px; padding: 0.18rem 0.55rem;
+    display: inline-block; }
+  nav.guide a:hover { color: var(--moss); border-color: var(--line); }
+  nav.guide a[aria-current="page"] { color: var(--paper); background: var(--moss);
     border-color: var(--moss); font-weight: 600; }
-  nav.site a:hover:not([aria-current="page"]) { border-color: var(--moss); color: var(--moss-ink); }
-  main.guide-main { padding-top: 0.5rem; }
-  footer.site { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
+  main.guide-main { padding-top: 0.9rem; }
+  footer.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
     border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--slate); }
-  footer.site p { margin: 0.35rem 0; }
-  .unofficial-legend { font-weight: 600; }
+  footer.guide p { margin: 0.35rem 0; }
+  footer.guide .unofficial-legend { font-weight: 600; }
 
   /* --- page 5 additions: worked-example specific (from the ESR walkthrough) --- */
   .toggle-wrap { display: flex; align-items: center; gap: 0.6rem; margin: 1rem 0 0.8rem; }
@@ -151,20 +156,22 @@
 </head>
 <body>
 
-<header class="site">
-  <h1>FinOps MCP Servers — Usage Guide</h1>
-  <nav class="site" aria-label="Guide pages">
-    <a href="index.html">Intro &amp; Getting Started</a>
-    <a href="framework-server.html">finops-framework-mcp</a>
-    <a href="focus-server.html">finops-focus-mcp</a>
-    <a href="example-showback.html">Showback</a>
-    <a href="example-esr.html" aria-current="page">Rate Optimization (ESR)</a>
-    <a href="example-forecasting.html">Forecasting Journey</a>
+<header class="guide">
+  <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+  <nav class="guide" aria-label="Guide pages">
+    <ol>
+      <li><a href="index.html">Intro &amp; Getting Started</a></li>
+      <li><a href="framework-server.html">finops-framework-mcp</a></li>
+      <li><a href="focus-server.html">finops-focus-mcp</a></li>
+      <li><a href="example-showback.html">Showback</a></li>
+      <li><a href="example-esr.html" aria-current="page">Rate Optimization (ESR)</a></li>
+      <li><a href="example-forecasting.html">Forecasting Journey</a></li>
+    </ol>
   </nav>
 </header>
 
 <main class="guide-main">
-  <p class="eyebrow">Worked example · page 5 of 6 · two MCP servers, one outcome</p>
+  <p class="eyebrow">Page 5 of 6 · Worked example · two MCP servers, one outcome</p>
   <h1>From Capability to Calculation</h1>
   <p class="lede">You want to improve your <strong>Rate Optimization</strong> practice.
   This page walks the exact chain an AI agent walks: official FinOps Framework guidance
@@ -322,16 +329,19 @@
   requirements plus the FOCUS columns a forecasting pipeline needs).</p>
 </main>
 
-<footer class="site">
+<footer class="guide">
   <p>FinOps Framework content © FinOps Foundation, licensed
   <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
   specification content and sample data © FinOps Foundation / FOCUS project
-  contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux Foundation.
-  Content on this page has been restructured and adapted from those sources.</p>
-  <p class="unofficial-legend">This page and these servers are community projects —
-  not published or endorsed by the FinOps Foundation or the FOCUS project. Content
-  marked UNOFFICIAL — KPI→column mappings, computed KPI values, and cross-version
-  diffs — is derived by these servers, not Foundation/FOCUS-published; verify before
+  contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
+  Foundation. Content on this page has been restructured and adapted from
+  those sources; this guide and these servers are community projects —
+  <strong>not published or endorsed by the FinOps Foundation or the FOCUS
+  project</strong>.</p>
+  <p class="unofficial-legend"><strong>UNOFFICIAL legend:</strong> anything marked
+  <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
+  values, and cross-version diffs — is derived by these servers
+  (<span class="mono">official: false</span>), not published upstream; verify before
   production use.</p>
 </footer>
 

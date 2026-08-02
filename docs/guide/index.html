@@ -50,7 +50,7 @@
   }
   body { background: var(--paper); color: var(--ink); font-family: var(--sans);
     line-height: 1.55; margin: 0; overflow-x: hidden; }
-  main { max-width: 72ch; margin: 0 auto; padding: 1.6rem 1.25rem 4rem; }
+  main { max-width: 78ch; margin: 0 auto; padding: 0 1.25rem 4rem; }
   h1, h2 { font-family: var(--serif); text-wrap: balance; line-height: 1.15; }
   h1 { font-size: 2.1rem; margin: 0.25rem 0 0.5rem; font-weight: 600; }
   h2 { font-size: 1.35rem; margin: 0 0 0.6rem; font-weight: 600; }
@@ -111,25 +111,27 @@
   .takeaway { border: 1px solid var(--moss); border-radius: 8px; padding: 0.9rem 1.1rem;
     margin-top: 1rem; background: var(--panel-2); }
   .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
-  footer { margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 1rem;
-    font-size: 0.78rem; color: var(--slate); }
-  footer p { margin: 0.35rem 0; }
   a { color: var(--moss); }
 
-  /* --- shared chrome: guide header + nav (identical on all six pages) --- */
-  header.guide { max-width: 72ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+  /* --- shared chrome: guide header + nav + footer (identical on all six pages) --- */
+  header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
   header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
     font-weight: 600; margin: 0; letter-spacing: 0.01em; }
-  header.guide nav { margin-top: 0.6rem; border-top: 1px solid var(--line);
+  nav.guide { margin-top: 0.6rem; border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
-  header.guide nav ol { list-style: none; display: flex; flex-wrap: wrap;
+  nav.guide ol { list-style: none; display: flex; flex-wrap: wrap;
     gap: 0.3rem 0.55rem; margin: 0; padding: 0; }
-  header.guide nav a { font-size: 0.76rem; text-decoration: none; color: var(--slate);
+  nav.guide a { font-size: 0.76rem; text-decoration: none; color: var(--slate);
     border: 1px solid transparent; border-radius: 999px; padding: 0.18rem 0.55rem;
     display: inline-block; }
-  header.guide nav a:hover { color: var(--moss); border-color: var(--line); }
-  header.guide nav a[aria-current="page"] { color: var(--paper); background: var(--moss);
+  nav.guide a:hover { color: var(--moss); border-color: var(--line); }
+  nav.guide a[aria-current="page"] { color: var(--paper); background: var(--moss);
     border-color: var(--moss); font-weight: 600; }
+  main.guide-main { padding-top: 0.9rem; }
+  footer.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
+    border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--slate); }
+  footer.guide p { margin: 0.35rem 0; }
+  footer.guide .unofficial-legend { font-weight: 600; }
 
   /* --- page 1 additions --- */
   pre.tx { font-family: var(--mono); font-size: 0.74rem; line-height: 1.45;
@@ -166,7 +168,7 @@
 
 <header class="guide">
   <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
-  <nav aria-label="Guide pages">
+  <nav class="guide" aria-label="Guide pages">
     <ol>
       <li><a href="index.html" aria-current="page">Intro &amp; Getting Started</a></li>
       <li><a href="framework-server.html">finops-framework-mcp</a></li>
@@ -178,7 +180,7 @@
   </nav>
 </header>
 
-<main>
+<main class="guide-main">
   <p class="eyebrow">Page 1 of 6 · Intro &amp; Getting Started</p>
   <h1>Two MCP servers for FinOps</h1>
   <p class="lede">This repository ships an agentic interface to the FinOps
@@ -424,14 +426,20 @@ claude mcp add focus-spec -- npx finops-focus-mcp</pre>
         "source_tag": "v1.0",
         "data_version": "1.0.1",
         "is_latest": false,
-        "counts": { "attributes": 9, "columns": 43 }
+        "counts": {
+          "attributes": 9,
+          "columns": 43
+        }
       },
       {
         "spec_version": "1.2",
         "source_tag": "v1.2",
         "data_version": "1.0.1",
         "is_latest": true,
-        "counts": { "attributes": 9, "columns": 57 }
+        "counts": {
+          "attributes": 9,
+          "columns": 57
+        }
       }
     ]
   }
@@ -548,23 +556,23 @@ claude mcp add focus-spec -- npx finops-focus-mcp</pre>
       </div>
     </div>
   </section>
-
-  <footer class="guide">
-    <p>FinOps Framework content © FinOps Foundation, licensed
-    <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
-    specification content and sample data © FinOps Foundation / FOCUS project
-    contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
-    Foundation. Content on this page has been restructured and adapted from
-    those sources; this guide and these servers are community projects —
-    <strong>not published or endorsed by the FinOps Foundation or the FOCUS
-    project</strong>.</p>
-    <p><strong>UNOFFICIAL legend:</strong> anything marked
-    <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
-    values, and cross-version diffs — is derived by these servers
-    (<span class="mono">official: false</span>), not published upstream; verify before
-    production use.</p>
-  </footer>
 </main>
+
+<footer class="guide">
+  <p>FinOps Framework content © FinOps Foundation, licensed
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
+  specification content and sample data © FinOps Foundation / FOCUS project
+  contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
+  Foundation. Content on this page has been restructured and adapted from
+  those sources; this guide and these servers are community projects —
+  <strong>not published or endorsed by the FinOps Foundation or the FOCUS
+  project</strong>.</p>
+  <p class="unofficial-legend"><strong>UNOFFICIAL legend:</strong> anything marked
+  <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
+  values, and cross-version diffs — is derived by these servers
+  (<span class="mono">official: false</span>), not published upstream; verify before
+  production use.</p>
+</footer>
 
 </body>
 </html>
