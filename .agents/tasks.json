@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "6a8311c3a51df861c3dfac893d97b8a4e5ac684f543180109bc4d39682f9b923",
+  "chainHead": "34a6fd15cd0063d5889d9074900013a5b461552fe54e1a43d5a5876c4b7b3bf6",
   "tasks": [
     {
       "id": "T-001",
@@ -1158,9 +1158,15 @@
       "acceptance": [
         "docs/guide/example-showback.html (Understand Usage & Cost: Allocation + Reporting & Analytics, real showback table computed from the committed official sample), example-esr.html (existing walkthrough restyled, headline numbers re-probed), example-forecasting.html (Crawl→Walk Forecasting maturity journey, verbatim official characteristics, Unit Economics + Forecasting KPIs, FOCUS columns per version) per spec pages 4-6; UNOFFICIAL + CC BY marking; gates pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Three worked examples. example-showback.html (37 probes): Understand Usage & Cost domain + Allocation/Reporting & Analytics verbatim definitions, official maturity sample goals (Crawl >=70%/Walk >=85%/Run >90% cost to known owner), 16-column showback set with 1.0/1.2 toggle, and a real report computed from the bundled official 1.0 sample (EffectiveCost by ServiceCategory and SubAccountId); honestly notes Reporting & Analytics has no featured KPIs and one Allocation KPI is unmapped rather than inventing either. example-esr.html (5 probes): validated ESR walkthrough restyled, headline numbers re-probed (ESR 26.552972346576816%, not-computable refusal, 1.2 values). example-forecasting.html (24 probes): verbatim official Forecasting Crawl (6) and Walk (7) characteristics, 4 featured KPIs with official formulas, FOCUS columns feeding a forecast, 90-day plan explicitly boxed as this guide's synthesis. gates PASS",
+        "commit": "c5fbdd521d51c41c3922680e36754260fffc6f60",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T15:34:33.441Z"
+      },
+      "hash": "34a6fd15cd0063d5889d9074900013a5b461552fe54e1a43d5a5876c4b7b3bf6"
     },
     {
       "id": "T-063",
