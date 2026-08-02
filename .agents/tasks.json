@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "b840b5d822394d2ced1fbf1cca5d4d2b09d2d9c32013adb1e8e74722a7b229a9",
+  "chainHead": "f7c2c386c11b5dcdc775f5afe11728cb583fd7176e723fe9134f173a62bef6da",
   "tasks": [
     {
       "id": "T-001",
@@ -1106,9 +1106,15 @@
         "This task EXPLICITLY authorizes editing the agentic.config.json format gate command (hard-rule escape hatch) to include demo/ in prettier check scope; demo/ files prettier-formatted once via --write",
         "If the PreToolUse hook or integrity gate still blocks the config edit, mark this task blocked with the hook message in the journal and leave the demo prettier-write as the landed portion; gates pass either way"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "agentic.config.json format gate extended to demo/; demo/*.js+.html prettier-written; gates PASS",
+        "commit": "e7c67915960ce99a964e67e52f6107327118c5b1",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T08:32:45.909Z"
+      },
+      "hash": "f7c2c386c11b5dcdc775f5afe11728cb583fd7176e723fe9134f173a62bef6da"
     }
   ]
 }
