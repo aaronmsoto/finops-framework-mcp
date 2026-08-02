@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "90a5bc639063b3b836c59e63778e00fbd56ecbdfb35c207676cefc47ffa20933",
+  "chainHead": "fd7a620d849f21baac13d8d9e63e93fa4d80da4ad663baf1741866796beb8fe9",
   "tasks": [
     {
       "id": "T-001",
@@ -957,9 +957,15 @@
         "list_capabilities description names the exact filter param 'domain' (no 'domain slug' prose trap); assess_maturity_path has .describe() on every param and cross-references get_maturity_assessment; the four hardcoded corpus counts (framework tools.ts ~203,545; focus tools.ts ~307,568) are interpolated from the loaded artifact/store at registration time (focus version-list pattern) or pinned by a test asserting description matches artifact counts",
         "Live probes: list-tools shows the new descriptions; list_capabilities with domain filter works and prose matches; gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "TN-1/2/3 fixed: exact param names + interpolated corpus counts in tool descriptions; gates green, live-probed via in-memory MCP client",
+        "commit": "fdf8a230d9cda99b23df8cdd6b41e025e8a8848b",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:02:28.748Z"
+      },
+      "hash": "fd7a620d849f21baac13d8d9e63e93fa4d80da4ad663baf1741866796beb8fe9"
     },
     {
       "id": "T-052",
