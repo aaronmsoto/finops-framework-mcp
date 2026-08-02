@@ -1115,6 +1115,52 @@
         "completedAt": "2026-08-02T08:32:45.909Z"
       },
       "hash": "f7c2c386c11b5dcdc775f5afe11728cb583fd7176e723fe9134f173a62bef6da"
+    },
+    {
+      "id": "T-060",
+      "title": "Usage guide: scaffold + Intro/Getting Started page (spec usage-guide-v1 T-A)",
+      "spec": ".agents/specs/usage-guide-v1.md",
+      "acceptance": [
+        "docs/guide/index.html exists per spec page 1: repo intro, both servers side by side with live-probed counts, getting-started (both bins, Claude Code + Claude Desktop config, Worker endpoints), one real first-call transcript per server, next-page map; self-contained, shared chrome, light/dark, six-link nav",
+        "Every fact/number/transcript live-probed (spec Hard content rules); gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-061",
+      "title": "Usage guide: server reference pages (spec usage-guide-v1 T-B)",
+      "spec": ".agents/specs/usage-guide-v1.md",
+      "acceptance": [
+        "docs/guide/framework-server.html and focus-server.html per spec pages 2-3: data/version model, grouped tool tours consistent with docs/mcp-surface.md, prompts + resources, worked demo sections (Anomaly Management; BilledCost + 1.0→1.2 diff) with real transcripts; shared chrome + nav; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-062",
+      "title": "Usage guide: three worked-example pages (spec usage-guide-v1 T-C)",
+      "spec": ".agents/specs/usage-guide-v1.md",
+      "acceptance": [
+        "docs/guide/example-showback.html (Understand Usage & Cost: Allocation + Reporting & Analytics, real showback table computed from the committed official sample), example-esr.html (existing walkthrough restyled, headline numbers re-probed), example-forecasting.html (Crawl→Walk Forecasting maturity journey, verbatim official characteristics, Unit Economics + Forecasting KPIs, FOCUS columns per version) per spec pages 4-6; UNOFFICIAL + CC BY marking; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-063",
+      "title": "Usage guide: integration, links, Artifact republish (spec usage-guide-v1 T-D)",
+      "spec": ".agents/specs/usage-guide-v1.md",
+      "acceptance": [
+        "README gains a Documentation section linking docs/guide/ (and the pages); docs/mcp-surface.md cross-links the guide; decisions.md records Pages-over-wiki with rationale; owner checklist (activeContext) gains enable-GitHub-Pages item",
+        "Single-file SPA build of the six pages published as the existing claude.ai Artifact URL; consistency check (nav/links/footers + 8 re-probed claims) recorded; memory/journal updated; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
