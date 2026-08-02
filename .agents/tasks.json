@@ -865,7 +865,7 @@
         "packages/focus-spec-mcp/README.md no longer calls the sibling package 'the official FinOps Framework server' — 'official' attaches to the upstream Framework/spec, never to this software; grep of both package READMEs, descriptions, and server.json files finds no other 'official' binding to the software itself",
         "gates pass (docs-only change; no artifact regen needed)"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

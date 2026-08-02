@@ -11,8 +11,9 @@ them.
 This package is a publish shim: it ships the built `focus` MCP server from
 the [finops-framework-mcp](https://github.com/aaronmsoto/finops-framework-mcp)
 monorepo as its own installable npm package, decoupled from the companion
-`finops-framework-mcp` package (the official FinOps Framework server). See
-that repository for source, tests, and contribution docs.
+`finops-framework-mcp` package (the companion unofficial server for the
+FinOps Framework published at finops.org/framework). See that repository for
+source, tests, and contribution docs.
 
 ## Quickstart
 

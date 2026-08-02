@@ -13,7 +13,25 @@
 ## In flight
 
 Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
-is underway. **T-045 done this session** (C3-version-2, MAJOR):
+is underway. **T-046 done this session** (C2-fidelity-3, MAJOR):
+`packages/focus-spec-mcp/README.md:14` called the sibling
+`finops-framework-mcp` package "the official FinOps Framework server" —
+"official" grammatically modified the *server* (this software), contradicting
+the same package's own `NOTICE.md` ("independent, unofficial integration ...
+not affiliated with or endorsed by the FinOps Foundation"). Fixed: reworded to
+"the companion unofficial server for the FinOps Framework published at
+finops.org/framework" — "official" now attaches only to the Framework.
+Grepped both package READMEs, both package.json descriptions, and both
+server.json files for other "official" occurrences per the fix's second
+requirement: every remaining hit (root README's "official FinOps Framework"/
+"official Crawl/Walk/Run", focus-spec-mcp README's "official FOCUS-to-FinOps-
+KPI mapping"/"official sample dataset", both package descriptions' "official
+FinOps Framework") modifies the upstream Framework/FOCUS/dataset, never the
+software itself — none needed changing. Docs-only; no artifact regen. Gates
+green. Full detail:
+`.agents/journal/20260730-t046-focus-readme-official-phrasing.md`.
+
+**T-045 done in an earlier session this batch** (C3-version-2, MAJOR):
 `src/crawlers/focus/kpi-mapping-data.ts`'s 18 KPI entries all shared the
 `perVersion()` helper, so `columns_by_version['1.0']`/`['1.2']` were
 byte-identical everywhere and the shared `caveat` string for the three
@@ -367,11 +385,9 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-039..T-045 done.** Next: T-046..T-047 (gate 4's remaining MINOR
-   fixes — README "official" phrasing, cross-version unknown-column hints
-   + slug docs polish; package trademark naming C4-community-3 is a
-   separate owner decision, not yet queued), one
-   task at a time per the task queue.
+1. **T-039..T-046 done.** Next: T-047 (gate 4's last remaining MINOR fix —
+   cross-version unknown-column hints + slug docs polish; package trademark
+   naming C4-community-3 is a separate owner decision, not yet queued).
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -428,7 +444,12 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-30 — T-045 done (the three commitment KPIs' kpi-mapping entries
+2026-07-30 — T-046 done (focus-spec-mcp README no longer calls the sibling
+`finops-framework-mcp` package "the official FinOps Framework server" —
+reworded so "official" attaches only to the Framework, never the software;
+gate 4 C2-fidelity-3; grepped both package READMEs/descriptions/server.json
+files, no other software-official binding found; docs-only, gates green).
+T-045 done earlier same day (the three commitment KPIs' kpi-mapping entries
 version-differentiate: columns_by_version['1.2'] gains
 CommitmentDiscountQuantity/CommitmentDiscountUnit and the shared caveat is
 rewritten version-neutral, so get_kpi_mapping at version=1.2 no longer
