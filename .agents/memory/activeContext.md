@@ -12,70 +12,49 @@
 
 ## In flight
 
-**T-052 done** (2026-08-02, this session): fixed the three MCP-protocol
-polish items from `docs/final-status-review.md` MCP-1/2/3.
-- **MCP-1 (pagination text parity)**: `search_framework`, `list_capabilities`
-  (framework/tools.ts) and `list_columns`, `search_focus` (focus/tools.ts)
-  now append a `Showing X of Y — pass cursor: "..." for more.` note to their
-  TEXT block whenever `nextCursor` is present, matching the pattern
-  `get_kpis` already had. No note when the page is unpaginated (full
-  results, no `nextCursor`). Added dedicated tests in both
-  `server.test.ts` files (`limit` small enough to force a `nextCursor`,
-  plus an assertion that a full unpaginated call carries no "Showing" text).
-- **MCP-2 (Worker GET/DELETE)**: `src/workers/app.ts` now short-circuits
-  `GET`/`DELETE` on `/mcp/framework` and `/mcp/focus` with `405` +
-  `Allow: POST, OPTIONS` before the request ever reaches
-  `WebStandardStreamableHTTPServerTransport` (previously GET opened an
-  eternal silent SSE stream since the transport is stateless — no session
-  ever has anything to relay — and DELETE returned 200 for a session that
-  never existed). CORS `Access-Control-Allow-Origin` still applied to the
-  405 response. GET on an unrelated path (e.g. `/mcp/unknown`) still 404s
-  as before — the short-circuit only fires for the two known MCP routes.
-  Added 4 new `app.test.ts` cases (GET 405+Allow, DELETE 405+Allow, ACAO
-  on the 405, unknown-path GET still 404).
-- **MCP-3 (listChanged doc mismatch)**: the SDK's `McpServer` hardcodes
-  `listChanged: true` in `registerCapabilities` for tools/resources/prompts
-  the moment any handler is registered (confirmed by reading
-  `node_modules/@modelcontextprotocol/sdk/dist/esm/server/mcp.js` — no
-  option suppresses it), so the fix is doc-only. Corrected the stale
-  `framework/server.ts:20-23` comment (previously claimed "without ...
-  listChanged") to match the already-accurate `docs/architecture.md` §5.5
-  wording, and added the equivalent comment to `focus/server.ts` (which had
-  none before).
-- Verified: `./scripts/agentic gates --tier all` all green (format, lint,
-  typecheck, 385 tests incl. the new ones, designs, integrity, memory,
-  build). Ran the new/changed tests directly first
-  (`vitest run src/servers/framework/server.test.ts
-  src/servers/focus/server.test.ts src/workers/app.test.ts`) — 20+101
-  tests passed before the full gate run.
-- Remaining backlog: T-053..T-059 queued (git log); rest of the 19-MINOR
+**T-053 done** (2026-08-02, this session): added the `map-kpi-to-focus-columns`
+prompt to `src/servers/focus/prompts.ts` (review MCP-4 — the flagship
+`get_kpi_mapping`/`calculate_kpi` workflow had no guided prompt).
+- Third prompt, mirroring `explain-focus`/`map-column-across-versions`:
+  optional `kpi` (completable KPI slug), `capability` (completable, from
+  `related_capability_slugs` across the mapping), and `version` (completable
+  spec version, default `DEFAULT_VERSION`) args.
+- With `kpi`: embeds the mapped FOCUS columns' resource docs (`columnMd`,
+  same as `map-column-across-versions`) then an UNOFFICIAL-framed
+  instruction to call `get_kpi_mapping` for the formula and `calculate_kpi`
+  for a computed sample value. Unknown `kpi` returns guidance instead of
+  erroring (mirrors the framework server's `assess-capability-maturity`
+  unknown-capability handling). With `capability` or with neither arg: pure
+  tool-call guidance (no resource to embed — there's no per-KPI renderer),
+  pointing at `get_kpi_mapping(capability: ...)` or a bare listing call.
+- **Fixed a latent bug found while wiring completion**: `completable(...).optional()`
+  silently drops completions. The SDK's `completable()` mutates the schema
+  object in place with a non-enumerable symbol property; zod v4's
+  `.optional()` clones into a *new* `ZodOptional` wrapper, so the marker
+  never survives being applied after `completable()` (confirmed by
+  reproducing with a 4-line node script against the installed SDK). Fixed
+  by moving `.optional()` *inside* `completable()`'s input schema (before
+  the outermost call) for `versionArg`, and applying the same shape to the
+  new `kpiArg`/`kpiCapabilityArg` helpers — this incidentally also fixes
+  `explain-focus`'s previously-silent `version` completion.
+- Verified: `vitest run src/servers/focus/server.test.ts` (59/59, incl. new
+  prompt-list/get/completion tests) then `./scripts/agentic gates --tier all`
+  all green (389 tests total). Live probe against built `dist/` via
+  `InMemoryTransport`: `prompts/list` includes all three names;
+  `getPrompt({kpi: "effective-savings-rate-percentage"})` returns 4 embedded
+  column resources + UNOFFICIAL instruction text; `complete` returns real
+  values for `kpi` ("effective" → 2 matches), `capability` ("rate" →
+  `rate-optimization`), and `version` ("1" → `1.0`, `1.2`).
+- Remaining backlog: T-054..T-059 queued (git log); rest of the 19-MINOR
   list in `docs/final-status-review.md` still open (MEMORY.md refresh,
   derive-pipeline integration test, worker index/data tests,
   `combined-scenario.xml` step-4 fix, SECURITY/CONTRIBUTING, npm metadata).
 
-**T-051 done** (2026-08-02, earlier this session): fixed the three
-tool-description issues from `docs/final-status-review.md` TN-1/2/3.
-- `list_capabilities` (framework/tools.ts) no longer says "domain slug or
-  persona slug" prose — now names the exact params `domain`/`persona` with
-  example values, and the "22" count is interpolated from
-  `artifact.capabilities.length`.
-- `assess_maturity_path` (framework/tools.ts) now has `.describe()` on
-  `capability`/`current_level`/`target_level` and cross-references
-  `get_maturity_assessment` for the single/all-levels case.
-- All four hardcoded corpus counts are now interpolated at registration
-  time instead of string literals: framework `get_kpis` ("44"/"88" from
-  `artifact.kpis`), focus `list_columns` ("43 in 1.0, 57 in 1.2" from
-  `store.versions.get(v).columns.length` per version slug — same pattern
-  `list_versions`/`DEFAULT_VERSION` already used), and focus
-  `compare_versions` ("14 added, 0 removed, 43 changed" from
-  `store.diff.*_columns.length`).
-- Verified live via an in-memory MCP client (`InMemoryTransport`) against
-  the built `dist/`: `list-tools` descriptions match; interpolated counts
-  equal the previously-hardcoded literals exactly (44/88, 43/57, 14/0/43);
-  `list_capabilities({domain: "understand-usage-and-cost"})` returns 4
-  capabilities with correct prose. Gates green (`./scripts/agentic gates`).
-- Remaining backlog: T-052..T-059 queued (see git log); 19-MINOR list in
-  `docs/final-status-review.md` mostly still open.
+**T-051/T-052 done** (2026-08-02, earlier same day): tool-description fixes
+(TN-1/2/3 — exact param names, `assess_maturity_path` descriptions, corpus
+counts interpolated not hardcoded) and MCP-protocol polish (MCP-1/2/3 —
+pagination text parity, Worker 405 on GET/DELETE, `listChanged` doc fix).
+Full detail in `.agents/journal/20260802-t051-*.md` and `-t052-*.md`.
 
 **v1 close-out is COMPLETE on `claude/session-k75rxy`; publish is
 owner-gated.** State as of 2026-08-02:
@@ -152,5 +131,5 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — T-052 session (MCP-1/2/3 protocol polish: pagination text
-parity, Worker GET/DELETE 405, listChanged doc fix).
+2026-08-02 — T-053 session (map-kpi-to-focus-columns prompt, review MCP-4;
+also fixed a latent completable()+optional() bug in focus/prompts.ts).

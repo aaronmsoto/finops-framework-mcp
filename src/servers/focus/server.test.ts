@@ -684,6 +684,15 @@ describe("resources", () => {
 });
 
 describe("prompts", () => {
+  it("lists the three workflows", async () => {
+    const res = await client.listPrompts();
+    expect(res.prompts.map((p) => p.name).sort()).toEqual([
+      "explain-focus",
+      "map-column-across-versions",
+      "map-kpi-to-focus-columns",
+    ]);
+  });
+
   it("registers explain-focus and returns embedded overview content", async () => {
     const res = await client.getPrompt({
       name: "explain-focus",
@@ -701,6 +710,51 @@ describe("prompts", () => {
       (m) => (m.content as { type: string }).type === "resource",
     );
     expect(resourceMsgs.length).toBeGreaterThanOrEqual(3); // both versions + diff
+  });
+
+  it("registers map-kpi-to-focus-columns and embeds the mapped columns, UNOFFICIAL-framed", async () => {
+    const res = await client.getPrompt({
+      name: "map-kpi-to-focus-columns",
+      arguments: { kpi: "effective-savings-rate-percentage" },
+    });
+    const resourceMsgs = res.messages.filter(
+      (m) => (m.content as { type: string }).type === "resource",
+    );
+    expect(resourceMsgs.length).toBeGreaterThan(0);
+    const instructionMsg = res.messages.find(
+      (m) => (m.content as { type: string }).type === "text",
+    );
+    const text = (instructionMsg?.content as { text: string }).text;
+    expect(text).toContain("UNOFFICIAL");
+    expect(text).toContain("calculate_kpi");
+  });
+
+  it("map-kpi-to-focus-columns falls back to tool-call guidance for capability and no-arg cases", async () => {
+    const byCapability = await client.getPrompt({
+      name: "map-kpi-to-focus-columns",
+      arguments: { capability: "rate-optimization" },
+    });
+    expect(
+      (byCapability.messages[0]?.content as { text: string }).text,
+    ).toContain("get_kpi_mapping(capability:");
+
+    const bare = await client.getPrompt({
+      name: "map-kpi-to-focus-columns",
+      arguments: {},
+    });
+    expect((bare.messages[0]?.content as { text: string }).text).toContain(
+      "get_kpi_mapping with no arguments",
+    );
+  });
+
+  it("completes the kpi argument for map-kpi-to-focus-columns", async () => {
+    const res = await client.complete({
+      ref: { type: "ref/prompt", name: "map-kpi-to-focus-columns" },
+      argument: { name: "kpi", value: "effective" },
+    });
+    expect(res.completion.values).toEqual(
+      expect.arrayContaining(["effective-savings-rate-percentage"]),
+    );
   });
 });
 
