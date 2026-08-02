@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "3aaadf891ec5eaca607c4e85d98613aa90e9e8ab3811dc50c78d89327db0a351",
+  "chainHead": "8f50087d77464db6468e5e7efbcc610f655add8bd5ec85513463e538b7cd3025",
   "tasks": [
     {
       "id": "T-001",
@@ -1051,9 +1051,15 @@
         "Both package.json files gain author, homepage, bugs; engines bumped to >=22 in both (CI tests node 22 only; no workflow edits); focus package README 'contribution docs' promise now resolves to real files",
         "npm pack for both packages still succeeds; gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "SECURITY.md/CONTRIBUTING.md/issue template added; both package.json gained author/homepage/bugs and engines>=22; npm pack succeeds both packages; gates green (392 tests)",
+        "commit": "bb5d3e9d0a81d6c0865abf6737326848b20b3176",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T08:03:40.142Z"
+      },
+      "hash": "8f50087d77464db6468e5e7efbcc610f655add8bd5ec85513463e538b7cd3025"
     },
     {
       "id": "T-057",
