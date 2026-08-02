@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "34a6fd15cd0063d5889d9074900013a5b461552fe54e1a43d5a5876c4b7b3bf6",
+  "chainHead": "2eca18b319e928c58841cfb8b6f0cf914bee26cc9b4091ac6132421ebffc7a7d",
   "tasks": [
     {
       "id": "T-001",
@@ -1176,9 +1176,15 @@
         "README gains a Documentation section linking docs/guide/ (and the pages); docs/mcp-surface.md cross-links the guide; decisions.md records Pages-over-wiki with rationale; owner checklist (activeContext) gains enable-GitHub-Pages item",
         "Single-file SPA build of the six pages published as the existing claude.ai Artifact URL; consistency check (nav/links/footers + 8 re-probed claims) recorded; memory/journal updated; gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "README gained a Documentation section with a per-page table linking all six guide pages; the mcp-surface GENERATOR (not the generated file) now cross-links docs/guide/ and the file was regenerated; decisions.md records Pages-over-wiki (with the accepted designs-gate warning rationale) and the live-probes-only content rule; activeContext owner checklist gains 'enable GitHub Pages' and confirms dual npm publish. Six pages published as a single-file SPA artifact for owner review (new URL: 640567bf-fe05-41e3-bf26-9609a3887b51 — a new source file always mints a new artifact; the earlier ESR-only artifact is superseded by guide page 5). Journal 20260802-t060-063-usage-guide.md; gates PASS",
+        "commit": "f4c0f50fc0ac6d2fe7d42f05090ac23a7d661caa",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T15:39:11.644Z"
+      },
+      "hash": "2eca18b319e928c58841cfb8b6f0cf914bee26cc9b4091ac6132421ebffc7a7d"
     }
   ]
 }
