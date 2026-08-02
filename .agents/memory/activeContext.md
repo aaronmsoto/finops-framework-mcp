@@ -13,7 +13,47 @@
 ## In flight
 
 Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
-is underway. **T-044 done this session** (C3-version-1 + C4-community-2,
+is underway. **T-045 done this session** (C3-version-2, MAJOR):
+`src/crawlers/focus/kpi-mapping-data.ts`'s 18 KPI entries all shared the
+`perVersion()` helper, so `columns_by_version['1.0']`/`['1.2']` were
+byte-identical everywhere and the shared `caveat` string for the three
+commitment KPIs (`commitment-utilization-score`,
+`percentage-of-commitment-based-discount-waste`,
+`consumption-versus-commitment`) self-contradicted at version=1.2: it said
+a quantity-based ratio "would need CommitmentDiscountQuantity, which FOCUS
+only introduced in 1.2" while the *requested* version was 1.2, where that
+column exists. Fixed: those three entries now write `columns_by_version`
+by hand ('1.0' unchanged four columns; '1.2' adds
+CommitmentDiscountQuantity/CommitmentDiscountUnit, both confirmed present
+in `data/focus/1.2/columns.json` and in `derived/diff-1.0-1.2.json`'s
+added_columns) and their `caveat` is rewritten as a single version-neutral
+string ("...at FOCUS 1.0, which has no dedicated committed-quantity
+column; FOCUS 1.2 adds CommitmentDiscountQuantity/CommitmentDiscountUnit,
+which a quantity-based ... ratio should prefer instead.") — deliberately
+not split into a `caveat_by_version`/`focus_formula_by_version` structural
+field, since `calculate_kpi`'s actual registered formula (unchanged, still
+spend-based at every version per T-044) would then display a
+recommend-quantity-based caveat next to a spend-based computed value, a
+new mismatch; see decisions.md / the T-045 journal for the full reasoning.
+`focus_formula` text itself was untouched (it only ever made a true,
+version-scoped claim about 1.0). Re-ran `node dist/crawlers/focus/cli.js`
+(cache-only, 0 network fetches — only `derived/kpi-mapping.json` +
+`index.json` changed) and `node scripts/bundle-worker-data.mjs`.
+`server.test.ts` gained a new `get_kpi_mapping` case asserting, for all
+three KPIs: at 1.2, `columns` includes both quantity columns and `caveat`
+matches "FOCUS 1.2 adds CommitmentDiscountQuantity" but not "only
+introduced in 1.2"; at 1.0, `columns` excludes the quantity columns and
+`caveat` still explains the spend proxy. Gates green (375 tests, up from
+374). Live-probed: `get_kpi_mapping
+'{"kpi":"consumption-versus-commitment","version":"1.2"}'` — columns now
+include CommitmentDiscountQuantity/CommitmentDiscountUnit, caveat no
+longer claims 1.2 lacks them; the same call at `version:"1.0"` still
+explains the spend proxy and correctly omits the quantity columns; both
+carry `official: false`. `calculate_kpi` at 1.2 unaffected
+(`0.4982433908723174`, unchanged from T-044). Full detail:
+`.agents/journal/20260730-t045-kpi-mapping-version-diff.md`.
+
+**T-044 done in an earlier session this batch** (C3-version-1 + C4-community-2,
 MAJOR): `calculateKpi`'s three commitment KPIs (commitment-utilization-score,
 percentage-of-commitment-based-discount-waste, consumption-versus-commitment)
 shared a `ratio()` helper that coerced a zero denominator to 0 — at FOCUS
@@ -209,12 +249,11 @@ bullets and dropping RECOMMENDED/MAY. Now:
   designs/integrity/memory/build all pass; coverage/e2e optional-skip as
   before).
 
-Remaining in the gate-4 fix batch: T-045..T-047 (not started) — T-045 KPI
-mapping version differentiation for 1.2 (C3-version-2), T-046 README
-"official" phrasing (C2-fidelity-3), T-047 MINOR polish (stable example
-slug, cross-version unknown-column hints, slug param docs — C1-protocol-3+4,
-C3-version-3). Package trademark naming (C4-community-3) is an owner
-decision point, not yet a queued task.
+Remaining in the gate-4 fix batch: T-046..T-047 (not started) — T-046
+README "official" phrasing (C2-fidelity-3), T-047 MINOR polish (stable
+example slug, cross-version unknown-column hints, slug param docs —
+C1-protocol-3+4, C3-version-3). Package trademark naming (C4-community-3)
+is an owner decision point, not yet a queued task.
 
 ---
 
@@ -328,10 +367,10 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-039..T-044 done.** Next: T-045..T-047 (gate 4's remaining MAJOR/MINOR
-   fixes — KPI mapping version differentiation, README "official" phrasing,
-   cross-version unknown-column hints + slug docs polish; package trademark
-   naming C4-community-3 is a separate owner decision, not yet queued), one
+1. **T-039..T-045 done.** Next: T-046..T-047 (gate 4's remaining MINOR
+   fixes — README "official" phrasing, cross-version unknown-column hints
+   + slug docs polish; package trademark naming C4-community-3 is a
+   separate owner decision, not yet queued), one
    task at a time per the task queue.
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
@@ -389,7 +428,14 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-30 — T-044 done (calculate_kpi's three commitment KPIs throw a
+2026-07-30 — T-045 done (the three commitment KPIs' kpi-mapping entries
+version-differentiate: columns_by_version['1.2'] gains
+CommitmentDiscountQuantity/CommitmentDiscountUnit and the shared caveat is
+rewritten version-neutral, so get_kpi_mapping at version=1.2 no longer
+claims it can't use a column FOCUS 1.2 actually has; gate 4 C3-version-2;
+kpi-mapping.json + worker bundle regenerated; new server.test.ts case;
+gates green 375 tests; live-probed both versions). T-044 done earlier same
+day (calculate_kpi's three commitment KPIs throw a
 clean not-computable guidance error, naming the missing Purchase rows and
 suggesting version="1.2", instead of coercing a zero denominator to a
 fabricated 0%/100%/0; gate 4 C3-version-1/C4-community-2; kpi-calc/server/

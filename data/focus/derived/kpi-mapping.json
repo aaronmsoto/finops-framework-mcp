@@ -27,7 +27,7 @@
     },
     {
       "category": "commitment_discounts",
-      "caveat": null,
+      "caveat": "Uses spend (EffectiveCost/ContractedCost) as a proxy for consumed/purchased commitment amounts at FOCUS 1.0, which has no dedicated committed-quantity column; FOCUS 1.2 adds CommitmentDiscountQuantity/CommitmentDiscountUnit, which a quantity-based utilization ratio should prefer instead.",
       "columns_by_version": {
         "1.0": [
           "ChargeCategory",
@@ -39,7 +39,9 @@
           "ChargeCategory",
           "CommitmentDiscountId",
           "EffectiveCost",
-          "ContractedCost"
+          "ContractedCost",
+          "CommitmentDiscountQuantity",
+          "CommitmentDiscountUnit"
         ]
       },
       "focus_formula": "Commitment Utilization Score = (SUM(EffectiveCost) WHERE ChargeCategory = 'Usage' AND CommitmentDiscountId IS NOT NULL) / (SUM(ContractedCost) WHERE ChargeCategory = 'Purchase' AND CommitmentDiscountId IS NOT NULL) × 100.",
@@ -73,7 +75,7 @@
     },
     {
       "category": "commitment_discounts",
-      "caveat": null,
+      "caveat": "Uses spend (EffectiveCost/ContractedCost) as a proxy for consumed/purchased commitment amounts at FOCUS 1.0, which has no dedicated committed-quantity column; FOCUS 1.2 adds CommitmentDiscountQuantity/CommitmentDiscountUnit, which a quantity-based waste ratio should prefer instead.",
       "columns_by_version": {
         "1.0": [
           "ChargeCategory",
@@ -85,7 +87,9 @@
           "ChargeCategory",
           "CommitmentDiscountId",
           "EffectiveCost",
-          "ContractedCost"
+          "ContractedCost",
+          "CommitmentDiscountQuantity",
+          "CommitmentDiscountUnit"
         ]
       },
       "focus_formula": "% Waste = (1 − (SUM(EffectiveCost) WHERE ChargeCategory = 'Usage' AND CommitmentDiscountId IS NOT NULL) / (SUM(ContractedCost) WHERE ChargeCategory = 'Purchase' AND CommitmentDiscountId IS NOT NULL)) × 100 — the complement of Commitment Utilization Score.",
@@ -98,7 +102,7 @@
     },
     {
       "category": "commitment_discounts",
-      "caveat": "Uses spend as a proxy for committed/consumed units; a quantity-based ratio would need CommitmentDiscountQuantity, which FOCUS only introduced in 1.2.",
+      "caveat": "Uses spend as a proxy for committed/consumed units at FOCUS 1.0, which has no dedicated committed-quantity column; FOCUS 1.2 adds CommitmentDiscountQuantity/CommitmentDiscountUnit, which a quantity-based ratio should prefer instead.",
       "columns_by_version": {
         "1.0": [
           "ChargeCategory",
@@ -110,7 +114,9 @@
           "ChargeCategory",
           "CommitmentDiscountId",
           "EffectiveCost",
-          "ContractedCost"
+          "ContractedCost",
+          "CommitmentDiscountQuantity",
+          "CommitmentDiscountUnit"
         ]
       },
       "focus_formula": "Consumption / Commitment = (SUM(EffectiveCost) WHERE ChargeCategory = 'Usage' AND CommitmentDiscountId IS NOT NULL) / (SUM(ContractedCost) WHERE ChargeCategory = 'Purchase' AND CommitmentDiscountId IS NOT NULL) — a spend ratio, since FOCUS 1.0 has no dedicated committed-quantity column.",

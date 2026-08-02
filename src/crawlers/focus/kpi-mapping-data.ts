@@ -28,11 +28,14 @@ const METHODOLOGY =
   "source KPI and column definitions (get_column, get_requirements) before " +
   "relying on it for production reporting.";
 
-// All columns used below are present, under the same ColumnId, in both
+// Most columns used below are present, under the same ColumnId, in both
 // pinned versions (1.0: 43 columns, 1.2: 57 columns) — see
 // kpi-mapping.test.ts. `columns_by_version` still lists both explicitly, so
 // a future version whose column set actually diverges here is a visible
-// per-version edit, not an implicit assumption.
+// per-version edit, not an implicit assumption. The three commitment-
+// discount KPIs below are exactly such a divergence: CommitmentDiscount-
+// Quantity/-Unit were introduced in 1.1, so 1.2's column list is a superset
+// of 1.0's and is written out by hand instead of via `perVersion`.
 const V = ["1.0", "1.2"];
 function perVersion(columns: string[]): Record<string, string[]> {
   return Object.fromEntries(V.map((v) => [v, columns]));
@@ -70,13 +73,28 @@ export const KPI_MAPPING: KpiMapping = {
         "ChargeCategory = 'Usage' AND CommitmentDiscountId IS NOT NULL) / " +
         "(SUM(ContractedCost) WHERE ChargeCategory = 'Purchase' AND " +
         "CommitmentDiscountId IS NOT NULL) × 100.",
-      columns_by_version: perVersion([
-        "ChargeCategory",
-        "CommitmentDiscountId",
-        "EffectiveCost",
-        "ContractedCost",
-      ]),
-      caveat: null,
+      columns_by_version: {
+        "1.0": [
+          "ChargeCategory",
+          "CommitmentDiscountId",
+          "EffectiveCost",
+          "ContractedCost",
+        ],
+        "1.2": [
+          "ChargeCategory",
+          "CommitmentDiscountId",
+          "EffectiveCost",
+          "ContractedCost",
+          "CommitmentDiscountQuantity",
+          "CommitmentDiscountUnit",
+        ],
+      },
+      caveat:
+        "Uses spend (EffectiveCost/ContractedCost) as a proxy for " +
+        "consumed/purchased commitment amounts at FOCUS 1.0, which has no " +
+        "dedicated committed-quantity column; FOCUS 1.2 adds " +
+        "CommitmentDiscountQuantity/CommitmentDiscountUnit, which a " +
+        "quantity-based utilization ratio should prefer instead.",
     },
     {
       kpi_slug:
@@ -107,13 +125,28 @@ export const KPI_MAPPING: KpiMapping = {
         "AND CommitmentDiscountId IS NOT NULL) / (SUM(ContractedCost) WHERE " +
         "ChargeCategory = 'Purchase' AND CommitmentDiscountId IS NOT NULL)) " +
         "× 100 — the complement of Commitment Utilization Score.",
-      columns_by_version: perVersion([
-        "ChargeCategory",
-        "CommitmentDiscountId",
-        "EffectiveCost",
-        "ContractedCost",
-      ]),
-      caveat: null,
+      columns_by_version: {
+        "1.0": [
+          "ChargeCategory",
+          "CommitmentDiscountId",
+          "EffectiveCost",
+          "ContractedCost",
+        ],
+        "1.2": [
+          "ChargeCategory",
+          "CommitmentDiscountId",
+          "EffectiveCost",
+          "ContractedCost",
+          "CommitmentDiscountQuantity",
+          "CommitmentDiscountUnit",
+        ],
+      },
+      caveat:
+        "Uses spend (EffectiveCost/ContractedCost) as a proxy for " +
+        "consumed/purchased commitment amounts at FOCUS 1.0, which has no " +
+        "dedicated committed-quantity column; FOCUS 1.2 adds " +
+        "CommitmentDiscountQuantity/CommitmentDiscountUnit, which a " +
+        "quantity-based waste ratio should prefer instead.",
     },
     {
       kpi_slug: "consumption-versus-commitment",
@@ -133,16 +166,27 @@ export const KPI_MAPPING: KpiMapping = {
         "(SUM(ContractedCost) WHERE ChargeCategory = 'Purchase' AND " +
         "CommitmentDiscountId IS NOT NULL) — a spend ratio, since FOCUS 1.0 " +
         "has no dedicated committed-quantity column.",
-      columns_by_version: perVersion([
-        "ChargeCategory",
-        "CommitmentDiscountId",
-        "EffectiveCost",
-        "ContractedCost",
-      ]),
+      columns_by_version: {
+        "1.0": [
+          "ChargeCategory",
+          "CommitmentDiscountId",
+          "EffectiveCost",
+          "ContractedCost",
+        ],
+        "1.2": [
+          "ChargeCategory",
+          "CommitmentDiscountId",
+          "EffectiveCost",
+          "ContractedCost",
+          "CommitmentDiscountQuantity",
+          "CommitmentDiscountUnit",
+        ],
+      },
       caveat:
-        "Uses spend as a proxy for committed/consumed units; a quantity-" +
-        "based ratio would need CommitmentDiscountQuantity, which FOCUS " +
-        "only introduced in 1.2.",
+        "Uses spend as a proxy for committed/consumed units at FOCUS 1.0, " +
+        "which has no dedicated committed-quantity column; FOCUS 1.2 adds " +
+        "CommitmentDiscountQuantity/CommitmentDiscountUnit, which a " +
+        "quantity-based ratio should prefer instead.",
     },
     {
       kpi_slug: "forecast-accuracy-rate-spend",

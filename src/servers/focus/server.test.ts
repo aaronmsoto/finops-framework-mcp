@@ -326,6 +326,46 @@ describe("get_kpi_mapping", () => {
       (res.structuredContent?.methodology as string).length,
     ).toBeGreaterThan(50);
   });
+
+  it("version-differentiates the commitment KPIs: 1.2 gains the quantity columns and no longer claims it can't use them, 1.0 still explains the spend proxy", async () => {
+    for (const kpi of [
+      "commitment-utilization-score",
+      "percentage-of-commitment-based-discount-waste",
+      "consumption-versus-commitment",
+    ]) {
+      const at12 = await call("get_kpi_mapping", { kpi, version: "1.2" });
+      expect(at12.isError, `${kpi} @1.2 errored`).toBeFalsy();
+      const row12 = (
+        at12.structuredContent?.kpis as {
+          columns: string[];
+          caveat: string | null;
+        }[]
+      )[0];
+      expect(row12?.columns).toEqual(
+        expect.arrayContaining([
+          "CommitmentDiscountQuantity",
+          "CommitmentDiscountUnit",
+        ]),
+      );
+      expect(row12?.caveat).not.toMatch(/only introduced in 1\.2/);
+      expect(row12?.caveat).toMatch(
+        /FOCUS 1\.2 adds CommitmentDiscountQuantity/,
+      );
+
+      const at10 = await call("get_kpi_mapping", { kpi, version: "1.0" });
+      expect(at10.isError, `${kpi} @1.0 errored`).toBeFalsy();
+      const row10 = (
+        at10.structuredContent?.kpis as {
+          columns: string[];
+          caveat: string | null;
+        }[]
+      )[0];
+      expect(row10?.columns).not.toEqual(
+        expect.arrayContaining(["CommitmentDiscountQuantity"]),
+      );
+      expect(row10?.caveat).toMatch(/spend.*as a proxy/);
+    }
+  });
 });
 
 describe("calculate_kpi", () => {

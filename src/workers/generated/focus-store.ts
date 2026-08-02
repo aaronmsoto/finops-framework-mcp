@@ -8,7 +8,7 @@ const focusStore: SerializedFocusStore = {
       "diff-1.0-1.2.json":
         "3aa29f5f80268e2831b92245639709691cfc05c0e92515b665d1a4bc2d6de119",
       "kpi-mapping.json":
-        "788c334c705e59a06b2338ec3a1c1f7a7890c27db28a36b5d78bcf8f7b3abca8",
+        "0b7ba99e99fe6ea55f65a6f620bfdf1869646c6922575ee0c669ea3da55f8211",
     },
     latest: "1.2",
     samples: {
@@ -4725,7 +4725,8 @@ const focusStore: SerializedFocusStore = {
       },
       {
         category: "commitment_discounts",
-        caveat: null,
+        caveat:
+          "Uses spend (EffectiveCost/ContractedCost) as a proxy for consumed/purchased commitment amounts at FOCUS 1.0, which has no dedicated committed-quantity column; FOCUS 1.2 adds CommitmentDiscountQuantity/CommitmentDiscountUnit, which a quantity-based utilization ratio should prefer instead.",
         columns_by_version: {
           "1.0": [
             "ChargeCategory",
@@ -4738,6 +4739,8 @@ const focusStore: SerializedFocusStore = {
             "CommitmentDiscountId",
             "EffectiveCost",
             "ContractedCost",
+            "CommitmentDiscountQuantity",
+            "CommitmentDiscountUnit",
           ],
         },
         focus_formula:
@@ -4764,7 +4767,8 @@ const focusStore: SerializedFocusStore = {
       },
       {
         category: "commitment_discounts",
-        caveat: null,
+        caveat:
+          "Uses spend (EffectiveCost/ContractedCost) as a proxy for consumed/purchased commitment amounts at FOCUS 1.0, which has no dedicated committed-quantity column; FOCUS 1.2 adds CommitmentDiscountQuantity/CommitmentDiscountUnit, which a quantity-based waste ratio should prefer instead.",
         columns_by_version: {
           "1.0": [
             "ChargeCategory",
@@ -4777,6 +4781,8 @@ const focusStore: SerializedFocusStore = {
             "CommitmentDiscountId",
             "EffectiveCost",
             "ContractedCost",
+            "CommitmentDiscountQuantity",
+            "CommitmentDiscountUnit",
           ],
         },
         focus_formula:
@@ -4789,7 +4795,7 @@ const focusStore: SerializedFocusStore = {
       {
         category: "commitment_discounts",
         caveat:
-          "Uses spend as a proxy for committed/consumed units; a quantity-based ratio would need CommitmentDiscountQuantity, which FOCUS only introduced in 1.2.",
+          "Uses spend as a proxy for committed/consumed units at FOCUS 1.0, which has no dedicated committed-quantity column; FOCUS 1.2 adds CommitmentDiscountQuantity/CommitmentDiscountUnit, which a quantity-based ratio should prefer instead.",
         columns_by_version: {
           "1.0": [
             "ChargeCategory",
@@ -4802,6 +4808,8 @@ const focusStore: SerializedFocusStore = {
             "CommitmentDiscountId",
             "EffectiveCost",
             "ContractedCost",
+            "CommitmentDiscountQuantity",
+            "CommitmentDiscountUnit",
           ],
         },
         focus_formula:
