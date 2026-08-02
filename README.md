@@ -127,20 +127,34 @@ Schema-breaking changes bump `schema_version` and require a server release.
 
 ## License and attribution
 
-Code: MIT (see `LICENSE`). Framework content in `data/framework/**`:
-© FinOps Foundation, **CC BY 4.0**, restructured/adapted — see `NOTICE.md`
-for the required attribution and modification notice.
+Code: MIT (see `LICENSE`). Framework content in `data/framework/**` and
+FOCUS specification content in `data/focus/**`: © FinOps Foundation /
+FOCUS project contributors, **CC BY 4.0**, restructured/adapted — see
+`NOTICE.md` for the required attribution and modification notices.
 
-## Roadmap
+## Sibling server: finops-focus-mcp
 
-The layout leaves room for sibling servers (e.g. a **FOCUS** specification
-server: `src/crawlers/focus`, `src/servers/focus`, `data/focus/`) reusing
-`src/shared` (types, artifact loader/validation) and the crawler's
-fetch/cache/politeness helpers.
+What the Roadmap once sketched is now built and ships from this repo: a
+version-aware **FOCUS specification** MCP server (`src/crawlers/focus`,
+`src/servers/focus`, `data/focus/` — FOCUS 1.0 and 1.2) reusing
+`src/shared`. It publishes separately as
+[`packages/finops-focus-mcp`](packages/finops-focus-mcp/) (npm bin
+`finops-focus-mcp`) with its own README, NOTICE, and registry manifest:
+9 tools covering column/attribute lookup, normative requirements, search,
+cross-version diffs, plus clearly-flagged **unofficial** KPI-to-FOCUS
+mappings and sample-data KPI calculation.
+
+Both servers are also deployable over **Streamable HTTP** via the bundled
+Cloudflare Worker (`src/workers/`, endpoints `/mcp/framework` and
+`/mcp/focus` — see [`docs/deploy-worker.md`](docs/deploy-worker.md)), and
+[`demo/`](demo/) is a static browser walkthrough that drives both servers
+end-to-end through the Worker.
 
 ## Development
 
 - Agent instructions: [AGENTS.md](AGENTS.md) · design: `docs/architecture.md`
-  (adversarial reviews: `docs/critique-1.md`, `docs/critique-2.md`)
+  (adversarial reviews: `docs/critique-1.md`, `docs/critique-2.md`,
+  `docs/critique-3-publish-gate.md`, `docs/critique-4-focus-gate.md`,
+  `docs/final-status-review.md`)
 - Gates: `./scripts/agentic gates` · tests: `npm test` (fixture-based, no
   network) · evals: `evals/framework/` (`docs/eval-results.md`)
