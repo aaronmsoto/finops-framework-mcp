@@ -19,6 +19,36 @@ recorded, and it applies equally to human contributors.
    (`.github/pull_request_template.md`): what changed and why, the task ID,
    pasted gate/behavior evidence, and any approval points touched.
 
+## Testing the servers locally
+
+The repo ships a `.mcp.json` that loads both servers into MCP clients that
+read it (Claude Code among them), pointed at the local build:
+
+```json
+{
+  "finops-framework": "node dist/servers/framework/main.js",
+  "finops-focus": "node dist/servers/focus/main.js"
+}
+```
+
+`dist/` is gitignored, so **build first** — step 1's `bootstrap.sh` (or
+`npm install && npm run build`) — otherwise the config points at files that
+don't exist yet. Clients read MCP config at startup, so restart the client
+after a first build.
+
+This is the _contributor_ form. The `npx`-based config documented for
+end users in [`docs/guide/index.html`](docs/guide/index.html) is
+deliberately different: it runs the published packages rather than your
+working tree.
+
+For one-off calls without an MCP client, use the stdio bridge directly —
+this is what the eval suites and every documented transcript use:
+
+```bash
+node evals/framework/mcp-call.mjs list-tools
+node evals/framework/mcp-call.mjs --server=focus call list_versions '{}'
+```
+
 ## Ground rules
 
 - One task per PR.

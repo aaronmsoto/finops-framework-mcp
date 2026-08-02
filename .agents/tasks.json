@@ -1185,6 +1185,19 @@
         "completedAt": "2026-08-02T15:39:11.644Z"
       },
       "hash": "2eca18b319e928c58841cfb8b6f0cf914bee26cc9b4091ac6132421ebffc7a7d"
+    },
+    {
+      "id": "T-064",
+      "title": "Add checked-in .mcp.json wiring both servers for contributors",
+      "acceptance": [
+        "Root .mcp.json defines finops-framework and finops-focus servers via node dist/servers/{framework,focus}/main.js; no FINOPS_MCP_EXPERIMENTAL (default surface stays official-only); valid JSON",
+        "Both servers verified by launching the EXACT command from the config: tools/list returns 11 framework tools and 9 focus tools matching docs/mcp-surface.md, and get_actions is absent from the default framework surface",
+        "CONTRIBUTING.md and the README Development section note the build prerequisite (dist/ is gitignored) and distinguish this contributor config from the npx form documented for consumers in docs/guide/index.html",
+        "gates pass"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

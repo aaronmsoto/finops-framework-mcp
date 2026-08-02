@@ -183,3 +183,8 @@ in `.agents/memory/decisions.md`.
   `docs/final-status-review.md`)
 - Gates: `./scripts/agentic gates` · tests: `npm test` (fixture-based, no
   network) · evals: `evals/framework/` (`docs/eval-results.md`)
+- Working in a clone: the checked-in `.mcp.json` loads **both** servers from
+  `dist/` into MCP clients that read it — build first (`dist/` is
+  gitignored), then restart the client. See
+  [CONTRIBUTING.md](CONTRIBUTING.md#testing-the-servers-locally); the
+  `npx` config in the guide is the end-user form.

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "finops-framework": {
+      "command": "node",
+      "args": ["dist/servers/framework/main.js"]
+    },
+    "finops-focus": {
+      "command": "node",
+      "args": ["dist/servers/focus/main.js"]
+    }
+  }
+}
