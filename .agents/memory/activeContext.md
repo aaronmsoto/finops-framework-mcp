@@ -13,7 +13,39 @@
 ## In flight
 
 Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
-is underway. **T-046 done this session** (C2-fidelity-3, MAJOR):
+is **complete**. **T-047 done this session** (C1-protocol-3+4, C3-version-3,
+MINOR, the batch's last item): two independent fixes in
+`src/servers/focus/tools.ts`. First, `get_attribute`'s inline example slug
+(`'CurrencyCodeFormat'`, renamed to `CurrencyFormat` in 1.2 — the server's own
+example failed at the default version) is now `'datetime_format'` (present as
+`DateTimeFormat` in both served versions); the tool's top-level description,
+which previously never named the `slug` parameter or explained discovery at
+all, now says to look up "by the `slug` parameter" and to discover attribute
+slugs via `search_focus` with `entity_types=['attribute']`. Second,
+`findColumn` (shared by `get_column`/`get_requirements`) gained a
+cross-version probe: on a miss in the requested version, it now checks every
+*other* served version in `store.versions` for an exact id/slug match before
+falling back to fuzzy suggestions — `get_column
+'{"column":"ServiceSubcategory","version":"1.0"}'` now says `"ServiceSubcategory"
+does not exist in FOCUS 1.0 — it exists in FOCUS 1.2 (added in 1.1). Retry
+with version="1.2" or see compare_versions.` instead of fuzzy-suggesting
+unrelated columns; same fix covers `SkuMeter@1.0`. When a column resolves in
+no served version, the fallback message now names the version consulted
+(`Unknown column "X" in FOCUS {version}.`). `findColumn`'s signature grew a
+`currentVersion` param; both call sites updated. `findAttribute` and
+`compare_versions`' own separate not-found branch (already names both
+versions) were untouched — out of scope. `server.test.ts` gained 4 new cases
+(ServiceSubcategory/SkuMeter cross-version hints, version-named fallback,
+datetime_format example success). Gates green (379 tests, up from 375).
+Live-probed via `node evals/framework/mcp-call.mjs --server=focus call ...`:
+`get_column` ServiceSubcategory@1.0 and SkuMeter@1.0 both name FOCUS 1.2;
+`get_attribute` datetime_format succeeds at the default version (spec_version
+1.2); a typo'd column at 1.0 names "in FOCUS 1.0"; `get_requirements` (the
+other `findColumn` caller) unaffected. Docs-only-adjacent — no artifact regen
+needed (server-side strings/descriptions only). Full detail:
+`.agents/journal/20260730-t047-slug-hints-polish.md`.
+
+**T-046 done in an earlier session this batch** (C2-fidelity-3, MAJOR):
 `packages/focus-spec-mcp/README.md:14` called the sibling
 `finops-framework-mcp` package "the official FinOps Framework server" —
 "official" grammatically modified the *server* (this software), contradicting
@@ -267,11 +299,9 @@ bullets and dropping RECOMMENDED/MAY. Now:
   designs/integrity/memory/build all pass; coverage/e2e optional-skip as
   before).
 
-Remaining in the gate-4 fix batch: T-046..T-047 (not started) — T-046
-README "official" phrasing (C2-fidelity-3), T-047 MINOR polish (stable
-example slug, cross-version unknown-column hints, slug param docs —
-C1-protocol-3+4, C3-version-3). Package trademark naming (C4-community-3)
-is an owner decision point, not yet a queued task.
+Gate-4 fix batch (T-039..T-047) is now fully closed. Package trademark
+naming (C4-community-3) remains an owner decision point, not yet a queued
+task.
 
 ---
 
@@ -385,11 +415,10 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-039..T-046 done.** Next: T-047 (gate 4's last remaining MINOR fix —
-   cross-version unknown-column hints + slug docs polish; package trademark
-   naming C4-community-3 is a separate owner decision, not yet queued).
+1. **T-039..T-047 all done — gate-4 fix batch is closed.** Package trademark
+   naming (C4-community-3) is a separate owner decision, not yet queued.
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
-   mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
+   mini-batch — the gate-4 fix batch (T-039..T-047) has now closed out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
    v1 (PR #4 merged to dev; publish happens from main after release) —
    T-036 gives `packages/focus-spec-mcp/` a second, independent publish
@@ -444,7 +473,16 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-30 — T-046 done (focus-spec-mcp README no longer calls the sibling
+2026-07-30 — T-047 done (gate-4 fix batch now fully closed: get_attribute's
+inline example is now 'datetime_format', present in both served versions,
+and its description names the `slug` parameter + search_focus
+entity_types=['attribute'] discovery; findColumn now names the served
+version a real column/slug resolves in when it's missing from the requested
+version — ServiceSubcategory@1.0/SkuMeter@1.0 name FOCUS 1.2 + "added in
+1.1" + suggest compare_versions — and names the version consulted
+otherwise; gate 4 C1-protocol-3+4, C3-version-3; 4 new server.test.ts cases,
+gates green 379 tests, live-probed). T-046 done earlier same day
+(focus-spec-mcp README no longer calls the sibling
 `finops-framework-mcp` package "the official FinOps Framework server" —
 reworded so "official" attaches only to the Framework, never the software;
 gate 4 C2-fidelity-3; grepped both package READMEs/descriptions/server.json

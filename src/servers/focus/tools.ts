@@ -133,18 +133,39 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     );
   }
 
-  function findColumn(artifact: FocusVersionArtifact, input: string) {
+  function findColumn(
+    artifact: FocusVersionArtifact,
+    currentVersion: string,
+    input: string,
+  ) {
     const needle = input.toLowerCase();
     const c = artifact.columns.find(
       (x) => x.id.toLowerCase() === needle || x.slug === needle,
     );
     if (c) return c;
+    for (const [otherVersion, otherArtifact] of store.versions) {
+      if (otherVersion === currentVersion) continue;
+      const otherC = otherArtifact.columns.find(
+        (x) => x.id.toLowerCase() === needle || x.slug === needle,
+      );
+      if (otherC) {
+        const introduced = otherC.introduced_version;
+        const addedNote =
+          introduced && introduced !== otherVersion
+            ? ` (added in ${introduced})`
+            : "";
+        return err(
+          `"${otherC.id}" does not exist in FOCUS ${currentVersion} — it exists in FOCUS ${otherVersion}${addedNote}. ` +
+            `Retry with version="${otherVersion}" or see compare_versions.`,
+        );
+      }
+    }
     const near = nearestMatches(
       input,
       artifact.columns.map((x) => x.slug),
     );
     return err(
-      `Unknown column "${input}".` +
+      `Unknown column "${input}" in FOCUS ${currentVersion}.` +
         (near.length ? ` Did you mean: ${near.join(", ")}?` : "") +
         ` Use list_columns for the full list.`,
     );
@@ -257,7 +278,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     ({ column, version }) => {
       const resolved = resolveVersion(version);
       if (isErr(resolved)) return resolved;
-      const c = findColumn(resolved.artifact, column);
+      const c = findColumn(resolved.artifact, resolved.version, column);
       if (isErr(c)) return c;
       const structured = {
         spec_version: resolved.version,
@@ -456,11 +477,11 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     {
       title: "Get one FOCUS attribute",
       description:
-        "Full record for one cross-cutting FOCUS attribute (naming/formatting conventions like currency codes, datetime format, key-value format): description, normative requirements, exceptions.",
+        "Full record for one cross-cutting FOCUS attribute (naming/formatting conventions like currency codes, datetime format, key-value format): description, normative requirements, exceptions. Look up by the `slug` parameter — an attribute ID or its lowercase slug, e.g. 'datetime_format'. Attribute names can change between versions; discover current slugs via search_focus with entity_types=['attribute'].",
       inputSchema: {
         slug: z
           .string()
-          .describe("Attribute ID or slug, e.g. 'CurrencyCodeFormat'"),
+          .describe("Attribute ID or slug, e.g. 'datetime_format'"),
         version: z
           .string()
           .optional()
@@ -520,7 +541,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     ({ column, version }) => {
       const resolved = resolveVersion(version);
       if (isErr(resolved)) return resolved;
-      const c = findColumn(resolved.artifact, column);
+      const c = findColumn(resolved.artifact, resolved.version, column);
       if (isErr(c)) return c;
       const body = c.requirements.length
         ? c.requirements.map((r) => `- ${r}`).join("\n")

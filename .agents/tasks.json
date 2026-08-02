@@ -884,7 +884,7 @@
         "findColumn's unknown-column error, when the exact id/slug resolves in a different served version, says so with the version it was added/present in and suggests retrying with that version or compare_versions (covers ServiceSubcategory@1.0 and SkuMeter@1.0); otherwise the error names the version consulted",
         "Live probes: get_column ServiceSubcategory version 1.0 mentions it exists in 1.2; get_attribute with the new example slug succeeds at the default version; gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }

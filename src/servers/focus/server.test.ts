@@ -70,6 +70,41 @@ describe("tools", () => {
     expect(res.content[0]?.text).toMatch(/Did you mean/);
   });
 
+  it("get_column names the exists-in-another-version hint for a column added after 1.0", async () => {
+    const res = await call("get_column", {
+      column: "ServiceSubcategory",
+      version: "1.0",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(
+      /does not exist in FOCUS 1\.0 — it exists in FOCUS 1\.2/,
+    );
+    expect(res.content[0]?.text).toMatch(/added in 1\.1/);
+    expect(res.content[0]?.text).toMatch(/compare_versions/);
+  });
+
+  it("get_column names the exists-in-another-version hint for SkuMeter at 1.0", async () => {
+    const res = await call("get_column", {
+      column: "SkuMeter",
+      version: "1.0",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(
+      /does not exist in FOCUS 1\.0 — it exists in FOCUS 1\.2/,
+    );
+  });
+
+  it("get_column names the version consulted for a column unknown to any served version", async () => {
+    const res = await call("get_column", {
+      column: "BilldCost",
+      version: "1.0",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(
+      /Unknown column "BilldCost" in FOCUS 1\.0/,
+    );
+  });
+
   it("get_column rejects an unknown version with valid options listed", async () => {
     const res = await call("get_column", {
       column: "BilledCost",
@@ -128,6 +163,14 @@ describe("tools", () => {
     expect(attribute.id).toBe("CurrencyFormat");
     expect(attribute.requirements.length).toBeGreaterThan(0);
     expect(res.content[0]?.text).toContain("CC BY 4.0");
+  });
+
+  it("get_attribute's example slug from its own tool description resolves at the default version", async () => {
+    const res = await call("get_attribute", { slug: "datetime_format" });
+    expect(res.isError).toBeFalsy();
+    expect(res.structuredContent?.spec_version).toBe("1.2");
+    const attribute = res.structuredContent?.attribute as { id: string };
+    expect(attribute.id).toBe("DateTimeFormat");
   });
 
   it("get_attribute resolves version-specific attribute ids (renamed across versions)", async () => {
