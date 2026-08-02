@@ -12,6 +12,21 @@
 
 ## In flight
 
+**T-059 done** (2026-08-02, this session): demo/ under the format gate
+(review R6) — see
+`.agents/journal/20260802-t059-demo-format-gate.md` for full detail.
+- `agentic.config.json` format gate command changed from
+  `prettier --check src tests` to `prettier --check src tests demo` (this
+  task's acceptance criteria explicitly authorized the protected-path
+  edit). The PreToolUse hook and integrity gate did not block it.
+- `demo/app.js`, `demo/client.js`, `demo/index.html` reformatted once via
+  `npx prettier --write demo` (whitespace/wrapping only — `git diff`
+  confirms no behavioral change); `demo/config.js`/`requests.js`/
+  `requests.d.ts` were already clean.
+- Verified: `./scripts/agentic gates` PASS (format/lint/typecheck/test/
+  designs/integrity/memory all green); `npx prettier --check src tests
+  demo` clean.
+
 **T-058 done** (2026-08-02, this session): derive pipeline integration test
 (review R1) — see
 `.agents/journal/20260802-t058-derive-pipeline-integration-test.md` for full
@@ -214,10 +229,10 @@ owner-gated.** State as of 2026-08-02:
 3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
-4. Next agent session: T-059 (demo format-gate — protected-path, needs an
-   explicit owner-approved task per the open question below). Regenerate
-   `docs/mcp-surface.md` (`npm run gen:mcp-surface`) if it touches a
-   prompt/resource/tool (T-059 shouldn't).
+4. T-054..T-059 (the review R6/19-MINOR backlog) are now all landed. Check
+   `docs/final-status-review.md`'s remaining MINOR list (if any) or the
+   task list for what's next; otherwise the post-launch backlog is clear
+   pending owner publish/merge steps above.
 
 ## Open questions
 
@@ -225,8 +240,6 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
   owner call (registry manifests are ready either way).
 - Trademark posture recorded in `decisions.md` (finops-focus-mcp,
   accepted-risk): revisit only if the FinOps Foundation objects.
-- `agentic.config.json` format-gate scope excludes `demo/` (review MINOR):
-  protected path — needs an explicit owner-approved task.
 - `src/shared/index.ts` `export *` barrel: any new server code importing a
   real binding from it can silently reintroduce fs-reachability in the
   Worker; `fs-boundary.test.ts` only catches code reachable from
@@ -248,4 +261,4 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — T-058 session (derive pipeline integration test, review R1).
+2026-08-02 — T-059 session (demo/ under the format gate, review R6).

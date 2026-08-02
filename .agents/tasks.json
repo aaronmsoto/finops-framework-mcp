@@ -1106,7 +1106,7 @@
         "This task EXPLICITLY authorizes editing the agentic.config.json format gate command (hard-rule escape hatch) to include demo/ in prettier check scope; demo/ files prettier-formatted once via --write",
         "If the PreToolUse hook or integrity gate still blocks the config edit, mark this task blocked with the hook message in the journal and leave the demo prettier-write as the landed portion; gates pass either way"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }

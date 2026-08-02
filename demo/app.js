@@ -37,7 +37,9 @@ function logStep(title, goal, server, request, response, error) {
   section.appendChild(goalEl);
   section.appendChild(detailsBlock("Request", request));
   section.appendChild(
-    error ? detailsBlock("Error", error, true) : detailsBlock("Response", response),
+    error
+      ? detailsBlock("Error", error, true)
+      : detailsBlock("Response", response),
   );
   log.appendChild(section);
   section.scrollIntoView({ behavior: "smooth", block: "end" });

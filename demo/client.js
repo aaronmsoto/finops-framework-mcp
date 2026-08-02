@@ -28,7 +28,9 @@ export async function sendRpc(url, body) {
   try {
     json = JSON.parse(text);
   } catch {
-    throw new Error(`Non-JSON response (HTTP ${res.status}): ${text.slice(0, 300)}`);
+    throw new Error(
+      `Non-JSON response (HTTP ${res.status}): ${text.slice(0, 300)}`,
+    );
   }
   if (!res.ok) {
     throw new Error(`HTTP ${res.status}: ${JSON.stringify(json)}`);
