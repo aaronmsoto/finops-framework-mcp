@@ -128,6 +128,7 @@ export interface FocusColumnChanged {
 export interface FocusDiff {
   from: string;
   to: string;
+  official: false;
   source: { from_tag: string; to_tag: string };
   added_columns: FocusColumnRef[];
   removed_columns: FocusColumnRef[];

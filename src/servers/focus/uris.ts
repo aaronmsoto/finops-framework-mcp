@@ -9,6 +9,7 @@ export const URI = {
   versions: `${AUTHORITY}/versions`,
   changes: (from: string, to: string) => `${AUTHORITY}/changes/${from}-${to}`,
   glossary: (version: string) => `${AUTHORITY}/${version}/glossary`,
+  changelog: (version: string) => `${AUTHORITY}/${version}/changelog`,
   column: (version: string, slug: string) =>
     `${AUTHORITY}/${version}/columns/${slug}`,
   attribute: (version: string, slug: string) =>
@@ -17,6 +18,7 @@ export const URI = {
 
 export const TEMPLATES = {
   glossary: `${AUTHORITY}/{version}/glossary`,
+  changelog: `${AUTHORITY}/{version}/changelog`,
   column: `${AUTHORITY}/{version}/columns/{slug}`,
   attribute: `${AUTHORITY}/{version}/attributes/{slug}`,
 } as const;

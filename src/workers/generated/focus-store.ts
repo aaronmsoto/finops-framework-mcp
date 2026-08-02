@@ -6,7 +6,7 @@ const focusStore: SerializedFocusStore = {
   index: {
     derived: {
       "diff-1.0-1.2.json":
-        "6b52d8d77374ac703472f807ce3e7ebc55cf9e80df0f1b4bca13d1c193aad9cb",
+        "3aa29f5f80268e2831b92245639709691cfc05c0e92515b665d1a4bc2d6de119",
       "kpi-mapping.json":
         "788c334c705e59a06b2338ec3a1c1f7a7890c27db28a36b5d78bcf8f7b3abca8",
     },
@@ -4689,6 +4689,7 @@ const focusStore: SerializedFocusStore = {
       },
     ],
     from: "1.0",
+    official: false,
     removed_columns: [],
     source: {
       from_tag: "v1.0",

@@ -56,6 +56,7 @@ export function diffColumns(
   return {
     from: from.spec_version,
     to: to.spec_version,
+    official: false,
     source: { from_tag: from.source_tag, to_tag: to.source_tag },
     added_columns,
     removed_columns,

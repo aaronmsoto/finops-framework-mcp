@@ -7,6 +7,7 @@ import type { FocusStore } from "../../shared/focus/artifact.js";
 import { nearestMatches } from "../../shared/slugs.js";
 import {
   attributeMd,
+  changelogMd,
   columnMd,
   diffMd,
   glossaryMd,
@@ -222,6 +223,36 @@ export function registerResources(server: McpServer, store: FocusStore): void {
       if (!artifact)
         notFound(uri.href, "FOCUS spec version", version, versionSlugs);
       return text(uri.href, glossaryMd(artifact));
+    },
+  );
+
+  server.registerResource(
+    "changelog",
+    new ResourceTemplate(TEMPLATES.changelog, {
+      list: () => ({
+        resources: versionSlugs.map((version) => ({
+          uri: URI.changelog(version),
+          name: `FOCUS ${version} changelog`,
+          description: `Upstream CHANGELOG for spec version ${version}, verbatim.`,
+          mimeType: MD,
+        })),
+      }),
+      complete: {
+        version: (v) => versionSlugs.filter((s) => s.startsWith(v)),
+      },
+    }),
+    {
+      title: "FOCUS CHANGELOG",
+      description:
+        "The upstream FOCUS CHANGELOG for one spec version, verbatim — includes the upstream materiality caveat for judging whether a change is semantic.",
+      ...std(),
+    },
+    (uri, vars) => {
+      const version = String(vars.version);
+      const artifact = store.versions.get(version);
+      if (!artifact)
+        notFound(uri.href, "FOCUS spec version", version, versionSlugs);
+      return text(uri.href, changelogMd(artifact));
     },
   );
 

@@ -436,6 +436,7 @@
     }
   ],
   "from": "1.0",
+  "official": false,
   "removed_columns": [],
   "source": {
     "from_tag": "v1.0",

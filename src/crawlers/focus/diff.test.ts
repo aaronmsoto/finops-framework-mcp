@@ -51,6 +51,7 @@ describe("diffColumns", () => {
     const diff = diffColumns(from, to);
     expect(diff.from).toBe("1.0");
     expect(diff.to).toBe("1.2");
+    expect(diff.official).toBe(false);
     expect(diff.added_columns).toEqual([
       { id: "NewColumn", source_url: "https://example.test/foo.md" },
     ]);

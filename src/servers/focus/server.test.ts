@@ -169,8 +169,17 @@ describe("tools", () => {
     expect(res.isError).toBeFalsy();
     expect(res.structuredContent?.from).toBe("1.0");
     expect(res.structuredContent?.to).toBe("1.2");
+    expect(res.structuredContent?.official).toBe(false);
     const added = res.structuredContent?.added_columns as unknown[];
     expect(added).toHaveLength(14);
+  });
+
+  it("compare_versions banner cites the upstream materiality caveat and links the changelog resource", async () => {
+    const res = await call("compare_versions");
+    expect(res.content[0]?.text).toMatch(
+      /most changes are not material unless specifically called out/,
+    );
+    expect(res.content[0]?.text).toContain("focus://spec/1.2/changelog");
   });
 
   it("compare_versions with a column narrows to that column's status", async () => {
@@ -184,6 +193,7 @@ describe("tools", () => {
   it("compare_versions reports 'changed' for a column present in both with different content", async () => {
     const res = await call("compare_versions", { column: "BilledCost" });
     expect(res.structuredContent?.status).toBe("changed");
+    expect(res.structuredContent?.official).toBe(false);
   });
 
   it("compare_versions errors on an unrecognized column instead of reporting 'unchanged'", async () => {
@@ -468,6 +478,8 @@ describe("resources", () => {
     expect(all).toContain("focus://spec/changes/1.0-1.2");
     expect(all).toContain("focus://spec/1.2/glossary");
     expect(all).toContain("focus://spec/1.0/glossary");
+    expect(all).toContain("focus://spec/1.2/changelog");
+    expect(all).toContain("focus://spec/1.0/changelog");
     expect(
       all.filter((u) => u.startsWith("focus://spec/1.2/columns/")),
     ).toHaveLength(57);
@@ -482,6 +494,20 @@ describe("resources", () => {
     });
     const text = (res.contents[0] as { text: string }).text;
     expect(text).toMatch(/^# Billed Cost/);
+    expect(text).toContain("CC BY 4.0");
+  });
+
+  it("reads the changelog resource with upstream text and attribution", async () => {
+    const res = await client.readResource({
+      uri: "focus://spec/1.2/changelog",
+    });
+    const text = (res.contents[0] as { text: string }).text;
+    expect(text).toMatch(
+      /^# FinOps Open Cost and Usage Specification Changelog/,
+    );
+    expect(text).toContain(
+      "the vast majority of such changes are not material unless specifically called out",
+    );
     expect(text).toContain("CC BY 4.0");
   });
 

@@ -810,7 +810,7 @@
         "data/focus/derived/diff-1.0-1.2.json carries official: false (derive step updated, artifact regenerated, worker bundle regenerated); compare_versions structuredContent echoes the unofficial flag; the NOTICE.md sentence claiming all derived records carry official:false is now true (or reworded to match reality)",
         "Live probes: reading the changelog resource returns upstream text; compare_versions text shows the caveat; gates --tier all pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

@@ -13,7 +13,49 @@
 ## In flight
 
 Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
-is underway. **T-042 done this session** (C1-protocol-2, MAJOR):
+is underway. **T-043 done this session** (C2-fidelity-4 + C2-fidelity-5,
+MAJOR + MINOR): two independent findings, one change set. First, the
+bundled upstream CHANGELOG (`data/focus/{version}/CHANGELOG.md`, ingested
+since T-029 but never exposed) is now a resource,
+`focus://spec/{version}/changelog` (`src/servers/focus/uris.ts` gains
+`URI.changelog`/`TEMPLATES.changelog`; `render.ts` gains `changelogMd()` —
+verbatim `changelog_md` + the same CC BY `footer()` every other
+content-bearing surface uses, source-citing the raw CHANGELOG URL found in
+`manifest.source_urls`; `resources.ts` registers it mirroring the glossary
+resource's list/complete shape). Second, `compare_versions`'s shared banner
+(`src/servers/focus/tools.ts`, all five response branches) now cites the
+upstream materiality caveat verbatim-paraphrased ("most changes are not
+material unless specifically called out") and points at the new changelog
+resource plus each entry's `from_source_url`/`to_source_url` to judge
+materiality — previously the "43 changed" count was bare, and the bundled
+CHANGELOG (which states outright that formatting reflow explains most of
+those 43) was reachable by no tool or resource. Third, `FocusDiff` gains an
+`official: false` field (`types.ts`, set in `diffColumns`/`diff.ts`) so
+`data/focus/derived/diff-1.0-1.2.json` now actually carries the
+`official: false` marker `packages/focus-spec-mcp/NOTICE.md` already
+claimed every derived record has (true before only for
+`kpi-mapping.json`); `compare_versions`'s `outputSchema` and every
+structuredContent payload echo `official: false` alongside `from`/`to`.
+Re-ran `node dist/crawlers/focus/cli.js` (cache-only, 0 network fetches) —
+only `derived/diff-1.0-1.2.json` and `index.json` changed (the new field);
+column/attribute/manifest content is byte-identical. Re-ran
+`node scripts/bundle-worker-data.mjs` so `src/workers/generated/
+focus-store.ts` matches. `server.test.ts`: new tests for the changelog
+resource (upstream heading + materiality sentence + CC BY footer present),
+for the compare_versions banner (materiality sentence + changelog URI in
+text), and `official: false` assertions on the full-diff and per-column
+`changed` structuredContent; `diff.test.ts`/`emit.test.ts` updated for the
+new required field. Gates green (`--tier all`: 370 tests, up from 367).
+Live-probed via a scratch MCP client script (deleted after use): reading
+`focus://spec/1.2/changelog` returns text starting with the real upstream
+CHANGELOG heading, containing the exact upstream materiality sentence, and
+ending with the CC BY 4.0 footer citing
+`https://raw.githubusercontent.com/.../v1.2/CHANGELOG.md`; `compare_versions
+'{}'` text now reads "...read focus://spec/1.2/changelog and each entry's
+source_url(s) below to judge materiality..." with `structuredContent.
+official: false`.
+
+**T-042 done in an earlier session this batch** (C1-protocol-2, MAJOR):
 `compare_versions`'s fallthrough branch (`src/servers/focus/tools.ts`)
 returned `status: "unchanged"` for *any* column not in the diff's added/
 removed/changed lists — including typos, since with today's data (14
@@ -255,12 +297,10 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-039, T-040, T-041, T-042 done.** Next: T-043..T-047 (gate 4's
-   remaining MAJOR/MINOR fixes — README "official" phrasing,
-   compare_versions materiality caveat, calculate_kpi 0/0 guard, KPI
-   mapping version differentiation, cross-version unknown-column hints,
-   diff artifact official:false marker, package trademark naming), one
-   task at a time per the task queue.
+1. **T-039..T-043 done.** Next: T-044..T-047 (gate 4's remaining MAJOR/MINOR
+   fixes — README "official" phrasing, calculate_kpi 0/0 guard, KPI mapping
+   version differentiation, cross-version unknown-column hints, package
+   trademark naming), one task at a time per the task queue.
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -317,7 +357,14 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-30 — T-042 done (compare_versions errors with did-you-mean
+2026-07-30 — T-043 done (focus://spec/{version}/changelog resource exposes
+the bundled upstream CHANGELOG verbatim; compare_versions banner cites the
+upstream materiality caveat and links the changelog resource +
+source_urls; FocusDiff/diff-1.0-1.2.json/compare_versions structuredContent
+all gain official: false, making NOTICE.md's "all derived records" claim
+true; gate 4 C2-fidelity-4+5; new tests, gates --tier all green 370 tests,
+live-probed). T-042 done earlier same day (compare_versions errors with
+did-you-mean
 suggestions on columns unknown to both versions instead of reporting
 "unchanged", gate 4 C1-protocol-2; new tests incl. a synthetic
 genuinely-unchanged case; gates green, live-probed, reviewer-verified).

@@ -120,6 +120,7 @@ describe("emitDerivedDiff + emitIndex", () => {
     const diff: FocusDiff = {
       from: "1.0",
       to: "1.2",
+      official: false,
       source: { from_tag: "v1.0", to_tag: "v1.2" },
       added_columns: [{ id: "Bar", source_url: "https://example.test/bar.md" }],
       removed_columns: [],

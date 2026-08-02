@@ -101,6 +101,14 @@ export function glossaryMd(artifact: FocusVersionArtifact): string {
   );
 }
 
+export function changelogMd(artifact: FocusVersionArtifact): string {
+  const sourceUrl =
+    artifact.manifest.source_urls.find((u) => u.endsWith("CHANGELOG.md")) ??
+    artifact.manifest.source_urls[0] ??
+    "https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec";
+  return artifact.changelog_md + footer(artifact, sourceUrl);
+}
+
 export function diffMd(diff: FocusDiff): string {
   const parts: string[] = [
     `# FOCUS ${diff.from} → ${diff.to} column diff (unofficial derivation)`,

@@ -554,6 +554,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
       outputSchema: {
         from: z.string(),
         to: z.string(),
+        official: z.literal(false),
         column: z.string().optional(),
         status: z.enum(["added", "removed", "changed", "unchanged"]).optional(),
         changed_fields: z.array(z.string()).optional(),
@@ -581,13 +582,17 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     },
     ({ column }) => {
       const diff = store.diff;
+      const changelogUri = URI.changelog(diff.to);
       const note =
-        "UNOFFICIAL: this diff is derived by this server from the two tagged spec releases, not an official FOCUS changelog.";
+        "UNOFFICIAL: this diff is derived by this server from the two tagged spec releases, not an official FOCUS changelog. " +
+        `Per the upstream CHANGELOG, most changes are not material unless specifically called out — read ${changelogUri} ` +
+        'and each entry\'s source_url(s) below to judge materiality before treating a "changed" status as semantic.';
       if (!column) {
         return ok(
           {
             from: diff.from,
             to: diff.to,
+            official: false,
             added_columns: diff.added_columns,
             removed_columns: diff.removed_columns,
             changed_columns: diff.changed_columns,
@@ -611,6 +616,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
           {
             from: diff.from,
             to: diff.to,
+            official: false,
             column: added.id,
             status: "added",
             source_url: added.source_url,
@@ -623,6 +629,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
           {
             from: diff.from,
             to: diff.to,
+            official: false,
             column: removed.id,
             status: "removed",
             source_url: removed.source_url,
@@ -635,6 +642,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
           {
             from: diff.from,
             to: diff.to,
+            official: false,
             column: changed.id,
             status: "changed",
             changed_fields: changed.changed_fields,
@@ -669,6 +677,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
         {
           from: diff.from,
           to: diff.to,
+          official: false,
           column: canonicalId,
           status: "unchanged",
         },
