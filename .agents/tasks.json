@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "4b336cc8c48d51eef2dfd8af6295889262ed09a2e710ad390570be56eeb18a60",
+  "chainHead": "2feeb4627ffaf5edb382a003ec09a664f6583cc3a6f479cf1bdeeaabf574f829",
   "tasks": [
     {
       "id": "T-001",
@@ -912,6 +912,25 @@
         "completedAt": "2026-08-02T05:48:58.365Z"
       },
       "hash": "4b336cc8c48d51eef2dfd8af6295889262ed09a2e710ad390570be56eeb18a60"
+    },
+    {
+      "id": "T-049",
+      "title": "Fix launch-blocking doc MAJORs: root README reality + NOTICE CC BY scope",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "Root README presents the shipped surface: a finops-focus-mcp sibling-server section linking packages/finops-focus-mcp, Worker remote endpoints + docs/deploy-worker.md, demo/ mention; Roadmap paragraph rewritten past-tense; critique list extended to critique-3/4; tool tables untouched (verified current by the review)",
+        "Root NOTICE.md gains the FOCUS specification text + sample data (CC BY 4.0) section covering data/focus/1.0, 1.2, samples/1.0/official (transplanted from packages/finops-focus-mcp/NOTICE.md); README license section widened to cover both data/framework and data/focus as CC BY 4.0",
+        "gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Root README now presents the shipped surface (finops-focus-mcp sibling section linking packages/finops-focus-mcp, Worker endpoints + deploy doc, demo/, past-tense roadmap folded in, critique list extended through critique-4 and the final review); NOTICE.md gained the FOCUS spec-text CC BY 4.0 section covering data/focus/1.0+1.2 with adaptation notice, sample section extended to data/focus/samples/1.0/official, scope line widened; gates PASS",
+        "commit": "5b67bbd77f96c637e188f485741639800e236446",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T06:21:57.568Z"
+      },
+      "hash": "2feeb4627ffaf5edb382a003ec09a664f6583cc3a6f479cf1bdeeaabf574f829"
     }
   ]
 }
