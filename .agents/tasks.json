@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "fd7a620d849f21baac13d8d9e63e93fa4d80da4ad663baf1741866796beb8fe9",
+  "chainHead": "7848d27e0c5f8b917bcf38a5283f8fb43e1481a75b8209c84f8c4acfcc0a9ff7",
   "tasks": [
     {
       "id": "T-001",
@@ -976,9 +976,15 @@
         "Worker short-circuits GET and DELETE on /mcp/* with 405 + Allow header instead of opening an eternal silent SSE stream; app.test.ts cases added for both",
         "listChanged comment/doc mismatch resolved: server.ts comments (framework ~20-23 and focus equivalent) corrected to note the SDK advertises listChanged though the artifact is immutable per process, or the flag suppressed if the SDK allows; gates --tier all pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "MCP-1/2/3 fixed: pagination text parity on 4 tools, Worker 405 for GET/DELETE with Allow header + 4 new app.test.ts cases, listChanged comments corrected in both server.ts; gates --tier all PASS (385 tests).",
+        "commit": "6c3a94719c0628b0fd8e4104981059ae87b06086",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:14:02.937Z"
+      },
+      "hash": "7848d27e0c5f8b917bcf38a5283f8fb43e1481a75b8209c84f8c4acfcc0a9ff7"
     },
     {
       "id": "T-053",
