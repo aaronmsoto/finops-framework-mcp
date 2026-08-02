@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "2eca18b319e928c58841cfb8b6f0cf914bee26cc9b4091ac6132421ebffc7a7d",
+  "chainHead": "07f67a34389c925625ebe5b677a0cc4af4c723131dd5fa5040f41b79b475afed",
   "tasks": [
     {
       "id": "T-001",
@@ -1195,9 +1195,15 @@
         "CONTRIBUTING.md and the README Development section note the build prerequisite (dist/ is gitignored) and distinguish this contributor config from the npx form documented for consumers in docs/guide/index.html",
         "gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Root .mcp.json defines finops-framework and finops-focus via node dist/servers/{framework,focus}/main.js, no experimental flag. Verified by launching each server through the EXACT command/args from the config (not the eval bridge): framework 11 tools + 4 prompts, focus 9 tools + 3 prompts, matching docs/mcp-surface.md, get_actions absent from both. CONTRIBUTING.md gained a 'Testing the servers locally' section (build-first caveat since dist/ is gitignored, client restart, contributor-vs-npx distinction, bridge fallback); README Development links it. gates PASS",
+        "commit": "98513dc506649a5fa1816849b85d0242f9e4146c",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T18:26:50.165Z"
+      },
+      "hash": "07f67a34389c925625ebe5b677a0cc4af4c723131dd5fa5040f41b79b475afed"
     }
   ]
 }
