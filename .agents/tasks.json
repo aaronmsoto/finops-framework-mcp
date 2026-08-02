@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "0af03f71c0bf45836138d82f5a8fecfef2883e3674055cff739787a99501aced",
+  "chainHead": "6a8311c3a51df861c3dfac893d97b8a4e5ac684f543180109bc4d39682f9b923",
   "tasks": [
     {
       "id": "T-001",
@@ -1141,9 +1141,15 @@
       "acceptance": [
         "docs/guide/framework-server.html and focus-server.html per spec pages 2-3: data/version model, grouped tool tours consistent with docs/mcp-surface.md, prompts + resources, worked demo sections (Anomaly Management; BilledCost + 1.0→1.2 diff) with real transcripts; shared chrome + nav; gates pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "docs/guide/framework-server.html (10 probes): 4 domains->22 capabilities->88 KPIs model, all 11 default tools grouped discover/read/search/assess with params, 4 prompts + finops:// resources, live cursor-pagination transcript, Anomaly Management end-to-end demo. docs/guide/focus-server.html (12 probes): version model, all 9 tools grouped versions->columns/attributes->requirements->search->compare/changelog->UNOFFICIAL KPI tools, 3 prompts + focus:// resources incl. changelog, BilledCost 1.0 record + 1.2 verbatim requirements + full 1.0->1.2 diff. Tool tables reconciled against docs/mcp-surface.md and live list-tools; gates PASS",
+        "commit": "0a72344acda7c62ac18e354d96ea9007f19353e6",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T15:34:04.076Z"
+      },
+      "hash": "6a8311c3a51df861c3dfac893d97b8a4e5ac684f543180109bc4d39682f9b923"
     },
     {
       "id": "T-062",
