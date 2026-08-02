@@ -148,3 +148,47 @@ re-grade pass is queued in the template's review backlog.
 (worked first try; a miss costs one search round-trip — the critique-3
 MINOR queue covers slug discoverability). Zero errors, zero wrong-tool
 detours, zero pagination problems on the fixed surfaces.
+
+# Focus suite (`evals/focus/eval.xml`)
+
+Same protocol as the framework suite: fresh-agent, tools-only,
+text-blocks-only, graded by the supervising session against the
+pre-registered `<expected>` answers via
+`node evals/framework/mcp-call.mjs --server=focus`.
+
+## Focus Run 1 — 2026-07-28 (post loop T-027..T-038), data 1.0/1.2, server 1.0.0
+
+| # | Probe | Verdict | Notes |
+|---|---|---|---|
+| 1 | Versions served + counts | **PASS** | 1.0/1.2, latest 1.2; 43+9 / 57+9 |
+| 2 | BilledCost 1.0 type/level/nulls | **PASS** | Metric; Mandatory; Decimal; non-null |
+| 3 | Mandatory columns in 1.2 | **PASS** | 21 via feature_level filter |
+| 4 | "commitment discount" search hits (1.0) | **PASS** | 9 hits; titles named |
+| 5 | Currency Format attribute + ISO 4217 | **PASS** | verbatim MUST clause |
+| 6 | BilledCost 1.2 InvoiceId reconciliation | **PASS** | verbatim requirement bullet |
+| 7 | Full 1.0→1.2 diff counts | **PASS** | 14 added / 0 removed / 43 changed |
+| 8 | CommitmentDiscountQuantity provenance | **PASS** | added in 1.2 |
+| 9 | rate-optimization KPI mapping (1.2) | **PASS** | 4 KPIs; UNOFFICIAL banner present |
+| 10 | ESR columns + formula (1.0) | **PASS** | 4 columns; formula in substance; unofficial |
+
+**Score: 10/10 (gate requires ≥9/10).** Friction: `get_attribute`'s
+parameter is `slug`, which the agent had to discover from the schema
+(description gap — queued as a MINOR alongside the critique-4 queue); no
+errors, no wrong-version answers, cursor pagination unused (limits
+sufficed).
+
+## Combined two-server scenario — 2026-07-28 (`evals/focus/combined-scenario.xml`)
+
+Fresh agent drove both servers through the eval bridge: framework
+`get_capability` (rate-optimization) → featured KPIs → focus
+`get_kpi_mapping` per version → `compare_versions` → `calculate_kpi`.
+**PASS end-to-end**: slugs flowed framework→focus first try; 6 distinct
+FOCUS columns cover all 4 featured KPIs across both versions; ESR over the
+official 1.0 sample = 26.552972346576816%; the three commitment KPIs
+returned 0%/100%/0 on a sample with no commitment-purchase rows — flagged
+in the practitioner summary as a data limitation, which critique gate #4
+subsequently confirmed as a MAJOR defect (C3-version-1/C4-community-2:
+must error/not-computable instead of definite numbers); unofficial
+flagging consistent on every derived answer. Friction: framework
+`assess_maturity_path` parameter names required a schema look;
+`compare_versions` per-column output is field-level, not value-level.
