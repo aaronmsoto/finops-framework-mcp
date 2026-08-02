@@ -1,4 +1,4 @@
-# focus-spec-mcp
+# finops-focus-mcp
 
 An [MCP](https://modelcontextprotocol.io) server that gives AI agents a
 structured, **version-aware** interface to the **FOCUS** (FinOps Open Cost &
@@ -18,13 +18,13 @@ source, tests, and contribution docs.
 ## Quickstart
 
 ```bash
-npx focus-spec-mcp
+npx finops-focus-mcp
 ```
 
 Claude Code:
 
 ```bash
-claude mcp add focus-spec -- npx focus-spec-mcp
+claude mcp add focus-spec -- npx finops-focus-mcp
 ```
 
 Claude Desktop (`claude_desktop_config.json`):
@@ -34,7 +34,7 @@ Claude Desktop (`claude_desktop_config.json`):
   "mcpServers": {
     "focus-spec": {
       "command": "npx",
-      "args": ["focus-spec-mcp"]
+      "args": ["finops-focus-mcp"]
     }
   }
 }
@@ -45,7 +45,7 @@ Generic stdio client:
 ```json
 {
   "command": "npx",
-  "args": ["focus-spec-mcp"]
+  "args": ["finops-focus-mcp"]
 }
 ```
 
@@ -71,5 +71,5 @@ this package is MIT-licensed (`LICENSE`).
 ## Version
 
 ```bash
-npx focus-spec-mcp --version
+npx finops-focus-mcp --version
 ```

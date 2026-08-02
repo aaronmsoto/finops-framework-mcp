@@ -893,6 +893,19 @@
         "completedAt": "2026-07-30T15:16:49.971Z"
       },
       "hash": "0033df447166e26ea8013a917d3130d7619aadb2138fd48530e2ed6771f7cb4b"
+    },
+    {
+      "id": "T-048",
+      "title": "Rename focus package to finops-focus-mcp (owner decision, gate4 C4-community-3)",
+      "acceptance": [
+        "packages/focus-spec-mcp/ renamed to packages/finops-focus-mcp/; package.json name and bin are finops-focus-mcp; its server.json registry id is io.github.aaronmsoto/finops-focus-mcp; every focus-spec-mcp reference in the repo (READMEs, NOTICE, docs, demo, scripts, workflows excluded-paths aside) swept to the new name",
+        "npm pack succeeds from the renamed dir; a temp install of the tarball runs the bin and prints the finops-focus-mcp banner with spec versions",
+        ".agents/memory/decisions.md records the owner decision: finops-focus-mcp for family consistency with finops-framework-mcp, LF trademark-policy quote, knowingly-accepted descriptive-use risk with mitigations",
+        "gates --tier all pass"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

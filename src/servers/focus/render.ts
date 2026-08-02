@@ -18,7 +18,7 @@ export function footer(
   return ccByFooter({
     sourceUrl,
     licenseHolder: "FinOps Foundation",
-    packageName: "focus-spec-mcp",
+    packageName: "finops-focus-mcp",
     dataVersion: m.data_version,
     crawledAt: m.crawled_at,
   });

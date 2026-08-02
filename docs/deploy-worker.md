@@ -2,7 +2,7 @@
 
 Owner-only checklist (deploying is a human approval point per
 `approvals.yaml` — no automation in this repo runs `wrangler deploy`).
-Deploys both MCP servers (finops-framework and focus-spec-mcp) over HTTPS
+Deploys both MCP servers (finops-framework and finops-focus-mcp) over HTTPS
 from one Worker, at `/mcp/framework` and `/mcp/focus`.
 
 ## What ships
@@ -54,7 +54,7 @@ npx wrangler secret put ALLOWED_ORIGINS   # or edit wrangler.toml [vars] and red
 
 A request with no `Origin` header is always allowed regardless of this
 list (that's how stdio-bridged and server-to-server MCP clients call it);
-only browser-originated requests with a *present but unlisted* `Origin` get
+only browser-originated requests with a _present but unlisted_ `Origin` get
 a `403`.
 
 This allowlist is also what drives CORS: `src/workers/app.ts` answers an

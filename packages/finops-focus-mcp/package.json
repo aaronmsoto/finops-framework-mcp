@@ -1,5 +1,5 @@
 {
-  "name": "focus-spec-mcp",
+  "name": "finops-focus-mcp",
   "version": "1.0.0",
   "description": "MCP server exposing the version-aware FOCUS (FinOps Open Cost & Usage Specification) to AI agents: columns, attributes, glossary, cross-version diffs, and a derived KPI-to-column mapping bridging it to the FinOps Framework.",
   "keywords": [
@@ -14,11 +14,11 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aaronmsoto/finops-framework-mcp.git",
-    "directory": "packages/focus-spec-mcp"
+    "directory": "packages/finops-focus-mcp"
   },
-  "mcpName": "io.github.aaronmsoto/focus-spec-mcp",
+  "mcpName": "io.github.aaronmsoto/finops-focus-mcp",
   "bin": {
-    "focus-spec-mcp": "dist/servers/focus/main.js"
+    "finops-focus-mcp": "dist/servers/focus/main.js"
   },
   "files": [
     "dist",

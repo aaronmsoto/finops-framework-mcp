@@ -19,7 +19,7 @@ function collectionSchema(
 ): Record<string, unknown> {
   return {
     $schema: "https://json-schema.org/draft/2020-12/schema",
-    $id: `focus-spec-mcp/${id}`,
+    $id: `finops-focus-mcp/${id}`,
     type: "array",
     items: {
       type: "object",
@@ -119,7 +119,7 @@ const ingestReportSchema = {
 
 export const focusVersionManifestSchema = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "focus-spec-mcp/manifest",
+  $id: "finops-focus-mcp/manifest",
   type: "object",
   properties: {
     spec_version: { type: "string" },

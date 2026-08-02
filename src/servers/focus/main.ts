@@ -26,7 +26,7 @@ export async function runCli(cliArgs: string[]): Promise<void> {
     const store = loadFocusStore(artifactDir); // throws with actionable error
     const versions = store.index.versions.map((v) => v.spec_version).join(", ");
     console.log(
-      `focus-spec-mcp v${pkg.version} (FOCUS spec versions: ${versions}; latest ${store.index.latest})`,
+      `finops-focus-mcp v${pkg.version} (FOCUS spec versions: ${versions}; latest ${store.index.latest})`,
     );
     return;
   }
@@ -35,7 +35,7 @@ export async function runCli(cliArgs: string[]): Promise<void> {
   const server = createServer(store);
   await server.connect(new StdioServerTransport());
   console.error(
-    `focus-spec-mcp MCP server ready on stdio (FOCUS spec versions: ` +
+    `finops-focus-mcp MCP server ready on stdio (FOCUS spec versions: ` +
       `${store.index.versions.map((v) => v.spec_version).join(", ")}; latest ${store.index.latest})`,
   );
 }

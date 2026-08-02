@@ -1,7 +1,7 @@
-// Packaging test for the focus-spec-mcp publish shim (T-036, spec
+// Packaging test for the finops-focus-mcp publish shim (T-036, spec
 // .agents/specs/focus-mcp-v1.md "Packaging / worker / demo"). Asserts BOTH
 // directions of the tarball boundary — the root (framework) package must
-// ship no focus server code or focus data, and the focus-spec-mcp shim must
+// ship no focus server code or focus data, and the finops-focus-mcp shim must
 // ship no framework server code or framework data — then proves the shim's
 // tarball actually installs and runs offline (using packages already
 // resolved for the root project, so no network access is required).
@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
-const focusPkgDir = path.join(repoRoot, "packages/focus-spec-mcp");
+const focusPkgDir = path.join(repoRoot, "packages/finops-focus-mcp");
 
 function ensureBuilt(): void {
   const frameworkMain = path.join(repoRoot, "dist/servers/framework/main.js");
@@ -42,7 +42,7 @@ function packDryRun(cwd: string): PackResult {
   return (JSON.parse(out) as PackResult[])[0];
 }
 
-describe("packaging: focus-spec-mcp shim (T-036)", () => {
+describe("packaging: finops-focus-mcp shim (T-036)", () => {
   beforeAll(() => {
     ensureBuilt();
   }, 120_000);
@@ -59,7 +59,7 @@ describe("packaging: focus-spec-mcp shim (T-036)", () => {
     expect(paths.some((p) => p.startsWith("data/framework/"))).toBe(true);
   });
 
-  it("focus-spec-mcp tarball ships no framework server code or framework data, and is under 1MB", () => {
+  it("finops-focus-mcp tarball ships no framework server code or framework data, and is under 1MB", () => {
     const pack = packDryRun(focusPkgDir);
     const paths = pack.files.map((f) => f.path);
 
@@ -108,11 +108,14 @@ describe("packaging: focus-spec-mcp shim (T-036)", () => {
         { cwd: installScratch, stdio: "inherit" },
       );
 
-      const bin = path.join(installScratch, "node_modules/.bin/focus-spec-mcp");
+      const bin = path.join(
+        installScratch,
+        "node_modules/.bin/finops-focus-mcp",
+      );
       const versionOut = execFileSync(bin, ["--version"], {
         encoding: "utf8",
       });
-      expect(versionOut).toMatch(/^focus-spec-mcp v\d+\.\d+\.\d+/);
+      expect(versionOut).toMatch(/^finops-focus-mcp v\d+\.\d+\.\d+/);
     } finally {
       fs.rmSync(packScratch, { recursive: true, force: true });
       fs.rmSync(installScratch, { recursive: true, force: true });

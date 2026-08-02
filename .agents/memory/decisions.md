@@ -70,7 +70,7 @@
   filenames breaks lexicographic order whenever one slug is a strict prefix
   of another, e.g. `general-ledger-recharge-rate` vs
   `general-ledger-recharge-rate-per-cost-center` — `"...rate.md"` sorts
-  *after* `"...rate-per-cost-center.md"` because `.` (0x2E) > `-` (0x2D),
+  _after_ `"...rate-per-cost-center.md"` because `.` (0x2E) > `-` (0x2D),
   even though the bare slug should sort first. Confirmed content-identical
   (order-only) via a per-slug set comparison before accepting the reorder.
   `diffArtifact` is order-insensitive (keyed by slug/wp_id) so this was
@@ -120,7 +120,7 @@
 ## 2026-07-23 — `assess_maturity_path` drops pre-crawl unconditionally, not just by default (T-008)
 
 - Decision: `assess_maturity_path`'s `current_level`/`target_level` are both
-  `z.enum(["crawl","walk","run"])` in *every* mode, not gated behind
+  `z.enum(["crawl","walk","run"])` in _every_ mode, not gated behind
   `experimental`. It now returns verbatim `assessment_md` (from
   `capability.maturity_raw`) instead of parsed `Action` characteristics.
 - Why: the tool's only reason to accept `pre-crawl` was to describe a gap
@@ -145,7 +145,7 @@
 ## 2026-07-28 — CachedFetcher gets a pluggable `isValidBody`, not a FOCUS-specific fetcher (T-029)
 
 - Decision: `CachedFetcherOptions` grew an optional `isValidBody?: (url,
-  body) => boolean`, defaulting to the existing HTML-page check
+body) => boolean`, defaulting to the existing HTML-page check
   (`bodyLooksValid` — min length + `<h1>`). The FOCUS crawler passes
   `isValidFocusBody` (`body.length > 0`); the framework crawler passes
   nothing and is byte-for-byte unaffected.
@@ -181,7 +181,7 @@
   warm cache, `diff -rq` reported zero differences.
 - Alternatives considered: always rewrite and exclude `crawled_at` from the
   "byte-identical" comparison in tests only (rejected — the acceptance
-  criterion says the *refresh* is byte-identical, not "byte-identical
+  criterion says the _refresh_ is byte-identical, not "byte-identical
   modulo a documented exception"; a real diff-on-disk after every refresh
   would also be confusing operationally, showing churn with no content
   change).
@@ -248,7 +248,7 @@
   no hardcoded per-column/per-version table. One combination needed a
   special rule: a `data_type: "JSON"` column that also declares
   `allowed_values` (today, only 1.2's `SkuPriceDetails` — its enum lists
-  valid property *keys* per `KeyValueFormat`, not the literal column
+  valid property _keys_ per `KeyValueFormat`, not the literal column
   value). `validateFocusCsv` checks `data_type` and `allowed_values`
   independently, so no single raw string can satisfy "valid JSON" and
   "exact match to an enum entry" at once. The generator always emits
@@ -302,7 +302,7 @@
 - Why: keeps the derived-file loading seam generic instead of hardcoding a
   second special case, keeps the KPI mapping data itself easy to review and
   extend (it's just an array literal), and keeps the focus package's only
-  coupling to the framework package at the *data* layer (tests reading both
+  coupling to the framework package at the _data_ layer (tests reading both
   data/ dirs), never a compiled-code import.
 - Alternatives considered: give kpi-mapping.json its own ajv JSON Schema
   like the per-version artifact files (rejected for now — the existing
@@ -321,7 +321,7 @@
   the same way `derived/` already is (`FocusStore.sampleManifest` +
   `sampleCsv: Map<"version:kind", csvText>`). A new
   `scripts/bundle-focus-samples.mjs` (mirrors `generate-focus-synthetic-
-  samples.mjs`'s own-script pattern, not folded into `cli.ts`'s `ingest()`)
+samples.mjs`'s own-script pattern, not folded into `cli.ts`'s `ingest()`)
   reads the three fixture files from `src/crawlers/focus/fixtures/samples/`
   and re-invokes `emitIndex`/a new `emitSamples`. `cli.ts`'s `ingest()` now
   reads any existing `index.json.samples` and carries it forward
@@ -373,9 +373,9 @@
   `src/crawlers/focus/parse/table.ts`) and prefixes a nested normative
   bullet with its full chain of ancestor bullet texts (trailing `:`
   stripped, joined with `": "`), e.g. `"SkuId nullability is defined as
-  follows: SkuId MUST be null when ChargeCategory is 'Tax'."` — not a
+follows: SkuId MUST be null when ChargeCategory is 'Tax'."` — not a
   hand-trimmed clause like `"When ChargeCategory is not 'Usage' or
-  'Purchase': ..."` (the illustrative, shortened form gate 4's
+'Purchase': ..."` (the illustrative, shortened form gate 4's
   C2-fidelity-1 finding used as an example fix).
 - Why: FOCUS 1.2's scoping-bullet phrasing isn't uniform ("X nullability
   is defined as follows:", "X for a given Y adheres to the following
@@ -388,7 +388,7 @@
   Keeping the whole ancestor text is generic, handles the observed 3-level
   nesting (`CommitmentDiscountQuantity` 1.2) without extra cases, and the
   acceptance criterion ("prefixed with its parent bullet's scoping clause")
-  is satisfied literally — the parent bullet *is* the scoping clause, just
+  is satisfied literally — the parent bullet _is_ the scoping clause, just
   not pre-shortened.
 - Alternatives considered: regex-stripping a fixed set of boilerplate
   suffixes (e.g. `/adheres to the following.*requirements:$/`) before using
@@ -400,3 +400,23 @@
   bullet, since every other code path (`get_column`, `get_attribute`,
   search indexing) treats `requirements` as an array of independent
   statements.
+
+## 2026-08-02 — FOCUS package npm name: finops-focus-mcp
+
+Decision (owner): publish the FOCUS server as `finops-focus-mcp`
+(registry id `io.github.aaronmsoto/finops-focus-mcp`), renamed from
+`focus-spec-mcp` before first publish.
+
+Alternatives: keep `focus-spec-mcp` (rejected: gate-4 C4-community-3 —
+LF trademark policy states "A trademark should not be used as part of
+your product name", and FOCUS™-first naming is the explicitly incorrect
+pattern); `@aaronsoto/focus-spec-mcp` scope (rejected: breaks family
+consistency); distinctive non-mark name (rejected: kills discoverability).
+
+Rationale: consistent complement to the existing `finops-framework-mcp`
+so both packages share one uniform, explicitly recorded posture. The
+residual risk (both names still contain Foundation marks) is knowingly
+accepted: names are descriptive of what the servers serve, the MCP
+ecosystem convention names servers after the upstream they front,
+NOTICE.md files disclaim affiliation/endorsement, and registry ids are
+author-namespaced. Revisit only if the Foundation objects.

@@ -46,7 +46,7 @@ needed (server-side strings/descriptions only). Full detail:
 `.agents/journal/20260730-t047-slug-hints-polish.md`.
 
 **T-046 done in an earlier session this batch** (C2-fidelity-3, MAJOR):
-`packages/focus-spec-mcp/README.md:14` called the sibling
+`packages/finops-focus-mcp/README.md:14` called the sibling
 `finops-framework-mcp` package "the official FinOps Framework server" —
 "official" grammatically modified the *server* (this software), contradicting
 the same package's own `NOTICE.md` ("independent, unofficial integration ...
@@ -56,7 +56,7 @@ finops.org/framework" — "official" now attaches only to the Framework.
 Grepped both package READMEs, both package.json descriptions, and both
 server.json files for other "official" occurrences per the fix's second
 requirement: every remaining hit (root README's "official FinOps Framework"/
-"official Crawl/Walk/Run", focus-spec-mcp README's "official FOCUS-to-FinOps-
+"official Crawl/Walk/Run", finops-focus-mcp README's "official FOCUS-to-FinOps-
 KPI mapping"/"official sample dataset", both package descriptions' "official
 FinOps Framework") modifies the upstream Framework/FOCUS/dataset, never the
 software itself — none needed changing. Docs-only; no artifact regen. Gates
@@ -156,7 +156,7 @@ CHANGELOG (which states outright that formatting reflow explains most of
 those 43) was reachable by no tool or resource. Third, `FocusDiff` gains an
 `official: false` field (`types.ts`, set in `diffColumns`/`diff.ts`) so
 `data/focus/derived/diff-1.0-1.2.json` now actually carries the
-`official: false` marker `packages/focus-spec-mcp/NOTICE.md` already
+`official: false` marker `packages/finops-focus-mcp/NOTICE.md` already
 claimed every derived record has (true before only for
 `kpi-mapping.json`); `compare_versions`'s `outputSchema` and every
 structuredContent payload echo `official: false` alongside `from`/`to`.
@@ -227,7 +227,7 @@ Live-probed via `node evals/framework/mcp-call.mjs --server=focus call
 get_requirements '{"column":"BilledCost"}'`: text now ends "...Source:
 https://raw.githubusercontent.com/.../billedcost.md — © FinOps Foundation,
 licensed CC BY 4.0 (...). Content restructured and adapted by
-focus-spec-mcp..."; structuredContent gained
+finops-focus-mcp..."; structuredContent gained
 `"source_url":"https://raw.githubusercontent.com/.../billedcost.md"` and
 `"license":"CC-BY-4.0"`, matching get_column's attribution verbatim.
 
@@ -291,7 +291,7 @@ bullets and dropping RECOMMENDED/MAY. Now:
   confirmed the 1.0 `tags.md` MAY-recovery from gate 4's count (`git diff
   data/focus/1.0/columns.json` shows the added "Tag key with a null value
   ... MAY be included" bullet).
-- `packages/focus-spec-mcp/data/` is gitignored and re-staged from
+- `packages/finops-focus-mcp/data/` is gitignored and re-staged from
   `data/focus/` at `npm pack`/prepack time (confirmed in the gates test
   run's "pack-focus: staged ... data/focus" log line) — no separate
   regen needed there.
@@ -305,7 +305,7 @@ task.
 
 ---
 
-Prior batch: focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`,
+Prior batch: finops-focus-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`,
 tasks T-027..T-038) — **all of T-027..T-038 are DONE**.
 
 T-038 this session: static demo web app (`demo/`) for the combined
@@ -398,7 +398,7 @@ worker test suite directly). Gates green (`--tier all`: format/lint/
 typecheck/test 354 passed/coverage/designs/integrity/memory/build all
 pass). Full detail: `.agents/journal/20260728-t037-cloudflare-worker.md`.
 
-T-036 (earlier session): `packages/focus-spec-mcp/` publish shim. See
+T-036 (earlier session): `packages/finops-focus-mcp/` publish shim. See
 `.agents/journal/20260728-t036-focus-pack-shim.md` for detail.
 
 T-035 (earlier session): eval design (`evals/focus/`), no source changes.
@@ -421,7 +421,7 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
    mini-batch — the gate-4 fix batch (T-039..T-047) has now closed out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
    v1 (PR #4 merged to dev; publish happens from main after release) —
-   T-036 gives `packages/focus-spec-mcp/` a second, independent publish
+   T-036 gives `packages/finops-focus-mcp/` a second, independent publish
    target (own `server.json`, own version line) alongside root.
 4. Owner: deploying the Cloudflare Worker (T-037) and the demo (T-038) are
    both human approval points — `docs/deploy-worker.md` and
@@ -482,7 +482,7 @@ version — ServiceSubcategory@1.0/SkuMeter@1.0 name FOCUS 1.2 + "added in
 1.1" + suggest compare_versions — and names the version consulted
 otherwise; gate 4 C1-protocol-3+4, C3-version-3; 4 new server.test.ts cases,
 gates green 379 tests, live-probed). T-046 done earlier same day
-(focus-spec-mcp README no longer calls the sibling
+(finops-focus-mcp README no longer calls the sibling
 `finops-framework-mcp` package "the official FinOps Framework server" —
 reworded so "official" attaches only to the Framework, never the software;
 gate 4 C2-fidelity-3; grepped both package READMEs/descriptions/server.json

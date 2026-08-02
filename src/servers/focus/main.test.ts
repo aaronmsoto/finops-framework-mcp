@@ -28,7 +28,7 @@ describe("direct-run detection (mirrors the framework server's main.test.ts)", (
       "main.ts",
     );
     tmp = fs.mkdtempSync(path.join(os.tmpdir(), "focus-bin-"));
-    const link = path.join(tmp, "focus-spec-mcp");
+    const link = path.join(tmp, "finops-focus-mcp");
     fs.symlinkSync(moduleFile, link);
     process.argv[1] = link;
     expect(detectDirectRun()).toBe(true);
@@ -52,13 +52,13 @@ describe.skipIf(!fs.existsSync(DIST_MAIN))(
     it("prints --version with both pinned spec versions and the latest", () => {
       const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "focus-binlink-"));
       try {
-        const link = path.join(tmp, "focus-spec-mcp");
+        const link = path.join(tmp, "finops-focus-mcp");
         fs.symlinkSync(DIST_MAIN, link);
         const out = execFileSync(process.execPath, [link, "--version"], {
           encoding: "utf8",
         });
         expect(out).toMatch(
-          /^focus-spec-mcp v\d+\.\d+\.\d+ \(FOCUS spec versions: 1\.0, 1\.2; latest 1\.2\)\n$/,
+          /^finops-focus-mcp v\d+\.\d+\.\d+ \(FOCUS spec versions: 1\.0, 1\.2; latest 1\.2\)\n$/,
         );
       } finally {
         fs.rmSync(tmp, { recursive: true, force: true });
@@ -76,7 +76,7 @@ describe("--version flag", () => {
     expect(logSpy).toHaveBeenCalledTimes(1);
     const [line] = logSpy.mock.calls[0] as [string];
     expect(line).toMatch(
-      /^focus-spec-mcp v\d+\.\d+\.\d+ \(FOCUS spec versions: 1\.0, 1\.2; latest 1\.2\)$/,
+      /^finops-focus-mcp v\d+\.\d+\.\d+ \(FOCUS spec versions: 1\.0, 1\.2; latest 1\.2\)$/,
     );
     logSpy.mockRestore();
   });

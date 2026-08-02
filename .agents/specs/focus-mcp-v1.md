@@ -1,4 +1,4 @@
-# Spec: focus-spec-mcp v1 — version-aware FOCUS specification MCP server
+# Spec: finops-focus-mcp v1 — version-aware FOCUS specification MCP server
 
 Owner-approved 2026-07-24 (question round + plan approval). Binding for loop
 tasks T-027..T-038. Companion to the shipped framework server; the version
@@ -93,11 +93,11 @@ tests). Methodology note in the artifact explains inference basis.
 
 ## Packaging / worker / demo (pinned)
 
-- Publish shim `packages/focus-spec-mcp/` (own package.json: name
-  focus-spec-mcp, bin → dist/servers/focus/main.js, files [dist,
+- Publish shim `packages/finops-focus-mcp/` (own package.json: name
+  finops-focus-mcp, bin → dist/servers/focus/main.js, files [dist,
   data/focus, README, LICENSE, NOTICE], prepack runs
   scripts/pack-focus.mjs copying dist/servers/focus + dist/shared +
-  data/focus in; mcpName io.github.aaronmsoto/focus-spec-mcp; own
+  data/focus in; mcpName io.github.aaronmsoto/finops-focus-mcp; own
   server.json). Root package.json: only narrow `files` so framework
   tarballs exclude focus code/data.
 - Worker: src/workers/app.ts fetch-handler factory (routes /mcp/framework

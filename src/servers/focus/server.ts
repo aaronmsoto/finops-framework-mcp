@@ -4,7 +4,7 @@ import { registerPrompts } from "./prompts.js";
 import { registerResources } from "./resources.js";
 import { registerTools } from "./tools.js";
 
-export const SERVER_NAME = "focus-spec-mcp";
+export const SERVER_NAME = "finops-focus-mcp";
 export const SERVER_VERSION = "1.0.0";
 
 /**

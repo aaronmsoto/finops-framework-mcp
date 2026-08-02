@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Eval suite for the focus-spec-mcp MCP server (T-035, spec
+  Eval suite for the finops-focus-mcp MCP server (T-035, spec
   .agents/specs/focus-mcp-v1.md). Constraints mirror evals/framework/eval.xml
   (critique M6 pattern): every question must be answerable TOOLS-ONLY, read-only,
   independent of the others, and verifiable against the committed data/focus
