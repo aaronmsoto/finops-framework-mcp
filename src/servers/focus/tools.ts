@@ -119,6 +119,9 @@ export function registerTools(server: McpServer, store: FocusStore): void {
   const searchIndexByVersion = new Map(
     [...store.versions.entries()].map(([v, a]) => [v, buildSearchIndex(v, a)]),
   );
+  const columnCountsBySpec = versionSlugs
+    .map((v) => `${store.versions.get(v)?.columns.length} in ${v}`)
+    .join(", ");
 
   function resolveVersion(
     version: string | undefined,
@@ -303,8 +306,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     "list_columns",
     {
       title: "List FOCUS columns",
-      description:
-        "All columns for one spec version, optionally filtered by feature_level (Mandatory|Conditional|Recommended) or column_type (Metric|Dimension). Default limit returns the full list in one call (43 in 1.0, 57 in 1.2).",
+      description: `All columns for one spec version, optionally filtered by feature_level (Mandatory|Conditional|Recommended) or column_type (Metric|Dimension). Default limit returns the full list in one call (${columnCountsBySpec}).`,
       inputSchema: {
         version: z
           .string()
@@ -564,8 +566,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     "compare_versions",
     {
       title: "Compare FOCUS 1.0 to 1.2",
-      description:
-        "The 1.0→1.2 column diff — an UNOFFICIAL derivation computed by this server from the two tagged spec releases, source-cited per entry. Without `column`: the full diff (14 added, 0 removed, 43 changed). With `column`: that one column's status and detail.",
+      description: `The ${store.diff.from}→${store.diff.to} column diff — an UNOFFICIAL derivation computed by this server from the two tagged spec releases, source-cited per entry. Without \`column\`: the full diff (${store.diff.added_columns.length} added, ${store.diff.removed_columns.length} removed, ${store.diff.changed_columns.length} changed). With \`column\`: that one column's status and detail.`,
       inputSchema: {
         column: z
           .string()

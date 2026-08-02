@@ -12,6 +12,30 @@
 
 ## In flight
 
+**T-051 done** (2026-08-02, this session): fixed the three tool-description
+issues from `docs/final-status-review.md` TN-1/2/3.
+- `list_capabilities` (framework/tools.ts) no longer says "domain slug or
+  persona slug" prose — now names the exact params `domain`/`persona` with
+  example values, and the "22" count is interpolated from
+  `artifact.capabilities.length`.
+- `assess_maturity_path` (framework/tools.ts) now has `.describe()` on
+  `capability`/`current_level`/`target_level` and cross-references
+  `get_maturity_assessment` for the single/all-levels case.
+- All four hardcoded corpus counts are now interpolated at registration
+  time instead of string literals: framework `get_kpis` ("44"/"88" from
+  `artifact.kpis`), focus `list_columns` ("43 in 1.0, 57 in 1.2" from
+  `store.versions.get(v).columns.length` per version slug — same pattern
+  `list_versions`/`DEFAULT_VERSION` already used), and focus
+  `compare_versions` ("14 added, 0 removed, 43 changed" from
+  `store.diff.*_columns.length`).
+- Verified live via an in-memory MCP client (`InMemoryTransport`) against
+  the built `dist/`: `list-tools` descriptions match; interpolated counts
+  equal the previously-hardcoded literals exactly (44/88, 43/57, 14/0/43);
+  `list_capabilities({domain: "understand-usage-and-cost"})` returns 4
+  capabilities with correct prose. Gates green (`./scripts/agentic gates`).
+- Remaining backlog: T-052..T-059 queued (see git log); 19-MINOR list in
+  `docs/final-status-review.md` mostly still open.
+
 **v1 close-out is COMPLETE on `claude/session-k75rxy`; publish is
 owner-gated.** State as of 2026-08-02:
 

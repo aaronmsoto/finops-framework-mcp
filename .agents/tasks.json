@@ -957,7 +957,7 @@
         "list_capabilities description names the exact filter param 'domain' (no 'domain slug' prose trap); assess_maturity_path has .describe() on every param and cross-references get_maturity_assessment; the four hardcoded corpus counts (framework tools.ts ~203,545; focus tools.ts ~307,568) are interpolated from the loaded artifact/store at registration time (focus version-list pattern) or pinned by a test asserting description matches artifact counts",
         "Live probes: list-tools shows the new descriptions; list_capabilities with domain filter works and prose matches; gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

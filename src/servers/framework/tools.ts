@@ -199,8 +199,7 @@ export function registerTools(
     "list_capabilities",
     {
       title: "List capabilities",
-      description:
-        "All 22 capabilities (slug, title, domain, one-line summary), optionally filtered by domain slug or persona slug. The framework does not assign capabilities to phases, so there is deliberately no phase filter. Default limit returns the full list in one call.",
+      description: `All ${artifact.capabilities.length} capabilities (slug, title, domain, one-line summary), optionally filtered by \`domain\` and/or \`persona\` (both take a slug, e.g. domain="understand-usage-and-cost", persona="finance"). The framework does not assign capabilities to phases, so there is deliberately no phase filter. Default limit returns the full list in one call.`,
       inputSchema: {
         domain: z
           .string()
@@ -541,8 +540,9 @@ export function registerTools(
     "get_kpis",
     {
       title: "Get KPIs (full records)",
-      description:
-        "Full KPI records: description, formula + candidate data sources (present for the ~44 KPIs the site details in capability-page popups), official related capabilities, and where each is featured. Look up one KPI with `slug`, or filter by capability and/or featured_only. Without filters, pages through the whole 88-entry library.",
+      description: `Full KPI records: description, formula + candidate data sources (present for the ${
+        artifact.kpis.filter((k) => k.formula).length
+      } KPIs the site details in capability-page popups), official related capabilities, and where each is featured. Look up one KPI with \`slug\`, or filter by capability and/or featured_only. Without filters, pages through the whole ${artifact.kpis.length}-entry library.`,
       inputSchema: {
         slug: z
           .string()
@@ -679,11 +679,19 @@ export function registerTools(
     {
       title: "Maturity gap between two levels",
       description:
-        "For one capability, the official maturity assessment text at each level between current and target — evidence to look for when maturing.",
+        "For one capability, the official maturity assessment text at each level between current and target — evidence to look for when maturing. To get one level's assessment text on its own (or all three at once), use get_maturity_assessment instead.",
       inputSchema: {
-        capability: z.string(),
-        current_level: z.enum(OFFICIAL),
-        target_level: z.enum(OFFICIAL),
+        capability: z.string().describe("Capability slug, e.g. 'allocation'"),
+        current_level: z
+          .enum(OFFICIAL)
+          .describe(
+            "Starting maturity level, exclusive — the gap begins above this",
+          ),
+        target_level: z
+          .enum(OFFICIAL)
+          .describe(
+            "Ending maturity level, inclusive — must be above current_level",
+          ),
       },
       outputSchema: {
         capability: z.string(),
