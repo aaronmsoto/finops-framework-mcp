@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "8f50087d77464db6468e5e7efbcc610f655add8bd5ec85513463e538b7cd3025",
+  "chainHead": "2b5a62693485dbf2889cbabb321f1e8e3d12197d2d8afe030e60c165c5a19752",
   "tasks": [
     {
       "id": "T-001",
@@ -1071,9 +1071,15 @@
         "The byte-identical notFound() helper (framework/resources.ts ~23-42 = focus/resources.ts ~18-37) is hoisted into src/shared with both servers importing it; existing typo tests still pass",
         "Dead code deleted: parseOverview() in parse/sections.ts (+ its orphaned tests) and the template greet() scaffold in src/index.ts (+ tests/index.test.ts adjusted or removed as part of this authorized cleanup); gates --tier all pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "gates --tier all PASS (402 tests): worker index/data tests added (100% stmt/fn coverage per raw coverage-final.json), cli.ts direct-run swapped to isDirectRunOf, notFound() hoisted to src/shared/mcp-not-found.ts, parseOverview()+greet() dead code deleted",
+        "commit": "18fb34f5aad15abe28ee7cdb7adec6e3aa1183e3",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T08:18:51.693Z"
+      },
+      "hash": "2b5a62693485dbf2889cbabb321f1e8e3d12197d2d8afe030e60c165c5a19752"
     },
     {
       "id": "T-058",
