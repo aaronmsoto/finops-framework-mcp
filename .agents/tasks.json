@@ -1071,7 +1071,7 @@
         "The byte-identical notFound() helper (framework/resources.ts ~23-42 = focus/resources.ts ~18-37) is hoisted into src/shared with both servers importing it; existing typo tests still pass",
         "Dead code deleted: parseOverview() in parse/sections.ts (+ its orphaned tests) and the template greet() scaffold in src/index.ts (+ tests/index.test.ts adjusted or removed as part of this authorized cleanup); gates --tier all pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

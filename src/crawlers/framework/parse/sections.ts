@@ -12,7 +12,7 @@ import {
 import { slugify } from "../../../shared/index.js";
 import { htmlToMd, normalizeHeading, textOf } from "../../../shared/md.js";
 import { ORIGIN } from "../urls.js";
-import { findHeading, load, slugFromHref } from "./helpers.js";
+import { load, slugFromHref } from "./helpers.js";
 
 const FOOTER_HEADINGS = new Set([
   "finops foundation",
@@ -208,18 +208,4 @@ export function parsePersonaPage(
     source_url: url,
     license: LICENSE,
   };
-}
-
-/** Framework overview page: markdown of the main prose. */
-export function parseOverview(html: string): string {
-  const $ = load(html);
-  const h1 = $("h1").first();
-  const chunks: string[] = [];
-  const heading = findHeading($, "h2", ["what is the finops framework"]);
-  const scope = heading ? heading.parent().parent() : h1.parents().eq(1);
-  scope.find("p").each((_, p) => {
-    const t = textOf($(p));
-    if (t.length > 80) chunks.push(t);
-  });
-  return chunks.slice(0, 6).join("\n\n");
 }

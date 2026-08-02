@@ -12,6 +12,44 @@
 
 ## In flight
 
+**T-057 done** (2026-08-02, this session): architecture periphery cleanup
+(review R2/R3/R4/R5) — see
+`.agents/journal/20260802-t057-architecture-periphery.md` for full detail.
+- Added `src/workers/index.test.ts` (exported `parseAllowedOrigins`, tested
+  its comma/whitespace/empty-entry handling plus the default export's
+  ALLOWED_ORIGINS wiring via a disallowed-Origin 403) and
+  `src/workers/data.test.ts` (`loadWorkerData`'s Map rehydration for
+  `focusStore.versions`/`sampleCsv`, purity, and pass-through of the
+  non-Map fields) — both were previously at 0% coverage (R2).
+- `src/crawlers/framework/cli.ts`'s direct-run guard now uses
+  `isDirectRunOf(import.meta.url)` from `src/shared/direct-run.ts` instead
+  of the fragile `process.argv[1]?.endsWith("cli.js")` (R3) — the last
+  entry point still on the old pattern.
+- Hoisted the byte-identical `notFound()` (-32002 + nearest-match
+  suggestions) out of `framework/resources.ts` and `focus/resources.ts`
+  into `src/shared/mcp-not-found.ts`; both servers now import it (R4).
+  Existing typo-pinning tests (`server.test.ts` in both servers) pass
+  unchanged, confirming behavior is unchanged.
+- Deleted dead code (R5): `parseOverview()` in
+  `crawlers/framework/parse/sections.ts` (confirmed zero callers anywhere
+  in the repo, including tests — no orphaned tests existed to remove) and
+  the template `greet()` scaffold in `src/index.ts`. `tests/index.test.ts`
+  (protected path, edit explicitly authorized by this task's acceptance
+  criteria — required `touch .agents/.cache/policy-edit-ok` to get past
+  the protect-policy hook) now asserts `src/index.ts`'s real remaining
+  content: the `createServer`/`SERVER_NAME`/`SERVER_VERSION` re-export
+  from `servers/framework/server.js`. Kept a file there (not removed
+  outright) because the format/lint gates hardcode `tests` as a directory
+  argument and fail with zero matched files otherwise; the integrity gate
+  also flags outright deletion of a protected-path test file.
+- Verified: `./scripts/agentic gates --tier all` all green (402 tests,
+  format/lint/typecheck/test/designs/integrity/memory/build all PASS).
+  Coverage text-table oddity noted: the v8 text reporter doesn't print
+  `src/workers/index.ts`/`data.ts` as individual rows for narrow test
+  subsets, but the underlying `coverage-final.json` confirms 100%
+  statement/function coverage for both — a reporter display quirk, not a
+  real gap (coverage gate itself is optional/unbound in this repo).
+
 **T-056 done** (2026-08-02, this session): dual-launch hygiene (review
 L3/L4) — see `.agents/journal/20260802-t056-dual-launch-hygiene.md` for full
 detail. Added root `SECURITY.md` (GitHub Security Advisories as the report
@@ -155,9 +193,11 @@ owner-gated.** State as of 2026-08-02:
 3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
-4. Next agent session: T-057..T-059 (architecture periphery, derive
-   integration test, demo format-gate). Regenerate `docs/mcp-surface.md`
-   (`npm run gen:mcp-surface`) if any of those touch a prompt/resource/tool.
+4. Next agent session: T-058..T-059 (derive-pipeline idempotence
+   integration test, demo format-gate — the latter is protected-path,
+   needs an explicit owner-approved task per the open question below).
+   Regenerate `docs/mcp-surface.md` (`npm run gen:mcp-surface`) if either
+   touches a prompt/resource/tool (T-058/T-059 shouldn't).
 
 ## Open questions
 
@@ -188,5 +228,5 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — T-056 session (dual-launch hygiene: SECURITY.md,
-CONTRIBUTING.md, issue template, npm author/homepage/bugs, engines >=22).
+2026-08-02 — T-057 session (architecture periphery: worker entry tests,
+direct-run guard, notFound dedup, dead code removal).

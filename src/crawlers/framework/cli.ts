@@ -14,6 +14,7 @@ import {
   type MaturityExtension,
   type Persona,
 } from "../../shared/index.js";
+import { isDirectRunOf } from "../../shared/direct-run.js";
 import { CachedFetcher } from "../../shared/http.js";
 import { htmlToMd } from "../../shared/md.js";
 import { scanForInjection, type InjectionHit } from "../../shared/sanitize.js";
@@ -566,7 +567,7 @@ async function main(): Promise<void> {
   process.exit(code);
 }
 
-const isDirectRun = process.argv[1]?.endsWith("cli.js");
+const isDirectRun = isDirectRunOf(import.meta.url);
 if (isDirectRun) {
   main().catch((err) => {
     console.error(String(err instanceof Error ? err.stack : err));

@@ -2,9 +2,8 @@ import {
   McpServer,
   ResourceTemplate,
 } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { McpError } from "@modelcontextprotocol/sdk/types.js";
 import type { FocusStore } from "../../shared/focus/artifact.js";
-import { nearestMatches } from "../../shared/slugs.js";
+import { notFound } from "../../shared/mcp-not-found.js";
 import {
   attributeMd,
   changelogMd,
@@ -14,23 +13,6 @@ import {
   overviewMd,
 } from "./render.js";
 import { TEMPLATES, URI } from "./uris.js";
-
-const RESOURCE_NOT_FOUND = -32002;
-
-function notFound(
-  uri: string,
-  kind: string,
-  input: string,
-  candidates: string[],
-): never {
-  const near = nearestMatches(input, candidates);
-  throw new McpError(
-    RESOURCE_NOT_FOUND,
-    `Resource not found: unknown ${kind} "${input}"` +
-      (near.length ? ` — did you mean: ${near.join(", ")}?` : ""),
-    { uri },
-  );
-}
 
 const MD = "text/markdown";
 const JSONM = "application/json";
