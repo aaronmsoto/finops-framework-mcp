@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "e3402c076956b973385648264d3f8f40df5a1fd13ce27fc8dba6fdbdea1d35c5",
+  "chainHead": "f704207264c6557cab894a46d555d981c3995320cf1a47c628962cc7f2c39fc8",
   "tasks": [
     {
       "id": "T-001",
@@ -810,9 +810,15 @@
         "data/focus/derived/diff-1.0-1.2.json carries official: false (derive step updated, artifact regenerated, worker bundle regenerated); compare_versions structuredContent echoes the unofficial flag; the NOTICE.md sentence claiming all derived records carry official:false is now true (or reworded to match reality)",
         "Live probes: reading the changelog resource returns upstream text; compare_versions text shows the caveat; gates --tier all pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "focus://spec/{version}/changelog resource + compare_versions materiality caveat + diff official:false; gates --tier all green (370 tests), live-probed",
+        "commit": "d1b181216132b05b910e97b766a089a43877747e",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:35:36.417Z"
+      },
+      "hash": "f704207264c6557cab894a46d555d981c3995320cf1a47c628962cc7f2c39fc8"
     },
     {
       "id": "T-044",
