@@ -420,3 +420,39 @@ accepted: names are descriptive of what the servers serve, the MCP
 ecosystem convention names servers after the upstream they front,
 NOTICE.md files disclaim affiliation/endorsement, and registry ids are
 author-namespaced. Revisit only if the Foundation objects.
+
+## 2026-08-02 — Usage guide lives in docs/guide/ (Pages), not a GitHub wiki
+
+Decision: publish the six-page usage guide as self-contained HTML under
+`docs/guide/`, served by GitHub Pages from the default branch, rather than
+as a GitHub wiki.
+
+Alternatives: a GitHub wiki (rejected — separate git remote, so pages get
+no PR review, no gates coverage, and no hash-chained task evidence);
+markdown pages in `docs/` (rejected — the guide needs interactive version
+toggles, side-by-side layouts, and transcript styling that markdown on
+Pages can't carry); an external docs host (rejected — new dependency and
+another publish surface to keep in sync).
+
+Consequence: the `designs` gate warns on every guide page ("HTML outside
+docs/designs/"). That warning is expected and accepted: `docs/designs/` is
+for owner-reviewed design documents, `docs/guide/` is the published site.
+The gate warns rather than fails, so this needs no gate change. Template
+feedback queued: the harness `design check` should accept a configured
+allowlist of HTML directories instead of hardcoding one.
+
+Enabling Pages is a repo-settings action and stays an owner step.
+
+## 2026-08-02 — Guide content rule: live probes only
+
+Decision: every fact, count, quote, and transcript in `docs/guide/` must
+come from a live probe of the built servers (`evals/framework/mcp-call.mjs`)
+or from committed artifact/sample files — never from memory or paraphrase.
+Synthesized advice (e.g. the forecasting 90-day plan) must be visibly
+labelled as the guide's own, not official guidance.
+
+Rationale: the guide's whole value proposition is that it shows what these
+servers actually return. A single invented number would undermine the
+provenance posture the servers themselves enforce with CC BY footers and
+UNOFFICIAL banners. The six pages were built from 103 recorded probes and
+spot-re-verified by an independent checker.

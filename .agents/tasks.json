@@ -1176,7 +1176,7 @@
         "README gains a Documentation section linking docs/guide/ (and the pages); docs/mcp-surface.md cross-links the guide; decisions.md records Pages-over-wiki with rationale; owner checklist (activeContext) gains enable-GitHub-Pages item",
         "Single-file SPA build of the six pages published as the existing claude.ai Artifact URL; consistency check (nav/links/footers + 8 re-probed claims) recorded; memory/journal updated; gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }

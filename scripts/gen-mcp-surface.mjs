@@ -297,6 +297,10 @@ async function main() {
       "arguments) — the same client-bridge pattern as " +
       "`evals/framework/mcp-call.mjs`, not hand-maintained prose.",
     "",
+    "This page is the machine-facing reference. For narrative documentation " +
+      "of the same surface — installation, worked examples, and transcripts " +
+      "— see the usage guide at [`docs/guide/`](guide/index.html).",
+    "",
     "## Legend",
     "",
     '- **[UNOFFICIAL/EXPERIMENTAL]** — title or description contains ' +

@@ -15,6 +15,7 @@
 **T-059 done** (2026-08-02, this session): demo/ under the format gate
 (review R6) — see
 `.agents/journal/20260802-t059-demo-format-gate.md` for full detail.
+
 - `agentic.config.json` format gate command changed from
   `prettier --check src tests` to `prettier --check src tests demo` (this
   task's acceptance criteria explicitly authorized the protected-path
@@ -25,12 +26,13 @@
   `requests.d.ts` were already clean.
 - Verified: `./scripts/agentic gates` PASS (format/lint/typecheck/test/
   designs/integrity/memory all green); `npx prettier --check src tests
-  demo` clean.
+demo` clean.
 
 **T-058 done** (2026-08-02, this session): derive pipeline integration test
 (review R1) — see
 `.agents/journal/20260802-t058-derive-pipeline-integration-test.md` for full
 detail.
+
 - Added `src/crawlers/framework/markdown/derive-artifact.test.ts`: runs
   `deriveArtifactPayload` against the real committed
   `data/framework/content/markdown` and deep-equal-compares all 10 derived
@@ -51,6 +53,7 @@ detail.
 **T-057 done** (2026-08-02, this session): architecture periphery cleanup
 (review R2/R3/R4/R5) — see
 `.agents/journal/20260802-t057-architecture-periphery.md` for full detail.
+
 - Added `src/workers/index.test.ts` (exported `parseAllowedOrigins`, tested
   its comma/whitespace/empty-entry handling plus the default export's
   ALLOWED_ORIGINS wiring via a disallowed-Origin 403) and
@@ -116,6 +119,7 @@ Limiting rules. Verified: `./scripts/agentic gates` (392 tests) all green;
 **T-054 done** (2026-08-02, earlier same session): built `docs/mcp-surface.md` — the
 prompts→resources→tools hierarchy for both servers, generated (not
 hand-typed) from live MCP protocol output.
+
 - `evals/framework/mcp-call.mjs` gained `list-resources`,
   `list-resource-templates`, `list-prompts` (same bridge pattern as
   `list-tools`, which stays byte-identical per the T-028 contract).
@@ -147,6 +151,7 @@ hand-typed) from live MCP protocol output.
 **T-053 done** (2026-08-02, earlier same session): added the `map-kpi-to-focus-columns`
 prompt to `src/servers/focus/prompts.ts` (review MCP-4 — the flagship
 `get_kpi_mapping`/`calculate_kpi` workflow had no guided prompt).
+
 - Third prompt, mirroring `explain-focus`/`map-column-across-versions`:
   optional `kpi` (completable KPI slug), `capability` (completable, from
   `related_capability_slugs` across the mapping), and `version` (completable
@@ -162,10 +167,10 @@ prompt to `src/servers/focus/prompts.ts` (review MCP-4 — the flagship
 - **Fixed a latent bug found while wiring completion**: `completable(...).optional()`
   silently drops completions. The SDK's `completable()` mutates the schema
   object in place with a non-enumerable symbol property; zod v4's
-  `.optional()` clones into a *new* `ZodOptional` wrapper, so the marker
+  `.optional()` clones into a _new_ `ZodOptional` wrapper, so the marker
   never survives being applied after `completable()` (confirmed by
   reproducing with a 4-line node script against the installed SDK). Fixed
-  by moving `.optional()` *inside* `completable()`'s input schema (before
+  by moving `.optional()` _inside_ `completable()`'s input schema (before
   the outermost call) for `versionArg`, and applying the same shape to the
   new `kpiArg`/`kpiCapabilityArg` helpers — this incidentally also fixes
   `explain-focus`'s previously-silent `version` completion.
@@ -222,17 +227,20 @@ owner-gated.** State as of 2026-08-02:
 
 ## Next steps
 
-1. Owner: review PR #9 (whole FOCUS v1 batch + close-out) and merge.
-2. Owner: `npm publish` from `packages/finops-focus-mcp/` and (if desired)
-   the root `finops-framework-mcp` package; MCP-registry submit both
-   `server.json` manifests.
-3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
+1. Owner: review PR #9 (FOCUS v1 batch + close-out + usage guide) and merge.
+2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and the
+   root `finops-framework-mcp` (dual launch is the confirmed intent);
+   MCP-registry submit both `server.json` manifests.
+3. Owner: **enable GitHub Pages** — serve `docs/` from the default branch so
+   `docs/guide/index.html` is the public usage guide. Pages is a repo-setting,
+   not agent-reachable.
+4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
-4. T-054..T-059 (the review R6/19-MINOR backlog) are now all landed. Check
-   `docs/final-status-review.md`'s remaining MINOR list (if any) or the
-   task list for what's next; otherwise the post-launch backlog is clear
-   pending owner publish/merge steps above.
+5. T-050..T-063 all landed: CI fix, the full 19-MINOR review backlog, and the
+   six-page guide under `docs/guide/`. Post-launch backlog is clear pending
+   the owner steps above. Template feedback to port: `design check` should
+   accept an allowlist of HTML dirs (it warns on all six guide pages).
 
 ## Open questions
 

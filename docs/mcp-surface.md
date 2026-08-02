@@ -4,6 +4,8 @@
 
 Live prompts → resources → tools hierarchy of both MCP servers shipped from this repo, captured from each server's own `tools/list`, `resources/list`, `resources/templates/list`, and `prompts/list` responses (plus `completion/complete` probes for resource-template arguments) — the same client-bridge pattern as `evals/framework/mcp-call.mjs`, not hand-maintained prose.
 
+This page is the machine-facing reference. For narrative documentation of the same surface — installation, worked examples, and transcripts — see the usage guide at [`docs/guide/`](guide/index.html).
+
 ## Legend
 
 - **[UNOFFICIAL/EXPERIMENTAL]** — title or description contains "unofficial" or "experimental": content derived/parsed by this server rather than published or endorsed by the FinOps Foundation or the FOCUS project (`official: false` in structured output), and/or gated behind an opt-in environment flag. Unmarked entries are official framework/FOCUS content, restructured.

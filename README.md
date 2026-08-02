@@ -154,6 +154,27 @@ The full prompts/resources/tools hierarchy of both servers — names, args,
 URIs, param defaults/limits — is generated from live MCP output at
 [`docs/mcp-surface.md`](docs/mcp-surface.md).
 
+## Documentation
+
+[**`docs/guide/`**](docs/guide/index.html) is the usage guide — six
+self-contained pages, GitHub-Pages-ready, in which every number, quote, and
+transcript was captured from a live probe of these servers or computed from
+the committed sample data:
+
+| Page                                                       | What it covers                                                                                                                                         |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Intro &amp; Getting Started](docs/guide/index.html)       | Both servers side by side; install, Claude Code / Claude Desktop / `.mcp.json` config, the Worker remote option, first call per server                 |
+| [finops-framework-mcp](docs/guide/framework-server.html)   | Data model, all 11 tools grouped by job, prompts and resources, pagination, an Anomaly Management demo                                                 |
+| [finops-focus-mcp](docs/guide/focus-server.html)           | Version model, all 9 tools, `focus://` resources, a BilledCost deep-dive and the 1.0→1.2 diff                                                          |
+| [Showback Reporting](docs/guide/example-showback.html)     | Understand Usage &amp; Cost → Allocation + Reporting &amp; Analytics → the FOCUS columns a showback needs → a report computed from the official sample |
+| [Rate Optimization (ESR)](docs/guide/example-esr.html)     | Capability → featured KPIs → FOCUS columns at 1.0 vs 1.2 → Effective Savings Rate on the official sample                                               |
+| [Forecasting Journey](docs/guide/example-forecasting.html) | A maturity journey to Walk-level Forecasting: official Crawl/Walk characteristics, KPIs, and the data that feeds a forecast                            |
+
+Open `docs/guide/index.html` directly (it works over `file://`), or serve
+`docs/` with GitHub Pages. Guide pages are rich HTML by design — an
+intentional exception to this repo's markdown-for-docs convention, recorded
+in `.agents/memory/decisions.md`.
+
 ## Development
 
 - Agent instructions: [AGENTS.md](AGENTS.md) · design: `docs/architecture.md`
