@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "9a85ca8b2734cab9067ba99a1b5c5da6b55d445967adadb15aaeb897ee943739",
+  "chainHead": "3aaadf891ec5eaca607c4e85d98613aa90e9e8ab3811dc50c78d89327db0a351",
   "tasks": [
     {
       "id": "T-001",
@@ -1032,9 +1032,15 @@
         "docs/architecture.md and AGENTS.md project framing updated: two MCP servers, Worker Streamable HTTP + demo now built (short 'now built' pointers, no rewrite of historical design rationale); AGENTS.md stays ~150 lines",
         "docs/deploy-worker.md Notes/limits documents the deliberate no-auth/no-rate-limit posture for stateless read-only public data and points at Cloudflare rate limiting; gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "MEMORY.md rewritten for v1 (50 lines); combined-scenario step 4 matches T-045 live output; architecture.md/AGENTS.md got 'Now built' pointers; deploy-worker.md documents deliberate no-auth posture; gates PASS (392 tests).",
+        "commit": "5ceac54f749f8774ab3903485e505573adb61dac",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:55:12.854Z"
+      },
+      "hash": "3aaadf891ec5eaca607c4e85d98613aa90e9e8ab3811dc50c78d89327db0a351"
     },
     {
       "id": "T-056",
