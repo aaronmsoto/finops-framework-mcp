@@ -388,6 +388,31 @@ describe("calculate_kpi", () => {
     }
   });
 
+  it("reports the three commitment KPIs as not computable at 1.0 (zero qualifying Purchase rows), not a fabricated 0%/100%/0", async () => {
+    for (const kpi of [
+      "commitment-utilization-score",
+      "percentage-of-commitment-based-discount-waste",
+      "consumption-versus-commitment",
+    ]) {
+      const res = await call("calculate_kpi", { kpi, version: "1.0" });
+      expect(res.isError, `${kpi} should error`).toBe(true);
+      expect(res.content[0]?.text).toMatch(/not computable/);
+      expect(res.content[0]?.text).toMatch(/version="1\.2"/);
+    }
+  });
+
+  it("computes the three commitment KPIs at 1.2, whose synthetic sample has qualifying Purchase rows", async () => {
+    for (const kpi of [
+      "commitment-utilization-score",
+      "percentage-of-commitment-based-discount-waste",
+      "consumption-versus-commitment",
+    ]) {
+      const res = await call("calculate_kpi", { kpi, version: "1.2" });
+      expect(res.isError, `${kpi} errored`).toBeFalsy();
+      expect(typeof res.structuredContent?.value).toBe("number");
+    }
+  });
+
   it("errors cleanly with guidance for a mapped KPI that has no registered formula", async () => {
     const res = await call("calculate_kpi", {
       kpi: "forecast-accuracy-rate-spend",

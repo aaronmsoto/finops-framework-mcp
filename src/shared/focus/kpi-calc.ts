@@ -62,6 +62,37 @@ function pct(numerator: number, denominator: number): number {
 
 type Formula = (table: CsvTable) => KpiCalcResult;
 
+/** Usage/Purchase commitment split shared by commitment-utilization-score,
+ * percentage-of-commitment-based-discount-waste, and
+ * consumption-versus-commitment. Throws (rather than silently returning a
+ * 0%/100%/0 that would misrepresent an undefined ratio as a definite one)
+ * when the sample carries no qualifying Purchase rows: a 0 denominator here
+ * means the sample cannot answer the question, not that utilization is 0. */
+function commitmentUsageAndPurchase(t: CsvTable): {
+  usage: number;
+  purchase: number;
+} {
+  const chargeCategory = colIndex(t.header, "ChargeCategory");
+  const commitmentId = colIndex(t.header, "CommitmentDiscountId");
+  const usage = sumWhere(t, "EffectiveCost", [
+    (r) => isAt(r, chargeCategory, "Usage"),
+    (r) => isNotNullAt(r, commitmentId),
+  ]);
+  const purchase = sumWhere(t, "ContractedCost", [
+    (r) => isAt(r, chargeCategory, "Purchase"),
+    (r) => isNotNullAt(r, commitmentId),
+  ]);
+  if (purchase === 0) {
+    throw new Error(
+      'the sample contains no ChargeCategory="Purchase" rows carrying a ' +
+        "CommitmentDiscountId, so the commitment-spend denominator is 0 and " +
+        "this ratio is not computable (not 0%, 100%, or 0) — FOCUS 1.2's " +
+        'bundled sample has qualifying commitment purchase rows; try version="1.2"',
+    );
+  }
+  return { usage, purchase };
+}
+
 /** SUM(sumCol) over rows matching every predicate (empty predicates = every row). */
 function sumWhere(
   table: CsvTable,
@@ -88,16 +119,7 @@ const FORMULAS: Record<string, Formula> = {
   },
 
   "commitment-utilization-score": (t) => {
-    const chargeCategory = colIndex(t.header, "ChargeCategory");
-    const commitmentId = colIndex(t.header, "CommitmentDiscountId");
-    const usage = sumWhere(t, "EffectiveCost", [
-      (r) => isAt(r, chargeCategory, "Usage"),
-      (r) => isNotNullAt(r, commitmentId),
-    ]);
-    const purchase = sumWhere(t, "ContractedCost", [
-      (r) => isAt(r, chargeCategory, "Purchase"),
-      (r) => isNotNullAt(r, commitmentId),
-    ]);
+    const { usage, purchase } = commitmentUsageAndPurchase(t);
     return {
       value: pct(usage, purchase),
       unit: "percent",
@@ -123,16 +145,7 @@ const FORMULAS: Record<string, Formula> = {
   },
 
   "percentage-of-commitment-based-discount-waste": (t) => {
-    const chargeCategory = colIndex(t.header, "ChargeCategory");
-    const commitmentId = colIndex(t.header, "CommitmentDiscountId");
-    const usage = sumWhere(t, "EffectiveCost", [
-      (r) => isAt(r, chargeCategory, "Usage"),
-      (r) => isNotNullAt(r, commitmentId),
-    ]);
-    const purchase = sumWhere(t, "ContractedCost", [
-      (r) => isAt(r, chargeCategory, "Purchase"),
-      (r) => isNotNullAt(r, commitmentId),
-    ]);
+    const { usage, purchase } = commitmentUsageAndPurchase(t);
     return {
       value: (1 - ratio(usage, purchase)) * 100,
       unit: "percent",
@@ -141,16 +154,7 @@ const FORMULAS: Record<string, Formula> = {
   },
 
   "consumption-versus-commitment": (t) => {
-    const chargeCategory = colIndex(t.header, "ChargeCategory");
-    const commitmentId = colIndex(t.header, "CommitmentDiscountId");
-    const usage = sumWhere(t, "EffectiveCost", [
-      (r) => isAt(r, chargeCategory, "Usage"),
-      (r) => isNotNullAt(r, commitmentId),
-    ]);
-    const purchase = sumWhere(t, "ContractedCost", [
-      (r) => isAt(r, chargeCategory, "Purchase"),
-      (r) => isNotNullAt(r, commitmentId),
-    ]);
+    const { usage, purchase } = commitmentUsageAndPurchase(t);
     return {
       value: ratio(usage, purchase),
       unit: "ratio",

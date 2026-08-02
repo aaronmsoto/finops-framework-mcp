@@ -117,6 +117,40 @@ describe("calculateKpi — other computable KPIs use their WHERE-filters correct
   });
 });
 
+describe("calculateKpi — commitment KPIs guard against a zero denominator", () => {
+  // Mirrors the official FOCUS 1.0 sample's actual shape: ChargeCategory only
+  // ever takes {Usage, Adjustment, Credit} there — zero Purchase rows — so
+  // the commitment-spend denominator is 0. The old behavior silently
+  // reported a definite-looking 0%/100%/0; that is a fabrication, not a
+  // correct application of the formula, so all three must now error.
+  const noPurchaseRowsTable = {
+    header: [
+      "ChargeCategory",
+      "CommitmentDiscountId",
+      "EffectiveCost",
+      "ContractedCost",
+    ],
+    rows: [
+      ["Usage", "cd-1", "80", "0"],
+      ["Usage", "NULL", "999", "0"],
+      ["Adjustment", "NULL", "5", "0"],
+    ],
+  };
+
+  it.each([
+    "commitment-utilization-score",
+    "percentage-of-commitment-based-discount-waste",
+    "consumption-versus-commitment",
+  ])(
+    "%s throws a not-computable error instead of returning 0/100/0",
+    (kpiSlug) => {
+      expect(() => calculateKpi(kpiSlug, noPurchaseRowsTable)).toThrow(
+        /no ChargeCategory="Purchase" rows.*not computable.*version="1\.2"/s,
+      );
+    },
+  );
+});
+
 describe("calculateKpi — KPIs without a registered formula", () => {
   it("hasFormula is false for KPIs needing an external forecast/budget input", () => {
     expect(hasFormula("forecast-accuracy-rate-spend")).toBe(false);

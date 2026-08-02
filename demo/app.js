@@ -78,16 +78,29 @@ async function runWalkthrough() {
       }
     }
     statusEl.textContent = `Calculating ${featuredKpis.length} featured KPI(s) over the bundled FOCUS 1.0 sample...`;
+    let notComputable = 0;
     for (const kpi of featuredKpis) {
       const request = calculateKpiRequest(nextId++, kpi.slug);
-      await callStep(
-        "focus",
-        `6. Calculate ${kpi.title}`,
-        `Compute ${kpi.slug} over the bundled sample (UNOFFICIAL calculation, not endorsed by the FinOps Foundation or the FOCUS project).`,
-        request,
-      );
+      try {
+        await callStep(
+          "focus",
+          `6. Calculate ${kpi.title}`,
+          `Compute ${kpi.slug} over the bundled sample (UNOFFICIAL calculation, not endorsed by the FinOps Foundation or the FOCUS project).`,
+          request,
+        );
+      } catch {
+        // calculate_kpi's own contract is to error with guidance rather than
+        // fabricate a number (e.g. a zero-denominator ratio) — that is an
+        // expected per-KPI outcome, not a walkthrough failure, so the
+        // already-rendered error step is left in place and the walkthrough
+        // continues to the next featured KPI.
+        notComputable++;
+      }
     }
-    statusEl.textContent = "Walkthrough complete.";
+    statusEl.textContent =
+      notComputable > 0
+        ? `Walkthrough complete — ${notComputable} of ${featuredKpis.length} featured KPI(s) were not computable over this sample (see above).`
+        : "Walkthrough complete.";
   } catch {
     statusEl.textContent = "Walkthrough stopped — see the error above.";
   } finally {

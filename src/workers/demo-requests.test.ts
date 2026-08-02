@@ -146,12 +146,27 @@ describe("demo requests against the worker fetch handler", () => {
     // Step 6 (dynamic): calculate_kpi for each featured KPI, over the
     // bundled FOCUS 1.0 sample — built from the KPI list step 2 returned,
     // not hardcoded, same as demo/app.js does.
+    // The official FOCUS 1.0 sample has zero ChargeCategory="Purchase" rows,
+    // so the three commitment KPIs' shared denominator is 0 — calculate_kpi
+    // reports that as not-computable (guidance error) rather than fabricating
+    // a 0%/100%/0 answer. ESR's denominator (total ListCost) is not zero, so
+    // it still returns a real number.
     let id = 6;
     const values: Record<string, number> = {};
+    const notComputable: Record<string, boolean> = {};
     for (const kpi of featuredKpis) {
       const request = calculateKpiRequest(id++, kpi.slug, CALCULATE_VERSION);
       const result = await call("focus", request);
-      expect(result.isError).toBeFalsy();
+      if (result.isError) {
+        notComputable[kpi.slug] = true;
+        const text = (result.content ?? [])
+          .map((c) => c.text)
+          .filter(Boolean)
+          .join("\n");
+        expect(text).toMatch(/not computable/);
+        expect(text).toMatch(/version="1\.2"/);
+        continue;
+      }
       const structured = result.structuredContent!;
       expect(structured.official).toBe(false);
       expect(structured.kpi_slug).toBe(kpi.slug);
@@ -162,8 +177,10 @@ describe("demo requests against the worker fetch handler", () => {
       26.552972346576816,
       9,
     );
-    expect(values["commitment-utilization-score"]).toBe(0);
-    expect(values["percentage-of-commitment-based-discount-waste"]).toBe(100);
-    expect(values["consumption-versus-commitment"]).toBe(0);
+    expect(notComputable["commitment-utilization-score"]).toBe(true);
+    expect(notComputable["percentage-of-commitment-based-discount-waste"]).toBe(
+      true,
+    );
+    expect(notComputable["consumption-versus-commitment"]).toBe(true);
   });
 });

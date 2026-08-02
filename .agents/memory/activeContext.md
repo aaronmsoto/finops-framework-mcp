@@ -13,7 +13,41 @@
 ## In flight
 
 Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
-is underway. **T-043 done this session** (C2-fidelity-4 + C2-fidelity-5,
+is underway. **T-044 done this session** (C3-version-1 + C4-community-2,
+MAJOR): `calculateKpi`'s three commitment KPIs (commitment-utilization-score,
+percentage-of-commitment-based-discount-waste, consumption-versus-commitment)
+shared a `ratio()` helper that coerced a zero denominator to 0 — at FOCUS
+1.0, whose official sample has zero `ChargeCategory="Purchase"` rows, this
+fabricated a definite-looking "0%"/"100%"/"0" instead of erroring, violating
+the server's own "uncomputable KPIs error with guidance" design. Fixed:
+`src/shared/focus/kpi-calc.ts` gains `commitmentUsageAndPurchase(t)`, used by
+all three formulas, which throws (naming the missing Purchase rows and
+suggesting `version="1.2"`, verified true — 1.2's synthetic sample has 12
+qualifying rows) instead of returning when the purchase sum is 0; caught by
+the existing `calculate_kpi` handler's try/catch into the clean `err(...)`
+guidance path — no handler change needed. ESR's zero-ListCost return-0 is
+untouched (semantically true: 0 spend really is 0% savings). This task
+explicitly authorized updating the fixtures that pinned the old fabricated
+values: `kpi-calc.test.ts` (new zero-denominator throw test, all three
+KPIs), `src/servers/focus/server.test.ts` (new not-computable-at-1.0 +
+computes-at-1.2 tests), `src/workers/demo-requests.test.ts` (asserts
+not-computable instead of 0/100/0), `demo/app.js` (the step-6 per-KPI loop
+now catches a per-iteration `calculate_kpi` failure as an expected
+error-with-guidance outcome and continues to the next KPI, rather than
+treating it as a walkthrough-stopping failure), and
+`evals/focus/combined-scenario.xml` (step 5/6 rewritten: the three
+commitment KPIs now expect a tool error with guidance, and the author
+annotation explains why the guard is correct and supersedes the prior
+"not a bug" framing gate 4 found to be a fabrication). Gates green
+(`--tier all`: 374 tests). Live-probed:
+`calculate_kpi '{"kpi":"commitment-utilization-score","version":"1.0"}'` →
+`isError: true`, guidance text naming the missing Purchase rows and
+`version="1.2"`, no 0% value; ESR at 1.0 unchanged
+(`26.552972346576816%`); commitment-utilization-score at 1.2 computes
+normally (`49.82433908723174%` over the 60-row synthetic sample). Full
+detail: `.agents/journal/20260730-t044-kpi-zero-denominator-guard.md`.
+
+**T-043 done in an earlier session this batch** (C2-fidelity-4 + C2-fidelity-5,
 MAJOR + MINOR): two independent findings, one change set. First, the
 bundled upstream CHANGELOG (`data/focus/{version}/CHANGELOG.md`, ingested
 since T-029 but never exposed) is now a resource,
@@ -175,15 +209,12 @@ bullets and dropping RECOMMENDED/MAY. Now:
   designs/integrity/memory/build all pass; coverage/e2e optional-skip as
   before).
 
-Remaining in the gate-4 fix batch: T-041..T-047 (not started — see gate
-4's other findings: get_requirements
-attribution footer (C1-protocol-1), compare_versions "unchanged" on typo'd
-columns (C1-protocol-2), README "official" phrasing (C2-fidelity-3),
-compare_versions materiality caveat (C2-fidelity-4), calculate_kpi 0/0
-guard (C3-version-1/C4-community-2), KPI mapping version differentiation
-(C3-version-2), cross-version unknown-column hints (C1-protocol-4/
-C3-version-3), diff artifact official:false marker (C2-fidelity-5),
-package trademark naming (C4-community-3, owner decision)).
+Remaining in the gate-4 fix batch: T-045..T-047 (not started) — T-045 KPI
+mapping version differentiation for 1.2 (C3-version-2), T-046 README
+"official" phrasing (C2-fidelity-3), T-047 MINOR polish (stable example
+slug, cross-version unknown-column hints, slug param docs — C1-protocol-3+4,
+C3-version-3). Package trademark naming (C4-community-3) is an owner
+decision point, not yet a queued task.
 
 ---
 
@@ -297,10 +328,11 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-039..T-043 done.** Next: T-044..T-047 (gate 4's remaining MAJOR/MINOR
-   fixes — README "official" phrasing, calculate_kpi 0/0 guard, KPI mapping
-   version differentiation, cross-version unknown-column hints, package
-   trademark naming), one task at a time per the task queue.
+1. **T-039..T-044 done.** Next: T-045..T-047 (gate 4's remaining MAJOR/MINOR
+   fixes — KPI mapping version differentiation, README "official" phrasing,
+   cross-version unknown-column hints + slug docs polish; package trademark
+   naming C4-community-3 is a separate owner decision, not yet queued), one
+   task at a time per the task queue.
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -357,7 +389,15 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-30 — T-043 done (focus://spec/{version}/changelog resource exposes
+2026-07-30 — T-044 done (calculate_kpi's three commitment KPIs throw a
+clean not-computable guidance error, naming the missing Purchase rows and
+suggesting version="1.2", instead of coercing a zero denominator to a
+fabricated 0%/100%/0; gate 4 C3-version-1/C4-community-2; kpi-calc/server/
+demo-requests tests and the demo app + combined-scenario eval updated per
+this task's explicit fixture-update authorization; gates --tier all green
+374 tests, live-probed both the not-computable path at 1.0 and unaffected
+ESR/1.2-computes-fine paths). T-043 done earlier same day
+(focus://spec/{version}/changelog resource exposes
 the bundled upstream CHANGELOG verbatim; compare_versions banner cites the
 upstream materiality caveat and links the changelog resource +
 source_urls; FocusDiff/diff-1.0-1.2.json/compare_versions structuredContent

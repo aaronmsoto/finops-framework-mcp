@@ -40,15 +40,15 @@
     <goal>Compute all 4 over the bundled official FOCUS 1.0 sample (1,000 real, anonymized rows) — the "calculate on sample" leg.</goal>
     <expected>
       effective-savings-rate-percentage: 26.552972346576816 percent (official sample).
-      commitment-utilization-score: 0 percent (official sample).
-      percentage-of-commitment-based-discount-waste: 100 percent (official sample).
-      consumption-versus-commitment: 0 ratio (official sample).
-      Every response carries the "UNOFFICIAL CALCULATION" banner and full sample provenance (kind: official, 1000 rows, CC-BY-4.0, source_url to FOCUS-Sample-Data).
+      commitment-utilization-score: error — not computable (see step 6).
+      percentage-of-commitment-based-discount-waste: error — not computable (see step 6).
+      consumption-versus-commitment: error — not computable (see step 6).
+      The ESR response carries the "UNOFFICIAL CALCULATION" banner and full sample provenance (kind: official, 1000 rows, CC-BY-4.0, source_url to FOCUS-Sample-Data). The three commitment KPIs instead return a tool error (isError: true) with guidance text explaining the sample lacks qualifying rows and suggesting version="1.2".
     </expected>
   </step>
   <step id="6" server="none" mode="author-annotation">
-    <action>Author-only annotation, NOT part of the tools-only graded walkthrough (steps 1-5 are): is the 0%/100% result from step 5 a bug?</action>
-    <goal>Record why the numbers look extreme, for anyone reading this scenario later — this step reads the committed CSV directly and is out of scope for a fresh agent restricted to the two bridges.</goal>
-    <expected>Not a bug. The official FOCUS 1.0 sample's ChargeCategory column contains only {Usage, Adjustment, Credit} — zero rows with ChargeCategory = "Purchase" (verified directly against the committed CSV, data/focus/samples/1.0/official/focus_sample.csv). Both KPI formulas divide by SUM(ContractedCost) WHERE ChargeCategory = "Purchase", so with that denominator at 0 the utilization score floors to 0% and its complement (waste) ceilings to 100% — correct application of the formula to a sample with no purchase-priced commitment rows, not a calculation defect. This is the same class of finding as T-034's noted AAI &gt;100% observation: real sample-data shape producing an edge value, left as-is per that decision.</expected>
+    <action>Author-only annotation, NOT part of the tools-only graded walkthrough (steps 1-5 are): why do the three commitment KPIs error instead of returning a number at version 1.0?</action>
+    <goal>Record why, for anyone reading this scenario later — this step reads the committed CSV directly and is out of scope for a fresh agent restricted to the two bridges.</goal>
+    <expected>Correct guidance-error behavior, not a bug and not a fabricated number. The official FOCUS 1.0 sample's ChargeCategory column contains only {Usage, Adjustment, Credit} — zero rows with ChargeCategory = "Purchase" (verified directly against the committed CSV, data/focus/samples/1.0/official/focus_sample.csv). All three KPI formulas divide by SUM(ContractedCost) WHERE ChargeCategory = "Purchase", so that denominator is 0 and the ratio is genuinely undefined on this sample — not 0%, not 100%. calculate_kpi now throws a clean guidance error ("...not computable... try version=\"1.2\"") instead of coercing the 0/0 to a definite-looking number, per the server's own stated design that uncomputable KPIs "error with guidance instead." FOCUS 1.2's bundled (synthetic) sample does carry qualifying Purchase rows, so the same three KPIs compute normally at version="1.2". This supersedes an earlier version of this scenario that treated the coerced 0%/100%/0 output as correct; that was a defect (gate 4, C3-version-1/C4-community-2), fixed in T-044.</expected>
   </step>
 </scenario>
