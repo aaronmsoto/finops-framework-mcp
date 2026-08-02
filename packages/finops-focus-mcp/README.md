@@ -61,6 +61,11 @@ to `1.2`) and echoes `spec_version` in its structured content.
 these two tools is marked `official: false` with an in-text UNOFFICIAL
 banner; see `NOTICE.md`.
 
+The full prompts/resources/tools hierarchy of this server (and its sibling
+`finops-framework-mcp`) — names, args, URIs, param defaults/limits — is
+generated from live MCP output in the monorepo at
+[`docs/mcp-surface.md`](../../docs/mcp-surface.md).
+
 ## Data & licensing
 
 FOCUS spec text, attributes, glossary, and the official sample dataset are

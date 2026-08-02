@@ -12,7 +12,38 @@
 
 ## In flight
 
-**T-053 done** (2026-08-02, this session): added the `map-kpi-to-focus-columns`
+**T-054 done** (2026-08-02, this session): built `docs/mcp-surface.md` — the
+prompts→resources→tools hierarchy for both servers, generated (not
+hand-typed) from live MCP protocol output.
+- `evals/framework/mcp-call.mjs` gained `list-resources`,
+  `list-resource-templates`, `list-prompts` (same bridge pattern as
+  `list-tools`, which stays byte-identical per the T-028 contract).
+- `scripts/gen-mcp-surface.mjs` (new, `npm run gen:mcp-surface`) connects
+  live to both built servers (+ framework with `FINOPS_MCP_EXPERIMENTAL=1`
+  to set-diff out `get_actions`), pages every list endpoint, probes
+  `completion/complete` on every resource-template variable to detect
+  completion support, separates fixed resources from template-expanded
+  ones by regex-matching live `uriTemplate`s against `resources/list`
+  output, and reads tool param type/required/default/limits straight from
+  live `inputSchema`. `[UNOFFICIAL/EXPERIMENTAL]` badges come from a
+  case-insensitive scan of title/description — nothing hardcoded. Supports
+  `--check` (diff vs committed file, exit 1 on drift).
+- `src/servers/mcp-surface.test.ts` (new) is the always-on drift guard:
+  InMemoryTransport against TS source (no dist build, stays fast-tier),
+  asserts every live tool/prompt/template name + fixed-resource URI + the
+  per-server counts appear in the committed doc. Full byte-for-byte
+  verification is `gen-mcp-surface.mjs --check` (needs `dist/`, run by
+  hand — the fast `test` gate runs before the full-tier `build` gate, so a
+  vitest test requiring dist would break on a fresh unbuilt checkout).
+- Both READMEs link to the doc.
+- Verified: `node scripts/gen-mcp-surface.mjs --check` clean after a full
+  `npm run build`; `vitest run src/servers/mcp-surface.test.ts` 3/3;
+  `./scripts/agentic gates --tier all` PASS (392 tests).
+- **Reminder for whoever does T-055..T-059 next**: if a change touches any
+  prompt/resource/tool, re-run `npm run gen:mcp-surface` and commit the
+  diff, or `mcp-surface.test.ts` fails.
+
+**T-053 done** (2026-08-02, earlier same session): added the `map-kpi-to-focus-columns`
 prompt to `src/servers/focus/prompts.ts` (review MCP-4 — the flagship
 `get_kpi_mapping`/`calculate_kpi` workflow had no guided prompt).
 - Third prompt, mirroring `explain-focus`/`map-column-across-versions`:
@@ -97,10 +128,13 @@ owner-gated.** State as of 2026-08-02:
 3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
-4. Next agent session: work the 19-MINOR backlog from
-   `docs/final-status-review.md` — start with the MEMORY.md rewrite
-   (update-memory skill) and the `combined-scenario.xml` step-4 expectation
-   fix (T-045 made the server correct; that eval prose is now stale).
+4. Next agent session: T-055 next (docs coherence — MEMORY.md rewrite via
+   the update-memory skill, `combined-scenario.xml` step-4 expectation fix
+   since T-045 made the server correct and that eval prose is now stale,
+   architecture/AGENTS framing, Worker no-auth posture doc), then
+   T-056..T-059 (dual-launch hygiene, architecture periphery, derive
+   integration test, demo format-gate). Regenerate `docs/mcp-surface.md`
+   (`npm run gen:mcp-surface`) if any of those touch a prompt/resource/tool.
 
 ## Open questions
 
@@ -131,5 +165,6 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — T-053 session (map-kpi-to-focus-columns prompt, review MCP-4;
-also fixed a latent completable()+optional() bug in focus/prompts.ts).
+2026-08-02 — T-054 session (docs/mcp-surface.md generated hierarchy doc +
+gen-mcp-surface.mjs + mcp-call.mjs list-resources/list-resource-templates/
+list-prompts + drift-guard test).

@@ -150,6 +150,10 @@ Cloudflare Worker (`src/workers/`, endpoints `/mcp/framework` and
 [`demo/`](demo/) is a static browser walkthrough that drives both servers
 end-to-end through the Worker.
 
+The full prompts/resources/tools hierarchy of both servers — names, args,
+URIs, param defaults/limits — is generated from live MCP output at
+[`docs/mcp-surface.md`](docs/mcp-surface.md).
+
 ## Development
 
 - Agent instructions: [AGENTS.md](AGENTS.md) · design: `docs/architecture.md`
