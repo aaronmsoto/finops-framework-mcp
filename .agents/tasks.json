@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "3eab27b5f86c1648727dd66229dd019ffa2198000bbaceb06c7361f8b226e9e2",
+  "chainHead": "23a03a926ab642f6df1c2ecf8dd6a81967fc7a8ade48c201d9f8c5cb84c61301",
   "tasks": [
     {
       "id": "T-001",
@@ -735,9 +735,15 @@
         "Re-run node dist/cli.js derive (or the documented derive entry) to regenerate data/focus/{1.0,1.2}/columns.json and derived/diff-1.0-1.2.json; re-run scripts/bundle-worker-data.mjs so src/workers/generated/focus-store.ts matches (bundle-data.test.ts must pass)",
         "Live probe evidence: get_requirements EffectiveCost 1.2 includes the nested 'sum of EffectiveCost where ChargeCategory is Usage MUST equal...' bullet; InvoiceId 1.2 includes both nullability MUSTs plus the RECOMMENDED presence and MAY pre-invoice bullets; gates --tier all pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "extractRequirements preserves nested normative bullets + RECOMMENDED/MAY; data/focus + worker bundle re-derived; gates --tier all green; live-probed EffectiveCost/InvoiceId 1.2 get_requirements",
+        "commit": "bdf0ec98ec15a57bd98fef0ff965926da234dc4c",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T13:51:18.511Z"
+      },
+      "hash": "23a03a926ab642f6df1c2ecf8dd6a81967fc7a8ade48c201d9f8c5cb84c61301"
     },
     {
       "id": "T-040",
