@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "56b02adf1585d6ebcd5f073bf09cf1ff635a4dc6eee0126e8d3d2a3e94f56ceb",
+  "chainHead": "d865c7251c71f9f2f6bdd7dadae6345924dbe547a1f698930d5ee8dd64acd3a4",
   "tasks": [
     {
       "id": "T-001",
@@ -865,9 +865,15 @@
         "packages/focus-spec-mcp/README.md no longer calls the sibling package 'the official FinOps Framework server' — 'official' attaches to the upstream Framework/spec, never to this software; grep of both package READMEs, descriptions, and server.json files finds no other 'official' binding to the software itself",
         "gates pass (docs-only change; no artifact regen needed)"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "README no longer calls sibling package 'the official FinOps Framework server'; grep of both packages' READMEs/descriptions/server.json confirms no other software-official binding; gates green",
+        "commit": "cb4f8ec1c0cf68d1f2d1c0c464dc11e7b1a8a969",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T15:07:18.545Z"
+      },
+      "hash": "d865c7251c71f9f2f6bdd7dadae6345924dbe547a1f698930d5ee8dd64acd3a4"
     },
     {
       "id": "T-047",
