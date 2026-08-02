@@ -1088,7 +1088,7 @@
       "acceptance": [
         "An integration test runs deriveFromDocs/deriveArtifactPayload against the committed data/framework/content/markdown and asserts the result equals the committed artifact JSON (byte or deep-equal), closing the 0%-covered derive orchestration gap; runtime stays reasonable for the fast tier or is bound to the full tier; gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

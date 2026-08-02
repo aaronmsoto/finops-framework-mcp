@@ -12,6 +12,27 @@
 
 ## In flight
 
+**T-058 done** (2026-08-02, this session): derive pipeline integration test
+(review R1) — see
+`.agents/journal/20260802-t058-derive-pipeline-integration-test.md` for full
+detail.
+- Added `src/crawlers/framework/markdown/derive-artifact.test.ts`: runs
+  `deriveArtifactPayload` against the real committed
+  `data/framework/content/markdown` and deep-equal-compares all 10 derived
+  entities against `loadArtifact("data/framework")`'s fields, asserts zero
+  parse warnings, asserts `derived.counts` matches `manifest.counts`, and
+  asserts `deriveArtifactPayload` is a thin wrapper over
+  `deriveFromDocs(walkMarkdownFiles(...))`. Closes the R1 finding — offline
+  derive orchestration was previously 0%-executed by any test.
+- Runtime ~37ms for the derive call itself, 54ms test-only inside the
+  suite; stays in the fast `test` gate tier, no full-tier binding needed.
+- Verified: `./scripts/agentic gates` PASS (407 tests, up from 403;
+  `derive.ts` in `crawlers/framework/markdown` now 96.59% stmts, was
+  fixture-only before); `./scripts/agentic gates --tier full` PASS (build).
+- **T-059** (demo under the format gate) remains — needs an
+  owner-approved task since `agentic.config.json` gate definitions are a
+  protected path.
+
 **T-057 done** (2026-08-02, this session): architecture periphery cleanup
 (review R2/R3/R4/R5) — see
 `.agents/journal/20260802-t057-architecture-periphery.md` for full detail.
@@ -193,11 +214,10 @@ owner-gated.** State as of 2026-08-02:
 3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
-4. Next agent session: T-058..T-059 (derive-pipeline idempotence
-   integration test, demo format-gate — the latter is protected-path,
-   needs an explicit owner-approved task per the open question below).
-   Regenerate `docs/mcp-surface.md` (`npm run gen:mcp-surface`) if either
-   touches a prompt/resource/tool (T-058/T-059 shouldn't).
+4. Next agent session: T-059 (demo format-gate — protected-path, needs an
+   explicit owner-approved task per the open question below). Regenerate
+   `docs/mcp-surface.md` (`npm run gen:mcp-surface`) if it touches a
+   prompt/resource/tool (T-059 shouldn't).
 
 ## Open questions
 
@@ -228,5 +248,4 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — T-057 session (architecture periphery: worker entry tests,
-direct-run guard, notFound dedup, dead code removal).
+2026-08-02 — T-058 session (derive pipeline integration test, review R1).
