@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "64b4a5c271edd283ff9a65c6f5a387ecd286bec695f0d4f1a110b4bbe64a8c47",
+  "chainHead": "9a85ca8b2734cab9067ba99a1b5c5da6b55d445967adadb15aaeb897ee943739",
   "tasks": [
     {
       "id": "T-001",
@@ -1012,9 +1012,15 @@
         "docs/mcp-surface.md documents BOTH servers as a hierarchy: server -> prompts (name, args) -> resources (fixed URIs + templates with completion notes) -> tools (name, one-line purpose, params with defaults/limits), generated from LIVE bridge output after all sibling tasks land, with resource/tool counts and an UNOFFICIAL-marking legend; both READMEs link to it",
         "A test or generation script (scripts/gen-mcp-surface.mjs) makes the doc reproducible; doc content matches live output at commit time; gates pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "docs/mcp-surface.md generated from live MCP output (gen-mcp-surface.mjs + mcp-call.mjs list-resources/templates/prompts); drift-guard test 3/3; gates --tier all PASS (392 tests)",
+        "commit": "5f44f8dee8528fe44db6c36a4827ed9ab8a1c028",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:45:23.222Z"
+      },
+      "hash": "9a85ca8b2734cab9067ba99a1b5c5da6b55d445967adadb15aaeb897ee943739"
     },
     {
       "id": "T-055",
