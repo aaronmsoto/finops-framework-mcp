@@ -724,6 +724,121 @@
         "completedAt": "2026-07-28T10:06:50.110Z"
       },
       "hash": "3eab27b5f86c1648727dd66229dd019ffa2198000bbaceb06c7361f8b226e9e2"
+    },
+    {
+      "id": "T-039",
+      "title": "Fix requirements parser: keep nested bullets, add RECOMMENDED/MAY (gate4 C2-fidelity-1+2)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "extractRequirements (src/crawlers/focus/parse/table.ts) preserves nested normative bullets, prefixing each with its parent bullet's scoping clause; NORMATIVE keyword set extended to the full RFC-2119 family FOCUS uses: MUST NOT, MUST, SHOULD NOT, SHOULD, RECOMMENDED, MAY (longest-first)",
+        "The existing parse/table.test.ts assertion that nested bullets are ignored is WRONG per gate 4 and this task explicitly authorizes rewriting it; add fixture tests pinning that effectivecost and skuid 1.2 nested MUSTs and InvoiceId 1.2 RECOMMENDED/MAY bullets survive parsing",
+        "Re-run node dist/cli.js derive (or the documented derive entry) to regenerate data/focus/{1.0,1.2}/columns.json and derived/diff-1.0-1.2.json; re-run scripts/bundle-worker-data.mjs so src/workers/generated/focus-store.ts matches (bundle-data.test.ts must pass)",
+        "Live probe evidence: get_requirements EffectiveCost 1.2 includes the nested 'sum of EffectiveCost where ChargeCategory is Usage MUST equal...' bullet; InvoiceId 1.2 includes both nullability MUSTs plus the RECOMMENDED presence and MAY pre-invoice bullets; gates --tier all pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-040",
+      "title": "Add CORS support to the Worker; fix deploy doc and demo hint (gate4 C4-community-1)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "createFetchHandler (src/workers/app.ts) answers OPTIONS on /mcp/framework and /mcp/focus with 204 + Access-Control-Allow-Origin echoing an allowlisted Origin, Access-Control-Allow-Methods: POST, GET, DELETE, OPTIONS, and Access-Control-Allow-Headers: Content-Type, Accept, Mcp-Session-Id, MCP-Protocol-Version; every non-preflight response whose Origin passed the allowlist carries Access-Control-Allow-Origin",
+        "src/workers/app.test.ts gains cases for preflight (allowed and unlisted Origin) and for ACAO presence on allowed-Origin POST responses",
+        "docs/deploy-worker.md no longer implies ALLOWED_ORIGINS alone enables browser clients (documents the CORS behavior); demo/client.js error hint no longer misdiagnoses CORS failures as purely an allowlist knob",
+        "gates --tier all pass; live probe evidence via a scratch native-Request script: preflight 204 with ACAO, POST 200 with ACAO for an allowlisted Origin"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-041",
+      "title": "Attribute get_requirements output: CC BY footer + source_url (gate4 C1-protocol-1)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "get_requirements text response ends with the same ccByFooter/footer(artifact, source_url) attribution line get_column uses; structuredContent and outputSchema gain source_url (and license CC-BY-4.0)",
+        "Live probe: get_requirements BilledCost shows the footer and structured source_url; existing tests updated only where they pin the old footer-less output (authorized); gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-042",
+      "title": "compare_versions: error on unknown columns instead of 'unchanged' (gate4 C1-protocol-2)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "compare_versions with a column that resolves in neither served version returns isError true with the same did-you-mean suggester get_column uses; status 'unchanged' is reserved for columns present in both versions with no diff entry",
+        "Live probe: column BilledCosts errors with suggestions; column BilledCost still reports changed; a genuinely-both-versions-no-diff case (if none exists in the current diff, a unit test constructs one) reports unchanged; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-043",
+      "title": "Expose CHANGELOG + materiality caveat; official:false on diff (gate4 C2-fidelity-4+5)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "The bundled upstream CHANGELOG is exposed as a resource (focus://spec/{version}/changelog); compare_versions banner cites the upstream materiality caveat (most changes are not material unless specifically called out) and links source_urls for judging materiality",
+        "data/focus/derived/diff-1.0-1.2.json carries official: false (derive step updated, artifact regenerated, worker bundle regenerated); compare_versions structuredContent echoes the unofficial flag; the NOTICE.md sentence claiming all derived records carry official:false is now true (or reworded to match reality)",
+        "Live probes: reading the changelog resource returns upstream text; compare_versions text shows the caveat; gates --tier all pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-044",
+      "title": "calculate_kpi: zero-denominator guard, no fabricated numbers (gate4 C3-version-1, C4-community-2)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "For ratio-of-filtered-sums KPIs, a zero denominator no longer coerces to a definite value: kpi-calc returns a not-computable result (computable:false + reason, or the clean guidance error path) explaining the sample lacks qualifying rows and suggesting version 1.2; return-0 kept only where 0 is semantically true (e.g. ESR with zero ListCost)",
+        "This task explicitly authorizes updating tests/eval fixtures that pinned the old 0%/100%/0 outputs: kpi-calc unit test pinning official-1.0 commitment KPIs as not-computable; demo/app.js and demo/requests-driven test render/assert not-computable instead of numbers; evals/focus/combined-scenario.xml expectations updated to match",
+        "Live probes: calculate_kpi commitment-utilization-score version 1.0 returns the not-computable explanation (no 0% value); ESR 1.0 still returns 26.552972346576816%; gates --tier all pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-045",
+      "title": "Version-differentiate commitment KPI mappings for 1.2 (gate4 C3-version-2)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "kpi-mapping derivation version-differentiates at least the three commitment KPIs: columns_by_version['1.2'] includes CommitmentDiscountQuantity and CommitmentDiscountUnit with a per-version formula or caveat (at 1.0 spend proxy; at 1.2 prefer quantity columns); data/focus/derived/kpi-mapping.json regenerated; worker bundle regenerated",
+        "Live probe: get_kpi_mapping consumption-versus-commitment version 1.2 no longer claims it cannot use CommitmentDiscountQuantity; the 1.0 answer still explains the spend proxy; UNOFFICIAL flags intact; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-046",
+      "title": "Fix 'official' phrasing in focus-spec-mcp README (gate4 C2-fidelity-3)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "packages/focus-spec-mcp/README.md no longer calls the sibling package 'the official FinOps Framework server' — 'official' attaches to the upstream Framework/spec, never to this software; grep of both package READMEs, descriptions, and server.json files finds no other 'official' binding to the software itself",
+        "gates pass (docs-only change; no artifact regen needed)"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-047",
+      "title": "MINOR polish: stable example slug, cross-version hints, slug param docs (gate4 C1-protocol-3+4, C3-version-3)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "get_attribute's inline example slug is one that resolves in both served versions (e.g. datetime_format) and its description explicitly names the parameter slug (eval Run 1 friction); description notes attribute discovery via search_focus entity_types=['attribute']",
+        "findColumn's unknown-column error, when the exact id/slug resolves in a different served version, says so with the version it was added/present in and suggests retrying with that version or compare_versions (covers ServiceSubcategory@1.0 and SkuMeter@1.0); otherwise the error names the version consulted",
+        "Live probes: get_column ServiceSubcategory version 1.0 mentions it exists in 1.2; get_attribute with the new example slug succeeds at the default version; gates pass"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
