@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "7848d27e0c5f8b917bcf38a5283f8fb43e1481a75b8209c84f8c4acfcc0a9ff7",
+  "chainHead": "64b4a5c271edd283ff9a65c6f5a387ecd286bec695f0d4f1a110b4bbe64a8c47",
   "tasks": [
     {
       "id": "T-001",
@@ -993,9 +993,15 @@
       "acceptance": [
         "src/servers/focus/prompts.ts registers a third prompt guiding the KPI->FOCUS-columns workflow (completable kpi/capability + version args, embedded resource or tool-call guidance, UNOFFICIAL framing) mirroring the existing prompt structure; prompt list/get covered by a test; live probe shows it in prompts/list with working completion"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Added map-kpi-to-focus-columns prompt (server.test.ts prompt list/get/completion tests, 389 tests green); live probe against dist/ confirms prompts/list + working kpi/capability/version completion",
+        "commit": "985996f4ba5375b9b455d205570a3641332e05e8",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:26:37.538Z"
+      },
+      "hash": "64b4a5c271edd283ff9a65c6f5a387ecd286bec695f0d4f1a110b4bbe64a8c47"
     },
     {
       "id": "T-054",
