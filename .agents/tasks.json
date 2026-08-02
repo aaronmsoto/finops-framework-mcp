@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "887f19a2acec3f4db62c476e8e122b93450277dad419de53014a9a14e7049496",
+  "chainHead": "56b02adf1585d6ebcd5f073bf09cf1ff635a4dc6eee0126e8d3d2a3e94f56ceb",
   "tasks": [
     {
       "id": "T-001",
@@ -847,9 +847,15 @@
         "kpi-mapping derivation version-differentiates at least the three commitment KPIs: columns_by_version['1.2'] includes CommitmentDiscountQuantity and CommitmentDiscountUnit with a per-version formula or caveat (at 1.0 spend proxy; at 1.2 prefer quantity columns); data/focus/derived/kpi-mapping.json regenerated; worker bundle regenerated",
         "Live probe: get_kpi_mapping consumption-versus-commitment version 1.2 no longer claims it cannot use CommitmentDiscountQuantity; the 1.0 answer still explains the spend proxy; UNOFFICIAL flags intact; gates pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "columns_by_version['1.2'] gains CommitmentDiscountQuantity/Unit for the 3 commitment KPIs, caveat rewritten version-neutral; gates green 375 tests, live-probed both versions",
+        "commit": "0f04a4f2eda54b76da0ea25b2f6478f671678049",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:58:59.257Z"
+      },
+      "hash": "56b02adf1585d6ebcd5f073bf09cf1ff635a4dc6eee0126e8d3d2a3e94f56ceb"
     },
     {
       "id": "T-046",
