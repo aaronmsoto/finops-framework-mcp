@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "23a03a926ab642f6df1c2ecf8dd6a81967fc7a8ade48c201d9f8c5cb84c61301",
+  "chainHead": "8ce86af826b965cfab0d52d582ce61c5636fec928609dc30ebbe34c8230631bf",
   "tasks": [
     {
       "id": "T-001",
@@ -755,9 +755,15 @@
         "docs/deploy-worker.md no longer implies ALLOWED_ORIGINS alone enables browser clients (documents the CORS behavior); demo/client.js error hint no longer misdiagnoses CORS failures as purely an allowlist knob",
         "gates --tier all pass; live probe evidence via a scratch native-Request script: preflight 204 with ACAO, POST 200 with ACAO for an allowlisted Origin"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Worker answers OPTIONS with 204+ACAO and stamps ACAO on allowed-Origin responses; gates --tier all green (364 tests), live-probed preflight 204/POST 200 with ACAO for an allowlisted Origin",
+        "commit": "7c6d61f835d9aaee6d5b91faadbe6e55ad7834a9",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:01:28.611Z"
+      },
+      "hash": "8ce86af826b965cfab0d52d582ce61c5636fec928609dc30ebbe34c8230631bf"
     },
     {
       "id": "T-041",
