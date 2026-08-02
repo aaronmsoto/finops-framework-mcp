@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "f7c2c386c11b5dcdc775f5afe11728cb583fd7176e723fe9134f173a62bef6da",
+  "chainHead": "0af03f71c0bf45836138d82f5a8fecfef2883e3674055cff739787a99501aced",
   "tasks": [
     {
       "id": "T-001",
@@ -1124,9 +1124,15 @@
         "docs/guide/index.html exists per spec page 1: repo intro, both servers side by side with live-probed counts, getting-started (both bins, Claude Code + Claude Desktop config, Worker endpoints), one real first-call transcript per server, next-page map; self-contained, shared chrome, light/dark, six-link nav",
         "Every fact/number/transcript live-probed (spec Hard content rules); gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "docs/guide/index.html: repo intro, both servers side by side with live counts (framework 22 capabilities/88 KPIs/11 tools/4 prompts/44 resources; focus 1.0=43+9, 1.2=57+9/9 tools/3 prompts/125 resources), getting-started for both bins with Claude Code + Desktop + .mcp.json configs, Worker remote option, and a verbatim first-call transcript per server (list_versions, get_capability anomaly-management). 15 live probes; shared chrome template documented in-file; gates PASS",
+        "commit": "a1cb38ec1cd2fa8cc014dd8ca1571fa1f5579ecf",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T15:33:36.725Z"
+      },
+      "hash": "0af03f71c0bf45836138d82f5a8fecfef2883e3674055cff739787a99501aced"
     },
     {
       "id": "T-061",
