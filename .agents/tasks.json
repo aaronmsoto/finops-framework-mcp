@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "f704207264c6557cab894a46d555d981c3995320cf1a47c628962cc7f2c39fc8",
+  "chainHead": "887f19a2acec3f4db62c476e8e122b93450277dad419de53014a9a14e7049496",
   "tasks": [
     {
       "id": "T-001",
@@ -829,9 +829,15 @@
         "This task explicitly authorizes updating tests/eval fixtures that pinned the old 0%/100%/0 outputs: kpi-calc unit test pinning official-1.0 commitment KPIs as not-computable; demo/app.js and demo/requests-driven test render/assert not-computable instead of numbers; evals/focus/combined-scenario.xml expectations updated to match",
         "Live probes: calculate_kpi commitment-utilization-score version 1.0 returns the not-computable explanation (no 0% value); ESR 1.0 still returns 26.552972346576816%; gates --tier all pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "calculate_kpi commitment KPIs now error with guidance (not 0%/100%/0) on zero-Purchase-row samples; ESR/1.2 unaffected; gates --tier all green, live-probed",
+        "commit": "28e710bd50353d43091a4082fce530ad25360b88",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:46:26.453Z"
+      },
+      "hash": "887f19a2acec3f4db62c476e8e122b93450277dad419de53014a9a14e7049496"
     },
     {
       "id": "T-045",
