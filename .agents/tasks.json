@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "2b5a62693485dbf2889cbabb321f1e8e3d12197d2d8afe030e60c165c5a19752",
+  "chainHead": "b840b5d822394d2ced1fbf1cca5d4d2b09d2d9c32013adb1e8e74722a7b229a9",
   "tasks": [
     {
       "id": "T-001",
@@ -1088,9 +1088,15 @@
       "acceptance": [
         "An integration test runs deriveFromDocs/deriveArtifactPayload against the committed data/framework/content/markdown and asserts the result equals the committed artifact JSON (byte or deep-equal), closing the 0%-covered derive orchestration gap; runtime stays reasonable for the fast tier or is bound to the full tier; gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Added derive-artifact.test.ts: deriveArtifactPayload vs committed data/framework artifact, all 10 entities deep-equal, 0 warnings, counts match; gates green (407 tests)",
+        "commit": "122d865faca8743a77323ab9e876d3ae720a24c6",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T08:26:41.754Z"
+      },
+      "hash": "b840b5d822394d2ced1fbf1cca5d4d2b09d2d9c32013adb1e8e74722a7b229a9"
     },
     {
       "id": "T-059",
