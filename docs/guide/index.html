@@ -1,0 +1,570 @@
+<!doctype html>
+<!--
+  docs/guide/index.html — page 1 of 6 (spec: .agents/specs/usage-guide-v1.md).
+
+  SHARED CHROME TEMPLATE. Every page in docs/guide/ reuses, verbatim:
+    1. this <style> block (CSS variables + light/dark + .step/.kpi/.zero-grid/
+       .callnote/table styles, inherited from the ESR walkthrough artifact),
+    2. the <header class="guide"> block below — same title, same six nav
+       links in the same order, with aria-current="page" moved to the
+       current page,
+    3. the <footer class="guide"> block — CC BY 4.0 attribution + the
+       one-line UNOFFICIAL legend.
+  Pages extend the style block minimally at the end, never edit the base.
+  No external assets: everything renders offline over file://.
+
+  Every fact, count, quote and transcript on this page came from a live
+  probe run against the built servers; the exact call is printed in the
+  .callnote under each block.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinOps MCP Servers — Usage Guide</title>
+<style>
+  :root {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+      --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+      --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+    --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+    --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+  }
+  :root[data-theme="light"] {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+  }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+    line-height: 1.55; margin: 0; overflow-x: hidden; }
+  main { max-width: 72ch; margin: 0 auto; padding: 1.6rem 1.25rem 4rem; }
+  h1, h2 { font-family: var(--serif); text-wrap: balance; line-height: 1.15; }
+  h1 { font-size: 2.1rem; margin: 0.25rem 0 0.5rem; font-weight: 600; }
+  h2 { font-size: 1.35rem; margin: 0 0 0.6rem; font-weight: 600; }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--slate); }
+  .lede { color: var(--slate); margin: 0.4rem 0 0; }
+  .servers { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
+  .server-chip { font-family: var(--mono); font-size: 0.78rem; padding: 0.3rem 0.65rem;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); }
+  .server-chip b { color: var(--moss); font-weight: 600; }
+  .step { margin-top: 2.6rem; display: grid; grid-template-columns: 2.1rem 1fr; gap: 0.9rem; }
+  .step-n { font-family: var(--serif); font-size: 1.5rem; color: var(--moss);
+    border-top: 2px solid var(--moss); padding-top: 0.3rem; text-align: center;
+    font-variant-numeric: tabular-nums; }
+  .step-body { border-top: 1px solid var(--line); padding-top: 0.55rem; min-width: 0; }
+  .badge { display: inline-block; font-size: 0.64rem; font-weight: 700;
+    letter-spacing: 0.08em; padding: 0.14rem 0.45rem; border-radius: 3px;
+    vertical-align: 0.15em; }
+  .badge.official { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .badge.derived { color: var(--amber); border: 1px solid var(--amber); background: var(--amber-bg); }
+  .quote { border-left: 3px solid var(--moss); background: var(--panel-2);
+    padding: 0.7rem 1rem; margin: 0.9rem 0; font-family: var(--serif); font-size: 1.02rem; }
+  .callnote { font-family: var(--mono); font-size: 0.72rem; color: var(--slate);
+    margin-top: 0.5rem; overflow-x: auto; white-space: nowrap; }
+  details.kpi { border: 1px solid var(--line); border-radius: 6px; margin: 0.55rem 0;
+    background: var(--panel-2); }
+  details.kpi summary { cursor: pointer; padding: 0.6rem 0.9rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+  details.kpi summary::-webkit-details-marker { display: none; }
+  details.kpi[open] summary { border-bottom: 1px solid var(--line); }
+  .kpi-inner { padding: 0.7rem 0.9rem 0.9rem; font-size: 0.92rem; }
+  .formula { font-family: var(--mono); font-size: 0.8rem; background: var(--panel);
+    padding: 0.55rem 0.75rem; border-radius: 4px; margin: 0.5rem 0; overflow-x: auto; }
+  .cols { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+  .col-chip { font-family: var(--mono); font-size: 0.74rem; padding: 0.18rem 0.5rem;
+    border-radius: 4px; background: var(--chip-off); border: 1px solid var(--line); }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; min-width: 34rem; }
+  th { text-align: left; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--slate); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    background: var(--panel-2); }
+  td { padding: 0.45rem 0.75rem; border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, .mono { font-family: var(--mono); font-size: 0.8rem; }
+  .lvl { font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 3px; }
+  .lvl.mand { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .lvl.cond { color: var(--slate); border: 1px dashed var(--slate); }
+  .absent { color: var(--slate); font-style: italic; }
+  .new-chip { font-size: 0.62rem; font-weight: 700; color: var(--paper);
+    background: var(--moss); border-radius: 3px; padding: 0.1rem 0.35rem; margin-left: 0.35rem; }
+  .zero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.6rem; margin: 0.8rem 0; }
+  .zero-card { border: 1px solid var(--line); border-radius: 6px; padding: 0.6rem 0.75rem;
+    background: var(--panel-2); }
+  .zero-card .v { font-family: var(--mono); font-size: 1.25rem; font-weight: 700; }
+  .zero-card .n { font-size: 0.74rem; color: var(--slate); margin-top: 0.15rem; }
+  .takeaway { border: 1px solid var(--moss); border-radius: 8px; padding: 0.9rem 1.1rem;
+    margin-top: 1rem; background: var(--panel-2); }
+  .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
+  footer { margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 1rem;
+    font-size: 0.78rem; color: var(--slate); }
+  footer p { margin: 0.35rem 0; }
+  a { color: var(--moss); }
+
+  /* --- shared chrome: guide header + nav (identical on all six pages) --- */
+  header.guide { max-width: 72ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+  header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
+    font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+  header.guide nav { margin-top: 0.6rem; border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
+  header.guide nav ol { list-style: none; display: flex; flex-wrap: wrap;
+    gap: 0.3rem 0.55rem; margin: 0; padding: 0; }
+  header.guide nav a { font-size: 0.76rem; text-decoration: none; color: var(--slate);
+    border: 1px solid transparent; border-radius: 999px; padding: 0.18rem 0.55rem;
+    display: inline-block; }
+  header.guide nav a:hover { color: var(--moss); border-color: var(--line); }
+  header.guide nav a[aria-current="page"] { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); font-weight: 600; }
+
+  /* --- page 1 additions --- */
+  pre.tx { font-family: var(--mono); font-size: 0.74rem; line-height: 1.45;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px;
+    padding: 0.7rem 0.85rem; margin: 0.6rem 0 0; overflow-x: auto; }
+  pre.tx .c { color: var(--slate); }
+  pre.tx .k { color: var(--moss); }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 0.9rem; margin: 1rem 0 0; }
+  .card { border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2);
+    padding: 0.9rem 1rem; min-width: 0; }
+  .card h3 { font-family: var(--mono); font-size: 0.85rem; margin: 0 0 0.15rem;
+    color: var(--moss); overflow-wrap: anywhere; }
+  .card .sub { font-size: 0.74rem; color: var(--slate); margin: 0 0 0.6rem; }
+  .card p { font-size: 0.88rem; margin: 0.4rem 0; }
+  .card dl { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.6rem;
+    margin: 0.6rem 0 0; font-size: 0.8rem; }
+  .card dt { font-family: var(--mono); font-weight: 700; font-variant-numeric: tabular-nums;
+    text-align: right; }
+  .card dd { margin: 0; color: var(--slate); }
+  .next-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.7rem; margin-top: 0.9rem; }
+  .next-card { border: 1px solid var(--line); border-left: 3px solid var(--moss);
+    border-radius: 6px; padding: 0.6rem 0.8rem; background: var(--panel-2); min-width: 0; }
+  .next-card a { font-weight: 600; font-size: 0.92rem; text-decoration: none; }
+  .next-card p { font-size: 0.8rem; color: var(--slate); margin: 0.25rem 0 0; }
+  h3.sec { font-family: var(--sans); font-size: 0.82rem; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--slate); margin: 1.4rem 0 0.3rem; }
+  ul.tight { font-size: 0.9rem; padding-left: 1.15rem; margin: 0.5rem 0; }
+  ul.tight li { margin: 0.25rem 0; }
+</style>
+</head>
+<body>
+
+<header class="guide">
+  <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+  <nav aria-label="Guide pages">
+    <ol>
+      <li><a href="index.html" aria-current="page">Intro &amp; Getting Started</a></li>
+      <li><a href="framework-server.html">finops-framework-mcp</a></li>
+      <li><a href="focus-server.html">finops-focus-mcp</a></li>
+      <li><a href="example-showback.html">Showback</a></li>
+      <li><a href="example-esr.html">Rate Optimization (ESR)</a></li>
+      <li><a href="example-forecasting.html">Forecasting Journey</a></li>
+    </ol>
+  </nav>
+</header>
+
+<main>
+  <p class="eyebrow">Page 1 of 6 · Intro &amp; Getting Started</p>
+  <h1>Two MCP servers for FinOps</h1>
+  <p class="lede">This repository ships an agentic interface to the FinOps
+  Foundation's published guidance: one MCP server for the <strong>FinOps
+  Framework</strong>, one for the <strong>FOCUS™ specification</strong>. Both are
+  read-only, offline, version-pinned, and label every derived answer as
+  unofficial. This page gets them running in your client and shows the first
+  call against each.</p>
+  <div class="servers">
+    <span class="server-chip"><b>finops-framework-mcp</b> · 11 tools · data v2.1.1</span>
+    <span class="server-chip"><b>finops-focus-mcp</b> · 9 tools · FOCUS 1.0 + 1.2</span>
+  </div>
+
+  <!-- STEP 1 — what this is -->
+  <section class="step">
+    <div class="step-n">1</div>
+    <div class="step-body">
+      <h2>What this repo is</h2>
+      <p>An LLM asked “how mature is our Allocation practice?” or “which FOCUS
+      columns do I need for effective savings rate?” will happily improvise.
+      These two servers exist so it doesn't have to: they serve the
+      Foundation's own text, structured, with the source URL and licence
+      attached to every response.</p>
+      <p>Each server is the same three decoupled parts — and the last two
+      run with no network access at all:</p>
+      <div class="formula">crawler ──▶ markdown-canonical data artifact ──▶ stdio MCP server</div>
+      <ul class="tight">
+        <li><strong>Official by default.</strong> The framework server's default
+        surface is official content only. Its two derived extras (a
+        below-Crawl <span class="mono">Pre-Crawl</span> level and the parsed
+        <span class="mono">get_actions</span> characteristics) are hidden behind
+        <span class="mono">FINOPS_MCP_EXPERIMENTAL=1</span>.</li>
+        <li><strong>Unofficial work is labelled, not hidden.</strong> The FOCUS
+        server's KPI mapping, KPI calculation and 1.0→1.2 diff ship in the
+        default surface but carry <span class="badge derived">UNOFFICIAL</span>
+        in-text and <span class="mono">official: false</span> in structured output.</li>
+        <li><strong>Reproducible.</strong> The data artifacts are committed;
+        <span class="mono">cli.js derive</span> regenerates every JSON file from the
+        canonical markdown offline, and the servers validate the artifact at
+        startup and refuse to run on a bad one.</li>
+        <li><strong>Version-pinned.</strong> FOCUS answers are always scoped to a
+        spec version rather than blended across releases.</li>
+      </ul>
+      <p class="callnote">framework · get_framework_info {} · focus · list_versions {} · both list-tools</p>
+    </div>
+  </section>
+
+  <!-- STEP 2 — servers side by side -->
+  <section class="step">
+    <div class="step-n">2</div>
+    <div class="step-body">
+      <h2>The two servers, side by side <span class="badge official">counts from live probes</span></h2>
+      <p>Every number in these two cards was read out of a live server
+      response, not a hand-maintained list.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h3>finops-framework-mcp</h3>
+          <p class="sub">The FinOps Framework · finops.org/framework · data v2.1.1, crawled 2026-07-23</p>
+          <p>The operating model: what a capability <em>is</em>, its official
+          Crawl/Walk/Run assessment prose, who does what in it, and which KPIs
+          it publishes.</p>
+          <dl>
+            <dt>6</dt><dd>Principles</dd>
+            <dt>3</dt><dd>Phases (Inform / Optimize / Operate)</dd>
+            <dt>4</dt><dd>Domains</dd>
+            <dt>22</dt><dd>Capabilities</dd>
+            <dt>11</dt><dd>Personas (6 core + 5 allied)</dd>
+            <dt>5</dt><dd>Technology Categories</dd>
+            <dt>3</dt><dd>Maturity levels</dd>
+            <dt>88</dt><dd>KPI library entries</dd>
+          </dl>
+          <dl>
+            <dt>11</dt><dd>tools</dd>
+            <dt>4</dt><dd>prompts</dd>
+            <dt>44</dt><dd>resources listed + 4 URI templates (<span class="mono">finops://</span>)</dd>
+          </dl>
+        </div>
+
+        <div class="card">
+          <h3>finops-focus-mcp</h3>
+          <p class="sub">The FOCUS™ specification · versions 1.0 and 1.2 · latest 1.2</p>
+          <p>The data contract: what each billing column means in a given spec
+          version, its normative MUST/SHOULD requirements, and what changed
+          between releases.</p>
+          <dl>
+            <dt>1.0</dt><dd>43 columns, 9 attributes (source tag v1.0)</dd>
+            <dt>1.2</dt><dd>57 columns, 9 attributes (source tag v1.2) — the default</dd>
+          </dl>
+          <dl>
+            <dt>9</dt><dd>tools</dd>
+            <dt>3</dt><dd>prompts</dd>
+            <dt>125</dt><dd>resources listed + 4 URI templates (<span class="mono">focus://</span>)</dd>
+          </dl>
+        </div>
+      </div>
+
+      <h3 class="sec">FOCUS columns by feature level</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Spec version</th><th>Mandatory</th><th>Conditional</th><th>Recommended</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1.0</td><td>21</td><td>20</td><td>2</td><td>43</td></tr>
+          <tr><td class="mono">1.2</td><td>21</td><td>32</td><td>4</td><td>57</td></tr>
+        </tbody>
+      </table></div>
+      <p style="font-size:0.88rem;">The mandatory count is identical in both
+      versions — all 14 columns 1.2 adds land in the Conditional and
+      Recommended tiers. The <a href="focus-server.html">FOCUS server page</a>
+      walks the full 1.0→1.2 diff.</p>
+      <p class="callnote">framework · get_framework_info {} · list-prompts · list-resources · list-resource-templates</p>
+      <p class="callnote">focus · list_versions {} · list_columns {version, feature_level} × 6 · list-prompts · list-resources</p>
+    </div>
+  </section>
+
+  <!-- STEP 3 — install -->
+  <section class="step">
+    <div class="step-n">3</div>
+    <div class="step-body">
+      <h2>Getting started — install</h2>
+      <p>Each server publishes as its own npm package with a stdio binary, so
+      an MCP client only ever needs a command and its arguments. Node
+      <span class="mono">&gt;=22</span> is required by both packages.</p>
+      <pre class="tx"><span class="c"># run either server directly — stdio, nothing to configure</span>
+npx finops-framework-mcp
+npx finops-focus-mcp
+
+<span class="c"># or from a clone of this repo</span>
+npm install &amp;&amp; npm run build &amp;&amp; npm run server</pre>
+      <p style="font-size:0.88rem;">The framework server loads the data
+      artifact packaged with its release (<span class="mono">data/framework</span>);
+      point it at a locally-refreshed artifact with
+      <span class="mono">FINOPS_MCP_DATA</span> or the first CLI argument. To expose
+      the framework server's opt-in derived extras, add
+      <span class="mono">FINOPS_MCP_EXPERIMENTAL=1</span> or the
+      <span class="mono">--experimental</span> flag — that adds exactly one tool,
+      <span class="mono">get_actions</span>, marked EXPERIMENTAL.</p>
+
+      <h3 class="sec">Claude Code — one command per server</h3>
+      <pre class="tx">claude mcp add finops-framework -- npx finops-framework-mcp
+claude mcp add focus-spec -- npx finops-focus-mcp</pre>
+
+      <h3 class="sec">Claude Code — project-scoped <span class="mono">.mcp.json</span></h3>
+      <p style="font-size:0.88rem;">Commit this at the repo root to give
+      everyone on the project both servers:</p>
+      <pre class="tx">{
+  <span class="k">"mcpServers"</span>: {
+    <span class="k">"finops-framework"</span>: {
+      <span class="k">"command"</span>: "npx",
+      <span class="k">"args"</span>: ["finops-framework-mcp"]
+    },
+    <span class="k">"focus-spec"</span>: {
+      <span class="k">"command"</span>: "npx",
+      <span class="k">"args"</span>: ["finops-focus-mcp"]
+    }
+  }
+}</pre>
+
+      <h3 class="sec">Claude Desktop — <span class="mono">claude_desktop_config.json</span></h3>
+      <pre class="tx">{
+  <span class="k">"mcpServers"</span>: {
+    <span class="k">"finops-framework"</span>: {
+      <span class="k">"command"</span>: "npx",
+      <span class="k">"args"</span>: ["finops-framework-mcp"]
+    },
+    <span class="k">"focus-spec"</span>: {
+      <span class="k">"command"</span>: "npx",
+      <span class="k">"args"</span>: ["finops-focus-mcp"]
+    }
+  }
+}</pre>
+      <p style="font-size:0.88rem;">Same shape either way — any generic stdio
+      MCP client takes the identical
+      <span class="mono">{"command": "npx", "args": ["finops-focus-mcp"]}</span> pair.</p>
+    </div>
+  </section>
+
+  <!-- STEP 4 — remote worker -->
+  <section class="step">
+    <div class="step-n">4</div>
+    <div class="step-body">
+      <h2>Or run them remotely — the Cloudflare Worker</h2>
+      <p>Both servers are also deployable over <strong>Streamable HTTP</strong> from a
+      single bundled Cloudflare Worker
+      (<span class="mono">src/workers/</span>), which serves them at two paths:</p>
+      <div class="cols">
+        <span class="col-chip">POST /mcp/framework</span>
+        <span class="col-chip">POST /mcp/focus</span>
+      </div>
+      <p style="font-size:0.9rem; margin-top:0.7rem;">The Worker builds a fresh
+      MCP server and transport per request — <strong>stateless by design</strong>: no
+      session state persists across requests or isolates, and there is no
+      user-supplied data path (<span class="mono">calculate_kpi</span> computes only
+      over the bundled samples, exactly as the stdio servers do). Both data
+      artifacts are compiled into the bundle at build time; nothing reachable
+      from the Worker entry point touches <span class="mono">node:fs</span> at runtime,
+      and a test statically walks the import graph to keep it that way.</p>
+      <p style="font-size:0.9rem;">Two operational notes before you point a
+      browser at it. Requests with <em>no</em> <span class="mono">Origin</span> header —
+      stdio-bridged and server-to-server MCP clients — are always allowed;
+      browser requests need their origin on the Worker's
+      <span class="mono">ALLOWED_ORIGINS</span> allowlist, which is also what drives
+      CORS. And there is deliberately no authentication and no rate limiting:
+      the Worker serves only public, read-only content with no per-user state
+      behind it.</p>
+      <p style="font-size:0.9rem;">There is no public hosted endpoint to point
+      you at here — deploying is a human approval point in this repo, so the
+      URL is whatever the operator's own
+      <span class="mono">wrangler deploy</span> produces. A deployment smoke test looks
+      like this:</p>
+      <pre class="tx">curl -s "$WORKER_URL/mcp/focus" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'</pre>
+      <p class="callnote">source: docs/deploy-worker.md (owner deployment checklist)</p>
+    </div>
+  </section>
+
+  <!-- STEP 5 — first calls -->
+  <section class="step">
+    <div class="step-n">5</div>
+    <div class="step-body">
+      <h2>Your first call against each server <span class="badge official">official</span></h2>
+      <p>Both servers publish a “start here” tool. Below is real, unedited
+      output from each — captured through the repo's own MCP client bridge,
+      which is the same stdio protocol your client will speak.</p>
+
+      <h3 class="sec">finops-focus-mcp · list_versions</h3>
+      <p style="font-size:0.88rem;">Call this first: it tells you which
+      <span class="mono">version</span> values every other FOCUS tool will accept.</p>
+      <pre class="tx"><span class="c">$ node evals/framework/mcp-call.mjs --server=focus call list_versions '{}'</span>
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "- 1.0: 43 columns, 9 attributes (source v1.0)\n- 1.2 (latest): 57 columns, 9 attributes (source v1.2)"
+    }
+  ],
+  "structuredContent": {
+    "latest": "1.2",
+    "versions": [
+      {
+        "spec_version": "1.0",
+        "source_tag": "v1.0",
+        "data_version": "1.0.1",
+        "is_latest": false,
+        "counts": { "attributes": 9, "columns": 43 }
+      },
+      {
+        "spec_version": "1.2",
+        "source_tag": "v1.2",
+        "data_version": "1.0.1",
+        "is_latest": true,
+        "counts": { "attributes": 9, "columns": 57 }
+      }
+    ]
+  }
+}</pre>
+      <p class="callnote">focus · list_versions {}</p>
+
+      <h3 class="sec">finops-framework-mcp · get_capability</h3>
+      <p style="font-size:0.88rem;">Capability documents are large, so
+      <span class="mono">get_capability</span> is section-selectable via
+      <span class="mono">include</span> — here, the summary alone. Note the two things
+      that come back on <em>every</em> official response: a
+      <span class="mono">source_url</span> pointing at the page the text came from,
+      and the CC BY 4.0 attribution footer.</p>
+      <pre class="tx"><span class="c">$ node evals/framework/mcp-call.mjs call get_capability \
+    '{"slug":"anomaly-management","include":["summary"]}'</span>
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"slug\": \"anomaly-management\",\n  \"title\": \"Anomaly Management\",\n  \"domain\": \"understand-usage-and-cost\",\n  \"sections\": {\n    \"summary\": \"Detect, identify, alert and manage unexpected or unforecasted technology cost and usage irregularities in a timely manner to lower risk and ensure cost-effective operations.\"\n  },\n  \"uri\": \"finops://framework/capabilities/anomaly-management\",\n  \"source_url\": \"https://www.finops.org/framework/capabilities/anomaly-management/\",\n  \"license\": \"CC-BY-4.0\"\n}\n\n---\nSource: https://www.finops.org/framework/capabilities/anomaly-management/ — © FinOps Foundation, licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Content restructured and adapted by finops-framework-mcp (data v2.1.1, crawled 2026-07-23); unofficial extensions are always marked."
+    },
+    {
+      "name": "anomaly-management",
+      "uri": "finops://framework/capabilities/anomaly-management",
+      "description": "Full anomaly-management capability document",
+      "mimeType": "text/markdown",
+      "type": "resource_link"
+    }
+  ],
+  "structuredContent": {
+    "slug": "anomaly-management",
+    "title": "Anomaly Management",
+    "domain": "understand-usage-and-cost",
+    "sections": {
+      "summary": "Detect, identify, alert and manage unexpected or unforecasted technology cost and usage irregularities in a timely manner to lower risk and ensure cost-effective operations."
+    },
+    "uri": "finops://framework/capabilities/anomaly-management",
+    "source_url": "https://www.finops.org/framework/capabilities/anomaly-management/",
+    "license": "CC-BY-4.0"
+  }
+}</pre>
+      <p class="callnote">framework · get_capability {slug: "anomaly-management", include: ["summary"]}</p>
+
+      <h3 class="sec">Don't know a slug? Don't guess</h3>
+      <p style="font-size:0.9rem;">Both servers ship a ranked keyword search
+      whose whole job is turning words into slugs you can feed to the other
+      tools — <span class="mono">search_framework {query}</span> on one side,
+      <span class="mono">search_focus {query, version}</span> on the other. Each hit
+      returns a slug and a resource URI. And if you'd rather orient than
+      search, <span class="mono">get_framework_info {}</span> returns the framework's
+      structure and a short navigation guide in one call:</p>
+      <div class="quote">“Look up anything by keyword: <span class="mono">search_framework</span>.
+      Browse: <span class="mono">list_capabilities</span> (filter by domain or persona),
+      then <span class="mono">get_capability</span> with an <span class="mono">include</span>
+      list to control size.”</div>
+      <p class="callnote">framework · get_framework_info {} → content[0].text, “How to navigate”</p>
+    </div>
+  </section>
+
+  <!-- STEP 6 — where next -->
+  <section class="step">
+    <div class="step-n">6</div>
+    <div class="step-body">
+      <h2>Where to go next</h2>
+      <p>Two reference pages, then three worked examples that use both servers
+      together. Every number and quote on all five is produced the same way as
+      the transcripts above.</p>
+      <div class="next-grid">
+        <div class="next-card">
+          <a href="framework-server.html">finops-framework-mcp reference</a>
+          <p>The data model (domains → capabilities → KPIs / personas /
+          maturity), the 11 tools grouped discover → read → search → assess,
+          prompts, <span class="mono">finops://</span> resource URIs, pagination, and how
+          official content is marked. Worked demo: Anomaly Management, end to end.</p>
+        </div>
+        <div class="next-card">
+          <a href="focus-server.html">finops-focus-mcp reference</a>
+          <p>The version model, the 9 tools grouped versions → columns /
+          attributes → requirements → search → diff → unofficial KPI mapping,
+          prompts and <span class="mono">focus://</span> resources. Worked demo:
+          BilledCost at both versions plus the 1.0→1.2 diff.</p>
+        </div>
+        <div class="next-card">
+          <a href="example-showback.html">Worked example · Showback</a>
+          <p>Understand Usage &amp; Cost → Allocation and Reporting &amp; Analytics
+          → the exact FOCUS columns a showback report needs → a real showback
+          table computed from the bundled official sample data.</p>
+        </div>
+        <div class="next-card">
+          <a href="example-esr.html">Worked example · Rate Optimization (ESR)</a>
+          <p>Capability → four featured KPIs → the six FOCUS columns that feed
+          them at 1.0 vs 1.2 → effective savings rate computed on the official
+          sample — and what the server does when a KPI <em>isn't</em> computable.</p>
+        </div>
+        <div class="next-card">
+          <a href="example-forecasting.html">Worked example · Forecasting journey</a>
+          <p>A maturity journey to Walk-level Forecasting: verbatim official
+          Crawl→Walk requirements, supporting capabilities and KPIs, then the
+          FOCUS columns that feed a forecasting pipeline.</p>
+        </div>
+      </div>
+
+      <div class="takeaway">
+        <h3>The one-minute version</h3>
+        <p style="margin:0; font-size:0.92rem;">Install both bins
+        (<span class="mono">npx finops-framework-mcp</span>,
+        <span class="mono">npx finops-focus-mcp</span>), register them in your client with
+        the same command/args pair, then start every session with
+        <span class="mono">get_framework_info {}</span> and
+        <span class="mono">list_versions {}</span>. Ask the framework server <em>what good
+        looks like</em>; ask the FOCUS server <em>which columns prove it</em>. Anything
+        the servers derived rather than quoted arrives already labelled
+        unofficial — believe the label.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="guide">
+    <p>FinOps Framework content © FinOps Foundation, licensed
+    <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
+    specification content and sample data © FinOps Foundation / FOCUS project
+    contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
+    Foundation. Content on this page has been restructured and adapted from
+    those sources; this guide and these servers are community projects —
+    <strong>not published or endorsed by the FinOps Foundation or the FOCUS
+    project</strong>.</p>
+    <p><strong>UNOFFICIAL legend:</strong> anything marked
+    <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
+    values, and cross-version diffs — is derived by these servers
+    (<span class="mono">official: false</span>), not published upstream; verify before
+    production use.</p>
+  </footer>
+</main>
+
+</body>
+</html>

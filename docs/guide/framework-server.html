@@ -1,0 +1,398 @@
+<title>finops-framework-mcp — FinOps MCP Servers Usage Guide</title>
+<style>
+  :root {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+      --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+      --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+    --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+    --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+  }
+  :root[data-theme="light"] {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+  }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+    line-height: 1.55; margin: 0; }
+  main { max-width: 78ch; margin: 0 auto; padding: 0 1.25rem 4rem; }
+  h1, h2, h3 { font-family: var(--serif); text-wrap: balance; line-height: 1.15; }
+  h1 { font-size: 2rem; margin: 0.25rem 0 0.5rem; font-weight: 600; }
+  h2 { font-size: 1.35rem; margin: 2.4rem 0 0.6rem; font-weight: 600;
+    border-top: 1px solid var(--line); padding-top: 1.6rem; }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; font-weight: 600; }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--slate); }
+  .lede { color: var(--slate); margin: 0.4rem 0 0; }
+  .servers { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
+  .server-chip { font-family: var(--mono); font-size: 0.78rem; padding: 0.3rem 0.65rem;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); }
+  .server-chip b { color: var(--moss); font-weight: 600; }
+  .step { margin-top: 2.6rem; display: grid; grid-template-columns: 2.1rem 1fr; gap: 0.9rem; }
+  .step-n { font-family: var(--serif); font-size: 1.5rem; color: var(--moss);
+    border-top: 2px solid var(--moss); padding-top: 0.3rem; text-align: center;
+    font-variant-numeric: tabular-nums; }
+  .step-body { border-top: 1px solid var(--line); padding-top: 0.55rem; min-width: 0; }
+  .badge { display: inline-block; font-size: 0.64rem; font-weight: 700;
+    letter-spacing: 0.08em; padding: 0.14rem 0.45rem; border-radius: 3px;
+    vertical-align: 0.15em; white-space: nowrap; }
+  .badge.official { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .badge.derived { color: var(--amber); border: 1px solid var(--amber); background: var(--amber-bg); }
+  .quote { border-left: 3px solid var(--moss); background: var(--panel-2);
+    padding: 0.7rem 1rem; margin: 0.9rem 0; font-family: var(--serif); font-size: 1.02rem; }
+  .callnote { font-family: var(--mono); font-size: 0.72rem; color: var(--slate);
+    margin-top: 0.5rem; overflow-x: auto; white-space: nowrap; }
+  details.kpi { border: 1px solid var(--line); border-radius: 6px; margin: 0.55rem 0;
+    background: var(--panel-2); }
+  details.kpi summary { cursor: pointer; padding: 0.6rem 0.9rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+  details.kpi summary::-webkit-details-marker { display: none; }
+  details.kpi[open] summary { border-bottom: 1px solid var(--line); }
+  .kpi-inner { padding: 0.7rem 0.9rem 0.9rem; font-size: 0.92rem; }
+  .formula { font-family: var(--mono); font-size: 0.8rem; background: var(--panel);
+    padding: 0.55rem 0.75rem; border-radius: 4px; margin: 0.5rem 0; overflow-x: auto;
+    white-space: pre-wrap; }
+  .cols { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+  .col-chip { font-family: var(--mono); font-size: 0.74rem; padding: 0.18rem 0.5rem;
+    border-radius: 4px; background: var(--chip-off); border: 1px solid var(--line); }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; margin: 0.7rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; min-width: 34rem; }
+  th { text-align: left; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--slate); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    background: var(--panel-2); }
+  td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, .mono { font-family: var(--mono); font-size: 0.8rem; }
+  .lvl { font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 3px; }
+  .lvl.mand { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .lvl.cond { color: var(--slate); border: 1px dashed var(--slate); }
+  .absent { color: var(--slate); font-style: italic; }
+  .zero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.6rem; margin: 0.8rem 0; }
+  .zero-card { border: 1px solid var(--line); border-radius: 6px; padding: 0.6rem 0.75rem;
+    background: var(--panel-2); }
+  .zero-card .v { font-family: var(--mono); font-size: 1.15rem; font-weight: 700; }
+  .zero-card .n { font-size: 0.72rem; color: var(--slate); margin-top: 0.15rem; }
+  .takeaway { border: 1px solid var(--moss); border-radius: 8px; padding: 0.9rem 1.1rem;
+    margin-top: 1rem; background: var(--panel-2); }
+  .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
+  a { color: var(--moss); }
+
+  /* --- shared chrome: header/nav/footer --- */
+  header.site { max-width: 78ch; margin: 0 auto; padding: 1.6rem 1.25rem 1rem; }
+  header.site h1 { font-size: 1.5rem; margin: 0 0 0.7rem; }
+  nav.site { display: flex; flex-wrap: wrap; gap: 0.4rem 0.3rem; font-size: 0.82rem; }
+  nav.site a { text-decoration: none; color: var(--slate); padding: 0.3rem 0.6rem;
+    border-radius: 999px; border: 1px solid var(--line); background: var(--panel-2); }
+  nav.site a[aria-current="page"] { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); font-weight: 600; }
+  nav.site a:hover:not([aria-current="page"]) { border-color: var(--moss); color: var(--moss-ink); }
+  main.guide-main { padding-top: 0.5rem; }
+  footer.site { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
+    border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--slate); }
+  footer.site p { margin: 0.35rem 0; }
+  .unofficial-legend { font-weight: 600; }
+
+  .datamodel { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.6rem; margin: 0.8rem 0; }
+  .dm-card { border: 1px solid var(--line); border-radius: 8px; padding: 0.75rem 0.9rem;
+    background: var(--panel-2); text-align: center; }
+  .dm-card .num { font-family: var(--serif); font-size: 1.7rem; color: var(--moss);
+    font-variant-numeric: tabular-nums; }
+  .dm-card .lbl { font-size: 0.78rem; color: var(--slate); margin-top: 0.1rem; }
+  .dm-arrow { text-align: center; font-size: 1.2rem; color: var(--slate); align-self: center; }
+  .group-hdr { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--moss-ink); background: var(--panel);
+    padding: 0.25rem 0.6rem; border-radius: 4px; display: inline-block; margin: 1.1rem 0 0.5rem; }
+</style>
+
+<header class="site">
+  <h1>FinOps MCP Servers — Usage Guide</h1>
+  <nav class="site" aria-label="Guide pages">
+    <a href="index.html">Intro &amp; Getting Started</a>
+    <a href="framework-server.html" aria-current="page">finops-framework-mcp</a>
+    <a href="focus-server.html">finops-focus-mcp</a>
+    <a href="example-showback.html">Showback</a>
+    <a href="example-esr.html">Rate Optimization (ESR)</a>
+    <a href="example-forecasting.html">Forecasting Journey</a>
+  </nav>
+</header>
+
+<main class="guide-main">
+  <p class="eyebrow">Server reference · page 2 of 6</p>
+  <h1>finops-framework-mcp</h1>
+  <p class="lede">An agentic interface to the official <strong>FinOps Framework</strong>
+  (finops.org/framework): 6 Principles, 3 Phases, 4 Domains containing 22 Capabilities,
+  11 Personas, 5 Technology Categories, Scopes, and an 88-entry KPI library — each
+  Capability carrying a definition, Crawl/Walk/Run maturity assessments, per-persona
+  activities, and featured KPIs.</p>
+  <div class="servers">
+    <span class="server-chip"><b>finops-framework-mcp</b> · data v2.1.1, crawled 2026-07-23</span>
+    <span class="server-chip">11 tools · 4 prompts · 11 fixed + 4 template resources</span>
+  </div>
+  <p class="callnote">framework · get_framework_info {}</p>
+
+  <h2 id="data-model">Data model</h2>
+  <p>The server's own orientation call lays out the hierarchy an agent walks — domains
+  group capabilities, and each capability is the unit that carries KPIs, personas, and
+  maturity guidance:</p>
+  <div class="quote">“<strong>4 Domains</strong> containing <strong>22 Capabilities</strong>
+  (the unit of practice — each with a definition, Crawl/Walk/Run maturity assessments,
+  per-persona activities, and KPIs), <strong>11 Personas</strong> (6 core + 5 allied),
+  <strong>5 Technology Categories</strong>, the Scopes concept, and a <strong>KPI
+  library</strong> (88 entries).”</div>
+  <div class="datamodel">
+    <div class="dm-card"><div class="num">4</div><div class="lbl">Domains</div></div>
+    <div class="dm-arrow">→</div>
+    <div class="dm-card"><div class="num">22</div><div class="lbl">Capabilities</div></div>
+    <div class="dm-arrow">→</div>
+    <div class="dm-card"><div class="num">88</div><div class="lbl">KPIs</div></div>
+  </div>
+  <div class="datamodel">
+    <div class="dm-card"><div class="num">11</div><div class="lbl">Personas</div></div>
+    <div class="dm-card"><div class="num">3</div><div class="lbl">Maturity levels<br>(Crawl/Walk/Run)</div></div>
+    <div class="dm-card"><div class="num">6</div><div class="lbl">Principles</div></div>
+    <div class="dm-card"><div class="num">3</div><div class="lbl">Phases</div></div>
+    <div class="dm-card"><div class="num">5</div><div class="lbl">Technology categories</div></div>
+  </div>
+  <p style="font-size:0.9rem;">The four domains, per <code>get_framework_info</code>:
+  <strong>Understand Usage &amp; Cost</strong> (4 capabilities),
+  <strong>Quantify Business Value</strong> (5), <strong>Optimize Usage &amp; Cost</strong> (5),
+  <strong>Manage the FinOps Practice</strong> (8). Phases (Inform/Optimize/Operate) are an
+  iterative lifecycle, not a partition of capabilities — the server does not offer a phase
+  filter for that reason.</p>
+  <p class="callnote">framework · get_framework_info {} → structuredContent.counts, overview_md</p>
+
+  <h2 id="tool-tour">Tool tour</h2>
+  <p>11 tools, grouped by what they're for. Names and parameters below are verified against
+  the live <code>tools/list</code> response (source: <a href="../mcp-surface.md">docs/mcp-surface.md</a>,
+  re-checked against a live probe for this page).</p>
+
+  <span class="group-hdr">Discover</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">get_framework_info</td><td>Orientation: entity counts, data version/crawl date/license, how to navigate. No params.</td><td class="mono">—</td></tr>
+      <tr><td class="mono">list_capabilities</td><td>All 22 capabilities (slug, title, domain, summary), optionally filtered.</td><td class="mono">domain, persona, limit (≤50, default 50), cursor</td></tr>
+      <tr><td class="mono">map_personas</td><td>Persona↔capability matrix. With <code>persona</code>: capabilities that persona works in, with activity bullets. With <code>capability</code>: personas active in it. With neither: full persona index.</td><td class="mono">capability, persona</td></tr>
+    </tbody>
+  </table></div>
+
+  <span class="group-hdr">Read</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">get_capability</td><td>One capability's content, section-selectable to control size (default [summary, definition] ≈1–2k tokens; all sections ≈7k).</td><td class="mono">slug (required); include: summary|definition|maturity|activities|kpis|headline_groups|inputs_outputs; persona (filters activities)</td></tr>
+      <tr><td class="mono">get_kpis</td><td>Full KPI records: description, formula + data sources, related capabilities, featured-on list. Single lookup or filtered/paged library browse.</td><td class="mono">slug, capability, featured_only (default false), limit (≤100, default 25), cursor</td></tr>
+      <tr><td class="mono">get_maturity_assessment</td><td>Official maturity assessment prose for a capability, verbatim, at one level or all three.</td><td class="mono">capability (required); level: crawl|walk|run (omit for all three)</td></tr>
+      <tr><td class="mono">get_maturity_model</td><td>The official Crawl/Walk/Run maturity model itself — capability-agnostic characteristics and sample goals/KPIs per level. No params.</td><td class="mono">—</td></tr>
+      <tr><td class="mono">get_entity</td><td>Full markdown for entity types with no dedicated tool.</td><td class="mono">entity_type (required): principles|phases|domains|technology-categories|scopes|persona; slug (required only for persona)</td></tr>
+      <tr><td class="mono">get_changelog</td><td>Rolling per-crawl diff summaries of this server's data artifact (crawl-to-crawl, capped at 20 entries).</td><td class="mono">limit (≤20, default 5)</td></tr>
+    </tbody>
+  </table></div>
+
+  <span class="group-hdr">Search</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">search_framework</td><td>Ranked keyword search over every entity type. Returns slug + uri per hit — feed slugs into get_capability/get_kpis/etc.</td><td class="mono">query (required, len ≥2); entity_types (filter); limit (≤50, default 10); cursor</td></tr>
+    </tbody>
+  </table></div>
+
+  <span class="group-hdr">Assess</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">assess_maturity_path</td><td>Official maturity assessment text at each level between a current and target level — evidence to look for when maturing.</td><td class="mono">capability (required); current_level (required, exclusive); target_level (required, must be above current)</td></tr>
+    </tbody>
+  </table></div>
+
+  <p style="font-size:0.88rem;">Behind <code>FINOPS_MCP_EXPERIMENTAL=1</code>, one additional
+  tool ships: <code class="mono">get_actions</code> <span class="badge derived">UNOFFICIAL/EXPERIMENTAL</span>
+  — maturity assessment characteristics via <code>capability</code> + <code>maturity</code>/<code>level</code>
+  (pre-crawl|crawl|walk|run, an alias pair for the same values). Off by default; this page
+  covers the shipped default posture. Source: docs/mcp-surface.md.</p>
+
+  <h2 id="prompts-resources">Prompts &amp; resources</h2>
+  <h3>Prompts (4)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Prompt</th><th>Purpose</th><th>Arguments</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">explain-framework</td><td>Guided onboarding tour of the framework, tailored to an audience.</td><td class="mono">audience (optional)</td></tr>
+      <tr><td class="mono">assess-capability-maturity</td><td>Structured interview to place an org's maturity for one capability, citing official assessment text as evidence.</td><td class="mono">capability (required)</td></tr>
+      <tr><td class="mono">plan-maturity-roadmap</td><td>Ordered plan from a current to a target maturity level, citing official assessment text as evidence.</td><td class="mono">capability, current, target (all required)</td></tr>
+      <tr><td class="mono">map-personas-to-capabilities</td><td>Engagement guide: what a persona (or every persona) does across the framework's capabilities.</td><td class="mono">persona (optional)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="callnote">framework · list-prompts (live probe, verbatim descriptions/arguments above)</p>
+
+  <h3>Resources — <code>finops://framework/…</code></h3>
+  <p>11 fixed resources plus 4 URI templates (44 concrete resources listed when templates
+  are expanded). Fixed resources are whole small documents; templates are per-entity
+  documents completed via slug (and, for maturity, level).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>URI</th><th>What it is</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">finops://framework/overview</td><td>Start here: what the framework contains, how to navigate</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/principles</td><td>The 6 FinOps Principles</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/phases</td><td>The 3 FinOps Phases (iterative lifecycle)</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/domains</td><td>The 4 Domains with their capabilities</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/technology-categories</td><td>The 5 Technology Categories</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/maturity-model</td><td>Official Crawl/Walk/Run maturity levels</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/scopes</td><td>FinOps Scopes — conceptual guidance</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/personas</td><td>All 11 personas (6 core + 5 allied)</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/capabilities</td><td>All 22 capabilities grouped by domain</td><td>fixed</td></tr>
+      <tr><td class="mono">finops://framework/meta/manifest</td><td>Data manifest (JSON): versions, crawl date, counts, source URLs, attribution</td><td>fixed, JSON</td></tr>
+      <tr><td class="mono">finops://framework/meta/changelog</td><td>Crawl changelog (JSON)</td><td>fixed, JSON</td></tr>
+      <tr><td class="mono">finops://framework/capabilities/{slug}</td><td>Full capability document: definition, maturity, activities, KPIs, inputs/outputs</td><td>template, completable</td></tr>
+      <tr><td class="mono">finops://framework/personas/{slug}</td><td>One persona's goals, objectives, capability involvement</td><td>template, completable</td></tr>
+      <tr><td class="mono">finops://framework/capabilities/{slug}/maturity/{level}</td><td>One capability's official assessment at one level</td><td>template, completable</td></tr>
+      <tr><td class="mono">finops://framework/kpis/{slug}</td><td>Full KPI record</td><td>template, completable</td></tr>
+    </tbody>
+  </table></div>
+  <p class="callnote">framework · list-resources (11 fixed confirmed live, incl. finops://framework/capabilities/anomaly-management) · docs/mcp-surface.md (template/completion detail)</p>
+
+  <h2 id="pagination">Pagination &amp; cursors</h2>
+  <p>List/search tools (<code>list_capabilities</code>, <code>get_kpis</code>,
+  <code>search_framework</code>) return an opaque <code>cursor</code> string alongside
+  results once more remain; pass it back as the <code>cursor</code> argument to continue.
+  A live 3-per-page walk of the 22 capabilities:</p>
+  <div class="callnote" style="white-space:pre-wrap;">framework · list_capabilities {limit: 3}
+→ "Showing 3 of 22 — pass cursor: "eyJ2IjoiMi4xLjEiLCJvIjozLCJoIjoieUYtbWsxYkNia09wIn0" for more."
+→ structuredContent.nextCursor: "eyJ2IjoiMi4xLjEiLCJvIjozLCJoIjoieUYtbWsxYkNia09wIn0"</div>
+  <p style="font-size:0.9rem;">The three capabilities returned were <span class="mono">allocation</span>,
+  <span class="mono">anomaly-management</span>, <span class="mono">architecting-workload-placement</span>
+  — pagination is stable ordering over the 22-entry list, cursor opaque and version-scoped
+  (embeds the data version, so a re-crawl invalidates stale cursors rather than silently
+  reordering results underneath them).</p>
+
+  <h2 id="provenance">Official vs. UNOFFICIAL, and provenance</h2>
+  <p>Everything in this server's default posture is <span class="badge official">official</span>
+  restructured FinOps Foundation content — the Framework, KPI library, personas, maturity
+  model, all as published at finops.org/framework. Every tool response carries a provenance
+  footer citing the source URL, CC BY 4.0 license, and the data version/crawl date, e.g.:</p>
+  <div class="quote" style="font-size:0.85rem; font-family:var(--mono);">Source:
+  https://www.finops.org/framework/capabilities/anomaly-management/ — © FinOps Foundation,
+  licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Content restructured
+  and adapted by finops-framework-mcp (data v2.1.1, crawled 2026-07-23); unofficial
+  extensions are always marked.</div>
+  <p>The one <span class="badge derived">UNOFFICIAL/EXPERIMENTAL</span> tool
+  (<code>get_actions</code>) only exists behind the opt-in
+  <code>FINOPS_MCP_EXPERIMENTAL=1</code> flag and is absent from every response's
+  <code>structuredContent</code> unless requested — the default posture (what a fresh
+  <code>npx finops-framework-mcp</code> serves) is 100% official content.</p>
+
+  <h2 id="demo">Worked demo: Anomaly Management end to end</h2>
+  <p>The chain an agent walks for one capability: <code>get_capability</code> for what it
+  is, <code>get_kpis</code> for what to measure, <code>get_maturity_assessment</code> for
+  how to grow it.</p>
+
+  <section class="step">
+    <div class="step-n">1</div>
+    <div class="step-body">
+      <h3>get_capability <span class="badge official">official</span></h3>
+      <div class="quote">“Detect, identify, alert and manage unexpected or unforecasted
+      technology cost and usage irregularities in a timely manner to lower risk and ensure
+      cost-effective operations.”</div>
+      <p style="font-size:0.9rem;">The full definition (trimmed here) situates it: “Anomaly
+      Management gives a FinOps team the ability to detect, identify, clarify, alert on,
+      and manage unexpected cost events in a timely manner […] Effective Allocation
+      metadata are critical to effective anomaly detection […] Use of automated, machine
+      learning–based anomaly detection is typical.” Domain: <span class="mono">understand-usage-and-cost</span>.</p>
+      <p class="callnote">framework · get_capability {slug: "anomaly-management", include: ["summary","definition"]}</p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-n">2</div>
+    <div class="step-body">
+      <h3>get_kpis, featured only <span class="badge official">official</span></h3>
+      <p>Three KPIs are featured on the capability's own page:</p>
+      <details class="kpi"><summary>Anomaly-Detected Cost Avoidance <span class="badge official">featured</span></summary>
+        <div class="kpi-inner">Measures amount of cost avoidance as a result of
+        identifying and correcting an anomaly.
+        <div class="formula">Total cost of the unpredicted &amp; correctable amount of spend * Projected Amount of Days the anomaly could have occurred if the underlying issue was not addressed</div>
+        Data source: Monitoring Tools.</div>
+      </details>
+      <details class="kpi"><summary>Anomaly Detection Rate <span class="badge official">featured</span></summary>
+        <div class="kpi-inner">Measures the frequency and cost impact of anomalies in AI
+        spending, such as sudden cost spikes or unexpected usage patterns.
+        <div class="formula">Total Cost of Anomaly Spikes / Total AI Spend = Anomaly Cost %
+where (adjust for your needs):
+Green (&lt; 2%): Healthy. Normal fluctuations.
+Yellow (2-7%): Warning. Minor anomaly trend
+Red (&gt; 7%): Critical. You have a "runaway" costs.</div>
+        Data sources: API usage reports, dashboards/logs from AI platforms, cloud billing data.
+        Related capabilities: anomaly-management, data-ingestion, reporting-analytics.</div>
+      </details>
+      <details class="kpi"><summary>Total Unpredicted Variance of Spend <span class="badge official">featured</span></summary>
+        <div class="kpi-inner">Measures the unpredicted variance of effective cost
+        associated with CSP Cloud usage recorded over a given period of time.
+        <div class="formula">Total effective cost associated with all anomalies events detected less the predicted spend of the services related to the identified anomalies</div>
+        Data source: Monitoring Tools.</div>
+      </details>
+      <p class="callnote">framework · get_kpis {capability: "anomaly-management", featured_only: true} → total: 3</p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-n">3</div>
+    <div class="step-body">
+      <h3>get_maturity_assessment, all three levels <span class="badge official">official</span></h3>
+      <p style="font-size:0.9rem;"><strong>Crawl:</strong> “Manually checking for anomalous
+      spending using reporting […] Reacting to anomaly activity more than a week after it
+      occurs (post receipt of billing data) […] Anomaly alerts sent to a central team, or
+      require manual action to look.”</p>
+      <p style="font-size:0.9rem;"><strong>Walk:</strong> “Some form of automated detection
+      or reporting or tooling […] Context-relevant thresholds are detected (percentage of
+      spend change, single item spend amount ceilings, forecast breach alerts, etc.) […]
+      Unexpected spending automatically routed to responsible teams […] KPIs associated
+      with Anomaly Management set and in use by key teams in the organization.”</p>
+      <p style="font-size:0.9rem;"><strong>Run:</strong> “Mature Anomaly detection tooling
+      in use and embedded in tooling across the organization […] Automation created to
+      detect, suggest resolution, or resolve anomalous spending alerts […] Analysis results
+      in full root cause analysis post-mortem where appropriate […] Analysis of resolution
+      of past anomalies improves alerting on future anomalies.”</p>
+      <p class="callnote">framework · get_maturity_assessment {capability: "anomaly-management", level: "crawl"} · {level: "walk"} · {level: "run"}</p>
+    </div>
+  </section>
+
+  <div class="takeaway">
+    <h3>What this demo shows</h3>
+    <p style="margin:0; font-size:0.92rem;">Three tool calls, zero invented data, one
+    complete practitioner briefing: what Anomaly Management covers, which three KPIs the
+    Foundation features on its page (with exact formulas), and the verbatim Crawl→Walk→Run
+    evidence to look for when maturing the practice — the same chain
+    <code>assess-capability-maturity</code> and <code>plan-maturity-roadmap</code> automate
+    as prompts.</p>
+  </div>
+
+  <p style="margin-top:2rem;">Next: pair this with FOCUS spec data on
+  <a href="focus-server.html">finops-focus-mcp</a>, or see both servers combined in the
+  <a href="example-esr.html">Rate Optimization (ESR)</a> worked example.</p>
+</main>
+
+<footer class="site">
+  <p>FinOps Framework content © FinOps Foundation, licensed
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Content
+  restructured and adapted by finops-framework-mcp. FOCUS™ specification content and
+  sample data © their contributors, licensed CC BY 4.0; FOCUS is a trademark of the
+  Linux Foundation.</p>
+  <p class="unofficial-legend">This page and these servers are community projects —
+  not published or endorsed by the FinOps Foundation or the FOCUS project. Content
+  marked UNOFFICIAL/EXPERIMENTAL is derived by this server, not Foundation-published;
+  verify before production use.</p>
+</footer>
