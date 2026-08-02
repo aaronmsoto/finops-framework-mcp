@@ -13,6 +13,7 @@
     "number_range": null,
     "parse_quality": "parsed",
     "requirements": [
+      "AvailabilityZone is RECOMMENDED to be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports deploying resources or services within an *availability zone*.",
       "AvailabilityZone MUST be of type String.",
       "AvailabilityZone MUST conform to [StringHandling](#stringhandling) requirements.",
       "AvailabilityZone MUST be null when a [*charge*](#glossary:charge) is not specific to an *availability zone*."
@@ -113,6 +114,8 @@
       "BillingAccountType MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports more than one possible BillingAccountType value.",
       "BillingAccountType MUST be of type String.",
       "BillingAccountType MUST conform to [StringHandling](#stringhandling) requirements.",
+      "BillingAccountType nullability is defined as follows: BillingAccountType MUST be null when [BillingAccountId](#billingaccountid) is null.",
+      "BillingAccountType nullability is defined as follows: BillingAccountType MUST NOT be null when BillingAccountId is not null.",
       "BillingAccountType MUST be a consistent, readable display value."
     ],
     "slug": "billingaccounttype",
@@ -209,7 +212,12 @@
     "requirements": [
       "CapacityReservationId MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *capacity reservations*.",
       "CapacityReservationId MUST be of type String.",
-      "CapacityReservationId MUST conform to [StringHandling](#stringhandling) requirements."
+      "CapacityReservationId MUST conform to [StringHandling](#stringhandling) requirements.",
+      "CapacityReservationId nullability is defined as follows: CapacityReservationId MUST be null when a *charge* is not related to a *capacity reservation*.",
+      "CapacityReservationId nullability is defined as follows: CapacityReservationId MUST NOT be null when a *charge* represents the unused portion of a *capacity reservation*.",
+      "CapacityReservationId nullability is defined as follows: CapacityReservationId SHOULD NOT be null when a *charge* is related to a capacity reservation.",
+      "When CapacityReservationId is not null, CapacityReservationId adheres to the following additional requirements: CapacityReservationId MUST be a unique identifier within the provider.",
+      "When CapacityReservationId is not null, CapacityReservationId adheres to the following additional requirements: CapacityReservationId SHOULD be a fully-qualified identifier."
     ],
     "slug": "capacityreservationid",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/capacityreservationid.md",
@@ -239,7 +247,12 @@
     "parse_quality": "parsed",
     "requirements": [
       "CapacityReservationStatus MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *capacity reservations*.",
-      "CapacityReservationStatus MUST be of type String."
+      "CapacityReservationStatus MUST be of type String.",
+      "CapacityReservationStatus nullability is defined as follows: CapacityReservationStatus MUST be null when CapacityReservationId is null.",
+      "CapacityReservationStatus nullability is defined as follows: CapacityReservationStatus MUST NOT be null when CapacityReservationId is not null and [ChargeCategory](#chargecategory) is \"Usage\".",
+      "When CapacityReservationStatus is not null, CapacityReservationStatus adheres to the following additional requirements: CapacityReservationStatus MUST be one of the allowed values.",
+      "When CapacityReservationStatus is not null, CapacityReservationStatus adheres to the following additional requirements: CapacityReservationStatus MUST be \"Unused\" when the *charge* represents the unused portion of a *capacity reservation*.",
+      "When CapacityReservationStatus is not null, CapacityReservationStatus adheres to the following additional requirements: CapacityReservationStatus MUST be \"Used\" when the *charge* represents the used portion of a *capacity reservation*."
     ],
     "slug": "capacityreservationstatus",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/capacityreservationstatus.md",
@@ -308,8 +321,6 @@
     "number_range": null,
     "parse_quality": "parsed",
     "requirements": [
-      "ChargeClass MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset).",
-      "ChargeClass MUST be of type String.",
       "ChargeClass MUST be \"Correction\" when ChargeClass is not null."
     ],
     "slug": "chargeclass",
@@ -367,6 +378,7 @@
     "number_range": null,
     "parse_quality": "parsed",
     "requirements": [
+      "ChargeFrequency is RECOMMENDED to be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset).",
       "ChargeFrequency MUST be of type String.",
       "ChargeFrequency MUST NOT be null.",
       "ChargeFrequency MUST be one of the allowed values.",
@@ -449,6 +461,8 @@
     "requirements": [
       "CommitmentDiscountCategory MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *commitment discounts*.",
       "CommitmentDiscountCategory MUST be of type String.",
+      "CommitmentDiscountCategory nullability is defined as follows: CommitmentDiscountCategory MUST be null when [CommitmentDiscountId](#commitmentdiscountid) is null.",
+      "CommitmentDiscountCategory nullability is defined as follows: CommitmentDiscountCategory MUST NOT be null when CommitmentDiscountId is not null.",
       "CommitmentDiscountCategory MUST be one of the allowed values."
     ],
     "slug": "commitmentdiscountcategory",
@@ -471,7 +485,11 @@
     "requirements": [
       "CommitmentDiscountId MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *commitment discounts*.",
       "CommitmentDiscountId MUST be of type String.",
-      "CommitmentDiscountId MUST conform to [StringHandling](#stringhandling) requirements."
+      "CommitmentDiscountId MUST conform to [StringHandling](#stringhandling) requirements.",
+      "CommitmentDiscountId nullability is defined as follows: CommitmentDiscountId MUST be null when a [*charge*](#glossary:charge) is not related to a *commitment discount*.",
+      "CommitmentDiscountId nullability is defined as follows: CommitmentDiscountId MUST NOT be null when a *charge* is related to a *commitment discount*.",
+      "When CommitmentDiscountId is not null, CommitmentDiscountId adheres to the following additional requirements: CommitmentDiscountId MUST be a unique identifier within the provider.",
+      "When CommitmentDiscountId is not null, CommitmentDiscountId adheres to the following additional requirements: CommitmentDiscountId SHOULD be a fully-qualified identifier."
     ],
     "slug": "commitmentdiscountid",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountid.md",
@@ -493,7 +511,10 @@
     "requirements": [
       "CommitmentDiscountName MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *commitment discounts*.",
       "CommitmentDiscountName MUST be of type String.",
-      "CommitmentDiscountName MUST conform to [StringHandling](#stringhandling) requirements."
+      "CommitmentDiscountName MUST conform to [StringHandling](#stringhandling) requirements.",
+      "CommitmentDiscountName nullability is defined as follows: CommitmentDiscountName MUST be null when [CommitmentDiscountId](#commitmentdiscountid) is null.",
+      "CommitmentDiscountName nullability is defined as follows: When CommitmentDiscountId is not null, CommitmentDiscountName adheres to the following additional requirements: CommitmentDiscountName MUST NOT be null when a display name can be assigned to a *commitment discount*.",
+      "CommitmentDiscountName nullability is defined as follows: When CommitmentDiscountId is not null, CommitmentDiscountName adheres to the following additional requirements: CommitmentDiscountName MAY be null when a display name cannot be assigned to a *commitment discount*."
     ],
     "slug": "commitmentdiscountname",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountname.md",
@@ -515,7 +536,15 @@
     "requirements": [
       "CommitmentDiscountQuantity MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *commitment discounts*.",
       "CommitmentDiscountQuantity MUST be of type Decimal.",
-      "CommitmentDiscountQuantity MUST conform to [NumericFormat](#numericformat) requirements."
+      "CommitmentDiscountQuantity MUST conform to [NumericFormat](#numericformat) requirements.",
+      "CommitmentDiscountQuantity nullability is defined as follows: When ChargeCategory is \"Usage\" or \"Purchase\" and CommitmentDiscountId is not null, CommitmentDiscountQuantity adheres to the following additional requirements: CommitmentDiscountQuantity MUST NOT be null when [ChargeClass](#chargeclass) is not \"Correction\".",
+      "CommitmentDiscountQuantity nullability is defined as follows: When ChargeCategory is \"Usage\" or \"Purchase\" and CommitmentDiscountId is not null, CommitmentDiscountQuantity adheres to the following additional requirements: CommitmentDiscountQuantity MAY be null when ChargeClass is \"Correction\".",
+      "CommitmentDiscountQuantity nullability is defined as follows: CommitmentDiscountQuantity MUST be null in all other cases.",
+      "When CommitmentDiscountQuantity is not null, CommitmentDiscountQuantity adheres to the following additional requirements: CommitmentDiscountQuantity MUST be a valid decimal value.",
+      "When CommitmentDiscountQuantity is not null, CommitmentDiscountQuantity adheres to the following additional requirements: When ChargeCategory is \"Purchase\": CommitmentDiscountQuantity MUST be the quantity of CommitmentDiscountUnit, paid fully or partially upfront, that is eligible for consumption over the *commitment discount's* *term* when [ChargeFrequency](#chargefrequency) is \"One-Time\".",
+      "When CommitmentDiscountQuantity is not null, CommitmentDiscountQuantity adheres to the following additional requirements: When ChargeCategory is \"Purchase\": CommitmentDiscountQuantity MUST be the quantity of CommitmentDiscountUnit that is eligible for consumption for each *charge period* that corresponds with the purchase when ChargeFrequency is \"Recurring\".",
+      "When CommitmentDiscountQuantity is not null, CommitmentDiscountQuantity adheres to the following additional requirements: When ChargeCategory is \"Usage\": CommitmentDiscountQuantity MUST be the metered quantity of CommitmentDiscountUnit that is consumed in a given *charge period* when [CommitmentDiscountStatus](#commitmentdiscountstatus) is \"Used\".",
+      "When CommitmentDiscountQuantity is not null, CommitmentDiscountQuantity adheres to the following additional requirements: When ChargeCategory is \"Usage\": CommitmentDiscountQuantity MUST be the remaining, unused quantity of CommitmentDiscountUnit in a given *charge period* when CommitmentDiscountStatus is \"Unused\"."
     ],
     "slug": "commitmentdiscountquantity",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountquantity.md",
@@ -546,6 +575,8 @@
     "requirements": [
       "CommitmentDiscountStatus MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *commitment discounts*.",
       "CommitmentDiscountStatus MUST be of type String.",
+      "CommitmentDiscountStatus nullability is defined as follows: CommitmentDiscountStatus MUST be null when [CommitmentDiscountId](#commitmentdiscountid) is null.",
+      "CommitmentDiscountStatus nullability is defined as follows: CommitmentDiscountStatus MUST NOT be null when CommitmentDiscountId is not null and [Charge Category](#chargecategory) is \"Usage\".",
       "CommitmentDiscountStatus MUST be one of the allowed values."
     ],
     "slug": "commitmentdiscountstatus",
@@ -568,7 +599,9 @@
     "requirements": [
       "CommitmentDiscountType MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *commitment discounts*.",
       "CommitmentDiscountType MUST be of type String.",
-      "CommitmentDiscountType MUST conform to [StringHandling](#stringhandling) requirements."
+      "CommitmentDiscountType MUST conform to [StringHandling](#stringhandling) requirements.",
+      "CommitmentDiscountType nullability is defined as follows: CommitmentDiscountType MUST be null when [CommitmentDiscountId](#commitmentdiscountid) is null.",
+      "CommitmentDiscountType nullability is defined as follows: CommitmentDiscountType MUST NOT be null when CommitmentDiscountId is not null."
     ],
     "slug": "commitmentdiscounttype",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscounttype.md",
@@ -591,7 +624,12 @@
       "CommitmentDiscountUnit MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports *commitment discounts*.",
       "CommitmentDiscountUnit MUST be of type String.",
       "CommitmentDiscountUnit MUST conform to [StringHandling](#stringhandling) requirements.",
-      "CommitmentDiscountUnit SHOULD conform to [UnitFormat](#unitformat) requirements."
+      "CommitmentDiscountUnit SHOULD conform to [UnitFormat](#unitformat) requirements.",
+      "CommitmentDiscountUnit nullability is defined as follows: CommitmentDiscountUnit MUST be null when CommitmentDiscountQuantity is null.",
+      "CommitmentDiscountUnit nullability is defined as follows: CommitmentDiscountUnit MUST NOT be null when CommitmentDiscountQuantity is not null.",
+      "When CommitmentDiscountUnit is not null, CommitmentDiscountUnit adheres to the following additional requirements: CommitmentDiscountUnit MUST remain consistent over time for a given CommitmentDiscountId.",
+      "When CommitmentDiscountUnit is not null, CommitmentDiscountUnit adheres to the following additional requirements: CommitmentDiscountUnit MUST represent the unit used to measure the *commitment discount*.",
+      "When CommitmentDiscountUnit is not null, CommitmentDiscountUnit adheres to the following additional requirements: When accounting for [*commitment discount flexibility*](#glossary:commitment-discount-flexibility), the CommitmentDiscountUnit value SHOULD reflect this consideration."
     ],
     "slug": "commitmentdiscountunit",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountunit.md",
@@ -614,6 +652,9 @@
       "ConsumedQuantity MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports the measurement of usage.",
       "ConsumedQuantity MUST be of type Decimal.",
       "ConsumedQuantity MUST conform to [NumericFormat](#numericformat) requirements.",
+      "ConsumedQuantity nullability is defined as follows: ConsumedQuantity MUST be null when [ChargeCategory](#chargecategory) is not \"Usage\", or when ChargeCategory is \"Usage\" and [CommitmentDiscountStatus](#commitmentdiscountstatus) is \"Unused\".",
+      "ConsumedQuantity nullability is defined as follows: When ChargeCategory is \"Usage\" and CommitmentDiscountStatus is not \"Unused\", ConsumedQuantity adheres to the following additional requirements: ConsumedQuantity MUST NOT be null when [ChargeClass](#chargeclass) is not \"Correction\".",
+      "ConsumedQuantity nullability is defined as follows: When ChargeCategory is \"Usage\" and CommitmentDiscountStatus is not \"Unused\", ConsumedQuantity adheres to the following additional requirements: ConsumedQuantity MAY be null when ChargeClass is \"Correction\".",
       "ConsumedQuantity MUST be a valid decimal value when not null."
     ],
     "slug": "consumedquantity",
@@ -637,7 +678,9 @@
       "ConsumedUnit MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports the measurement of usage.",
       "ConsumedUnit MUST be of type String.",
       "ConsumedUnit MUST conform to [StringHandling](#stringhandling) requirements.",
-      "ConsumedUnit SHOULD conform to [UnitFormat](#unitformat) requirements."
+      "ConsumedUnit SHOULD conform to [UnitFormat](#unitformat) requirements.",
+      "ConsumedUnit nullability is defined as follows: ConsumedUnit MUST be null when ConsumedQuantity is null.",
+      "ConsumedUnit nullability is defined as follows: ConsumedUnit MUST NOT be null when ConsumedQuantity is not null."
     ],
     "slug": "consumedunit",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/consumedunit.md",
@@ -663,7 +706,10 @@
       "ContractedCost MUST NOT be null.",
       "ContractedCost MUST be a valid decimal value.",
       "ContractedCost MUST be denominated in the BillingCurrency.",
-      "The product of ContractedUnitPrice and PricingQuantity MUST match the ContractedCost when ContractedUnitPrice is not null, PricingQuantity is not null, and [ChargeClass](#chargeclass) is not \"Correction\"."
+      "When [ContractedUnitPrice](#contractedunitprice) is null, ContractedCost adheres to the following additional requirements: ContractedCost of a [*charge*](#glossary:charge) calculated based on other *charges* (e.g., when the [ChargeCategory](#chargecategory) is \"Tax\") MUST be calculated based on the ContractedCost of those related *charges*.",
+      "When [ContractedUnitPrice](#contractedunitprice) is null, ContractedCost adheres to the following additional requirements: ContractedCost of a *charge* unrelated to other *charges* (e.g., when the ChargeCategory is \"Credit\") MUST match the [BilledCost](#billedcost).",
+      "The product of ContractedUnitPrice and PricingQuantity MUST match the ContractedCost when ContractedUnitPrice is not null, PricingQuantity is not null, and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "Discrepancies in ContractedCost, ContractedUnitPrice, or PricingQuantity MAY exist when ChargeClass is \"Correction\"."
     ],
     "slug": "contractedcost",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/contractedcost.md",
@@ -685,7 +731,14 @@
     "requirements": [
       "ContractedUnitPrice MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports negotiated pricing concepts.",
       "ContractedUnitPrice MUST be of type Decimal.",
-      "ContractedUnitPrice MUST conform to [NumericFormat](#numericformat) requirements."
+      "ContractedUnitPrice MUST conform to [NumericFormat](#numericformat) requirements.",
+      "ContractedUnitPrice nullability is defined as follows: ContractedUnitPrice MUST be null when [ChargeCategory](#chargecategory) is \"Tax\".",
+      "ContractedUnitPrice nullability is defined as follows: ContractedUnitPrice MUST NOT be null when ChargeCategory is \"Usage\" or \"Purchase\" and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "ContractedUnitPrice nullability is defined as follows: ContractedUnitPrice MAY be null in all other cases.",
+      "When ContractedUnitPrice is not null, ContractedUnitPrice adheres to the following additional requirements: ContractedUnitPrice MUST be a non-negative decimal value.",
+      "When ContractedUnitPrice is not null, ContractedUnitPrice adheres to the following additional requirements: ContractedUnitPrice MUST be denominated in the BillingCurrency.",
+      "When ContractedUnitPrice is not null, ContractedUnitPrice adheres to the following additional requirements: The product of ContractedUnitPrice and [PricingQuantity](#pricingquantity) MUST match the [ContractedCost](#contractedcost) when PricingQuantity is not null and ChargeClass is not \"Correction\".",
+      "Discrepancies in ContractedUnitPrice, ContractedCost, or PricingQuantity MAY exist when ChargeClass is \"Correction\"."
     ],
     "slug": "contractedunitprice",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/contractedunitprice.md",
@@ -711,7 +764,11 @@
       "EffectiveCost MUST NOT be null.",
       "EffectiveCost MUST be a valid decimal value.",
       "EffectiveCost MUST be 0 when [ChargeCategory](#chargecategory) is \"Purchase\" and the purchase is intended to cover future eligible *charges*.",
-      "EffectiveCost MUST be denominated in the BillingCurrency."
+      "EffectiveCost MUST be denominated in the BillingCurrency.",
+      "When ChargeCategory is not \"Usage\" or \"Purchase\", EffectiveCost adheres to the following additional requirements: EffectiveCost of a *charge* calculated based on other *charges* (e.g., when the ChargeCategory is \"Tax\") MUST be calculated based on the EffectiveCost of those related *charges*.",
+      "When ChargeCategory is not \"Usage\" or \"Purchase\", EffectiveCost adheres to the following additional requirements: EffectiveCost of a *charge* unrelated to other *charges* (e.g., when the ChargeCategory is \"Credit\") MUST match the [BilledCost](#billedcost).",
+      "*Charges* for a given [CommitmentDiscountId](#commitmentdiscountid) adhere to the following additional requirements: The sum of EffectiveCost where ChargeCategory is \"Usage\" MUST equal the sum of BilledCost where ChargeCategory is \"Purchase\".",
+      "*Charges* for a given [CommitmentDiscountId](#commitmentdiscountid) adhere to the following additional requirements: The sum of EffectiveCost where ChargeCategory is \"Usage\" MUST equal the sum of EffectiveCost where ChargeCategory is \"Usage\" and [CommitmentDiscountStatus](#commitmentdiscountstatus) is \"Used\", plus the sum of EffectiveCost where ChargeCategory is \"Usage\" and CommitmentDiscountStatus is \"Unused\"."
     ],
     "slug": "effectivecost",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/effectivecost.md",
@@ -731,8 +788,12 @@
     "number_range": null,
     "parse_quality": "parsed",
     "requirements": [
+      "InvoiceId is RECOMMENDED to be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset).",
       "InvoiceId MUST be of type String.",
       "InvoiceId MUST conform to [StringHandling](#stringhandling) requirements.",
+      "InvoiceId nullability is defined as follows: InvoiceId MUST be null when the *charge* is not associated either with an invoice or with a pre-generated provisional invoice.",
+      "InvoiceId nullability is defined as follows: InvoiceId MUST NOT be null when the *charge* is associated with either an issued invoice or a pre-generated provisional invoice.",
+      "InvoiceId MAY be generated prior to an invoice being issued.",
       "InvoiceId MUST be associated with the related *charge* and BillingAccountId when a pre-generated invoice or provisional invoice exists."
     ],
     "slug": "invoiceid",
@@ -782,7 +843,10 @@
       "ListCost MUST NOT be null.",
       "ListCost MUST be a valid decimal value.",
       "ListCost MUST be denominated in the BillingCurrency.",
-      "The product of ListUnitPrice and PricingQuantity MUST match the ListCost when ListUnitPrice is not null, PricingQuantity is not null, and [ChargeClass](#chargeclass) is not \"Correction\"."
+      "When [ListUnitPrice](#listunitprice) is null, ListCost adheres to the following additional requirements: ListCost of a [*charge*](#glossary:charge) calculated based on other *charges* (e.g., when the [ChargeCategory](#chargecategory) is \"Tax\") MUST be calculated based on the ListCost of those related *charges*.",
+      "When [ListUnitPrice](#listunitprice) is null, ListCost adheres to the following additional requirements: ListCost of a *charge* unrelated to other *charges* (e.g., when the ChargeCategory is \"Credit\") MUST match the [BilledCost](#billedcost).",
+      "The product of ListUnitPrice and PricingQuantity MUST match the ListCost when ListUnitPrice is not null, PricingQuantity is not null, and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "Discrepancies in ListCost, ListUnitPrice, or PricingQuantity MAY exist when ChargeClass is \"Correction\"."
     ],
     "slug": "listcost",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/listcost.md",
@@ -804,7 +868,14 @@
     "requirements": [
       "ListUnitPrice MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider publishes unit prices exclusive of discounts.",
       "ListUnitPrice MUST be of type Decimal.",
-      "ListUnitPrice MUST conform to [NumericFormat](#numericformat) requirements."
+      "ListUnitPrice MUST conform to [NumericFormat](#numericformat) requirements.",
+      "ListUnitPrice nullability is defined as follows: ListUnitPrice MUST be null when [ChargeCategory](#chargecategory) is \"Tax\".",
+      "ListUnitPrice nullability is defined as follows: ListUnitPrice MUST NOT be null when ChargeCategory is \"Usage\" or \"Purchase\" and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "ListUnitPrice nullability is defined as follows: ListUnitPrice MAY be null in all other cases.",
+      "When ListUnitPrice is not null, ListUnitPrice adheres to the following additional requirements: ListUnitPrice MUST be a non-negative decimal value.",
+      "When ListUnitPrice is not null, ListUnitPrice adheres to the following additional requirements: ListUnitPrice MUST be denominated in the BillingCurrency.",
+      "When ListUnitPrice is not null, ListUnitPrice adheres to the following additional requirements: The product of ListUnitPrice and [PricingQuantity](#pricingquantity) MUST match the [ListCost](#listcost) when PricingQuantity is not null and ChargeClass is not \"Correction\".",
+      "When ListUnitPrice is not null, ListUnitPrice adheres to the following additional requirements: Discrepancies in ListUnitPrice, ListCost, or PricingQuantity MAY exist when ChargeClass is \"Correction\"."
     ],
     "slug": "listunitprice",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/listunitprice.md",
@@ -842,7 +913,15 @@
     "parse_quality": "parsed",
     "requirements": [
       "PricingCategory MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports more than one pricing category across all [*SKUs*](#glossary:sku).",
-      "PricingCategory MUST be of type String."
+      "PricingCategory MUST be of type String.",
+      "PricingCategory nullability is defined as follows: PricingCategory MUST be null when [ChargeCategory](#chargecategory) is \"Tax\".",
+      "PricingCategory nullability is defined as follows: PricingCategory MUST NOT be null when ChargeCategory is \"Usage\" or \"Purchase\" and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "PricingCategory nullability is defined as follows: PricingCategory MAY be null in all other cases.",
+      "When PricingCategory is not null, PricingCategory adheres to the following additional requirements: PricingCategory MUST be one of the allowed values.",
+      "When PricingCategory is not null, PricingCategory adheres to the following additional requirements: PricingCategory MUST be \"Standard\" when pricing is predetermined at the agreed upon rate for the [billing account](#glossary:billing-account).",
+      "When PricingCategory is not null, PricingCategory adheres to the following additional requirements: PricingCategory MUST be \"Committed\" when the *charge* is subject to an existing *commitment discount* and is not the purchase of the *commitment discount*.",
+      "When PricingCategory is not null, PricingCategory adheres to the following additional requirements: PricingCategory MUST be \"Dynamic\" when pricing is determined by the provider and may change over time, regardless of predetermined agreement pricing.",
+      "When PricingCategory is not null, PricingCategory adheres to the following additional requirements: PricingCategory MUST be \"Other\" when there is a pricing model but none of the allowed values apply."
     ],
     "slug": "pricingcategory",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingcategory.md",
@@ -886,8 +965,17 @@
     "number_range": "Any valid non-negative decimal value",
     "parse_quality": "parsed",
     "requirements": [
+      "PricingCurrencyContractedUnitPrice presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyContractedUnitPrice MUST be present in a *FOCUS dataset* when the provider supports prices in virtual currency and publishes unit prices exclusive of discounts.",
+      "PricingCurrencyContractedUnitPrice presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyContractedUnitPrice is RECOMMENDED to be present in a *FOCUS dataset* when the provider supports pricing and billing in different currencies and publishes unit prices exclusive of discounts.",
+      "PricingCurrencyContractedUnitPrice presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyContractedUnitPrice MAY be present in a *FOCUS dataset* in all other cases.",
       "PricingCurrencyContractedUnitPrice MUST be of type Decimal.",
-      "PricingCurrencyContractedUnitPrice MUST conform to [NumericFormat](#numericformat) requirements."
+      "PricingCurrencyContractedUnitPrice MUST conform to [NumericFormat](#numericformat) requirements.",
+      "PricingCurrencyContractedUnitPrice nullability is defined as follows: PricingCurrencyContractedUnitPrice MUST be null when [ChargeCategory](#chargecategory) is \"Tax\".",
+      "PricingCurrencyContractedUnitPrice nullability is defined as follows: PricingCurrencyContractedUnitPrice MUST NOT be null when ChargeCategory is \"Usage\" or \"Purchase\" and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "PricingCurrencyContractedUnitPrice nullability is defined as follows: PricingCurrencyContractedUnitPrice MAY be null in all other cases.",
+      "When PricingCurrencyContractedUnitPrice is not null, PricingCurrencyContractedUnitPrice adheres to the following additional requirements: PricingCurrencyContractedUnitPrice MUST be a non-negative decimal value.",
+      "When PricingCurrencyContractedUnitPrice is not null, PricingCurrencyContractedUnitPrice adheres to the following additional requirements: PricingCurrencyContractedUnitPrice MUST be denominated in the PricingCurrency.",
+      "Discrepancies in PricingCurrencyContractedUnitPrice, [ContractedCost](#contractedcost), or [PricingQuantity](#pricingquantity) MAY exist when ChargeClass is \"Correction\"."
     ],
     "slug": "pricingcurrencycontractedunitprice",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingcurrencycontractedunitprice.md",
@@ -907,6 +995,9 @@
     "number_range": "Any valid decimal value",
     "parse_quality": "parsed",
     "requirements": [
+      "PricingCurrencyEffectiveCost presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyEffectiveCost MUST be present in a *FOCUS dataset* when the provider supports prices in virtual currency and publishes unit prices exclusive of discounts.",
+      "PricingCurrencyEffectiveCost presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyEffectiveCost is RECOMMENDED to be present in a *FOCUS dataset* when the provider supports pricing and billing in different currencies and publishes unit prices exclusive of discounts.",
+      "PricingCurrencyEffectiveCost presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyEffectiveCost MAY be present in a *FOCUS dataset* in all other cases.",
       "PricingCurrencyEffectiveCost MUST be of type Decimal.",
       "PricingCurrencyEffectiveCost MUST conform to [NumericFormat](#numericformat) requirements.",
       "PricingCurrencyEffectiveCost MUST NOT be null.",
@@ -932,8 +1023,17 @@
     "number_range": "Any valid non-negative decimal value",
     "parse_quality": "parsed",
     "requirements": [
+      "PricingCurrencyListUnitPrice presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyListUnitPrice MUST be present in a *FOCUS dataset* when the provider supports prices in virtual currency and publishes unit prices exclusive of discounts.",
+      "PricingCurrencyListUnitPrice presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyListUnitPrice is RECOMMENDED to be present in a *FOCUS dataset* when the provider supports pricing and billing in different currencies and publishes unit prices exclusive of discounts.",
+      "PricingCurrencyListUnitPrice presence in a [*FOCUS dataset*](#glossary:FOCUS-dataset) is defined as follows: PricingCurrencyListUnitPrice MAY be present in a *FOCUS dataset* in all other cases.",
       "PricingCurrencyListUnitPrice MUST be of type Decimal.",
-      "PricingCurrencyListUnitPrice MUST conform to [NumericFormat](#numericformat) requirements."
+      "PricingCurrencyListUnitPrice MUST conform to [NumericFormat](#numericformat) requirements.",
+      "PricingCurrencyListUnitPrice nullability is defined as follows: PricingCurrencyListUnitPrice MUST be null when [ChargeCategory](#chargecategory) is \"Tax\".",
+      "PricingCurrencyListUnitPrice nullability is defined as follows: PricingCurrencyListUnitPrice MUST NOT be null when ChargeCategory is \"Usage\" or \"Purchase\" and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "PricingCurrencyListUnitPrice nullability is defined as follows: PricingCurrencyListUnitPrice MAY be null in all other cases.",
+      "When PricingCurrencyListUnitPrice is not null, ListUnitPrice adheres to the following additional requirements: PricingCurrencyListUnitPrice MUST be a non-negative decimal value.",
+      "When PricingCurrencyListUnitPrice is not null, ListUnitPrice adheres to the following additional requirements: PricingCurrencyListUnitPrice MUST be denominated in the PricingCurrency.",
+      "When PricingCurrencyListUnitPrice is not null, ListUnitPrice adheres to the following additional requirements: Discrepancies in PricingCurrencyListUnitPrice, ListCost, or PricingQuantity MAY be addressed independently when ChargeClass is \"Correction\"."
     ],
     "slug": "pricingcurrencylistunitprice",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingcurrencylistunitprice.md",
@@ -955,7 +1055,13 @@
     "requirements": [
       "PricingQuantity MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset).",
       "PricingQuantity MUST be of type Decimal.",
-      "PricingQuantity MUST conform to [NumericFormat](#numericformat) requirements."
+      "PricingQuantity MUST conform to [NumericFormat](#numericformat) requirements.",
+      "PricingQuantity nullability is defined as follows: PricingQuantity MUST be null when [ChargeCategory](#chargecategory) is \"Tax\".",
+      "PricingQuantity nullability is defined as follows: PricingQuantity MUST NOT be null when ChargeCategory is \"Usage\" or \"Purchase\" and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "PricingQuantity nullability is defined as follows: PricingQuantity MAY be null in all other cases.",
+      "When PricingQuantity is not null, PricingQuantity adheres to the following additional requirements: PricingQuantity MUST be a valid decimal value.",
+      "When PricingQuantity is not null, PricingQuantity adheres to the following additional requirements: The product of PricingQuantity and a unit price (e.g., [ContractedUnitPrice](#contractedunitprice)) MUST match the corresponding cost metric (e.g., [ContractedCost](#contractedcost)) when the unit price is not null and ChargeClass is not \"Correction\".",
+      "Discrepancies in PricingQuantity, unit prices (e.g., ContractedUnitPrice), or costs (e.g., ContractedCost) MAY exist when ChargeClass is \"Correction\"."
     ],
     "slug": "pricingquantity",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingquantity.md",
@@ -978,7 +1084,11 @@
       "PricingUnit MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset).",
       "PricingUnit MUST be of type String.",
       "PricingUnit MUST conform to [StringHandling](#stringhandling) requirements.",
-      "PricingUnit SHOULD conform to [UnitFormat](#unitformat) requirements."
+      "PricingUnit SHOULD conform to [UnitFormat](#unitformat) requirements.",
+      "PricingUnit nullability is defined as follows: PricingUnit MUST be null when PricingQuantity is null.",
+      "PricingUnit nullability is defined as follows: PricingUnit MUST NOT be null when PricingQuantity is not null.",
+      "When PricingUnit is not null, PricingUnit adheres to the following additional requirements: PricingUnit MUST be semantically equal to the corresponding pricing measurement unit provided in provider-published [*price list*](#glossary:price-list).",
+      "When PricingUnit is not null, PricingUnit adheres to the following additional requirements: PricingUnit MUST be semantically equal to the corresponding pricing measurement unit provided in invoice, when the invoice includes a pricing measurement unit."
     ],
     "slug": "pricingunit",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingunit.md",
@@ -1046,7 +1156,9 @@
     "requirements": [
       "RegionId MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports deploying resources or services within a region.",
       "RegionId MUST be of type String.",
-      "RegionId MUST conform to [StringHandling](#stringhandling) requirements."
+      "RegionId MUST conform to [StringHandling](#stringhandling) requirements.",
+      "RegionId nullability is defined as follows: RegionId MUST NOT be null when a *resource* or *service* is operated in or managed from a distinct region.",
+      "RegionId nullability is defined as follows: RegionId MAY be null when a *resource* or *service* is not operated in or managed from a distinct region."
     ],
     "slug": "regionid",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/regionid.md",
@@ -1068,7 +1180,9 @@
     "requirements": [
       "RegionName MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports deploying resources or services within a region.",
       "RegionName MUST be of type String.",
-      "RegionName MUST conform to [StringHandling](#stringhandling) requirements."
+      "RegionName MUST conform to [StringHandling](#stringhandling) requirements.",
+      "RegionName nullability is defined as follows: RegionName MUST be null when [RegionId](#regionid) is null.",
+      "RegionName nullability is defined as follows: RegionName MUST NOT be null when RegionId is not null."
     ],
     "slug": "regionname",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/regionname.md",
@@ -1090,7 +1204,11 @@
     "requirements": [
       "ResourceId MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports billing based on provisioned *resources*.",
       "ResourceId MUST be of type String.",
-      "ResourceId MUST conform to [StringHandling](#stringhandling) requirements."
+      "ResourceId MUST conform to [StringHandling](#stringhandling) requirements.",
+      "ResourceId nullability is defined as follows: ResourceId MUST be null when a [*charge*](#glossary:charge) is not related to a *resource*.",
+      "ResourceId nullability is defined as follows: ResourceId MUST NOT be null when a *charge* is related to a *resource*.",
+      "When ResourceId is not null, ResourceId adheres to the following additional requirements: ResourceId MUST be a unique identifier within the provider.",
+      "When ResourceId is not null, ResourceId adheres to the following additional requirements: ResourceId SHOULD be a fully-qualified identifier."
     ],
     "slug": "resourceid",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/resourceid.md",
@@ -1113,6 +1231,8 @@
       "ResourceName MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports billing based on provisioned resources.",
       "ResourceName MUST be of type String.",
       "ResourceName MUST conform to [StringHandling](#stringhandling) requirements.",
+      "ResourceName nullability is defined as follows: ResourceName MUST be null when [ResourceId](#resourceid) is null or when the *resource* does not have an assigned display name.",
+      "ResourceName nullability is defined as follows: ResourceName MUST NOT be null when ResourceId is not null and the *resource* has an assigned display name.",
       "ResourceName MUST NOT duplicate ResourceId when the *resource* is not provisioned interactively or only has a system-generated ResourceId."
     ],
     "slug": "resourcename",
@@ -1135,7 +1255,9 @@
     "requirements": [
       "ResourceType MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports billing based on provisioned *resources* and supports assigning types to *resources*.",
       "ResourceType MUST be of type String.",
-      "ResourceType MUST conform to [StringHandling](#stringhandling) requirements."
+      "ResourceType MUST conform to [StringHandling](#stringhandling) requirements.",
+      "ResourceType nullability is defined as follows: ResourceType MUST be null when [ResourceId](#resourceid) is null.",
+      "ResourceType nullability is defined as follows: ResourceType MUST NOT be null when ResourceId is not null."
     ],
     "slug": "resourcetype",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/resourcetype.md",
@@ -1258,7 +1380,11 @@
       "ServiceName MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset).",
       "ServiceName MUST be of type String.",
       "ServiceName MUST conform to [StringHandling](#stringhandling) requirements.",
-      "ServiceName MUST NOT be null."
+      "ServiceName MUST NOT be null.",
+      "The relationship between ServiceName and [ServiceCategory](#servicecategory) is defined as follows: ServiceName MUST have one and only one ServiceCategory that best aligns with its primary purpose, except when no suitable ServiceCategory is available.",
+      "The relationship between ServiceName and [ServiceCategory](#servicecategory) is defined as follows: ServiceName MUST be associated with the ServiceCategory \"Other\" when no suitable ServiceCategory is available.",
+      "The relationship between ServiceName and [ServiceSubcategory](#servicesubcategory) is defined as follows: ServiceName SHOULD have one and only one ServiceSubcategory that best aligns with its primary purpose, except when no suitable ServiceSubcategory is available.",
+      "The relationship between ServiceName and [ServiceSubcategory](#servicesubcategory) is defined as follows: ServiceName SHOULD be associated with the ServiceSubcategory \"Other\" when no suitable ServiceSubcategory is available."
     ],
     "slug": "servicename",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/servicename.md",
@@ -1607,6 +1733,7 @@
     "number_range": null,
     "parse_quality": "parsed",
     "requirements": [
+      "ServiceSubcategory is RECOMMENDED to be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset).",
       "ServiceSubcategory MUST be of type String.",
       "ServiceSubcategory MUST NOT be null.",
       "ServiceSubcategory MUST be one of the allowed values.",
@@ -1633,7 +1760,14 @@
       "SkuId MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports unit pricing concepts and publishes price lists, publicly or as part of contracting.",
       "SkuId MUST be of type String.",
       "SkuId MUST conform to [StringHandling](#stringhandling) requirements.",
-      "SkuId MUST be associated with a given [*resource*](#glossary:resource) or [*service*](#glossary:service) when ChargeCategory is \"Usage\" or \"Purchase\"."
+      "SkuId nullability is defined as follows: SkuId MUST be null when [ChargeCategory](#chargecategory) is \"Tax\".",
+      "SkuId nullability is defined as follows: SkuId MUST NOT be null when ChargeCategory is \"Usage\" or \"Purchase\" and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "SkuId nullability is defined as follows: SkuId MAY be null in all other cases.",
+      "SkuId for a given *SKU* adheres to the following additional requirements: SkuId MUST remain consistent across [*billing accounts*](#glossary:billing-account) or contracts.",
+      "SkuId for a given *SKU* adheres to the following additional requirements: SkuId MUST remain consistent across [PricingCategory](#pricingcategory) values.",
+      "SkuId for a given *SKU* adheres to the following additional requirements: SkuId MUST remain consistent regardless of any other factors that might impact the price but do not affect the functionality of the *SKU*.",
+      "SkuId MUST be associated with a given [*resource*](#glossary:resource) or [*service*](#glossary:service) when ChargeCategory is \"Usage\" or \"Purchase\".",
+      "SkuId MAY equal [SkuPriceId](#SkuPriceId)."
     ],
     "slug": "skuid",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/skuid.md",
@@ -1656,6 +1790,8 @@
       "SkuMeter MUST be present in a *FOCUS dataset* when the provider supports unit pricing concepts and publishes [*price lists*](#glossary:price-list), publicly or as part of contracting.",
       "SkuMeter MUST be of type String.",
       "SkuMeter MUST conform to [StringHandling](#stringhandling) requirements.",
+      "SkuMeter nullability is defined as follows: SkuMeter MUST be null when [SkuId](#skuid) is null.",
+      "SkuMeter nullability is defined as follows: SkuMeter SHOULD NOT be null when SkuId is not null.",
       "SkuMeter SHOULD remain consistent over time for a given SkuId."
     ],
     "slug": "skumeter",
@@ -1731,7 +1867,23 @@
     "requirements": [
       "SkuPriceDetails MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports unit pricing concepts and publishes [*price lists*](#glossary:price-list), publicly or as part of contracting.",
       "SkuPriceDetails MUST conform to [KeyValueFormat](#key-valueformat) requirements.",
-      "SkuPriceDetails property keys SHOULD conform to [PascalCase](#glossary:pascalcase) format."
+      "SkuPriceDetails property keys SHOULD conform to [PascalCase](#glossary:pascalcase) format.",
+      "SkuPriceDetails nullability is defined as follows: SkuPriceDetails MUST be null when SkuPriceId is null.",
+      "SkuPriceDetails nullability is defined as follows: SkuPriceDetails MAY be null when SkuPriceId is not null.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: SkuPriceDetails MUST be associated with a given SkuPriceId.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: SkuPriceDetails MUST NOT include properties that are not applicable to the corresponding SkuPriceId.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: SkuPriceDetails SHOULD include all FOCUS-defined SKU Price properties listed below that are applicable to the corresponding SkuPriceId.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: SkuPriceDetails MUST include the FOCUS-defined SKU Price property when an equivalent property is included as a Provider-defined property.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: SkuPriceDetails MAY include properties that are already captured in other dedicated columns.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: SkuPriceDetails properties for a given SkuPriceId adhere to the following additional requirements: Existing SkuPriceDetails properties SHOULD remain consistent over time.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: SkuPriceDetails properties for a given SkuPriceId adhere to the following additional requirements: Existing SkuPriceDetails properties SHOULD NOT be removed.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: SkuPriceDetails properties for a given SkuPriceId adhere to the following additional requirements: Additional SkuPriceDetails properties MAY be added over time.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: Property key SHOULD remain consistent across comparable *SKUs* having that property, and the values for this key SHOULD remain in a consistent format.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: Property key MUST begin with the string \"x_\" unless it is a FOCUS-defined property.",
+      "When SkuPriceDetails is not null, SkuPriceDetails adheres to the following additional requirements: Property value MUST represent the value for a single [PricingUnit](#pricingunit) when the property holds a numeric value.",
+      "FOCUS-defined SKU Price properties adhere to the following additional requirements: Property key MUST match the spelling and casing specified for the FOCUS-defined property.",
+      "FOCUS-defined SKU Price properties adhere to the following additional requirements: Property value MUST be of the type specified for that property.",
+      "FOCUS-defined SKU Price properties adhere to the following additional requirements: Property value MUST represent the value for a single PricingUnit, denominated in the unit of measure specified for that property when the property holds a numeric value."
     ],
     "slug": "skupricedetails",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/skupricedetails.md",
@@ -1753,7 +1905,18 @@
     "requirements": [
       "SkuPriceId MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports unit pricing concepts and publishes *price lists*, publicly or as part of contracting.",
       "SkuPriceId MUST be of type String.",
-      "SkuPriceId MUST conform to [String Handling](#stringhandling) requirements."
+      "SkuPriceId MUST conform to [String Handling](#stringhandling) requirements.",
+      "SkuPriceId nullability is defined as follows: SkuPriceId MUST be null when [ChargeCategory](#chargecategory) is \"Tax\".",
+      "SkuPriceId nullability is defined as follows: SkuPriceId MUST NOT be null when ChargeCategory is \"Usage\" or \"Purchase\" and [ChargeClass](#chargeclass) is not \"Correction\".",
+      "SkuPriceId nullability is defined as follows: SkuPriceId MAY be null in all other cases.",
+      "When SkuPriceId is not null, SkuPriceId adheres to the following additional requirements: SkuPriceId MUST have one and only one parent [SkuId](#skuid).",
+      "When SkuPriceId is not null, SkuPriceId adheres to the following additional requirements: SkuPriceId MUST remain consistent over time.",
+      "When SkuPriceId is not null, SkuPriceId adheres to the following additional requirements: SkuPriceId MUST remain consistent across [*billing accounts*](#glossary:billing-account) or contracts.",
+      "When SkuPriceId is not null, SkuPriceId adheres to the following additional requirements: SkuPriceId MAY equal SkuId.",
+      "When SkuPriceId is not null, SkuPriceId adheres to the following additional requirements: SkuPriceId MUST be associated with a given [*resource*](#glossary:resource) or [*service*](#glossary:service) when ChargeCategory is \"Usage\" or \"Purchase\".",
+      "When SkuPriceId is not null, SkuPriceId adheres to the following additional requirements: SkuPriceId MUST reference a *SKU Price* in a provider-supplied *price list*, enabling the lookup of detailed information about the *SKU Price*.",
+      "When SkuPriceId is not null, SkuPriceId adheres to the following additional requirements: SkuPriceId MUST support the lookup of the [ListUnitPrice](#listunitprice) when the provider publishes unit prices exclusive of discounts.",
+      "When SkuPriceId is not null, SkuPriceId adheres to the following additional requirements: SkuPriceId MUST support the verification of the given [ContractedUnitPrice](#contractedunitprice) when the provider supports negotiated pricing concepts."
     ],
     "slug": "skupriceid",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/skupriceid.md",
@@ -1775,7 +1938,9 @@
     "requirements": [
       "SubAccountId MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports a *sub account* construct.",
       "SubAccountId MUST be of type String.",
-      "SubAccountId MUST conform to [StringHandling](#stringhandling) requirements."
+      "SubAccountId MUST conform to [StringHandling](#stringhandling) requirements.",
+      "SubAccountId nullability is defined as follows: SubAccountId MUST be null when a [*charge*](#glossary:charge) is not related to a *sub account*.",
+      "SubAccountId nullability is defined as follows: SubAccountId MUST NOT be null when a *charge* is related to a *sub account*."
     ],
     "slug": "subaccountid",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/subaccountid.md",
@@ -1794,11 +1959,7 @@
     "license": "CC-BY-4.0",
     "number_range": null,
     "parse_quality": "parsed",
-    "requirements": [
-      "SubAccountName MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports a *sub account* construct.",
-      "SubAccountName MUST be of type String.",
-      "SubAccountName MUST conform to [StringHandling](#stringhandling) requirements."
-    ],
+    "requirements": [],
     "slug": "subaccountname",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/subaccountname.md",
     "value_format_md": "\\<not specified>"
@@ -1820,6 +1981,8 @@
       "SubAccountType MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports more than one possible SubAccountType value.",
       "SubAccountType MUST be of type String.",
       "SubAccountType MUST conform to [StringHandling](#stringhandling) requirements.",
+      "SubAccountType nullability is defined as follows: SubAccountType MUST be null when [SubAccountId](#subaccountid) is null.",
+      "SubAccountType nullability is defined as follows: SubAccountType MUST NOT be null when SubAccountId is not null.",
       "SubAccountType MUST be a consistent, readable display value."
     ],
     "slug": "subaccounttype",
@@ -1841,7 +2004,20 @@
     "parse_quality": "parsed",
     "requirements": [
       "Tags MUST be present in a [*FOCUS dataset*](#glossary:FOCUS-dataset) when the provider supports setting user or provider-defined tags.",
-      "Tags MUST conform to [KeyValueFormat](#key-valueformat) requirements."
+      "Tags MUST conform to [KeyValueFormat](#key-valueformat) requirements.",
+      "Tags MAY be null.",
+      "When Tags is not null, Tags adheres to the following additional requirements: Tags MUST include all user-defined and provider-defined tags.",
+      "When Tags is not null, Tags adheres to the following additional requirements: Tags MUST only include finalized tags.",
+      "When Tags is not null, Tags adheres to the following additional requirements: Tags SHOULD include tag keys with corresponding non-null values for a given [*resource*](#glossary:resource).",
+      "When Tags is not null, Tags adheres to the following additional requirements: Tags MAY include tag keys with a null value for a given *resource* depending on the provider's tag finalization process.",
+      "When Tags is not null, Tags adheres to the following additional requirements: Tag keys that do not support corresponding values, MUST have a corresponding true (boolean) value set.",
+      "When Tags is not null, Tags adheres to the following additional requirements: Provider SHOULD publish tag finalization methods and semantics within their respective documentation.",
+      "When Tags is not null, Tags adheres to the following additional requirements: Provider MUST NOT alter tag values unless applying true (boolean) to valueless tags.",
+      "Provider-defined tags adhere to the following additional requirements: Provider-defined tag keys MUST be prefixed with a predetermined, provider-specified tag key prefix that is unique to each corresponding provider-specified tag scheme.",
+      "Provider-defined tags adhere to the following additional requirements: Provider SHOULD publish all provider-specified tag key prefixes within their respective documentation.",
+      "User-defined tags adhere to the following additional requirements: Provider MUST prefix all but one user-defined tag scheme with a predetermined, provider-specified tag key prefix that is unique to each corresponding user-defined tag scheme when the provider has more than one user-defined tag scheme.",
+      "User-defined tags adhere to the following additional requirements: Provider MUST NOT prefix tag keys when the provider has only one user-defined tag scheme.",
+      "User-defined tags adhere to the following additional requirements: Provider MUST NOT allow reserved tag key prefixes to be used as prefixes for any user-defined tag keys within a prefixless user-defined tag scheme."
     ],
     "slug": "tags",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/tags.md",

@@ -3,8 +3,8 @@
     "attributes": 9,
     "columns": 57
   },
-  "crawled_at": "2026-07-28T07:27:30.644Z",
-  "data_version": "1.0.0",
+  "crawled_at": "2026-07-30T13:47:23.843Z",
+  "data_version": "1.0.1",
   "ingest_report": {
     "attributes": {
       "markdown_only": 0,
@@ -17,7 +17,7 @@
   },
   "parse_warnings": [],
   "sha256": {
-    "attributes.json": "1d6b326b3e27dc3aef16324af3c8633f8905f8c0b8af00c6170d8893d3904f22",
+    "attributes.json": "1e178c817b6544218d62242834482fbfac1a26bd6ee9bf61b1a7d417bf4d672d",
     "attributes/column_handling.md": "3d3b998f9f5882faa8a63008f3959a07061d11dcb9362e02be9622bb1c05f5a0",
     "attributes/currency_format.md": "082eb6872f60374b369dd61d833711675ce06dede9d6f85f775f6fe722242cb0",
     "attributes/datetime_format.md": "fd22c26c76d2a6d5ff5fdb57b9eed2a99f6bd06b1cff53e5611a97f420c7e2ac",
@@ -28,7 +28,7 @@
     "attributes/string_handling.md": "19d0b98fea5967453181e3addb080f337e7b6f749c4c1b2ba5d4cb12d0de276d",
     "attributes/unit_format.md": "e87620b0f9a41f3726bb3ac7b3baf0817eaf382d38124f1581e72c930768e17d",
     "CHANGELOG.md": "fe7a54d3ffa16cb408946536247bb59b05d8f1b90e14d735d48e7fe4574d0ebc",
-    "columns.json": "6c19ee7c40f7997f350888a0e344853290e1b21850cb0564ef7ef41fd3f90093",
+    "columns.json": "a500896a0931845ceda73b67e124789b397409283291595812b07748f5c272ee",
     "columns/availabilityzone.md": "becab0b53bf89b0ccd77f4260e87614e6781d785c58a8b8e9a2a2012bbf7b8ee",
     "columns/billedcost.md": "645cafad43ff135fc33d7963f3fa69383f5bae64ce29b17d39a1492f8cdf4e3c",
     "columns/billingaccountid.md": "5492a2c90f399364e38fce08745c8a3d26245804a91adf84bac78059c16abc8e",

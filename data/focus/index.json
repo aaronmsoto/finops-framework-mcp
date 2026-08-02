@@ -12,16 +12,16 @@
   },
   "versions": [
     {
-      "data_version": "1.0.0",
+      "data_version": "1.0.1",
       "dir": "1.0",
-      "manifest_sha256": "8f8584bbf2b129a97920660f4e68fdc623a31235ad6117c07f1fe8594feb8456",
+      "manifest_sha256": "c72f3b818717e2d08c997713987dfec7930d85e8ce82cc6662cd6824453b8efd",
       "source_tag": "v1.0",
       "spec_version": "1.0"
     },
     {
-      "data_version": "1.0.0",
+      "data_version": "1.0.1",
       "dir": "1.2",
-      "manifest_sha256": "4864d44de3a11f74d1abfe224a321b939003f1428b777917f8333735f1973938",
+      "manifest_sha256": "dbacf87ef923aa6178b480c3aa80e3b81807edc28aef505e03cbc99085c512fe",
       "source_tag": "v1.2",
       "spec_version": "1.2"
     }

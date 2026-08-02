@@ -13,6 +13,7 @@
     "number_range": null,
     "parse_quality": "parsed",
     "requirements": [
+      "The AvailabilityZone column is RECOMMENDED to be present in the billing data when the provider supports deploying resources or services within an *availability zone*.",
       "This column MUST be of type String and MAY contain null values when a charge is not specific to an *availability zone*."
     ],
     "slug": "availabilityzone",
@@ -464,7 +465,8 @@
       "ConsumedQuantity column MUST be present in the billing data when the provider supports the measurement of usage.",
       "This column MUST NOT be null if [ChargeCategory](#chargecategory) is \"Usage\" and [ChargeClass](#chargeclass) is not \"Correction\".",
       "This column MUST be null for other ChargeCategory values.",
-      "This column MUST be of type Decimal and MUST conform to [Numeric Format](#numericformat) requirements."
+      "This column MUST be of type Decimal and MUST conform to [Numeric Format](#numericformat) requirements.",
+      "The value MAY be negative in cases where [ChargeClass](#chargeclass) is \"Correction\"."
     ],
     "slug": "consumedquantity",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/consumedquantity.md",
@@ -684,6 +686,7 @@
     "requirements": [
       "The PricingQuantity column MUST be present in the billing data.",
       "This column MUST be of type Decimal and MUST conform to [Numeric Format](#numericformat) requirements.",
+      "The value MAY be negative in cases where [ChargeClass](#chargeclass) is \"Correction\".",
       "This column MUST NOT be null when [ChargeClass](#chargeclass) is not \"Correction\" and [ChargeCategory](#chargecategory) is \"Usage\" or \"Purchase\", MUST be null when ChargeCategory is \"Tax\", and MAY be null for all other combinations of ChargeClass and ChargeCategory.",
       "When unit prices are not null, multiplying PricingQuantity by a unit price MUST produce a result equal to the corresponding cost metric, except in cases of ChargeClass \"Correction\", which may address PricingQuantity or any cost discrepancies independently."
     ],
@@ -704,13 +707,7 @@
     "license": "CC-BY-4.0",
     "number_range": null,
     "parse_quality": "parsed",
-    "requirements": [
-      "The PricingUnit column MUST be present in the billing data.",
-      "This column MUST be of type String.",
-      "It MUST NOT be null when [ChargeClass](#chargeclass) is not \"Correction\" and [ChargeCategory](#chargecategory) is \"Usage\" or \"Purchase\", MUST be null when ChargeCategory is \"Tax\", and MAY be null for all other combinations of ChargeClass and ChargeCategory.",
-      "Units of measure used in PricingUnit SHOULD adhere to the values and format requirements specified in the [UnitFormat](#unitformat) attribute.",
-      "The PricingUnit value MUST be semantically equal to the corresponding pricing measurement unit value provided in:"
-    ],
+    "requirements": [],
     "slug": "pricingunit",
     "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/pricingunit.md",
     "value_format_md": "[Unit Format](#unitformat)"
@@ -815,6 +812,7 @@
     "requirements": [
       "The ResourceId column MUST be present in the billing data when the provider supports billing based on provisioned resources.",
       "This column MUST be of type String.",
+      "The ResourceId value MAY be a nullable column as some cost data [*rows*](#glossary:row) may not be associated with a *resource*.",
       "ResourceId MUST appear in the cost data if an identifier is assigned to a *resource* by the provider.",
       "ResourceId SHOULD be a fully-qualified identifier that ensures global uniqueness within the provider."
     ],
@@ -838,6 +836,7 @@
     "requirements": [
       "The ResourceName column MUST be present in the billing data when the provider supports billing based on provisioned resources.",
       "This column MUST be of type String.",
+      "The ResourceName value MAY be a nullable column as some cost data [*rows*](#glossary:row) may not be associated with a *resource* or because a display name cannot be assigned to a *resource*.",
       "ResourceName MUST NOT be null if a display name can be assigned to a *resource*. *Resources* not provisioned interactively or only have a system-generated [ResourceId](#resourceid) MUST NOT duplicate the same value as the ResourceName."
     ],
     "slug": "resourcename",
@@ -1096,6 +1095,7 @@
       "The Tags column MUST only contain finalized tags.",
       "The Tags column MUST be in [Key-Value Format](#key-valueformat).",
       "A Tag key with a non-null value for a given resource SHOULD be included in the tags column.",
+      "A Tag key with a null value for a given resource MAY be included in the tags column depending on the provider's tag finalization process.",
       "A Tag key that does *not* support a corresponding value, MUST have a corresponding true (boolean) value set.",
       "If Tag finalization is supported, providers MUST publish tag finalization methods and semantics within their respective documentation.",
       "Providers MUST NOT alter user-defined Tag keys or values.",

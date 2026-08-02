@@ -365,3 +365,38 @@
   denominator below the filtered numerator. Not a bug to fix in the
   formula; flagged here so a future reader doesn't "fix" it into an
   incorrect clamp.
+
+## 2026-07-30 — Nested-bullet prefix uses the parent's full bullet text, not a trimmed clause (T-039)
+
+- Decision: `extractRequirements` now builds an indentation-based bullet
+  forest (`buildBulletForest`/`collectNormative` in
+  `src/crawlers/focus/parse/table.ts`) and prefixes a nested normative
+  bullet with its full chain of ancestor bullet texts (trailing `:`
+  stripped, joined with `": "`), e.g. `"SkuId nullability is defined as
+  follows: SkuId MUST be null when ChargeCategory is 'Tax'."` — not a
+  hand-trimmed clause like `"When ChargeCategory is not 'Usage' or
+  'Purchase': ..."` (the illustrative, shortened form gate 4's
+  C2-fidelity-1 finding used as an example fix).
+- Why: FOCUS 1.2's scoping-bullet phrasing isn't uniform ("X nullability
+  is defined as follows:", "X for a given Y adheres to the following
+  additional requirements:", "When ChargeCategory is not 'Usage' or
+  'Purchase', X adheres to...:", "When ChargeCategory is 'Purchase':" —
+  the last already terse). Trimming to "the meaningful part before the
+  boilerplate" would need per-phrasing-pattern special-casing to avoid
+  leaving orphaned boilerplate ("...adheres to the following additional
+  requirements: EffectiveCost of a charge...") or truncating real content.
+  Keeping the whole ancestor text is generic, handles the observed 3-level
+  nesting (`CommitmentDiscountQuantity` 1.2) without extra cases, and the
+  acceptance criterion ("prefixed with its parent bullet's scoping clause")
+  is satisfied literally — the parent bullet *is* the scoping clause, just
+  not pre-shortened.
+- Alternatives considered: regex-stripping a fixed set of boilerplate
+  suffixes (e.g. `/adheres to the following.*requirements:$/`) before using
+  the remainder as the prefix (rejected — fragile against phrasings not
+  yet seen, and the finding's own example is explicitly an "e.g.", not a
+  literal spec for the output string). Serving the whole nested list
+  block verbatim as a single string per top-level bullet (the finding's
+  offered fallback) — rejected in favor of one array entry per normative
+  bullet, since every other code path (`get_column`, `get_attribute`,
+  search indexing) treats `requirements` as an array of independent
+  statements.

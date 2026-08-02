@@ -12,9 +12,63 @@
 
 ## In flight
 
-focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`, tasks
-T-027..T-038) is underway. **All of T-027..T-038 are now DONE** — this was
-the last task in the batch.
+Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
+is underway. **T-039 done this session**: fixed the two BLOCKERs/MAJORs
+that share one root cause — `extractRequirements`
+(`src/crawlers/focus/parse/table.ts`) was flattening nested normative
+bullets and dropping RECOMMENDED/MAY. Now:
+- `NORMATIVE` extended to the full RFC-2119 family FOCUS uses: `MUST NOT`,
+  `MUST`, `SHOULD NOT`, `SHOULD`, `RECOMMENDED`, `MAY` (longest-first).
+- `buildBulletForest`/`collectNormative` (new) parse the requirements
+  section into an indentation-based bullet tree (2-space nesting, up to 3
+  levels observed live in `CommitmentDiscountQuantity` 1.2) instead of
+  filtering to indent-0 lines only. Every normative bullet at any depth is
+  emitted, nested ones prefixed with the full chain of ancestor bullet
+  text (trailing `:` stripped, joined `": "`) — see decisions.md
+  2026-07-30 for why the whole ancestor text is used rather than a
+  hand-trimmed clause.
+- `parse/table.test.ts`'s old "ignoring nested bullets" assertion (wrong
+  per gate 4) rewritten; added fixture tests pinning EffectiveCost 1.2's
+  reconciliation MUSTs, SkuId 1.2's nullability MUSTs/MAY, and InvoiceId
+  1.2's RECOMMENDED/MAY bullets surviving parsing.
+- Re-ran `node dist/crawlers/focus/cli.js` (cache-only, 0 network fetches)
+  to regenerate `data/focus/{1.0,1.2}/{columns,attributes}.json` +
+  manifests; `data/focus/derived/diff-1.0-1.2.json` came out byte-identical
+  (the 43 "changed" columns were already flagged changed pre-fix, so
+  recovering more requirements text into an already-changed column doesn't
+  move the diff counts — expected, not a bug). Re-ran
+  `scripts/bundle-worker-data.mjs` so `src/workers/generated/focus-store.ts`
+  matches.
+- Live-probed via `node evals/framework/mcp-call.mjs --server=focus call
+  get_requirements '{"column":"EffectiveCost","version":"1.2"}'` (10
+  requirements now, incl. both `CommitmentDiscountId`-scoped MUSTs) and
+  same for `InvoiceId` 1.2 (7 requirements: RECOMMENDED presence, both
+  nullability MUSTs, and the MAY pre-invoice bullet all present). Also
+  confirmed the 1.0 `tags.md` MAY-recovery from gate 4's count (`git diff
+  data/focus/1.0/columns.json` shows the added "Tag key with a null value
+  ... MAY be included" bullet).
+- `packages/focus-spec-mcp/data/` is gitignored and re-staged from
+  `data/focus/` at `npm pack`/prepack time (confirmed in the gates test
+  run's "pack-focus: staged ... data/focus" log line) — no separate
+  regen needed there.
+- Gates green (`--tier all`: format/lint/typecheck/test 359 passed/
+  designs/integrity/memory/build all pass; coverage/e2e optional-skip as
+  before).
+
+Remaining in the gate-4 fix batch: T-040..T-047 (not started — see gate
+4's other findings: CORS on the Worker (C4-community-1), get_requirements
+attribution footer (C1-protocol-1), compare_versions "unchanged" on typo'd
+columns (C1-protocol-2), README "official" phrasing (C2-fidelity-3),
+compare_versions materiality caveat (C2-fidelity-4), calculate_kpi 0/0
+guard (C3-version-1/C4-community-2), KPI mapping version differentiation
+(C3-version-2), cross-version unknown-column hints (C1-protocol-4/
+C3-version-3), diff artifact official:false marker (C2-fidelity-5),
+package trademark naming (C4-community-3, owner decision)).
+
+---
+
+Prior batch: focus-spec-mcp v1 build loop (`.agents/specs/focus-mcp-v1.md`,
+tasks T-027..T-038) — **all of T-027..T-038 are DONE**.
 
 T-038 this session: static demo web app (`demo/`) for the combined
 Rate Optimization walkthrough — capability → featured KPIs →
@@ -123,17 +177,11 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-027..T-038 are all DONE.** Next: critique gate #4
-   (`docs/critique-4-focus-gate.md`) per the spec's v1 acceptance-criteria
-   list — this is the last unchecked item in that list before the batch is
-   considered fully shipped (data artifact/refresh-idempotence checks,
-   server test coverage incl. cross-version cursor rejection, sample
-   validator pass, KPI-mapping cross-validation, evals ≥9/10 + combined
-   scenario pass, tarball/worker acceptance checks). Most of these already
-   have evidence scattered across T-027..T-038's journals/tests; critique
-   gate #4 is where that gets assembled and any remaining BLOCKERs found.
+1. **T-039 done.** Next: T-040..T-047 (gate 4's remaining BLOCKER —
+   Worker CORS, C4-community-1 — plus the 7 MAJOR/MINOR fixes listed
+   above under "In flight"), one task at a time per the task queue.
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
-   mini-batch once critique gate #4 closes out.
+   mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
    v1 (PR #4 merged to dev; publish happens from main after release) —
    T-036 gives `packages/focus-spec-mcp/` a second, independent publish
@@ -188,5 +236,6 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-28 — T-038 done (static demo web app + demo-vs-worker-handler Node
-test + deploy doc); focus-mcp-v1's T-027..T-038 task batch is now complete.
+2026-07-30 — T-039 done (requirements parser keeps nested normative bullets
++ RECOMMENDED/MAY, gate 4 C2-fidelity-1/2; data/focus + worker bundle
+re-derived; gates --tier all green).
