@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "8ce86af826b965cfab0d52d582ce61c5636fec928609dc30ebbe34c8230631bf",
+  "chainHead": "ec0a0174ccdd03716f4e15e86941f1b4dbed0893f022205c212905042fd9ba0b",
   "tasks": [
     {
       "id": "T-001",
@@ -773,9 +773,15 @@
         "get_requirements text response ends with the same ccByFooter/footer(artifact, source_url) attribution line get_column uses; structuredContent and outputSchema gain source_url (and license CC-BY-4.0)",
         "Live probe: get_requirements BilledCost shows the footer and structured source_url; existing tests updated only where they pin the old footer-less output (authorized); gates pass"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "get_requirements now appends the ccByFooter and returns source_url/license, matching get_column; gates green (365 tests), live-probed BilledCost",
+        "commit": "cd76e39bf981beff54328de244640c9ed97f89df",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:10:05.059Z"
+      },
+      "hash": "ec0a0174ccdd03716f4e15e86941f1b4dbed0893f022205c212905042fd9ba0b"
     },
     {
       "id": "T-042",
