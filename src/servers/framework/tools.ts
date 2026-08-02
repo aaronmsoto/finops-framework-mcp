@@ -189,7 +189,10 @@ export function registerTools(
                 .join("\n")
             : all.length > 0
               ? " — but this page is past the end of the results. Restart without a cursor."
-              : ". Try broader terms or search_framework without entity_types."),
+              : ". Try broader terms or search_framework without entity_types.") +
+          (p.nextCursor
+            ? `\n\nShowing ${results.length} of ${all.length} — pass cursor: "${p.nextCursor}" for more.`
+            : ""),
       );
     },
   );
@@ -288,7 +291,10 @@ export function registerTools(
               (r) =>
                 `- ${r.title} (${r.slug}) [${r.domain}]${r.summary ? `\n  ${r.summary}` : ""}`,
             )
-            .join("\n"),
+            .join("\n") +
+          (pg.nextCursor
+            ? `\n\nShowing ${rows.length} of ${caps.length} — pass cursor: "${pg.nextCursor}" for more.`
+            : ""),
       );
     },
   );

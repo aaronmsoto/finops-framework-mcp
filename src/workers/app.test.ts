@@ -201,4 +201,42 @@ describe("routing edge cases", () => {
     );
     expect(res.status).toBe(405);
   });
+
+  it("405s GET on /mcp/* with an Allow header instead of opening an SSE stream (review MCP-2)", async () => {
+    const res = await handler(
+      new Request("https://worker.example/mcp/framework", { method: "GET" }),
+    );
+    expect(res.status).toBe(405);
+    expect(res.headers.get("Allow")).toBe("POST, OPTIONS");
+    const body = await res.json();
+    expect(body).toMatchObject({ error: expect.stringContaining("GET") });
+  });
+
+  it("405s DELETE on /mcp/* with an Allow header (review MCP-2)", async () => {
+    const res = await handler(
+      new Request("https://worker.example/mcp/focus", { method: "DELETE" }),
+    );
+    expect(res.status).toBe(405);
+    expect(res.headers.get("Allow")).toBe("POST, OPTIONS");
+    const body = await res.json();
+    expect(body).toMatchObject({ error: expect.stringContaining("DELETE") });
+  });
+
+  it("carries Access-Control-Allow-Origin on a 405'd GET from an allowed Origin", async () => {
+    const res = await handler(
+      new Request("https://worker.example/mcp/framework", {
+        method: "GET",
+        headers: { Origin: ALLOWED_ORIGIN },
+      }),
+    );
+    expect(res.status).toBe(405);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
+  });
+
+  it("still 404s GET on an unknown /mcp/* path (not a route, so not short-circuited)", async () => {
+    const res = await handler(
+      new Request("https://worker.example/mcp/unknown", { method: "GET" }),
+    );
+    expect(res.status).toBe(404);
+  });
 });

@@ -92,6 +92,34 @@ export function createFetchHandler(opts: FetchHandlerOptions): FetchHandler {
     }
 
     const { pathname } = new URL(request.url);
+    const isMcpRoute =
+      pathname === ROUTES.framework || pathname === ROUTES.focus;
+
+    // The transport is stateless (no sessionIdGenerator): every request gets
+    // a fresh server, so there is no session for a GET SSE stream to relay
+    // notifications from — the SDK would otherwise hold the connection open
+    // forever with nothing to send. DELETE (session termination) is equally
+    // meaningless without server-held session state. Reject both before the
+    // transport ever sees them rather than let GET hang (review MCP-2).
+    if (
+      isMcpRoute &&
+      (request.method === "GET" || request.method === "DELETE")
+    ) {
+      const headers = new Headers({
+        Allow: "POST, OPTIONS",
+        "Content-Type": "application/json",
+      });
+      if (origin !== null) {
+        headers.set("Access-Control-Allow-Origin", origin);
+      }
+      return new Response(
+        JSON.stringify({
+          error: `method ${request.method} not supported on this stateless endpoint; use POST`,
+        }),
+        { status: 405, headers },
+      );
+    }
+
     let response: Response;
     switch (pathname) {
       case ROUTES.framework:

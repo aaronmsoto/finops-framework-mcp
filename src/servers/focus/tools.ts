@@ -381,6 +381,9 @@ export function registerTools(server: McpServer, store: FocusStore): void {
                     `- ${r.display_name} (\`${r.id}\`) [${r.column_type}/${r.feature_level}]`,
                 )
                 .join("\n")
+            : "") +
+          (pg.nextCursor
+            ? `\n\nShowing ${rows.length} of ${cols.length} — pass cursor: "${pg.nextCursor}" for more.`
             : ""),
       );
     },
@@ -468,7 +471,10 @@ export function registerTools(server: McpServer, store: FocusStore): void {
                     `- [${r.entity_type}] ${r.title} (${r.slug}): ${r.snippet.slice(0, 100)}`,
                 )
                 .join("\n")
-            : "."),
+            : ".") +
+          (p.nextCursor
+            ? `\n\nShowing ${results.length} of ${all.length} — pass cursor: "${p.nextCursor}" for more.`
+            : ""),
       );
     },
   );

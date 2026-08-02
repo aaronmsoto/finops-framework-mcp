@@ -12,6 +12,13 @@ export const SERVER_VERSION = "1.0.0";
  * via loadFocusStore). Transport-free by design, same as the framework
  * server: stdio today, `createServer(store).connect(transport)` covers any
  * future transport too.
+ *
+ * Capability declarations: the store is immutable for the process lifetime
+ * — refreshing data means restarting the server — so no list ever changes
+ * and `resources.subscribe` is not offered. The SDK's high-level McpServer
+ * still force-advertises `listChanged: true` on resources/tools/prompts
+ * once any handler is registered (it does not expose a way to suppress
+ * this); the corresponding notification is simply never emitted.
  */
 export function createServer(store: FocusStore): McpServer {
   const server = new McpServer(

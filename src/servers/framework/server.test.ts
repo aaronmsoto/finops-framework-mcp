@@ -259,6 +259,30 @@ describe("tools", () => {
     expect(one.content.some((c) => c.type === "resource_link")).toBe(true);
   });
 
+  it("search_framework and list_capabilities text report Showing X of Y when paginated (review MCP-1)", async () => {
+    const search = await call("search_framework", { query: "cost", limit: 3 });
+    const searchCursor = search.structuredContent?.nextCursor as
+      string | undefined;
+    expect(searchCursor).toBeDefined();
+    const searchText = search.content.find((c) => c.type === "text")
+      ?.text as string;
+    expect(searchText).toMatch(/Showing 3 of \d+ — pass cursor/);
+
+    const caps = await call("list_capabilities", { limit: 5 });
+    const capsCursor = caps.structuredContent?.nextCursor as string | undefined;
+    expect(capsCursor).toBeDefined();
+    const capsText = caps.content.find((c) => c.type === "text")
+      ?.text as string;
+    expect(capsText).toMatch(/Showing 5 of 22 — pass cursor/);
+
+    // Unpaginated calls (full page, no next cursor) carry no truncation note.
+    const full = await call("list_capabilities", {});
+    expect(full.structuredContent?.nextCursor).toBeUndefined();
+    expect(full.content.find((c) => c.type === "text")?.text).not.toMatch(
+      /Showing/,
+    );
+  });
+
   it("leaf tools carry CC BY attribution in text (critique-2 M7')", async () => {
     for (const [tool, args] of [
       ["get_capability", { slug: "allocation" }],

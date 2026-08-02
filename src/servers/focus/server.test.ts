@@ -540,6 +540,27 @@ describe("cursors", () => {
     expect(page2[0]?.id).not.toBe(page1[0]?.id);
   });
 
+  it("list_columns and search_focus text report Showing X of Y when paginated (review MCP-1)", async () => {
+    const cols = await call("list_columns", { version: "1.2", limit: 5 });
+    expect(cols.structuredContent?.nextCursor).toBeDefined();
+    const colsText = cols.content.find((c) => c.type === "text")
+      ?.text as string;
+    expect(colsText).toMatch(/Showing 5 of \d+ — pass cursor/);
+
+    const search = await call("search_focus", { query: "cost", limit: 1 });
+    expect(search.structuredContent?.nextCursor).toBeDefined();
+    const searchText = search.content.find((c) => c.type === "text")
+      ?.text as string;
+    expect(searchText).toMatch(/Showing 1 of \d+ — pass cursor/);
+
+    // A full, unpaginated page carries no truncation note.
+    const full = await call("list_columns", { version: "1.2", limit: 100 });
+    expect(full.structuredContent?.nextCursor).toBeUndefined();
+    expect(full.content.find((c) => c.type === "text")?.text).not.toMatch(
+      /Showing/,
+    );
+  });
+
   it("rejects cross-version cursor reuse (spec: version participates in the cursor fingerprint)", async () => {
     const first = await call("list_columns", { version: "1.2", limit: 5 });
     const cursor = first.structuredContent?.nextCursor as string;

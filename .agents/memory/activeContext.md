@@ -12,8 +12,49 @@
 
 ## In flight
 
-**T-051 done** (2026-08-02, this session): fixed the three tool-description
-issues from `docs/final-status-review.md` TN-1/2/3.
+**T-052 done** (2026-08-02, this session): fixed the three MCP-protocol
+polish items from `docs/final-status-review.md` MCP-1/2/3.
+- **MCP-1 (pagination text parity)**: `search_framework`, `list_capabilities`
+  (framework/tools.ts) and `list_columns`, `search_focus` (focus/tools.ts)
+  now append a `Showing X of Y — pass cursor: "..." for more.` note to their
+  TEXT block whenever `nextCursor` is present, matching the pattern
+  `get_kpis` already had. No note when the page is unpaginated (full
+  results, no `nextCursor`). Added dedicated tests in both
+  `server.test.ts` files (`limit` small enough to force a `nextCursor`,
+  plus an assertion that a full unpaginated call carries no "Showing" text).
+- **MCP-2 (Worker GET/DELETE)**: `src/workers/app.ts` now short-circuits
+  `GET`/`DELETE` on `/mcp/framework` and `/mcp/focus` with `405` +
+  `Allow: POST, OPTIONS` before the request ever reaches
+  `WebStandardStreamableHTTPServerTransport` (previously GET opened an
+  eternal silent SSE stream since the transport is stateless — no session
+  ever has anything to relay — and DELETE returned 200 for a session that
+  never existed). CORS `Access-Control-Allow-Origin` still applied to the
+  405 response. GET on an unrelated path (e.g. `/mcp/unknown`) still 404s
+  as before — the short-circuit only fires for the two known MCP routes.
+  Added 4 new `app.test.ts` cases (GET 405+Allow, DELETE 405+Allow, ACAO
+  on the 405, unknown-path GET still 404).
+- **MCP-3 (listChanged doc mismatch)**: the SDK's `McpServer` hardcodes
+  `listChanged: true` in `registerCapabilities` for tools/resources/prompts
+  the moment any handler is registered (confirmed by reading
+  `node_modules/@modelcontextprotocol/sdk/dist/esm/server/mcp.js` — no
+  option suppresses it), so the fix is doc-only. Corrected the stale
+  `framework/server.ts:20-23` comment (previously claimed "without ...
+  listChanged") to match the already-accurate `docs/architecture.md` §5.5
+  wording, and added the equivalent comment to `focus/server.ts` (which had
+  none before).
+- Verified: `./scripts/agentic gates --tier all` all green (format, lint,
+  typecheck, 385 tests incl. the new ones, designs, integrity, memory,
+  build). Ran the new/changed tests directly first
+  (`vitest run src/servers/framework/server.test.ts
+  src/servers/focus/server.test.ts src/workers/app.test.ts`) — 20+101
+  tests passed before the full gate run.
+- Remaining backlog: T-053..T-059 queued (git log); rest of the 19-MINOR
+  list in `docs/final-status-review.md` still open (MEMORY.md refresh,
+  derive-pipeline integration test, worker index/data tests,
+  `combined-scenario.xml` step-4 fix, SECURITY/CONTRIBUTING, npm metadata).
+
+**T-051 done** (2026-08-02, earlier this session): fixed the three
+tool-description issues from `docs/final-status-review.md` TN-1/2/3.
 - `list_capabilities` (framework/tools.ts) no longer says "domain slug or
   persona slug" prose — now names the exact params `domain`/`persona` with
   example values, and the "22" count is interpolated from
@@ -111,6 +152,5 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — close-out session (gate-4 fix verification, T-048 rename,
-T-049 doc MAJORs, final status review GO-after-listed-fixes, focus eval
-Run 2 10/10).
+2026-08-02 — T-052 session (MCP-1/2/3 protocol polish: pagination text
+parity, Worker GET/DELETE 405, listChanged doc fix).
