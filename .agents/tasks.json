@@ -1032,7 +1032,7 @@
         "docs/architecture.md and AGENTS.md project framing updated: two MCP servers, Worker Streamable HTTP + demo now built (short 'now built' pointers, no rewrite of historical design rationale); AGENTS.md stays ~150 lines",
         "docs/deploy-worker.md Notes/limits documents the deliberate no-auth/no-rate-limit posture for stateless read-only public data and points at Cloudflare rate limiting; gates pass"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

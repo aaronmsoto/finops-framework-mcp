@@ -129,3 +129,10 @@ npx wrangler rollback [deployment-id]
 - Refreshing the framework/FOCUS data (`npm run refresh`, FOCUS ingestion)
   does not auto-deploy anything — re-run step 1, review the diff, commit,
   then repeat step 4 when ready.
+- No authentication and no rate limiting: deliberate, not an oversight. The
+  Worker serves only public, read-only FinOps Foundation/FOCUS content
+  (§CORS above already restricts browser callers, not API access) with no
+  per-user state to protect — there is nothing behind it worth gating. If
+  abuse becomes a problem, add rate limiting at the edge via [Cloudflare
+  Rate Limiting rules](https://developers.cloudflare.com/waf/rate-limiting-rules/)
+  rather than in application code.

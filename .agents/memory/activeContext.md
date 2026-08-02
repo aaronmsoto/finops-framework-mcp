@@ -12,7 +12,23 @@
 
 ## In flight
 
-**T-054 done** (2026-08-02, this session): built `docs/mcp-surface.md` — the
+**T-055 done** (2026-08-02, this session): docs coherence pass (review
+DOC-1/3/4, L5) — see `.agents/journal/20260802-t055-docs-coherence.md` for
+full detail. MEMORY.md rewritten for v1 reality via the `update-memory`
+skill (two servers, Worker+demo, four critique gates + final review passed,
+publish owner-gated; "inferred edges" invariant dropped; 50 lines).
+`evals/focus/combined-scenario.xml` step 4 rewritten to match the T-045
+mapping shape (live-probed: 1.2 columns for the three commitment KPIs grow
+to include CommitmentDiscountQuantity/CommitmentDiscountUnit, caveat is a
+single version-neutral string). `docs/architecture.md` and `AGENTS.md` got
+short "Now built" pointers to the FOCUS server/Worker/demo/critique-3+4
+(no rewrite of historical rationale; AGENTS.md still 66 lines).
+`docs/deploy-worker.md` Notes/limits now documents the Worker's
+no-auth/no-rate-limit posture as deliberate, pointing at Cloudflare Rate
+Limiting rules. Verified: `./scripts/agentic gates` (392 tests) all green;
+`memory lint` 0 warnings.
+
+**T-054 done** (2026-08-02, earlier same session): built `docs/mcp-surface.md` — the
 prompts→resources→tools hierarchy for both servers, generated (not
 hand-typed) from live MCP protocol output.
 - `evals/framework/mcp-call.mjs` gained `list-resources`,
@@ -128,13 +144,10 @@ owner-gated.** State as of 2026-08-02:
 3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
-4. Next agent session: T-055 next (docs coherence — MEMORY.md rewrite via
-   the update-memory skill, `combined-scenario.xml` step-4 expectation fix
-   since T-045 made the server correct and that eval prose is now stale,
-   architecture/AGENTS framing, Worker no-auth posture doc), then
-   T-056..T-059 (dual-launch hygiene, architecture periphery, derive
-   integration test, demo format-gate). Regenerate `docs/mcp-surface.md`
-   (`npm run gen:mcp-surface`) if any of those touch a prompt/resource/tool.
+4. Next agent session: T-056 next (dual-launch hygiene), then T-057..T-059
+   (architecture periphery, derive integration test, demo format-gate).
+   Regenerate `docs/mcp-surface.md` (`npm run gen:mcp-surface`) if any of
+   those touch a prompt/resource/tool.
 
 ## Open questions
 
@@ -165,6 +178,6 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — T-054 session (docs/mcp-surface.md generated hierarchy doc +
-gen-mcp-surface.mjs + mcp-call.mjs list-resources/list-resource-templates/
-list-prompts + drift-guard test).
+2026-08-02 — T-055 session (docs coherence: MEMORY.md rewrite,
+combined-scenario.xml step 4, architecture.md/AGENTS.md "Now built"
+pointers, deploy-worker.md no-auth posture).

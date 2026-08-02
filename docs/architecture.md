@@ -43,6 +43,9 @@ All tests live under `src/**/*.test.ts` (repo `tests/**` is a protected
 path); `vitest.config.ts` includes them and excludes `fixtures/` from
 coverage. Future FOCUS sibling: `src/crawlers/focus`, `src/servers/focus`
 reuse `src/shared` directly; extract packages only if that day ever needs it.
+**Now built:** `packages/finops-focus-mcp` — a second, published MCP server
+covering the FOCUS spec (columns, KPI mappings, cross-version diffs), reusing
+`src/shared` and following the same crawler → artifact → server pipeline.
 
 Toolchain: TypeScript strict, `@modelcontextprotocol/sdk` ^1.29 (+ zod),
 `cheerio`, `ajv`. No `any` at directory boundaries.
@@ -238,7 +241,10 @@ content the model should fetch via tools (M8). Single renderer shared with
 ### 5.4 Transport
 
 stdio primary via `servers/framework` bin; `createServer(artifact)` is
-transport-free; Streamable HTTP later = a new entry point only.
+transport-free; Streamable HTTP later = a new entry point only. **Now
+built:** `src/workers/index.ts` — a Cloudflare Worker entry point serving
+the framework server over Streamable HTTP, plus a static browser `demo/`
+against it (see `docs/deploy-worker.md`).
 
 ### 5.5 Capability declarations (m4)
 
@@ -351,4 +357,8 @@ tools-only.
 5. Official-only default surface, unofficial extensions opt-in and labeled
    → §5 experimental flag + flag-matrix tests (§8).
 6. Evals ≥9/10 + two critique gates, zero unresolved BLOCKERs →
-   `docs/critique-1.md`, `docs/critique-2.md`, `docs/eval-results.md`.
+   `docs/critique-1.md`, `docs/critique-2.md`, `docs/eval-results.md`. **Now
+   built:** two further critique gates (`docs/critique-3-publish-gate.md` —
+   framework-server publish readiness; `docs/critique-4-focus-gate.md` —
+   the FOCUS server build) plus a five-lens final pre-launch review
+   (`docs/final-status-review.md`).

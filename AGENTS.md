@@ -4,15 +4,18 @@ Canonical instructions for AI coding agents (Claude Code, GitHub Copilot CLI, an
 
 ## What this project is
 
-finops-framework-mcp is an MCP (Model Context Protocol) server that acts as an
-agentic interface to the FinOps Framework published at
-https://finops.org/framework — it lets AI agents and MCP clients query and
-navigate the framework's official guidance through MCP tools. TypeScript;
-pipeline: crawler → markdown-canonical data artifact (`data/framework/`,
-regenerable offline via `cli.js derive`) → stdio server
-(`src/servers/framework`, bin `finops-framework-mcp`). Unofficial extensions
-are gated behind `FINOPS_MCP_EXPERIMENTAL=1`. Gates run via
-`./scripts/agentic gates`, tests via vitest.
+finops-framework-mcp hosts two MCP (Model Context Protocol) servers that act
+as an agentic interface to the FinOps Foundation's official guidance: the
+framework server (`src/servers/framework`, bin `finops-framework-mcp`) covers
+the FinOps Framework at https://finops.org/framework, and the FOCUS server
+(`packages/finops-focus-mcp`) covers the FOCUS spec (columns, KPI mappings,
+cross-version diffs). Each follows the same TypeScript pipeline: crawler →
+markdown-canonical data artifact (`data/{framework,focus}/`, regenerable
+offline via `cli.js derive`) → stdio server. Unofficial extensions are gated
+behind `FINOPS_MCP_EXPERIMENTAL=1`. **Now built:** the framework server also
+ships a Cloudflare Worker Streamable HTTP entry point (`src/workers/`, see
+`docs/deploy-worker.md`) and a static browser `demo/` against it. Gates run
+via `./scripts/agentic gates`, tests via vitest.
 
 ## Session protocol (every session, both tools)
 
