@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "d865c7251c71f9f2f6bdd7dadae6345924dbe547a1f698930d5ee8dd64acd3a4",
+  "chainHead": "0033df447166e26ea8013a917d3130d7619aadb2138fd48530e2ed6771f7cb4b",
   "tasks": [
     {
       "id": "T-001",
@@ -884,9 +884,15 @@
         "findColumn's unknown-column error, when the exact id/slug resolves in a different served version, says so with the version it was added/present in and suggests retrying with that version or compare_versions (covers ServiceSubcategory@1.0 and SkuMeter@1.0); otherwise the error names the version consulted",
         "Live probes: get_column ServiceSubcategory version 1.0 mentions it exists in 1.2; get_attribute with the new example slug succeeds at the default version; gates pass"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "get_attribute example slug now datetime_format (works at default version); findColumn names the other served version + suggests compare_versions when a real column is missing only from the requested version; 4 new tests, gates green 379 tests, live-probed",
+        "commit": "b2ec652b3953f9ec45d11ae8750d38533467a5e6",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T15:16:49.971Z"
+      },
+      "hash": "0033df447166e26ea8013a917d3130d7619aadb2138fd48530e2ed6771f7cb4b"
     }
   ]
 }
