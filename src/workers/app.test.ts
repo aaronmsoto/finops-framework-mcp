@@ -120,6 +120,71 @@ describe("Origin allowlist", () => {
     );
     expect(res.status).toBe(403);
   });
+
+  it("carries Access-Control-Allow-Origin on a POST from an allowed Origin", async () => {
+    const res = await handler(
+      rpcRequest("mcp/framework", INITIALIZE_BODY, { Origin: ALLOWED_ORIGIN }),
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
+  });
+
+  it("carries no Access-Control-Allow-Origin when no Origin header is sent", async () => {
+    const res = await handler(rpcRequest("mcp/framework", INITIALIZE_BODY));
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBeNull();
+  });
+});
+
+describe("CORS preflight", () => {
+  it("answers an allowed-Origin OPTIONS preflight with 204 + CORS headers", async () => {
+    const res = await handler(
+      new Request("https://worker.example/mcp/framework", {
+        method: "OPTIONS",
+        headers: {
+          Origin: ALLOWED_ORIGIN,
+          "Access-Control-Request-Method": "POST",
+          "Access-Control-Request-Headers": "Content-Type",
+        },
+      }),
+    );
+    expect(res.status).toBe(204);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
+    expect(res.headers.get("Access-Control-Allow-Methods")).toBe(
+      "POST, GET, DELETE, OPTIONS",
+    );
+    expect(res.headers.get("Access-Control-Allow-Headers")).toBe(
+      "Content-Type, Accept, Mcp-Session-Id, MCP-Protocol-Version",
+    );
+  });
+
+  it("also answers the /mcp/focus route's preflight", async () => {
+    const res = await handler(
+      new Request("https://worker.example/mcp/focus", {
+        method: "OPTIONS",
+        headers: {
+          Origin: ALLOWED_ORIGIN,
+          "Access-Control-Request-Method": "POST",
+        },
+      }),
+    );
+    expect(res.status).toBe(204);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
+  });
+
+  it("rejects an unlisted-Origin preflight with 403 and no ACAO", async () => {
+    const res = await handler(
+      new Request("https://worker.example/mcp/framework", {
+        method: "OPTIONS",
+        headers: {
+          Origin: "https://evil.example.com",
+          "Access-Control-Request-Method": "POST",
+        },
+      }),
+    );
+    expect(res.status).toBe(403);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBeNull();
+  });
 });
 
 describe("routing edge cases", () => {

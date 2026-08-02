@@ -13,8 +13,34 @@
 ## In flight
 
 Critique gate #4 (`docs/critique-4-focus-gate.md`) fix batch (T-039..T-047)
-is underway. **T-039 done this session**: fixed the two BLOCKERs/MAJORs
-that share one root cause — `extractRequirements`
+is underway. **T-040 done this session** (the batch's other BLOCKER,
+C4-community-1): `src/workers/app.ts`'s `createFetchHandler` never
+answered OPTIONS preflights and never emitted `Access-Control-Allow-
+Origin`, so no browser (including the T-038 demo) could ever read a
+cross-origin response regardless of `ALLOWED_ORIGINS`. Fixed: OPTIONS now
+short-circuits to a 204 with ACAO (echoing the Origin) + `Access-Control-
+Allow-Methods: POST, GET, DELETE, OPTIONS` + `Access-Control-Allow-Headers:
+Content-Type, Accept, Mcp-Session-Id, MCP-Protocol-Version`; every other
+response also gets ACAO set whenever an Origin was sent (it's already
+passed the existing allowlist gate by that point — no new reject path
+needed, unlisted-Origin OPTIONS 403s the same as any other method).
+`src/workers/app.test.ts` gained a `CORS preflight` describe block (both
+routes, allowed + unlisted Origin) plus two `Origin allowlist` cases for
+ACAO presence/absence on POST. `docs/deploy-worker.md` §2 now says
+`ALLOWED_ORIGINS` also drives CORS (a browser silently discards the
+response client-side without matching ACAO, even though the same JSON-RPC
+response crossed the wire); `demo/client.js`'s error hint no longer implies
+a separate "allowlist configured?" toggle. Gates green (`--tier all`:
+364 tests, up from 359; `app.ts` 100% statement coverage). Live-probed via
+a scratch native-Request script (`dist/workers/app.js`,
+`allowedOrigins:['https://demo.pages.dev']`, deleted after use): allowed-
+Origin OPTIONS → 204 + all three CORS headers; allowed-Origin POST → 200 +
+ACAO; unlisted-Origin OPTIONS → 403, no ACAO — reverses the gate's
+pre-fix repro (`PREFLIGHT status: 405`, `POST ACAO: null`). Full detail:
+`.agents/journal/20260730-t040-worker-cors.md`.
+
+**T-039 done in an earlier session this batch**: fixed the two
+BLOCKERs/MAJORs that share one root cause — `extractRequirements`
 (`src/crawlers/focus/parse/table.ts`) was flattening nested normative
 bullets and dropping RECOMMENDED/MAY. Now:
 - `NORMATIVE` extended to the full RFC-2119 family FOCUS uses: `MUST NOT`,
@@ -55,8 +81,8 @@ bullets and dropping RECOMMENDED/MAY. Now:
   designs/integrity/memory/build all pass; coverage/e2e optional-skip as
   before).
 
-Remaining in the gate-4 fix batch: T-040..T-047 (not started — see gate
-4's other findings: CORS on the Worker (C4-community-1), get_requirements
+Remaining in the gate-4 fix batch: T-041..T-047 (not started — see gate
+4's other findings: get_requirements
 attribution footer (C1-protocol-1), compare_versions "unchanged" on typo'd
 columns (C1-protocol-2), README "official" phrasing (C2-fidelity-3),
 compare_versions materiality caveat (C2-fidelity-4), calculate_kpi 0/0
@@ -177,9 +203,9 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Next steps
 
-1. **T-039 done.** Next: T-040..T-047 (gate 4's remaining BLOCKER —
-   Worker CORS, C4-community-1 — plus the 7 MAJOR/MINOR fixes listed
-   above under "In flight"), one task at a time per the task queue.
+1. **T-039 and T-040 done** (both BLOCKERs closed). Next: T-041..T-047
+   (gate 4's 7 remaining MAJOR/MINOR fixes listed above under
+   "In flight"), one task at a time per the task queue.
 2. Open PR (branch → dev) for the harness fix batch (T-025/T-026) + v1.1
    mini-batch once the gate-4 fix batch (T-039..T-047) closes out.
 3. Owner: npm publish + mcp-publisher registry submit remain pending from
@@ -236,6 +262,8 @@ mapped KPIs). Full detail in git history and `.agents/journal/`.
 
 ## Last updated
 
-2026-07-30 — T-039 done (requirements parser keeps nested normative bullets
-+ RECOMMENDED/MAY, gate 4 C2-fidelity-1/2; data/focus + worker bundle
-re-derived; gates --tier all green).
+2026-07-30 — T-040 done (Worker CORS: OPTIONS preflight + ACAO on every
+allowed-Origin response, gate 4 C4-community-1; deploy doc + demo hint
+fixed; gates --tier all green, live-probed). T-039 done earlier same day
+(requirements parser keeps nested normative bullets + RECOMMENDED/MAY,
+gate 4 C2-fidelity-1/2; data/focus + worker bundle re-derived).

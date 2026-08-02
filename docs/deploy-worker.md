@@ -57,6 +57,19 @@ list (that's how stdio-bridged and server-to-server MCP clients call it);
 only browser-originated requests with a *present but unlisted* `Origin` get
 a `403`.
 
+This allowlist is also what drives CORS: `src/workers/app.ts` answers an
+`OPTIONS` preflight with `204` and echoes the request's `Origin` back as
+`Access-Control-Allow-Origin` only when that Origin is on the list (plus
+`Access-Control-Allow-Methods`/`-Headers`), and every subsequent
+non-preflight response for that Origin carries the same `Access-Control-
+Allow-Origin` header. Without an Origin on this list, a browser's `fetch()`
+against the Worker still gets a same-shaped JSON-RPC response over the
+wire, but the browser itself discards it before your client code ever sees
+it — the allowlist is not just a server-side gate, it is also what makes
+the response visible to browser JavaScript at all. There's no separate
+switch to "turn CORS on" — putting an origin on `ALLOWED_ORIGINS` and
+redeploying is both steps.
+
 ## 3. First-time Cloudflare setup
 
 ```sh

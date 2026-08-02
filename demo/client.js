@@ -16,7 +16,11 @@ export async function sendRpc(url, body) {
   } catch (e) {
     throw new Error(
       `Could not reach ${url}: ${e instanceof Error ? e.message : String(e)}. ` +
-        "Is the Worker URL correct and its Origin allowlist configured (docs/deploy-worker.md)?",
+        "Check the Worker URL, and that this page's origin is on the " +
+        "Worker's ALLOWED_ORIGINS (the same setting also drives the CORS " +
+        "headers the browser needs to read the response — see " +
+        "docs/deploy-worker.md). If the allowlist looks right, this may " +
+        "also be a network error unrelated to CORS.",
     );
   }
   const text = await res.text();

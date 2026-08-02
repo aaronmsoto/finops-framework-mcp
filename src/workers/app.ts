@@ -8,6 +8,18 @@
 // non-browser MCP client — is always allowed; a present-but-unlisted Origin
 // is rejected before any server work happens).
 //
+// CORS (T-040, gate 4 C4-community-1): the allowlist above only ever
+// governed whether *this* handler accepts a request — it never told a
+// browser it may read the response. A browser-hosted client (the T-038
+// demo) always preflights a JSON POST (its Content-Type header forces
+// one), and without Access-Control-Allow-Origin on both the preflight and
+// the actual response, the browser blocks the response client-side even
+// though the Worker returned 200. So every response whose Origin passed
+// the allowlist above also echoes that Origin back as ACAO, and OPTIONS
+// gets a dedicated 204 preflight reply carrying ACAO + the allowed
+// methods/headers instead of falling through to the transport (which would
+// 405 it — the SDK transport only knows POST/GET/DELETE).
+//
 // Deliberately does not import from ../shared/index.js (the barrel) or any
 // module that imports node:fs — see src/workers/data.ts and
 // src/workers/fs-boundary.test.ts. createServer() for both servers only
@@ -34,6 +46,10 @@ const ROUTES = {
   framework: "/mcp/framework",
   focus: "/mcp/focus",
 } as const;
+
+const CORS_ALLOW_METHODS = "POST, GET, DELETE, OPTIONS";
+const CORS_ALLOW_HEADERS =
+  "Content-Type, Accept, Mcp-Session-Id, MCP-Protocol-Version";
 
 async function handleMcp(
   request: Request,
@@ -64,19 +80,40 @@ export function createFetchHandler(opts: FetchHandlerOptions): FetchHandler {
       });
     }
 
+    if (request.method === "OPTIONS") {
+      const headers = new Headers({
+        "Access-Control-Allow-Methods": CORS_ALLOW_METHODS,
+        "Access-Control-Allow-Headers": CORS_ALLOW_HEADERS,
+      });
+      if (origin !== null) {
+        headers.set("Access-Control-Allow-Origin", origin);
+      }
+      return new Response(null, { status: 204, headers });
+    }
+
     const { pathname } = new URL(request.url);
+    let response: Response;
     switch (pathname) {
       case ROUTES.framework:
-        return handleMcp(request, () =>
+        response = await handleMcp(request, () =>
           createFrameworkServer(frameworkArtifact),
         );
+        break;
       case ROUTES.focus:
-        return handleMcp(request, () => createFocusServer(focusStore));
+        response = await handleMcp(request, () =>
+          createFocusServer(focusStore),
+        );
+        break;
       default:
-        return new Response(JSON.stringify({ error: "not found" }), {
+        response = new Response(JSON.stringify({ error: "not found" }), {
           status: 404,
           headers: { "Content-Type": "application/json" },
         });
     }
+
+    if (origin !== null) {
+      response.headers.set("Access-Control-Allow-Origin", origin);
+    }
+    return response;
   };
 }
