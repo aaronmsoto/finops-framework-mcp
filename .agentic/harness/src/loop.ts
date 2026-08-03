@@ -34,6 +34,13 @@ export interface IterationRecord {
   details: string[];
   /** Build + verify token usage for this iteration (zeros when the runner reports none). */
   tokens?: TokenTotals;
+  /**
+   * Build-phase and verify-phase tokens reported separately: conflating them
+   * misattributed verification cost (measured ~12% of a run, not the ~2x a
+   * combined number suggested — necessity-review B3-economics-3).
+   */
+  buildTokens?: TokenTotals;
+  verifyTokens?: TokenTotals;
   /** Repo-relative path of the persisted verifier transcript, when one was written. */
   verifyEvidence?: string;
 }
@@ -139,6 +146,12 @@ function readPrompt(rootDir: string, name: string): string {
     );
   }
   return text;
+}
+
+/** Current branch name ("HEAD" when detached); null if git fails. */
+function gitBranch(rootDir: string): string | null {
+  const res = git(rootDir, ["rev-parse", "--abbrev-ref", "HEAD"]);
+  return res.ok ? res.stdout.trim() : null;
 }
 
 /** Name which budget killed a timed-out runner so the failure is diagnosable. */
@@ -443,6 +456,20 @@ async function runLoopInner(
   // before preflight so even a preflight-failed run is identifiable.
   const journalSlug = `loop-${mode}-${timeOfDayStamp()}`;
 
+  // A runner that switches branches corrupts every subsequent independent
+  // check (commits, chain, integrity all assume one branch). Record the
+  // starting branch and refuse to continue if HEAD moves off it
+  // (necessity-review B2-soundness-4).
+  const startBranch = gitBranch(rootDir);
+  const assertBranchStable = (): void => {
+    const now = gitBranch(rootDir);
+    if (startBranch !== null && now !== null && now !== startBranch) {
+      throw new CliError(
+        `loop: the working tree switched from branch "${startBranch}" to "${now}" mid-run — a runner or concurrent session moved HEAD. Return to ${startBranch} and resume with a fresh loop invocation.`,
+      );
+    }
+  };
+
   // Heartbeat: overwrite the state file on every phase transition so
   // `agentic status` can tell a live loop (fresh updatedAt + alive pid)
   // from a crashed or finished one. Best-effort; never fails the loop.
@@ -570,6 +597,7 @@ async function runLoopInner(
   }
 
   for (let n = 1; ; n++) {
+    assertBranchStable();
     const tasksFile = loadTasks(rootDir);
 
     // A --task target that is blocked is not "finished": tell the operator
@@ -623,7 +651,14 @@ async function runLoopInner(
       extraEnv: { AGENTIC_LOOP: "1", AGENTIC_TASK_ID: task.id, AGENTIC_LOOP_PHASE: "build" },
     });
 
-    let iterTokens = tokenTotals(runRes.usage);
+    assertBranchStable(); // before trusting gates/chain checks run on this tree
+    const buildTokens = tokenTotals(runRes.usage);
+    let verifyTokens = ZERO_TOKENS;
+    if (maxTotalTokens !== null && runRes.usage === undefined) {
+      logErr(
+        `[loop] warning: the ${runner.name} runner reported no usage for iteration ${n} — loop.max_total_tokens cannot see this iteration's spend (CLI output format may have changed).`,
+      );
+    }
 
     // Independent checks — agent claims are ignored; only these count.
     const details: string[] = [];
@@ -663,7 +698,12 @@ async function runLoopInner(
         timeoutMs: verifyRemainingMs,
         extraEnv: { AGENTIC_LOOP: "1", AGENTIC_TASK_ID: task.id, AGENTIC_LOOP_PHASE: "verify" },
       });
-      iterTokens = addTokens(iterTokens, tokenTotals(verifyRes.usage));
+      verifyTokens = tokenTotals(verifyRes.usage);
+      if (maxTotalTokens !== null && verifyRes.usage === undefined) {
+        logErr(
+          `[loop] warning: the ${runner.name} runner reported no usage for iteration ${n}'s verify pass — loop.max_total_tokens cannot see it.`,
+        );
+      }
       const match = /^VERDICT:\s*(pass|fail)/im.exec(verifyRes.finalText);
       if (match && match[1]!.toLowerCase() === "pass") {
         verdict = "pass";
@@ -687,6 +727,7 @@ async function runLoopInner(
       }
     }
 
+    const iterTokens = addTokens(buildTokens, verifyTokens);
     runTokens = addTokens(runTokens, iterTokens);
     const record: IterationRecord = {
       n,
@@ -700,6 +741,8 @@ async function runLoopInner(
       durationMs: Date.now() - iterStarted,
       details,
       tokens: iterTokens,
+      buildTokens,
+      verifyTokens,
       ...(verifyEvidence !== null ? { verifyEvidence } : {}),
     };
     records.push(record);
@@ -712,7 +755,7 @@ async function runLoopInner(
       verification: verdict,
       ...(verifyEvidence !== null ? { verifyEvidence } : {}),
       ...(verifyExcerpt !== null && verifyExcerpt.trim() !== "" ? { verifyExcerpt } : {}),
-      tokens: `${fmtTokens(iterTokens)} (run total ${runTokens.total})`,
+      tokens: `build ${fmtTokens(buildTokens)}; verify ${fmtTokens(verifyTokens)}; iteration total=${iterTokens.total} (run total ${runTokens.total})`,
       duration: `${record.durationMs}ms`,
       ...(details.length > 0 ? { details: details.join(" | ") } : {}),
     });

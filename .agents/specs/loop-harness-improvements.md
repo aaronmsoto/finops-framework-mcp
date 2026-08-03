@@ -53,9 +53,18 @@ suites plus mock failure-path scenarios and one real mini loop run.
 | 16b cap ergonomics | T-014 `31bf982` | done | scenarios A/B/E logs show derived budget; flag lowered cap in B; 4 tests | **port** |
 | 13 heartbeat + status | T-015 `10ab095` | done | scenario E live: `status` showed preflight→build phases mid-run, terminal after; 6 tests | **port** |
 | 14 journal auto-commit | T-016 `249f444` | done | scenarios B/C/D/E all ended with a pathspec-scoped journal commit; success/exhausted runs leave a clean tree (blocked runs keep BLOCKED.md + blocked task state dirty by design — they need human eyes) | **port** |
+| review B3-econ-3/4: build/verify token split + usage canary | T-025 | done | journal shows build/verify/iteration/run totals; cap-invisible warning tested | **port** |
+| review B2-soundness-4: branch assert + atomic tasks.json | T-026 | done | rogue-branch run terminates with terminal:error; saveTasks temp+rename | **port** |
 
 Port verdicts: **port** (copy as-is), **adjust** (port with noted changes),
 **drop** (didn't earn its keep — explain).
+
+### Distribution decision (owner, 2026-07-24)
+
+The harness will move to npm distribution as `@aaronsoto/agentic-harness`
+(template repo packages it; owner publishes). Once published, THIS repo's
+vendored `.agentic/harness/` copy should be replaced by the package
+dependency — queued as the migration step that closes this tracker.
 
 ### Deviations to review at port time
 

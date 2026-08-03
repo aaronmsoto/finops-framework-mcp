@@ -1,0 +1,12 @@
+name = "finops-mcp-worker"
+main = "src/workers/index.ts"
+compatibility_date = "2026-07-28"
+compatibility_flags = ["nodejs_compat"]
+
+# Comma-separated allowlist of Origin header values permitted to call this
+# worker from a browser. Requests with no Origin header (non-browser MCP
+# clients) are always allowed regardless of this setting. Empty by default —
+# set per environment before deploying a browser-facing client (see
+# docs/deploy-worker.md).
+[vars]
+ALLOWED_ORIGINS = ""

@@ -17,10 +17,13 @@ export interface ServerOptions {
  * (docs/architecture.md §5.4): stdio today, streamable HTTP later, both just
  * `createServer(artifact).connect(transport)`.
  *
- * Capability declarations (§5.5): resources/tools/prompts without subscribe
- * or listChanged — the artifact is immutable for the process lifetime;
- * refreshing data means restarting the server. Completions are enabled for
- * resource-template and prompt arguments.
+ * Capability declarations (§5.5): the artifact is immutable for the process
+ * lifetime — refreshing data means restarting the server — so no list ever
+ * changes and `resources.subscribe` is not offered. The SDK's high-level
+ * McpServer still force-advertises `listChanged: true` on resources/tools/
+ * prompts once any handler is registered (it does not expose a way to
+ * suppress this); the corresponding notification is simply never emitted.
+ * Completions are enabled for resource-template and prompt arguments.
  */
 export function createServer(
   artifact: Artifact,

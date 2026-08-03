@@ -9,7 +9,13 @@ import {
   type OfficialMaturityLevel,
 } from "../../../shared/index.js";
 import { slugify, slugFromUrl } from "../../../shared/index.js";
-import { htmlToMd, normalizeHeading, parseList, textOf } from "../md.js";
+import {
+  htmlToMd,
+  normalizeHeading,
+  parseList,
+  textOf,
+} from "../../../shared/md.js";
+import { ORIGIN } from "../urls.js";
 import {
   findHeading,
   findHeadings,
@@ -170,7 +176,7 @@ export function parseCapabilityPage(
     ? sectionContent($, defHeading)
     : $("[id=definition]").first().children().not("h1, h2");
   if (defContent.length) {
-    definition_md = htmlToMd($, defContent);
+    definition_md = htmlToMd($, defContent, ORIGIN);
     if (!defHeading)
       warnings.push(`${slug}: Definition parsed via id fallback`);
   } else {
@@ -192,7 +198,7 @@ export function parseCapabilityPage(
     for (const block of matBlocks) {
       const level = normalizeHeading(block.title) as OfficialMaturityLevel;
       if (!OFFICIAL_MATURITY_LEVELS.includes(level)) continue;
-      maturity_raw[level] = htmlToMd($, block.nodes);
+      maturity_raw[level] = htmlToMd($, block.nodes, ORIGIN);
       const lists = block.nodes
         .filter("ul, ol")
         .add(block.nodes.find("ul, ol").first());
@@ -346,7 +352,7 @@ export function parseCapabilityPage(
   const ioHeading = findHeading($, "h2", ["inputs and outputs"]);
   if (ioHeading) {
     const content = sectionContent($, ioHeading);
-    inputs_outputs_md = htmlToMd($, content);
+    inputs_outputs_md = htmlToMd($, content, ORIGIN);
   } else {
     warnings.push(`${slug}: Inputs & Outputs section not found`);
   }
@@ -362,6 +368,7 @@ export function parseCapabilityPage(
     const description_md = htmlToMd(
       $,
       $el.find(".c-modal_content").first().children("p"),
+      ORIGIN,
     );
     // The fixed-code-block mixes labeled segments; formulas appear as <p>
     // text on some KPIs and as <li> items under a label on others, so we

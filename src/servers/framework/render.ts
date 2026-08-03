@@ -1,3 +1,4 @@
+import { ccByFooter } from "../../shared/footer.js";
 import type {
   Artifact,
   Capability,
@@ -17,13 +18,13 @@ export const UNOFFICIAL_ACTIONS_NOTE =
 
 export function footer(artifact: Artifact, sourceUrl: string): string {
   const m = artifact.manifest;
-  return (
-    `\n\n---\n` +
-    `Source: ${sourceUrl} — © FinOps Foundation, licensed CC BY 4.0 ` +
-    `(https://creativecommons.org/licenses/by/4.0/). Content restructured and ` +
-    `adapted by finops-framework-mcp (data v${m.data_version}, crawled ` +
-    `${m.crawled_at.slice(0, 10)}); unofficial extensions are always marked.`
-  );
+  return ccByFooter({
+    sourceUrl,
+    licenseHolder: "FinOps Foundation",
+    packageName: "finops-framework-mcp",
+    dataVersion: m.data_version,
+    crawledAt: m.crawled_at,
+  });
 }
 
 export function overviewMd(artifact: Artifact, experimental = false): string {

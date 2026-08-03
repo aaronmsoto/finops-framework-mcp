@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
 import type { Cheerio, CheerioAPI } from "cheerio";
 import type { AnyNode } from "domhandler";
-import { normalizeHeading } from "../md.js";
+import { normalizeHeading } from "../../../shared/md.js";
 
 type CheerioModule = typeof import("cheerio");
 

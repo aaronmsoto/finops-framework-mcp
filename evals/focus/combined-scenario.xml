@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Combined two-server scenario eval (T-035, spec .agents/specs/focus-mcp-v1.md,
+  "Rate Optimization walkthrough": capability -> KPIs -> FOCUS columns per
+  version -> calculate on sample). Unlike evals/framework/eval.xml and
+  evals/focus/eval.xml (ten independent, single-server questions), this is one
+  ORDERED walkthrough spanning both bridges — evals/framework/mcp-call.mjs
+  --server=framework and --server=focus — with no other tools, resources, code,
+  or data files read directly. Each <step> names which bridge/tool answers it;
+  later steps may depend on slugs/values discovered in earlier steps (that
+  dependency is itself part of what this eval documents: the two servers only
+  connect through slugs and finops:// URIs, never a shared runtime object).
+  This is the "combined value" case the spec's Problem section calls out:
+  capability -> KPI -> FOCUS columns -> calculation, which today exists nowhere
+  else. It doubles as the demo app's (T-038) source script.
+-->
+<scenario name="rate-optimization-walkthrough" servers="framework,focus">
+  <step id="1" server="framework">
+    <action>list_capabilities(domain: "optimize-usage-and-cost")</action>
+    <goal>Confirm "Rate Optimization" is a capability in the Optimize Usage &amp; Cost domain and get its slug.</goal>
+    <expected>Capability slug "rate-optimization", title "Rate Optimization", domain "optimize-usage-and-cost" — one of several capabilities in that domain.</expected>
+  </step>
+  <step id="2" server="framework">
+    <action>get_capability(slug: "rate-optimization", include: ["summary", "kpis"])</action>
+    <goal>Get the capability's official summary and its featured KPIs.</goal>
+    <expected>Summary: rate efficiency through vendor use, negotiated discounts, commitment discounts, and pricing mechanisms. Featured KPIs (via get_kpis(capability: "rate-optimization", featured_only: true), 4 total): Effective Savings Rate Percentage (effective-savings-rate-percentage), Commitment Utilization Score (commitment-utilization-score), Percentage of Commitment Discount Waste (percentage-of-commitment-based-discount-waste), Consumption versus Commitment (consumption-versus-commitment).</expected>
+  </step>
+  <step id="3" server="focus">
+    <action>get_kpi_mapping(capability: "rate-optimization", version: "1.0")</action>
+    <goal>Cross the bridge: ask the focus server which FOCUS columns compute those same framework KPIs. This is the KPI-mapping bridge the spec's Problem section says exists nowhere else.</goal>
+    <expected>The SAME 4 KPI slugs from step 2 come back (unofficial, capability-filter cross-validates both directions per the spec's KPI-mapping acceptance criterion), each with its FOCUS 1.0 columns: ESR needs BillingPeriodStart/BillingPeriodEnd/ListCost/EffectiveCost; the other three (Commitment Utilization Score, Waste, Consumption vs Commitment) all need ChargeCategory/CommitmentDiscountId/EffectiveCost/ContractedCost. Response carries an UNOFFICIAL banner and a not-endorsed-by-FinOps-Foundation-or-FOCUS-project methodology note.</expected>
+  </step>
+  <step id="4" server="focus">
+    <action>get_kpi_mapping(capability: "rate-optimization", version: "1.2") then compare_versions(column: "CommitmentDiscountQuantity")</action>
+    <goal>Check the mapping's version-awareness: does moving to FOCUS 1.2 change which columns are needed?</goal>
+    <expected>The 1.2 mapping's `columns` for all three commitment KPIs (Commitment Utilization Score, Waste, Consumption versus Commitment) grow to include CommitmentDiscountQuantity/CommitmentDiscountUnit alongside the 1.0 four (ChargeCategory/CommitmentDiscountId/EffectiveCost/ContractedCost) — confirmed via compare_versions: CommitmentDiscountQuantity status "added" in 1.2, absent from 1.0. The `caveat` text is version-neutral by design (same string at 1.0 and 1.2, so it reads correctly either way) but explains the nuance: this server's `calculate_kpi` formula still computes a spend-based ratio (EffectiveCost/ContractedCost) at both versions — FOCUS 1.2 adding the dedicated quantity columns doesn't change what's computed, only what a future quantity-based formula could use instead. This is the version-aware nuance the walkthrough is meant to surface: newer spec exposes a better column, mapping's `columns` list reflects it, but the formula itself is an explicitly flagged unused opportunity.</expected>
+  </step>
+  <step id="5" server="focus">
+    <action>calculate_kpi(kpi, version: "1.0") for each of the 4 KPI slugs from steps 2-3</action>
+    <goal>Compute all 4 over the bundled official FOCUS 1.0 sample (1,000 real, anonymized rows) — the "calculate on sample" leg.</goal>
+    <expected>
+      effective-savings-rate-percentage: 26.552972346576816 percent (official sample).
+      commitment-utilization-score: error — not computable (see step 6).
+      percentage-of-commitment-based-discount-waste: error — not computable (see step 6).
+      consumption-versus-commitment: error — not computable (see step 6).
+      The ESR response carries the "UNOFFICIAL CALCULATION" banner and full sample provenance (kind: official, 1000 rows, CC-BY-4.0, source_url to FOCUS-Sample-Data). The three commitment KPIs instead return a tool error (isError: true) with guidance text explaining the sample lacks qualifying rows and suggesting version="1.2".
+    </expected>
+  </step>
+  <step id="6" server="none" mode="author-annotation">
+    <action>Author-only annotation, NOT part of the tools-only graded walkthrough (steps 1-5 are): why do the three commitment KPIs error instead of returning a number at version 1.0?</action>
+    <goal>Record why, for anyone reading this scenario later — this step reads the committed CSV directly and is out of scope for a fresh agent restricted to the two bridges.</goal>
+    <expected>Correct guidance-error behavior, not a bug and not a fabricated number. The official FOCUS 1.0 sample's ChargeCategory column contains only {Usage, Adjustment, Credit} — zero rows with ChargeCategory = "Purchase" (verified directly against the committed CSV, data/focus/samples/1.0/official/focus_sample.csv). All three KPI formulas divide by SUM(ContractedCost) WHERE ChargeCategory = "Purchase", so that denominator is 0 and the ratio is genuinely undefined on this sample — not 0%, not 100%. calculate_kpi now throws a clean guidance error ("...not computable... try version=\"1.2\"") instead of coercing the 0/0 to a definite-looking number, per the server's own stated design that uncomputable KPIs "error with guidance instead." FOCUS 1.2's bundled (synthetic) sample does carry qualifying Purchase rows, so the same three KPIs compute normally at version="1.2". This supersedes an earlier version of this scenario that treated the coerced 0%/100%/0 output as correct; that was a defect (gate 4, C3-version-1/C4-community-2), fixed in T-044.</expected>
+  </step>
+</scenario>
