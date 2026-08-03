@@ -1,6 +1,5 @@
 import type { Cheerio, CheerioAPI } from "cheerio";
 import type { AnyNode } from "domhandler";
-import { ORIGIN } from "./urls.js";
 
 /**
  * Normalize a heading for structure-anchored matching: lowercase, entities
@@ -15,23 +14,28 @@ export function normalizeHeading(text: string): string {
     .trim();
 }
 
-function absoluteUrl(href: string | undefined): string | null {
+function absoluteUrl(href: string | undefined, origin: string): string | null {
   if (!href) return null;
   try {
-    return new URL(href, ORIGIN).toString();
+    return new URL(href, origin).toString();
   } catch {
     return null;
   }
 }
 
 /**
- * Minimal HTML → markdown for the framework's prose (p, lists, headings,
+ * Minimal HTML → markdown for the site's prose (p, lists, headings,
  * bold/em, links, simple tables are flattened to text). Sanitization rules
  * (docs/architecture.md §6.3): scripts/styles/comments dropped by cheerio
- * parsing here; `data:` URIs dropped; off-finops.org links kept as plain
- * text so crawled content cannot smuggle live external links.
+ * parsing here; `data:` URIs dropped; off-origin links kept as plain text so
+ * crawled content cannot smuggle live external links. `origin` scopes which
+ * links are kept as markdown links vs. flattened to plain text.
  */
-export function htmlToMd($: CheerioAPI, node: Cheerio<AnyNode>): string {
+export function htmlToMd(
+  $: CheerioAPI,
+  node: Cheerio<AnyNode>,
+  origin: string,
+): string {
   const out: string[] = [];
   node.each((_, n) => render($(n), ""));
   return out
@@ -123,10 +127,10 @@ export function htmlToMd($: CheerioAPI, node: Cheerio<AnyNode>): string {
         return;
       }
       case "a": {
-        const url = absoluteUrl(el.attr("href"));
+        const url = absoluteUrl(el.attr("href"), origin);
         const text = el.text().replace(/\s+/g, " ").trim();
         if (!text) return;
-        if (url && url.startsWith(ORIGIN) && !url.startsWith("data:")) {
+        if (url && url.startsWith(origin) && !url.startsWith("data:")) {
           out.push(`[${text}](${url})`);
         } else {
           out.push(text);

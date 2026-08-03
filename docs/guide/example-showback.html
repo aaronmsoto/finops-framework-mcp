@@ -1,0 +1,642 @@
+<!doctype html>
+<!--
+  docs/guide/example-showback.html - page 4 of 6 (spec: .agents/specs/usage-guide-v1.md).
+  Shared chrome (style block, header nav, footer) copied verbatim from index.html;
+  the "page 4 additions" rules at the end of the stylesheet are this page's only
+  extension. No external assets: renders offline over file://.
+
+  Every fact, count, quote, formula and figure on this page came from a live probe
+  against the built servers, or from exact-decimal aggregation over the committed
+  sample CSV. The exact call is printed in the .callnote under each step.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Showback Reporting — FinOps MCP Servers Usage Guide</title>
+<style>
+  :root {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+      --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+      --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+    --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+    --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+  }
+  :root[data-theme="light"] {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+  }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+    line-height: 1.55; margin: 0; overflow-x: hidden; }
+  main { max-width: 78ch; margin: 0 auto; padding: 0 1.25rem 4rem; }
+  h1, h2 { font-family: var(--serif); text-wrap: balance; line-height: 1.15; }
+  h1 { font-size: 2.1rem; margin: 0.25rem 0 0.5rem; font-weight: 600; }
+  h2 { font-size: 1.35rem; margin: 0 0 0.6rem; font-weight: 600; }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--slate); }
+  .lede { color: var(--slate); margin: 0.4rem 0 0; }
+  .servers { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
+  .server-chip { font-family: var(--mono); font-size: 0.78rem; padding: 0.3rem 0.65rem;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); }
+  .server-chip b { color: var(--moss); font-weight: 600; }
+  .step { margin-top: 2.6rem; display: grid; grid-template-columns: 2.1rem 1fr; gap: 0.9rem; }
+  .step-n { font-family: var(--serif); font-size: 1.5rem; color: var(--moss);
+    border-top: 2px solid var(--moss); padding-top: 0.3rem; text-align: center;
+    font-variant-numeric: tabular-nums; }
+  .step-body { border-top: 1px solid var(--line); padding-top: 0.55rem; min-width: 0; }
+  .badge { display: inline-block; font-size: 0.64rem; font-weight: 700;
+    letter-spacing: 0.08em; padding: 0.14rem 0.45rem; border-radius: 3px;
+    vertical-align: 0.15em; }
+  .badge.official { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .badge.derived { color: var(--amber); border: 1px solid var(--amber); background: var(--amber-bg); }
+  .quote { border-left: 3px solid var(--moss); background: var(--panel-2);
+    padding: 0.7rem 1rem; margin: 0.9rem 0; font-family: var(--serif); font-size: 1.02rem; }
+  .callnote { font-family: var(--mono); font-size: 0.72rem; color: var(--slate);
+    margin-top: 0.5rem; overflow-x: auto; white-space: nowrap; }
+  details.kpi { border: 1px solid var(--line); border-radius: 6px; margin: 0.55rem 0;
+    background: var(--panel-2); }
+  details.kpi summary { cursor: pointer; padding: 0.6rem 0.9rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+  details.kpi summary::-webkit-details-marker { display: none; }
+  details.kpi[open] summary { border-bottom: 1px solid var(--line); }
+  .kpi-inner { padding: 0.7rem 0.9rem 0.9rem; font-size: 0.92rem; }
+  .formula { font-family: var(--mono); font-size: 0.8rem; background: var(--panel);
+    padding: 0.55rem 0.75rem; border-radius: 4px; margin: 0.5rem 0; overflow-x: auto; }
+  .cols { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+  .col-chip { font-family: var(--mono); font-size: 0.74rem; padding: 0.18rem 0.5rem;
+    border-radius: 4px; background: var(--chip-off); border: 1px solid var(--line); }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; min-width: 34rem; }
+  th { text-align: left; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--slate); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    background: var(--panel-2); }
+  td { padding: 0.45rem 0.75rem; border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, .mono { font-family: var(--mono); font-size: 0.8rem; }
+  .lvl { font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 3px; }
+  .lvl.mand { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .lvl.cond { color: var(--slate); border: 1px dashed var(--slate); }
+  .absent { color: var(--slate); font-style: italic; }
+  .new-chip { font-size: 0.62rem; font-weight: 700; color: var(--paper);
+    background: var(--moss); border-radius: 3px; padding: 0.1rem 0.35rem; margin-left: 0.35rem; }
+  .zero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.6rem; margin: 0.8rem 0; }
+  .zero-card { border: 1px solid var(--line); border-radius: 6px; padding: 0.6rem 0.75rem;
+    background: var(--panel-2); }
+  .zero-card .v { font-family: var(--mono); font-size: 1.25rem; font-weight: 700; }
+  .zero-card .n { font-size: 0.74rem; color: var(--slate); margin-top: 0.15rem; }
+  .takeaway { border: 1px solid var(--moss); border-radius: 8px; padding: 0.9rem 1.1rem;
+    margin-top: 1rem; background: var(--panel-2); }
+  .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
+  a { color: var(--moss); }
+
+  /* --- shared chrome: guide header + nav + footer (identical on all six pages) --- */
+  header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+  header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
+    font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+  nav.guide { margin-top: 0.6rem; border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
+  nav.guide ol { list-style: none; display: flex; flex-wrap: wrap;
+    gap: 0.3rem 0.55rem; margin: 0; padding: 0; }
+  nav.guide a { font-size: 0.76rem; text-decoration: none; color: var(--slate);
+    border: 1px solid transparent; border-radius: 999px; padding: 0.18rem 0.55rem;
+    display: inline-block; }
+  nav.guide a:hover { color: var(--moss); border-color: var(--line); }
+  nav.guide a[aria-current="page"] { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); font-weight: 600; }
+  main.guide-main { padding-top: 0.9rem; }
+  footer.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
+    border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--slate); }
+  footer.guide p { margin: 0.35rem 0; }
+  footer.guide .unofficial-legend { font-weight: 600; }
+
+  /* --- page 4 additions --- */
+  .lvl.rec { color: var(--amber); border: 1px dotted var(--amber); }
+  th.num, td.num { text-align: right; font-variant-numeric: tabular-nums;
+    white-space: nowrap; }
+  td.neg { color: var(--amber); }
+  tr.tot td { border-top: 2px solid var(--line); border-bottom: 0;
+    background: var(--panel-2); }
+  .fnote { font-size: 0.8rem; color: var(--slate); margin: 0.5rem 0 0; }
+  h3.sec { font-family: var(--sans); font-size: 0.82rem; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--slate); margin: 1.5rem 0 0.4rem; }
+  ul.tight { font-size: 0.9rem; padding-left: 1.15rem; margin: 0.5rem 0; }
+  ul.tight li { margin: 0.3rem 0; }
+  .takeaway ul.tight li { margin: 0.45rem 0; }
+</style>
+</head>
+<body>
+
+<header class="guide">
+  <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+  <nav class="guide" aria-label="Guide pages">
+    <ol>
+      <li><a href="index.html">Intro &amp; Getting Started</a></li>
+      <li><a href="framework-server.html">finops-framework-mcp</a></li>
+      <li><a href="focus-server.html">finops-focus-mcp</a></li>
+      <li><a href="example-showback.html" aria-current="page">Showback</a></li>
+      <li><a href="example-esr.html">Rate Optimization (ESR)</a></li>
+      <li><a href="example-forecasting.html">Forecasting Journey</a></li>
+    </ol>
+  </nav>
+</header>
+
+<main class="guide-main">
+  <p class="eyebrow">Page 4 of 6 · Worked example · both servers</p>
+  <h1>Showback Reporting</h1>
+  <p class="lede">A showback report tells each team what its technology use cost —
+  without moving money. This page walks the chain an agent walks to build one:
+  the official FinOps Framework guidance that defines the work, the maturity bar
+  it has to clear, the FOCUS™ columns your billing export must carry, and finally
+  a real showback table computed from the bundled official FOCUS 1.0 sample.</p>
+  <div class="servers">
+    <span class="server-chip"><b>finops-framework-mcp</b> · Understand Usage &amp; Cost</span>
+    <span class="server-chip"><b>finops-focus-mcp</b> · FOCUS 1.0 + 1.2 columns</span>
+  </div>
+
+  <!-- STEP 1 -->
+  <section class="step">
+    <div class="step-n">1</div>
+    <div class="step-body">
+      <h2>Locate the work in the framework <span class="badge official">official</span></h2>
+      <p>Showback lives in the <strong>Understand Usage &amp; Cost</strong> domain. The
+      framework server returns the domain definition verbatim:</p>
+      <div class="quote">“The outcome of this Domain is a better understanding of an
+      organization's use of technology. […] Activities in this Domain also define the
+      organizational metadata to categorize, allocate and summarize technology cost and
+      usage, and define the reporting and analytics processes making that data available
+      for use by all FinOps Personas.”</div>
+      <p>That single sentence names both halves of a showback: the <em>metadata</em> that
+      says who owns what (Allocation) and the <em>reporting process</em> that puts the
+      number in front of them (Reporting &amp; Analytics). The domain carries four
+      capabilities:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Capability</th><th>Slug</th><th>Official summary</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Allocation</strong></td><td class="mono">allocation</td>
+            <td>Define strategies to assign and share cost and usage using accounts, tags, labels, and other metadata, creating accountability among teams and projects within an organization.</td></tr>
+          <tr><td><strong>Reporting &amp; Analytics</strong></td><td class="mono">reporting-analytics</td>
+            <td>Analyze data and create reporting to gain insights into usage patterns and spend patterns, identify opportunities for improvement, and support informed decision-making about technology resources.</td></tr>
+          <tr><td>Data Ingestion</td><td class="mono">data-ingestion</td>
+            <td>Collect, transfer, store, and normalize data from various sources, with a goal of creating a complete, contextual dataset of usage and cost data available for analysis.</td></tr>
+          <tr><td>Anomaly Management</td><td class="mono">anomaly-management</td>
+            <td>Detect, identify, alert and manage unexpected or unforecasted technology cost and usage irregularities in a timely manner to lower risk and ensure cost-effective operations.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="fnote">The two bolded capabilities carry this example; the other two are the
+      pipeline underneath it and the alarm bell on top of it.</p>
+      <p class="callnote">framework · get_entity {"entity_type": "domains"} · list_capabilities {"domain": "understand-usage-and-cost"}</p>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step">
+    <div class="step-n">2</div>
+    <div class="step-body">
+      <h2>Read the two capabilities <span class="badge official">official</span></h2>
+      <p><strong>Allocation</strong> is explicit that showback is one of its three
+      destinations, and it names the three strategies you have to write down:</p>
+      <div class="quote">“The allocation strategy primarily involves understanding and
+      defining how the organization wishes to look at technology costs in order to do
+      showback to various teams, chargeback to finance, or allocation to cost centers.”</div>
+      <ul class="tight">
+        <li><strong>Allocation strategy</strong> — “defining how costs should be mapped to the organization.”</li>
+        <li><strong>Tagging / metadata strategy</strong> — “defining how usage and resources will be mapped to the defined parts of the organization.”</li>
+        <li><strong>Shared cost strategy</strong> — “which defines how each set of shared resources will be allocated to budgets.”</li>
+      </ul>
+      <p>The capability also grants permission to <em>not</em> solve everything at once:
+      many early practices adopt an “informed ignore” approach, explicitly deciding to
+      budget shared items centrally rather than allocating them out. And it closes on the
+      standard to aim at — “the level of allocation that provides the organization with
+      the level of information to make good decisions at its chosen level of maturity.”</p>
+      <p><strong>Reporting &amp; Analytics</strong> supplies the delivery half, and names
+      showback as one of its use cases:</p>
+      <div class="quote">“Reporting can detail, highlight, summarize, categorize, and
+      support use-cases such as ad hoc reporting, showback, investigative reports or
+      routine reporting used by the organization. This is one of the most important and
+      critical of the FinOps Capabilities, supporting almost every other Capability.”</div>
+      <p>Note the dependency direction the official text states: “Much of the strategy for
+      these metadata will be defined in the Allocation capability.” Allocation decides the
+      grouping; Reporting &amp; Analytics renders it. Build them in that order.</p>
+      <p class="callnote">framework · get_capability {"slug": "allocation", "include": ["summary","definition"]} · get_capability {"slug": "reporting-analytics", "include": ["summary","definition"]}</p>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step">
+    <div class="step-n">3</div>
+    <div class="step-body">
+      <h2>Set the maturity bar <span class="badge official">official</span></h2>
+      <p>The framework's own maturity model publishes sample goals per level — and the
+      first one at every level is an allocation-coverage number. This is the target your
+      showback is graded against:</p>
+      <div class="zero-grid">
+        <div class="zero-card"><div class="v">≥ 70%</div><div class="n">Crawl — “Able to allocate at least 70% of cost to known owner”</div></div>
+        <div class="zero-card"><div class="v">≥ 85%</div><div class="n">Walk — “Able to allocate at least 85% of cost to known owner”</div></div>
+        <div class="zero-card"><div class="v">&gt; 90%</div><div class="n">Run — “Greater than 90% of spend can be allocated”</div></div>
+      </div>
+      <p>The capability-level assessments tell you what that looks like operationally.
+      Selected characteristics, verbatim:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Capability</th><th>Crawl</th><th>Walk</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Allocation</strong></td>
+            <td>“Simple Allocation strategy where costs of accounts, projects or subscriptions are allocated to the business units, portfolios or cost centers using a list of accounts known to belong to specific cost centers or business units”; “Tagging strategy compliance is inconsistent”; “Shared costs are allocated to central budgets or platform teams directly and not charged back”.</td>
+            <td>“Cost allocation can be done to an application or service level”; “Tagging compliance is consistent in key areas or applications but not universal”; “Shared platform owners are able to showback costs generated by internal customers”.</td>
+          </tr>
+          <tr>
+            <td><strong>Reporting &amp; Analytics</strong></td>
+            <td>“Use of canned reports with only basic ability to filter and alter result view”; “Reporting centered on high level cost and usage groupings with limited granularity”; “Analytic results are being manually communicated to teams”.</td>
+            <td>“Granular reporting enabling KPI tracking and showback reporting”; “Reporting tools enable custom views and aggregations”; “Dashboard reporting is provided centrally to teams”.</td>
+          </tr>
+        </tbody>
+      </table></div>
+      <p class="fnote">Read across: <em>showback</em> appears explicitly at Walk in both
+      capabilities. At Crawl you are grouping by account and mailing a spreadsheet; at Walk
+      the platform owner can hand each internal customer its own number.</p>
+      <p class="callnote">framework · get_maturity_model {} · get_maturity_assessment {"capability": "allocation"} · get_maturity_assessment {"capability": "reporting-analytics", "level": "crawl" | "walk"}</p>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step">
+    <div class="step-n">4</div>
+    <div class="step-body">
+      <h2>Pick the KPIs <span class="badge official">official</span></h2>
+      <p>Three KPIs are featured on Allocation's own page. Expand for the official formula:</p>
+      <details class="kpi"><summary>Allocation Accuracy Index (AAI) <span class="badge official">featured</span></summary>
+        <div class="kpi-inner">“Measures the effectiveness of cost attribution practices
+        across an organization's infrastructure. […] A higher AAI indicates better financial
+        transparency, more reliable Chargeback or Showback […]”. Developed by the FinOps
+        for Data Center Working Group.
+        <div class="formula">Allocation Accuracy Index (AAI) = (Directly Attributed Costs / Total Infrastructure Costs) × 100</div>
+        <p style="margin:0.4rem 0 0;font-size:0.84rem;">Official data sources: On-Premises
+        Cost Data · Resource Metadata · ERP / Accounting Systems · Audit logs. Officially
+        related capabilities: <span class="mono">allocation</span>,
+        <span class="mono">reporting-analytics</span>, <span class="mono">usage-optimization</span>.</p>
+        </div>
+      </details>
+      <details class="kpi"><summary>Percentage of Costs Associated with Unallocated CSP Cloud Resources <span class="badge official">featured</span></summary>
+        <div class="kpi-inner">“Unallocated cost refers to expenses incurred for resources
+        or services that are not directly attributed to specific projects, departments, or
+        applications. […] Identifying unallocated cost and reducing them by allocating,
+        improves the cost allocation”.
+        <div class="formula">(Total Effective Costs Associated w/Unallocated CSP Cloud Resources During a Period of Time / Total CSP Cloud Costs During a Period of Time)</div></div>
+      </details>
+      <details class="kpi"><summary>Usage or Spend Apportionment Validation <span class="badge official">featured</span></summary>
+        <div class="kpi-inner">“Method of apportioning shared effective costs based on usage
+        or spend proportional amount.” This is the shared-cost half of the allocation
+        strategy — the check that every shared dollar landed somewhere.
+        <div class="formula">Total apportionment of Shared Costs / Total shared costs</div>
+        <p style="margin:0.4rem 0 0;font-size:0.84rem;">Official data sources: CSP Billing
+        Data · Internal Finance Metrics.</p></div>
+      </details>
+      <p><strong>Reporting &amp; Analytics features no KPIs of its own</strong> —
+      <span class="mono">get_kpis {"capability": "reporting-analytics", "featured_only": true}</span>
+      returns <span class="mono">total: 0</span>. Dropping <span class="mono">featured_only</span>
+      returns 14 KPIs officially <em>related</em> to the capability, but every one of them is
+      featured on some other capability's page (AAI on Allocation, Cost per API Call on Unit
+      Economics, and so on). That is the framework being consistent with its own text:
+      Reporting &amp; Analytics is the surface that renders other capabilities' metrics.</p>
+      <p class="callnote">framework · get_kpis {"capability": "allocation", "featured_only": true} · get_kpis {"capability": "reporting-analytics", "featured_only": true} · get_kpis {"capability": "reporting-analytics"}</p>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="step">
+    <div class="step-n">5</div>
+    <div class="step-body">
+      <h2>The FOCUS columns a showback needs <span class="badge official">official</span></h2>
+      <p>Now switch servers. A showback report is five questions — <em>whose is it, what
+      was it, when was it, what did it cost, in what currency</em> — and FOCUS answers each
+      with named columns. Flip the spec version to see what your export must carry:</p>
+      <div class="toggle-wrap">
+        <span class="eyebrow">FOCUS version</span>
+        <div class="vt" role="group" aria-label="FOCUS spec version">
+          <button id="btn-10" aria-pressed="false" onclick="setV('1.0')">1.0</button>
+          <button id="btn-12" aria-pressed="true" onclick="setV('1.2')">1.2</button>
+        </div>
+      </div>
+      <div class="tbl-wrap"><table id="coltable">
+        <thead><tr><th>Column</th><th>Role in the showback</th><th>Type</th><th>Feature level</th><th>Normative reqs</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <p id="vnote" style="font-size:0.88rem;"></p>
+      <p class="fnote">“Normative reqs” is the count of MUST/SHOULD/MAY bullets the server
+      parses out of that column's spec page at that version — a rough proxy for how much
+      the spec tightened. <span class="mono">SubAccountName</span> at 1.2 is the honest
+      outlier: <span class="mono">get_requirements</span> replies “No normative requirements
+      bullets parsed for SubAccountName.”</p>
+      <p>Two requirements are worth internalising before you group by anything. On the
+      owner axis, at FOCUS 1.2:</p>
+      <div class="quote" style="font-family:var(--mono);font-size:0.82rem;">“SubAccountId
+      MUST be present in a <em>FOCUS dataset</em> when the provider supports a <em>sub
+      account</em> construct.” · “SubAccountId MUST be null when a <em>charge</em> is not
+      related to a <em>sub account</em>.”</div>
+      <p>So <span class="mono">SubAccountId</span> is <em>Conditional</em>, and null is a
+      legitimate value, not a data-quality bug — those nulls are exactly the unallocated
+      slice your AAI is measuring. On the service axis, at FOCUS 1.0:</p>
+      <div class="quote" style="font-family:var(--mono);font-size:0.82rem;">“The
+      ServiceCategory column MUST be present and MUST NOT be null.” · “This column is of
+      type String and MUST be one of the allowed values.”</div>
+      <p><span class="mono">ServiceCategory</span> is a closed vocabulary of
+      <strong>19 values</strong> — identical in 1.0 and 1.2 (AI and Machine Learning,
+      Analytics, Business Applications, Compute, Databases, Developer Tools, Multicloud,
+      Identity, Integration, Internet of Things, Management and Governance, Media,
+      Migration, Mobile, Networking, Security, Storage, Web, Other). That is what makes it
+      the safe grouping key for a multi-provider showback: it is mandatory, non-null, and
+      enumerated, so an AWS row and an Oracle row land in the same bucket without a mapping
+      table of your own.</p>
+      <p class="callnote">focus · list_versions {} · list_columns {"version": "1.0" | "1.2", "limit": 100} · get_column {"column": …, "version": "1.0" | "1.2"} × 13 columns per version, plus ServiceSubcategory / SubAccountType / BillingAccountType at 1.2 · get_requirements {"column": "SubAccountId", "version": "1.2"} · get_requirements {"column": "ServiceCategory", "version": "1.0"} · search_focus {"query": "sub account grouping", "version": "1.2"}</p>
+    </div>
+  </section>
+
+  <!-- STEP 6 -->
+  <section class="step">
+    <div class="step-n">6</div>
+    <div class="step-body">
+      <h2>Score the allocation KPIs <span class="badge derived">UNOFFICIAL</span></h2>
+      <p>No official mapping from framework KPIs to FOCUS columns exists. The FOCUS server
+      derives one and flags it on every response. Of Allocation's three featured KPIs,
+      <strong>two are mapped and one is not</strong>:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Featured KPI</th><th>Derived FOCUS formula</th></tr></thead>
+        <tbody>
+          <tr><td>Allocation Accuracy Index (AAI)</td>
+            <td class="mono">AAI % = (SUM(BilledCost) WHERE SubAccountId IS NOT NULL AND Tags IS NOT NULL) / SUM(BilledCost) × 100.</td></tr>
+          <tr><td>Percentage of Costs Associated with Unallocated CSP Cloud Resources</td>
+            <td class="mono">% Unallocated = (SUM(BilledCost) WHERE SubAccountId IS NULL) / SUM(BilledCost) × 100.</td></tr>
+          <tr><td>Usage or Spend Apportionment Validation</td>
+            <td class="absent">Not in the mapping. <span class="mono">calculate_kpi</span> returns an error:
+            “Unknown KPI &quot;usage-or-spend-apportionment-validation&quot; in the mapping.” Its inputs — which
+            costs your organisation has declared <em>shared</em>, and the apportionment
+            basis — are policy, not billing data. FOCUS cannot supply them, so the server
+            declines rather than inventing a denominator.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Running the two mapped ones over the bundled official FOCUS 1.0 sample:</p>
+      <div class="esr-card">
+        <span class="eyebrow">Allocation Accuracy Index · official 1.0 sample · UNOFFICIAL calculation</span><br>
+        <span class="esr-value">108.30%</span>
+        <div class="esr-math">
+          <span>server value      = <b>108.2959595022164%</b></span>
+          <span>SUM(BilledCost) WHERE tagged AND sub-account = <b>$22.22257642819</b> (711 rows)</span>
+          <span>SUM(BilledCost) total                        = <b>$20.52022672899</b> (1,000 rows)</span>
+        </div>
+      </div>
+      <p><strong>An allocation-accuracy score above 100% is not a rounding artifact — it is
+      a finding.</strong> The 289 untagged rows in this sample sum to
+      <span class="mono">−$1.70234969920</span> of BilledCost, because one of them is a
+      <span class="mono">ChargeCategory = "Credit"</span> row worth
+      <span class="mono">−$2.61370000000</span> (“AWS Open Source Promotional Credits”).
+      Credits and adjustments usually arrive
+      without tags, so they shrink the denominator while contributing nothing to the
+      numerator. The lesson for a production showback: <em>decide up front how credits and
+      adjustments are allocated</em>, or your coverage ratio will drift above 100% and stop
+      meaning anything.</p>
+      <div class="zero-grid">
+        <div class="zero-card"><div class="v">0%</div><div class="n">% Costs on Unallocated CSP Resources — every one of the 1,000 sample rows carries a non-null SubAccountId</div></div>
+        <div class="zero-card"><div class="v">289</div><div class="n">rows with <span class="mono">Tags = NULL</span> (711 carry a tag object)</div></div>
+        <div class="zero-card"><div class="v">13</div><div class="n">rows with negative EffectiveCost, totalling −$3.16197130010</div></div>
+      </div>
+      <p class="fnote">Both values above are <strong>UNOFFICIAL</strong>: derived formula,
+      derived computation, bundled sample data only — <span class="mono">official: false</span>
+      on every response. They are not FinOps Foundation or FOCUS project outputs.</p>
+      <p class="callnote">focus · get_kpi_mapping {"capability": "allocation", "version": "1.2"} · calculate_kpi {"kpi": "allocation-accuracy-index-aai", "version": "1.0", "sample": "official"} · calculate_kpi {"kpi": "percentage-of-costs-associated-with-unallocated-csp-cloud-resources", "version": "1.0", "sample": "official"} · calculate_kpi {"kpi": "usage-or-spend-apportionment-validation", …} → error</p>
+    </div>
+  </section>
+
+  <!-- STEP 7 -->
+  <section class="step">
+    <div class="step-n">7</div>
+    <div class="step-body">
+      <h2>Build the report <span class="badge derived">computed from bundled sample</span></h2>
+      <p>Everything below is <strong>computed from the bundled official sample for
+      illustration</strong> — <span class="mono">data/focus/samples/1.0/official/focus_sample.csv</span>,
+      1,000 rows of real, anonymized multi-provider billing data published by the FOCUS
+      project under CC BY 4.0 (AWS 942 · Microsoft 51 · Oracle 7 rows; all
+      <span class="mono">BillingCurrency = USD</span>; 999 rows in billing period
+      2024-09-01 → 2024-10-01). It is a <em>sample</em>: the totals are cents, not a real
+      organisation's bill. The shape of the exercise is what transfers.</p>
+
+      <h3 class="sec">Showback by service — SUM(EffectiveCost) GROUP BY ServiceCategory</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>ServiceCategory</th><th class="num">Rows</th><th class="num">EffectiveCost (USD)</th><th class="num">Share</th></tr></thead>
+        <tbody>
+          <tr><td>Compute</td><td class="num">443</td><td class="num">14.75656109</td><td class="num">98.531%</td></tr>
+          <tr><td>Databases</td><td class="num">21</td><td class="num">0.37096774</td><td class="num">2.477%</td></tr>
+          <tr><td>Storage</td><td class="num">209</td><td class="num">0.00088292</td><td class="num">0.006%</td></tr>
+          <tr><td>Networking</td><td class="num">168</td><td class="num">0.00000000</td><td class="num">0.000%</td></tr>
+          <tr><td>Management and Governance</td><td class="num">79</td><td class="num">0.00000000</td><td class="num">0.000%</td></tr>
+          <tr><td>Other</td><td class="num">47</td><td class="num">0.00000000</td><td class="num">0.000%</td></tr>
+          <tr><td>Integration</td><td class="num">18</td><td class="num">0.00000000</td><td class="num">0.000%</td></tr>
+          <tr><td>Identity</td><td class="num">4</td><td class="num">0.00000000</td><td class="num">0.000%</td></tr>
+          <tr><td>Security</td><td class="num">2</td><td class="num">0.00000000</td><td class="num">0.000%</td></tr>
+          <tr><td>AI and Machine Learning</td><td class="num">9</td><td class="num neg">−0.15189756</td><td class="num neg">−1.014%</td></tr>
+          <tr class="tot"><td><strong>Total</strong></td><td class="num"><strong>1,000</strong></td><td class="num"><strong>14.97651419</strong></td><td class="num"><strong>100.000%</strong></td></tr>
+        </tbody>
+      </table></div>
+      <p class="fnote">Nine of the 19 allowed ServiceCategory values never appear in this
+      sample; they are omitted rather than shown as empty rows. The AI and Machine Learning
+      line is <em>negative</em>: five of its nine rows carry a negative EffectiveCost, so
+      the category nets out as a credit against the bill.</p>
+
+      <h3 class="sec">Showback by owner — SUM(EffectiveCost) GROUP BY SubAccountName</h3>
+      <p style="font-size:0.9rem;">The sample's owner axis is emphatically non-degenerate:
+      <strong>73 distinct SubAccountId values</strong> resolving to
+      <strong>68 distinct SubAccountName values</strong>. It is also brutally concentrated —
+      939 of the 1,000 rows have an EffectiveCost of exactly zero, and 64 of the 68 names
+      total exactly $0.00.</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>SubAccountName</th><th class="num">Rows</th><th class="num">EffectiveCost (USD)</th><th class="num">Share</th></tr></thead>
+        <tbody>
+          <tr><td>Atlas Orion</td><td class="num">230</td><td class="num">14.58088000</td><td class="num">97.358%</td></tr>
+          <tr><td>Orion Pioneer</td><td class="num">63</td><td class="num">0.21995208</td><td class="num">1.469%</td></tr>
+          <tr><td>Apollo Eclipse</td><td class="num">4</td><td class="num">0.17568152</td><td class="num">1.173%</td></tr>
+          <tr><td>Pioneer Zenith</td><td class="num">16</td><td class="num">0.00000059</td><td class="num">0.000%</td></tr>
+          <tr><td class="absent">64 other sub-account names</td><td class="num">687</td><td class="num">0.00000000</td><td class="num">0.000%</td></tr>
+          <tr class="tot"><td><strong>Total</strong></td><td class="num"><strong>1,000</strong></td><td class="num"><strong>14.97651419</strong></td><td class="num"><strong>100.000%</strong></td></tr>
+        </tbody>
+      </table></div>
+      <p class="fnote"><strong>Why you group by ID, not by name.</strong> “Atlas Orion” is a
+      single line above, but it is three sub-accounts across three providers: AWS
+      <span class="mono">11353890204</span> ($13.00000000, 225 rows), Microsoft
+      <span class="mono">/subscriptions/ed570627-…</span> ($1.58088000, 2 rows), and Oracle
+      <span class="mono">ocid6.tenancy.oc6..aaaa…</span> ($0.00000000, 3 rows). Names are for
+      humans; <span class="mono">SubAccountId</span> is the join key.</p>
+
+      <h3 class="sec">The report itself — owner × service, non-zero cells only</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>SubAccountName</th><th>ServiceCategory</th><th class="num">Rows</th><th class="num">EffectiveCost (USD)</th></tr></thead>
+        <tbody>
+          <tr><td>Atlas Orion</td><td>Compute</td><td class="num">188</td><td class="num">14.58088000</td></tr>
+          <tr><td>Orion Pioneer</td><td>Databases</td><td class="num">1</td><td class="num">0.37096774</td></tr>
+          <tr><td>Apollo Eclipse</td><td>Compute</td><td class="num">2</td><td class="num">0.17568072</td></tr>
+          <tr><td>Orion Pioneer</td><td>AI and Machine Learning</td><td class="num">9</td><td class="num neg">−0.15189756</td></tr>
+          <tr><td>Orion Pioneer</td><td>Storage</td><td class="num">35</td><td class="num">0.00088190</td></tr>
+          <tr><td>Apollo Eclipse</td><td>Storage</td><td class="num">1</td><td class="num">0.00000080</td></tr>
+          <tr><td>Pioneer Zenith</td><td>Compute</td><td class="num">9</td><td class="num">0.00000037</td></tr>
+          <tr><td>Pioneer Zenith</td><td>Storage</td><td class="num">1</td><td class="num">0.00000022</td></tr>
+          <tr class="tot"><td colspan="2"><strong>8 non-zero cells of 191 populated pairs</strong></td><td class="num"><strong>246</strong></td><td class="num"><strong>14.97651419</strong></td></tr>
+        </tbody>
+      </table></div>
+      <p class="fnote">Computed offline from the committed CSV with a small Python
+      aggregation (exact decimal arithmetic, no floating point), not by an MCP tool —
+      <span class="mono">calculate_kpi</span> computes mapped KPIs, not arbitrary
+      group-bys. Figures are shown at 8 decimal places because at this sample's scale
+      rounding to cents would erase four of the eight rows.</p>
+      <p class="callnote">offline · python3 csv.DictReader over data/focus/samples/1.0/official/focus_sample.csv · Decimal sums grouped by ServiceCategory, SubAccountName, and the pair</p>
+    </div>
+  </section>
+
+  <!-- STEP 8 -->
+  <section class="step">
+    <div class="step-n">8</div>
+    <div class="step-body">
+      <h2>Takeaways</h2>
+      <div class="takeaway">
+        <h3>What a practitioner walks away with</h3>
+        <ul class="tight" style="margin-bottom:0;">
+          <li><strong>Thirteen FOCUS 1.0 columns carry a complete showback</strong> —
+          <span class="mono">BillingAccountId/Name</span>, <span class="mono">SubAccountId/Name</span>,
+          <span class="mono">Tags</span>, <span class="mono">ServiceCategory</span>,
+          <span class="mono">ServiceName</span>, <span class="mono">ChargePeriodStart/End</span>,
+          <span class="mono">ChargeCategory</span>, <span class="mono">EffectiveCost</span>,
+          <span class="mono">BilledCost</span>, <span class="mono">BillingCurrency</span>. All
+          thirteen survive unchanged into 1.2, so a 1.0 pipeline keeps running.</li>
+          <li><strong>Group by <span class="mono">ServiceCategory</span>, not
+          <span class="mono">ServiceName</span>.</strong> ServiceCategory is Mandatory,
+          non-null, and a closed 19-value vocabulary identical across 1.0 and 1.2 — the one
+          axis that is comparable across providers without a mapping table you maintain.</li>
+          <li><strong>Use <span class="mono">EffectiveCost</span> for showback, not
+          <span class="mono">BilledCost</span>.</strong> EffectiveCost is the amortized cost
+          after discounts and the applicable portion of prepaid purchases — it is what the
+          team actually consumed. Across this sample the two totals differ by
+          $5.54371254, or 27.02% of BilledCost
+          ($14.97651419 effective vs $20.52022673 billed), so the choice changes every
+          line of the report.</li>
+          <li><strong>Nulls in <span class="mono">SubAccountId</span> are spec-legal.</strong>
+          The column is Conditional and MUST be null when the charge is not related to a sub
+          account. Those rows are your unallocated slice — measure them, do not "fix" them.</li>
+          <li><strong>Decide the credit/adjustment policy before you publish.</strong> The
+          untagged rows in this sample net to −$1.70 of BilledCost, which is why the derived
+          AAI reads 108.30%. A coverage ratio that can exceed 100% is a ratio nobody trusts.</li>
+          <li><strong>Aim at the published bar.</strong> Crawl is ≥70% of cost allocated to a
+          known owner, Walk ≥85%, Run &gt;90% — official sample goals, not a vendor's.
+          Showback itself is a <em>Walk</em>-level behaviour in both Allocation and
+          Reporting &amp; Analytics.</li>
+          <li><strong>Some KPIs are honestly out of reach.</strong> Usage or Spend
+          Apportionment Validation has no FOCUS mapping because its inputs are your shared-cost
+          policy, not your billing export. A tool that refuses is more useful than one that
+          guesses.</li>
+        </ul>
+      </div>
+      <p style="margin-top:0.9rem;">Next: the same two servers applied to
+      <a href="example-esr.html">rate optimization</a>, where the chain ends in a single
+      computed Effective Savings Rate — or the
+      <a href="example-forecasting.html">forecasting maturity journey</a>, which starts from
+      the Crawl→Walk gap instead of from a report.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="guide">
+  <p>FinOps Framework content © FinOps Foundation, licensed
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
+  specification content and sample data © FinOps Foundation / FOCUS project
+  contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
+  Foundation. Content on this page has been restructured and adapted from
+  those sources; this guide and these servers are community projects —
+  <strong>not published or endorsed by the FinOps Foundation or the FOCUS
+  project</strong>.</p>
+  <p class="unofficial-legend"><strong>UNOFFICIAL legend:</strong> anything marked
+  <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
+  values, and cross-version diffs — is derived by these servers
+  (<span class="mono">official: false</span>), not published upstream; verify before
+  production use.</p>
+</footer>
+
+<script>
+  var COLS = {
+    "1.0": [
+      ["BillingAccountId", "whose invoice this is", "Dimension", "Mandatory", "3", false],
+      ["BillingAccountName", "human label for the invoice owner", "Dimension", "Mandatory", "3", false],
+      ["BillingAccountType", null, null, null, null, false],
+      ["SubAccountId", "the owner axis — primary showback grouping key", "Dimension", "Conditional", "3", false],
+      ["SubAccountName", "human label for the owner", "Dimension", "Conditional", "3", false],
+      ["SubAccountType", null, null, null, null, false],
+      ["Tags", "finer allocation than the account tree gives you", "Dimension", "Conditional", "11", false],
+      ["ServiceCategory", "the service axis — closed 19-value vocabulary", "Dimension", "Mandatory", "2", false],
+      ["ServiceName", "drill-down under the category", "Dimension", "Mandatory", "2", false],
+      ["ServiceSubcategory", null, null, null, null, false],
+      ["ChargePeriodStart", "period scope (inclusive start)", "Dimension", "Mandatory", "2", false],
+      ["ChargePeriodEnd", "period scope (exclusive end)", "Dimension", "Mandatory", "2", false],
+      ["ChargeCategory", "separate Usage from Credit / Adjustment / Purchase", "Dimension", "Mandatory", "2", false],
+      ["EffectiveCost", "the showback number — amortized, post-discount", "Metric", "Mandatory", "2", false],
+      ["BilledCost", "reconciliation against the invoice", "Metric", "Mandatory", "3", false],
+      ["BillingCurrency", "guards against summing mixed currencies", "Dimension", "Mandatory", "4", false]
+    ],
+    "1.2": [
+      ["BillingAccountId", "whose invoice this is", "Dimension", "Mandatory", "6", false],
+      ["BillingAccountName", "human label for the invoice owner", "Dimension", "Mandatory", "4", false],
+      ["BillingAccountType", "provider-assigned billing-account type", "Dimension", "Conditional", "6", true],
+      ["SubAccountId", "the owner axis — primary showback grouping key", "Dimension", "Conditional", "5", false],
+      ["SubAccountName", "human label for the owner", "Dimension", "Conditional", "none parsed", false],
+      ["SubAccountType", "provider-assigned sub-account type", "Dimension", "Conditional", "6", true],
+      ["Tags", "finer allocation than the account tree gives you", "Dimension", "Conditional", "15", false],
+      ["ServiceCategory", "the service axis — closed 19-value vocabulary", "Dimension", "Mandatory", "4", false],
+      ["ServiceName", "drill-down under the category", "Dimension", "Mandatory", "8", false],
+      ["ServiceSubcategory", "second-level service taxonomy (introduced in 1.1)", "Dimension", "Recommended", "5", true],
+      ["ChargePeriodStart", "period scope (inclusive start bound)", "Dimension", "Mandatory", "5", false],
+      ["ChargePeriodEnd", "period scope (exclusive end bound)", "Dimension", "Mandatory", "5", false],
+      ["ChargeCategory", "separate Usage from Credit / Adjustment / Purchase", "Dimension", "Mandatory", "4", false],
+      ["EffectiveCost", "the showback number — amortized, post-discount", "Metric", "Mandatory", "11", false],
+      ["BilledCost", "reconciliation against the invoice", "Metric", "Mandatory", "8", false],
+      ["BillingCurrency", "guards against summing mixed currencies", "Dimension", "Mandatory", "7", false]
+    ]
+  };
+  var NOTES = {
+    "1.0": "FOCUS 1.0 ships 43 columns. Thirteen of them cover a complete showback; the account-type and service-subcategory refinements do not exist yet, so the owner axis is SubAccountId/Name only and the service taxonomy is two levels deep (ServiceCategory → ServiceName).",
+    "1.2": "FOCUS 1.2 ships 57 columns — 14 added, 0 removed, 43 changed since 1.0. Three of the additions matter to a showback: ServiceSubcategory deepens the service taxonomy to three levels, and SubAccountType / BillingAccountType let you tell a management account from a workload account without a lookup of your own."
+  };
+  function setV(v) {
+    document.getElementById("btn-10").setAttribute("aria-pressed", String(v === "1.0"));
+    document.getElementById("btn-12").setAttribute("aria-pressed", String(v === "1.2"));
+    var tb = document.querySelector("#coltable tbody");
+    tb.innerHTML = "";
+    COLS[v].forEach(function (r) {
+      var tr = document.createElement("tr");
+      var name = "<td class='mono'>" + r[0] + (r[5] ? "<span class='new-chip'>new in 1.2</span>" : "") + "</td>";
+      if (r[1] === null) {
+        tr.innerHTML = name + "<td class='absent' colspan='4'>not in FOCUS " + v + "</td>";
+      } else {
+        var cls = r[3] === "Mandatory" ? "mand" : (r[3] === "Recommended" ? "rec" : "cond");
+        var lvl = "<span class='lvl " + cls + "'>" + r[3] + "</span>";
+        tr.innerHTML = name + "<td>" + r[1] + "</td><td>" + r[2] + "</td><td>" + lvl +
+          "</td><td class='num'>" + r[4] + "</td>";
+      }
+      tb.appendChild(tr);
+    });
+    document.getElementById("vnote").textContent = NOTES[v];
+  }
+  setV("1.2");
+</script>
+
+</body>
+</html>

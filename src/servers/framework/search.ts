@@ -1,5 +1,13 @@
 import type { Artifact } from "../../shared/index.js";
+import {
+  addTokens,
+  snippetOf,
+  type SearchDoc as GenericSearchDoc,
+  type SearchResult as GenericSearchResult,
+} from "../../shared/search.js";
 import { URI } from "./uris.js";
+
+export { search } from "../../shared/search.js";
 
 export type SearchEntityType =
   | "capability"
@@ -12,52 +20,8 @@ export type SearchEntityType =
   | "maturity-level"
   | "scope";
 
-export interface SearchDoc {
-  entity_type: SearchEntityType;
-  slug: string;
-  title: string;
-  uri: string;
-  snippet: string;
-  tokens: Map<string, number>;
-}
-
-export interface SearchResult {
-  entity_type: SearchEntityType;
-  slug: string;
-  title: string;
-  uri: string;
-  snippet: string;
-  score: number;
-}
-
-function tokenize(text: string): string[] {
-  return text
-    .toLowerCase()
-    .split(/[^a-z0-9]+/)
-    .filter((t) => t.length > 1);
-}
-
-function addTokens(
-  map: Map<string, number>,
-  text: string,
-  weight: number,
-): void {
-  for (const t of tokenize(text)) {
-    map.set(t, (map.get(t) ?? 0) + weight);
-  }
-}
-
-function snippetOf(text: string): string {
-  // Strip markdown constructs only — never intra-word characters like
-  // hyphens ("technology-related" must survive, critique-2).
-  const flat = text
-    .replace(/^[#>\-*]+\s*/gm, "")
-    .replace(/[*_`]/g, "")
-    .replace(/\[([^\]]*)\]\(([^)]*)\)/g, "$1")
-    .replace(/\s+/g, " ")
-    .trim();
-  return flat.length > 220 ? `${flat.slice(0, 217)}…` : flat;
-}
+export type SearchDoc = GenericSearchDoc<SearchEntityType>;
+export type SearchResult = GenericSearchResult<SearchEntityType>;
 
 /** Built at server startup from the artifact — never persisted (critique m10). */
 export function buildSearchIndex(artifact: Artifact): SearchDoc[] {
@@ -194,43 +158,4 @@ export function buildSearchIndex(artifact: Artifact): SearchDoc[] {
     artifact.scopes.sections[0]?.body_md ?? "",
   );
   return docs;
-}
-
-export function search(
-  index: SearchDoc[],
-  query: string,
-  entityTypes?: SearchEntityType[],
-): SearchResult[] {
-  const terms = tokenize(query);
-  if (terms.length === 0) return [];
-  const results: SearchResult[] = [];
-  for (const d of index) {
-    if (
-      entityTypes &&
-      entityTypes.length > 0 &&
-      !entityTypes.includes(d.entity_type)
-    ) {
-      continue;
-    }
-    let score = 0;
-    let matched = 0;
-    for (const t of terms) {
-      const w = d.tokens.get(t) ?? 0;
-      if (w > 0) matched += 1;
-      score += w;
-    }
-    // Require at least half the terms to hit so multi-word queries stay precise.
-    if (matched === 0 || matched < Math.ceil(terms.length / 2)) continue;
-    results.push({
-      entity_type: d.entity_type,
-      slug: d.slug,
-      title: d.title,
-      uri: d.uri,
-      snippet: d.snippet,
-      score: score * (matched / terms.length),
-    });
-  }
-  return results.sort(
-    (a, b) => b.score - a.score || a.slug.localeCompare(b.slug),
-  );
 }

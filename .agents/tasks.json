@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "43286de4db3344acc705a211defc7b19601fe55afe838952fed0f4fec2458855",
+  "chainHead": "07f67a34389c925625ebe5b677a0cc4af4c723131dd5fa5040f41b79b475afed",
   "tasks": [
     {
       "id": "T-001",
@@ -457,6 +457,753 @@
         "completedAt": "2026-07-24T07:14:44.284Z"
       },
       "hash": "43286de4db3344acc705a211defc7b19601fe55afe838952fed0f4fec2458855"
+    },
+    {
+      "id": "T-025",
+      "title": "Split build/verify token accounting and add usage canary",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "IterationRecord and journal report build-phase and verify-phase tokens separately (combined totals kept)",
+        "When a token cap is set and a runner reports no usage, the loop warns that the cap cannot see that iteration",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "IterationRecord gains buildTokens/verifyTokens; journal line shows build/verify/iteration/run totals; usage-invisible warning fires when a cap is set and usage is missing (build and verify paths). 2 new/extended tests; 246 harness tests green.",
+        "commit": "4f3841ad410200ac3288134c45f5380072b75061",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T08:08:01.830Z"
+      },
+      "hash": "711da5d54258b920378b809743339361133f31c112f0dcca398f559385b433f5"
+    },
+    {
+      "id": "T-026",
+      "title": "Assert loop branch stability and write tasks.json atomically",
+      "spec": ".agents/specs/loop-harness-improvements.md",
+      "acceptance": [
+        "The loop records its starting branch and terminates with an actionable error if HEAD moves to a different branch mid-run",
+        "saveTasks writes via temp file + rename (no torn tasks.json on kill)",
+        "Harness npm run test, lint, typecheck green with new tests"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Branch recorded at loop start and asserted per iteration and post-build; rogue-branch test proves actionable termination with terminal:error state. saveTasks now temp+rename; no temp residue. 248 harness tests green.",
+        "commit": "63d0d3cdb9749353d2f12bfc6a3dacd69c76290a",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-24T08:10:44.497Z"
+      },
+      "hash": "a2157049eac31b8d210757f03585d5bf61c1e44b3d78faa31d1f0d10d75f3d10"
+    },
+    {
+      "id": "T-027",
+      "title": "Lift shared crawler and server infrastructure into src/shared",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "frontmatter, compose infra (guard/heading/bullet/assemble), derive splitters, md, sanitize, http (origin/UA parameterized), search core (buildIndex split out), tool helpers (cursor/paginate/ok/err/RO), footer (attribution parameterized), detectDirectRun all live under src/shared and framework code re-imports them",
+        "All existing tests pass with assertion content unmodified; moved symbols are no longer defined under src/crawlers/framework or src/servers/framework (grep evidence)",
+        "npm pack --dry-run file list unchanged apart from dist internals; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Shared infra (frontmatter/compose/derive-splitters/md/sanitize/http/search/tools/footer/direct-run) moved to src/shared; framework re-imports; gates green, 197/197 tests pass, derive reproduces artifact byte-identically, npm pack diff shows only dist-internal moves",
+        "commit": "316ea59c16b79794b49f0388eb76bc814ab0a913",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T07:02:48.281Z"
+      },
+      "hash": "9f1e9af30ed75db20272870beafd356db688d5b98cb6d6f1ce3fdbf345ee5d7a"
+    },
+    {
+      "id": "T-028",
+      "title": "Add generic artifact-loading seam and multi-server eval bridge",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "loadArtifactGeneric(dir, {files, assemble, crossValidate, remediation}) exists with its own synthetic-spec test; loadArtifact(dir) remains a thin framework wrapper with unchanged signature and error text (main.ts/emit.ts/tests untouched)",
+        "evals/framework/mcp-call.mjs (or a generalized evals/mcp-call.mjs) selects the server dist path via flag/env, defaulting to framework; framework list-tools output unchanged",
+        "Gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "loadArtifactGeneric extracted with synthetic-spec test; loadArtifact thin wrapper unchanged; mcp-call.mjs --server/env selects dist path, framework list-tools byte-identical; gates green 203/203",
+        "commit": "d9d33946eb1a105809d81052b1abd99c3b1f970d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T07:11:13.015Z"
+      },
+      "hash": "be8da81f0a587fef533b498a388929f1b3263414789d1188ad578e511c3a25bf"
+    },
+    {
+      "id": "T-029",
+      "title": "Ingest FOCUS v1.0 and v1.2 from git tags into data/focus",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "src/crawlers/focus enumerates columns from each tag's columns.mdpp !INCLUDE list, asserts counts 43 (v1.0) and 57 (v1.2), cross-checks the jsDelivr flat tree, and fetches columns/attributes/glossary/CHANGELOG via raw.githubusercontent with the shared CachedFetcher",
+        "Emits data/focus/{1.0,1.2}/ markdown-canonical artifacts + manifests, data/focus/derived/diff-1.0-1.2.json (14 added columns, source-cited, plus changed records), and data/focus/index.json per the spec's version model",
+        "Refresh from cache is byte-identical (test or cited run); every column record carries id/display_name/feature_level/column_type/requirements[] with committed fixture-based parser tests; parse failures degrade to markdown-only, never block",
+        "du -s data/focus is 3MB or less; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "FOCUS 1.0/1.2 ingested: 43/57 columns matching spec, 14-column diff matching spec, byte-identical refresh verified, 852K/3MB, gates green",
+        "commit": "a11989d93d0b5adb026fc12bb928636a09d5066e",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T07:32:55.694Z"
+      },
+      "hash": "559f56d7ad8044a99af00f5e9aa3c3db47ada9c9154687c1d90c290802b1cf8a"
+    },
+    {
+      "id": "T-030",
+      "title": "Build the version-aware focus stdio server",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "src/servers/focus serves list_versions, get_column, list_columns (feature_level/column_type filters), search_focus, get_attribute, get_requirements, compare_versions with version param defaulting to 1.2 and spec_version echoed in structuredContent",
+        "focus://spec/{version}/... resources and prompts registered; unknown slugs get -32002 nearest-match; CC BY attribution footers on content responses; outputSchema conformance test covers every tool",
+        "Cross-version cursor reuse is rejected (test); dist main.js --version prints spec versions; eval bridge lists the tool surface; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Fixed verifier-flagged CC BY footer gap on get_attribute (attributeMd routing + test assertion); gates green, 268/268 tests",
+        "commit": "d5a38c10c1bb71864284af3824a4b2e100e8c9a0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T07:56:14.903Z"
+      },
+      "hash": "fda3d77f33cd42e15ca9a94fcdf0722e4efdbde0fdc399c2ed8e276af47ab13e"
+    },
+    {
+      "id": "T-031",
+      "title": "Add FOCUS conformance validator with official 1.0 ground truth",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "Per-version validator library + CLI checks column presence by feature level, data types, nullability, and value formats derived from the artifact",
+        "scripts/fetch-official-sample.mjs fetches FOCUS-1.0/focus_sample.csv once and records PROVENANCE.json (URL, date, sha256); the 1,000-row sample is committed as a test fixture with NOTICE.md attribution; no network in tests",
+        "Official sample passes 1.0 validation with 0 errors (test); at least 5 deliberately corrupted fixtures fail with column-addressed errors; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "FOCUS 1.0 validator built (columns.json-derived rules); official sample passes with 0 errors (8 real-data warnings); 8 corrupted fixtures fail with column-addressed errors; gates green, 284/284 tests",
+        "commit": "8b6418c7785e72429f3b48e178569b645c0e7385",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T08:15:12.498Z"
+      },
+      "hash": "0ef16168a45816c63580044032e519df55f35a3e961d888615703dd8a5597d35"
+    },
+    {
+      "id": "T-032",
+      "title": "Add seeded synthetic FOCUS data generator",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "Deterministic seeded generator emits spec-conformant CSV per version; same seed produces byte-identical output (test)",
+        "Generated 1.0 data passes the 1.0 validator and generated 1.2 data passes the 1.2 validator (tests); headers exactly match each version's column list",
+        "Committed synthetic samples total 200KB or less and are clearly labeled synthetic; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Seeded generator (mulberry32) derives values purely from columns.json metadata; 297/297 tests incl. determinism + 0-error/0-warning validator pass for both versions; synthetic fixtures 140KB total, clearly labeled",
+        "commit": "9bf337175935a83bb87fe7c9e66b31eeec8f6ce2",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T08:26:45.449Z"
+      },
+      "hash": "c9785e798e6bb305fac655e2b4cc124ea52747079d7904306435b954b32b2ba7"
+    },
+    {
+      "id": "T-033",
+      "title": "Derive the unofficial KPI-to-FOCUS-column mapping",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "data/focus/derived/kpi-mapping.json maps 15-20 high-impact framework KPIs (ESR, commitment set, unit-economics set) to required FOCUS columns per version with FOCUS-terms formula translations and a methodology note; every record official:false",
+        "Tests cross-validate every mapped framework KPI slug against data/framework content and every referenced column against the target version artifact",
+        "get_kpi_mapping tool serves the mapping with an UNOFFICIAL banner in text content and framework finops:// URI cross-references (tests); artifact hashed in index.json; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "18 unofficial KPI-to-FOCUS-column mappings + get_kpi_mapping tool; 315/315 tests, gates green",
+        "commit": "3b880b37a3c07d049bd588060e184abfa7667191",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T08:44:10.528Z"
+      },
+      "hash": "97f179d883b5a554df1d23b882f2dced4697d71fadf32dde9da84eaca6611995"
+    },
+    {
+      "id": "T-034",
+      "title": "Add calculate_kpi over bundled sample data",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "Formula registry computes at least ESR (and 2+ more mapped KPIs) over the bundled official and synthetic samples, selected by version; user-supplied data is NOT accepted",
+        "ESR over a hand-computed 10-row fixture matches the expected value exactly (test); KPIs without formulas error cleanly with guidance",
+        "Responses carry the unofficial-calculation disclaimer and sample provenance; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "calculate_kpi over bundled samples: 9 mapped KPIs computed (ESR exact on 10-row fixture), no-formula KPIs error with guidance, unofficial-calculation banner + sample provenance in every response, gates green (336/336 tests)",
+        "commit": "5d010769df62231abea6c4a3ca7944f6a2381f47",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T09:04:32.228Z"
+      },
+      "hash": "7b75f40a472f39a6ffa47f2312aed32f62f0feea9425cd3b2fd14e5c8b0e0603"
+    },
+    {
+      "id": "T-035",
+      "title": "Author focus eval suite and combined two-server scenario",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "evals/focus/eval.xml holds 10 version-aware tools-only questions (including at least 2 requiring compare_versions and 2 requiring the KPI mapping) answerable against the committed artifact",
+        "A combined scenario eval documents the Rate Optimization walkthrough answered using only the framework and focus bridges",
+        "Eval design verified by answering every question through the live server and citing the calls in the journal; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "evals/focus/eval.xml (10 version-aware Qs, 2 compare_versions + 2 get_kpi_mapping) and combined-scenario.xml (Rate Optimization walkthrough, both bridges) authored and verified live; gates green",
+        "commit": "83fb4ed9744a13d135defee880afcfa8624aa408",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T09:16:13.968Z"
+      },
+      "hash": "9378cc2cc3a9c4e5d1088560beb48580e980ff14fafdc87126c68b6fa90d69e0"
+    },
+    {
+      "id": "T-036",
+      "title": "Package focus-spec-mcp as its own npm publish shim",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "packages/focus-spec-mcp/ has package.json (name focus-spec-mcp, bin, files whitelist, prepack runs scripts/pack-focus.mjs), README.md, NOTICE.md with FOCUS CC BY attribution and no-endorsement note, and server.json for the MCP registry",
+        "Root package.json files narrowed so the framework tarball contains no focus dist or data (packaging test asserts both directions); focus tarball is under 1MB and contains dist/servers/focus/main.js + data/focus",
+        "A test packs the shim into scratch, installs it, and runs the bin --version successfully; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "packages/focus-spec-mcp/ shim built, packed+installed+run --version verified offline, gates green (--tier all)",
+        "commit": "83a286e2b2488f031502321402ec332379071345",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T09:32:36.331Z"
+      },
+      "hash": "2228b3c6b3a5c785074379de4e62cdd8d839bcf166c4d7271ba570d2588f8cab"
+    },
+    {
+      "id": "T-037",
+      "title": "Build the Cloudflare Worker serving both MCP servers over HTTPS",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "src/workers/app.ts exports a fetch-handler factory routing /mcp/framework and /mcp/focus with per-request server + WebStandardStreamableHTTPServerTransport (stateless, enableJsonResponse) and an Origin allowlist (absent Origin allowed, unlisted Origin 403)",
+        "scripts/bundle-worker-data.mjs ajv-validates artifacts at build time and emits JSON modules; no node:fs reachable from src/workers/index.ts (grep test); wrangler.toml has nodejs_compat and main src/workers/index.ts",
+        "app.test.ts drives initialize, tools/list, and a tools/call on BOTH routes using native Request objects plus the 403/404/405 cases; docs/deploy-worker.md gives the owner deploy checklist; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Worker (src/workers/) routes /mcp/framework + /mcp/focus over WebStandardStreamableHTTPServerTransport, stateless, Origin-allowlisted; scripts/bundle-worker-data.mjs ajv-validates + emits committed data modules; fs-boundary test proves no node:fs reachable; app.test.ts covers both routes + 403/404/405; docs/deploy-worker.md; gates --tier all green (354 tests)",
+        "commit": "bdc29614aa2802ae361d5cfe73a5ea2a3a67a57a",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T09:54:04.324Z"
+      },
+      "hash": "2c464a00dc1e920b2073c271de8658ecfdaecad90cab198a4b38a623b1684e95"
+    },
+    {
+      "id": "T-038",
+      "title": "Build the static demo web app for the combined walkthrough",
+      "spec": ".agents/specs/focus-mcp-v1.md",
+      "acceptance": [
+        "demo/ is a static app (no build step) with one endpoint-config object, walking Rate Optimization -> KPIs -> FOCUS columns per version -> calculate_kpi against the worker endpoints",
+        "A node test validates the demo's JSON-RPC request bodies against the worker fetch handler from the previous task",
+        "docs/deploy-demo.md covers Cloudflare Pages (or equivalent static) deployment; gates green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "demo/ static walkthrough app + Node test validating its request bodies against the T-037 worker handler (values match combined-scenario.xml exactly); docs/deploy-demo.md; gates green --tier all",
+        "commit": "f1c1bb39f94a24c48fb92418a719190d3fde2709",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-28T10:06:50.110Z"
+      },
+      "hash": "3eab27b5f86c1648727dd66229dd019ffa2198000bbaceb06c7361f8b226e9e2"
+    },
+    {
+      "id": "T-039",
+      "title": "Fix requirements parser: keep nested bullets, add RECOMMENDED/MAY (gate4 C2-fidelity-1+2)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "extractRequirements (src/crawlers/focus/parse/table.ts) preserves nested normative bullets, prefixing each with its parent bullet's scoping clause; NORMATIVE keyword set extended to the full RFC-2119 family FOCUS uses: MUST NOT, MUST, SHOULD NOT, SHOULD, RECOMMENDED, MAY (longest-first)",
+        "The existing parse/table.test.ts assertion that nested bullets are ignored is WRONG per gate 4 and this task explicitly authorizes rewriting it; add fixture tests pinning that effectivecost and skuid 1.2 nested MUSTs and InvoiceId 1.2 RECOMMENDED/MAY bullets survive parsing",
+        "Re-run node dist/cli.js derive (or the documented derive entry) to regenerate data/focus/{1.0,1.2}/columns.json and derived/diff-1.0-1.2.json; re-run scripts/bundle-worker-data.mjs so src/workers/generated/focus-store.ts matches (bundle-data.test.ts must pass)",
+        "Live probe evidence: get_requirements EffectiveCost 1.2 includes the nested 'sum of EffectiveCost where ChargeCategory is Usage MUST equal...' bullet; InvoiceId 1.2 includes both nullability MUSTs plus the RECOMMENDED presence and MAY pre-invoice bullets; gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "extractRequirements preserves nested normative bullets + RECOMMENDED/MAY; data/focus + worker bundle re-derived; gates --tier all green; live-probed EffectiveCost/InvoiceId 1.2 get_requirements",
+        "commit": "bdf0ec98ec15a57bd98fef0ff965926da234dc4c",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T13:51:18.511Z"
+      },
+      "hash": "23a03a926ab642f6df1c2ecf8dd6a81967fc7a8ade48c201d9f8c5cb84c61301"
+    },
+    {
+      "id": "T-040",
+      "title": "Add CORS support to the Worker; fix deploy doc and demo hint (gate4 C4-community-1)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "createFetchHandler (src/workers/app.ts) answers OPTIONS on /mcp/framework and /mcp/focus with 204 + Access-Control-Allow-Origin echoing an allowlisted Origin, Access-Control-Allow-Methods: POST, GET, DELETE, OPTIONS, and Access-Control-Allow-Headers: Content-Type, Accept, Mcp-Session-Id, MCP-Protocol-Version; every non-preflight response whose Origin passed the allowlist carries Access-Control-Allow-Origin",
+        "src/workers/app.test.ts gains cases for preflight (allowed and unlisted Origin) and for ACAO presence on allowed-Origin POST responses",
+        "docs/deploy-worker.md no longer implies ALLOWED_ORIGINS alone enables browser clients (documents the CORS behavior); demo/client.js error hint no longer misdiagnoses CORS failures as purely an allowlist knob",
+        "gates --tier all pass; live probe evidence via a scratch native-Request script: preflight 204 with ACAO, POST 200 with ACAO for an allowlisted Origin"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Worker answers OPTIONS with 204+ACAO and stamps ACAO on allowed-Origin responses; gates --tier all green (364 tests), live-probed preflight 204/POST 200 with ACAO for an allowlisted Origin",
+        "commit": "7c6d61f835d9aaee6d5b91faadbe6e55ad7834a9",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:01:28.611Z"
+      },
+      "hash": "8ce86af826b965cfab0d52d582ce61c5636fec928609dc30ebbe34c8230631bf"
+    },
+    {
+      "id": "T-041",
+      "title": "Attribute get_requirements output: CC BY footer + source_url (gate4 C1-protocol-1)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "get_requirements text response ends with the same ccByFooter/footer(artifact, source_url) attribution line get_column uses; structuredContent and outputSchema gain source_url (and license CC-BY-4.0)",
+        "Live probe: get_requirements BilledCost shows the footer and structured source_url; existing tests updated only where they pin the old footer-less output (authorized); gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "get_requirements now appends the ccByFooter and returns source_url/license, matching get_column; gates green (365 tests), live-probed BilledCost",
+        "commit": "cd76e39bf981beff54328de244640c9ed97f89df",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:10:05.059Z"
+      },
+      "hash": "ec0a0174ccdd03716f4e15e86941f1b4dbed0893f022205c212905042fd9ba0b"
+    },
+    {
+      "id": "T-042",
+      "title": "compare_versions: error on unknown columns instead of 'unchanged' (gate4 C1-protocol-2)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "compare_versions with a column that resolves in neither served version returns isError true with the same did-you-mean suggester get_column uses; status 'unchanged' is reserved for columns present in both versions with no diff entry",
+        "Live probe: column BilledCosts errors with suggestions; column BilledCost still reports changed; a genuinely-both-versions-no-diff case (if none exists in the current diff, a unit test constructs one) reports unchanged; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "compare_versions errors with did-you-mean on unknown columns (BilledCosts); BilledCost still 'changed'; synthetic test covers genuine unchanged; gates pass (367 tests), reviewer-verified",
+        "commit": "34c86a8b9aaf188837505994fdb6b768c92eed0e",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:20:02.461Z"
+      },
+      "hash": "e3402c076956b973385648264d3f8f40df5a1fd13ce27fc8dba6fdbdea1d35c5"
+    },
+    {
+      "id": "T-043",
+      "title": "Expose CHANGELOG + materiality caveat; official:false on diff (gate4 C2-fidelity-4+5)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "The bundled upstream CHANGELOG is exposed as a resource (focus://spec/{version}/changelog); compare_versions banner cites the upstream materiality caveat (most changes are not material unless specifically called out) and links source_urls for judging materiality",
+        "data/focus/derived/diff-1.0-1.2.json carries official: false (derive step updated, artifact regenerated, worker bundle regenerated); compare_versions structuredContent echoes the unofficial flag; the NOTICE.md sentence claiming all derived records carry official:false is now true (or reworded to match reality)",
+        "Live probes: reading the changelog resource returns upstream text; compare_versions text shows the caveat; gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "focus://spec/{version}/changelog resource + compare_versions materiality caveat + diff official:false; gates --tier all green (370 tests), live-probed",
+        "commit": "d1b181216132b05b910e97b766a089a43877747e",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:35:36.417Z"
+      },
+      "hash": "f704207264c6557cab894a46d555d981c3995320cf1a47c628962cc7f2c39fc8"
+    },
+    {
+      "id": "T-044",
+      "title": "calculate_kpi: zero-denominator guard, no fabricated numbers (gate4 C3-version-1, C4-community-2)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "For ratio-of-filtered-sums KPIs, a zero denominator no longer coerces to a definite value: kpi-calc returns a not-computable result (computable:false + reason, or the clean guidance error path) explaining the sample lacks qualifying rows and suggesting version 1.2; return-0 kept only where 0 is semantically true (e.g. ESR with zero ListCost)",
+        "This task explicitly authorizes updating tests/eval fixtures that pinned the old 0%/100%/0 outputs: kpi-calc unit test pinning official-1.0 commitment KPIs as not-computable; demo/app.js and demo/requests-driven test render/assert not-computable instead of numbers; evals/focus/combined-scenario.xml expectations updated to match",
+        "Live probes: calculate_kpi commitment-utilization-score version 1.0 returns the not-computable explanation (no 0% value); ESR 1.0 still returns 26.552972346576816%; gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "calculate_kpi commitment KPIs now error with guidance (not 0%/100%/0) on zero-Purchase-row samples; ESR/1.2 unaffected; gates --tier all green, live-probed",
+        "commit": "28e710bd50353d43091a4082fce530ad25360b88",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:46:26.453Z"
+      },
+      "hash": "887f19a2acec3f4db62c476e8e122b93450277dad419de53014a9a14e7049496"
+    },
+    {
+      "id": "T-045",
+      "title": "Version-differentiate commitment KPI mappings for 1.2 (gate4 C3-version-2)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "kpi-mapping derivation version-differentiates at least the three commitment KPIs: columns_by_version['1.2'] includes CommitmentDiscountQuantity and CommitmentDiscountUnit with a per-version formula or caveat (at 1.0 spend proxy; at 1.2 prefer quantity columns); data/focus/derived/kpi-mapping.json regenerated; worker bundle regenerated",
+        "Live probe: get_kpi_mapping consumption-versus-commitment version 1.2 no longer claims it cannot use CommitmentDiscountQuantity; the 1.0 answer still explains the spend proxy; UNOFFICIAL flags intact; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "columns_by_version['1.2'] gains CommitmentDiscountQuantity/Unit for the 3 commitment KPIs, caveat rewritten version-neutral; gates green 375 tests, live-probed both versions",
+        "commit": "0f04a4f2eda54b76da0ea25b2f6478f671678049",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T14:58:59.257Z"
+      },
+      "hash": "56b02adf1585d6ebcd5f073bf09cf1ff635a4dc6eee0126e8d3d2a3e94f56ceb"
+    },
+    {
+      "id": "T-046",
+      "title": "Fix 'official' phrasing in focus-spec-mcp README (gate4 C2-fidelity-3)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "packages/focus-spec-mcp/README.md no longer calls the sibling package 'the official FinOps Framework server' — 'official' attaches to the upstream Framework/spec, never to this software; grep of both package READMEs, descriptions, and server.json files finds no other 'official' binding to the software itself",
+        "gates pass (docs-only change; no artifact regen needed)"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "README no longer calls sibling package 'the official FinOps Framework server'; grep of both packages' READMEs/descriptions/server.json confirms no other software-official binding; gates green",
+        "commit": "cb4f8ec1c0cf68d1f2d1c0c464dc11e7b1a8a969",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T15:07:18.545Z"
+      },
+      "hash": "d865c7251c71f9f2f6bdd7dadae6345924dbe547a1f698930d5ee8dd64acd3a4"
+    },
+    {
+      "id": "T-047",
+      "title": "MINOR polish: stable example slug, cross-version hints, slug param docs (gate4 C1-protocol-3+4, C3-version-3)",
+      "spec": "docs/critique-4-focus-gate.md",
+      "acceptance": [
+        "get_attribute's inline example slug is one that resolves in both served versions (e.g. datetime_format) and its description explicitly names the parameter slug (eval Run 1 friction); description notes attribute discovery via search_focus entity_types=['attribute']",
+        "findColumn's unknown-column error, when the exact id/slug resolves in a different served version, says so with the version it was added/present in and suggests retrying with that version or compare_versions (covers ServiceSubcategory@1.0 and SkuMeter@1.0); otherwise the error names the version consulted",
+        "Live probes: get_column ServiceSubcategory version 1.0 mentions it exists in 1.2; get_attribute with the new example slug succeeds at the default version; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "get_attribute example slug now datetime_format (works at default version); findColumn names the other served version + suggests compare_versions when a real column is missing only from the requested version; 4 new tests, gates green 379 tests, live-probed",
+        "commit": "b2ec652b3953f9ec45d11ae8750d38533467a5e6",
+        "verifiedBy": "gates",
+        "completedAt": "2026-07-30T15:16:49.971Z"
+      },
+      "hash": "0033df447166e26ea8013a917d3130d7619aadb2138fd48530e2ed6771f7cb4b"
+    },
+    {
+      "id": "T-048",
+      "title": "Rename focus package to finops-focus-mcp (owner decision, gate4 C4-community-3)",
+      "acceptance": [
+        "packages/focus-spec-mcp/ renamed to packages/finops-focus-mcp/; package.json name and bin are finops-focus-mcp; its server.json registry id is io.github.aaronmsoto/finops-focus-mcp; every focus-spec-mcp reference in the repo (READMEs, NOTICE, docs, demo, scripts, workflows excluded-paths aside) swept to the new name",
+        "npm pack succeeds from the renamed dir; a temp install of the tarball runs the bin and prints the finops-focus-mcp banner with spec versions",
+        ".agents/memory/decisions.md records the owner decision: finops-focus-mcp for family consistency with finops-framework-mcp, LF trademark-policy quote, knowingly-accepted descriptive-use risk with mitigations",
+        "gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Renamed focus-spec-mcp to finops-focus-mcp everywhere live (shim dir, package/bin/mcpName, server.json id, server identity + schema $ids, pack script, demo, deploy doc, eval header, spec, memory); tarball re-packed (241KB) and temp-install bin prints 'finops-focus-mcp v1.0.0 (FOCUS spec versions: 1.0, 1.2; latest 1.2)'; decision + LF-policy risk rationale in decisions.md; gates --tier all PASS",
+        "commit": "0bd490beb3e6aa9eceaa84cf54538d1d83382ae5",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T05:48:58.365Z"
+      },
+      "hash": "4b336cc8c48d51eef2dfd8af6295889262ed09a2e710ad390570be56eeb18a60"
+    },
+    {
+      "id": "T-049",
+      "title": "Fix launch-blocking doc MAJORs: root README reality + NOTICE CC BY scope",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "Root README presents the shipped surface: a finops-focus-mcp sibling-server section linking packages/finops-focus-mcp, Worker remote endpoints + docs/deploy-worker.md, demo/ mention; Roadmap paragraph rewritten past-tense; critique list extended to critique-3/4; tool tables untouched (verified current by the review)",
+        "Root NOTICE.md gains the FOCUS specification text + sample data (CC BY 4.0) section covering data/focus/1.0, 1.2, samples/1.0/official (transplanted from packages/finops-focus-mcp/NOTICE.md); README license section widened to cover both data/framework and data/focus as CC BY 4.0",
+        "gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Root README now presents the shipped surface (finops-focus-mcp sibling section linking packages/finops-focus-mcp, Worker endpoints + deploy doc, demo/, past-tense roadmap folded in, critique list extended through critique-4 and the final review); NOTICE.md gained the FOCUS spec-text CC BY 4.0 section covering data/focus/1.0+1.2 with adaptation notice, sample section extended to data/focus/samples/1.0/official, scope line widened; gates PASS",
+        "commit": "5b67bbd77f96c637e188f485741639800e236446",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T06:21:57.568Z"
+      },
+      "hash": "2feeb4627ffaf5edb382a003ec09a664f6583cc3a6f479cf1bdeeaabf574f829"
+    },
+    {
+      "id": "T-050",
+      "title": "Fix CI: packaging test offline install fails with ENOTCACHED",
+      "acceptance": [
+        "src/packaging.test.ts installs the packed tarball with --prefer-offline (warm-cache hermetic locally, network fallback in CI where npm ci does not cache the @modelcontextprotocol/sdk packument); comment updated to explain why",
+        "Full test suite green locally; after push, PR #9 gates-fast check goes green"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "packaging test installs the shim tarball with --prefer-offline; local gates green (379 tests); pushed, PR #9 CI re-triggered — root cause was npm ci not caching the SDK packument, so strict --offline ENOTCACHED'd in CI",
+        "commit": "0251817033dbea7902ebf13f8fb87906b6e90386",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T06:51:52.390Z"
+      },
+      "hash": "90a5bc639063b3b836c59e63778e00fbd56ecbdfb35c207676cefc47ffa20933"
+    },
+    {
+      "id": "T-051",
+      "title": "Tool description fixes: exact params, cross-refs, live counts (review TN-1/2/3)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "list_capabilities description names the exact filter param 'domain' (no 'domain slug' prose trap); assess_maturity_path has .describe() on every param and cross-references get_maturity_assessment; the four hardcoded corpus counts (framework tools.ts ~203,545; focus tools.ts ~307,568) are interpolated from the loaded artifact/store at registration time (focus version-list pattern) or pinned by a test asserting description matches artifact counts",
+        "Live probes: list-tools shows the new descriptions; list_capabilities with domain filter works and prose matches; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "TN-1/2/3 fixed: exact param names + interpolated corpus counts in tool descriptions; gates green, live-probed via in-memory MCP client",
+        "commit": "fdf8a230d9cda99b23df8cdd6b41e025e8a8848b",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:02:28.748Z"
+      },
+      "hash": "fd7a620d849f21baac13d8d9e63e93fa4d80da4ad663baf1741866796beb8fe9"
+    },
+    {
+      "id": "T-052",
+      "title": "MCP protocol polish: pagination parity, Worker 405s, listChanged docs (review MCP-1/2/3)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "Every paginated tool's TEXT block reports 'Showing X of Y' + next-cursor presence, mirroring get_kpis (list_capabilities, list_columns, search_framework, and any others found); existing text-snapshot tests updated as part of this behavior change (authorized)",
+        "Worker short-circuits GET and DELETE on /mcp/* with 405 + Allow header instead of opening an eternal silent SSE stream; app.test.ts cases added for both",
+        "listChanged comment/doc mismatch resolved: server.ts comments (framework ~20-23 and focus equivalent) corrected to note the SDK advertises listChanged though the artifact is immutable per process, or the flag suppressed if the SDK allows; gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "MCP-1/2/3 fixed: pagination text parity on 4 tools, Worker 405 for GET/DELETE with Allow header + 4 new app.test.ts cases, listChanged comments corrected in both server.ts; gates --tier all PASS (385 tests).",
+        "commit": "6c3a94719c0628b0fd8e4104981059ae87b06086",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:14:02.937Z"
+      },
+      "hash": "7848d27e0c5f8b917bcf38a5283f8fb43e1481a75b8209c84f8c4acfcc0a9ff7"
+    },
+    {
+      "id": "T-053",
+      "title": "Add map-kpi-to-focus-columns prompt to the focus server (review MCP-4)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "src/servers/focus/prompts.ts registers a third prompt guiding the KPI->FOCUS-columns workflow (completable kpi/capability + version args, embedded resource or tool-call guidance, UNOFFICIAL framing) mirroring the existing prompt structure; prompt list/get covered by a test; live probe shows it in prompts/list with working completion"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Added map-kpi-to-focus-columns prompt (server.test.ts prompt list/get/completion tests, 389 tests green); live probe against dist/ confirms prompts/list + working kpi/capability/version completion",
+        "commit": "985996f4ba5375b9b455d205570a3641332e05e8",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:26:37.538Z"
+      },
+      "hash": "64b4a5c271edd283ff9a65c6f5a387ecd286bec695f0d4f1a110b4bbe64a8c47"
+    },
+    {
+      "id": "T-054",
+      "title": "Generate docs/mcp-surface.md: per-server prompts/resources/tools hierarchy",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "evals/framework/mcp-call.mjs gains list-resources, list-resource-templates, and list-prompts commands (same client bridge pattern as list-tools)",
+        "docs/mcp-surface.md documents BOTH servers as a hierarchy: server -> prompts (name, args) -> resources (fixed URIs + templates with completion notes) -> tools (name, one-line purpose, params with defaults/limits), generated from LIVE bridge output after all sibling tasks land, with resource/tool counts and an UNOFFICIAL-marking legend; both READMEs link to it",
+        "A test or generation script (scripts/gen-mcp-surface.mjs) makes the doc reproducible; doc content matches live output at commit time; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "docs/mcp-surface.md generated from live MCP output (gen-mcp-surface.mjs + mcp-call.mjs list-resources/templates/prompts); drift-guard test 3/3; gates --tier all PASS (392 tests)",
+        "commit": "5f44f8dee8528fe44db6c36a4827ed9ab8a1c028",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:45:23.222Z"
+      },
+      "hash": "9a85ca8b2734cab9067ba99a1b5c5da6b55d445967adadb15aaeb897ee943739"
+    },
+    {
+      "id": "T-055",
+      "title": "Docs coherence: MEMORY.md, combined-scenario step 4, architecture/AGENTS framing, Worker posture (review DOC-1/3/4, L5)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "MEMORY.md rewritten per the update-memory protocol: current phase (v1 + finops-focus-mcp built, four critique gates + final review passed, publish owner-gated), FOCUS/Worker/demo invariants, 'inferred edges' invariant dropped; under 200 lines (memory lint hard limit)",
+        "evals/focus/combined-scenario.xml step-4 expected text matches the T-045 reality (1.2 commitment mappings include CommitmentDiscountQuantity/Unit with version-differentiated caveat)",
+        "docs/architecture.md and AGENTS.md project framing updated: two MCP servers, Worker Streamable HTTP + demo now built (short 'now built' pointers, no rewrite of historical design rationale); AGENTS.md stays ~150 lines",
+        "docs/deploy-worker.md Notes/limits documents the deliberate no-auth/no-rate-limit posture for stateless read-only public data and points at Cloudflare rate limiting; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "MEMORY.md rewritten for v1 (50 lines); combined-scenario step 4 matches T-045 live output; architecture.md/AGENTS.md got 'Now built' pointers; deploy-worker.md documents deliberate no-auth posture; gates PASS (392 tests).",
+        "commit": "5ceac54f749f8774ab3903485e505573adb61dac",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T07:55:12.854Z"
+      },
+      "hash": "3aaadf891ec5eaca607c4e85d98613aa90e9e8ab3811dc50c78d89327db0a351"
+    },
+    {
+      "id": "T-056",
+      "title": "Dual-launch hygiene: SECURITY/CONTRIBUTING/issue template, npm metadata, engines (review L3/L4)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "SECURITY.md (report channel + supported-versions note), CONTRIBUTING.md (short; points at AGENTS.md, gates, PR flow), and one .github/ISSUE_TEMPLATE bug template exist; .github/workflows NOT touched",
+        "Both package.json files gain author, homepage, bugs; engines bumped to >=22 in both (CI tests node 22 only; no workflow edits); focus package README 'contribution docs' promise now resolves to real files",
+        "npm pack for both packages still succeeds; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "SECURITY.md/CONTRIBUTING.md/issue template added; both package.json gained author/homepage/bugs and engines>=22; npm pack succeeds both packages; gates green (392 tests)",
+        "commit": "bb5d3e9d0a81d6c0865abf6737326848b20b3176",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T08:03:40.142Z"
+      },
+      "hash": "8f50087d77464db6468e5e7efbcc610f655add8bd5ec85513463e538b7cd3025"
+    },
+    {
+      "id": "T-057",
+      "title": "Architecture periphery: worker entry tests, direct-run guard, notFound dedup, dead code (review R2/3/4/5)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "Pure-function tests for parseAllowedOrigins and loadWorkerData (src/workers/index.ts, data.ts — currently 0% covered)",
+        "src/crawlers/framework/cli.ts direct-run check uses isDirectRunOf(import.meta.url) from src/shared/direct-run.ts instead of endsWith('cli.js')",
+        "The byte-identical notFound() helper (framework/resources.ts ~23-42 = focus/resources.ts ~18-37) is hoisted into src/shared with both servers importing it; existing typo tests still pass",
+        "Dead code deleted: parseOverview() in parse/sections.ts (+ its orphaned tests) and the template greet() scaffold in src/index.ts (+ tests/index.test.ts adjusted or removed as part of this authorized cleanup); gates --tier all pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "gates --tier all PASS (402 tests): worker index/data tests added (100% stmt/fn coverage per raw coverage-final.json), cli.ts direct-run swapped to isDirectRunOf, notFound() hoisted to src/shared/mcp-not-found.ts, parseOverview()+greet() dead code deleted",
+        "commit": "18fb34f5aad15abe28ee7cdb7adec6e3aa1183e3",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T08:18:51.693Z"
+      },
+      "hash": "2b5a62693485dbf2889cbabb321f1e8e3d12197d2d8afe030e60c165c5a19752"
+    },
+    {
+      "id": "T-058",
+      "title": "Derive pipeline integration test (review R1)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "An integration test runs deriveFromDocs/deriveArtifactPayload against the committed data/framework/content/markdown and asserts the result equals the committed artifact JSON (byte or deep-equal), closing the 0%-covered derive orchestration gap; runtime stays reasonable for the fast tier or is bound to the full tier; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Added derive-artifact.test.ts: deriveArtifactPayload vs committed data/framework artifact, all 10 entities deep-equal, 0 warnings, counts match; gates green (407 tests)",
+        "commit": "122d865faca8743a77323ab9e876d3ae720a24c6",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T08:26:41.754Z"
+      },
+      "hash": "b840b5d822394d2ced1fbf1cca5d4d2b09d2d9c32013adb1e8e74722a7b229a9"
+    },
+    {
+      "id": "T-059",
+      "title": "Bring demo/ under the format gate (review R6; protected-path edit AUTHORIZED)",
+      "spec": "docs/final-status-review.md",
+      "acceptance": [
+        "This task EXPLICITLY authorizes editing the agentic.config.json format gate command (hard-rule escape hatch) to include demo/ in prettier check scope; demo/ files prettier-formatted once via --write",
+        "If the PreToolUse hook or integrity gate still blocks the config edit, mark this task blocked with the hook message in the journal and leave the demo prettier-write as the landed portion; gates pass either way"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "agentic.config.json format gate extended to demo/; demo/*.js+.html prettier-written; gates PASS",
+        "commit": "e7c67915960ce99a964e67e52f6107327118c5b1",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T08:32:45.909Z"
+      },
+      "hash": "f7c2c386c11b5dcdc775f5afe11728cb583fd7176e723fe9134f173a62bef6da"
+    },
+    {
+      "id": "T-060",
+      "title": "Usage guide: scaffold + Intro/Getting Started page (spec usage-guide-v1 T-A)",
+      "spec": ".agents/specs/usage-guide-v1.md",
+      "acceptance": [
+        "docs/guide/index.html exists per spec page 1: repo intro, both servers side by side with live-probed counts, getting-started (both bins, Claude Code + Claude Desktop config, Worker endpoints), one real first-call transcript per server, next-page map; self-contained, shared chrome, light/dark, six-link nav",
+        "Every fact/number/transcript live-probed (spec Hard content rules); gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "docs/guide/index.html: repo intro, both servers side by side with live counts (framework 22 capabilities/88 KPIs/11 tools/4 prompts/44 resources; focus 1.0=43+9, 1.2=57+9/9 tools/3 prompts/125 resources), getting-started for both bins with Claude Code + Desktop + .mcp.json configs, Worker remote option, and a verbatim first-call transcript per server (list_versions, get_capability anomaly-management). 15 live probes; shared chrome template documented in-file; gates PASS",
+        "commit": "a1cb38ec1cd2fa8cc014dd8ca1571fa1f5579ecf",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T15:33:36.725Z"
+      },
+      "hash": "0af03f71c0bf45836138d82f5a8fecfef2883e3674055cff739787a99501aced"
+    },
+    {
+      "id": "T-061",
+      "title": "Usage guide: server reference pages (spec usage-guide-v1 T-B)",
+      "spec": ".agents/specs/usage-guide-v1.md",
+      "acceptance": [
+        "docs/guide/framework-server.html and focus-server.html per spec pages 2-3: data/version model, grouped tool tours consistent with docs/mcp-surface.md, prompts + resources, worked demo sections (Anomaly Management; BilledCost + 1.0→1.2 diff) with real transcripts; shared chrome + nav; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "docs/guide/framework-server.html (10 probes): 4 domains->22 capabilities->88 KPIs model, all 11 default tools grouped discover/read/search/assess with params, 4 prompts + finops:// resources, live cursor-pagination transcript, Anomaly Management end-to-end demo. docs/guide/focus-server.html (12 probes): version model, all 9 tools grouped versions->columns/attributes->requirements->search->compare/changelog->UNOFFICIAL KPI tools, 3 prompts + focus:// resources incl. changelog, BilledCost 1.0 record + 1.2 verbatim requirements + full 1.0->1.2 diff. Tool tables reconciled against docs/mcp-surface.md and live list-tools; gates PASS",
+        "commit": "0a72344acda7c62ac18e354d96ea9007f19353e6",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T15:34:04.076Z"
+      },
+      "hash": "6a8311c3a51df861c3dfac893d97b8a4e5ac684f543180109bc4d39682f9b923"
+    },
+    {
+      "id": "T-062",
+      "title": "Usage guide: three worked-example pages (spec usage-guide-v1 T-C)",
+      "spec": ".agents/specs/usage-guide-v1.md",
+      "acceptance": [
+        "docs/guide/example-showback.html (Understand Usage & Cost: Allocation + Reporting & Analytics, real showback table computed from the committed official sample), example-esr.html (existing walkthrough restyled, headline numbers re-probed), example-forecasting.html (Crawl→Walk Forecasting maturity journey, verbatim official characteristics, Unit Economics + Forecasting KPIs, FOCUS columns per version) per spec pages 4-6; UNOFFICIAL + CC BY marking; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Three worked examples. example-showback.html (37 probes): Understand Usage & Cost domain + Allocation/Reporting & Analytics verbatim definitions, official maturity sample goals (Crawl >=70%/Walk >=85%/Run >90% cost to known owner), 16-column showback set with 1.0/1.2 toggle, and a real report computed from the bundled official 1.0 sample (EffectiveCost by ServiceCategory and SubAccountId); honestly notes Reporting & Analytics has no featured KPIs and one Allocation KPI is unmapped rather than inventing either. example-esr.html (5 probes): validated ESR walkthrough restyled, headline numbers re-probed (ESR 26.552972346576816%, not-computable refusal, 1.2 values). example-forecasting.html (24 probes): verbatim official Forecasting Crawl (6) and Walk (7) characteristics, 4 featured KPIs with official formulas, FOCUS columns feeding a forecast, 90-day plan explicitly boxed as this guide's synthesis. gates PASS",
+        "commit": "c5fbdd521d51c41c3922680e36754260fffc6f60",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T15:34:33.441Z"
+      },
+      "hash": "34a6fd15cd0063d5889d9074900013a5b461552fe54e1a43d5a5876c4b7b3bf6"
+    },
+    {
+      "id": "T-063",
+      "title": "Usage guide: integration, links, Artifact republish (spec usage-guide-v1 T-D)",
+      "spec": ".agents/specs/usage-guide-v1.md",
+      "acceptance": [
+        "README gains a Documentation section linking docs/guide/ (and the pages); docs/mcp-surface.md cross-links the guide; decisions.md records Pages-over-wiki with rationale; owner checklist (activeContext) gains enable-GitHub-Pages item",
+        "Single-file SPA build of the six pages published as the existing claude.ai Artifact URL; consistency check (nav/links/footers + 8 re-probed claims) recorded; memory/journal updated; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "README gained a Documentation section with a per-page table linking all six guide pages; the mcp-surface GENERATOR (not the generated file) now cross-links docs/guide/ and the file was regenerated; decisions.md records Pages-over-wiki (with the accepted designs-gate warning rationale) and the live-probes-only content rule; activeContext owner checklist gains 'enable GitHub Pages' and confirms dual npm publish. Six pages published as a single-file SPA artifact for owner review (new URL: 640567bf-fe05-41e3-bf26-9609a3887b51 — a new source file always mints a new artifact; the earlier ESR-only artifact is superseded by guide page 5). Journal 20260802-t060-063-usage-guide.md; gates PASS",
+        "commit": "f4c0f50fc0ac6d2fe7d42f05090ac23a7d661caa",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T15:39:11.644Z"
+      },
+      "hash": "2eca18b319e928c58841cfb8b6f0cf914bee26cc9b4091ac6132421ebffc7a7d"
+    },
+    {
+      "id": "T-064",
+      "title": "Add checked-in .mcp.json wiring both servers for contributors",
+      "acceptance": [
+        "Root .mcp.json defines finops-framework and finops-focus servers via node dist/servers/{framework,focus}/main.js; no FINOPS_MCP_EXPERIMENTAL (default surface stays official-only); valid JSON",
+        "Both servers verified by launching the EXACT command from the config: tools/list returns 11 framework tools and 9 focus tools matching docs/mcp-surface.md, and get_actions is absent from the default framework surface",
+        "CONTRIBUTING.md and the README Development section note the build prerequisite (dist/ is gitignored) and distinguish this contributor config from the npx form documented for consumers in docs/guide/index.html",
+        "gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Root .mcp.json defines finops-framework and finops-focus via node dist/servers/{framework,focus}/main.js, no experimental flag. Verified by launching each server through the EXACT command/args from the config (not the eval bridge): framework 11 tools + 4 prompts, focus 9 tools + 3 prompts, matching docs/mcp-surface.md, get_actions absent from both. CONTRIBUTING.md gained a 'Testing the servers locally' section (build-first caveat since dist/ is gitignored, client restart, contributor-vs-npx distinction, bridge fallback); README Development links it. gates PASS",
+        "commit": "98513dc506649a5fa1816849b85d0242f9e4146c",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-02T18:26:50.165Z"
+      },
+      "hash": "07f67a34389c925625ebe5b677a0cc4af4c723131dd5fa5040f41b79b475afed"
     }
   ]
 }

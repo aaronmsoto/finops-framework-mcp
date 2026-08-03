@@ -1,0 +1,47 @@
+{
+  "name": "finops-focus-mcp",
+  "version": "1.0.0",
+  "description": "MCP server exposing the version-aware FOCUS (FinOps Open Cost & Usage Specification) to AI agents: columns, attributes, glossary, cross-version diffs, and a derived KPI-to-column mapping bridging it to the FinOps Framework.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "finops",
+    "focus",
+    "cost-and-usage-spec"
+  ],
+  "license": "MIT",
+  "author": "Aaron Soto",
+  "homepage": "https://github.com/aaronmsoto/finops-framework-mcp/tree/main/packages/finops-focus-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/aaronmsoto/finops-framework-mcp/issues"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aaronmsoto/finops-framework-mcp.git",
+    "directory": "packages/finops-focus-mcp"
+  },
+  "mcpName": "io.github.aaronmsoto/finops-focus-mcp",
+  "bin": {
+    "finops-focus-mcp": "dist/servers/focus/main.js"
+  },
+  "files": [
+    "dist",
+    "data/focus",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md"
+  ],
+  "scripts": {
+    "prepack": "node ../../scripts/pack-focus.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "zod": "^4.4.3"
+  }
+}

@@ -13,7 +13,7 @@
   },
   "gates": {
     "format": {
-      "command": "prettier --check src tests",
+      "command": "prettier --check src tests demo",
       "tier": "fast"
     },
     "lint": {

@@ -10,6 +10,11 @@
     "finops-framework"
   ],
   "license": "MIT",
+  "author": "Aaron Soto",
+  "homepage": "https://github.com/aaronmsoto/finops-framework-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/aaronmsoto/finops-framework-mcp/issues"
+  },
   "type": "module",
   "repository": {
     "type": "git",
@@ -20,7 +25,10 @@
     "finops-framework-mcp": "dist/servers/framework/main.js"
   },
   "files": [
-    "dist",
+    "dist/index.js",
+    "dist/servers/framework",
+    "dist/crawlers/framework",
+    "dist/shared",
     "data/framework",
     "README.md",
     "LICENSE",
@@ -34,10 +42,12 @@
     "build": "tsc -p tsconfig.build.json",
     "refresh": "npm run build && node dist/crawlers/framework/cli.js refresh",
     "server": "npm run build && node dist/servers/framework/main.js",
+    "bundle:worker": "npm run build && node scripts/bundle-worker-data.mjs",
+    "gen:mcp-surface": "npm run build && node scripts/gen-mcp-surface.mjs",
     "prepublishOnly": "npm run build && npm test"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

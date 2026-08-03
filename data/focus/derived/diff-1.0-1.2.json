@@ -1,0 +1,446 @@
+{
+  "added_columns": [
+    {
+      "id": "BillingAccountType",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/billingaccounttype.md"
+    },
+    {
+      "id": "CapacityReservationId",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/capacityreservationid.md"
+    },
+    {
+      "id": "CapacityReservationStatus",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/capacityreservationstatus.md"
+    },
+    {
+      "id": "CommitmentDiscountQuantity",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountquantity.md"
+    },
+    {
+      "id": "CommitmentDiscountUnit",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountunit.md"
+    },
+    {
+      "id": "InvoiceId",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/invoiceid.md"
+    },
+    {
+      "id": "PricingCurrency",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingcurrency.md"
+    },
+    {
+      "id": "PricingCurrencyContractedUnitPrice",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingcurrencycontractedunitprice.md"
+    },
+    {
+      "id": "PricingCurrencyEffectiveCost",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingcurrencyeffectivecost.md"
+    },
+    {
+      "id": "PricingCurrencyListUnitPrice",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingcurrencylistunitprice.md"
+    },
+    {
+      "id": "ServiceSubcategory",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/servicesubcategory.md"
+    },
+    {
+      "id": "SkuMeter",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/skumeter.md"
+    },
+    {
+      "id": "SkuPriceDetails",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/skupricedetails.md"
+    },
+    {
+      "id": "SubAccountType",
+      "source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/subaccounttype.md"
+    }
+  ],
+  "changed_columns": [
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/availabilityzone.md",
+      "id": "AvailabilityZone",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/availabilityzone.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/billedcost.md",
+      "id": "BilledCost",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/billedcost.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/billingaccountid.md",
+      "id": "BillingAccountId",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/billingaccountid.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/billingaccountname.md",
+      "id": "BillingAccountName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/billingaccountname.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "value_format_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/billingcurrency.md",
+      "id": "BillingCurrency",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/billingcurrency.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/billingperiodend.md",
+      "id": "BillingPeriodEnd",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/billingperiodend.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/billingperiodstart.md",
+      "id": "BillingPeriodStart",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/billingperiodstart.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "allowed_values",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/chargecategory.md",
+      "id": "ChargeCategory",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/chargecategory.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "allowed_values",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/chargeclass.md",
+      "id": "ChargeClass",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/chargeclass.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/chargedescription.md",
+      "id": "ChargeDescription",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/chargedescription.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "allowed_values",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/chargefrequency.md",
+      "id": "ChargeFrequency",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/chargefrequency.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/chargeperiodend.md",
+      "id": "ChargePeriodEnd",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/chargeperiodend.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/chargeperiodstart.md",
+      "id": "ChargePeriodStart",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/chargeperiodstart.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "allowed_values",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/commitmentdiscountcategory.md",
+      "id": "CommitmentDiscountCategory",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountcategory.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/commitmentdiscountid.md",
+      "id": "CommitmentDiscountId",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountid.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/commitmentdiscountname.md",
+      "id": "CommitmentDiscountName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountname.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "allowed_values",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/commitmentdiscountstatus.md",
+      "id": "CommitmentDiscountStatus",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscountstatus.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/commitmentdiscounttype.md",
+      "id": "CommitmentDiscountType",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/commitmentdiscounttype.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/consumedquantity.md",
+      "id": "ConsumedQuantity",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/consumedquantity.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "column_type",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/consumedunit.md",
+      "id": "ConsumedUnit",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/consumedunit.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/contractedcost.md",
+      "id": "ContractedCost",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/contractedcost.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/contractedunitprice.md",
+      "id": "ContractedUnitPrice",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/contractedunitprice.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/effectivecost.md",
+      "id": "EffectiveCost",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/effectivecost.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/invoiceissuer.md",
+      "id": "InvoiceIssuerName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/invoiceissuer.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/listcost.md",
+      "id": "ListCost",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/listcost.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/listunitprice.md",
+      "id": "ListUnitPrice",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/listunitprice.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "allowed_values",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/pricingcategory.md",
+      "id": "PricingCategory",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingcategory.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/pricingquantity.md",
+      "id": "PricingQuantity",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingquantity.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/pricingunit.md",
+      "id": "PricingUnit",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/pricingunit.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/provider.md",
+      "id": "ProviderName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/provider.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/publisher.md",
+      "id": "PublisherName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/publisher.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/regionid.md",
+      "id": "RegionId",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/regionid.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/regionname.md",
+      "id": "RegionName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/regionname.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/resourceid.md",
+      "id": "ResourceId",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/resourceid.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/resourcename.md",
+      "id": "ResourceName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/resourcename.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/resourcetype.md",
+      "id": "ResourceType",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/resourcetype.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/servicecategory.md",
+      "id": "ServiceCategory",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/servicecategory.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/servicename.md",
+      "id": "ServiceName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/servicename.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/skuid.md",
+      "id": "SkuId",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/skuid.md"
+    },
+    {
+      "changed_fields": [
+        "description_md",
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/skupriceid.md",
+      "id": "SkuPriceId",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/skupriceid.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/subaccountid.md",
+      "id": "SubAccountId",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/subaccountid.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/subaccountname.md",
+      "id": "SubAccountName",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/subaccountname.md"
+    },
+    {
+      "changed_fields": [
+        "requirements"
+      ],
+      "from_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.0/specification/columns/tags.md",
+      "id": "Tags",
+      "to_source_url": "https://raw.githubusercontent.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/v1.2/specification/columns/tags.md"
+    }
+  ],
+  "from": "1.0",
+  "official": false,
+  "removed_columns": [],
+  "source": {
+    "from_tag": "v1.0",
+    "to_tag": "v1.2"
+  },
+  "to": "1.2"
+}

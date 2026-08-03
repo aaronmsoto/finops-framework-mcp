@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.aaronmsoto/finops-focus-mcp",
+  "description": "MCP server exposing the version-aware FOCUS (FinOps Open Cost & Usage Specification) to AI agents: columns, attributes, glossary, cross-version diffs, and a derived KPI-to-column mapping.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/aaronmsoto/finops-framework-mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "finops-focus-mcp",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

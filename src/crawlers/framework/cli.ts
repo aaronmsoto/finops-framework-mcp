@@ -14,8 +14,10 @@ import {
   type MaturityExtension,
   type Persona,
 } from "../../shared/index.js";
-import { CachedFetcher } from "./http.js";
-import { htmlToMd } from "./md.js";
+import { isDirectRunOf } from "../../shared/direct-run.js";
+import { CachedFetcher } from "../../shared/http.js";
+import { htmlToMd } from "../../shared/md.js";
+import { scanForInjection, type InjectionHit } from "../../shared/sanitize.js";
 import { emitArtifact, renderDiffReport } from "./emit.js";
 import {
   buildCapability,
@@ -50,8 +52,7 @@ import {
   deriveFromDocs,
   type DerivedEntities,
 } from "./markdown/derive.js";
-import { scanForInjection, type InjectionHit } from "./sanitize.js";
-import { ORIGIN, URLS } from "./urls.js";
+import { ORIGIN, URLS, USER_AGENT } from "./urls.js";
 
 interface ApiListRecord {
   title: string;
@@ -94,7 +95,7 @@ function decodeEntities(s: string): string {
 
 function htmlFragmentToMd(html: string): string {
   const $ = loadHtml(html);
-  return htmlToMd($, $("body").children());
+  return htmlToMd($, $("body").children(), ORIGIN);
 }
 
 interface AssessResult {
@@ -221,7 +222,10 @@ export interface RefreshOptions {
 
 export async function refresh(opts: RefreshOptions): Promise<number> {
   const { log } = opts;
-  const fetcher = new CachedFetcher(opts.cacheDir, opts.useCache);
+  const fetcher = new CachedFetcher(opts.cacheDir, opts.useCache, {
+    origin: ORIGIN,
+    userAgent: USER_AGENT,
+  });
   const warnings: string[] = [];
 
   // --- fetch & cross-check enumeration sources -------------------------
@@ -563,7 +567,7 @@ async function main(): Promise<void> {
   process.exit(code);
 }
 
-const isDirectRun = process.argv[1]?.endsWith("cli.js");
+const isDirectRun = isDirectRunOf(import.meta.url);
 if (isDirectRun) {
   main().catch((err) => {
     console.error(String(err instanceof Error ? err.stack : err));

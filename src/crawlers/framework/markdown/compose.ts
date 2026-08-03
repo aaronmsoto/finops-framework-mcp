@@ -14,57 +14,20 @@ import type {
   Kpi,
 } from "../../../shared/index.js";
 import { OFFICIAL_MATURITY_LEVELS } from "../../../shared/index.js";
+import {
+  assembleBody,
+  bulletLines,
+  ComposeError,
+  doc,
+  guard,
+  heading,
+} from "../../../shared/markdown/compose.js";
 import type {
   FeaturedKpiDetail,
   ParsedCapabilityPage,
 } from "../parse/capability.js";
-import { formatFrontmatter, type FrontmatterValue } from "./frontmatter.js";
 
-/** Thrown when compose input would break the markdown dialect (spec §2). */
-export class ComposeError extends Error {}
-
-/**
- * Escaping guard: a plain-text item/label may not start with `-`/`#` (would
- * be misread as a list marker or heading) or contain a newline (would break
- * line-based list/heading detection). Verbatim already-markdown fields
- * (definition_md, maturity_raw, description_md, …) are NOT run through this
- * — they are inserted as-is.
- */
-function guard(text: string, where: string): string {
-  if (text.includes("\n")) {
-    throw new ComposeError(`${where}: plain-text item contains a newline`);
-  }
-  if (/^[-#]/.test(text)) {
-    throw new ComposeError(
-      `${where}: plain-text item starts with "${text[0]}" — would break the markdown dialect`,
-    );
-  }
-  return text;
-}
-
-function bulletLines(items: string[], where: string, indent = ""): string {
-  return items.map((item) => `${indent}- ${guard(item, where)}`).join("\n");
-}
-
-function heading(level: number, text: string): string {
-  return `${"#".repeat(level)} ${text}`;
-}
-
-/** Joins top-level blocks with a single blank line; trims outer whitespace. */
-function assembleBody(blocks: string[]): string {
-  return blocks
-    .filter((b) => b.length > 0)
-    .join("\n\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-}
-
-function doc(
-  frontmatter: Record<string, FrontmatterValue | undefined>,
-  blocks: string[],
-): string {
-  return `${formatFrontmatter(frontmatter)}\n\n${assembleBody(blocks)}\n`;
-}
+export { ComposeError };
 
 const LEVEL_TITLE: Record<OfficialMaturityLevel, string> = {
   crawl: "Crawl",

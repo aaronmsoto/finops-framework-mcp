@@ -1,0 +1,439 @@
+<!doctype html>
+<!--
+  docs/guide/focus-server.html — page 3 of 6 (spec: .agents/specs/usage-guide-v1.md).
+
+  Shared chrome (base CSS block, header.guide/nav.guide, footer.guide) is identical
+  on all six guide pages; page-3 additions are appended at the end of the style
+  block only. No external assets: everything renders offline over file://.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>finops-focus-mcp — FinOps MCP Servers Usage Guide</title>
+<style>
+  :root {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+      --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+      --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+    --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+    --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+  }
+  :root[data-theme="light"] {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+  }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+    line-height: 1.55; margin: 0; overflow-x: hidden; }
+  main { max-width: 78ch; margin: 0 auto; padding: 0 1.25rem 4rem; }
+  h1, h2, h3 { font-family: var(--serif); text-wrap: balance; line-height: 1.15; }
+  h1 { font-size: 2rem; margin: 0.25rem 0 0.5rem; font-weight: 600; }
+  h2 { font-size: 1.35rem; margin: 2.4rem 0 0.6rem; font-weight: 600;
+    border-top: 1px solid var(--line); padding-top: 1.6rem; }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; font-weight: 600; }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--slate); }
+  .lede { color: var(--slate); margin: 0.4rem 0 0; }
+  .servers { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
+  .server-chip { font-family: var(--mono); font-size: 0.78rem; padding: 0.3rem 0.65rem;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); }
+  .server-chip b { color: var(--moss); font-weight: 600; }
+  .step { margin-top: 2.6rem; display: grid; grid-template-columns: 2.1rem 1fr; gap: 0.9rem; }
+  .step-n { font-family: var(--serif); font-size: 1.5rem; color: var(--moss);
+    border-top: 2px solid var(--moss); padding-top: 0.3rem; text-align: center;
+    font-variant-numeric: tabular-nums; }
+  .step-body { border-top: 1px solid var(--line); padding-top: 0.55rem; min-width: 0; }
+  .badge { display: inline-block; font-size: 0.64rem; font-weight: 700;
+    letter-spacing: 0.08em; padding: 0.14rem 0.45rem; border-radius: 3px;
+    vertical-align: 0.15em; white-space: nowrap; }
+  .badge.official { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .badge.derived { color: var(--amber); border: 1px solid var(--amber); background: var(--amber-bg); }
+  .quote { border-left: 3px solid var(--moss); background: var(--panel-2);
+    padding: 0.7rem 1rem; margin: 0.9rem 0; font-family: var(--serif); font-size: 1.02rem; }
+  .callnote { font-family: var(--mono); font-size: 0.72rem; color: var(--slate);
+    margin-top: 0.5rem; overflow-x: auto; white-space: nowrap; }
+  details.kpi { border: 1px solid var(--line); border-radius: 6px; margin: 0.55rem 0;
+    background: var(--panel-2); }
+  details.kpi summary { cursor: pointer; padding: 0.6rem 0.9rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+  details.kpi summary::-webkit-details-marker { display: none; }
+  details.kpi[open] summary { border-bottom: 1px solid var(--line); }
+  .kpi-inner { padding: 0.7rem 0.9rem 0.9rem; font-size: 0.92rem; }
+  .formula { font-family: var(--mono); font-size: 0.8rem; background: var(--panel);
+    padding: 0.55rem 0.75rem; border-radius: 4px; margin: 0.5rem 0; overflow-x: auto;
+    white-space: pre-wrap; }
+  .cols { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+  .col-chip { font-family: var(--mono); font-size: 0.74rem; padding: 0.18rem 0.5rem;
+    border-radius: 4px; background: var(--chip-off); border: 1px solid var(--line); }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; margin: 0.7rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; min-width: 34rem; }
+  th { text-align: left; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--slate); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    background: var(--panel-2); }
+  td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, .mono { font-family: var(--mono); font-size: 0.8rem; }
+  .lvl { font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 3px; }
+  .lvl.mand { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .lvl.cond { color: var(--slate); border: 1px dashed var(--slate); }
+  .absent { color: var(--slate); font-style: italic; }
+  .new-chip { font-size: 0.62rem; font-weight: 700; color: var(--paper);
+    background: var(--moss); border-radius: 3px; padding: 0.1rem 0.35rem; margin-left: 0.35rem; }
+  .zero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.6rem; margin: 0.8rem 0; }
+  .zero-card { border: 1px solid var(--line); border-radius: 6px; padding: 0.6rem 0.75rem;
+    background: var(--panel-2); }
+  .zero-card .v { font-family: var(--mono); font-size: 1.15rem; font-weight: 700; }
+  .zero-card .n { font-size: 0.72rem; color: var(--slate); margin-top: 0.15rem; }
+  .takeaway { border: 1px solid var(--moss); border-radius: 8px; padding: 0.9rem 1.1rem;
+    margin-top: 1rem; background: var(--panel-2); }
+  .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
+  a { color: var(--moss); }
+
+  /* --- shared chrome: guide header + nav + footer (identical on all six pages) --- */
+  header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+  header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
+    font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+  nav.guide { margin-top: 0.6rem; border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
+  nav.guide ol { list-style: none; display: flex; flex-wrap: wrap;
+    gap: 0.3rem 0.55rem; margin: 0; padding: 0; }
+  nav.guide a { font-size: 0.76rem; text-decoration: none; color: var(--slate);
+    border: 1px solid transparent; border-radius: 999px; padding: 0.18rem 0.55rem;
+    display: inline-block; }
+  nav.guide a:hover { color: var(--moss); border-color: var(--line); }
+  nav.guide a[aria-current="page"] { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); font-weight: 600; }
+  main.guide-main { padding-top: 0.9rem; }
+  footer.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
+    border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--slate); }
+  footer.guide p { margin: 0.35rem 0; }
+  footer.guide .unofficial-legend { font-weight: 600; }
+
+  .datamodel { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.6rem; margin: 0.8rem 0; }
+  .dm-card { border: 1px solid var(--line); border-radius: 8px; padding: 0.75rem 0.9rem;
+    background: var(--panel-2); text-align: center; }
+  .dm-card .num { font-family: var(--serif); font-size: 1.7rem; color: var(--moss);
+    font-variant-numeric: tabular-nums; }
+  .dm-card .lbl { font-size: 0.78rem; color: var(--slate); margin-top: 0.1rem; }
+  .dm-arrow { text-align: center; font-size: 1.2rem; color: var(--slate); align-self: center; }
+  .group-hdr { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--moss-ink); background: var(--panel);
+    padding: 0.25rem 0.6rem; border-radius: 4px; display: inline-block; margin: 1.1rem 0 0.5rem; }
+  .diff-tally { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.8rem 0; }
+  .tally-card { border: 1px solid var(--line); border-radius: 8px; padding: 0.7rem 1rem;
+    background: var(--panel-2); text-align: center; min-width: 6.5rem; }
+  .tally-card .num { font-family: var(--serif); font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+  .tally-card.add .num { color: var(--moss); }
+  .tally-card.rm .num { color: var(--slate); }
+  .tally-card.chg .num { color: var(--amber); }
+  .tally-card .lbl { font-size: 0.72rem; color: var(--slate); margin-top: 0.1rem; }
+  .caveat { border: 1px dashed var(--amber); background: var(--amber-bg); border-radius: 6px;
+    padding: 0.65rem 0.9rem; font-size: 0.86rem; margin: 0.8rem 0; }
+</style>
+</head>
+<body>
+
+<header class="guide">
+  <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+  <nav class="guide" aria-label="Guide pages">
+    <ol>
+      <li><a href="index.html">Intro &amp; Getting Started</a></li>
+      <li><a href="framework-server.html">finops-framework-mcp</a></li>
+      <li><a href="focus-server.html" aria-current="page">finops-focus-mcp</a></li>
+      <li><a href="example-showback.html">Showback</a></li>
+      <li><a href="example-esr.html">Rate Optimization (ESR)</a></li>
+      <li><a href="example-forecasting.html">Forecasting Journey</a></li>
+    </ol>
+  </nav>
+</header>
+
+<main class="guide-main">
+  <p class="eyebrow">Page 3 of 6 · Server reference</p>
+  <h1>finops-focus-mcp</h1>
+  <p class="lede">An agentic interface to the <strong>FOCUS™ specification</strong> (the
+  FinOps Open Cost &amp; Usage Specification): every column and cross-cutting attribute,
+  pinned at two spec versions, with normative requirements, keyword search, an unofficial
+  cross-version diff, and an unofficial layer mapping FinOps Framework KPIs onto the FOCUS
+  columns that compute them.</p>
+  <div class="servers">
+    <span class="server-chip"><b>finops-focus-mcp</b> · FOCUS spec versions 1.0, 1.2 · latest 1.2</span>
+    <span class="server-chip">9 tools · 3 prompts · 3 fixed + 4 template resources (125 concrete)</span>
+  </div>
+  <p class="callnote">focus · list_versions {}</p>
+
+  <h2 id="version-model">Version model</h2>
+  <p>Two spec versions are pinned and served side by side. The server's own index call
+  states the shape directly:</p>
+  <div class="quote">“1.0: 43 columns, 9 attributes (source v1.0)<br>1.2 (latest): 57 columns,
+  9 attributes (source v1.2)”</div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Version</th><th>Source tag</th><th>Data version</th><th>Latest?</th><th>Columns</th><th>Attributes</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">1.0</td><td class="mono">v1.0</td><td class="mono">1.0.1</td><td>—</td><td>43</td><td>9</td></tr>
+      <tr><td class="mono">1.2</td><td class="mono">v1.2</td><td class="mono">1.0.1</td><td><span class="lvl mand">latest</span></td><td>57</td><td>9</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:0.9rem;">Every version-aware tool takes an optional
+  <code>version</code> string parameter (<code>"1.0"</code> or <code>"1.2"</code>) that
+  defaults to <code>"1.2"</code> when omitted — so a first-call agent that never passes
+  <code>version</code> always lands on the current spec, and must opt in explicitly to see
+  the 1.0 shape of a column, attribute, or requirement. <code>compare_versions</code> is the
+  one exception: it has no <code>version</code> parameter because it always compares the two
+  pinned versions (1.0 → 1.2) in a fixed direction.</p>
+  <p class="callnote">focus · list_versions {} → structuredContent.latest, structuredContent.versions[]</p>
+
+  <h2 id="tool-tour">Tool tour</h2>
+  <p>9 tools, grouped by what they're for. Names and parameters below are verified against
+  the live <code>tools/list</code> response (source: <a href="../mcp-surface.md">docs/mcp-surface.md</a>,
+  re-checked against a live probe for this page).</p>
+
+  <span class="group-hdr">Versions</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">list_versions</td><td>Every FOCUS spec version served, with source git tag and column/attribute counts. Start here to discover valid <code>version</code> values.</td><td class="mono">— (no params)</td></tr>
+    </tbody>
+  </table></div>
+
+  <span class="group-hdr">Columns &amp; attributes</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">get_column</td><td>Full record for one column: description, content constraints (type, feature level, nulls, data type, value format), allowed values, normative requirements, introduced-in version.</td><td class="mono">column (required, ID or slug); version (default "1.2")</td></tr>
+      <tr><td class="mono">list_columns</td><td>All columns for one version, optionally filtered by feature_level or column_type. Default limit returns the full list in one call (43 in 1.0, 57 in 1.2).</td><td class="mono">version (default "1.2"); feature_level: Mandatory|Conditional|Recommended|unknown; column_type: Metric|Dimension|unknown; limit (≤100, default 100); cursor</td></tr>
+      <tr><td class="mono">get_attribute</td><td>Full record for one cross-cutting attribute (naming/formatting conventions like currency codes, datetime format, key-value format): description, normative requirements, exceptions.</td><td class="mono">slug (required, ID or slug); version (default "1.2")</td></tr>
+    </tbody>
+  </table></div>
+
+  <span class="group-hdr">Requirements</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">get_requirements</td><td>The normative MUST/SHOULD bullets for one column, verbatim from the spec text — nothing else (use get_column for the full record).</td><td class="mono">column (required, ID or slug); version (default "1.2")</td></tr>
+    </tbody>
+  </table></div>
+
+  <span class="group-hdr">Search</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">search_focus</td><td>Ranked keyword search over one version's columns and attributes. Returns slug + uri per hit — feed into get_column/get_attribute.</td><td class="mono">query (required, len ≥2); version (default "1.2"); entity_types: column|attribute; limit (≤50, default 10); cursor</td></tr>
+    </tbody>
+  </table></div>
+
+  <span class="group-hdr">Compare &amp; changelog</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">compare_versions <span class="badge derived">UNOFFICIAL</span></td><td>The 1.0→1.2 column diff — an unofficial derivation computed by this server from the two tagged releases, source-cited per entry. Without <code>column</code>: the full diff (14 added, 0 removed, 43 changed). With <code>column</code>: that one column's status and detail.</td><td class="mono">column (optional, narrows to one column)</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:0.88rem;">There is no <code>get_changelog</code> tool on this server
+  (that name belongs to the framework server's crawl-changelog tool). What this server calls
+  a "changelog" is the <em>upstream</em> FOCUS project CHANGELOG, exposed per version as the
+  <code class="mono">focus://spec/{version}/changelog</code> resource — verbatim upstream
+  text, including the materiality caveat used to judge whether a "changed" entry from
+  <code>compare_versions</code> is actually semantic. See <a href="#prompts-resources">Prompts
+  &amp; resources</a> below.</p>
+
+  <span class="group-hdr">UNOFFICIAL KPI mapping &amp; calculation</span>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">get_kpi_mapping <span class="badge derived">UNOFFICIAL</span></td><td>Derived mapping from framework KPIs (effective savings rate, commitment discounts, forecast accuracy, unit economics, allocation) to the FOCUS columns needed to compute each, with a FOCUS-terms formula translation. Not published or endorsed by the FinOps Foundation or the FOCUS project.</td><td class="mono">kpi, capability (filters); version (default "1.2")</td></tr>
+      <tr><td class="mono">calculate_kpi <span class="badge derived">UNOFFICIAL</span></td><td>Computes one mapped KPI using this server's own derived formula, over a bundled sample dataset (official FOCUS 1.0 sample where available, else this project's seeded synthetic sample) — never user-supplied data. Not every mapped KPI has a registered formula; unsupported ones error with guidance instead of guessing.</td><td class="mono">kpi (required); version (default "1.2"); sample: official|synthetic</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:0.88rem;">A live example of the mapping tool, at 1.0, for the KPI this
+  page's worked demo doesn't otherwise touch:</p>
+  <div class="quote" style="font-size:0.92rem;">“ESR % = ((SUM(ListCost) − SUM(EffectiveCost))
+  / SUM(ListCost)) × 100, aggregated over the BillingPeriodStart/BillingPeriodEnd in scope.”
+  — columns: <span class="mono">BillingPeriodStart, BillingPeriodEnd, ListCost,
+  EffectiveCost</span></div>
+  <p class="callnote">focus · get_kpi_mapping {kpi: "effective-savings-rate-percentage", version: "1.0"}</p>
+
+  <h2 id="prompts-resources">Prompts &amp; resources</h2>
+  <h3>Prompts (3)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Prompt</th><th>Purpose</th><th>Arguments</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">explain-focus</td><td>Guided orientation to FOCUS: what it standardizes, how versions differ, how to look up columns.</td><td class="mono">version (optional; default latest)</td></tr>
+      <tr><td class="mono">map-column-across-versions</td><td>For one Column ID, shows its record in each served version and the 1.0→1.2 diff status, citing sources.</td><td class="mono">column (required)</td></tr>
+      <tr><td class="mono">map-kpi-to-focus-columns <span class="badge derived">UNOFFICIAL</span></td><td>Guides computing a framework KPI from FOCUS data: which columns it needs, the FOCUS-terms formula, and (where a formula is registered) the computed value over bundled sample data.</td><td class="mono">kpi, capability (optional filters); version (optional; default "1.2")</td></tr>
+    </tbody>
+  </table></div>
+  <p class="callnote">focus · list-prompts (live probe, verbatim descriptions/arguments above)</p>
+
+  <h3>Resources — <code>focus://spec/…</code></h3>
+  <p>3 fixed resources plus 4 URI templates (125 concrete resources listed when templates
+  are expanded across both versions' columns and attributes, plus per-version glossary and
+  changelog).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>URI</th><th>What it is</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">focus://spec/overview</td><td>Start here: what this server covers, how to navigate its version-pinned tools</td><td>fixed</td></tr>
+      <tr><td class="mono">focus://spec/versions</td><td>Every FOCUS spec version served, with source tag and counts (JSON)</td><td>fixed, JSON</td></tr>
+      <tr><td class="mono">focus://spec/changes/1.0-1.2 <span class="badge derived">UNOFFICIAL</span></td><td>Unofficial column diff between the two pinned spec versions, source-cited — the resource form of <code>compare_versions {}</code></td><td>fixed</td></tr>
+      <tr><td class="mono">focus://spec/{version}/columns/{slug}</td><td>Full column record: description, content constraints, allowed values, normative requirements</td><td>template, completable</td></tr>
+      <tr><td class="mono">focus://spec/{version}/attributes/{slug}</td><td>Full attribute record: description, normative requirements, exceptions</td><td>template, completable</td></tr>
+      <tr><td class="mono">focus://spec/{version}/glossary</td><td>Term glossary for one spec version</td><td>template, completable</td></tr>
+      <tr><td class="mono">focus://spec/{version}/changelog</td><td>The upstream FOCUS project CHANGELOG for one spec version, verbatim — includes the upstream materiality caveat for judging whether a change is semantic</td><td>template, completable</td></tr>
+    </tbody>
+  </table></div>
+  <p class="callnote">focus · list-resources · list-resource-templates (live probes, verbatim titles/descriptions/mimeTypes above)</p>
+
+  <h2 id="demo">Worked demo: BilledCost deep-dive</h2>
+  <p>The chain an agent walks to understand one column across the spec's lifetime:
+  <code>get_column</code> for the 1.0 record, <code>get_requirements</code> for the 1.2
+  normative text, then <code>compare_versions</code> to see exactly what moved between them
+  — landing on the same column used in the demo.</p>
+
+  <section class="step">
+    <div class="step-n">1</div>
+    <div class="step-body">
+      <h3>get_column, version 1.0 <span class="badge official">official</span></h3>
+      <p style="font-size:0.9rem;"><span class="mono">BilledCost</span> — <strong>Metric</strong>,
+      feature level <strong>Mandatory</strong>, data type <strong>Decimal</strong>, introduced
+      in spec version 0.5, nulls not allowed.</p>
+      <div class="quote">“A charge serving as the basis for invoicing, inclusive of all
+      reduced rates and discounts while excluding the <em>amortization</em> of upfront
+      charges (one-time or recurring).”</div>
+      <p style="font-size:0.9rem;">Its three 1.0 requirements, verbatim:</p>
+      <ol style="font-size:0.88rem;">
+        <li>The BilledCost column MUST be present in the billing data and MUST NOT be null.</li>
+        <li>This column MUST be of type Decimal, MUST conform to Numeric Format, and be
+        denominated in the BillingCurrency.</li>
+        <li>The sum of the BilledCost for <em>rows</em> in a given <em>billing period</em>
+        MUST match the sum of the invoices received for that <em>billing period</em> for a
+        <em>billing account</em>.</li>
+      </ol>
+      <p class="callnote">focus · get_column {column: "BilledCost", version: "1.0"}</p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-n">2</div>
+    <div class="step-body">
+      <h3>get_requirements, version 1.2 <span class="badge official">official</span></h3>
+      <p style="font-size:0.9rem;">By 1.2 the requirement list has grown from three bullets to
+      eight — new content, not just rewording. All eight, verbatim:</p>
+      <ol style="font-size:0.88rem;">
+        <li>BilledCost MUST be present in a <em>FOCUS dataset</em>.</li>
+        <li>BilledCost MUST be of type Decimal.</li>
+        <li>BilledCost MUST conform to NumericFormat requirements.</li>
+        <li>BilledCost MUST NOT be null.</li>
+        <li>BilledCost MUST be a valid decimal value.</li>
+        <li>BilledCost MUST be 0 for <em>charges</em> where payments are received by a third
+        party (e.g., marketplace transactions).</li>
+        <li>BilledCost MUST be denominated in the BillingCurrency.</li>
+        <li style="font-weight:600;">The sum of the BilledCost for a given InvoiceId MUST
+        match the sum of the payable amount provided in the corresponding invoice with the
+        same id generated by the InvoiceIssuer.</li>
+      </ol>
+      <p style="font-size:0.9rem;">That last bullet is new in substance: FOCUS 1.0 had no
+      <span class="mono">InvoiceId</span> column at all — the reconciliation requirement that
+      ties BilledCost to a specific invoice only becomes expressible once 1.2 adds
+      <span class="mono">InvoiceId</span> as one of its 14 new columns (see step 3).</p>
+      <p class="callnote">focus · get_requirements {column: "BilledCost", version: "1.2"}</p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-n">3</div>
+    <div class="step-body">
+      <h3>compare_versions, full diff <span class="badge derived">UNOFFICIAL</span></h3>
+      <div class="diff-tally">
+        <div class="tally-card add"><div class="num">14</div><div class="lbl">added</div></div>
+        <div class="tally-card rm"><div class="num">0</div><div class="lbl">removed</div></div>
+        <div class="tally-card chg"><div class="num">43</div><div class="lbl">changed</div></div>
+      </div>
+      <div class="caveat">“UNOFFICIAL: this diff is derived by this server from the two
+      tagged spec releases, not an official FOCUS changelog. Per the upstream CHANGELOG,
+      most changes are not material unless specifically called out — read
+      <span class="mono">focus://spec/1.2/changelog</span> and each entry's
+      <span class="mono">source_url(s)</span> below to judge materiality before treating a
+      &ldquo;changed&rdquo; status as semantic.”</div>
+      <p style="font-size:0.9rem;"><span class="mono">BilledCost</span> itself is one of the
+      43 <strong>changed</strong> columns — <span class="mono">changed_fields:
+      ["description_md","requirements"]</span> — which matches exactly what steps 1 and 2
+      just showed: the description was refined and the requirement list grew from 3 to 8
+      bullets, including the new InvoiceId-reconciliation bullet.</p>
+      <p style="font-size:0.9rem;">The 14 added columns, verbatim IDs from
+      <span class="mono">added_columns</span>:</p>
+      <div class="cols">
+        <span class="col-chip">BillingAccountType</span>
+        <span class="col-chip">CapacityReservationId</span>
+        <span class="col-chip">CapacityReservationStatus</span>
+        <span class="col-chip">CommitmentDiscountQuantity</span>
+        <span class="col-chip">CommitmentDiscountUnit</span>
+        <span class="col-chip">InvoiceId</span>
+        <span class="col-chip">PricingCurrency</span>
+        <span class="col-chip">PricingCurrencyContractedUnitPrice</span>
+        <span class="col-chip">PricingCurrencyEffectiveCost</span>
+        <span class="col-chip">PricingCurrencyListUnitPrice</span>
+        <span class="col-chip">ServiceSubcategory</span>
+        <span class="col-chip">SkuMeter</span>
+        <span class="col-chip">SkuPriceDetails</span>
+        <span class="col-chip">SubAccountType</span>
+      </div>
+      <p style="font-size:0.9rem;">Zero removed columns means every 1.0 pipeline's column
+      list still resolves in 1.2 — the risk in an upgrade is entirely in the 43 changed
+      entries' <span class="mono">requirements</span>/<span class="mono">description_md</span>/
+      <span class="mono">allowed_values</span> fields, which is exactly why the tool's own
+      caveat insists on checking materiality per column rather than treating "changed" as a
+      breaking-change signal by default.</p>
+      <p class="callnote">focus · compare_versions {} → structuredContent.added_columns (14), .removed_columns (0), .changed_columns (43)</p>
+    </div>
+  </section>
+
+  <div class="takeaway">
+    <h3>What this demo shows</h3>
+    <p style="margin:0; font-size:0.92rem;">Three tool calls, zero invented data: one
+    column's full 1.0 record, its expanded 1.2 normative text (including a requirement that
+    is only possible because of a column FOCUS 1.2 introduced), and the server's own
+    accounting of exactly what changed spec-wide between the two versions — with the
+    materiality caveat surfaced, not hidden, so "43 changed" reads as "go check", not
+    "43 breaking changes."</p>
+  </div>
+
+  <p style="margin-top:2rem;">Next: see this server paired with
+  <a href="framework-server.html">finops-framework-mcp</a> in the
+  <a href="example-esr.html">Rate Optimization (ESR)</a> worked example, or jump to
+  <a href="example-showback.html">Showback</a> for a columns-driven reporting walkthrough.</p>
+</main>
+
+<footer class="guide">
+  <p>FinOps Framework content © FinOps Foundation, licensed
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
+  specification content and sample data © FinOps Foundation / FOCUS project
+  contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
+  Foundation. Content on this page has been restructured and adapted from
+  those sources; this guide and these servers are community projects —
+  <strong>not published or endorsed by the FinOps Foundation or the FOCUS
+  project</strong>.</p>
+  <p class="unofficial-legend"><strong>UNOFFICIAL legend:</strong> anything marked
+  <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
+  values, and cross-version diffs — is derived by these servers
+  (<span class="mono">official: false</span>), not published upstream; verify before
+  production use.</p>
+</footer>
+
+</body>
+</html>

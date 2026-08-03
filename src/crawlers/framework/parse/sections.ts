@@ -10,8 +10,9 @@ import {
   type TechnologyCategory,
 } from "../../../shared/index.js";
 import { slugify } from "../../../shared/index.js";
-import { htmlToMd, normalizeHeading, textOf } from "../md.js";
-import { findHeading, load, slugFromHref } from "./helpers.js";
+import { htmlToMd, normalizeHeading, textOf } from "../../../shared/md.js";
+import { ORIGIN } from "../urls.js";
+import { load, slugFromHref } from "./helpers.js";
 
 const FOOTER_HEADINGS = new Set([
   "finops foundation",
@@ -37,7 +38,7 @@ export function parsePrinciples(html: string, url: string): Principle[] {
     const title = textOf($el).replace(/\.$/, "");
     if (!title || !isContentHeading(title)) return;
     const card = $el.parent();
-    const body = htmlToMd($, card.children().not("h5"));
+    const body = htmlToMd($, card.children().not("h5"), ORIGIN);
     if (!body) return;
     out.push({
       slug: slugify(title),
@@ -64,7 +65,7 @@ export function parsePhases(html: string, url: string): Phase[] {
     out.push({
       slug: slugify(title),
       title,
-      description_md: htmlToMd($, content),
+      description_md: htmlToMd($, content, ORIGIN),
       order: out.length + 1,
       source_url: url,
       license: LICENSE,
@@ -81,7 +82,7 @@ export function parseDomains(html: string, url: string): Domain[] {
     const $el = $(el);
     const title = textOf($el.find("h3").first());
     if (!title) return;
-    const description_md = htmlToMd($, $el.children("p").first());
+    const description_md = htmlToMd($, $el.children("p").first(), ORIGIN);
     const capability_slugs: string[] = [];
     $el.find("a").each((_, a) => {
       const s = slugFromHref($(a).attr("href"), "/framework/capabilities");
@@ -114,7 +115,7 @@ export function parseMaturityModel(html: string, url: string): MaturityLevel[] {
     section.filter("h3").each((_, h3) => {
       const $h3 = $(h3);
       const name = normalizeHeading(textOf($h3));
-      const body = htmlToMd($, $h3.nextUntil("h2, h3"));
+      const body = htmlToMd($, $h3.nextUntil("h2, h3"), ORIGIN);
       if (name.startsWith("maturity level characteristics"))
         characteristics_md = body;
       else if (name.startsWith("sample goals")) sample_goals_md = body;
@@ -150,7 +151,7 @@ export function parseTechnologyCategories(
     out.push({
       slug: slugify(title.replace(/^finops for /i, "")),
       title,
-      description_md: htmlToMd($, body),
+      description_md: htmlToMd($, body, ORIGIN),
       source_url: url,
       license: LICENSE,
     });
@@ -168,13 +169,14 @@ export function parseScopes(html: string, url: string): ScopeDoc {
   const intro = htmlToMd(
     $,
     h1.parent().nextUntil("h3").add(h1.nextUntil("h3")).filter("p, div"),
+    ORIGIN,
   );
   if (intro) sections.push({ heading: "Overview", body_md: intro });
   $("h3").each((_, el) => {
     const $el = $(el);
     const heading = textOf($el);
     if (!heading || !isContentHeading(heading)) return;
-    const body_md = htmlToMd($, $el.nextUntil("h2, h3"));
+    const body_md = htmlToMd($, $el.nextUntil("h2, h3"), ORIGIN);
     if (body_md) sections.push({ heading, body_md });
   });
   return { title, sections, source_url: url, license: LICENSE };
@@ -197,7 +199,7 @@ export function parsePersonaPage(
   const title = textOf($("h1").first());
   const prose = $("div.f24-content").first();
   const body = prose.length ? prose : $("h1").first().parent().parent();
-  const description_md = htmlToMd($, body.children());
+  const description_md = htmlToMd($, body.children(), ORIGIN);
   return {
     slug: slugify(title),
     title,
@@ -206,18 +208,4 @@ export function parsePersonaPage(
     source_url: url,
     license: LICENSE,
   };
-}
-
-/** Framework overview page: markdown of the main prose. */
-export function parseOverview(html: string): string {
-  const $ = load(html);
-  const h1 = $("h1").first();
-  const chunks: string[] = [];
-  const heading = findHeading($, "h2", ["what is the finops framework"]);
-  const scope = heading ? heading.parent().parent() : h1.parents().eq(1);
-  scope.find("p").each((_, p) => {
-    const t = textOf($(p));
-    if (t.length > 80) chunks.push(t);
-  });
-  return chunks.slice(0, 6).join("\n\n");
 }

@@ -1,9 +1,9 @@
-import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { Ajv2020, type ValidateFunction } from "ajv/dist/2020.js";
-import addFormats from "ajv-formats";
 import { ARTIFACT_FILES } from "./schemas.js";
+import {
+  ArtifactValidationError,
+  loadArtifactGeneric,
+  sha256,
+} from "./artifact-loader.js";
 import type {
   Action,
   Artifact,
@@ -21,107 +21,43 @@ import type {
   TechnologyCategory,
 } from "./types.js";
 
-export class ArtifactValidationError extends Error {
-  constructor(
-    readonly file: string,
-    readonly detail: string,
-  ) {
-    super(
-      `data artifact invalid: ${file} — ${detail}. ` +
-        `Re-run "npm run refresh" or restore data/framework/ from git; ` +
-        `the server refuses to start on an invalid artifact.`,
-    );
-    this.name = "ArtifactValidationError";
-  }
-}
+export { ArtifactValidationError, sha256 };
 
-function readJson(dir: string, rel: string): unknown {
-  let raw: string;
-  try {
-    raw = readFileSync(join(dir, rel), "utf8");
-  } catch (err) {
-    throw new ArtifactValidationError(rel, `cannot read file (${String(err)})`);
-  }
-  try {
-    return JSON.parse(raw);
-  } catch (err) {
-    throw new ArtifactValidationError(rel, `not valid JSON (${String(err)})`);
-  }
-}
-
-export function sha256(text: string): string {
-  return createHash("sha256").update(text, "utf8").digest("hex");
-}
-
-function buildValidators(): Map<string, ValidateFunction> {
-  const ajv = new Ajv2020({ allErrors: true, strict: false });
-  addFormats.default(ajv);
-  const out = new Map<string, ValidateFunction>();
-  for (const [rel, schema] of Object.entries(ARTIFACT_FILES)) {
-    out.set(rel, ajv.compile(schema));
-  }
-  return out;
-}
+const REMEDIATION =
+  'Re-run "npm run refresh" or restore data/framework/ from git; ' +
+  "the server refuses to start on an invalid artifact.";
 
 /**
  * Load and validate the data artifact. Throws ArtifactValidationError with an
  * actionable message on any schema violation, hash mismatch, or missing file.
  */
 export function loadArtifact(dir: string): Artifact {
-  const validators = buildValidators();
-  const parsed = new Map<string, unknown>();
-
-  for (const rel of Object.keys(ARTIFACT_FILES)) {
-    const data = readJson(dir, rel);
-    const validate = validators.get(rel) as ValidateFunction;
-    if (!validate(data)) {
-      const first = validate.errors?.[0];
-      throw new ArtifactValidationError(
-        rel,
-        `schema violation at "${first?.instancePath ?? ""}": ${first?.message ?? "unknown"}`,
-      );
-    }
-    parsed.set(rel, data);
-  }
-
-  const manifest = parsed.get("manifest.json") as Manifest;
-
-  // Manifest hashes must match the files on disk (integrity of the seam).
-  for (const [rel, expected] of Object.entries(manifest.sha256)) {
-    if (rel === "manifest.json") continue;
-    const actual = sha256(readFileSync(join(dir, rel), "utf8"));
-    if (actual !== expected) {
-      throw new ArtifactValidationError(
-        rel,
-        `sha256 mismatch (manifest ${expected.slice(0, 12)}…, file ${actual.slice(0, 12)}…)`,
-      );
-    }
-  }
-
-  const artifact: Artifact = {
-    manifest,
-    principles: parsed.get("content/principles.json") as Principle[],
-    phases: parsed.get("content/phases.json") as Phase[],
-    domains: parsed.get("content/domains.json") as Domain[],
-    capabilities: parsed.get("content/capabilities.json") as Capability[],
-    personas: parsed.get("content/personas.json") as Persona[],
-    scopes: parsed.get("content/scopes.json") as ScopeDoc,
-    technology_categories: parsed.get(
-      "content/technology-categories.json",
-    ) as TechnologyCategory[],
-    maturity_levels: parsed.get(
-      "content/maturity-levels.json",
-    ) as MaturityLevel[],
-    maturity_extension: parsed.get(
-      "derived/maturity-extension.json",
-    ) as MaturityExtension,
-    kpis: parsed.get("content/kpis.json") as Kpi[],
-    actions: parsed.get("derived/actions.json") as Action[],
-    changelog: parsed.get("derived/changelog.json") as ChangelogEntry[],
-  };
-
-  crossValidate(artifact);
-  return artifact;
+  return loadArtifactGeneric(dir, {
+    files: ARTIFACT_FILES,
+    remediation: REMEDIATION,
+    crossValidate,
+    assemble: (parsed, manifest) => ({
+      manifest: manifest as Manifest,
+      principles: parsed.get("content/principles.json") as Principle[],
+      phases: parsed.get("content/phases.json") as Phase[],
+      domains: parsed.get("content/domains.json") as Domain[],
+      capabilities: parsed.get("content/capabilities.json") as Capability[],
+      personas: parsed.get("content/personas.json") as Persona[],
+      scopes: parsed.get("content/scopes.json") as ScopeDoc,
+      technology_categories: parsed.get(
+        "content/technology-categories.json",
+      ) as TechnologyCategory[],
+      maturity_levels: parsed.get(
+        "content/maturity-levels.json",
+      ) as MaturityLevel[],
+      maturity_extension: parsed.get(
+        "derived/maturity-extension.json",
+      ) as MaturityExtension,
+      kpis: parsed.get("content/kpis.json") as Kpi[],
+      actions: parsed.get("derived/actions.json") as Action[],
+      changelog: parsed.get("derived/changelog.json") as ChangelogEntry[],
+    }),
+  });
 }
 
 /** Referential checks that JSON Schema alone cannot express. */
@@ -133,6 +69,7 @@ function crossValidate(a: Artifact): void {
         throw new ArtifactValidationError(
           "content/domains.json",
           `domain "${d.slug}" references unknown capability "${s}"`,
+          REMEDIATION,
         );
       }
     }
@@ -143,6 +80,7 @@ function crossValidate(a: Artifact): void {
       throw new ArtifactValidationError(
         "content/capabilities.json",
         `capability "${c.slug}" references unknown domain "${c.domain_slug}"`,
+        REMEDIATION,
       );
     }
   }
