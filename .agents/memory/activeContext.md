@@ -12,7 +12,26 @@
 
 ## In flight
 
-**T-059 done** (2026-08-02, this session): demo/ under the format gate
+**CI product/governance split — spec written, AWAITING OWNER VALIDATION**
+(2026-08-04): `.agents/specs/ci-product-governance-split.md`, planning only,
+no tasks generated yet. See
+`.agents/journal/20260804-ci-split-spec.md`. Do not implement before the
+owner answers the spec's four open questions.
+
+- Driver: going public + extracting the harness to a private scoped npm
+  package. Today 100% of CI signal runs through `./scripts/agentic gates`
+  after `./scripts/bootstrap.sh`, so a fork PR would get no signal at all
+  once the harness needs auth to install.
+- Verified split: product gates (`format`/`lint`/`typecheck`/`test`/`build`)
+  need only root devDeps — prettier/eslint/tsc/vitest all resolve via `npx
+  --no-install` with `.agentic/` untouched. Harness-implemented: `designs`/
+  `integrity`/`memory`, plus `coverage`/`e2e` which have no `command` key.
+- Design: root `package.json` scripts become the single source of truth;
+  `agentic.config.json` gate entries and CI both call `npm run <script>`.
+- Spec explicitly authorizes protected-path edits to
+  `.github/workflows/ci.yml` and the `gates` block of `agentic.config.json`.
+
+**T-059 done** (2026-08-02, earlier session): demo/ under the format gate
 (review R6) — see
 `.agents/journal/20260802-t059-demo-format-gate.md` for full detail.
 
@@ -241,6 +260,11 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    six-page guide under `docs/guide/`. Post-launch backlog is clear pending
    the owner steps above. Template feedback to port: `design check` should
    accept an allowlist of HTML dirs (it warns on all six guide pages).
+6. Owner: answer the four open questions in
+   `.agents/specs/ci-product-governance-split.md`, then a fresh session
+   decomposes it via `tasks add --spec`. This is a prerequisite for going
+   public — without it, fork PRs get zero CI signal once the harness moves
+   to a private npm package.
 
 ## Open questions
 
@@ -269,4 +293,5 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 
 ## Last updated
 
-2026-08-02 — T-059 session (demo/ under the format gate, review R6).
+2026-08-04 — CI product/governance split planning session (spec written,
+awaiting owner validation; no tasks generated).
