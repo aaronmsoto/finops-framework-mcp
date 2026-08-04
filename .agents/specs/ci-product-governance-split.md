@@ -72,8 +72,18 @@ a recompile, which must be its own reviewed step.
       a comment stating that this step is what changes when the harness moves
       to npm.
 - [ ] The governance job reports a conclusion (not "skipped") on fork PRs, so
-      it can remain a required check without blocking forks indefinitely — see
-      Open question 1.
+      it can remain a required check without blocking forks indefinitely — the
+      job itself always runs; only its harness steps skip internally.
+- [ ] The product job is named `gates-fast`, so no ruleset recompile is needed
+      and `.github/rulesets/main-branch.json` is untouched by this work.
+- [ ] The vitest config enforces coverage thresholds set at or below the
+      measured baseline (75.6% statements, 65.21% branches, 75.6% functions,
+      76.72% lines); artificially raising a threshold by one point makes
+      `npm test` fail, proving enforcement is live.
+- [ ] The unbound optional `coverage` entry is removed from
+      `agentic.config.json`, and `./scripts/agentic gates` no longer prints
+      `SKIP coverage`.
+- [ ] `.github/workflows/ci.yml` triggers `push` on both `main` and `dev`.
 - [ ] Workflow comments explain the product/governance split in the same style
       as the existing fast/full and `merge_group` notes.
 - [ ] A fork-PR simulation is documented in the journal with observed output,
@@ -81,22 +91,32 @@ a recompile, which must be its own reviewed step.
 
 ## Open questions
 
-1. **Required-check strategy for forks.** A job skipped by an `if:` condition
-   reports "skipped", which does **not** satisfy a required status check and
-   blocks the PR forever — the same class of trap the existing `merge_group`
-   comment warns about. Options: (a) always run the governance job and no-op
-   its harness steps on forks so the check still reports success; (b) leave
-   governance non-required and rely on maintainer-owned branches; (c) a
-   separate always-green aggregator check. Recommend (a).
-2. **`coverage` and `e2e` have no `command`** in `agentic.config.json` — they
-   are harness-implemented, and `coverage` is not obviously governance. Does
-   coverage enforcement move product-side via vitest thresholds, or stay in
-   the governance job? Recommend vitest thresholds so forks see coverage
-   failures.
-3. **Trigger coverage.** CI currently runs `push` only on `main`, but PRs
-   target `dev`. Should the product job also run on pushes to `dev`?
-4. **Whether required-check names change.** If the product job is named
-   something other than `gates-fast`, the branch ruleset and
-   `.github/rulesets/main-branch.json` need recompiling — an
-   `approvals compile` step that must be reviewed separately. Keeping the name
-   `gates-fast` for the product job avoids this entirely.
+All four resolved by the owner on 2026-08-04. Recorded here as decisions; no
+open questions remain.
+
+1. **Required-check strategy for forks — RESOLVED: always run, no-op on
+   forks.** A job skipped by an `if:` condition reports "skipped", which does
+   **not** satisfy a required status check and blocks the PR forever — the
+   same class of trap the existing `merge_group` comment warns about. The
+   governance job therefore always runs so its check name always reports; the
+   harness-dependent steps detect a fork and skip internally, exiting 0.
+   Rejected: leaving governance non-required (nothing would enforce that gates
+   ran before merge), and a separate always-green aggregator check (adds a job
+   whose only purpose is reporting, and obscures which real job went red).
+2. **`coverage` — RESOLVED: move product-side via vitest thresholds.** Encode
+   thresholds in the vitest config so `npm test` fails on regression and forks
+   see coverage failures like any other test failure. Thresholds must start at
+   or below the current measured baseline — 75.6% statements, 65.21% branches,
+   75.6% functions, 76.72% lines — so the change is not a silent tightening.
+   The now-redundant unbound `coverage` gate entry is removed: it is optional
+   with no `command` and always reports SKIP, so replacing it with enforced
+   vitest thresholds is strictly stronger, not a weakened gate.
+   `e2e` is out of scope and stays as-is.
+3. **Trigger coverage — RESOLVED: add `dev` to the `push` triggers.** Today a
+   PR merged into `dev` gets no post-merge CI run at all, so breakage there is
+   invisible until the next PR.
+4. **Required-check names — RESOLVED: the product job keeps the name
+   `gates-fast`.** It inherits the existing required-check name, so no ruleset
+   recompile and no `approvals.yaml` churn. The governance job takes a new
+   name and is added as a required check separately if desired — explicitly
+   out of scope here.

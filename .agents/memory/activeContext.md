@@ -12,11 +12,23 @@
 
 ## In flight
 
-**CI product/governance split — spec written, AWAITING OWNER VALIDATION**
-(2026-08-04): `.agents/specs/ci-product-governance-split.md`, planning only,
-no tasks generated yet. See
-`.agents/journal/20260804-ci-split-spec.md`. Do not implement before the
-owner answers the spec's four open questions.
+**CI product/governance split — spec OWNER-VALIDATED, T-065..T-067 pending**
+(2026-08-04): `.agents/specs/ci-product-governance-split.md`; all four open
+questions resolved, zero remaining. Planning session only — no
+implementation. See `.agents/journal/20260804-ci-split-spec.md`.
+
+- Decisions: governance job always runs and no-ops its harness steps on forks
+  (a job skipped via `if:` reports "skipped" and never satisfies a required
+  check); coverage moves product-side to vitest thresholds at/below the
+  75.6/65.21/75.6/76.72 baseline and the unbound `coverage` gate entry is
+  removed; `push` triggers gain `dev`; product job keeps the name
+  `gates-fast` so no ruleset recompile.
+- Removing the `coverage` entry is a STRENGTHENING, not a weakened gate: it
+  is `optional` with no `command` and always reported SKIP. T-066 must say so
+  in its journal for the integrity gate and reviewer.
+- True fork-PR behavior is not locally observable; T-067 proves
+  harness-independence via a `.agentic/` stash run. Confirming a real fork PR
+  goes green is a post-merge check on the first external PR.
 
 - Driver: going public + extracting the harness to a private scoped npm
   package. Today 100% of CI signal runs through `./scripts/agentic gates`
@@ -260,11 +272,17 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    six-page guide under `docs/guide/`. Post-launch backlog is clear pending
    the owner steps above. Template feedback to port: `design check` should
    accept an allowlist of HTML dirs (it warns on all six guide pages).
-6. Owner: answer the four open questions in
-   `.agents/specs/ci-product-governance-split.md`, then a fresh session
-   decomposes it via `tasks add --spec`. This is a prerequisite for going
-   public — without it, fork PRs get zero CI signal once the harness moves
-   to a private npm package.
+6. **T-065 → T-066 → T-067** (pending, in order): the CI product/governance
+   split. Spec is owner-validated; run `/next-task` in a fresh context. This
+   is a prerequisite for going public — without it, fork PRs get zero CI
+   signal once the harness moves to a private npm package.
+7. Harness extraction to a private scoped npm package
+   (`@aaronsoto/agentic-harness`, name available) is the follow-on project,
+   not yet specced. Note the vendored `.agentic/harness/` here has already
+   drifted from agentic-starter-repo — `approvals.ts` differs by 307 lines,
+   `tasks.ts` by 57, `gates.ts` by 27 — and the template copy is the one that
+   is ahead and already publish-configured. Reconcile deliberately during
+   migration; do not blind-sync before the CI split lands.
 
 ## Open questions
 
