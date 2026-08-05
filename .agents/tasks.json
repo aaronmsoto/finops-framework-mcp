@@ -1204,6 +1204,19 @@
         "completedAt": "2026-08-02T18:26:50.165Z"
       },
       "hash": "07f67a34389c925625ebe5b677a0cc4af4c723131dd5fa5040f41b79b475afed"
+    },
+    {
+      "id": "T-065",
+      "title": "Publish the usage guide as the GitHub Pages site (docs/ root)",
+      "acceptance": [
+        "docs/index.html redirects / to the six-page guide; docs/404.html and docs/.nojekyll exist",
+        "All six guide pages carry per-page description, canonical and og:* metadata pointing at the published URLs",
+        "Every internal link on all six pages resolves 200 when docs/ is served as a site root",
+        "docs/deploy-pages.md documents the owner-only Settings->Pages step, the smoke test, and the private-repo/plan prerequisite"
+      ],
+      "status": "blocked",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

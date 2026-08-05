@@ -62,3 +62,37 @@ branch:
    offers a source at all.
 3. Pages serves a branch, so this has to reach `main` first — merging to
    `main` is a human approval point per `approvals.yaml`.
+
+## T-065 marked blocked (not completed) — 2026-08-05T21:58:00Z
+
+The work is finished and committed (`29fe25d`), but
+`./scripts/agentic tasks complete T-065` **refuses to close the task**:
+
+```
+agentic: refusing to complete T-065: fast gates failed — FAIL (format=pass,
+lint=pass, typecheck=pass, test=fail, coverage=skipped, designs=pass,
+integrity=pass, memory=pass)
+```
+
+The single failing case is `src/packaging.test.ts` › "packs the shim into
+scratch, installs it, and runs the bin --version", which dies on:
+
+```
+npm error code ETARGET
+npm error notarget No matching version found for ajv@^8.20.0.
+```
+
+That is this sandbox's npm registry mirror, not the diff. Evidence:
+
+- It failed identically on a clean tree at session start, before any file
+  was touched (first `./scripts/agentic gates` run after `npm ci`).
+- This task's diff is `docs/`, `README.md` and `.agents/` only — zero source
+  files, zero test files (`git show --stat 29fe25d`).
+- `npx vitest run --exclude 'src/packaging.test.ts'` → 36 files, 404 tests,
+  all pass.
+
+Per the hard rules the test was **not** weakened, skipped or deleted to get
+the gate green, so T-065 stays `blocked` rather than `done`. To close it,
+re-run `./scripts/agentic tasks complete T-065 --commit` from an environment
+with normal npm registry access (CI, or a local clone); the gate should pass
+and the task will close with its hash-chain evidence intact.
