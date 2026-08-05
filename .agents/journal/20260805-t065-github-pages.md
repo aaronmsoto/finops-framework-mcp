@@ -132,3 +132,55 @@ owner's call.
 Re-verified after the fixes: `/`, `/guide/`, `/guide/index.html`, `/404.html`
 all 200 over a local `docs/` server; `memory lint` ok;
 `prettier --check docs/deploy-pages.md docs/README.md README.md` clean.
+
+## Owner decision: publish docs/guide/ only, via Actions — 2026-08-05T22:45:00Z
+
+**Decision.** The owner asked whether narrowing the published set to
+`docs/guide/` was worth it. Two facts settled it: GitHub's branch source
+offers only `/` or `/docs` (a deeper folder is not selectable), and a
+*project* Pages site cannot carry its own `robots.txt` (it lives in the
+`aaronmsoto.github.io` user repo). So narrowing means Pages source =
+"GitHub Actions". Chosen — **not** for secrecy (a public repo exposes those
+files on github.com anyway) but because the guide then serves at the bare
+`https://aaronmsoto.github.io/finops-framework-mcp/` with no redirect hop.
+
+**Did.** Reworked the branch-source setup from earlier this session into an
+Actions deployment publishing `docs/guide/` alone:
+
+- `docs/proposed/pages.yml` (new) — staged, uninstalled, following the
+  `refresh-data.yml` convention (`.github/workflows/` is protected, so the
+  owner runs `git mv`). `push` to main filtered on `docs/guide/**` plus
+  `workflow_dispatch`; least-privilege `contents: read` / `pages: write` /
+  `id-token: write`; `concurrency: pages` with `cancel-in-progress: false`;
+  a guard step that fails if any of the seven expected files is missing so a
+  bad path filter cannot publish an empty site over a working one.
+- `docs/index.html` **deleted** — the redirect existed only to give the
+  `/docs` root a front door; the guide is now the root itself.
+- `docs/404.html` → `docs/guide/404.html` (must sit at the published root),
+  its link retargeted from `/finops-framework-mcp/guide/index.html` to
+  `/finops-framework-mcp/`.
+- `docs/.nojekyll` → `docs/guide/.nojekyll`. The Actions path never runs
+  Jekyll; kept as insurance if the source is ever switched back to a branch.
+- All six pages: `canonical`/`og:url` re-baked without the `/guide/` segment
+  (`…/finops-framework-mcp/` for page 1, `…/<file>.html` for the rest).
+- The two `href="../mcp-surface.md"` links (framework-server, focus-server)
+  now point at the GitHub blob URL on `main` — that file is no longer on the
+  published site, so a relative link would 404.
+- `deploy-pages.md` rewritten for the three-step owner flow; `README.md`,
+  `docs/README.md` and the shared-chrome comment in `guide/index.html`
+  updated to say only `docs/guide/` is published.
+
+**Result.** Served `docs/guide/` as a site root on localhost — the exact
+shape the artifact upload produces: `/`, `/index.html`, the five other
+pages and `/404.html` all **200 (8/8)**; crawled every non-external `href`
+across all seven files, **8 internal targets, 0 broken**; `canonical` ==
+`og:url` on all six pages and each matches its own filename. Ran the
+workflow's guard step by hand — all seven files present and non-empty.
+`docs/proposed/pages.yml` parses as valid YAML with the expected job shape.
+`./scripts/agentic gates`: everything PASS except the same pre-existing
+sandbox `src/packaging.test.ts` registry failure documented above.
+
+**Still owner-gated**, now three steps: (1) repo public or paid plan,
+(2) merge to `main`, (3) `git mv docs/proposed/pages.yml
+.github/workflows/pages.yml` **and** Settings → Pages → Source = GitHub
+Actions.

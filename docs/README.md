@@ -4,11 +4,10 @@ This directory belongs to **your project**. The starter template's own
 documentation (architecture contract, operations manual, getting-started,
 research corpus) lives out of the way in [`.agentic/docs/`](../.agentic/docs/).
 
-This directory is also the **GitHub Pages publishing root** (branch `main`,
-folder `/docs`): `index.html` redirects to the usage guide in `guide/`,
-`404.html` is the site's not-found page, and `.nojekyll` keeps Pages from
-running Jekyll over the markdown. Setup and smoke test:
-[`deploy-pages.md`](deploy-pages.md).
+[`guide/`](guide/index.html) is published as the project's **GitHub Pages
+site** — and it is the only thing published: the deploy workflow uploads
+that directory alone, so nothing else in here is served on the public web.
+Setup and smoke test: [`deploy-pages.md`](deploy-pages.md).
 
 What lives here:
 

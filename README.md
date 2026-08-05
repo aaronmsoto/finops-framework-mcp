@@ -159,9 +159,10 @@ URIs, param defaults/limits — is generated from live MCP output at
 [**`docs/guide/`**](docs/guide/index.html) is the usage guide — six
 self-contained pages in which every number, quote, and transcript was
 captured from a live probe of these servers or computed from the committed
-sample data. It is also the published site: once Pages is enabled it serves
-at <https://aaronmsoto.github.io/finops-framework-mcp/> (setup and smoke
-test in [`docs/deploy-pages.md`](docs/deploy-pages.md)).
+sample data. It is also the published site: once the staged workflow is
+installed and Pages is enabled, `docs/guide/` — and only that directory —
+serves at <https://aaronmsoto.github.io/finops-framework-mcp/> (setup and
+smoke test in [`docs/deploy-pages.md`](docs/deploy-pages.md)).
 
 | Page                                                       | What it covers                                                                                                                                         |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |

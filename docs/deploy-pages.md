@@ -1,92 +1,98 @@
 # Publishing the usage guide on GitHub Pages
 
-Owner-only checklist. Enabling Pages is a repository **setting**, not
-something in this repo — no agent, workflow, or script here can turn it on,
-and the GitHub API path for it is blocked to automation. Everything below
-that _is_ in the repo is already in place; steps 1–2 are the human part.
+Owner-only checklist. Two of the three steps are outside this repo: enabling
+Pages is a repository **setting** (its REST API is blocked to agent
+sessions), and installing the workflow means writing to
+`.github/workflows/`, a protected path here.
 
-The published site is the six-page usage guide in [`guide/`](guide/index.html).
+The published site is the six-page usage guide in [`guide/`](guide/index.html)
+— **only** that directory. Nothing else under `docs/` is served.
 
 ## Prerequisites
 
 - **The repository must be public**, or the account must be on GitHub Pro /
   Team / Enterprise. GitHub Pages is not available for private repositories
-  on the Free plan. This repo is currently **private**, so on a Free plan
-  step 1 will not offer a source until the repo is made public.
-- The content must be on the branch you select in step 1 — Pages serves a
-  branch, not a pull request. Merging the branch that carries these files to
-  `main` is the normal path (merging to `main` is a human approval point per
-  `approvals.yaml`).
+  on the Free plan, whatever the source is set to. This repo is currently
+  **private**, so on a Free plan step 2 will not offer a source at all.
+- The workflow deploys from `main`, so the content has to be merged there
+  first (merging to `main` is a human approval point per `approvals.yaml`).
 
-## 1. Turn Pages on
+## 1. Install the workflow
 
-Repository **Settings → Pages**:
+```bash
+git mv docs/proposed/pages.yml .github/workflows/pages.yml
+```
 
-| Field  | Value                |
-| ------ | -------------------- |
-| Source | Deploy from a branch |
-| Branch | `main`               |
-| Folder | `/docs`              |
+Same convention as `docs/proposed/refresh-data.yml`: agents stage workflows
+under `docs/proposed/` and the owner installs them.
 
-Save. The first build takes a minute or two; the URL appears on the same
-settings page.
+## 2. Turn Pages on
 
-## 2. Check the result
+Repository **Settings → Pages → Source: GitHub Actions**.
+
+Do _not_ pick "Deploy from a branch" — that ignores the workflow, and its
+folder options are only `/` or `/docs`, neither of which is the guide.
+
+## 3. Run it and check the result
+
+The workflow runs on any push to `main` touching `docs/guide/**`, and can be
+started by hand from **Actions → pages → Run workflow**.
 
 Published URL: <https://aaronmsoto.github.io/finops-framework-mcp/>
 
-| Path                 | Serves                                                |
-| -------------------- | ----------------------------------------------------- |
-| `/`                  | `docs/index.html` — redirects to the guide            |
-| `/guide/`            | `docs/guide/index.html` — page 1 of 6, the front door |
-| `/guide/<page>.html` | the other five guide pages                            |
-| anything unmatched   | `docs/404.html`                                       |
+| Path               | Serves                                                |
+| ------------------ | ----------------------------------------------------- |
+| `/`                | `docs/guide/index.html` — page 1 of 6, the front door |
+| `/<page>.html`     | the other five guide pages                            |
+| anything unmatched | `docs/guide/404.html`                                 |
 
-Smoke test after the build goes green:
+Smoke test once the deploy goes green:
 
 ```sh
 BASE=https://aaronmsoto.github.io/finops-framework-mcp
-for p in / /guide/ /guide/framework-server.html /guide/focus-server.html \
-         /guide/example-showback.html /guide/example-esr.html \
-         /guide/example-forecasting.html; do
+for p in / /framework-server.html /focus-server.html /example-showback.html \
+         /example-esr.html /example-forecasting.html; do
   printf '%s %s\n' "$(curl -s -o /dev/null -w '%{http_code}' "$BASE$p")" "$p"
 done
+curl -s -o /dev/null -w '%{http_code} (expect 404) /no-such-page\n' "$BASE/no-such-page"
 ```
 
-All seven should be `200`.
+The six real paths should be `200`.
 
 ## What is in the repo for this
 
-- `docs/index.html` — the site root; redirects `/` to `/guide/`.
-- `docs/404.html` — the Pages 404 page (must live at the published root).
-- `docs/.nojekyll` — turns Jekyll off. Without it Pages would render every
-  markdown file under `docs/` as a web page and would rewrite paths starting
-  with `_`. With it, the HTML is served exactly as committed and the
-  markdown is served as raw text.
-- `docs/guide/*.html` — the guide itself. Self-contained: no external CSS,
-  fonts, scripts or images, so every page also opens over `file://`.
-  Each page carries a `description`, `canonical` and Open Graph tags
-  pointing at the URLs in the table above.
+- `docs/proposed/pages.yml` — the deploy workflow, uninstalled. Uploads
+  `docs/guide` as the Pages artifact; least-privilege permissions
+  (`contents: read`, `pages: write`, `id-token: write`); guards against
+  publishing an empty site by failing if any of the seven expected files is
+  missing.
+- `docs/guide/*.html` — the guide. Self-contained: no external CSS, fonts,
+  scripts or images, so every page also opens over `file://`. Each carries a
+  `description`, `canonical` and Open Graph tags pointing at the URLs above.
+- `docs/guide/404.html` — the Pages 404 page; lives in `guide/` because that
+  directory becomes the site root.
+- `docs/guide/.nojekyll` — belt and braces. The Actions deploy path does not
+  run Jekyll at all, but this keeps the site correct if anyone ever switches
+  the source back to a branch.
 
 ## Notes and limits
 
-- **Publishing `/docs` publishes everything under it**, including the
-  internal review documents (`critique-*.md`, `final-status-review.md`,
-  `eval-results.md`). They are served as raw markdown, unlinked from the
-  guide and not indexed by anything that follows links only — but they are
-  reachable by exact URL. They are equally readable on github.com once the
-  repository is public, so this exposes nothing the public repo would not.
-  If that is not acceptable, the alternative is a Pages source of
-  "GitHub Actions" plus a workflow that uploads only `docs/guide/` — that
-  needs a new file in `.github/workflows/`, a protected path, so it has to
-  be an explicitly authorised task.
-- The two guide pages that link to `../mcp-surface.md` resolve to
-  `/mcp-surface.md` on the published site and download as plain markdown.
-  Publishing only `docs/guide/` (the alternative above) would break those
-  two links.
+- **Only `docs/guide/` is published.** The internal review documents
+  (`critique-*.md`, `final-status-review.md`, `eval-results.md`,
+  `research.md`) are not served on the public site. They remain readable on
+  github.com once the repository is public — this controls the web site, not
+  repository visibility.
+- Because the rest of `docs/` is off-site, the two guide pages that cite
+  `docs/mcp-surface.md` link to the GitHub blob URL on `main` rather than a
+  relative path. If `mcp-surface.md` is ever moved or renamed, those two
+  links break silently — nothing validates them.
 - Changing the repository name or owner changes the published URL, which
-  would invalidate the `canonical`/`og:url` values baked into the six guide
-  pages and the root-relative link in `docs/404.html`. **A custom domain
-  does the same**: it drops the `/finops-framework-mcp` path prefix, so that
-  one link in `404.html` has to lose the prefix too. The guide pages
-  themselves link relatively and survive either change.
+  invalidates the `canonical`/`og:url` values baked into the six guide pages
+  and the root-relative link in `404.html`. **A custom domain does the
+  same**: it drops the `/finops-framework-mcp` path prefix, so that link in
+  `404.html` has to lose the prefix too. The guide pages link to each other
+  relatively and survive either change.
+- A _project_ Pages site cannot carry its own `robots.txt` — for
+  `aaronmsoto.github.io/finops-framework-mcp/` the crawler directives live at
+  `aaronmsoto.github.io/robots.txt`, i.e. in a separate `aaronmsoto.github.io`
+  repository. Nothing here can control indexing.

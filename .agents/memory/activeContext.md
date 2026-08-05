@@ -21,21 +21,31 @@ normal registry access to close it. `docs/` is now a publishable
 GitHub Pages site root — see
 `.agents/journal/20260805-t065-github-pages.md` for full detail.
 
-- New: `docs/index.html` (redirects `/` → `/guide/index.html`, works with JS
-  off), `docs/404.html`, `docs/.nojekyll`, `docs/deploy-pages.md` (owner
-  checklist + smoke test). All six `docs/guide/*.html` gained per-page
-  `<head>` metadata (description, canonical, `og:*`, twitter:card) pointing
-  at `https://aaronmsoto.github.io/finops-framework-mcp/guide/…`; no
-  external assets, so the `file://` invariant holds.
-- Verified by running the site: `docs/` served on localhost, 11/11 paths
-  HTTP 200, 8/8 internal links resolve, headless Chromium confirms the root
-  redirect with JS on and off. Gates all PASS except the pre-existing
-  sandbox-only `src/packaging.test.ts` npm-registry failure (`ajv@^8.20.0`
-  notarget) — 404/404 other tests pass.
+- **Only `docs/guide/` is published**, via a staged Actions workflow —
+  owner decision, see journal. Branch-source was built first and then
+  reworked: GitHub's branch source offers only `/` or `/docs`, so a deeper
+  folder is not selectable, and a *project* Pages site cannot carry its own
+  `robots.txt`. The driver was the bare URL (no `/guide/` redirect hop), not
+  secrecy — a public repo exposes `docs/*.md` on github.com regardless.
+- `docs/proposed/pages.yml` (staged, uninstalled — `.github/workflows/` is
+  protected, same convention as `refresh-data.yml`) uploads `docs/guide`
+  alone, least-privilege perms, with a guard step that fails if any of the
+  seven expected files is missing. `docs/guide/404.html` + `.nojekyll` moved
+  in; the old `docs/index.html` redirect is deleted. All six pages carry
+  per-page `<head>` metadata with `canonical`/`og:url` at
+  `https://aaronmsoto.github.io/finops-framework-mcp/<file>.html` (page 1 =
+  bare root); the two `../mcp-surface.md` links now go to the GitHub blob
+  URL since that file is off-site. No external assets — `file://` still works.
+- Verified by running the site: `docs/guide/` served as a root, 8/8 paths
+  HTTP 200, 8/8 internal links resolve, `canonical == og:url` on all six,
+  workflow guard step passes by hand, `pages.yml` parses. Gates all PASS
+  except the pre-existing sandbox-only `src/packaging.test.ts` npm-registry
+  failure (`ajv@^8.20.0` notarget) — 404/404 other tests pass.
 - **Owner-gated, in this order**: (1) repo is **private** — Pages needs a
-  public repo or a paid plan; (2) merge to `main`; (3) Settings → Pages →
-  branch `main`, folder `/docs`. The Pages REST API is blocked to agent
-  sessions (403 via proxy), so no automation can do step 3.
+  public repo or a paid plan; (2) merge to `main`; (3) `git mv
+docs/proposed/pages.yml .github/workflows/pages.yml` **and** Settings →
+  Pages → Source = **GitHub Actions** (not a branch). The Pages REST API is
+  blocked to agent sessions (403 via proxy), so no automation can do step 3.
 
 **T-059 done** (2026-08-02, earlier session): demo/ under the format gate
 (review R6) — see
@@ -256,10 +266,11 @@ owner-gated.** State as of 2026-08-02:
 2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and the
    root `finops-framework-mcp` (dual launch is the confirmed intent);
    MCP-registry submit both `server.json` manifests.
-3. Owner: **enable GitHub Pages** — Settings → Pages → branch `main`, folder
-   `/docs`. Repo must be public first (or account on Pro/Team/Enterprise);
-   Pages is a repo setting and its REST API is blocked to agent sessions.
-   Everything else is in place — see `docs/deploy-pages.md`.
+3. Owner: **publish the guide on GitHub Pages** — repo public first (or
+   account on Pro/Team/Enterprise), then `git mv docs/proposed/pages.yml
+.github/workflows/pages.yml`, then Settings → Pages → Source = **GitHub
+   Actions**. Pages is a repo setting and its REST API is blocked to agent
+   sessions. Everything else is in place — see `docs/deploy-pages.md`.
 4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).

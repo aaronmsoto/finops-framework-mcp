@@ -1,8 +1,12 @@
 <!doctype html>
 <!--
-  docs/404.html — GitHub Pages serves this for any unmatched path under the
-  published site. Root-relative links (not "guide/…") because a 404 can be
-  served from any depth.
+  docs/guide/404.html — GitHub Pages serves this for any unmatched path under
+  the published site. docs/guide/ IS the site root (the pages workflow uploads
+  only this directory), so this file sits at /404.html once deployed.
+
+  The link below is root-relative, not relative, because a 404 is served for
+  paths at any depth. It hardcodes the /finops-framework-mcp project prefix —
+  a repo rename or a custom domain would need it updated (docs/deploy-pages.md).
 -->
 <html lang="en">
 <head>
@@ -44,7 +48,7 @@
   <h1>No page at that address</h1>
   <p>The usage guide has six pages — start at the beginning and the
   navigation will take you through the rest.</p>
-  <a class="go" href="/finops-framework-mcp/guide/index.html">Open the guide →</a>
+  <a class="go" href="/finops-framework-mcp/">Open the guide →</a>
 </div>
 </body>
 </html>

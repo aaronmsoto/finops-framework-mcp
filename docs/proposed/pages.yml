@@ -1,0 +1,58 @@
+# PROPOSED workflow — .github/workflows/ is a protected path in this repo, so
+# the OWNER must install this file (same convention as refresh-data.yml):
+#
+#   git mv docs/proposed/pages.yml .github/workflows/pages.yml
+#
+# Owner install checklist — full version in docs/deploy-pages.md:
+# 1. Repo must be public, or the account on GitHub Pro/Team/Enterprise.
+#    Pages is unavailable for private repos on the Free plan.
+# 2. Repo setting required: Settings → Pages → Source = "GitHub Actions".
+#    Selecting a branch instead will ignore this workflow.
+# 3. Publishes ONLY docs/guide/ — the six-page usage guide — at the site
+#    root. Nothing else under docs/ is served (that is the point: the
+#    internal review markdown stays off the public site).
+# 4. Until installed, the guide is not published anywhere.
+
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths: ["docs/guide/**", ".github/workflows/pages.yml"]
+  workflow_dispatch: {}
+
+# Least privilege: read the repo, mint the Pages OIDC token, nothing else.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One live deployment at a time; let a running deploy finish rather than
+# cancelling it half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail if the guide is missing or incomplete
+        # Cheap guard: a bad path filter or a moved directory would otherwise
+        # publish an empty site over a working one.
+        run: |
+          for f in index.html framework-server.html focus-server.html \
+                   example-showback.html example-esr.html \
+                   example-forecasting.html 404.html; do
+            test -s "docs/guide/$f" || { echo "missing docs/guide/$f"; exit 1; }
+          done
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/guide
+      - id: deployment
+        uses: actions/deploy-pages@v4
