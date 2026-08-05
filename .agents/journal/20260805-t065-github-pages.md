@@ -96,3 +96,39 @@ the gate green, so T-065 stays `blocked` rather than `done`. To close it,
 re-run `./scripts/agentic tasks complete T-065 --commit` from an environment
 with normal npm registry access (CI, or a local clone); the gate should pass
 and the task will close with its hash-chain evidence intact.
+
+## Reviewer pass + follow-up fixes — 2026-08-05T22:10:00Z
+
+Independent `reviewer` subagent verdict: **pass**. It reproduced the link
+crawl itself (62 link checks across the six pages, 0 failures), confirmed
+the canonical/og:url values are mutually consistent and correct for
+`aaronmsoto/finops-framework-mcp` served from main `/docs`, confirmed the
+`file://`/no-external-assets invariant still holds after the head-metadata
+additions (grepped for script/link/@import/url()/img/iframe — zero hits),
+and confirmed no protected path or test was touched. It independently
+disproved the packaging-test failure as diff-caused by building a throwaway
+package outside the repo with only the focus shim's four dependencies and
+reproducing the same registry `notarget` error there.
+
+Fixed three of its five non-blocking findings:
+
+- `activeContext.md` said "T-065 done" while the task record says `blocked`
+  — the next session reads that file first, so the contradiction mattered.
+  Now states the blocked status and how to close it.
+- `deploy-pages.md` warned that a repo/owner rename invalidates the baked-in
+  URLs but not that a **custom domain** does the same (it drops the
+  `/finops-framework-mcp` prefix, breaking the one root-relative link in
+  `404.html`). Documented.
+- `og:type` was `article` on the guide's page 1 and absent entirely from
+  `docs/index.html`. Both now carry a full `og:*` set with
+  `og:type=website` — the root redirect page is what a crawler that does
+  not follow redirects would see for the bare site URL.
+
+Left alone: no `og:image` (would be the first external-ish asset and there
+is no artwork to point at), and the `/docs`-publishes-the-review-markdown
+consequence, which is already disclosed in `deploy-pages.md` and is the
+owner's call.
+
+Re-verified after the fixes: `/`, `/guide/`, `/guide/index.html`, `/404.html`
+all 200 over a local `docs/` server; `memory lint` ok;
+`prettier --check docs/deploy-pages.md docs/README.md README.md` clean.

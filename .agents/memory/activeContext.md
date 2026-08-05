@@ -12,7 +12,12 @@
 
 ## In flight
 
-**T-065 done** (2026-08-05, this session): `docs/` is now a publishable
+**T-065 built but recorded `blocked`, not `done`** (2026-08-05, this
+session): the work landed in `29fe25d`, but `tasks complete` refuses to
+close it while the sandbox npm registry fails `src/packaging.test.ts`
+(`notarget ajv@^8.20.0`) — so the record has no hash-chain evidence. Re-run
+`./scripts/agentic tasks complete T-065 --commit` from an environment with
+normal registry access to close it. `docs/` is now a publishable
 GitHub Pages site root — see
 `.agents/journal/20260805-t065-github-pages.md` for full detail.
 

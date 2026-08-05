@@ -3,7 +3,7 @@
 Owner-only checklist. Enabling Pages is a repository **setting**, not
 something in this repo — no agent, workflow, or script here can turn it on,
 and the GitHub API path for it is blocked to automation. Everything below
-that *is* in the repo is already in place; steps 1–2 are the human part.
+that _is_ in the repo is already in place; steps 1–2 are the human part.
 
 The published site is the six-page usage guide in [`guide/`](guide/index.html).
 
@@ -22,11 +22,11 @@ The published site is the six-page usage guide in [`guide/`](guide/index.html).
 
 Repository **Settings → Pages**:
 
-| Field | Value |
-|---|---|
+| Field  | Value                |
+| ------ | -------------------- |
 | Source | Deploy from a branch |
-| Branch | `main` |
-| Folder | `/docs` |
+| Branch | `main`               |
+| Folder | `/docs`              |
 
 Save. The first build takes a minute or two; the URL appears on the same
 settings page.
@@ -35,12 +35,12 @@ settings page.
 
 Published URL: <https://aaronmsoto.github.io/finops-framework-mcp/>
 
-| Path | Serves |
-|---|---|
-| `/` | `docs/index.html` — redirects to the guide |
-| `/guide/` | `docs/guide/index.html` — page 1 of 6, the front door |
-| `/guide/<page>.html` | the other five guide pages |
-| anything unmatched | `docs/404.html` |
+| Path                 | Serves                                                |
+| -------------------- | ----------------------------------------------------- |
+| `/`                  | `docs/index.html` — redirects to the guide            |
+| `/guide/`            | `docs/guide/index.html` — page 1 of 6, the front door |
+| `/guide/<page>.html` | the other five guide pages                            |
+| anything unmatched   | `docs/404.html`                                       |
 
 Smoke test after the build goes green:
 
@@ -86,4 +86,7 @@ All seven should be `200`.
   two links.
 - Changing the repository name or owner changes the published URL, which
   would invalidate the `canonical`/`og:url` values baked into the six guide
-  pages and the root-relative link in `docs/404.html`.
+  pages and the root-relative link in `docs/404.html`. **A custom domain
+  does the same**: it drops the `/finops-framework-mcp` path prefix, so that
+  one link in `404.html` has to lose the prefix too. The guide pages
+  themselves link relatively and survive either change.
