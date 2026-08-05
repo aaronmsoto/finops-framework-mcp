@@ -13,6 +13,11 @@
   Pages extend the style block minimally at the end, never edit the base.
   No external assets: everything renders offline over file://.
 
+  The <head> metadata below the <title> is per-page, NOT shared chrome:
+  description / canonical / og:* are written for each page and point at the
+  published GitHub Pages URLs (docs/deploy-pages.md). Renaming the repo or
+  the owner invalidates them.
+
   Every fact, count, quote and transcript on this page came from a live
   probe run against the built servers; the exact call is printed in the
   .callnote under each block.
@@ -22,6 +27,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FinOps MCP Servers — Usage Guide</title>
+<meta name="description" content="Install and run two read-only MCP servers for the FinOps Framework and the FOCUS specification, with live-probed transcripts of the first call against each.">
+<link rel="canonical" href="https://aaronmsoto.github.io/finops-framework-mcp/guide/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="FinOps MCP Servers — Usage Guide">
+<meta property="og:title" content="Two MCP servers for FinOps">
+<meta property="og:description" content="Install and run two read-only MCP servers for the FinOps Framework and the FOCUS specification, with live-probed transcripts of the first call against each.">
+<meta property="og:url" content="https://aaronmsoto.github.io/finops-framework-mcp/guide/">
+<meta name="twitter:card" content="summary">
 <style>
   :root {
     --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;

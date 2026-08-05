@@ -12,7 +12,27 @@
 
 ## In flight
 
-**T-059 done** (2026-08-02, this session): demo/ under the format gate
+**T-065 done** (2026-08-05, this session): `docs/` is now a publishable
+GitHub Pages site root — see
+`.agents/journal/20260805-t065-github-pages.md` for full detail.
+
+- New: `docs/index.html` (redirects `/` → `/guide/index.html`, works with JS
+  off), `docs/404.html`, `docs/.nojekyll`, `docs/deploy-pages.md` (owner
+  checklist + smoke test). All six `docs/guide/*.html` gained per-page
+  `<head>` metadata (description, canonical, `og:*`, twitter:card) pointing
+  at `https://aaronmsoto.github.io/finops-framework-mcp/guide/…`; no
+  external assets, so the `file://` invariant holds.
+- Verified by running the site: `docs/` served on localhost, 11/11 paths
+  HTTP 200, 8/8 internal links resolve, headless Chromium confirms the root
+  redirect with JS on and off. Gates all PASS except the pre-existing
+  sandbox-only `src/packaging.test.ts` npm-registry failure (`ajv@^8.20.0`
+  notarget) — 404/404 other tests pass.
+- **Owner-gated, in this order**: (1) repo is **private** — Pages needs a
+  public repo or a paid plan; (2) merge to `main`; (3) Settings → Pages →
+  branch `main`, folder `/docs`. The Pages REST API is blocked to agent
+  sessions (403 via proxy), so no automation can do step 3.
+
+**T-059 done** (2026-08-02, earlier session): demo/ under the format gate
 (review R6) — see
 `.agents/journal/20260802-t059-demo-format-gate.md` for full detail.
 
@@ -231,9 +251,10 @@ owner-gated.** State as of 2026-08-02:
 2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and the
    root `finops-framework-mcp` (dual launch is the confirmed intent);
    MCP-registry submit both `server.json` manifests.
-3. Owner: **enable GitHub Pages** — serve `docs/` from the default branch so
-   `docs/guide/index.html` is the public usage guide. Pages is a repo-setting,
-   not agent-reachable.
+3. Owner: **enable GitHub Pages** — Settings → Pages → branch `main`, folder
+   `/docs`. Repo must be public first (or account on Pro/Team/Enterprise);
+   Pages is a repo setting and its REST API is blocked to agent sessions.
+   Everything else is in place — see `docs/deploy-pages.md`.
 4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).

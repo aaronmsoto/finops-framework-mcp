@@ -4,7 +4,16 @@ This directory belongs to **your project**. The starter template's own
 documentation (architecture contract, operations manual, getting-started,
 research corpus) lives out of the way in [`.agentic/docs/`](../.agentic/docs/).
 
+This directory is also the **GitHub Pages publishing root** (branch `main`,
+folder `/docs`): `index.html` redirects to the usage guide in `guide/`,
+`404.html` is the site's not-found page, and `.nojekyll` keeps Pages from
+running Jekyll over the markdown. Setup and smoke test:
+[`deploy-pages.md`](deploy-pages.md).
+
 What lives here:
+
+- [`guide/`](guide/index.html) — the six-page usage guide; the published
+  site's front door.
 
 - [`designs/`](designs/) — rich, self-contained HTML design docs for your
   features, created via the `design-feature` skill
