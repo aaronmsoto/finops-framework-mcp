@@ -28,10 +28,6 @@
       "command": "npm run test",
       "tier": "fast"
     },
-    "coverage": {
-      "tier": "fast",
-      "optional": true
-    },
     "designs": {
       "command": "node .agentic/harness/dist/cli.js design check",
       "tier": "fast"

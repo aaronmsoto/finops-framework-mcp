@@ -1236,7 +1236,7 @@
         "The journal states explicitly that this STRENGTHENS coverage enforcement: the removed entry had no command bound and always reported SKIP, so it checked nothing. This is not a weakened or deleted gate",
         "./scripts/agentic gates --tier all PASS; protected-path edit to agentic.config.json AUTHORIZED by the spec"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

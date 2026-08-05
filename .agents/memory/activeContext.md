@@ -12,26 +12,23 @@
 
 ## In flight
 
-**CI product/governance split — T-065 done, T-066/T-067 pending**
+**CI product/governance split — T-065/T-066 done, T-067 pending**
 (spec `.agents/specs/ci-product-governance-split.md`, owner-validated
 2026-08-04, all four open questions resolved).
 
 - **T-065 done** (2026-08-05): root `package.json` gained `format:check`
-  / `lint` / `typecheck` scripts (bodies byte-identical to the commands
-  previously inlined in `agentic.config.json`); the `format`/`lint`/
-  `typecheck`/`test` gate entries now invoke `npm run <script>` (`build`
-  already did). No tool binary is named in both files. Protected-path
-  gates-block edit was spec-authorized; `approvals.yaml` and
-  `.claude/settings.json` untouched; `coverage` entry deliberately left
-  for T-066. Verified: `./scripts/agentic gates --tier all` PASS (407
-  tests, coverage baseline unchanged 75.6/65.21/75.6/76.72). See
-  `.agents/journal/20260805-t065-npm-script-gates.md`.
-- **T-066 next**: vitest coverage thresholds at/below the
-  75.6/65.21/75.6/76.72 baseline; remove the unbound optional `coverage`
-  gate entry. Its journal MUST state the removal is a STRENGTHENING (the
-  entry is `optional` with no `command` and always reported SKIP) for the
-  integrity gate and reviewer.
-- **T-067 after**: split `.github/workflows/ci.yml` into product +
+  / `lint` / `typecheck` scripts; the `format`/`lint`/`typecheck`/`test`
+  gate entries now invoke `npm run <script>`. No tool binary is named in
+  both files. See `.agents/journal/20260805-t065-npm-script-gates.md`.
+- **T-066 done** (2026-08-05): `vitest.config.ts` enforces coverage
+  thresholds at the measured baseline (75.6/65.21/75.6/76.72); the
+  unbound optional `coverage` gate entry is removed from
+  `agentic.config.json` (STRENGTHENING — it had no command and always
+  reported SKIP; thresholds now fail `npm test` live, proven by a +1
+  threshold bump exiting 1, then reverted). Gates `--tier all` PASS;
+  only `SKIP e2e` remains. See
+  `.agents/journal/20260805-t066-vitest-coverage-thresholds.md`.
+- **T-067 next**: split `.github/workflows/ci.yml` into product +
   governance jobs. Key decisions: governance job always runs and no-ops
   its harness steps on forks (an `if:`-skipped job reports "skipped" and
   never satisfies a required check); product job keeps the name
@@ -54,7 +51,7 @@ combined two-server scenario PASS (`docs/eval-results.md`).
 
 ## Next steps
 
-1. **T-066 → T-067** via `/next-task` in a fresh context (one task per
+1. **T-067** via `/next-task` in a fresh context (one task per
    session). Prerequisite for going public.
 2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and
    root `finops-framework-mcp`; MCP-registry submit both `server.json`
@@ -100,5 +97,5 @@ combined two-server scenario PASS (`docs/eval-results.md`).
 
 ## Last updated
 
-2026-08-05 — T-065 session (npm-script gate indirection landed; T-066
-next).
+2026-08-05 — T-066 session (vitest coverage thresholds enforced, unbound
+coverage gate removed; T-067 next).
