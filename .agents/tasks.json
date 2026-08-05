@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "55a5bb4a092d46e3549b6fe467a0b2598e0a58a23327a340e9e5e93e68f0f37c",
+  "chainHead": "dc758c3dc28e80144d56b30e053237c476323010aff71f9cd3b3a0b94db6775f",
   "tasks": [
     {
       "id": "T-001",
@@ -1258,9 +1258,15 @@
         "Proven with the harness absent: git stash push -- .agentic, then npm ci and npm run format:check, lint, typecheck, test, build all pass; stash restored. Observed output recorded in the journal, not asserted from reading YAML",
         ".github/rulesets/main-branch.json and approvals.yaml are untouched; git diff confirms. Protected-path edit to .github/workflows/ci.yml AUTHORIZED by the spec"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "ci.yml split into gates-fast/gates-full (harness-free product jobs, root lockfile cache) + governance (one acquisition step, no job-level if, harness steps exit 0 on forks); push covers dev; proven by moving .agentic/ out and running npm ci+format:check+lint+typecheck+test+build green; gates --tier all PASS; reviewer PASS",
+        "commit": "3979549129472dbf467f16544fd77cfa3585de5d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-05T13:06:36.709Z"
+      },
+      "hash": "dc758c3dc28e80144d56b30e053237c476323010aff71f9cd3b3a0b94db6775f"
     }
   ]
 }
