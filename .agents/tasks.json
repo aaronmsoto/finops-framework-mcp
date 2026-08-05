@@ -1258,7 +1258,7 @@
         "Proven with the harness absent: git stash push -- .agentic, then npm ci and npm run format:check, lint, typecheck, test, build all pass; stash restored. Observed output recorded in the journal, not asserted from reading YAML",
         ".github/rulesets/main-branch.json and approvals.yaml are untouched; git diff confirms. Protected-path edit to .github/workflows/ci.yml AUTHORIZED by the spec"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }
