@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "7091e1cfcd3fae51b37f98bf75bf34938e4beab57b27ca1c4f17cce2ddc0f32c",
+  "chainHead": "55a5bb4a092d46e3549b6fe467a0b2598e0a58a23327a340e9e5e93e68f0f37c",
   "tasks": [
     {
       "id": "T-001",
@@ -1236,9 +1236,15 @@
         "The journal states explicitly that this STRENGTHENS coverage enforcement: the removed entry had no command bound and always reported SKIP, so it checked nothing. This is not a weakened or deleted gate",
         "./scripts/agentic gates --tier all PASS; protected-path edit to agentic.config.json AUTHORIZED by the spec"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "vitest thresholds at baseline 75.6/65.21/75.6/76.72 enforce coverage in npm test (proven: +1 bump exits 1); unbound SKIP-only coverage gate entry removed — strengthening; gates --tier all PASS, reviewer PASS",
+        "commit": "15ee94749fcc35edb3150cc8c3e998852a80abc0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-05T06:00:41.411Z"
+      },
+      "hash": "55a5bb4a092d46e3549b6fe467a0b2598e0a58a23327a340e9e5e93e68f0f37c"
     },
     {
       "id": "T-067",
