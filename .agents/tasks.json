@@ -1215,7 +1215,7 @@
         "./scripts/agentic gates --tier all PASS on a clean tree, proving the indirection changed no behavior",
         "Protected-path edit to the agentic.config.json gates block is AUTHORIZED by spec ci-product-governance-split; approvals.yaml and .claude/settings.json stay untouched"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

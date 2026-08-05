@@ -12,276 +12,64 @@
 
 ## In flight
 
-**CI product/governance split — spec OWNER-VALIDATED, T-065..T-067 pending**
-(2026-08-04): `.agents/specs/ci-product-governance-split.md`; all four open
-questions resolved, zero remaining. Planning session only — no
-implementation. See `.agents/journal/20260804-ci-split-spec.md`.
+**CI product/governance split — T-065 done, T-066/T-067 pending**
+(spec `.agents/specs/ci-product-governance-split.md`, owner-validated
+2026-08-04, all four open questions resolved).
 
-- Decisions: governance job always runs and no-ops its harness steps on forks
-  (a job skipped via `if:` reports "skipped" and never satisfies a required
-  check); coverage moves product-side to vitest thresholds at/below the
-  75.6/65.21/75.6/76.72 baseline and the unbound `coverage` gate entry is
-  removed; `push` triggers gain `dev`; product job keeps the name
-  `gates-fast` so no ruleset recompile.
-- Removing the `coverage` entry is a STRENGTHENING, not a weakened gate: it
-  is `optional` with no `command` and always reported SKIP. T-066 must say so
-  in its journal for the integrity gate and reviewer.
-- True fork-PR behavior is not locally observable; T-067 proves
-  harness-independence via a `.agentic/` stash run. Confirming a real fork PR
-  goes green is a post-merge check on the first external PR.
-
+- **T-065 done** (2026-08-05): root `package.json` gained `format:check`
+  / `lint` / `typecheck` scripts (bodies byte-identical to the commands
+  previously inlined in `agentic.config.json`); the `format`/`lint`/
+  `typecheck`/`test` gate entries now invoke `npm run <script>` (`build`
+  already did). No tool binary is named in both files. Protected-path
+  gates-block edit was spec-authorized; `approvals.yaml` and
+  `.claude/settings.json` untouched; `coverage` entry deliberately left
+  for T-066. Verified: `./scripts/agentic gates --tier all` PASS (407
+  tests, coverage baseline unchanged 75.6/65.21/75.6/76.72). See
+  `.agents/journal/20260805-t065-npm-script-gates.md`.
+- **T-066 next**: vitest coverage thresholds at/below the
+  75.6/65.21/75.6/76.72 baseline; remove the unbound optional `coverage`
+  gate entry. Its journal MUST state the removal is a STRENGTHENING (the
+  entry is `optional` with no `command` and always reported SKIP) for the
+  integrity gate and reviewer.
+- **T-067 after**: split `.github/workflows/ci.yml` into product +
+  governance jobs. Key decisions: governance job always runs and no-ops
+  its harness steps on forks (an `if:`-skipped job reports "skipped" and
+  never satisfies a required check); product job keeps the name
+  `gates-fast` (no ruleset recompile); `push` triggers gain `dev`;
+  governance acquires the harness in exactly one named step. True fork-PR
+  behavior is not locally observable — T-067 proves harness-independence
+  via a `.agentic/` stash run; a real fork PR going green is a post-merge
+  check on the first external PR.
 - Driver: going public + extracting the harness to a private scoped npm
   package. Today 100% of CI signal runs through `./scripts/agentic gates`
   after `./scripts/bootstrap.sh`, so a fork PR would get no signal at all
   once the harness needs auth to install.
-- Verified split: product gates (`format`/`lint`/`typecheck`/`test`/`build`)
-  need only root devDeps — prettier/eslint/tsc/vitest all resolve via `npx
-  --no-install` with `.agentic/` untouched. Harness-implemented: `designs`/
-  `integrity`/`memory`, plus `coverage`/`e2e` which have no `command` key.
-- Design: root `package.json` scripts become the single source of truth;
-  `agentic.config.json` gate entries and CI both call `npm run <script>`.
-- Spec explicitly authorizes protected-path edits to
-  `.github/workflows/ci.yml` and the `gates` block of `agentic.config.json`.
-
-**T-059 done** (2026-08-02, earlier session): demo/ under the format gate
-(review R6) — see
-`.agents/journal/20260802-t059-demo-format-gate.md` for full detail.
-
-- `agentic.config.json` format gate command changed from
-  `prettier --check src tests` to `prettier --check src tests demo` (this
-  task's acceptance criteria explicitly authorized the protected-path
-  edit). The PreToolUse hook and integrity gate did not block it.
-- `demo/app.js`, `demo/client.js`, `demo/index.html` reformatted once via
-  `npx prettier --write demo` (whitespace/wrapping only — `git diff`
-  confirms no behavioral change); `demo/config.js`/`requests.js`/
-  `requests.d.ts` were already clean.
-- Verified: `./scripts/agentic gates` PASS (format/lint/typecheck/test/
-  designs/integrity/memory all green); `npx prettier --check src tests
-demo` clean.
-
-**T-058 done** (2026-08-02, this session): derive pipeline integration test
-(review R1) — see
-`.agents/journal/20260802-t058-derive-pipeline-integration-test.md` for full
-detail.
-
-- Added `src/crawlers/framework/markdown/derive-artifact.test.ts`: runs
-  `deriveArtifactPayload` against the real committed
-  `data/framework/content/markdown` and deep-equal-compares all 10 derived
-  entities against `loadArtifact("data/framework")`'s fields, asserts zero
-  parse warnings, asserts `derived.counts` matches `manifest.counts`, and
-  asserts `deriveArtifactPayload` is a thin wrapper over
-  `deriveFromDocs(walkMarkdownFiles(...))`. Closes the R1 finding — offline
-  derive orchestration was previously 0%-executed by any test.
-- Runtime ~37ms for the derive call itself, 54ms test-only inside the
-  suite; stays in the fast `test` gate tier, no full-tier binding needed.
-- Verified: `./scripts/agentic gates` PASS (407 tests, up from 403;
-  `derive.ts` in `crawlers/framework/markdown` now 96.59% stmts, was
-  fixture-only before); `./scripts/agentic gates --tier full` PASS (build).
-- **T-059** (demo under the format gate) remains — needs an
-  owner-approved task since `agentic.config.json` gate definitions are a
-  protected path.
-
-**T-057 done** (2026-08-02, this session): architecture periphery cleanup
-(review R2/R3/R4/R5) — see
-`.agents/journal/20260802-t057-architecture-periphery.md` for full detail.
-
-- Added `src/workers/index.test.ts` (exported `parseAllowedOrigins`, tested
-  its comma/whitespace/empty-entry handling plus the default export's
-  ALLOWED_ORIGINS wiring via a disallowed-Origin 403) and
-  `src/workers/data.test.ts` (`loadWorkerData`'s Map rehydration for
-  `focusStore.versions`/`sampleCsv`, purity, and pass-through of the
-  non-Map fields) — both were previously at 0% coverage (R2).
-- `src/crawlers/framework/cli.ts`'s direct-run guard now uses
-  `isDirectRunOf(import.meta.url)` from `src/shared/direct-run.ts` instead
-  of the fragile `process.argv[1]?.endsWith("cli.js")` (R3) — the last
-  entry point still on the old pattern.
-- Hoisted the byte-identical `notFound()` (-32002 + nearest-match
-  suggestions) out of `framework/resources.ts` and `focus/resources.ts`
-  into `src/shared/mcp-not-found.ts`; both servers now import it (R4).
-  Existing typo-pinning tests (`server.test.ts` in both servers) pass
-  unchanged, confirming behavior is unchanged.
-- Deleted dead code (R5): `parseOverview()` in
-  `crawlers/framework/parse/sections.ts` (confirmed zero callers anywhere
-  in the repo, including tests — no orphaned tests existed to remove) and
-  the template `greet()` scaffold in `src/index.ts`. `tests/index.test.ts`
-  (protected path, edit explicitly authorized by this task's acceptance
-  criteria — required `touch .agents/.cache/policy-edit-ok` to get past
-  the protect-policy hook) now asserts `src/index.ts`'s real remaining
-  content: the `createServer`/`SERVER_NAME`/`SERVER_VERSION` re-export
-  from `servers/framework/server.js`. Kept a file there (not removed
-  outright) because the format/lint gates hardcode `tests` as a directory
-  argument and fail with zero matched files otherwise; the integrity gate
-  also flags outright deletion of a protected-path test file.
-- Verified: `./scripts/agentic gates --tier all` all green (402 tests,
-  format/lint/typecheck/test/designs/integrity/memory/build all PASS).
-  Coverage text-table oddity noted: the v8 text reporter doesn't print
-  `src/workers/index.ts`/`data.ts` as individual rows for narrow test
-  subsets, but the underlying `coverage-final.json` confirms 100%
-  statement/function coverage for both — a reporter display quirk, not a
-  real gap (coverage gate itself is optional/unbound in this repo).
-
-**T-056 done** (2026-08-02, this session): dual-launch hygiene (review
-L3/L4) — see `.agents/journal/20260802-t056-dual-launch-hygiene.md` for full
-detail. Added root `SECURITY.md` (GitHub Security Advisories as the report
-channel, no personal email published) and `CONTRIBUTING.md` (points at
-AGENTS.md), plus `.github/ISSUE_TEMPLATE/bug_report.md`
-(`.github/workflows/` untouched). Both `package.json`s gained
-`author`/`homepage`/`bugs` and `engines.node` bumped `>=20` → `>=22`
-(confirmed CI already only tests node 22). Verified: `./scripts/agentic
-gates` all green (392 tests); `npm pack --dry-run` succeeds from both repo
-root and `packages/finops-focus-mcp/` (prepack staging still works).
-
-**T-055 done** (2026-08-02, this session): docs coherence pass (review
-DOC-1/3/4, L5) — see `.agents/journal/20260802-t055-docs-coherence.md` for
-full detail. MEMORY.md rewritten for v1 reality via the `update-memory`
-skill (two servers, Worker+demo, four critique gates + final review passed,
-publish owner-gated; "inferred edges" invariant dropped; 50 lines).
-`evals/focus/combined-scenario.xml` step 4 rewritten to match the T-045
-mapping shape (live-probed: 1.2 columns for the three commitment KPIs grow
-to include CommitmentDiscountQuantity/CommitmentDiscountUnit, caveat is a
-single version-neutral string). `docs/architecture.md` and `AGENTS.md` got
-short "Now built" pointers to the FOCUS server/Worker/demo/critique-3+4
-(no rewrite of historical rationale; AGENTS.md still 66 lines).
-`docs/deploy-worker.md` Notes/limits now documents the Worker's
-no-auth/no-rate-limit posture as deliberate, pointing at Cloudflare Rate
-Limiting rules. Verified: `./scripts/agentic gates` (392 tests) all green;
-`memory lint` 0 warnings.
-
-**T-054 done** (2026-08-02, earlier same session): built `docs/mcp-surface.md` — the
-prompts→resources→tools hierarchy for both servers, generated (not
-hand-typed) from live MCP protocol output.
-
-- `evals/framework/mcp-call.mjs` gained `list-resources`,
-  `list-resource-templates`, `list-prompts` (same bridge pattern as
-  `list-tools`, which stays byte-identical per the T-028 contract).
-- `scripts/gen-mcp-surface.mjs` (new, `npm run gen:mcp-surface`) connects
-  live to both built servers (+ framework with `FINOPS_MCP_EXPERIMENTAL=1`
-  to set-diff out `get_actions`), pages every list endpoint, probes
-  `completion/complete` on every resource-template variable to detect
-  completion support, separates fixed resources from template-expanded
-  ones by regex-matching live `uriTemplate`s against `resources/list`
-  output, and reads tool param type/required/default/limits straight from
-  live `inputSchema`. `[UNOFFICIAL/EXPERIMENTAL]` badges come from a
-  case-insensitive scan of title/description — nothing hardcoded. Supports
-  `--check` (diff vs committed file, exit 1 on drift).
-- `src/servers/mcp-surface.test.ts` (new) is the always-on drift guard:
-  InMemoryTransport against TS source (no dist build, stays fast-tier),
-  asserts every live tool/prompt/template name + fixed-resource URI + the
-  per-server counts appear in the committed doc. Full byte-for-byte
-  verification is `gen-mcp-surface.mjs --check` (needs `dist/`, run by
-  hand — the fast `test` gate runs before the full-tier `build` gate, so a
-  vitest test requiring dist would break on a fresh unbuilt checkout).
-- Both READMEs link to the doc.
-- Verified: `node scripts/gen-mcp-surface.mjs --check` clean after a full
-  `npm run build`; `vitest run src/servers/mcp-surface.test.ts` 3/3;
-  `./scripts/agentic gates --tier all` PASS (392 tests).
-- **Reminder for whoever does T-055..T-059 next**: if a change touches any
-  prompt/resource/tool, re-run `npm run gen:mcp-surface` and commit the
-  diff, or `mcp-surface.test.ts` fails.
-
-**T-053 done** (2026-08-02, earlier same session): added the `map-kpi-to-focus-columns`
-prompt to `src/servers/focus/prompts.ts` (review MCP-4 — the flagship
-`get_kpi_mapping`/`calculate_kpi` workflow had no guided prompt).
-
-- Third prompt, mirroring `explain-focus`/`map-column-across-versions`:
-  optional `kpi` (completable KPI slug), `capability` (completable, from
-  `related_capability_slugs` across the mapping), and `version` (completable
-  spec version, default `DEFAULT_VERSION`) args.
-- With `kpi`: embeds the mapped FOCUS columns' resource docs (`columnMd`,
-  same as `map-column-across-versions`) then an UNOFFICIAL-framed
-  instruction to call `get_kpi_mapping` for the formula and `calculate_kpi`
-  for a computed sample value. Unknown `kpi` returns guidance instead of
-  erroring (mirrors the framework server's `assess-capability-maturity`
-  unknown-capability handling). With `capability` or with neither arg: pure
-  tool-call guidance (no resource to embed — there's no per-KPI renderer),
-  pointing at `get_kpi_mapping(capability: ...)` or a bare listing call.
-- **Fixed a latent bug found while wiring completion**: `completable(...).optional()`
-  silently drops completions. The SDK's `completable()` mutates the schema
-  object in place with a non-enumerable symbol property; zod v4's
-  `.optional()` clones into a _new_ `ZodOptional` wrapper, so the marker
-  never survives being applied after `completable()` (confirmed by
-  reproducing with a 4-line node script against the installed SDK). Fixed
-  by moving `.optional()` _inside_ `completable()`'s input schema (before
-  the outermost call) for `versionArg`, and applying the same shape to the
-  new `kpiArg`/`kpiCapabilityArg` helpers — this incidentally also fixes
-  `explain-focus`'s previously-silent `version` completion.
-- Verified: `vitest run src/servers/focus/server.test.ts` (59/59, incl. new
-  prompt-list/get/completion tests) then `./scripts/agentic gates --tier all`
-  all green (389 tests total). Live probe against built `dist/` via
-  `InMemoryTransport`: `prompts/list` includes all three names;
-  `getPrompt({kpi: "effective-savings-rate-percentage"})` returns 4 embedded
-  column resources + UNOFFICIAL instruction text; `complete` returns real
-  values for `kpi` ("effective" → 2 matches), `capability` ("rate" →
-  `rate-optimization`), and `version` ("1" → `1.0`, `1.2`).
-- Remaining backlog: T-054..T-059 queued (git log); rest of the 19-MINOR
-  list in `docs/final-status-review.md` still open (MEMORY.md refresh,
-  derive-pipeline integration test, worker index/data tests,
-  `combined-scenario.xml` step-4 fix, SECURITY/CONTRIBUTING, npm metadata).
-
-**T-051/T-052 done** (2026-08-02, earlier same day): tool-description fixes
-(TN-1/2/3 — exact param names, `assess_maturity_path` descriptions, corpus
-counts interpolated not hardcoded) and MCP-protocol polish (MCP-1/2/3 —
-pagination text parity, Worker 405 on GET/DELETE, `listChanged` doc fix).
-Full detail in `.agents/journal/20260802-t051-*.md` and `-t052-*.md`.
 
 **v1 close-out is COMPLETE on `claude/session-k75rxy`; publish is
-owner-gated.** State as of 2026-08-02:
-
-- FOCUS build batch T-027..T-038 (12/12) + critique gate 4
-  (`docs/critique-4-focus-gate.md`, SHIP-after-fixes, 2 BLOCKER / 8 MAJOR /
-  5 MINOR, 0 refuted) + fix batch T-039..T-047 (9/9, loop run
-  `.agents/journal/20260730-loop-build-134141.md`) all landed. Every fix
-  hand-verified live this session (probe notes in `docs/eval-results.md`
-  Focus Run 2).
-- **T-048**: FOCUS package renamed `focus-spec-mcp` → **`finops-focus-mcp`**
-  (owner decision in `decisions.md`; resolves gate-4 C4-community-3). Dir is
-  `packages/finops-focus-mcp/`, bin prints
-  `finops-focus-mcp v1.0.0 (FOCUS spec versions: 1.0, 1.2; latest 1.2)`,
-  tarball 241KB, temp-install verified. Historical docs/journals keep the
-  old name on purpose.
-- **Evals**: focus Run 1 10/10 (pre-fix), Run 2 10/10 (post-fix, post-rename,
-  regenerated artifact), combined two-server scenario PASS —
-  `docs/eval-results.md`.
-- **Final pre-launch review** (`docs/final-status-review.md`, five lenses +
-  adversarial verification): **GO-after-listed-fixes**, grades A-/A-/A-/B+/B-,
-  zero BLOCKERs. Its two MAJORs (root README omitted the shipped FOCUS
-  server/Worker/demo; root NOTICE.md lacked CC BY scope for `data/focus/**`)
-  were fixed as **T-049** — landed, gates green. Its 19 MINORs are the
-  post-launch backlog (list in the review doc; includes MEMORY.md refresh,
-  derive-pipeline integration test, worker index/data tests, demo in the
-  format gate [protected-path — owner task], SECURITY/CONTRIBUTING files,
-  npm author/homepage/bugs fields, text-pagination parity, Worker
-  GET/DELETE 405).
-- All commits re-authored (committer noreply@anthropic.com) and pushed.
-  Task-evidence commit SHAs recorded before the 2026-08-02 rebase point at
-  pre-rebase objects (provenance display only; nothing resolves them).
+owner-gated.** PR #9 (FOCUS v1 batch + close-out + usage guide) was merged
+2026-08-04. T-050..T-064 all landed: CI fix, the full 19-MINOR review
+backlog from `docs/final-status-review.md`, the six-page guide under
+`docs/guide/`, and `.mcp.json` local wiring. Evals: focus Runs 1+2 10/10,
+combined two-server scenario PASS (`docs/eval-results.md`).
 
 ## Next steps
 
-1. Owner: review PR #9 (FOCUS v1 batch + close-out + usage guide) and merge.
-2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and the
-   root `finops-framework-mcp` (dual launch is the confirmed intent);
-   MCP-registry submit both `server.json` manifests.
-3. Owner: **enable GitHub Pages** — serve `docs/` from the default branch so
-   `docs/guide/index.html` is the public usage guide. Pages is a repo-setting,
-   not agent-reachable.
-4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
-demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
-   handler-level verified, not yet wrangler-deployed).
-5. T-050..T-063 all landed: CI fix, the full 19-MINOR review backlog, and the
-   six-page guide under `docs/guide/`. Post-launch backlog is clear pending
-   the owner steps above. Template feedback to port: `design check` should
-   accept an allowlist of HTML dirs (it warns on all six guide pages).
-6. **T-065 → T-066 → T-067** (pending, in order): the CI product/governance
-   split. Spec is owner-validated; run `/next-task` in a fresh context. This
-   is a prerequisite for going public — without it, fork PRs get zero CI
-   signal once the harness moves to a private npm package.
-7. Harness extraction to a private scoped npm package
-   (`@aaronsoto/agentic-harness`, name available) is the follow-on project,
-   not yet specced. Note the vendored `.agentic/harness/` here has already
-   drifted from agentic-starter-repo — `approvals.ts` differs by 307 lines,
-   `tasks.ts` by 57, `gates.ts` by 27 — and the template copy is the one that
-   is ahead and already publish-configured. Reconcile deliberately during
+1. **T-066 → T-067** via `/next-task` in a fresh context (one task per
+   session). Prerequisite for going public.
+2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and
+   root `finops-framework-mcp`; MCP-registry submit both `server.json`
+   manifests.
+3. Owner: enable GitHub Pages (serve `docs/` from the default branch so
+   `docs/guide/index.html` is the public usage guide) — repo setting, not
+   agent-reachable.
+4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages
+   deploy demo/`; smoke-test the demo against the deployed Worker (CORS
+   fix is handler-level verified, not yet wrangler-deployed).
+5. Harness extraction to `@aaronsoto/agentic-harness` (private scoped npm,
+   name available) is the follow-on project, not yet specced. The vendored
+   `.agentic/harness/` here has drifted from agentic-starter-repo
+   (`approvals.ts` −307 lines, `tasks.ts` −57, `gates.ts` −27; template
+   copy is ahead and publish-configured). Reconcile deliberately during
    migration; do not blind-sync before the CI split lands.
 
 ## Open questions
@@ -306,10 +94,11 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
 - Template feedback queued for agentic-starter-repo: `gates --tier full`
   runs only full-tier gates (use `--tier all` before shipping);
   supervising sessions must not commit a live loop's in-flight tasks.json;
-  NEW — background watchers must not `pgrep` for a pattern contained in
-  their own command line (self-match false positive, this session).
+  background watchers must not `pgrep` for a pattern contained in their
+  own command line (self-match false positive); `design check` should
+  accept an allowlist of HTML dirs (it warns on all six guide pages).
 
 ## Last updated
 
-2026-08-04 — CI product/governance split planning session (spec written,
-awaiting owner validation; no tasks generated).
+2026-08-05 — T-065 session (npm-script gate indirection landed; T-066
+next).

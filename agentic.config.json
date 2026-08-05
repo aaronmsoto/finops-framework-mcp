@@ -13,19 +13,19 @@
   },
   "gates": {
     "format": {
-      "command": "prettier --check src tests demo",
+      "command": "npm run format:check",
       "tier": "fast"
     },
     "lint": {
-      "command": "eslint src tests",
+      "command": "npm run lint",
       "tier": "fast"
     },
     "typecheck": {
-      "command": "tsc --noEmit",
+      "command": "npm run typecheck",
       "tier": "fast"
     },
     "test": {
-      "command": "vitest run --coverage",
+      "command": "npm run test",
       "tier": "fast"
     },
     "coverage": {
