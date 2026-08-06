@@ -12,7 +12,48 @@
 
 ## In flight
 
-**T-059 done** (2026-08-02, this session): demo/ under the format gate
+**T-065 done** (2026-08-06, this session): chain extended, and
+`./scripts/agentic verify` passes every check. The earlier
+`src/packaging.test.ts` failure that briefly blocked the task was a **stale
+local npm cache**, not a missing package — the test installs with
+`--prefer-offline`, so stale packuments produced a bogus `notarget`
+(it moved from `ajv` to `qs` on retry, which gave it away).
+`npm cache clean --force` fixed it; `gates --tier all` is now fully green.
+`docs/guide/` is the publishable GitHub Pages site — see
+`.agents/journal/20260805-t065-github-pages.md` for full detail.
+
+- **Only `docs/guide/` is published**, via a staged Actions workflow —
+  owner decision, see journal. Branch-source was built first and then
+  reworked: GitHub's branch source offers only `/` or `/docs`, so a deeper
+  folder is not selectable, and a *project* Pages site cannot carry its own
+  `robots.txt`. The driver was the bare URL (no `/guide/` redirect hop), not
+  secrecy — a public repo exposes `docs/*.md` on github.com regardless.
+- **T-066** installed the workflow at `.github/workflows/pages.yml` — a
+  protected-path write, explicitly authorized by the owner in-session (they
+  have iOS-only access and cannot run `git mv`). Done via the hook's
+  documented override (`touch .agents/.cache/policy-edit-ok`, removed
+  immediately after); no other protected path was touched. It uploads
+  `docs/guide` alone, least-privilege perms, with a guard step that fails if
+  any of the seven expected files is missing. `docs/guide/404.html` +
+  `.nojekyll` moved
+  in; the old `docs/index.html` redirect is deleted. All six pages carry
+  per-page `<head>` metadata with `canonical`/`og:url` at
+  `https://aaronmsoto.github.io/finops-framework-mcp/<file>.html` (page 1 =
+  bare root); the two `../mcp-surface.md` links now go to the GitHub blob
+  URL since that file is off-site. No external assets — `file://` still works.
+- Verified by running the site: `docs/guide/` served as a root, 8/8 paths
+  HTTP 200, 8/8 internal links resolve, `canonical == og:url` on all six,
+  workflow guard step passes by hand, `pages.yml` parses. `gates --tier all`
+  PASS; `verify` PASS.
+- **Owner-gated, two steps left**: (1) merge PR #11 to `main`; (2) Settings →
+  Pages → Source = **GitHub Actions** (not a branch — its `/` or `/docs`
+  folder options cannot express "publish `docs/guide` only"). The Pages REST
+  API is blocked to agent sessions (403 via proxy), so no automation can do
+  step 2. Owner reports **GitHub Pro**, so Pages works with the repo staying
+  private; the published site is public either way (private Pages sites are
+  Enterprise Cloud only).
+
+**T-059 done** (2026-08-02, earlier session): demo/ under the format gate
 (review R6) — see
 `.agents/journal/20260802-t059-demo-format-gate.md` for full detail.
 
@@ -231,9 +272,11 @@ owner-gated.** State as of 2026-08-02:
 2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and the
    root `finops-framework-mcp` (dual launch is the confirmed intent);
    MCP-registry submit both `server.json` manifests.
-3. Owner: **enable GitHub Pages** — serve `docs/` from the default branch so
-   `docs/guide/index.html` is the public usage guide. Pages is a repo-setting,
-   not agent-reachable.
+3. Owner: **publish the guide on GitHub Pages** — merge PR #11, then
+   Settings → Pages → Source = **GitHub Actions**. That is the whole
+   remaining list: the workflow is installed (T-066) and Pro covers Pages on
+   a private repo. Pages is a repo setting and its REST API is blocked to
+   agent sessions. See `docs/deploy-pages.md`.
 4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
@@ -266,7 +309,20 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
   supervising sessions must not commit a live loop's in-flight tasks.json;
   NEW — background watchers must not `pgrep` for a pattern contained in
   their own command line (self-match false positive, this session).
+- **Template BUG (blocking, found 2026-08-06)**: `compileRuleset` in
+  `.agentic/harness/src/approvals.ts` emits
+  `required_approving_review_count: 1` + `require_code_owner_review: true` +
+  `bypass_actors: []` whenever `merge_to_main: human`, and CODEOWNERS makes
+  the owner the only reviewer. GitHub forbids approving your own PR, so on
+  any **single-maintainer** repo every PR the owner opens is permanently
+  unmergeable (`mergeable_state: blocked`, only "Request Review" offered) —
+  hit for real on PR #11. `compileIntegrationRuleset` in the same file gets
+  it right (`count: 0`, "green CI is the merge gate"). Fix: emit a
+  Repository-admin bypass actor (or `count: 0`) when the owner is the sole
+  code owner. Workaround applied here: owner adds the bypass in
+  Settings → Rules → Rulesets by hand, which then drifts from the generated
+  `.github/rulesets/main-branch.json`.
 
 ## Last updated
 
-2026-08-02 — T-059 session (demo/ under the format gate, review R6).
+2026-08-06 — T-065/T-066 session (Pages publish; ruleset deadlock found).
