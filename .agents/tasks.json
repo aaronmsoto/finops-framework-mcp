@@ -1362,6 +1362,61 @@
         "completedAt": "2026-08-06T04:14:46.895Z"
       },
       "hash": "87bfd773c0450d740bc5f604b731fba3cf86522e9fdeaa99fa8876418a2c2b77"
+    },
+    {
+      "id": "T-073",
+      "title": "Consume the npm harness via .agentic manifest and npm-first shim",
+      "spec": ".agents/specs/harness-npm-consumption.md",
+      "acceptance": [
+        ".agentic/package.json (sole devDependency @aaronmsoto/agentic-harness), its package-lock.json, and a committed .agentic/.npmrc (@aaronmsoto scope registry line + ${NPM_TOKEN} auth reference) exist; root package.json and package-lock.json are byte-unchanged and npm ci at root succeeds with no registry auth configured",
+        "scripts/agentic resolves .agentic/node_modules/@aaronmsoto/agentic-harness/dist/cli.js first, then root node_modules, then the vendored .agentic/harness/dist/cli.js, and errors actionably naming the install command when none exists; observed behavior cited for npm-resolved and vendored-resolved runs",
+        "agentic.config.json designs/integrity/memory gate commands invoke ./scripts/agentic <cmd> instead of node .agentic/harness/dist/cli.js — this protected-path gates-block edit is AUTHORIZED by spec harness-npm-consumption; no other agentic.config.json change",
+        "Session prerequisite documented and used: installing the private package requires a read:packages token in NPM_TOKEN (owner-supplied or environment-configured); ./scripts/agentic gates --tier all PASS with the npm copy resolving"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-074",
+      "title": "Swap governance CI to install the harness from GitHub Packages",
+      "spec": ".agents/specs/harness-npm-consumption.md",
+      "acceptance": [
+        "ci.yml governance job's 'Acquire harness' step runs npm ci --prefix .agentic with NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }} (package access grant is the owner-side prerequisite) instead of ./scripts/bootstrap.sh — this .github/workflows/ edit is AUTHORIZED by spec harness-npm-consumption; the FORK_PR exit-0 no-op and both product jobs are byte-unchanged",
+        "Workflow YAML parses (actionlint or yq/python yaml load cited); the changed step is the ONLY diff hunk in ci.yml",
+        "Journal records that a green governance run on a real PR is the post-merge observable (requires the owner's package-access grant), and what was verified locally in its place"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-075",
+      "title": "Recompile surfaces with the npm harness and review the drift",
+      "spec": ".agents/specs/harness-npm-consumption.md",
+      "acceptance": [
+        "Baseline captured first: ./scripts/agentic gates --tier all PASS on the pre-upgrade tree, output tail in the journal",
+        "agentic upgrade run with the npm-resolved harness; every changed/created surface (markers, _generated keys, approvals.lock.json, .github/hooks/copilot-cli-policy.json, scripts/hooks/copilot-policy.mjs, settings hook block, ruleset/CODEOWNERS semantic changes) listed in the journal with one sentence each on why it changed — no blind commit; edits to .claude/settings.json and generated surfaces are AUTHORIZED by spec harness-npm-consumption",
+        "approvals check clean afterwards; gates prints NO version-skew warning; gates --tier all PASS post-upgrade",
+        "approvals.yaml and agentic.config.json gate definitions are untouched by this task"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
+    },
+    {
+      "id": "T-076",
+      "title": "Delete the vendored harness and prove npm-only parity",
+      "spec": ".agents/specs/harness-npm-consumption.md",
+      "acceptance": [
+        ".agentic/harness/ is fully deleted; scripts/bootstrap.sh installs the harness via npm ci --prefix .agentic (keeping its Node>=20 checks); AGENTS.md harness-development line and architecture/operations doc references updated to the npm package",
+        "approvals.yaml protected_paths no longer lists .agentic/harness/tests/** — this single-line approvals.yaml edit is AUTHORIZED by spec harness-npm-consumption — and approvals compile + check run clean after",
+        "git grep -l 'agentic-starter/harness\\|\\.agentic/harness/dist' returns only historical files (journals, specs, decisions, task records) — no live code, config, docs, or CI references",
+        "npm-only parity proof observed and journaled: gates --tier all PASS, verify PASS, and one loop --runner mock iteration green, all with the vendored copy gone"
+      ],
+      "status": "pending",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

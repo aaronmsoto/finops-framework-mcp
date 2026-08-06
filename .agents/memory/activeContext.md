@@ -92,14 +92,16 @@ Evals: focus Runs 1+2 10/10, combined two-server scenario PASS.
 
    (PRs #11, #12 and #13 are all merged; GitHub Pages is live; the CI split
    and both policy toggles are in. Nothing else is waiting on a merge.)
-5. Harness extraction: template Phase B is COMPLETE in
-   agentic-starter-repo (versioned surface markers + approvals.lock.json,
-   `agentic upgrade` + gates skew warning, registry-ready packaging).
-   Owner chose **GitHub Packages**; publish pending there. Phase C (this
-   repo): drop vendored `.agentic/harness/`, add the devDependency +
-   `.npmrc`, swap the governance job's "Acquire harness" step, reconcile
-   the deliberate drift (template approvals.ts is ~307 lines ahead) — spec
-   it after the package is installable.
+5. Phase C is SPECCED and queued: `@aaronmsoto/agentic-harness@0.1.0`
+   published to GitHub Packages 2026-08-06; spec
+   `.agents/specs/harness-npm-consumption.md` owner-validated (all four
+   questions resolved: recreate dev/keep integration; CI auth via
+   package access grant + GITHUB_TOKEN; vendored deletion this phase
+   post-parity; dead protected glob removed). Tasks T-073..T-076
+   pending. `dev` recreated from main. OWNER PREREQS: package access
+   grant for finops-framework-mcp (Package settings → Manage Actions
+   access), and a read:packages NPM_TOKEN for the implementing session
+   (env var in the environment settings, not chat).
 
 ## Open questions
 
