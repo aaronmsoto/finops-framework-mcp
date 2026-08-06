@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "360cd868355fdd86d14c2b5f5cf46ebcc5cd9bb131509090cccf081244fda8af",
+  "chainHead": "b4704e16f093fe299258495b4e013b696fdc6ed1b87c21be38d6a66452daacd6",
   "tasks": [
     {
       "id": "T-001",
@@ -1242,6 +1242,25 @@
         "completedAt": "2026-08-06T01:54:50.803Z"
       },
       "hash": "360cd868355fdd86d14c2b5f5cf46ebcc5cd9bb131509090cccf081244fda8af"
+    },
+    {
+      "id": "T-067",
+      "title": "Fix the solo-maintainer ruleset deadlock in the approvals compiler",
+      "acceptance": [
+        "OWNER AUTHORIZATION: the owner explicitly authorized editing approvals.yaml in this session to correct this. Scope: approvals.yaml + harness src (config.ts, approvals.ts) + regenerated surfaces via 'approvals compile'. Harness tests under .agentic/harness/tests/** must NOT be edited.",
+        "A solo_maintainer flag in approvals.yaml makes compileRuleset emit required_approving_review_count 0 and require_code_owner_review false, so an owner-authored PR to main is mergeable; default false leaves existing multi-maintainer behavior byte-identical",
+        "When solo_maintainer is true the client-side Bash(gh pr merge*) ask rule is restored even in integration mode, replacing the server-side review gate it relied on",
+        "approvals compile regenerates CODEOWNERS/settings/rulesets; harness tests pass unedited and ./scripts/agentic gates --tier all passes"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Add a solo_maintainer flag to approvals.yaml: compileRuleset drops the code-owner review requirement that GitHub makes unsatisfiable for a lone owner, and derivedPermissions restores the Bash(gh pr merge*) ask so main stays gated client-side. Default false leaves multi-maintainer output byte-identical (probed both branches); 248 harness tests pass unedited; approvals check reports no drift; gates --tier all PASS.",
+        "commit": "899a2d4504c84b3a231033436c5bf1170a298cea",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T02:39:05.970Z"
+      },
+      "hash": "b4704e16f093fe299258495b4e013b696fdc6ed1b87c21be38d6a66452daacd6"
     }
   ]
 }
