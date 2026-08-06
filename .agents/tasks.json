@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "360cd868355fdd86d14c2b5f5cf46ebcc5cd9bb131509090cccf081244fda8af",
+  "chainHead": "55917dd76cd2089df4679edc4513c7b8c7bc365a29e9639e9887d2090c296afc",
   "tasks": [
     {
       "id": "T-001",
@@ -1242,6 +1242,69 @@
         "completedAt": "2026-08-06T01:54:50.803Z"
       },
       "hash": "360cd868355fdd86d14c2b5f5cf46ebcc5cd9bb131509090cccf081244fda8af"
+    },
+    {
+      "id": "T-067",
+      "title": "Collapse product gate commands into root npm scripts",
+      "spec": ".agents/specs/ci-product-governance-split.md",
+      "acceptance": [
+        "Root package.json gains lint, format:check, and typecheck scripts whose bodies are exactly the commands currently inlined in agentic.config.json (eslint src tests / prettier --check src tests demo / tsc --noEmit)",
+        "The format, lint, typecheck, test and build gate entries in agentic.config.json invoke npm run <script>; no tool binary is named in both package.json and agentic.config.json",
+        "./scripts/agentic gates --tier all PASS on a clean tree, proving the indirection changed no behavior",
+        "Protected-path edit to the agentic.config.json gates block is AUTHORIZED by spec ci-product-governance-split; approvals.yaml and .claude/settings.json stay untouched"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Root npm scripts (format:check/lint/typecheck) now single source of truth; format/lint/typecheck/test gates invoke npm run; gates --tier all PASS (407 tests, coverage baseline unchanged); reviewer verdict pass",
+        "commit": "cb91f8c5567610368b78049c5100b85f52ca3f63",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-05T05:35:22.004Z"
+      },
+      "hash": "5049e51c066a2ab07f9e21371a315e171f85fbac3172b0a4bd48e3c85c9ff561"
+    },
+    {
+      "id": "T-068",
+      "title": "Enforce coverage via vitest thresholds, drop unbound gate",
+      "spec": ".agents/specs/ci-product-governance-split.md",
+      "acceptance": [
+        "The vitest config declares coverage thresholds at or below the measured baseline: 75.6 percent statements, 65.21 branches, 75.6 functions, 76.72 lines",
+        "Enforcement is proven live, not asserted: raising one threshold a point above baseline makes npm test fail, output cited in the journal, then reverted",
+        "The optional unbound coverage entry is removed from agentic.config.json and ./scripts/agentic gates no longer prints SKIP coverage",
+        "The journal states explicitly that this STRENGTHENS coverage enforcement: the removed entry had no command bound and always reported SKIP, so it checked nothing. This is not a weakened or deleted gate",
+        "./scripts/agentic gates --tier all PASS; protected-path edit to agentic.config.json AUTHORIZED by the spec"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "vitest thresholds at baseline 75.6/65.21/75.6/76.72 enforce coverage in npm test (proven: +1 bump exits 1); unbound SKIP-only coverage gate entry removed — strengthening; gates --tier all PASS, reviewer PASS",
+        "commit": "15ee94749fcc35edb3150cc8c3e998852a80abc0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-05T06:00:41.411Z"
+      },
+      "hash": "b3e80c49c38a622cb2d32285180a569932c43527b0f39a30c7b6a5b39e32029c"
+    },
+    {
+      "id": "T-069",
+      "title": "Split ci.yml into product and governance jobs",
+      "spec": ".agents/specs/ci-product-governance-split.md",
+      "acceptance": [
+        "Product job is named gates-fast (no ruleset recompile), does not run scripts/bootstrap.sh, contains no .agentic/ reference, and its cache-dependency-path is the root package-lock.json",
+        "Governance job acquires the harness in exactly ONE named step carrying a comment stating that this step is what changes when the harness moves to a private npm package",
+        "Governance job always runs with no job-level if: that could report skipped; its harness steps detect a fork PR and exit 0, so the check always reports a conclusion and can stay required",
+        "push triggers include both main and dev; merge_group and pull_request behavior unchanged",
+        "Proven with the harness absent: git stash push -- .agentic, then npm ci and npm run format:check, lint, typecheck, test, build all pass; stash restored. Observed output recorded in the journal, not asserted from reading YAML",
+        ".github/rulesets/main-branch.json and approvals.yaml are untouched; git diff confirms. Protected-path edit to .github/workflows/ci.yml AUTHORIZED by the spec"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "ci.yml split into gates-fast/gates-full (harness-free product jobs, root lockfile cache) + governance (one acquisition step, no job-level if, harness steps exit 0 on forks); push covers dev; proven by moving .agentic/ out and running npm ci+format:check+lint+typecheck+test+build green; gates --tier all PASS; reviewer PASS",
+        "commit": "3979549129472dbf467f16544fd77cfa3585de5d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-05T13:06:36.709Z"
+      },
+      "hash": "55917dd76cd2089df4679edc4513c7b8c7bc365a29e9639e9887d2090c296afc"
     }
   ]
 }
