@@ -1,39 +1,36 @@
 # Publishing the usage guide on GitHub Pages
 
-Owner-only checklist. Two of the three steps are outside this repo: enabling
-Pages is a repository **setting** (its REST API is blocked to agent
-sessions), and installing the workflow means writing to
-`.github/workflows/`, a protected path here.
+The deploy workflow is **installed** at
+[`.github/workflows/pages.yml`](../.github/workflows/pages.yml). One owner
+step remains, and it is a repository **setting** rather than anything in this
+repo — the Pages REST API is blocked to agent sessions, so no automation here
+can do it.
 
 The published site is the six-page usage guide in [`guide/`](guide/index.html)
 — **only** that directory. Nothing else under `docs/` is served.
 
 ## Prerequisites
 
-- **The repository must be public**, or the account must be on GitHub Pro /
-  Team / Enterprise. GitHub Pages is not available for private repositories
-  on the Free plan, whatever the source is set to. This repo is currently
-  **private**, so on a Free plan step 2 will not offer a source at all.
+- **GitHub Pages must be available for this repository.** It is included for
+  private repos on GitHub Pro / Team / Enterprise, but on the Free plan it
+  requires a public repository. This repo is private, so on Free the setting
+  below will not offer a source at all.
+- On Pro, the repository stays private while the **published site is public**
+  — access-controlled (private) Pages sites are GitHub Enterprise Cloud only.
+  That is the intended posture here: public guide, private repo, and the
+  internal review markdown never leaves the repo because the workflow uploads
+  only `docs/guide/`.
 - The workflow deploys from `main`, so the content has to be merged there
   first (merging to `main` is a human approval point per `approvals.yaml`).
 
-## 1. Install the workflow
-
-```bash
-git mv docs/proposed/pages.yml .github/workflows/pages.yml
-```
-
-Same convention as `docs/proposed/refresh-data.yml`: agents stage workflows
-under `docs/proposed/` and the owner installs them.
-
-## 2. Turn Pages on
+## 1. Turn Pages on
 
 Repository **Settings → Pages → Source: GitHub Actions**.
 
 Do _not_ pick "Deploy from a branch" — that ignores the workflow, and its
 folder options are only `/` or `/docs`, neither of which is the guide.
 
-## 3. Run it and check the result
+## 2. Run it and check the result
 
 The workflow runs on any push to `main` touching `docs/guide/**`, and can be
 started by hand from **Actions → pages → Run workflow**.
@@ -61,7 +58,7 @@ The six real paths should be `200`.
 
 ## What is in the repo for this
 
-- `docs/proposed/pages.yml` — the deploy workflow, uninstalled. Uploads
+- `.github/workflows/pages.yml` — the deploy workflow. Uploads
   `docs/guide` as the Pages artifact; least-privilege permissions
   (`contents: read`, `pages: write`, `id-token: write`); guards against
   publishing an empty site by failing if any of the seven expected files is
@@ -79,9 +76,10 @@ The six real paths should be `200`.
 
 - **Only `docs/guide/` is published.** The internal review documents
   (`critique-*.md`, `final-status-review.md`, `eval-results.md`,
-  `research.md`) are not served on the public site. They remain readable on
-  github.com once the repository is public — this controls the web site, not
-  repository visibility.
+  `research.md`) are not served on the public site. While the repository is
+  private that is the only thing keeping them off the web; if the repository
+  is ever made public they become readable on github.com regardless, because
+  this controls the web site, not repository visibility.
 - Because the rest of `docs/` is off-site, the two guide pages that cite
   `docs/mcp-surface.md` link to the GitHub blob URL on `main` rather than a
   relative path. If `mcp-surface.md` is ever moved or renamed, those two

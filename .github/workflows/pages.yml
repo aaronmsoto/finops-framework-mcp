@@ -1,17 +1,19 @@
-# PROPOSED workflow — .github/workflows/ is a protected path in this repo, so
-# the OWNER must install this file (same convention as refresh-data.yml):
+# Deploys the six-page usage guide (docs/guide/) to GitHub Pages.
 #
-#   git mv docs/proposed/pages.yml .github/workflows/pages.yml
+# .github/workflows/ is a protected path here — this file was installed by an
+# explicitly owner-authorized task (T-066); agents do not edit it otherwise.
 #
-# Owner install checklist — full version in docs/deploy-pages.md:
+# Two things live outside this file, both owner-only — full checklist in
+# docs/deploy-pages.md:
 # 1. Repo must be public, or the account on GitHub Pro/Team/Enterprise.
 #    Pages is unavailable for private repos on the Free plan.
 # 2. Repo setting required: Settings → Pages → Source = "GitHub Actions".
-#    Selecting a branch instead will ignore this workflow.
-# 3. Publishes ONLY docs/guide/ — the six-page usage guide — at the site
-#    root. Nothing else under docs/ is served (that is the point: the
-#    internal review markdown stays off the public site).
-# 4. Until installed, the guide is not published anywhere.
+#    Selecting a branch instead silently ignores this workflow, and its
+#    folder options (/ or /docs) cannot express "publish docs/guide only".
+#
+# Publishes ONLY docs/guide/, at the site root. Nothing else under docs/ is
+# served — that is deliberate: the internal review markdown
+# (critique-*.md, final-status-review.md, …) stays off the public site.
 
 name: pages
 

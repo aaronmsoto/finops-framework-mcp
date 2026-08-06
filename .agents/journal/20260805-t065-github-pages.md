@@ -209,3 +209,39 @@ a genuinely missing dependency would not move around.
 Worth remembering: a `notarget` error under `--prefer-offline` means "stale
 cache" at least as often as it means "package missing". Clear the cache
 before concluding the environment is broken.
+
+## T-066: workflow installed (owner-authorized protected-path edit) — 2026-08-06T02:10:00Z
+
+**Why now.** The owner has iOS-only access to this repo and cannot run
+`git mv` locally, so the staged-workflow handoff had no owner-executable
+step. They explicitly authorized the protected-path write in-session.
+
+**Did.** `docs/proposed/pages.yml` → `.github/workflows/pages.yml`, via the
+hook's own documented override (`touch .agents/.cache/policy-edit-ok`,
+removed immediately after the move — it is gitignored and was never
+committed). Scope held to that one file: `approvals.yaml`,
+`.claude/settings.json`, `agentic.config.json`, CODEOWNERS, rulesets and the
+other four workflows are untouched. The file's header was rewritten from
+"PROPOSED — the OWNER must install this" to installed-state notes that keep
+the two things still outside it (plan requirement, the Pages source setting).
+
+Also corrected the docs that assumed the pre-Pro, public-repo posture:
+
+- `deploy-pages.md` — dropped the install step and renumbered; prerequisites
+  now say Pages is included for **private** repos on Pro, that the published
+  site is public regardless (private Pages sites are Enterprise Cloud only),
+  and that while the repo stays private the guide-only upload is the *only*
+  thing keeping the review markdown off the web.
+- `README.md`, `.agents/memory/activeContext.md` — no longer describe a
+  staged workflow; remaining owner steps are merge + the Pages source setting.
+
+**Result.** `.github/workflows/pages.yml` parses with the expected job shape
+(`upload-pages-artifact` path `docs/guide`, permissions
+`contents: read` / `pages: write` / `id-token: write`).
+`./scripts/agentic gates --tier all` → **PASS** on every gate.
+
+**Watch for.** Pushing a commit that adds a file under `.github/workflows/`
+requires the pushing credential to carry GitHub's `workflow` scope. If this
+session's token lacks it the push is rejected outright — recorded here
+because the fallback (owner pastes the file via the GitHub web UI) would
+otherwise look like a new problem rather than a known one.

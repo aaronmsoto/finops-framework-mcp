@@ -28,10 +28,14 @@ local npm cache**, not a missing package — the test installs with
   folder is not selectable, and a *project* Pages site cannot carry its own
   `robots.txt`. The driver was the bare URL (no `/guide/` redirect hop), not
   secrecy — a public repo exposes `docs/*.md` on github.com regardless.
-- `docs/proposed/pages.yml` (staged, uninstalled — `.github/workflows/` is
-  protected, same convention as `refresh-data.yml`) uploads `docs/guide`
-  alone, least-privilege perms, with a guard step that fails if any of the
-  seven expected files is missing. `docs/guide/404.html` + `.nojekyll` moved
+- **T-066** installed the workflow at `.github/workflows/pages.yml` — a
+  protected-path write, explicitly authorized by the owner in-session (they
+  have iOS-only access and cannot run `git mv`). Done via the hook's
+  documented override (`touch .agents/.cache/policy-edit-ok`, removed
+  immediately after); no other protected path was touched. It uploads
+  `docs/guide` alone, least-privilege perms, with a guard step that fails if
+  any of the seven expected files is missing. `docs/guide/404.html` +
+  `.nojekyll` moved
   in; the old `docs/index.html` redirect is deleted. All six pages carry
   per-page `<head>` metadata with `canonical`/`og:url` at
   `https://aaronmsoto.github.io/finops-framework-mcp/<file>.html` (page 1 =
@@ -39,14 +43,15 @@ local npm cache**, not a missing package — the test installs with
   URL since that file is off-site. No external assets — `file://` still works.
 - Verified by running the site: `docs/guide/` served as a root, 8/8 paths
   HTTP 200, 8/8 internal links resolve, `canonical == og:url` on all six,
-  workflow guard step passes by hand, `pages.yml` parses. Gates all PASS
-  except the pre-existing sandbox-only `src/packaging.test.ts` npm-registry
-  failure (`ajv@^8.20.0` notarget) — 404/404 other tests pass.
-- **Owner-gated, in this order**: (1) repo is **private** — Pages needs a
-  public repo or a paid plan; (2) merge to `main`; (3) `git mv
-docs/proposed/pages.yml .github/workflows/pages.yml` **and** Settings →
-  Pages → Source = **GitHub Actions** (not a branch). The Pages REST API is
-  blocked to agent sessions (403 via proxy), so no automation can do step 3.
+  workflow guard step passes by hand, `pages.yml` parses. `gates --tier all`
+  PASS; `verify` PASS.
+- **Owner-gated, two steps left**: (1) merge PR #11 to `main`; (2) Settings →
+  Pages → Source = **GitHub Actions** (not a branch — its `/` or `/docs`
+  folder options cannot express "publish `docs/guide` only"). The Pages REST
+  API is blocked to agent sessions (403 via proxy), so no automation can do
+  step 2. Owner reports **GitHub Pro**, so Pages works with the repo staying
+  private; the published site is public either way (private Pages sites are
+  Enterprise Cloud only).
 
 **T-059 done** (2026-08-02, earlier session): demo/ under the format gate
 (review R6) — see
@@ -267,11 +272,11 @@ owner-gated.** State as of 2026-08-02:
 2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and the
    root `finops-framework-mcp` (dual launch is the confirmed intent);
    MCP-registry submit both `server.json` manifests.
-3. Owner: **publish the guide on GitHub Pages** — repo public first (or
-   account on Pro/Team/Enterprise), then `git mv docs/proposed/pages.yml
-.github/workflows/pages.yml`, then Settings → Pages → Source = **GitHub
-   Actions**. Pages is a repo setting and its REST API is blocked to agent
-   sessions. Everything else is in place — see `docs/deploy-pages.md`.
+3. Owner: **publish the guide on GitHub Pages** — merge PR #11, then
+   Settings → Pages → Source = **GitHub Actions**. That is the whole
+   remaining list: the workflow is installed (T-066) and Pro covers Pages on
+   a private repo. Pages is a repo setting and its REST API is blocked to
+   agent sessions. See `docs/deploy-pages.md`.
 4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
 demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
    handler-level verified, not yet wrangler-deployed).
