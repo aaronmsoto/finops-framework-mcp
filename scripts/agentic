@@ -1,16 +1,34 @@
 #!/bin/sh
-# agentic — POSIX shim for the harness CLI (.agentic/harness/dist/cli.js).
+# agentic — POSIX shim for the harness CLI.
 # Invoked as ./scripts/agentic <command>; see .agentic/docs/architecture.md for commands.
 # Resolves the repo root from this script's own location so it works from any cwd.
+#
+# Resolution order (npm-first, spec harness-npm-consumption):
+#   1. .agentic/node_modules — @aaronmsoto/agentic-harness from GitHub
+#      Packages, installed via the SEPARATE .agentic/package.json manifest
+#      (root npm ci must stay registry-free for forks/public consumers).
+#   2. repo-root node_modules — in case a consumer installs it at the root.
+#   3. .agentic/harness/dist — the vendored copy, until Phase C deletes it.
 set -eu
 
 SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(dirname -- "$SCRIPT_DIR")
-CLI="$REPO_ROOT/.agentic/harness/dist/cli.js"
+AGENTIC_NPM_CLI="$REPO_ROOT/.agentic/node_modules/@aaronmsoto/agentic-harness/dist/cli.js"
+ROOT_NPM_CLI="$REPO_ROOT/node_modules/@aaronmsoto/agentic-harness/dist/cli.js"
+VENDORED_CLI="$REPO_ROOT/.agentic/harness/dist/cli.js"
 
-if [ ! -f "$CLI" ]; then
-    echo "agentic: $CLI not found." >&2
-    echo "Run ./scripts/bootstrap.sh first" >&2
+if [ -f "$AGENTIC_NPM_CLI" ]; then
+    CLI="$AGENTIC_NPM_CLI"
+elif [ -f "$ROOT_NPM_CLI" ]; then
+    CLI="$ROOT_NPM_CLI"
+elif [ -f "$VENDORED_CLI" ]; then
+    CLI="$VENDORED_CLI"
+else
+    echo "agentic: no harness CLI found. Looked for:" >&2
+    echo "  $AGENTIC_NPM_CLI" >&2
+    echo "  $ROOT_NPM_CLI" >&2
+    echo "  $VENDORED_CLI" >&2
+    echo "Install it with: npm ci --prefix .agentic   (needs a read:packages token in NPM_TOKEN)" >&2
     exit 1
 fi
 

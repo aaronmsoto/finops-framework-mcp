@@ -1,0 +1,8 @@
+{
+  "name": "finops-framework-mcp-agentic-tooling",
+  "private": true,
+  "description": "Dev-loop tooling manifest: installs the agentic harness from GitHub Packages. Separate from the root package so product installs and gates-fast CI stay registry-free.",
+  "devDependencies": {
+    "@aaronmsoto/agentic-harness": "^0.1.0"
+  }
+}

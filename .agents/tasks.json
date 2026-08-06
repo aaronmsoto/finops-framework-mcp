@@ -1373,7 +1373,7 @@
         "agentic.config.json designs/integrity/memory gate commands invoke ./scripts/agentic <cmd> instead of node .agentic/harness/dist/cli.js — this protected-path gates-block edit is AUTHORIZED by spec harness-npm-consumption; no other agentic.config.json change",
         "Session prerequisite documented and used: installing the private package requires a read:packages token in NPM_TOKEN (owner-supplied or environment-configured); ./scripts/agentic gates --tier all PASS with the npm copy resolving"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },

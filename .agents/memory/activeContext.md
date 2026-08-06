@@ -97,8 +97,7 @@ Evals: focus Runs 1+2 10/10, combined two-server scenario PASS.
    `.agents/specs/harness-npm-consumption.md` owner-validated (all four
    questions resolved: recreate dev/keep integration; CI auth via
    package access grant + GITHUB_TOKEN; vendored deletion this phase
-   post-parity; dead protected glob removed). Tasks T-073..T-076
-   pending. `dev` recreated from main. OWNER PREREQS: package access
+   post-parity; dead protected glob removed). T-073 DONE (manifest+shim+config indirection; journal 20260806-t073-npm-harness-consumption.md); T-074..T-076 pending. `dev` recreated from main. OWNER PREREQS: package access
    grant for finops-framework-mcp (Package settings → Manage Actions
    access), and a read:packages NPM_TOKEN for the implementing session
    (env var in the environment settings, not chat).
