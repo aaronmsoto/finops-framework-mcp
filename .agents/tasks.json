@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "87bfd773c0450d740bc5f604b731fba3cf86522e9fdeaa99fa8876418a2c2b77",
+  "chainHead": "fa5b3c1a8a02bf8e91930eb1b916cb6c4dd71683c3205f6cebe4a4b80c121153",
   "tasks": [
     {
       "id": "T-001",
@@ -1373,9 +1373,15 @@
         "agentic.config.json designs/integrity/memory gate commands invoke ./scripts/agentic <cmd> instead of node .agentic/harness/dist/cli.js — this protected-path gates-block edit is AUTHORIZED by spec harness-npm-consumption; no other agentic.config.json change",
         "Session prerequisite documented and used: installing the private package requires a read:packages token in NPM_TOKEN (owner-supplied or environment-configured); ./scripts/agentic gates --tier all PASS with the npm copy resolving"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "npm harness installed from GitHub Packages via .agentic manifest; shim npm-first with all three resolution paths observed (priority proven via upgrade-help grep); root manifests byte-unchanged, root npm ci auth-free; gates --tier all PASS on npm copy; reviewer verdict pass",
+        "commit": "7836f5f1b79c99494910e7ab20250174c110b1e0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T05:28:49.539Z"
+      },
+      "hash": "fa5b3c1a8a02bf8e91930eb1b916cb6c4dd71683c3205f6cebe4a4b80c121153"
     },
     {
       "id": "T-074",
