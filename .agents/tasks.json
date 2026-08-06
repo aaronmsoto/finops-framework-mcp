@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "b4704e16f093fe299258495b4e013b696fdc6ed1b87c21be38d6a66452daacd6",
+  "chainHead": "8097f4ea13cd16a514e9f2fc943e58b0b4f07d64b9e564d80a4c508b11e634c9",
   "tasks": [
     {
       "id": "T-001",
@@ -1271,9 +1271,15 @@
         "When set to allow, the integrity gate skips its commit-message attribution check and the prepare-commit-msg hook stops stripping attribution lines",
         "AGENTS.md states the rule as configurable rather than absolute; harness tests pass unedited and gates --tier all passes"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Add ai_attribution: forbid|allow to approvals.yaml (default forbid, this repo allow), read by the prepare-commit-msg hook, the integrity gate (via runIntegrity opts + cli), and AGENTS.md. Verified both directions: hook leaves a Claude trailer intact under allow and strips it under forbid; integrity reports 0 attribution failures under allow and 1 under forbid on the same real commit. 248 harness tests pass unedited; approvals check clean; gates --tier all PASS. ci.yml's PR-body check still needs wiring once PR #12 lands.",
+        "commit": "ff71620a4a91f9c948a8ac7e07d9225e5b5f1b43",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T03:35:04.964Z"
+      },
+      "hash": "8097f4ea13cd16a514e9f2fc943e58b0b4f07d64b9e564d80a4c508b11e634c9"
     }
   ]
 }
