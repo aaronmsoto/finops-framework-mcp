@@ -1412,7 +1412,7 @@
         "approvals check clean afterwards; gates prints NO version-skew warning; gates --tier all PASS post-upgrade",
         "approvals.yaml and agentic.config.json gate definitions are untouched by this task"
       ],
-      "status": "pending",
+      "status": "blocked",
       "evidence": null,
       "hash": null
     },
