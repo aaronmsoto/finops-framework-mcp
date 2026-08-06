@@ -157,9 +157,13 @@ URIs, param defaults/limits — is generated from live MCP output at
 ## Documentation
 
 [**`docs/guide/`**](docs/guide/index.html) is the usage guide — six
-self-contained pages, GitHub-Pages-ready, in which every number, quote, and
-transcript was captured from a live probe of these servers or computed from
-the committed sample data:
+self-contained pages in which every number, quote, and transcript was
+captured from a live probe of these servers or computed from the committed
+sample data. It is also the published site: `.github/workflows/pages.yml`
+deploys `docs/guide/` — and only that directory — to
+<https://aaronmsoto.github.io/finops-framework-mcp/> on every push to `main`
+that touches it (setup and smoke test in
+[`docs/deploy-pages.md`](docs/deploy-pages.md)).
 
 | Page                                                       | What it covers                                                                                                                                         |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -170,10 +174,10 @@ the committed sample data:
 | [Rate Optimization (ESR)](docs/guide/example-esr.html)     | Capability → featured KPIs → FOCUS columns at 1.0 vs 1.2 → Effective Savings Rate on the official sample                                               |
 | [Forecasting Journey](docs/guide/example-forecasting.html) | A maturity journey to Walk-level Forecasting: official Crawl/Walk characteristics, KPIs, and the data that feeds a forecast                            |
 
-Open `docs/guide/index.html` directly (it works over `file://`), or serve
-`docs/` with GitHub Pages. Guide pages are rich HTML by design — an
-intentional exception to this repo's markdown-for-docs convention, recorded
-in `.agents/memory/decisions.md`.
+Every page opens over `file://` too — the guide has no external assets.
+Guide pages are rich HTML by design — an intentional exception to this
+repo's markdown-for-docs convention, recorded in
+`.agents/memory/decisions.md`.
 
 ## Development
 

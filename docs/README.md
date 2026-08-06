@@ -4,7 +4,15 @@ This directory belongs to **your project**. The starter template's own
 documentation (architecture contract, operations manual, getting-started,
 research corpus) lives out of the way in [`.agentic/docs/`](../.agentic/docs/).
 
+[`guide/`](guide/index.html) is published as the project's **GitHub Pages
+site** — and it is the only thing published: the deploy workflow uploads
+that directory alone, so nothing else in here is served on the public web.
+Setup and smoke test: [`deploy-pages.md`](deploy-pages.md).
+
 What lives here:
+
+- [`guide/`](guide/index.html) — the six-page usage guide; the published
+  site's front door.
 
 - [`designs/`](designs/) — rich, self-contained HTML design docs for your
   features, created via the `design-feature` skill

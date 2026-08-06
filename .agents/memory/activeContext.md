@@ -12,56 +12,57 @@
 
 ## In flight
 
-**CI product/governance split — COMPLETE (T-065/T-066/T-067 all done)**
-(spec `.agents/specs/ci-product-governance-split.md`, owner-validated
-2026-08-04).
+**Merge reconciliation (2026-08-06):** `origin/main` was merged into
+`claude/session-k75rxy`. A parallel Pages session (PR #11, merged) had
+allocated T-065/T-066 for Pages work while this branch used T-065..T-067
+for the CI split — the CI-split tasks were renumbered **T-067 (npm-script
+gates), T-068 (coverage thresholds), T-069 (ci.yml split)** and the hash
+chain recomputed (`tasks validate`: chain valid). Journals written before
+the merge reference the old IDs. The `dev` branch was deleted with PR #10,
+so this branch's PR targets `main` directly.
 
-- **T-065 done** (2026-08-05): product gate commands collapsed into root
-  npm scripts; gate entries invoke `npm run <script>`. See
-  `.agents/journal/20260805-t065-npm-script-gates.md`.
-- **T-066 done** (2026-08-05): coverage enforced via vitest thresholds at
-  the measured baseline (75.6/65.21/75.6/76.72); unbound `coverage` gate
-  removed. See `.agents/journal/20260805-t066-vitest-coverage-thresholds.md`.
-- **T-067 done** (2026-08-05): `ci.yml` split into `gates-fast` (product
-  fast: npm ci + format:check/lint/typecheck/test, zero `.agentic/`
-  references, root lockfile cache), `gates-full` (product full: build,
-  merge_group+push, also harness-free), and `governance` (always runs, no
-  job-level `if:`; PR-body check covers forks; harness acquired in ONE
-  named step; harness steps exit 0 on fork PRs via `FORK_PR` env). `push`
-  triggers now include `dev`. Harness-independence proven by physically
-  moving `.agentic/` out of the repo and running all five product commands
-  green (the acceptance's `git stash push -- .agentic` no-ops — stash
-  saves changes, not files). Ruleset + approvals.yaml untouched. See
-  `.agents/journal/20260805-t067-ci-product-governance-split.md`.
-- **Post-merge check on first external PR**: a real fork PR must show the
-  governance check reporting "success" (not "skipped") before making
-  `governance` a required check — not locally observable.
+**CI product/governance split — COMPLETE (T-067/T-068/T-069, formerly
+T-065..T-067)** (spec `.agents/specs/ci-product-governance-split.md`,
+owner-validated 2026-08-04). Product gate commands live only in root npm
+scripts; coverage enforced via vitest thresholds at the measured baseline
+(75.6/65.21/75.6/76.72); `ci.yml` split into `gates-fast` + `gates-full`
+(product, zero `.agentic/` references) and `governance` (always runs,
+fork-safe via `FORK_PR` exit 0, harness acquired in ONE named step — the
+one-line swap point for the npm-packaged harness). Harness-independence
+proven by physically moving `.agentic/` out and running all five product
+commands green. **Post-merge check on first external PR:** governance must
+report "success" (not "skipped") before being made a required check.
 
-**v1 close-out is COMPLETE on `claude/session-k75rxy`; publish is
-owner-gated.** PR #9 (FOCUS v1 batch + close-out + usage guide) was merged
-2026-08-04. T-050..T-064 all landed: CI fix, the full 19-MINOR review
-backlog from `docs/final-status-review.md`, the six-page guide under
-`docs/guide/`, and `.mcp.json` local wiring. Evals: focus Runs 1+2 10/10,
-combined two-server scenario PASS (`docs/eval-results.md`).
+**GitHub Pages — landed on main via PR #11 (parallel session):** T-065/
+T-066 (Pages numbering) published `docs/guide/` alone through a staged
+Actions workflow (`.github/workflows/pages.yml`, owner-authorized
+protected-path write). Remaining owner step: Settings → Pages → Source =
+**GitHub Actions** (REST API blocked to agents). See
+`docs/deploy-pages.md` and journal `20260805-t065-github-pages.md`.
+
+**v1 close-out COMPLETE; publish owner-gated.** PR #9 merged 2026-08-04:
+T-050..T-064 (CI fix, 19-MINOR review backlog, six-page guide, `.mcp.json`).
+Evals: focus Runs 1+2 10/10, combined two-server scenario PASS.
 
 ## Next steps
 
-1. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and
+1. Owner: review/merge the **CI-split PR** (`claude/session-k75rxy` →
+   `main`; includes this merge-reconciliation commit).
+2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and
    root `finops-framework-mcp`; MCP-registry submit both `server.json`
    manifests.
-2. Owner: enable GitHub Pages (serve `docs/` from the default branch so
-   `docs/guide/index.html` is the public usage guide) — repo setting, not
-   agent-reachable.
-3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages
-   deploy demo/`; smoke-test the demo against the deployed Worker (CORS
-   fix is handler-level verified, not yet wrangler-deployed).
-4. Harness extraction to `@aaronsoto/agentic-harness` (private scoped npm,
-   name available) is the follow-on project, not yet specced. The vendored
-   `.agentic/harness/` here has drifted from agentic-starter-repo
-   (`approvals.ts` −307 lines, `tasks.ts` −57, `gates.ts` −27; template
-   copy is ahead and publish-configured). Reconcile deliberately during
-   migration; the CI split (T-065..T-067) has now landed on the branch, so
-   the governance job's "Acquire harness" step is the one-line swap point.
+3. Owner: Settings → Pages → Source = **GitHub Actions** (workflow is
+   installed; Pro covers Pages on a private repo).
+4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages
+   deploy demo/`; smoke-test the demo against the deployed Worker.
+5. Harness extraction: template Phase B is COMPLETE in
+   agentic-starter-repo (versioned surface markers + approvals.lock.json,
+   `agentic upgrade` + gates skew warning, registry-ready packaging).
+   Owner chose **GitHub Packages**; publish pending there. Phase C (this
+   repo): drop vendored `.agentic/harness/`, add the devDependency +
+   `.npmrc`, swap the governance job's "Acquire harness" step, reconcile
+   the deliberate drift (template approvals.ts is ~307 lines ahead) — spec
+   it after the package is installable.
 
 ## Open questions
 
@@ -87,9 +88,26 @@ combined two-server scenario PASS (`docs/eval-results.md`).
   supervising sessions must not commit a live loop's in-flight tasks.json;
   background watchers must not `pgrep` for a pattern contained in their
   own command line (self-match false positive); `design check` should
-  accept an allowlist of HTML dirs (it warns on all six guide pages).
+  accept an allowlist of HTML dirs (it warns on all six guide pages);
+  NEW — task IDs collide across parallel branches (`tasks add` numbers
+  from the local file only; this merge had to renumber T-065..T-067 →
+  T-067..T-069 and recompute the chain by hand).
+- **Template BUG (blocking, found 2026-08-06)**: `compileRuleset` in
+  `.agentic/harness/src/approvals.ts` emits
+  `required_approving_review_count: 1` + `require_code_owner_review: true` +
+  `bypass_actors: []` whenever `merge_to_main: human`, and CODEOWNERS makes
+  the owner the only reviewer. GitHub forbids approving your own PR, so on
+  any **single-maintainer** repo every PR the owner opens is permanently
+  unmergeable (`mergeable_state: blocked`) — hit for real on PR #11.
+  `compileIntegrationRuleset` gets it right (`count: 0`). Fix: emit a
+  Repository-admin bypass actor (or `count: 0`) when the owner is the sole
+  code owner. Workaround: owner added the bypass by hand in Settings →
+  Rules → Rulesets, which now drifts from the generated
+  `.github/rulesets/main-branch.json`.
 
 ## Last updated
 
-2026-08-05 — T-067 session (ci.yml split into product/governance jobs;
-CI split spec complete; publish remains owner-gated).
+2026-08-06 — merge-reconciliation session: origin/main merged into
+claude/session-k75rxy (Pages work + CI split now coexist); CI-split task
+IDs renumbered T-067..T-069 after the parallel-session collision, chain
+revalidated; CI-split PR targets main (dev was deleted with PR #10).
