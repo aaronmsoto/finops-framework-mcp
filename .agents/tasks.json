@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "fa5b3c1a8a02bf8e91930eb1b916cb6c4dd71683c3205f6cebe4a4b80c121153",
+  "chainHead": "ce925795d2870206b403cd550fc91e853a92e24bbbe152566ffe4b5e832c1f01",
   "tasks": [
     {
       "id": "T-001",
@@ -1392,9 +1392,15 @@
         "Workflow YAML parses (actionlint or yq/python yaml load cited); the changed step is the ONLY diff hunk in ci.yml",
         "Journal records that a green governance run on a real PR is the post-merge observable (requires the owner's package-access grant), and what was verified locally in its place"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Governance CI acquires harness via npm ci --prefix .agentic + GITHUB_TOKEN with job-level packages:read (reviewer caught the zeroed scope, fixed, re-review pass); cache re-keyed to .agentic lockfile; YAML parses, two hunks confined to governance job, gates PASS; green run on a real PR is the post-merge observable",
+        "commit": "756748b3643c48fe1c32feec0607799e285de3ac",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T05:39:42.237Z"
+      },
+      "hash": "ce925795d2870206b403cd550fc91e853a92e24bbbe152566ffe4b5e832c1f01"
     },
     {
       "id": "T-075",
