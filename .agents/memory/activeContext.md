@@ -12,6 +12,27 @@
 
 ## In flight
 
+**GitHub Pages is LIVE** (2026-08-06): the six-page guide serves at
+<https://aaronmsoto.github.io/finops-framework-mcp/>. Verified in production
+— 6/6 pages 200, 404 page works, all seven deployed files byte-identical to
+`docs/guide/`, and `critique-*.md`/`final-status-review.md`/`mcp-surface.md`
+all 404 (guide-only upload holds). Repo stays private (Pro covers Pages).
+Gotcha for next time: the deploy fires on the merge push, so if Pages'
+source is set *after* merging, run #1 fails `Get Pages site failed` — just
+re-dispatch `pages.yml`.
+
+**T-067 done** (2026-08-06): fixed the solo-maintainer ruleset deadlock in
+the harness (owner-authorized `approvals.yaml` edit). New top-level
+`solo_maintainer` flag (default false): when true `compileRuleset` emits
+`required_approving_review_count: 0` + `require_code_owner_review: false`,
+and `derivedPermissions` restores `Bash(gh pr merge*)` to the ask list even
+in integration mode so main is not ungated on both sides. Default-false
+output is byte-unchanged; 248 harness tests pass unedited.
+**Owner action outstanding**: the LIVE ruleset still requires 1 code-owner
+review — Settings → Rules → Rulesets → main-branch must be updated to match
+the regenerated `.github/rulesets/main-branch.json`, or the next PR
+deadlocks again.
+
 **T-065 done** (2026-08-06, this session): chain extended, and
 `./scripts/agentic verify` passes every check. The earlier
 `src/packaging.test.ts` failure that briefly blocked the task was a **stale

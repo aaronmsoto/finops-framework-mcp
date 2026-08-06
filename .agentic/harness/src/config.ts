@@ -208,6 +208,18 @@ export interface ApprovalsPolicy {
   commands: { ask: string[]; deny: string[] };
   loop: LoopCaps;
   branching: BranchingPolicy;
+  /**
+   * True when `owner` is the ONLY person with write access.
+   *
+   * GitHub refuses to let anyone approve their own pull request. With
+   * `merge_to_main: human` the compiled main ruleset would otherwise require
+   * one approving CODEOWNER review, and CODEOWNERS names only the owner — so
+   * every PR the owner opens is permanently unmergeable. This flag swaps that
+   * server-side review gate for the client-side `gh pr merge` prompt; a PR
+   * and green CI are still required either way. Leave false whenever a second
+   * reviewer exists.
+   */
+  solo_maintainer: boolean;
 }
 
 export const DEFAULT_LOOP_CAPS: LoopCaps = {
@@ -355,5 +367,13 @@ export function validateApprovals(raw: unknown): ApprovalsPolicy {
     }
   }
 
-  return { version: 1, owner, approvals, protected_paths, commands, loop, branching };
+  let solo_maintainer = false;
+  if (raw.solo_maintainer !== undefined) {
+    if (typeof raw.solo_maintainer !== "boolean") {
+      fail(F, "solo_maintainer", `must be true or false (got ${describe(raw.solo_maintainer)})`);
+    }
+    solo_maintainer = raw.solo_maintainer;
+  }
+
+  return { version: 1, owner, approvals, protected_paths, commands, loop, branching, solo_maintainer };
 }
