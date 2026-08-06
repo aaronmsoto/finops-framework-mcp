@@ -18,6 +18,20 @@ owner: "@aaronmsoto"
 # restores for this case even in integration mode. Set back to false the
 # moment a second reviewer exists — the server-side gate is the stronger one.
 solo_maintainer: true
+# May AI-attribution markers appear in git artifacts — `Co-Authored-By:
+# ...claude...`, `Claude-Session:`, "Generated with/by ...", 🤖?
+#
+#   forbid (default) — the prepare-commit-msg hook strips them from commit
+#     messages and the integrity gate fails commits carrying them.
+#   allow            — both are turned off.
+#
+# Set to `allow` here on 2026-08-06: agent tooling appends these footers
+# automatically, and re-appends them to PR bodies after submission, so
+# `forbid` was failing CI on essentially every pull request for a cosmetic
+# reason the owner does not care about. See decisions.md.
+#
+# NOTE: the PR-body check in .github/workflows/ci.yml reads this same key.
+ai_attribution: allow
 approvals:
   merge_to_main: human
   deploy_production: human

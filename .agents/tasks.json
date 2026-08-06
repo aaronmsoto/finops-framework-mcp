@@ -1261,6 +1261,19 @@
         "completedAt": "2026-08-06T02:39:05.970Z"
       },
       "hash": "b4704e16f093fe299258495b4e013b696fdc6ed1b87c21be38d6a66452daacd6"
+    },
+    {
+      "id": "T-068",
+      "title": "Make the no-AI-attribution policy an owner-configurable option",
+      "acceptance": [
+        "OWNER AUTHORIZATION: the owner explicitly asked for this rule to become a toggle and stated attribution is acceptable in this repo. Authorized to edit approvals.yaml (protected) and AGENTS.md; harness tests under .agentic/harness/tests/** must NOT be edited.",
+        "approvals.yaml gains ai_attribution: allow|forbid, defaulting to forbid so existing template behavior is byte-unchanged",
+        "When set to allow, the integrity gate skips its commit-message attribution check and the prepare-commit-msg hook stops stripping attribution lines",
+        "AGENTS.md states the rule as configurable rather than absolute; harness tests pass unedited and gates --tier all passes"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

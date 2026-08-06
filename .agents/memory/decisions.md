@@ -456,3 +456,35 @@ servers actually return. A single invented number would undermine the
 provenance posture the servers themselves enforce with CC BY footers and
 UNOFFICIAL banners. The six pages were built from 103 recorded probes and
 spot-re-verified by an independent checker.
+
+## 2026-08-06 — AI attribution: policy toggle, set to `allow`
+
+Decision: `approvals.yaml` gains `ai_attribution: forbid|allow` (default
+`forbid`, preserving template behavior); this repo sets **`allow`**. The
+prepare-commit-msg hook, the integrity gate, and the CI PR-body check all
+read the same key. This supersedes the 2026-07-14 blanket "no AI attribution
+in git artifacts" rule, which was absolute.
+
+Rationale: the policy was unenforceable in practice against the tooling that
+produces the commits. Agent tooling appends attribution automatically and
+re-appends it to PR bodies *after* submission — the CI check even documents
+that, which is why it listens to the `edited` event. Net effect was a
+recurring CI failure on essentially every PR (PR #12 blocked on it) for a
+cosmetic reason the owner does not care about. Enforcing a rule the workflow
+constantly violates trains everyone to treat red CI as noise, which is worse
+than the attribution lines themselves.
+
+Alternatives considered:
+
+- **Keep `forbid`, strip footers by hand each time.** Rejected: it had
+  already failed repeatedly, and it puts a manual step on every PR forever.
+- **Keep `forbid`, drop only the PR-body check.** Rejected as incoherent —
+  it would forbid attribution in commits while allowing it in the far more
+  visible PR description.
+- **Delete the policy entirely.** Rejected: other repos from this template
+  may want it, and the default must stay `forbid` so their behavior is
+  byte-unchanged. A toggle keeps both postures available.
+
+Note the toggle governs *git artifacts only*. The CC BY attribution that
+must ride on every served surface (NOTICE.md) is a separate, unaffected
+obligation.
