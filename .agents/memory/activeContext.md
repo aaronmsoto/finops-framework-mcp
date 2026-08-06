@@ -12,6 +12,23 @@
 
 ## In flight
 
+**T-073 (2026-08-06): guide layout at large viewports.** The container was
+pinned at `78ch` at every desktop width, so the six nav links wrapped to two
+lines and the Data Model's five cards never shared a row. Added a `--wrap`
+custom property to the shared chrome (`78ch`, `62rem` from `64rem` up) — one
+knob for `header.guide`/`footer.guide`/`main`, with the `main` override in
+the chrome block so it stays byte-identical across all six pages. Prose
+deliberately does not widen (`main p:not(.callnote), main ul, main ol {
+max-width: 78ch }`): body text was already ~111 chars/line and is now ~100,
+while the nav, tables and card grids get the extra room. `.datamodel`
+switched from grid to flex so the `→` arrows stop claiming a full column;
+below `34rem` they go full-width and rotate for a vertical flow. Verified by
+measurement across 8 viewports plus screenshots; phone behavior compared
+against `origin/main` and unchanged or better.
+**Known pre-existing, NOT introduced by this:** `index`, `framework-server`
+and `focus-server` overflow horizontally at 414/360px — identical on
+`origin/main`. Deserves its own task.
+
 **GitHub Pages is LIVE** (2026-08-06): the six-page guide serves at
 <https://aaronmsoto.github.io/finops-framework-mcp/>. Verified in production
 — 6/6 pages 200, 404 page works, all seven deployed files byte-identical to
