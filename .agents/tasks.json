@@ -1392,7 +1392,7 @@
         "Workflow YAML parses (actionlint or yq/python yaml load cited); the changed step is the ONLY diff hunk in ci.yml",
         "Journal records that a green governance run on a real PR is the post-merge observable (requires the owner's package-access grant), and what was verified locally in its place"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     },
