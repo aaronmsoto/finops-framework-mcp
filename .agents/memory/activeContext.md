@@ -309,7 +309,20 @@ demo/`; smoke-test the demo against the deployed Worker (the CORS fix is
   supervising sessions must not commit a live loop's in-flight tasks.json;
   NEW — background watchers must not `pgrep` for a pattern contained in
   their own command line (self-match false positive, this session).
+- **Template BUG (blocking, found 2026-08-06)**: `compileRuleset` in
+  `.agentic/harness/src/approvals.ts` emits
+  `required_approving_review_count: 1` + `require_code_owner_review: true` +
+  `bypass_actors: []` whenever `merge_to_main: human`, and CODEOWNERS makes
+  the owner the only reviewer. GitHub forbids approving your own PR, so on
+  any **single-maintainer** repo every PR the owner opens is permanently
+  unmergeable (`mergeable_state: blocked`, only "Request Review" offered) —
+  hit for real on PR #11. `compileIntegrationRuleset` in the same file gets
+  it right (`count: 0`, "green CI is the merge gate"). Fix: emit a
+  Repository-admin bypass actor (or `count: 0`) when the owner is the sole
+  code owner. Workaround applied here: owner adds the bypass in
+  Settings → Rules → Rulesets by hand, which then drifts from the generated
+  `.github/rulesets/main-branch.json`.
 
 ## Last updated
 
-2026-08-02 — T-059 session (demo/ under the format gate, review R6).
+2026-08-06 — T-065/T-066 session (Pages publish; ruleset deadlock found).
