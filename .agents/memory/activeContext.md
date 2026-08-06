@@ -12,13 +12,14 @@
 
 ## In flight
 
-**T-065 built but recorded `blocked`, not `done`** (2026-08-05, this
-session): the work landed in `29fe25d`, but `tasks complete` refuses to
-close it while the sandbox npm registry fails `src/packaging.test.ts`
-(`notarget ajv@^8.20.0`) — so the record has no hash-chain evidence. Re-run
-`./scripts/agentic tasks complete T-065 --commit` from an environment with
-normal registry access to close it. `docs/` is now a publishable
-GitHub Pages site root — see
+**T-065 done** (2026-08-06, this session): chain extended, and
+`./scripts/agentic verify` passes every check. The earlier
+`src/packaging.test.ts` failure that briefly blocked the task was a **stale
+local npm cache**, not a missing package — the test installs with
+`--prefer-offline`, so stale packuments produced a bogus `notarget`
+(it moved from `ajv` to `qs` on retry, which gave it away).
+`npm cache clean --force` fixed it; `gates --tier all` is now fully green.
+`docs/guide/` is the publishable GitHub Pages site — see
 `.agents/journal/20260805-t065-github-pages.md` for full detail.
 
 - **Only `docs/guide/` is published**, via a staged Actions workflow —

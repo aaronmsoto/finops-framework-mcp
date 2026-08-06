@@ -184,3 +184,28 @@ sandbox `src/packaging.test.ts` registry failure documented above.
 (2) merge to `main`, (3) `git mv docs/proposed/pages.yml
 .github/workflows/pages.yml` **and** Settings → Pages → Source = GitHub
 Actions.
+
+## T-065 closed — the npm failure was a stale cache — 2026-08-06T01:50:00Z
+
+The blocker above is resolved, and the earlier diagnosis was incomplete.
+It was not that the sandbox registry mirror lacks the packages — `npm view
+ajv@^8.20.0 version` returns `8.20.0` fine. The **local npm cache held stale
+packuments**, and `src/packaging.test.ts` installs with `--prefer-offline`
+(deliberately, per T-050, to dodge ENOTCACHED in CI), so range resolution
+read those stale packuments and reported `notarget`. The tell: on retry it
+failed on a *different* package (`qs@^6.15.2` instead of `ajv@^8.20.0`) —
+a genuinely missing dependency would not move around.
+
+`npm cache clean --force` fixed it outright:
+
+- `npx vitest run src/packaging.test.ts` → 3/3 pass.
+- `./scripts/agentic gates --tier all` → **PASS** on every gate
+  (format, lint, typecheck, test, designs, integrity, memory, build).
+- `./scripts/agentic tasks complete T-065 --commit` → chain extended,
+  `7576a10b34e5463264df420a2c96b11a11cd8966171a8f0860be8bb88650484b`.
+- `./scripts/agentic verify` → all checks pass (gates-fast, chain-valid,
+  working-tree-clean, done-tasks-have-evidence, acceptance-criteria-present).
+
+Worth remembering: a `notarget` error under `--prefer-offline` means "stale
+cache" at least as often as it means "package missing". Clear the cache
+before concluding the environment is broken.
