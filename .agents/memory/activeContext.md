@@ -38,10 +38,16 @@ owner-authorized protected-path edits):
   for tool-authored PRs — verified by removing one and watching it return in
   a different form within minutes.
 
-**Owner action outstanding**: the LIVE main-branch ruleset still requires 1
-code-owner review — Settings → Rules → Rulesets → main-branch must be set to
-approvals `0` with "Require review from Code Owners" unticked to match the
-regenerated `.github/rulesets/main-branch.json`, or the deadlock returns.
+**Both landed and CONFIRMED WORKING** (PR #13 merged 2026-08-06):
+
+- Live main-branch ruleset now reads `required_approving_review_count: 0`,
+  `require_code_owner_review: false`, required checks `['gates-fast']` —
+  matching the generated `.github/rulesets/main-branch.json`. No drift, no
+  deadlock. (An earlier note here claimed the live ruleset still required a
+  review; that was a stale API read and was wrong.)
+- `governance` passed on PR #13 itself, whose body carried the attribution
+  footer — the end-to-end proof that all four enforcement points now honor
+  `ai_attribution: allow`.
 
 **Merge reconciliation (2026-08-06):** `origin/main` was merged into
 `claude/session-k75rxy`. A parallel Pages session (PR #11, merged) had
@@ -67,8 +73,9 @@ report "success" (not "skipped") before being made a required check.
 **GitHub Pages — landed on main via PR #11 (parallel session):** T-065/
 T-066 (Pages numbering) published `docs/guide/` alone through a staged
 Actions workflow (`.github/workflows/pages.yml`, owner-authorized
-protected-path write). Remaining owner step: Settings → Pages → Source =
-**GitHub Actions** (REST API blocked to agents). See
+protected-path write). **DONE and live** — Pages source is set to GitHub
+Actions and the site serves at
+<https://aaronmsoto.github.io/finops-framework-mcp/>. See
 `docs/deploy-pages.md` and journal `20260805-t065-github-pages.md`.
 
 **v1 close-out COMPLETE; publish owner-gated.** PR #9 merged 2026-08-04:
@@ -77,15 +84,14 @@ Evals: focus Runs 1+2 10/10, combined two-server scenario PASS.
 
 ## Next steps
 
-1. Owner: review/merge the **CI-split PR** (`claude/session-k75rxy` →
-   `main`; includes this merge-reconciliation commit).
-2. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and
+1. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and
    root `finops-framework-mcp`; MCP-registry submit both `server.json`
    manifests.
-3. Owner: Settings → Pages → Source = **GitHub Actions** (workflow is
-   installed; Pro covers Pages on a private repo).
-4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages
+2. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages
    deploy demo/`; smoke-test the demo against the deployed Worker.
+
+   (PRs #11, #12 and #13 are all merged; GitHub Pages is live; the CI split
+   and both policy toggles are in. Nothing else is waiting on a merge.)
 5. Harness extraction: template Phase B is COMPLETE in
    agentic-starter-repo (versioned surface markers + approvals.lock.json,
    `agentic upgrade` + gates skew warning, registry-ready packaging).
@@ -123,22 +129,22 @@ Evals: focus Runs 1+2 10/10, combined two-server scenario PASS.
   NEW — task IDs collide across parallel branches (`tasks add` numbers
   from the local file only; this merge had to renumber T-065..T-067 →
   T-067..T-069 and recompute the chain by hand).
-- **Template BUG (blocking, found 2026-08-06)**: `compileRuleset` in
-  `.agentic/harness/src/approvals.ts` emits
-  `required_approving_review_count: 1` + `require_code_owner_review: true` +
-  `bypass_actors: []` whenever `merge_to_main: human`, and CODEOWNERS makes
-  the owner the only reviewer. GitHub forbids approving your own PR, so on
-  any **single-maintainer** repo every PR the owner opens is permanently
-  unmergeable (`mergeable_state: blocked`) — hit for real on PR #11.
-  `compileIntegrationRuleset` gets it right (`count: 0`). Fix: emit a
-  Repository-admin bypass actor (or `count: 0`) when the owner is the sole
-  code owner. Workaround: owner added the bypass by hand in Settings →
-  Rules → Rulesets, which now drifts from the generated
-  `.github/rulesets/main-branch.json`.
+- **FIXED HERE, still to port upstream (both found 2026-08-06)**: the two
+  template rules that were unsatisfiable for a solo-maintained repo —
+  `compileRuleset`'s mandatory code-owner review (GitHub forbids
+  self-approval, so every owner-authored PR was unmergeable; hit on PR #11)
+  and the no-AI-attribution policy (footers are re-appended server-side
+  after submission, so the PR-body check could never be satisfied; hit on
+  PR #12). Both are now `approvals.yaml` toggles — `solo_maintainer` and
+  `ai_attribution` — defaulting to the old behavior. Port both to
+  agentic-starter-repo along with the feedback list above; also add there:
+  `tasks complete --commit` run mid-merge swallows the merge and mislabels
+  it (amend before pushing, or commit the merge first).
 
 ## Last updated
 
-2026-08-06 — merge-reconciliation session: origin/main merged into
-claude/session-k75rxy (Pages work + CI split now coexist); CI-split task
-IDs renumbered T-067..T-069 after the parallel-session collision, chain
-revalidated; CI-split PR targets main (dev was deleted with PR #10).
+2026-08-06 — Pages + policy-toggle session (PRs #11/#12/#13 all merged).
+GitHub Pages live and verified in production; `solo_maintainer` and
+`ai_attribution` toggles landed and confirmed working (`governance` green on
+a PR whose body carries the footer). Remaining owner work is npm/registry
+publish and the Worker deploy — nothing waiting on a merge.
