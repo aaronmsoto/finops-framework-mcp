@@ -136,10 +136,12 @@ Evals: focus Runs 1+2 10/10, combined two-server scenario PASS.
   and the no-AI-attribution policy (footers are re-appended server-side
   after submission, so the PR-body check could never be satisfied; hit on
   PR #12). Both are now `approvals.yaml` toggles — `solo_maintainer` and
-  `ai_attribution` — defaulting to the old behavior. Port both to
-  agentic-starter-repo along with the feedback list above; also add there:
-  `tasks complete --commit` run mid-merge swallows the merge and mislabels
-  it (amend before pushing, or commit the merge first).
+  `ai_attribution` — defaulting to the old behavior.
+  **The port brief is written and ready to execute:**
+  `.agents/specs/upstream-port-to-agentic-starter-repo.md` — self-contained
+  (rationale, applyable diffs, tests to add, the smaller feedback list), so
+  a session with access to agentic-starter-repo needs nothing from the
+  originating conversation. Hand it that path.
 
 ## Last updated
 
