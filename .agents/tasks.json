@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "87bfd773c0450d740bc5f604b731fba3cf86522e9fdeaa99fa8876418a2c2b77",
+  "chainHead": "5d4dec917bb259ae383f1a91cab78c0068243f1684a881b3af670b63b2eab833",
   "tasks": [
     {
       "id": "T-001",
@@ -1362,6 +1362,25 @@
         "completedAt": "2026-08-06T04:14:46.895Z"
       },
       "hash": "87bfd773c0450d740bc5f604b731fba3cf86522e9fdeaa99fa8876418a2c2b77"
+    },
+    {
+      "id": "T-073",
+      "title": "Widen the guide's large-viewport container; fix Data Model card row",
+      "acceptance": [
+        "At >=1024px the six nav links sit on one line on all six pages, and the Data Model's five cards share one row on framework-server.html",
+        "Prose line length does not grow with the container - paragraphs and lists keep a fixed reading measure while nav, tables, card grids and transcripts use the extra width",
+        "Phone layouts (360/414px) are no worse than before: nav row count unchanged, cards pair rather than stack as singles, no new horizontal overflow",
+        "The shared chrome CSS block stays byte-identical across all six pages; gates pass"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Add a --wrap custom property to the shared chrome (78ch, 62rem from 64rem up) so the six nav links fit one line and the Data Model's five cards share a row; prose is pinned to 78ch so line length drops from ~111 to ~100 chars rather than growing. .datamodel switched grid->flex so arrows stop taking a full column, with a full-width rotated arrow below 34rem. Verified across 8 viewports plus screenshots; chrome block still byte-identical on all six pages; phone behavior compared against origin/main and unchanged or better.",
+        "commit": "0c933fb24f63416b515634260a64c6225de1fd97",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T06:20:30.796Z"
+      },
+      "hash": "5d4dec917bb259ae383f1a91cab78c0068243f1684a881b3af670b63b2eab833"
     }
   ]
 }
