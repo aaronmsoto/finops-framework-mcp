@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "ce925795d2870206b403cd550fc91e853a92e24bbbe152566ffe4b5e832c1f01",
+  "chainHead": "2794b55789f003f1993b5dfd788c5cf21af1ad81f6685fdb2e976da66cec6400",
   "tasks": [
     {
       "id": "T-001",
@@ -1412,9 +1412,15 @@
         "approvals check clean afterwards; gates prints NO version-skew warning; gates --tier all PASS post-upgrade",
         "approvals.yaml and agentic.config.json gate definitions are untouched by this task"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Surfaces recompiled with npm 0.2.0 after upstream ports: settings.json unchanged, solo ruleset preserved (marker-only diffs), copilot.sh comment-only, lockfile+Copilot-hooks surfaces added; check clean, idempotent, no skew warning, gates --tier all PASS, reviewer verdict pass",
+        "commit": "f240d96fd62611f44f063012811a51374702bc1d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T06:21:26.631Z"
+      },
+      "hash": "2794b55789f003f1993b5dfd788c5cf21af1ad81f6685fdb2e976da66cec6400"
     },
     {
       "id": "T-076",
