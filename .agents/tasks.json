@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "2794b55789f003f1993b5dfd788c5cf21af1ad81f6685fdb2e976da66cec6400",
+  "chainHead": "a0a4563a07bbf108246664d6154a2daaefbe5f9b5f1d8a983a127708d665af44",
   "tasks": [
     {
       "id": "T-001",
@@ -1432,9 +1432,15 @@
         "git grep -l 'agentic-starter/harness\\|\\.agentic/harness/dist' returns only historical files (journals, specs, decisions, task records) — no live code, config, docs, or CI references",
         "npm-only parity proof observed and journaled: gates --tier all PASS, verify PASS, and one loop --runner mock iteration green, all with the vendored copy gone"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Vendored harness deleted; npm-only proven: gates --tier all PASS, verify all checks passed post-commit, mock loop terminal success, acceptance grep zero live hits; approvals.yaml glob removal recompiled clean at 0.2.1; reviewer verdict pass",
+        "commit": "c4f145e680ffb7814347d78056cd795cd513150d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T06:42:02.766Z"
+      },
+      "hash": "a0a4563a07bbf108246664d6154a2daaefbe5f9b5f1d8a983a127708d665af44"
     }
   ]
 }
