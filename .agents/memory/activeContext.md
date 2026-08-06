@@ -6,7 +6,13 @@
     ## In flight       — what is currently being worked on, by whom/what mode
     ## Next steps      — ordered, concrete, small
     ## Open questions  — things a future session must not silently re-decide
-    ## Last updated    — ISO date + actor
+    - T-076 reviewer follow-up nits (non-blocking, queued): agentic.config.json
+  `$schema` still points at the deleted vendored schema path (protected
+  file — needs its own authorized task); vendored template docs under
+  `.agentic/docs/` retain references to the deleted presets/INSTANTIATE
+  and vendored-era examples (doc-hygiene pass).
+
+## Last updated    — ISO date + actor
   `memory lint` warns when this file goes stale while commits continue.
 -->
 
@@ -97,7 +103,14 @@ Evals: focus Runs 1+2 10/10, combined two-server scenario PASS.
    `.agents/specs/harness-npm-consumption.md` owner-validated (all four
    questions resolved: recreate dev/keep integration; CI auth via
    package access grant + GITHUB_TOKEN; vendored deletion this phase
-   post-parity; dead protected glob removed). T-073+T-074 DONE (manifest+shim+config indirection; governance CI now npm ci --prefix .agentic with GITHUB_TOKEN + job-level packages:read, cache re-keyed — journals 20260806-t073/t074). T-075 DONE after unblock (journal 20260806-t075-upgrade-drift-review.md): both fixes were ported to the template (its T-012/T-013) and released as 0.2.0; manifest bumped, upgrade reviewed file-by-file — settings.json UNCHANGED and main ruleset params preserved (solo fix intact), markers/lockfile/Copilot-hooks surfaces added, copilot.sh comment-only; check clean, idempotent, no skew warning, gates --tier all PASS. T-076 (delete vendored harness + parity proof) is next. Green governance on a real PR remains the post-merge observable for the package-access grant. `dev` recreated from main. OWNER PREREQS: package access
+   post-parity; dead protected glob removed). T-073+T-074 DONE (manifest+shim+config indirection; governance CI now npm ci --prefix .agentic with GITHUB_TOKEN + job-level packages:read, cache re-keyed — journals 20260806-t073/t074). T-075 DONE after unblock (journal 20260806-t075-upgrade-drift-review.md): both fixes were ported to the template (its T-012/T-013) and released as 0.2.0; manifest bumped, upgrade reviewed file-by-file — settings.json UNCHANGED and main ruleset params preserved (solo fix intact), markers/lockfile/Copilot-hooks surfaces added, copilot.sh comment-only; check clean, idempotent, no skew warning, gates --tier all PASS. T-076 DONE (journal 20260806-t076-vendored-harness-deleted.md):
+vendored `.agentic/harness/` DELETED (with presets/ and INSTANTIATE.md —
+template-authoring artifacts); bootstrap/shim/hooks/docs all npm-only;
+authorized approvals.yaml glob removal recompiled cleanly; acceptance
+grep zero live hits; parity: gates --tier all PASS, mock-loop terminal
+success, verify PASS post-commit. Template 0.2.1 (shim-first hooks) was
+the enabling upstream release. **Phase C COMPLETE — this repo now runs
+entirely on @aaronmsoto/agentic-harness@0.2.1 from GitHub Packages.** Green governance on a real PR remains the post-merge observable for the package-access grant. `dev` recreated from main. OWNER PREREQS: package access
    grant for finops-framework-mcp (Package settings → Manage Actions
    access), and a read:packages NPM_TOKEN for the implementing session
    (env var in the environment settings, not chat).

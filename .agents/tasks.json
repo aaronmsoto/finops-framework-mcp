@@ -1432,7 +1432,7 @@
         "git grep -l 'agentic-starter/harness\\|\\.agentic/harness/dist' returns only historical files (journals, specs, decisions, task records) — no live code, config, docs, or CI references",
         "npm-only parity proof observed and journaled: gates --tier all PASS, verify PASS, and one loop --runner mock iteration green, all with the vendored copy gone"
       ],
-      "status": "pending",
+      "status": "in_progress",
       "evidence": null,
       "hash": null
     }

@@ -37,7 +37,7 @@ via `./scripts/agentic gates`, tests via vitest.
 | Memory hygiene | `./scripts/agentic memory lint` |
 | Status overview | `./scripts/agentic status` |
 
-Harness development: `cd .agentic/harness && npm run test | lint | typecheck | build`.
+Harness lives upstream: this repo consumes `@aaronmsoto/agentic-harness` from GitHub Packages via `.agentic/package.json` (`npm ci --prefix .agentic`); harness development happens in agentic-starter-repo. After `npm update`, run `./scripts/agentic upgrade` to recompile the generated surfaces.
 
 ## Hard rules (each has a deterministic enforcement twin — see .agentic/docs/architecture.md)
 
@@ -57,7 +57,6 @@ Harness development: `cd .agentic/harness && npm run test | lint | typecheck | b
 - Skills: `.claude/skills/` (shared SKILL.md format — Copilot reads these too).
 - Policy: `approvals.yaml` (owner-edited) → compiled by `./scripts/agentic approvals compile`.
 - Full design: `.agentic/docs/architecture.md`. Operations: `.agentic/docs/operations.md`.
-- Creating a NEW project from this template (agent-driven, dual-repo session): follow `.agentic/INSTANTIATE.md`.
 
 ## Conventions
 

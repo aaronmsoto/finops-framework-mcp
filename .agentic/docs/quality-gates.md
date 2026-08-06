@@ -11,8 +11,8 @@ The `gates` section of `agentic.config.json` is an ordered map of name → gate:
   "lint":      { "command": "cd .agentic/harness && npm run lint",      "tier": "fast" },
   "typecheck": { "command": "cd .agentic/harness && npm run typecheck", "tier": "fast" },
   "test":      { "command": "cd .agentic/harness && npm run test",      "tier": "fast" },
-  "integrity": { "command": "node .agentic/harness/dist/cli.js integrity",   "tier": "fast" },
-  "memory":    { "command": "node .agentic/harness/dist/cli.js memory lint", "tier": "fast" },
+  "integrity": { "command": "./scripts/agentic integrity",   "tier": "fast" },
+  "memory":    { "command": "./scripts/agentic memory lint", "tier": "fast" },
   "build":     { "command": "cd .agentic/harness && npm run build",     "tier": "full" }
 }
 ```

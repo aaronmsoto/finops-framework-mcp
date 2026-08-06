@@ -39,7 +39,6 @@ approvals:
   force_push: never
 protected_paths:
   - "tests/**"
-  - ".agentic/harness/tests/**"
   - ".github/workflows/**"
   - "approvals.yaml"
   - "agentic.config.json"

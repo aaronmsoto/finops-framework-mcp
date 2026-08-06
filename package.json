@@ -36,8 +36,8 @@
   ],
   "scripts": {
     "bootstrap": "./scripts/bootstrap.sh",
-    "agentic": "node .agentic/harness/dist/cli.js",
-    "gates": "node .agentic/harness/dist/cli.js gates",
+    "agentic": "./scripts/agentic",
+    "gates": "./scripts/agentic gates",
     "format:check": "prettier --check src tests demo",
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",

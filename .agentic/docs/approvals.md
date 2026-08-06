@@ -15,7 +15,6 @@ approvals:
   release: human              # human | auto
   force_push: never           # never | human
 protected_paths:
-  - ".agentic/harness/tests/**"
   - ".github/workflows/**"
   - "approvals.yaml"
   - "agentic.config.json"

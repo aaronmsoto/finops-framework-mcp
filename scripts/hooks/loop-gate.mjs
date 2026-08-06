@@ -37,8 +37,15 @@ try {
     if (parent === dir) break; // filesystem root: keep the original cwd
     dir = parent;
   }
-  const cli = resolve(repoRoot, ".agentic/harness/dist/cli.js");
-  if (!existsSync(cli)) process.exit(0); // harness not built: nothing to enforce
+  // Same npm-first probe order as scripts/agentic (the vendored copy is gone
+  // since Phase C).
+  const cli = [
+    ".agentic/node_modules/@aaronmsoto/agentic-harness/dist/cli.js",
+    "node_modules/@aaronmsoto/agentic-harness/dist/cli.js",
+  ]
+    .map((c) => resolve(repoRoot, c))
+    .find((c) => existsSync(c));
+  if (cli === undefined) process.exit(0); // harness not installed: nothing to enforce
 
   const res = spawnSync(process.execPath, [cli, "gates", "--tier", "fast"], {
     cwd: repoRoot,

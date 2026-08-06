@@ -14,7 +14,6 @@ const FALLBACK_PROTECTED = [
   "agentic.config.json",
   ".claude/settings.json",
   ".github/workflows/**",
-  ".agentic/harness/tests/**",
 ];
 
 // The session may start in a SUBDIRECTORY of the repo, so the hook's cwd is
