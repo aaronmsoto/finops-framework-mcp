@@ -1,4 +1,4 @@
-# 2026-08-06 — Pages live; T-067 solo-maintainer ruleset fix
+# 2026-08-06 — Pages live; T-071 solo-maintainer ruleset fix
 
 ## GitHub Pages is live — 2026-08-06T02:35:00Z
 
@@ -30,7 +30,7 @@ sandbox's Chromium cannot traverse the agent proxy, with or without the
 `proxy:` option). Not chased: curl already proves status, content and
 byte-identity, and the identical bytes were rendered headlessly earlier.
 
-## T-067: fix the solo-maintainer ruleset deadlock — 2026-08-06T02:40:00Z
+## T-071: fix the solo-maintainer ruleset deadlock — 2026-08-06T02:40:00Z
 
 **The bug.** `compileRuleset` emitted `required_approving_review_count: 1` +
 `require_code_owner_review: true` whenever `merge_to_main: human`, and

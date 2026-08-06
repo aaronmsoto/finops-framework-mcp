@@ -1,4 +1,4 @@
-# 2026-08-06 — T-068 make the no-AI-attribution policy configurable
+# 2026-08-06 — T-072 make the no-AI-attribution policy configurable
 
 ## Diagnosis: it was the PR body, not the commits — 2026-08-06T03:00:00Z
 
@@ -104,3 +104,16 @@ Sequence to a permanently green board:
    call the CLI.
 3. `governance` goes green on every subsequent PR without anyone editing a
    description.
+
+## Renumbered T-067/T-068 -> T-071/T-072 after merging main — 2026-08-06T04:00:00Z
+
+PR #12 landed first and had itself renumbered its CI-split tasks to
+T-067..T-069 — colliding with the T-067/T-068 this branch had allocated. Same
+root cause as the collision #12 hit: `tasks add` numbers from the local file
+only, so parallel branches hand out the same IDs.
+
+Resolved by taking `origin/main`'s `tasks.json` wholesale and re-adding both
+tasks through `./scripts/agentic tasks add|start|complete`, so the hash chain
+is computed by the harness rather than patched by hand (AGENTS.md: editing
+`tasks.json` status by hand breaks validation). The two journal files were
+renamed to match the new IDs; their bodies otherwise stand.

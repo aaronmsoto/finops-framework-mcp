@@ -12,6 +12,37 @@
 
 ## In flight
 
+**GitHub Pages is LIVE** (2026-08-06): the six-page guide serves at
+<https://aaronmsoto.github.io/finops-framework-mcp/>. Verified in production
+— 6/6 pages 200, 404 page works, all seven deployed files byte-identical to
+`docs/guide/`, and `critique-*.md`/`final-status-review.md`/`mcp-surface.md`
+all 404 (guide-only upload holds). Repo stays private (Pro covers Pages).
+Gotcha: the deploy fires on the merge push, so if Pages' source is set
+*after* merging, run #1 fails `Get Pages site failed` — re-dispatch
+`pages.yml`.
+
+**Two template rules became owner toggles** (T-070/T-071/T-072, 2026-08-06,
+owner-authorized protected-path edits):
+
+- `solo_maintainer` (approvals.yaml, default false; **true** here) —
+  `compileRuleset` was requiring one approving CODEOWNER review, and
+  CODEOWNERS names only the owner. GitHub forbids self-approval, so every
+  owner-authored PR was permanently unmergeable. Now emits count 0 +
+  code-owner false, and `derivedPermissions` restores `Bash(gh pr merge*)`
+  even in integration mode so main is not ungated on both sides.
+- `ai_attribution: forbid|allow` (default forbid; **allow** here) — read by
+  the prepare-commit-msg hook, the integrity gate, and ci.yml's PR-body
+  check (grep, not the CLI: that step runs before harness acquisition and on
+  fork PRs). Motivation: attribution footers are **re-appended server-side
+  after submission**, so under `forbid` the PR-body check is unsatisfiable
+  for tool-authored PRs — verified by removing one and watching it return in
+  a different form within minutes.
+
+**Owner action outstanding**: the LIVE main-branch ruleset still requires 1
+code-owner review — Settings → Rules → Rulesets → main-branch must be set to
+approvals `0` with "Require review from Code Owners" unticked to match the
+regenerated `.github/rulesets/main-branch.json`, or the deadlock returns.
+
 **Merge reconciliation (2026-08-06):** `origin/main` was merged into
 `claude/session-k75rxy`. A parallel Pages session (PR #11, merged) had
 allocated T-065/T-066 for Pages work while this branch used T-065..T-067
