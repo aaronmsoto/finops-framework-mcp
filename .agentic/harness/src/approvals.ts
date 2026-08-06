@@ -40,7 +40,11 @@ export function derivedPermissions(policy: ApprovalsPolicy): { ask: string[]; de
     // agents must enable native auto-merge on PRs into the integration branch
     // (green CI is the gate); main stays human-gated server-side by the
     // main ruleset's required code-owner review.
-    if (policy.branching.mode !== "integration") ask.push("Bash(gh pr merge*)");
+    //
+    // EXCEPT when solo_maintainer is set — there is no server-side review gate
+    // to lean on (see compileRuleset), so the client-side prompt has to come
+    // back or merges to main would be ungated on both sides.
+    if (policy.branching.mode !== "integration" || policy.solo_maintainer) ask.push("Bash(gh pr merge*)");
   }
   if (policy.approvals.deploy_production === "human") ask.push("Bash(gh workflow run *deploy*)");
   if (policy.approvals.release === "human") ask.push("Bash(npm publish*)", "Bash(gh release create*)");
@@ -155,12 +159,19 @@ export function compileCodeowners(policy: ApprovalsPolicy): string {
 export function compileRuleset(policy: ApprovalsPolicy): string {
   const rules: unknown[] = [{ type: "deletion" }, { type: "non_fast_forward" }];
   if (policy.approvals.merge_to_main === "human") {
+    // GitHub does not allow approving your own PR. On a solo-maintained repo
+    // CODEOWNERS names only the owner, so requiring one approving code-owner
+    // review makes every PR the owner opens permanently unmergeable — GitHub
+    // offers "Request Review" and nothing else. Requiring a PR and green CI
+    // still holds; the human gate moves client-side to the `gh pr merge`
+    // prompt that derivedPermissions restores for this case.
+    const solo = policy.solo_maintainer;
     rules.push({
       type: "pull_request",
       parameters: {
-        required_approving_review_count: 1,
+        required_approving_review_count: solo ? 0 : 1,
         dismiss_stale_reviews_on_push: false,
-        require_code_owner_review: true,
+        require_code_owner_review: !solo,
         require_last_push_approval: false,
         required_review_thread_resolution: false,
         // In integration mode the release PR (dev -> main) must land as a

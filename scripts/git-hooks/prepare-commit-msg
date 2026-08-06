@@ -19,6 +19,16 @@ MSG_FILE="$1"
 
 [ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ] || exit 0
 
+# Owner policy toggle: approvals.yaml `ai_attribution: allow` turns the whole
+# thing off (the integrity gate reads the same key). Grepped rather than
+# parsed — this hook must stay dependency-free and must never block a commit,
+# so an unreadable or absent file just leaves the strict default in place.
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=.
+if grep -qE '^[[:space:]]*ai_attribution:[[:space:]]*"?allow"?[[:space:]]*(#.*)?$' \
+    "$ROOT/approvals.yaml" 2>/dev/null; then
+    exit 0
+fi
+
 TMP="${MSG_FILE}.noai"
 if grep -v -i \
     -e '^co-authored-by:.*\(claude\|copilot\|anthropic\|openai\|gemini\|cursor\|aider\|devin\)' \

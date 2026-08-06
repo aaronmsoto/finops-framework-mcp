@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { AgenticConfig, BranchingPolicy } from "./config.js";
+import type { AgenticConfig, AiAttributionMode, BranchingPolicy } from "./config.js";
 import { git, matchesAnyGlob } from "./util.js";
 
 export interface IntegrityResult {
@@ -70,7 +70,7 @@ interface DiffEntry {
 export function runIntegrity(
   rootDir: string,
   config: AgenticConfig,
-  opts: { base?: string } = {},
+  opts: { base?: string; aiAttribution?: AiAttributionMode } = {},
 ): IntegrityResult {
   const base = opts.base ?? DEFAULT_BASE;
   const failures: string[] = [];
@@ -183,12 +183,17 @@ export function runIntegrity(
     );
   }
 
-  // 5. AI-attribution markers in new commit messages -> fail (owner policy:
-  // no AI attribution in git artifacts — see AGENTS.md Conventions and
-  // decisions.md 2026-07-14). The prepare-commit-msg hook strips these
-  // best-effort; this check is the enforcement. Commit MESSAGES only —
-  // functional references to agent tooling in code/docs are out of scope,
-  // and human Co-Authored-By trailers do not match.
+  // 5. AI-attribution markers in new commit messages -> fail, UNLESS
+  // approvals.yaml sets `ai_attribution: allow` (owner policy — see AGENTS.md
+  // Conventions and decisions.md 2026-07-14 / 2026-08-06). The
+  // prepare-commit-msg hook strips these best-effort; this check is the
+  // enforcement. Commit MESSAGES only — functional references to agent
+  // tooling in code/docs are out of scope, and human Co-Authored-By trailers
+  // do not match.
+  //
+  // The subject-length check below shares this loop and is NOT policy-gated,
+  // so it still runs when attribution is allowed.
+  const forbidAttribution = (opts.aiAttribution ?? "forbid") === "forbid";
   const logRes = git(rootDir, ["log", "--format=%h%x00%B%x01", `${compareRef}..HEAD`]);
   if (logRes.ok) {
     for (const record of logRes.stdout.split("\x01")) {
@@ -202,7 +207,7 @@ export function runIntegrity(
       if (subject.length > MAX_SUBJECT_CHARS && !subject.startsWith("Merge ")) {
         warnings.push(`commit ${short} subject is ${subject.length} chars (max ${MAX_SUBJECT_CHARS}): "${subject.slice(0, 50)}..."`);
       }
-      for (const marker of AI_ATTRIBUTION_RES) {
+      for (const marker of forbidAttribution ? AI_ATTRIBUTION_RES : []) {
         const m = marker.exec(message);
         if (m) {
           failures.push(

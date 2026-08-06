@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "55917dd76cd2089df4679edc4513c7b8c7bc365a29e9639e9887d2090c296afc",
+  "chainHead": "87bfd773c0450d740bc5f604b731fba3cf86522e9fdeaa99fa8876418a2c2b77",
   "tasks": [
     {
       "id": "T-001",
@@ -1305,6 +1305,63 @@
         "completedAt": "2026-08-05T13:06:36.709Z"
       },
       "hash": "55917dd76cd2089df4679edc4513c7b8c7bc365a29e9639e9887d2090c296afc"
+    },
+    {
+      "id": "T-070",
+      "title": "Make ci.yml's PR-body attribution check honor ai_attribution",
+      "acceptance": [
+        "OWNER AUTHORIZATION: the owner asked for this rule to be permanently toggleable and merged PR #12 so the check now exists on main. Authorized to edit .github/workflows/ci.yml (protected) for this single step only.",
+        "The PR-body step reads ai_attribution from approvals.yaml with a grep (no harness: it runs before harness acquisition and on fork PRs) and skips the check when set to allow",
+        "Under forbid the check still fails a body containing a footer; both directions verified by running the step's shell logic locally",
+        "gates --tier all passes and the workflow still parses with the expected job shape"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "ci.yml's PR-body attribution step now greps approvals.yaml for ai_attribution and skips when allow (grep not CLI: it runs before harness acquisition and on fork PRs). Verified by extracting the shipped run: block with a YAML parser and executing it against the real re-appended footer body: allow -> exit 0, forbid -> exit 1. Workflow parses; job shape unchanged.",
+        "commit": "f146fd9b62f2af853be7df796141bd49eaa2d267",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T04:13:34.142Z"
+      },
+      "hash": "d764efb348e175ad863c4f18b99e8c35cb7f1890e29c598146af17f21247d669"
+    },
+    {
+      "id": "T-071",
+      "title": "Fix the solo-maintainer ruleset deadlock in the approvals compiler",
+      "acceptance": [
+        "OWNER AUTHORIZATION: owner authorized editing approvals.yaml (protected) to correct this; harness tests must not be edited",
+        "solo_maintainer flag makes compileRuleset emit review count 0 and code-owner false so an owner-authored PR is mergeable; default false keeps multi-maintainer output byte-identical",
+        "When true, Bash(gh pr merge*) is restored to the ask list even in integration mode",
+        "approvals compile regenerates surfaces; harness tests pass unedited; gates --tier all passes"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Add solo_maintainer to approvals.yaml: compileRuleset drops the code-owner review GitHub makes unsatisfiable for a lone owner; derivedPermissions restores Bash(gh pr merge*) so main stays gated client-side. Probed both branches (solo=false unchanged); 248 harness tests pass unedited; approvals check clean.",
+        "commit": "f146fd9b62f2af853be7df796141bd49eaa2d267",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T04:14:06.528Z"
+      },
+      "hash": "14b656fba67157f0739083fe9ebbee68d9262a3653907973bc72a4d80cdf7f55"
+    },
+    {
+      "id": "T-072",
+      "title": "Make the no-AI-attribution policy an owner-configurable option",
+      "acceptance": [
+        "OWNER AUTHORIZATION: owner asked for this rule to become a toggle and stated attribution is acceptable here; authorized to edit approvals.yaml and AGENTS.md; harness tests must not be edited",
+        "approvals.yaml gains ai_attribution: allow|forbid, defaulting to forbid so template behavior is byte-unchanged",
+        "When allow, the integrity gate skips its commit-message attribution check and the prepare-commit-msg hook stops stripping",
+        "AGENTS.md states the rule as configurable; harness tests pass unedited and gates --tier all passes"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Add ai_attribution: forbid|allow to approvals.yaml (default forbid, allow here), read by the prepare-commit-msg hook, the integrity gate via runIntegrity opts, and AGENTS.md. Verified both directions: hook leaves a Claude trailer intact under allow and strips it under forbid; integrity reports 0 attribution failures under allow and 1 under forbid on the same real commit (ff71620).",
+        "commit": "f146fd9b62f2af853be7df796141bd49eaa2d267",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T04:14:46.895Z"
+      },
+      "hash": "87bfd773c0450d740bc5f604b731fba3cf86522e9fdeaa99fa8876418a2c2b77"
     }
   ]
 }

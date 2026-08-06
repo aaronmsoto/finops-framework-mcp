@@ -208,7 +208,33 @@ export interface ApprovalsPolicy {
   commands: { ask: string[]; deny: string[] };
   loop: LoopCaps;
   branching: BranchingPolicy;
+  /**
+   * True when `owner` is the ONLY person with write access.
+   *
+   * GitHub refuses to let anyone approve their own pull request. With
+   * `merge_to_main: human` the compiled main ruleset would otherwise require
+   * one approving CODEOWNER review, and CODEOWNERS names only the owner — so
+   * every PR the owner opens is permanently unmergeable. This flag swaps that
+   * server-side review gate for the client-side `gh pr merge` prompt; a PR
+   * and green CI are still required either way. Leave false whenever a second
+   * reviewer exists.
+   */
+  solo_maintainer: boolean;
+  /**
+   * Whether AI-attribution markers (`Co-Authored-By: ...claude...`,
+   * `Claude-Session:`, "Generated with/by ...", 🤖) may appear in git
+   * artifacts — commit messages and PR bodies.
+   *
+   * "forbid" (the default) is the template's original posture: the
+   * prepare-commit-msg hook strips them and the integrity gate fails commits
+   * carrying them. "allow" turns both off. Agent tooling appends these
+   * footers automatically and often re-appends them after submission, so a
+   * repo that does not care about them otherwise fails CI on every PR.
+   */
+  ai_attribution: AiAttributionMode;
 }
+
+export type AiAttributionMode = "forbid" | "allow";
 
 export const DEFAULT_LOOP_CAPS: LoopCaps = {
   max_iterations: 10,
@@ -355,5 +381,31 @@ export function validateApprovals(raw: unknown): ApprovalsPolicy {
     }
   }
 
-  return { version: 1, owner, approvals, protected_paths, commands, loop, branching };
+  let solo_maintainer = false;
+  if (raw.solo_maintainer !== undefined) {
+    if (typeof raw.solo_maintainer !== "boolean") {
+      fail(F, "solo_maintainer", `must be true or false (got ${describe(raw.solo_maintainer)})`);
+    }
+    solo_maintainer = raw.solo_maintainer;
+  }
+
+  let ai_attribution: AiAttributionMode = "forbid";
+  if (raw.ai_attribution !== undefined) {
+    if (raw.ai_attribution !== "forbid" && raw.ai_attribution !== "allow") {
+      fail(F, "ai_attribution", `must be "forbid" or "allow" (got ${describe(raw.ai_attribution)})`);
+    }
+    ai_attribution = raw.ai_attribution;
+  }
+
+  return {
+    version: 1,
+    owner,
+    approvals,
+    protected_paths,
+    commands,
+    loop,
+    branching,
+    solo_maintainer,
+    ai_attribution,
+  };
 }

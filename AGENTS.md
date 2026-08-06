@@ -61,6 +61,7 @@ Harness development: `cd .agentic/harness && npm run test | lint | typecheck | b
 
 ## Conventions
 
-- Commit messages: imperative subject ≤ 72 chars; body explains why. **No AI attribution anywhere in git artifacts** — no `Co-Authored-By` bot trailers, session links, `Agent:` trailers, or "Generated with ..." footers in commits, PR titles/bodies, or code comments. (Enforced: the `prepare-commit-msg` hook strips them; the integrity gate fails new commits carrying them.)
+- Commit messages: imperative subject ≤ 72 chars; body explains why.
+- AI attribution in git artifacts (`Co-Authored-By` bot trailers, session links, `Agent:` trailers, "Generated with/by ..." footers) is governed by `ai_attribution` in `approvals.yaml`. **This repo sets `allow`** — do not spend effort stripping them. Under `forbid` (the template default) the `prepare-commit-msg` hook strips them, the integrity gate fails commits carrying them, and CI fails PR bodies containing them.
 - Match surrounding code style; comments only for non-obvious constraints.
 - Keep this file ~150 lines (`memory lint` warns past 170) and `MEMORY.md` under 200 (hard fail).

@@ -6,7 +6,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkApprovals, compileApprovals } from "./approvals.js";
-import { loadAgenticConfig, loadApprovals, type AgenticConfig, type BranchingMode } from "./config.js";
+import {
+  loadAgenticConfig,
+  loadApprovals,
+  type AgenticConfig,
+  type AiAttributionMode,
+  type BranchingMode,
+} from "./config.js";
 import { designCheck, designNew, designPublish } from "./designs.js";
 import { gatesReportPath, runGates, summarizeReport, type TierSelection } from "./gates.js";
 import { runInit, initNextSteps, LICENSE_CHOICES, type InitOptions, type LicenseChoice } from "./init.js";
@@ -384,14 +390,17 @@ function cmdIntegrity(root: string, config: AgenticConfig, args: string[], json:
   // Default base is derived from branching policy (integration branch in
   // integration mode, else default_branch), not the constant origin/main.
   let base = parsed.strings.base;
-  if (base === undefined) {
-    try {
-      base = resolveDefaultBase(root, loadApprovals(root).branching);
-    } catch {
-      // approvals.yaml missing/invalid: fall through to runIntegrity's default.
-    }
+  // Owner policy: whether AI-attribution markers are allowed in commit
+  // messages. Unreadable approvals.yaml falls back to the strict default.
+  let aiAttribution: AiAttributionMode = "forbid";
+  try {
+    const policy = loadApprovals(root);
+    if (base === undefined) base = resolveDefaultBase(root, policy.branching);
+    aiAttribution = policy.ai_attribution;
+  } catch {
+    // approvals.yaml missing/invalid: fall through to runIntegrity's defaults.
   }
-  const result = runIntegrity(root, config, { base });
+  const result = runIntegrity(root, config, { base, aiAttribution });
   const strict = parsed.booleans.strict;
   const failures = strict ? [...result.failures, ...result.warnings] : result.failures;
   const warnings = strict ? [] : result.warnings;

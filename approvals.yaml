@@ -4,6 +4,34 @@
 # .github/rulesets/main-branch.json) by hand.
 version: 1
 owner: "@aaronmsoto"
+# True when `owner` above is the ONLY account with write access.
+#
+# GitHub refuses to let anyone approve their own pull request. Without this,
+# `merge_to_main: human` compiles a main ruleset requiring one approving
+# CODEOWNER review, and CODEOWNERS names only the owner — so every PR the
+# owner opens is unmergeable forever ("Request Review" is the only button
+# GitHub can offer). Hit for real on PR #11, 2026-08-06.
+#
+# With it, the main ruleset still requires a pull request and a green
+# `gates-fast`, but drops the review count to 0; the human gate moves
+# client-side to the `Bash(gh pr merge*)` ask rule, which the compiler
+# restores for this case even in integration mode. Set back to false the
+# moment a second reviewer exists — the server-side gate is the stronger one.
+solo_maintainer: true
+# May AI-attribution markers appear in git artifacts — `Co-Authored-By:
+# ...claude...`, `Claude-Session:`, "Generated with/by ...", 🤖?
+#
+#   forbid (default) — the prepare-commit-msg hook strips them from commit
+#     messages and the integrity gate fails commits carrying them.
+#   allow            — both are turned off.
+#
+# Set to `allow` here on 2026-08-06: agent tooling appends these footers
+# automatically, and re-appends them to PR bodies after submission, so
+# `forbid` was failing CI on essentially every pull request for a cosmetic
+# reason the owner does not care about. See decisions.md.
+#
+# NOTE: the PR-body check in .github/workflows/ci.yml reads this same key.
+ai_attribution: allow
 approvals:
   merge_to_main: human
   deploy_production: human
