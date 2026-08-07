@@ -12,6 +12,17 @@
 
 ## In flight
 
+**Merge reconciliation (2026-08-07):** `origin/main` merged into the
+release line — main carried PR #15 (guide large-viewport widening from a
+parallel session) which `dev` lacked, leaving rolling PR #17 conflicted.
+Its task collided on ID **T-073** (already the npm-harness task on this
+chain) and was renumbered **T-078** with the chain recomputed; journal
+`20260806-t073-guide-wide-viewport.md` keeps the old ID (same precedent as
+the T-065..T-067 renumbering — second occurrence of upstream feedback
+item 13). The guide widening itself (`--wrap` custom property in the
+shared chrome, datamodel flex) merged cleanly alongside this branch's
+`npx -y`/unofficial edits.
+
 **Pre-publish hardening COMPLETE (T-077, 2026-08-07, branch
 claude/session-k75rxy).** A 3-expert review panel (MCP design, npm
 publishing, OSS readiness) audited the repo for open-sourcing + npm publish;
@@ -84,9 +95,20 @@ complete on @aaronmsoto/agentic-harness@0.2.1) is unchanged — see journal
   blocks for `get_capability`/`get_kpis`, dropping `get_actions`' `level`
   alias, glossary lookup tool, trimming `dist/shared/focus/*` from the root
   tarball.
+- Guide mobile overflow (pre-existing, noted by T-078): `index`,
+  `framework-server` and `focus-server` overflow horizontally at 414/360px.
+  Deserves its own task.
+- Upstream porting status: the two policy toggles (`solo_maintainer`,
+  `ai_attribution`) ALREADY shipped in harness 0.2.0 (starter T-012/T-013);
+  the remaining harness feedback (incl. task-ID collisions — bit again in
+  THIS merge) lives in agentic-starter-repo's activeContext Next steps
+  9–14. `.agents/specs/upstream-port-to-agentic-starter-repo.md` (from
+  PR #15) is the fuller port brief; its toggle diffs are done, its smaller
+  feedback list is superseded by the starter-repo list.
 
 ## Last updated
 
 2026-08-07 — T-077 pre-publish hardening session (review panel findings
 implemented; versions at 0.9.0; publish procedure in
-docs/release-runbook.md).
+docs/release-runbook.md), then main→dev merge reconciliation
+(T-073(main) → T-078 renumbering) to unblock rolling PR #17.

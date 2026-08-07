@@ -131,14 +131,45 @@
   footer.guide p { margin: 0.35rem 0; }
   footer.guide .unofficial-legend { font-weight: 600; }
 
-  .datamodel { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  /* --- wide-viewport container (2026-08-06) ---
+     The six nav links needed 892px of content width to sit on one line, and
+     the Data Model's five cards needed room to share a row; the container
+     was capped at 78ch (~794px of content) at every desktop size. --wrap
+     widens it past both thresholds from 64rem up, and is the single knob
+     for all three container elements.
+
+     Prose deliberately does NOT widen with it: body text was already ~111
+     characters per line, so paragraphs and lists keep the old measure while
+     the extra room goes to the nav, tables, card grids and transcripts,
+     which are the parts that were actually cramped. .callnote is exempt —
+     it is a nowrap scroll strip that wants the full width. */
+  :root { --wrap: 78ch; }
+  @media (min-width: 64rem) { :root { --wrap: 62rem; } }
+  header.guide, footer.guide, main { max-width: var(--wrap); }
+  main p:not(.callnote), main ul, main ol { max-width: 78ch; }
+  nav.guide a { white-space: nowrap; }
+
+  /* Flex, not grid: as a grid every child took an equal 1fr column, so the
+     two arrows in the first row claimed as much width as the cards. Here the
+     cards share the space and the arrows take only what they need. A 7.5rem
+     basis lets all five cards of the second row share one line from tablet
+     width up, and pairs them two-per-row on a phone instead of stacking
+     five singles. */
+  .datamodel { display: flex; flex-wrap: wrap; align-items: stretch;
     gap: 0.6rem; margin: 0.8rem 0; }
-  .dm-card { border: 1px solid var(--line); border-radius: 8px; padding: 0.75rem 0.9rem;
-    background: var(--panel-2); text-align: center; }
+  .dm-card { flex: 1 1 7.5rem; border: 1px solid var(--line); border-radius: 8px;
+    padding: 0.75rem 0.9rem; background: var(--panel-2); text-align: center; }
   .dm-card .num { font-family: var(--serif); font-size: 1.7rem; color: var(--moss);
     font-variant-numeric: tabular-nums; }
   .dm-card .lbl { font-size: 0.78rem; color: var(--slate); margin-top: 0.1rem; }
-  .dm-arrow { text-align: center; font-size: 1.2rem; color: var(--slate); align-self: center; }
+  .dm-arrow { flex: 0 0 auto; text-align: center; font-size: 1.2rem; color: var(--slate); align-self: center; }
+  /* Once the row wraps, an inline arrow strands itself at the start of the
+     next line, reading as a stray glyph. Below 34rem give each arrow its own
+     full-width line and turn it downward, so the chain reads as a vertical
+     flow instead. */
+  @media (max-width: 34rem) {
+    .dm-arrow { flex: 1 0 100%; transform: rotate(90deg); margin: -0.15rem 0; }
+  }
   .group-hdr { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
     text-transform: uppercase; color: var(--moss-ink); background: var(--panel);
     padding: 0.25rem 0.6rem; border-radius: 4px; display: inline-block; margin: 1.1rem 0 0.5rem; }
