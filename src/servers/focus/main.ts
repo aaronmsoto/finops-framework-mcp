@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { isDirectRunOf } from "../../shared/direct-run.js";
 import { loadFocusStore } from "../../shared/index.js";
@@ -9,9 +10,15 @@ import { createServer } from "./server.js";
 // data/focus resolved RELATIVE TO THIS MODULE (dist/servers/focus/), so
 // absolute-path invocations from any cwd work; env/argv override (mirrors
 // the framework server's main.ts).
-const defaultDir = new URL("../../../data/focus", import.meta.url).pathname;
-const packageJsonPath = new URL("../../../package.json", import.meta.url)
-  .pathname;
+// fileURLToPath, not URL.pathname: pathname percent-encodes spaces and
+// yields /C:/... on Windows, which breaks npx installs (space or Windows
+// paths are the norm under the npx cache).
+const defaultDir = fileURLToPath(
+  new URL("../../../data/focus", import.meta.url),
+);
+const packageJsonPath = fileURLToPath(
+  new URL("../../../package.json", import.meta.url),
+);
 
 export async function runCli(cliArgs: string[]): Promise<void> {
   const artifactDir =
