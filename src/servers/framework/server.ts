@@ -44,15 +44,21 @@ export function createServer(
         completions: {},
       },
       instructions:
-        "FinOps Framework (finops.org) as structured data: 6 principles, 3 phases, 4 domains, " +
-        "22 capabilities with Crawl/Walk/Run maturity assessments, 11 personas, and a KPI library. " +
+        // Counts derived from the artifact so a re-crawl can never leave
+        // the advertised numbers stale.
+        `FinOps Framework (finops.org) as structured data: ${artifact.principles.length} principles, ` +
+        `${artifact.phases.length} phases, ${artifact.domains.length} domains, ` +
+        `${artifact.capabilities.length} capabilities with Crawl/Walk/Run maturity assessments, ` +
+        `${artifact.personas.length} personas, and a KPI library. ` +
         "Start with get_framework_info. Tools are the primary interface; " +
         "finops://framework/* resources hold the same content as full documents. " +
         (experimental
           ? "Unofficial extensions (pre-crawl level, parsed assessment items) are always " +
             "flagged official:false. "
           : "") +
-        "Content © FinOps Foundation, CC BY 4.0, adapted.",
+        "Content © FinOps Foundation, CC BY 4.0, adapted. This server is an independent, " +
+        "unofficial project — FinOps is a trademark of the FinOps Foundation; " +
+        "attribution does not imply endorsement.",
     },
   );
   registerResources(server, artifact, { experimental });
