@@ -62,6 +62,14 @@ solo_maintainer + ai_attribution toggles working, Phase C npm-harness
 complete on @aaronmsoto/agentic-harness@0.2.1) is unchanged — see journal
 20260806-* files.
 
+**T-079 added (2026-08-07):** live MCP testing surfaced `slug` vs
+`capability` param friction; investigation confirmed the naming is a
+deliberate role convention (decisions.md 2026-08-07 — no renames), but found
+two real defects now tracked as T-079: FOCUS `get_kpi_mapping`'s
+`capability` filter silently returns 0 results on unknown/wrong-cased
+values (no findCapability-style validation or nearest-match hints), and
+`get_attribute`/`get_column` description clarity.
+
 ## Next steps
 
 1. Owner: merge the T-077 PR, flip the repo public.

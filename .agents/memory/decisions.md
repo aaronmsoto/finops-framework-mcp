@@ -488,3 +488,33 @@ Alternatives considered:
 Note the toggle governs *git artifacts only*. The CC BY attribution that
 must ride on every served surface (NOTICE.md) is a separate, unaffected
 obligation.
+
+## 2026-08-07 — Keep `slug`/`capability`/`column` param naming; no unification (T-079 scoping)
+
+Decision: tool input params keep their role-based names. `slug` is the
+fetched entity's own identifier (polymorphic per tool: capability slug in
+`get_capability`, KPI slug in `get_kpis`, persona slug in `get_entity`,
+attribute in `get_attribute`); `capability` is always a filter/scope on
+another tool's output; FOCUS `column` is a Column ID. This re-affirms the
+T-077 owner directive ("NO param renames") after a session hit the
+`slug`-vs-`capability` friction live and asked whether to unify.
+
+Rationale: although `get_capability({slug})` and the `capability` filters
+resolve through the same `findCapability` lookup (same value domain), the
+name encodes the param's *role*, not its value type — and every tool
+description already states "Capability slug" with an example. A rename is a
+breaking change across ~12 files including the published finops-focus-mcp
+package, docs/guide HTML, demo, and evals.
+
+Alternatives considered:
+
+- **Unify on `slug` everywhere.** Rejected: loses the fetch-target vs
+  filter distinction (`get_kpis` takes both), breaking change, owner ruled.
+- **Accept both names as aliases.** Rejected: the MCP SDK silently strips
+  unknown params (activeContext open question), so the wrong half of an
+  alias pair fails silently instead of helpfully — worse than today's
+  explicit validation error.
+
+The genuine defects found during the investigation (FOCUS
+`get_kpi_mapping`'s unvalidated `capability` filter; `get_attribute`
+description clarity vs `get_column`) are tracked as T-079.
