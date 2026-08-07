@@ -6,121 +6,64 @@
     ## In flight       — what is currently being worked on, by whom/what mode
     ## Next steps      — ordered, concrete, small
     ## Open questions  — things a future session must not silently re-decide
-    - T-076 reviewer follow-up nits (non-blocking, queued): agentic.config.json
-  `$schema` still points at the deleted vendored schema path (protected
-  file — needs its own authorized task); vendored template docs under
-  `.agentic/docs/` retain references to the deleted presets/INSTANTIATE
-  and vendored-era examples (doc-hygiene pass).
-
-## Last updated    — ISO date + actor
+    ## Last updated    — ISO date + actor
   `memory lint` warns when this file goes stale while commits continue.
 -->
 
 ## In flight
 
-**GitHub Pages is LIVE** (2026-08-06): the six-page guide serves at
-<https://aaronmsoto.github.io/finops-framework-mcp/>. Verified in production
-— 6/6 pages 200, 404 page works, all seven deployed files byte-identical to
-`docs/guide/`, and `critique-*.md`/`final-status-review.md`/`mcp-surface.md`
-all 404 (guide-only upload holds). Repo stays private (Pro covers Pages).
-Gotcha: the deploy fires on the merge push, so if Pages' source is set
-*after* merging, run #1 fails `Get Pages site failed` — re-dispatch
-`pages.yml`.
+**Pre-publish hardening COMPLETE (T-077, 2026-08-07, branch
+claude/session-k75rxy).** A 3-expert review panel (MCP design, npm
+publishing, OSS readiness) audited the repo for open-sourcing + npm publish;
+the owner approved every finding. Landed, one commit per item:
 
-**Two template rules became owner toggles** (T-070/T-071/T-072, 2026-08-06,
-owner-authorized protected-path edits):
+- **B1:** both bins resolve data/package.json via `fileURLToPath` —
+  `URL.pathname` broke npx on Windows and space-containing paths (reproduced,
+  then regression-covered by space-containing scratch dirs in
+  `src/packaging.test.ts`).
+- **B2:** both `server.json` manifests now validate against the 2025-09-29
+  registry schema (descriptions were over the 100-char max); env vars +
+  websiteUrl declared.
+- **Identity/version:** servers report their package names (framework was
+  `finops-framework`), plus `title`; ALL versions moved to **0.9.0** (owner
+  call: first public release is deliberately not v1). Sync tests:
+  `tests/version-sync.test.ts` (server.ts ↔ package.json),
+  `src/servers/focus/default-version.test.ts` (DEFAULT_VERSION ↔ data
+  latest). SERVER_VERSION stays a literal — Worker fs boundary.
+- **Docs/UX:** instructions counts derived from artifact; FOCUS "every tool
+  takes version" overclaim fixed; `npx -y` everywhere; "official" phrasing
+  now "unofficial" in package descriptions/README/guide; root NOTICE.md
+  carries the trademark non-affiliation sentence.
+- **Pipeline:** `publish.yml` (tag-triggered, npm trusted publishing/OIDC);
+  `pack-focus.mjs` rebuilds on stale dist (mtime check), stale local .tgz
+  deleted; **`docs/release-runbook.md` is the publish procedure now** —
+  first publish per package is manual (trusted publishing needs an existing
+  package), then per-package trusted-publisher config on npmjs.com.
+- **Community:** CONTRIBUTING split into external (registry-free npm
+  commands, matching CI gates-fast) vs maintainer (harness) paths;
+  AI-attribution ground rule corrected to `allow`; CODE_OF_CONDUCT
+  (Contributor Covenant 2.1, GitHub private reporting as contact); YAML
+  issue forms replace the markdown template; PR template harness items are
+  maintainer-only.
 
-- `solo_maintainer` (approvals.yaml, default false; **true** here) —
-  `compileRuleset` was requiring one approving CODEOWNER review, and
-  CODEOWNERS names only the owner. GitHub forbids self-approval, so every
-  owner-authored PR was permanently unmergeable. Now emits count 0 +
-  code-owner false, and `derivedPermissions` restores `Bash(gh pr merge*)`
-  even in integration mode so main is not ungated on both sides.
-- `ai_attribution: forbid|allow` (default forbid; **allow** here) — read by
-  the prepare-commit-msg hook, the integrity gate, and ci.yml's PR-body
-  check (grep, not the CLI: that step runs before harness acquisition and on
-  fork PRs). Motivation: attribution footers are **re-appended server-side
-  after submission**, so under `forbid` the PR-body check is unsatisfiable
-  for tool-authored PRs — verified by removing one and watching it return in
-  a different form within minutes.
-
-**Both landed and CONFIRMED WORKING** (PR #13 merged 2026-08-06):
-
-- Live main-branch ruleset now reads `required_approving_review_count: 0`,
-  `require_code_owner_review: false`, required checks `['gates-fast']` —
-  matching the generated `.github/rulesets/main-branch.json`. No drift, no
-  deadlock. (An earlier note here claimed the live ruleset still required a
-  review; that was a stale API read and was wrong.)
-- `governance` passed on PR #13 itself, whose body carried the attribution
-  footer — the end-to-end proof that all four enforcement points now honor
-  `ai_attribution: allow`.
-
-**Merge reconciliation (2026-08-06):** `origin/main` was merged into
-`claude/session-k75rxy`. A parallel Pages session (PR #11, merged) had
-allocated T-065/T-066 for Pages work while this branch used T-065..T-067
-for the CI split — the CI-split tasks were renumbered **T-067 (npm-script
-gates), T-068 (coverage thresholds), T-069 (ci.yml split)** and the hash
-chain recomputed (`tasks validate`: chain valid). Journals written before
-the merge reference the old IDs. The `dev` branch was deleted with PR #10,
-so this branch's PR targets `main` directly.
-
-**CI product/governance split — COMPLETE (T-067/T-068/T-069, formerly
-T-065..T-067)** (spec `.agents/specs/ci-product-governance-split.md`,
-owner-validated 2026-08-04). Product gate commands live only in root npm
-scripts; coverage enforced via vitest thresholds at the measured baseline
-(75.6/65.21/75.6/76.72); `ci.yml` split into `gates-fast` + `gates-full`
-(product, zero `.agentic/` references) and `governance` (always runs,
-fork-safe via `FORK_PR` exit 0, harness acquired in ONE named step — the
-one-line swap point for the npm-packaged harness). Harness-independence
-proven by physically moving `.agentic/` out and running all five product
-commands green. **Post-merge check on first external PR:** governance must
-report "success" (not "skipped") before being made a required check.
-
-**GitHub Pages — landed on main via PR #11 (parallel session):** T-065/
-T-066 (Pages numbering) published `docs/guide/` alone through a staged
-Actions workflow (`.github/workflows/pages.yml`, owner-authorized
-protected-path write). **DONE and live** — Pages source is set to GitHub
-Actions and the site serves at
-<https://aaronmsoto.github.io/finops-framework-mcp/>. See
-`docs/deploy-pages.md` and journal `20260805-t065-github-pages.md`.
-
-**v1 close-out COMPLETE; publish owner-gated.** PR #9 merged 2026-08-04:
-T-050..T-064 (CI fix, 19-MINOR review backlog, six-page guide, `.mcp.json`).
-Evals: focus Runs 1+2 10/10, combined two-server scenario PASS.
+Prior state (Pages live at aaronmsoto.github.io/finops-framework-mcp,
+solo_maintainer + ai_attribution toggles working, Phase C npm-harness
+complete on @aaronmsoto/agentic-harness@0.2.1) is unchanged — see journal
+20260806-* files.
 
 ## Next steps
 
-1. Owner: `npm publish` BOTH packages — `packages/finops-focus-mcp/` and
-   root `finops-framework-mcp`; MCP-registry submit both `server.json`
-   manifests.
-2. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages
-   deploy demo/`; smoke-test the demo against the deployed Worker.
-
-   (PRs #11, #12 and #13 are all merged; GitHub Pages is live; the CI split
-   and both policy toggles are in. Nothing else is waiting on a merge.)
-5. Phase C is SPECCED and queued: `@aaronmsoto/agentic-harness@0.1.0`
-   published to GitHub Packages 2026-08-06; spec
-   `.agents/specs/harness-npm-consumption.md` owner-validated (all four
-   questions resolved: recreate dev/keep integration; CI auth via
-   package access grant + GITHUB_TOKEN; vendored deletion this phase
-   post-parity; dead protected glob removed). T-073+T-074 DONE (manifest+shim+config indirection; governance CI now npm ci --prefix .agentic with GITHUB_TOKEN + job-level packages:read, cache re-keyed — journals 20260806-t073/t074). T-075 DONE after unblock (journal 20260806-t075-upgrade-drift-review.md): both fixes were ported to the template (its T-012/T-013) and released as 0.2.0; manifest bumped, upgrade reviewed file-by-file — settings.json UNCHANGED and main ruleset params preserved (solo fix intact), markers/lockfile/Copilot-hooks surfaces added, copilot.sh comment-only; check clean, idempotent, no skew warning, gates --tier all PASS. T-076 DONE (journal 20260806-t076-vendored-harness-deleted.md):
-vendored `.agentic/harness/` DELETED (with presets/ and INSTANTIATE.md —
-template-authoring artifacts); bootstrap/shim/hooks/docs all npm-only;
-authorized approvals.yaml glob removal recompiled cleanly; acceptance
-grep zero live hits; parity: gates --tier all PASS, mock-loop terminal
-success, verify PASS post-commit. Template 0.2.1 (shim-first hooks) was
-the enabling upstream release. **Phase C COMPLETE — this repo now runs
-entirely on @aaronmsoto/agentic-harness@0.2.1 from GitHub Packages.** Green governance on a real PR remains the post-merge observable for the package-access grant. `dev` recreated from main. OWNER PREREQS: package access
-   grant for finops-framework-mcp (Package settings → Manage Actions
-   access), and a read:packages NPM_TOKEN for the implementing session
-   (env var in the environment settings, not chat).
+1. Owner: merge the T-077 PR, flip the repo public.
+2. Owner: follow `docs/release-runbook.md` — manual first `npm publish` of
+   both packages (0.9.0), configure trusted publishers, submit both
+   `server.json` manifests via `mcp-publisher`.
+3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
+   demo/`; smoke-test the demo against the deployed Worker.
+4. Post-merge observable still pending: `governance` CI job green ("success",
+   not "skipped") on a real PR, proving the package-access grant.
 
 ## Open questions
 
-- npm publish of the root framework package: 1.0.x now vs after PR merge —
-  owner call (registry manifests are ready either way).
-- Trademark posture recorded in `decisions.md` (finops-focus-mcp,
-  accepted-risk): revisit only if the FinOps Foundation objects.
 - `src/shared/index.ts` `export *` barrel: any new server code importing a
   real binding from it can silently reintroduce fs-reachability in the
   Worker; `fs-boundary.test.ts` only catches code reachable from
@@ -134,31 +77,16 @@ entirely on @aaronmsoto/agentic-harness@0.2.1 from GitHub Packages.** Green gove
 - MCP SDK zod validation silently strips unknown tool params
   (docs/eval-results.md #3) — revisit when the SDK supports strict input
   schemas.
-- Template feedback queued for agentic-starter-repo: `gates --tier full`
-  runs only full-tier gates (use `--tier all` before shipping);
-  supervising sessions must not commit a live loop's in-flight tasks.json;
-  background watchers must not `pgrep` for a pattern contained in their
-  own command line (self-match false positive); `design check` should
-  accept an allowlist of HTML dirs (it warns on all six guide pages);
-  NEW — task IDs collide across parallel branches (`tasks add` numbers
-  from the local file only; this merge had to renumber T-065..T-067 →
-  T-067..T-069 and recompute the chain by hand).
-- **FIXED HERE, still to port upstream (both found 2026-08-06)**: the two
-  template rules that were unsatisfiable for a solo-maintained repo —
-  `compileRuleset`'s mandatory code-owner review (GitHub forbids
-  self-approval, so every owner-authored PR was unmergeable; hit on PR #11)
-  and the no-AI-attribution policy (footers are re-appended server-side
-  after submission, so the PR-body check could never be satisfied; hit on
-  PR #12). Both are now `approvals.yaml` toggles — `solo_maintainer` and
-  `ai_attribution` — defaulting to the old behavior. Port both to
-  agentic-starter-repo along with the feedback list above; also add there:
-  `tasks complete --commit` run mid-merge swallows the merge and mislabels
-  it (amend before pushing, or commit the merge first).
+- Trademark posture (decisions.md, accepted-risk, phrasing now "unofficial"
+  everywhere outward-facing): revisit only if the FinOps Foundation objects.
+- Panel nice-to-haves deliberately deferred: README badges, `exports` field
+  for `dist/index.js` (currently shipped but unimportable), markdown text
+  blocks for `get_capability`/`get_kpis`, dropping `get_actions`' `level`
+  alias, glossary lookup tool, trimming `dist/shared/focus/*` from the root
+  tarball.
 
 ## Last updated
 
-2026-08-06 — Pages + policy-toggle session (PRs #11/#12/#13 all merged).
-GitHub Pages live and verified in production; `solo_maintainer` and
-`ai_attribution` toggles landed and confirmed working (`governance` green on
-a PR whose body carries the footer). Remaining owner work is npm/registry
-publish and the Worker deploy — nothing waiting on a merge.
+2026-08-07 — T-077 pre-publish hardening session (review panel findings
+implemented; versions at 0.9.0; publish procedure in
+docs/release-runbook.md).
