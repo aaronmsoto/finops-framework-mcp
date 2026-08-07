@@ -5,19 +5,37 @@ protocol. Read [`AGENTS.md`](AGENTS.md) first — it is the canonical set of
 instructions for how work here gets planned, implemented, verified, and
 recorded, and it applies equally to human contributors.
 
-## Quick start
+## Quick start — external contributors
+
+Everything the product needs runs from the public npm registry; you do NOT
+need the agentic harness (owner tooling, installed from a registry that
+requires auth). This is exactly what CI's `gates-fast` job runs on every PR:
+
+```bash
+npm ci
+npm run format:check
+npm run lint
+npm run typecheck
+npm test           # includes coverage thresholds
+npm run build      # before shipping / to run the servers locally
+```
+
+Open an issue first for anything nontrivial, make the smallest change that
+satisfies it, and open a pull request using the repo's PR template
+(`.github/pull_request_template.md`): what changed and why, plus pasted
+command/behavior evidence.
+
+## Quick start — maintainers (harness path)
+
+The `./scripts/agentic` harness (task chain, gates, memory lint) installs
+from GitHub Packages and needs a `read:packages` token in `NPM_TOKEN`:
 
 1. `./scripts/bootstrap.sh` (once per clone).
-2. Pick up work via `./scripts/agentic tasks list | next` or open an issue
-   describing the change first for anything nontrivial.
-3. Make the smallest change that satisfies the task, matching surrounding
-   code style.
-4. Run `./scripts/agentic gates` (`--tier full` before shipping) and fix
+2. Pick up work via `./scripts/agentic tasks list | next`.
+3. Run `./scripts/agentic gates` (`--tier full` before shipping) and fix
    failures — see `AGENTS.md`'s "Hard rules" for what gates protect and must
    never be weakened to pass.
-5. Open a pull request using the repo's PR template
-   (`.github/pull_request_template.md`): what changed and why, the task ID,
-   pasted gate/behavior evidence, and any approval points touched.
+4. Complete tracked tasks via `./scripts/agentic tasks complete <id>`.
 
 ## Testing the servers locally
 
@@ -31,9 +49,9 @@ read it (Claude Code among them), pointed at the local build:
 }
 ```
 
-`dist/` is gitignored, so **build first** — step 1's `bootstrap.sh` (or
-`npm install && npm run build`) — otherwise the config points at files that
-don't exist yet. Clients read MCP config at startup, so restart the client
+`dist/` is gitignored, so **build first** (`npm ci && npm run build`, or
+`bootstrap.sh` on the maintainer path) — otherwise the config points at
+files that don't exist yet. Clients read MCP config at startup, so restart the client
 after a first build.
 
 This is the _contributor_ form. The `npx`-based config documented for
@@ -55,8 +73,11 @@ node evals/framework/mcp-call.mjs --server=focus call list_versions '{}'
 - Never edit `approvals.yaml`, `.claude/settings.json`,
   `agentic.config.json` gate definitions, or `.github/workflows/` unless the
   task explicitly calls for it — these are owner-approval points.
-- No AI-attribution footers or trailers in commits or PR text (CI checks
-  this).
+- AI attribution in commits and PR text (bot `Co-Authored-By` trailers,
+  session links, "Generated with ..." footers) is governed by
+  `ai_attribution` in `approvals.yaml`; this repo sets `allow`, so leave
+  such trailers alone — don't add policy of your own and don't spend
+  effort stripping them.
 - Bug reports: use the issue template under `.github/ISSUE_TEMPLATE/`.
   Security vulnerabilities: see [`SECURITY.md`](SECURITY.md) instead of a
   public issue.
