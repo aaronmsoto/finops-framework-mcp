@@ -1,7 +1,7 @@
 {
   "name": "finops-focus-mcp",
-  "version": "1.0.0",
-  "description": "MCP server exposing the version-aware FOCUS (FinOps Open Cost & Usage Specification) to AI agents: columns, attributes, glossary, cross-version diffs, and a derived KPI-to-column mapping bridging it to the FinOps Framework.",
+  "version": "0.9.0",
+  "description": "Unofficial MCP server exposing the version-aware FOCUS (FinOps Open Cost & Usage Specification) to AI agents: columns, attributes, glossary, cross-version diffs, and a derived KPI-to-column mapping bridging it to the FinOps Framework.",
   "keywords": [
     "mcp",
     "model-context-protocol",

@@ -149,8 +149,8 @@ Maturity gap between two levels
 
 Persona ↔ capability matrix
 
-- `capability`, optional, string
-- `persona`, optional, string
+- `capability`, optional, string — Capability slug, e.g. 'allocation'
+- `persona`, optional, string — Persona slug, e.g. 'finance'
 
 #### `get_entity`
 

@@ -74,9 +74,12 @@ describe("packaging: finops-focus-mcp shim (T-036)", () => {
   });
 
   it("packs the shim into scratch, installs it, and runs the bin --version", () => {
-    const packScratch = fs.mkdtempSync(path.join(os.tmpdir(), "focus-pack-"));
+    // Scratch prefixes deliberately contain a space: the bin resolves its
+    // data dir from import.meta.url, and URL.pathname percent-encodes
+    // spaces (broke real installs) — fileURLToPath must survive this path.
+    const packScratch = fs.mkdtempSync(path.join(os.tmpdir(), "focus pack "));
     const installScratch = fs.mkdtempSync(
-      path.join(os.tmpdir(), "focus-install-"),
+      path.join(os.tmpdir(), "focus install "),
     );
     try {
       const out = execFileSync(

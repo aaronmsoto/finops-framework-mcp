@@ -747,8 +747,11 @@ export function registerTools(
       description:
         "With `persona`: every capability that persona works in, WITH that persona's activity bullets inline (one call answers 'what does X do across the framework'). With `capability`: every persona active in it, with activities. With neither: the full persona index (slugs, categories) — use it to discover persona slugs. Allied personas are mapped at group level by the framework; responses say so explicitly.",
       inputSchema: {
-        capability: z.string().optional(),
-        persona: z.string().optional(),
+        capability: z
+          .string()
+          .optional()
+          .describe("Capability slug, e.g. 'allocation'"),
+        persona: z.string().optional().describe("Persona slug, e.g. 'finance'"),
       },
       outputSchema: {
         mode: z.enum(["persona", "capability", "index"]),

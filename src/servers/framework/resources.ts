@@ -91,13 +91,15 @@ export function registerResources(
     [
       "personas-index",
       URI.personasIndex,
-      "All 11 personas (6 core + 5 allied)",
+      `All ${artifact.personas.length} personas ` +
+        `(${artifact.personas.filter((p) => p.category === "core").length} core + ` +
+        `${artifact.personas.filter((p) => p.category === "allied").length} allied)`,
       "personas-index",
     ],
     [
       "capabilities-index",
       URI.capabilitiesIndex,
-      "All 22 capabilities grouped by domain",
+      `All ${artifact.capabilities.length} capabilities grouped by domain`,
       "capabilities-index",
     ],
   ];

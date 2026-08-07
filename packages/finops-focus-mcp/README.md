@@ -18,13 +18,16 @@ source, tests, and contribution docs.
 ## Quickstart
 
 ```bash
-npx finops-focus-mcp
+npx -y finops-focus-mcp
 ```
+
+(`-y` skips npx's first-run install prompt, which can hang non-interactive
+MCP clients; pin a version with `npx -y finops-focus-mcp@latest` or `@0.9`.)
 
 Claude Code:
 
 ```bash
-claude mcp add focus-spec -- npx finops-focus-mcp
+claude mcp add focus-spec -- npx -y finops-focus-mcp
 ```
 
 Claude Desktop (`claude_desktop_config.json`):
@@ -34,7 +37,7 @@ Claude Desktop (`claude_desktop_config.json`):
   "mcpServers": {
     "focus-spec": {
       "command": "npx",
-      "args": ["finops-focus-mcp"]
+      "args": ["-y", "finops-focus-mcp"]
     }
   }
 }
@@ -45,7 +48,7 @@ Generic stdio client:
 ```json
 {
   "command": "npx",
-  "args": ["finops-focus-mcp"]
+  "args": ["-y", "finops-focus-mcp"]
 }
 ```
 
@@ -53,8 +56,9 @@ Generic stdio client:
 
 `list_versions`, `get_column`, `list_columns`, `search_focus`,
 `get_attribute`, `get_requirements`, `compare_versions`, `get_kpi_mapping`,
-`calculate_kpi`. Every tool takes an optional `version` parameter (defaults
-to `1.2`) and echoes `spec_version` in its structured content.
+`calculate_kpi`. Version-parameterized tools take an optional `version`
+parameter (defaults to `1.2`) and echo `spec_version` in their structured
+content; `list_versions` and `compare_versions` are version-independent.
 
 `get_kpi_mapping` and `calculate_kpi` are **derived, unofficial** extensions
 — no official FOCUS-to-FinOps-KPI mapping exists upstream. Every record from
@@ -76,5 +80,5 @@ this package is MIT-licensed (`LICENSE`).
 ## Version
 
 ```bash
-npx finops-focus-mcp --version
+npx -y finops-focus-mcp --version
 ```

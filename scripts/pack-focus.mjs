@@ -5,16 +5,35 @@
 // `npm pack`/`npm publish` run from packages/finops-focus-mcp/ tarball exactly
 // that — never the framework server or data/framework (T-036).
 
-import { cpSync, existsSync, rmSync } from "node:fs";
+import { cpSync, existsSync, readdirSync, rmSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 
 const repoRoot = join(import.meta.dirname, "..");
 const pkgDir = join(repoRoot, "packages/finops-focus-mcp");
 
+// Newest mtime under a tree (files only). Used to detect a stale dist:
+// existence alone let `npm publish` silently ship an old build after src
+// edits, since prepack is the only build step on the focus publish path.
+function newestMtime(dir) {
+  let newest = 0;
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, entry.name);
+    newest = Math.max(
+      newest,
+      entry.isDirectory() ? newestMtime(p) : statSync(p).mtimeMs,
+    );
+  }
+  return newest;
+}
+
 const distFocusServer = join(repoRoot, "dist/servers/focus");
 const distShared = join(repoRoot, "dist/shared");
-if (!existsSync(distFocusServer) || !existsSync(distShared)) {
+const distStale =
+  !existsSync(distFocusServer) ||
+  !existsSync(distShared) ||
+  newestMtime(join(repoRoot, "src")) > newestMtime(join(repoRoot, "dist"));
+if (distStale) {
   execFileSync("npm", ["run", "build"], { cwd: repoRoot, stdio: "inherit" });
 }
 if (!existsSync(distFocusServer) || !existsSync(distShared)) {

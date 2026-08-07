@@ -4,8 +4,12 @@ import { registerPrompts } from "./prompts.js";
 import { registerResources } from "./resources.js";
 import { registerTools } from "./tools.js";
 
-export const SERVER_NAME = "finops-framework";
-export const SERVER_VERSION = "1.0.0";
+// SERVER_VERSION stays a literal: this module is inside the Cloudflare
+// Worker import graph (src/workers/fs-boundary.test.ts), so it cannot read
+// package.json at runtime. tests/index.test.ts asserts the two stay in sync.
+export const SERVER_NAME = "finops-framework-mcp";
+export const SERVER_TITLE = "FinOps Framework MCP";
+export const SERVER_VERSION = "0.9.0";
 
 export interface ServerOptions {
   /** Restores get_actions and the unofficial pre-crawl extension (v1 default: off). */
@@ -31,7 +35,7 @@ export function createServer(
 ): McpServer {
   const experimental = opts.experimental ?? false;
   const server = new McpServer(
-    { name: SERVER_NAME, version: SERVER_VERSION },
+    { name: SERVER_NAME, title: SERVER_TITLE, version: SERVER_VERSION },
     {
       capabilities: {
         resources: {},
@@ -40,15 +44,21 @@ export function createServer(
         completions: {},
       },
       instructions:
-        "FinOps Framework (finops.org) as structured data: 6 principles, 3 phases, 4 domains, " +
-        "22 capabilities with Crawl/Walk/Run maturity assessments, 11 personas, and a KPI library. " +
+        // Counts derived from the artifact so a re-crawl can never leave
+        // the advertised numbers stale.
+        `FinOps Framework (finops.org) as structured data: ${artifact.principles.length} principles, ` +
+        `${artifact.phases.length} phases, ${artifact.domains.length} domains, ` +
+        `${artifact.capabilities.length} capabilities with Crawl/Walk/Run maturity assessments, ` +
+        `${artifact.personas.length} personas, and a KPI library. ` +
         "Start with get_framework_info. Tools are the primary interface; " +
         "finops://framework/* resources hold the same content as full documents. " +
         (experimental
           ? "Unofficial extensions (pre-crawl level, parsed assessment items) are always " +
             "flagged official:false. "
           : "") +
-        "Content © FinOps Foundation, CC BY 4.0, adapted.",
+        "Content © FinOps Foundation, CC BY 4.0, adapted. This server is an independent, " +
+        "unofficial project — FinOps is a trademark of the FinOps Foundation; " +
+        "attribution does not imply endorsement.",
     },
   );
   registerResources(server, artifact, { experimental });

@@ -2,6 +2,12 @@
 
 Canonical instructions for AI coding agents (Claude Code, GitHub Copilot CLI, and any AGENTS.md-aware tool) working in this repository. `CLAUDE.md` imports this file — do not duplicate content there.
 
+> **On a fork without the maintainer harness?** If `./scripts/agentic` exits
+> with "no harness CLI found", you're an external contributor — skip every
+> `./scripts/agentic` command in this file and use the npm commands in
+> `CONTRIBUTING.md` ("Quick start — external contributors"); they cover
+> everything CI checks.
+
 ## What this project is
 
 finops-framework-mcp hosts two MCP (Model Context Protocol) servers that act

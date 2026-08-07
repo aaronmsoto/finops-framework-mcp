@@ -35,16 +35,15 @@
   import anything fs-reachable (`fs-boundary.test.ts` guards this, but only
   for code reachable from that entrypoint — see decisions/open questions on
   the `src/shared/index.ts` barrel).
-- `demo/` is a static browser client calling the deployed Worker; excluded
-  from the format gate (protected-path, owner-approved change needed to
-  add it).
+- `demo/` is a static browser client calling the deployed Worker; it IS in
+  the format gate (`prettier --check src tests demo`, since T-059).
 - Any change touching a prompt/resource/tool must regenerate
   `docs/mcp-surface.md` (`npm run gen:mcp-surface`) — `mcp-surface.test.ts`
   fails on drift.
 
 ## Current focus
 
-- Publish is owner-gated: PR review/merge, `npm publish` both packages,
-  MCP-registry submit, `wrangler deploy` + demo deploy. See
-  activeContext.md for the ordered next-steps list and the post-launch
-  MINOR backlog (`docs/final-status-review.md`).
+- Pre-publish hardening done (T-077, versions at 0.9.0); publish is
+  owner-gated and proceduralized in `docs/release-runbook.md` (manual first
+  publish → trusted publishing via publish.yml → mcp-publisher). See
+  activeContext.md for ordered next steps and the deferred-polish list.

@@ -1,0 +1,59 @@
+name: Bug report
+description: Report a problem with finops-framework-mcp or finops-focus-mcp
+title: "[bug] "
+labels: [bug]
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      options:
+        - finops-framework-mcp
+        - finops-focus-mcp
+        - both / not sure
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Package version (`npx -y <package> --version`), or the git commit if running from source.
+      placeholder: "0.9.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: client
+    attributes:
+      label: MCP client
+      options:
+        - Claude Code
+        - Claude Desktop
+        - Other (say which below)
+    validations:
+      required: true
+  - type: dropdown
+    id: transport
+    attributes:
+      label: Transport
+      options:
+        - stdio (npx / node)
+        - Cloudflare Worker (Streamable HTTP)
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you do (tool/resource/prompt called, arguments passed), what did you expect, what did you get instead?
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Node version (`node -v`), OS.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Logs, stack traces, or anything else relevant.
