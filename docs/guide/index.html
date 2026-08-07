@@ -216,9 +216,10 @@
 <main class="guide-main">
   <p class="eyebrow">Page 1 of 6 · Intro &amp; Getting Started</p>
   <h1>Two MCP servers for FinOps</h1>
-  <p class="lede">This repository ships an agentic interface to the FinOps
-  Foundation's published guidance: one MCP server for the <strong>FinOps
-  Framework</strong>, one for the <strong>FOCUS™ specification</strong>. Both are
+  <p class="lede">This repository ships an independent, unofficial agentic
+  interface to the FinOps Foundation's published guidance: one MCP server for
+  the <strong>FinOps Framework</strong>, one for the
+  <strong>FOCUS™ specification</strong>. Both are
   read-only, offline, version-pinned, and label every derived answer as
   unofficial. This page gets them running in your client and shows the first
   call against each.</p>
@@ -337,8 +338,8 @@
       an MCP client only ever needs a command and its arguments. Node
       <span class="mono">&gt;=22</span> is required by both packages.</p>
       <pre class="tx"><span class="c"># run either server directly — stdio, nothing to configure</span>
-npx finops-framework-mcp
-npx finops-focus-mcp
+npx -y finops-framework-mcp
+npx -y finops-focus-mcp
 
 <span class="c"># or from a clone of this repo</span>
 npm install &amp;&amp; npm run build &amp;&amp; npm run server</pre>
@@ -352,8 +353,8 @@ npm install &amp;&amp; npm run build &amp;&amp; npm run server</pre>
       <span class="mono">get_actions</span>, marked EXPERIMENTAL.</p>
 
       <h3 class="sec">Claude Code — one command per server</h3>
-      <pre class="tx">claude mcp add finops-framework -- npx finops-framework-mcp
-claude mcp add focus-spec -- npx finops-focus-mcp</pre>
+      <pre class="tx">claude mcp add finops-framework -- npx -y finops-framework-mcp
+claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
 
       <h3 class="sec">Claude Code — project-scoped <span class="mono">.mcp.json</span></h3>
       <p style="font-size:0.88rem;">Commit this at the repo root to give
@@ -362,11 +363,11 @@ claude mcp add focus-spec -- npx finops-focus-mcp</pre>
   <span class="k">"mcpServers"</span>: {
     <span class="k">"finops-framework"</span>: {
       <span class="k">"command"</span>: "npx",
-      <span class="k">"args"</span>: ["finops-framework-mcp"]
+      <span class="k">"args"</span>: ["-y", "finops-framework-mcp"]
     },
     <span class="k">"focus-spec"</span>: {
       <span class="k">"command"</span>: "npx",
-      <span class="k">"args"</span>: ["finops-focus-mcp"]
+      <span class="k">"args"</span>: ["-y", "finops-focus-mcp"]
     }
   }
 }</pre>
@@ -376,17 +377,19 @@ claude mcp add focus-spec -- npx finops-focus-mcp</pre>
   <span class="k">"mcpServers"</span>: {
     <span class="k">"finops-framework"</span>: {
       <span class="k">"command"</span>: "npx",
-      <span class="k">"args"</span>: ["finops-framework-mcp"]
+      <span class="k">"args"</span>: ["-y", "finops-framework-mcp"]
     },
     <span class="k">"focus-spec"</span>: {
       <span class="k">"command"</span>: "npx",
-      <span class="k">"args"</span>: ["finops-focus-mcp"]
+      <span class="k">"args"</span>: ["-y", "finops-focus-mcp"]
     }
   }
 }</pre>
       <p style="font-size:0.88rem;">Same shape either way — any generic stdio
       MCP client takes the identical
-      <span class="mono">{"command": "npx", "args": ["finops-focus-mcp"]}</span> pair.</p>
+      <span class="mono">{"command": "npx", "args": ["-y", "finops-focus-mcp"]}</span> pair.
+      (<span class="mono">-y</span> skips npx's first-run install prompt, which can
+      hang non-interactive MCP clients.)</p>
     </div>
   </section>
 
@@ -578,8 +581,8 @@ claude mcp add focus-spec -- npx finops-focus-mcp</pre>
       <div class="takeaway">
         <h3>The one-minute version</h3>
         <p style="margin:0; font-size:0.92rem;">Install both bins
-        (<span class="mono">npx finops-framework-mcp</span>,
-        <span class="mono">npx finops-focus-mcp</span>), register them in your client with
+        (<span class="mono">npx -y finops-framework-mcp</span>,
+        <span class="mono">npx -y finops-focus-mcp</span>), register them in your client with
         the same command/args pair, then start every session with
         <span class="mono">get_framework_info {}</span> and
         <span class="mono">list_versions {}</span>. Ask the framework server <em>what good

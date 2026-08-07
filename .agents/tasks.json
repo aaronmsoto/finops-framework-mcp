@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "5d4dec917bb259ae383f1a91cab78c0068243f1684a881b3af670b63b2eab833",
+  "chainHead": "99a33d831e062887c64f42d7a7d38ee539fd67235e2a6c20d930548d2cc36e98",
   "tasks": [
     {
       "id": "T-001",
@@ -71,7 +71,7 @@
     },
     {
       "id": "T-005",
-      "title": "Delete relationship functionality and bump to schema 2.0.0 (spec §1)",
+      "title": "Delete relationship functionality and bump to schema 2.0.0 (spec \u00a71)",
       "spec": ".agents/specs/v1-official-only.md",
       "acceptance": [
         "src has no infer.ts/graph.ts; no get_prerequisites/get_related tools; no graph resource; types/schemas/artifact loader carry no relationship entities; KPI related_capability_slugs kept",
@@ -90,10 +90,10 @@
     },
     {
       "id": "T-006",
-      "title": "Add markdown compose layer: crawler writes canonical per-page markdown (spec §2)",
+      "title": "Add markdown compose layer: crawler writes canonical per-page markdown (spec \u00a72)",
       "spec": ".agents/specs/v1-official-only.md",
       "acceptance": [
-        "refresh writes data/framework/content/markdown/ per spec §2 layout (22 capabilities, 11 personas, 88 kpis, 6 section docs) with sorted front-matter and canonical headings; files hashed in manifest sha256",
+        "refresh writes data/framework/content/markdown/ per spec \u00a72 layout (22 capabilities, 11 personas, 88 kpis, 6 section docs) with sorted front-matter and canonical headings; files hashed in manifest sha256",
         "compose escaping guard throws on dialect-breaking items; front-matter emit/parse unit tests and per-fixture compose tests pass",
         "double refresh remains byte-idempotent (No changes on second run); gates --tier all pass"
       ],
@@ -109,7 +109,7 @@
     },
     {
       "id": "T-007",
-      "title": "Add derive step: all JSON regenerated from markdown, offline (spec §3)",
+      "title": "Add derive step: all JSON regenerated from markdown, offline (spec \u00a73)",
       "spec": ".agents/specs/v1-official-only.md",
       "acceptance": [
         "cli derive subcommand rebuilds every content/derived JSON from content/markdown with zero network; refresh routes JSON production through the same derive path",
@@ -119,7 +119,7 @@
       "status": "done",
       "evidence": {
         "gates": "pass",
-        "summary": "derive step implemented; gates --tier all pass (169/169 tests); refresh→derive zero diff and derive→derive byte-identical verified live offline",
+        "summary": "derive step implemented; gates --tier all pass (169/169 tests); refresh\u2192derive zero diff and derive\u2192derive byte-identical verified live offline",
         "commit": "b83be93a9c61a82d82d82c4bed2ca5f38f1e91bc",
         "verifiedBy": "gates",
         "completedAt": "2026-07-23T01:43:26.897Z"
@@ -128,7 +128,7 @@
     },
     {
       "id": "T-008",
-      "title": "Experimental flag: hide actions and pre-crawl; official maturity surface (spec §4)",
+      "title": "Experimental flag: hide actions and pre-crawl; official maturity surface (spec \u00a74)",
       "spec": ".agents/specs/v1-official-only.md",
       "acceptance": [
         "default server: tools/list lacks get_actions and includes get_maturity_assessment (verbatim official maturity markdown w/ attribution + resource_link); no pre-crawl in any enum, completion, resource level list, maturity model output, prompt, or instructions",
@@ -147,10 +147,10 @@
     },
     {
       "id": "T-009",
-      "title": "v1 docs, revised evals, npm publish prep (spec §5)",
+      "title": "v1 docs, revised evals, npm publish prep (spec \u00a75)",
       "spec": ".agents/specs/v1-official-only.md",
       "acceptance": [
-        "architecture.md/README updated to v1 surface (no relationships, flag documented, npx quickstart); eval.xml Q1/Q2/Q10 rewritten per spec §5",
+        "architecture.md/README updated to v1 surface (no relationships, flag documented, npx quickstart); eval.xml Q1/Q2/Q10 rewritten per spec \u00a75",
         "package.json un-privated with version 1.0.0, files whitelist, mcpName, repository, prepublishOnly; server.json added; npm pack --dry-run ships only dist+data+README+LICENSE+NOTICE",
         "gates --tier all pass; artifact manifest shows schema_version 2.0.0"
       ],
@@ -376,7 +376,7 @@
       "status": "done",
       "evidence": {
         "gates": "pass",
-        "summary": "isDirectRun now realpath-compares argv[1] to the module path; symlink unit tests + dist-conditional spawn test added; npm pack/install smoke test rerun — .bin entry prints version and serves initialize (was: silent exit 0).",
+        "summary": "isDirectRun now realpath-compares argv[1] to the module path; symlink unit tests + dist-conditional spawn test added; npm pack/install smoke test rerun \u2014 .bin entry prints version and serves initialize (was: silent exit 0).",
         "commit": "e04aecdcb58274a7c65eb1f176130aa13336a1f0",
         "verifiedBy": "gates",
         "completedAt": "2026-07-24T07:04:45.189Z"
@@ -862,7 +862,7 @@
       "title": "Fix 'official' phrasing in focus-spec-mcp README (gate4 C2-fidelity-3)",
       "spec": "docs/critique-4-focus-gate.md",
       "acceptance": [
-        "packages/focus-spec-mcp/README.md no longer calls the sibling package 'the official FinOps Framework server' — 'official' attaches to the upstream Framework/spec, never to this software; grep of both package READMEs, descriptions, and server.json files finds no other 'official' binding to the software itself",
+        "packages/focus-spec-mcp/README.md no longer calls the sibling package 'the official FinOps Framework server' \u2014 'official' attaches to the upstream Framework/spec, never to this software; grep of both package READMEs, descriptions, and server.json files finds no other 'official' binding to the software itself",
         "gates pass (docs-only change; no artifact regen needed)"
       ],
       "status": "done",
@@ -942,7 +942,7 @@
       "status": "done",
       "evidence": {
         "gates": "pass",
-        "summary": "packaging test installs the shim tarball with --prefer-offline; local gates green (379 tests); pushed, PR #9 CI re-triggered — root cause was npm ci not caching the SDK packument, so strict --offline ENOTCACHED'd in CI",
+        "summary": "packaging test installs the shim tarball with --prefer-offline; local gates green (379 tests); pushed, PR #9 CI re-triggered \u2014 root cause was npm ci not caching the SDK packument, so strict --offline ENOTCACHED'd in CI",
         "commit": "0251817033dbea7902ebf13f8fb87906b6e90386",
         "verifiedBy": "gates",
         "completedAt": "2026-08-02T06:51:52.390Z"
@@ -1066,7 +1066,7 @@
       "title": "Architecture periphery: worker entry tests, direct-run guard, notFound dedup, dead code (review R2/3/4/5)",
       "spec": "docs/final-status-review.md",
       "acceptance": [
-        "Pure-function tests for parseAllowedOrigins and loadWorkerData (src/workers/index.ts, data.ts — currently 0% covered)",
+        "Pure-function tests for parseAllowedOrigins and loadWorkerData (src/workers/index.ts, data.ts \u2014 currently 0% covered)",
         "src/crawlers/framework/cli.ts direct-run check uses isDirectRunOf(import.meta.url) from src/shared/direct-run.ts instead of endsWith('cli.js')",
         "The byte-identical notFound() helper (framework/resources.ts ~23-42 = focus/resources.ts ~18-37) is hoisted into src/shared with both servers importing it; existing typo tests still pass",
         "Dead code deleted: parseOverview() in parse/sections.ts (+ its orphaned tests) and the template greet() scaffold in src/index.ts (+ tests/index.test.ts adjusted or removed as part of this authorized cleanup); gates --tier all pass"
@@ -1139,7 +1139,7 @@
       "title": "Usage guide: server reference pages (spec usage-guide-v1 T-B)",
       "spec": ".agents/specs/usage-guide-v1.md",
       "acceptance": [
-        "docs/guide/framework-server.html and focus-server.html per spec pages 2-3: data/version model, grouped tool tours consistent with docs/mcp-surface.md, prompts + resources, worked demo sections (Anomaly Management; BilledCost + 1.0→1.2 diff) with real transcripts; shared chrome + nav; gates pass"
+        "docs/guide/framework-server.html and focus-server.html per spec pages 2-3: data/version model, grouped tool tours consistent with docs/mcp-surface.md, prompts + resources, worked demo sections (Anomaly Management; BilledCost + 1.0\u21921.2 diff) with real transcripts; shared chrome + nav; gates pass"
       ],
       "status": "done",
       "evidence": {
@@ -1156,7 +1156,7 @@
       "title": "Usage guide: three worked-example pages (spec usage-guide-v1 T-C)",
       "spec": ".agents/specs/usage-guide-v1.md",
       "acceptance": [
-        "docs/guide/example-showback.html (Understand Usage & Cost: Allocation + Reporting & Analytics, real showback table computed from the committed official sample), example-esr.html (existing walkthrough restyled, headline numbers re-probed), example-forecasting.html (Crawl→Walk Forecasting maturity journey, verbatim official characteristics, Unit Economics + Forecasting KPIs, FOCUS columns per version) per spec pages 4-6; UNOFFICIAL + CC BY marking; gates pass"
+        "docs/guide/example-showback.html (Understand Usage & Cost: Allocation + Reporting & Analytics, real showback table computed from the committed official sample), example-esr.html (existing walkthrough restyled, headline numbers re-probed), example-forecasting.html (Crawl\u2192Walk Forecasting maturity journey, verbatim official characteristics, Unit Economics + Forecasting KPIs, FOCUS columns per version) per spec pages 4-6; UNOFFICIAL + CC BY marking; gates pass"
       ],
       "status": "done",
       "evidence": {
@@ -1179,7 +1179,7 @@
       "status": "done",
       "evidence": {
         "gates": "pass",
-        "summary": "README gained a Documentation section with a per-page table linking all six guide pages; the mcp-surface GENERATOR (not the generated file) now cross-links docs/guide/ and the file was regenerated; decisions.md records Pages-over-wiki (with the accepted designs-gate warning rationale) and the live-probes-only content rule; activeContext owner checklist gains 'enable GitHub Pages' and confirms dual npm publish. Six pages published as a single-file SPA artifact for owner review (new URL: 640567bf-fe05-41e3-bf26-9609a3887b51 — a new source file always mints a new artifact; the earlier ESR-only artifact is superseded by guide page 5). Journal 20260802-t060-063-usage-guide.md; gates PASS",
+        "summary": "README gained a Documentation section with a per-page table linking all six guide pages; the mcp-surface GENERATOR (not the generated file) now cross-links docs/guide/ and the file was regenerated; decisions.md records Pages-over-wiki (with the accepted designs-gate warning rationale) and the live-probes-only content rule; activeContext owner checklist gains 'enable GitHub Pages' and confirms dual npm publish. Six pages published as a single-file SPA artifact for owner review (new URL: 640567bf-fe05-41e3-bf26-9609a3887b51 \u2014 a new source file always mints a new artifact; the earlier ESR-only artifact is superseded by guide page 5). Journal 20260802-t060-063-usage-guide.md; gates PASS",
         "commit": "f4c0f50fc0ac6d2fe7d42f05090ac23a7d661caa",
         "verifiedBy": "gates",
         "completedAt": "2026-08-02T15:39:11.644Z"
@@ -1277,7 +1277,7 @@
       "status": "done",
       "evidence": {
         "gates": "pass",
-        "summary": "vitest thresholds at baseline 75.6/65.21/75.6/76.72 enforce coverage in npm test (proven: +1 bump exits 1); unbound SKIP-only coverage gate entry removed — strengthening; gates --tier all PASS, reviewer PASS",
+        "summary": "vitest thresholds at baseline 75.6/65.21/75.6/76.72 enforce coverage in npm test (proven: +1 bump exits 1); unbound SKIP-only coverage gate entry removed \u2014 strengthening; gates --tier all PASS, reviewer PASS",
         "commit": "15ee94749fcc35edb3150cc8c3e998852a80abc0",
         "verifiedBy": "gates",
         "completedAt": "2026-08-05T06:00:41.411Z"
@@ -1365,6 +1365,106 @@
     },
     {
       "id": "T-073",
+      "title": "Consume the npm harness via .agentic manifest and npm-first shim",
+      "spec": ".agents/specs/harness-npm-consumption.md",
+      "acceptance": [
+        ".agentic/package.json (sole devDependency @aaronmsoto/agentic-harness), its package-lock.json, and a committed .agentic/.npmrc (@aaronmsoto scope registry line + ${NPM_TOKEN} auth reference) exist; root package.json and package-lock.json are byte-unchanged and npm ci at root succeeds with no registry auth configured",
+        "scripts/agentic resolves .agentic/node_modules/@aaronmsoto/agentic-harness/dist/cli.js first, then root node_modules, then the vendored .agentic/harness/dist/cli.js, and errors actionably naming the install command when none exists; observed behavior cited for npm-resolved and vendored-resolved runs",
+        "agentic.config.json designs/integrity/memory gate commands invoke ./scripts/agentic <cmd> instead of node .agentic/harness/dist/cli.js \u2014 this protected-path gates-block edit is AUTHORIZED by spec harness-npm-consumption; no other agentic.config.json change",
+        "Session prerequisite documented and used: installing the private package requires a read:packages token in NPM_TOKEN (owner-supplied or environment-configured); ./scripts/agentic gates --tier all PASS with the npm copy resolving"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "npm harness installed from GitHub Packages via .agentic manifest; shim npm-first with all three resolution paths observed (priority proven via upgrade-help grep); root manifests byte-unchanged, root npm ci auth-free; gates --tier all PASS on npm copy; reviewer verdict pass",
+        "commit": "7836f5f1b79c99494910e7ab20250174c110b1e0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T05:28:49.539Z"
+      },
+      "hash": "fa5b3c1a8a02bf8e91930eb1b916cb6c4dd71683c3205f6cebe4a4b80c121153"
+    },
+    {
+      "id": "T-074",
+      "title": "Swap governance CI to install the harness from GitHub Packages",
+      "spec": ".agents/specs/harness-npm-consumption.md",
+      "acceptance": [
+        "ci.yml governance job's 'Acquire harness' step runs npm ci --prefix .agentic with NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }} (package access grant is the owner-side prerequisite) instead of ./scripts/bootstrap.sh \u2014 this .github/workflows/ edit is AUTHORIZED by spec harness-npm-consumption; the FORK_PR exit-0 no-op and both product jobs are byte-unchanged",
+        "Workflow YAML parses (actionlint or yq/python yaml load cited); the changed step is the ONLY diff hunk in ci.yml",
+        "Journal records that a green governance run on a real PR is the post-merge observable (requires the owner's package-access grant), and what was verified locally in its place"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Governance CI acquires harness via npm ci --prefix .agentic + GITHUB_TOKEN with job-level packages:read (reviewer caught the zeroed scope, fixed, re-review pass); cache re-keyed to .agentic lockfile; YAML parses, two hunks confined to governance job, gates PASS; green run on a real PR is the post-merge observable",
+        "commit": "756748b3643c48fe1c32feec0607799e285de3ac",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T05:39:42.237Z"
+      },
+      "hash": "ce925795d2870206b403cd550fc91e853a92e24bbbe152566ffe4b5e832c1f01"
+    },
+    {
+      "id": "T-075",
+      "title": "Recompile surfaces with the npm harness and review the drift",
+      "spec": ".agents/specs/harness-npm-consumption.md",
+      "acceptance": [
+        "Baseline captured first: ./scripts/agentic gates --tier all PASS on the pre-upgrade tree, output tail in the journal",
+        "agentic upgrade run with the npm-resolved harness; every changed/created surface (markers, _generated keys, approvals.lock.json, .github/hooks/copilot-cli-policy.json, scripts/hooks/copilot-policy.mjs, settings hook block, ruleset/CODEOWNERS semantic changes) listed in the journal with one sentence each on why it changed \u2014 no blind commit; edits to .claude/settings.json and generated surfaces are AUTHORIZED by spec harness-npm-consumption",
+        "approvals check clean afterwards; gates prints NO version-skew warning; gates --tier all PASS post-upgrade",
+        "approvals.yaml and agentic.config.json gate definitions are untouched by this task"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Surfaces recompiled with npm 0.2.0 after upstream ports: settings.json unchanged, solo ruleset preserved (marker-only diffs), copilot.sh comment-only, lockfile+Copilot-hooks surfaces added; check clean, idempotent, no skew warning, gates --tier all PASS, reviewer verdict pass",
+        "commit": "f240d96fd62611f44f063012811a51374702bc1d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T06:21:26.631Z"
+      },
+      "hash": "2794b55789f003f1993b5dfd788c5cf21af1ad81f6685fdb2e976da66cec6400"
+    },
+    {
+      "id": "T-076",
+      "title": "Delete the vendored harness and prove npm-only parity",
+      "spec": ".agents/specs/harness-npm-consumption.md",
+      "acceptance": [
+        ".agentic/harness/ is fully deleted; scripts/bootstrap.sh installs the harness via npm ci --prefix .agentic (keeping its Node>=20 checks); AGENTS.md harness-development line and architecture/operations doc references updated to the npm package",
+        "approvals.yaml protected_paths no longer lists .agentic/harness/tests/** \u2014 this single-line approvals.yaml edit is AUTHORIZED by spec harness-npm-consumption \u2014 and approvals compile + check run clean after",
+        "git grep -l 'agentic-starter/harness\\|\\.agentic/harness/dist' returns only historical files (journals, specs, decisions, task records) \u2014 no live code, config, docs, or CI references",
+        "npm-only parity proof observed and journaled: gates --tier all PASS, verify PASS, and one loop --runner mock iteration green, all with the vendored copy gone"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Vendored harness deleted; npm-only proven: gates --tier all PASS, verify all checks passed post-commit, mock loop terminal success, acceptance grep zero live hits; approvals.yaml glob removal recompiled clean at 0.2.1; reviewer verdict pass",
+        "commit": "c4f145e680ffb7814347d78056cd795cd513150d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-06T06:42:02.766Z"
+      },
+      "hash": "a0a4563a07bbf108246664d6154a2daaefbe5f9b5f1d8a983a127708d665af44"
+    },
+    {
+      "id": "T-077",
+      "title": "Pre-publish hardening: panel blockers B1-B2 + approved items 1-9",
+      "acceptance": [
+        "fileURLToPath path fix in both bins with space-path regression coverage",
+        "Both server.json validate against 2025-09-29 registry schema (desc<=100, envVars, websiteUrl, 0.9.0)",
+        "Identity/version: SERVER_NAME=finops-framework-mcp|finops-focus-mcp, all versions 0.9.0, sync tests",
+        "Instructions derived from data; npx -y sweep; unofficial phrasing; publish workflow + runbook",
+        "CONTRIBUTING dual-path, CoC (Contributor Covenant 2.1), YAML issue forms, memory hygiene",
+        "Gates pass fast+full; packed tarballs smoke-tested over stdio from space-containing path"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Panel blockers B1/B2 + items 1-9 landed across 9 commits: fileURLToPath fix with space-path regression (packaging test 3/3), both server.json ajv-VALID vs 2025-09-29 schema with env vars + websiteUrl, identity=package names + title + 0.9.0 everywhere with version-sync and DEFAULT_VERSION guard tests, instructions counts derived from data, npx -y in 24 snippets, unofficial trademark phrasing, OIDC publish.yml + release runbook + pack-focus staleness rebuild, CONTRIBUTING external/maintainer split, Contributor Covenant 2.1 + YAML issue forms, memory hygiene. gates --tier all PASS (e2e skipped, no command); packed 0.9.0 tarballs installed in a space-containing dir answered initialize/tools-list with 11 and 9 tools.",
+        "commit": "7336f34fc0e1213cff72d4d17e478b0b69f38ced",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-07T04:22:35.457Z"
+      },
+      "hash": "e98433183f698a0bae0a6db2433b28c3a5898f85f0b03a529d91ac63e9b799fc"
+    },
+    {
+      "id": "T-078",
       "title": "Widen the guide's large-viewport container; fix Data Model card row",
       "acceptance": [
         "At >=1024px the six nav links sit on one line on all six pages, and the Data Model's five cards share one row on framework-server.html",
@@ -1380,7 +1480,7 @@
         "verifiedBy": "gates",
         "completedAt": "2026-08-06T06:20:30.796Z"
       },
-      "hash": "5d4dec917bb259ae383f1a91cab78c0068243f1684a881b3af670b63b2eab833"
+      "hash": "99a33d831e062887c64f42d7a7d38ee539fd67235e2a6c20d930548d2cc36e98"
     }
   ]
 }

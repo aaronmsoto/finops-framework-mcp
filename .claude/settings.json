@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && { [ -f .agentic/harness/dist/cli.js ] && node .agentic/harness/dist/cli.js memory show --session-start || cat .agents/memory/MEMORY.md .agents/memory/activeContext.md 2>/dev/null || true; }",
+            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && { [ -x scripts/agentic ] && scripts/agentic memory show --session-start || cat .agents/memory/MEMORY.md .agents/memory/activeContext.md 2>/dev/null || true; }",
             "timeout": 30
           }
         ]

@@ -1,7 +1,7 @@
 # finops-framework-mcp
 
-An [MCP](https://modelcontextprotocol.io) server that gives AI agents a
-structured, queryable interface to the **official FinOps Framework**
+An unofficial [MCP](https://modelcontextprotocol.io) server that gives AI
+agents a structured, queryable interface to the **FinOps Framework**
 published by the FinOps Foundation at <https://finops.org/framework>: 6
 Principles, 3 Phases, 4 Domains, 22 Capabilities (with Crawl/Walk/Run
 maturity assessments, per-persona activities, and KPIs), 11 Personas, 5
@@ -31,8 +31,11 @@ against its schemas at startup and refuses to start on a bad artifact.
 ## Quickstart
 
 ```bash
-npx finops-framework-mcp
+npx -y finops-framework-mcp
 ```
+
+(`-y` skips npx's first-run install prompt, which can hang non-interactive
+MCP clients; pin a version with `npx -y finops-framework-mcp@latest` or `@0.9`.)
 
 or, from a clone:
 
@@ -43,7 +46,7 @@ npm install && npm run build && npm run server
 Claude Code:
 
 ```bash
-claude mcp add finops-framework -- npx finops-framework-mcp
+claude mcp add finops-framework -- npx -y finops-framework-mcp
 ```
 
 Claude Desktop (`claude_desktop_config.json`):
@@ -53,7 +56,7 @@ Claude Desktop (`claude_desktop_config.json`):
   "mcpServers": {
     "finops-framework": {
       "command": "npx",
-      "args": ["finops-framework-mcp"]
+      "args": ["-y", "finops-framework-mcp"]
     }
   }
 }
@@ -85,9 +88,9 @@ hidden by default and served only when explicitly requested:
 Enable both with an environment variable or flag:
 
 ```bash
-FINOPS_MCP_EXPERIMENTAL=1 npx finops-framework-mcp
+FINOPS_MCP_EXPERIMENTAL=1 npx -y finops-framework-mcp
 # or
-npx finops-framework-mcp --experimental
+npx -y finops-framework-mcp --experimental
 ```
 
 Everything experimental is labeled `official: false` / EXPERIMENTAL wherever

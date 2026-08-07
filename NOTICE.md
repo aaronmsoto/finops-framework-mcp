@@ -84,4 +84,6 @@ its use of the data.
 ## This repository's code
 
 The source code of finops-framework-mcp is licensed under the MIT license —
-see `LICENSE`.
+see `LICENSE`. FinOps™, FinOps Foundation™, and FOCUS™ are trademarks of
+the FinOps Foundation; this repository is an independent, unofficial
+project and is not affiliated with or endorsed by the FinOps Foundation.

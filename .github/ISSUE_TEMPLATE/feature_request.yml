@@ -1,0 +1,32 @@
+name: Feature request
+description: Propose a new tool, resource, prompt, or other improvement
+title: "[feature] "
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      options:
+        - finops-framework-mcp
+        - finops-focus-mcp
+        - both / repo-wide
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What can't you (or your agent) do today? What question goes unanswered?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed shape
+      description: If you have one — tool name, params, example call/response, or resource URI. Note that unofficial derivations must be clearly labeled (`official:false`) per this repo's policy.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds you tried, or why existing tools don't cover it.

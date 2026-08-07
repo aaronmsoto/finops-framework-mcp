@@ -29,7 +29,7 @@ Use GitHub's **Use this template** button so you get a clean history rather than
 
 This does two things:
 
-1. **Builds the harness**: `cd .agentic/harness && npm ci && npm run build`. The harness is self-contained — its only runtime dependency is `yaml` — and compiles to `.agentic/harness/dist/`. Every `./scripts/agentic` invocation is just `node .agentic/harness/dist/cli.js`, so nothing works until this build exists.
+1. **Installs the harness**: `npm ci --prefix .agentic` pulls `@aaronmsoto/agentic-harness` from GitHub Packages (needs a `read:packages` token in `NPM_TOKEN`). Every `./scripts/agentic` invocation resolves that installed CLI, so nothing works until this install exists.
 2. **Installs git hooks** by pointing `core.hooksPath` at `scripts/git-hooks/`:
    - `pre-push` runs `gates --tier fast`, so you cannot push red.
    - `prepare-commit-msg` strips AI-attribution lines (bot `Co-Authored-By` trailers, session links, `Agent:` trailers, "Generated with ..." footers) from commit messages — this repo's policy is a clean, attribution-free git history, and the integrity gate fails any new commit that still carries one.
@@ -163,7 +163,7 @@ through the API must likewise pass an explicit commit body, never the default.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `./scripts/agentic` fails with a missing `.agentic/harness/dist/cli.js` | Harness not built | Run `./scripts/bootstrap.sh` (or `cd .agentic/harness && npm ci && npm run build`). |
+| `./scripts/agentic` fails with "no harness CLI found" | Harness package not installed | Run `./scripts/bootstrap.sh` (or `npm ci --prefix .agentic` with `NPM_TOKEN` set). |
 | Gates red right after `init` | Your project's toolchain isn't installed yet — presets bind gates to tools like eslint/vitest/ruff that `init` tells you to install | Follow the **preset setup steps `init` printed** (rerun `./scripts/agentic init ...` to see them again, or read `.agentic/presets/<name>.json` `setup`). Gates put `node_modules/.bin` on PATH, so a plain dev-dependency install is enough. |
 | A hook blocked an edit to `approvals.yaml`, `.claude/settings.json`, or another protected file | The PreToolUse protect-policy hook is doing its job | Read the hook's message. If you (the human) intend the edit, use the supervised override described in [approvals.md](approvals.md#changing-the-policy); never have the agent work around the hook. |
 | Loop exited `blocked` | 3 consecutive failed iterations on a task | Read `.agents/BLOCKED.md` (failing task, last errors, gate output). Fix the underlying problem or re-scope the task, reset it via `tasks`, and rerun. |

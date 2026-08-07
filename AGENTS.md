@@ -2,6 +2,12 @@
 
 Canonical instructions for AI coding agents (Claude Code, GitHub Copilot CLI, and any AGENTS.md-aware tool) working in this repository. `CLAUDE.md` imports this file — do not duplicate content there.
 
+> **On a fork without the maintainer harness?** If `./scripts/agentic` exits
+> with "no harness CLI found", you're an external contributor — skip every
+> `./scripts/agentic` command in this file and use the npm commands in
+> `CONTRIBUTING.md` ("Quick start — external contributors"); they cover
+> everything CI checks.
+
 ## What this project is
 
 finops-framework-mcp hosts two MCP (Model Context Protocol) servers that act
@@ -37,7 +43,7 @@ via `./scripts/agentic gates`, tests via vitest.
 | Memory hygiene | `./scripts/agentic memory lint` |
 | Status overview | `./scripts/agentic status` |
 
-Harness development: `cd .agentic/harness && npm run test | lint | typecheck | build`.
+Harness lives upstream: this repo consumes `@aaronmsoto/agentic-harness` from GitHub Packages via `.agentic/package.json` (`npm ci --prefix .agentic`); harness development happens in agentic-starter-repo. After `npm update`, run `./scripts/agentic upgrade` to recompile the generated surfaces.
 
 ## Hard rules (each has a deterministic enforcement twin — see .agentic/docs/architecture.md)
 
@@ -57,7 +63,6 @@ Harness development: `cd .agentic/harness && npm run test | lint | typecheck | b
 - Skills: `.claude/skills/` (shared SKILL.md format — Copilot reads these too).
 - Policy: `approvals.yaml` (owner-edited) → compiled by `./scripts/agentic approvals compile`.
 - Full design: `.agentic/docs/architecture.md`. Operations: `.agentic/docs/operations.md`.
-- Creating a NEW project from this template (agent-driven, dual-repo session): follow `.agentic/INSTANTIATE.md`.
 
 ## Conventions
 

@@ -4,11 +4,15 @@
 
 ## Task ID(s)
 
-<!-- e.g. T-014 (from .agents/tasks.json). One task per PR. -->
+<!-- Maintainers: e.g. T-014 (from .agents/tasks.json). One task per PR.
+     External contributors: leave as "n/a" — task tracking is maintainer
+     tooling. -->
 
 ## Evidence
 
-<!-- Paste the relevant tail of `./scripts/agentic gates --tier full` output.
+<!-- Maintainers: paste the relevant tail of `./scripts/agentic gates --tier full`.
+     External contributors: paste the output of the CONTRIBUTING.md quick-start
+     commands (format:check / lint / typecheck / test / build) instead.
      For behavior changes: what did you run, and what did you observe?
      Claims without evidence will be sent back. -->
 
@@ -27,8 +31,11 @@ None.
 
 ## Checklist
 
-- [ ] Gates green locally, including `./scripts/agentic gates --tier full`
-- [ ] Memory bank updated (`.agents/memory/activeContext.md`, `decisions.md` if a decision was made) and journal appended
-- [ ] Exactly one task in this PR; task completed via `./scripts/agentic tasks complete <id>` (hash chain intact)
+- [ ] Checks green locally — maintainers: `./scripts/agentic gates --tier full`;
+      external contributors: the CONTRIBUTING.md quick-start commands (CI runs
+      the same set)
 - [ ] Behavior changes were exercised, not just compiled — evidence pasted above
 - [ ] No tests deleted or weakened; no `.only`/`fit`/`fdescribe` left behind
+- [ ] Maintainers only: memory bank updated and journal appended; exactly one
+      task in this PR, completed via `./scripts/agentic tasks complete <id>`
+      (hash chain intact)

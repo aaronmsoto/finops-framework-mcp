@@ -11,15 +11,13 @@ The published site is the six-page usage guide in [`guide/`](guide/index.html)
 
 ## Prerequisites
 
-- **GitHub Pages must be available for this repository.** It is included for
-  private repos on GitHub Pro / Team / Enterprise, but on the Free plan it
-  requires a public repository. This repo is private, so on Free the setting
-  below will not offer a source at all.
-- On Pro, the repository stays private while the **published site is public**
-  — access-controlled (private) Pages sites are GitHub Enterprise Cloud only.
-  That is the intended posture here: public guide, private repo, and the
-  internal review markdown never leaves the repo because the workflow uploads
-  only `docs/guide/`.
+- **GitHub Pages must be available for this repository.** Public repos get
+  Pages on every plan; private repos need Pro / Team / Enterprise. This repo
+  is public, so availability is not a constraint. (Historical note: the site
+  first launched while the repo was still private on Pro.)
+- The workflow uploads **only `docs/guide/`**, so the published site stays a
+  curated surface even though the whole repository is browsable on
+  github.com.
 - The workflow deploys from `main`, so the content has to be merged there
   first (merging to `main` is a human approval point per `approvals.yaml`).
 
@@ -74,12 +72,13 @@ The six real paths should be `200`.
 
 ## Notes and limits
 
-- **Only `docs/guide/` is published.** The internal review documents
-  (`critique-*.md`, `final-status-review.md`, `eval-results.md`,
-  `research.md`) are not served on the public site. While the repository is
-  private that is the only thing keeping them off the web; if the repository
-  is ever made public they become readable on github.com regardless, because
-  this controls the web site, not repository visibility.
+- **Only `docs/guide/` is published to the site.** The internal review
+  documents (`critique-*.md`, `final-status-review.md`, `eval-results.md`,
+  `research.md`) are not served on Pages; with the repository public they
+  are readable on github.com like any other file (an owner-accepted
+  posture — the development history is deliberately transparent), but they
+  stay out of the curated site because the workflow uploads only
+  `docs/guide/`.
 - Because the rest of `docs/` is off-site, the two guide pages that cite
   `docs/mcp-surface.md` link to the GitHub blob URL on `main` rather than a
   relative path. If `mcp-surface.md` is ever moved or renamed, those two
