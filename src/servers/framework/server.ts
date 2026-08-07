@@ -4,8 +4,12 @@ import { registerPrompts } from "./prompts.js";
 import { registerResources } from "./resources.js";
 import { registerTools } from "./tools.js";
 
-export const SERVER_NAME = "finops-framework";
-export const SERVER_VERSION = "1.0.0";
+// SERVER_VERSION stays a literal: this module is inside the Cloudflare
+// Worker import graph (src/workers/fs-boundary.test.ts), so it cannot read
+// package.json at runtime. tests/index.test.ts asserts the two stay in sync.
+export const SERVER_NAME = "finops-framework-mcp";
+export const SERVER_TITLE = "FinOps Framework MCP";
+export const SERVER_VERSION = "0.9.0";
 
 export interface ServerOptions {
   /** Restores get_actions and the unofficial pre-crawl extension (v1 default: off). */
@@ -31,7 +35,7 @@ export function createServer(
 ): McpServer {
   const experimental = opts.experimental ?? false;
   const server = new McpServer(
-    { name: SERVER_NAME, version: SERVER_VERSION },
+    { name: SERVER_NAME, title: SERVER_TITLE, version: SERVER_VERSION },
     {
       capabilities: {
         resources: {},

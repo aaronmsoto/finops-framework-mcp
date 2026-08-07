@@ -4,8 +4,12 @@ import { registerPrompts } from "./prompts.js";
 import { registerResources } from "./resources.js";
 import { registerTools } from "./tools.js";
 
+// SERVER_VERSION stays a literal: this module is inside the Cloudflare
+// Worker import graph (src/workers/fs-boundary.test.ts), so it cannot read
+// package.json at runtime. server.test.ts asserts the two stay in sync.
 export const SERVER_NAME = "finops-focus-mcp";
-export const SERVER_VERSION = "1.0.0";
+export const SERVER_TITLE = "FinOps FOCUS MCP";
+export const SERVER_VERSION = "0.9.0";
 
 /**
  * Build the MCP server from a loaded FOCUS store (data/focus/, T-029, loaded
@@ -22,7 +26,7 @@ export const SERVER_VERSION = "1.0.0";
  */
 export function createServer(store: FocusStore): McpServer {
   const server = new McpServer(
-    { name: SERVER_NAME, version: SERVER_VERSION },
+    { name: SERVER_NAME, title: SERVER_TITLE, version: SERVER_VERSION },
     {
       capabilities: {
         resources: {},
