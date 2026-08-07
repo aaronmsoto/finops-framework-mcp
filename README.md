@@ -1,7 +1,7 @@
 # finops-framework-mcp
 
-An [MCP](https://modelcontextprotocol.io) server that gives AI agents a
-structured, queryable interface to the **official FinOps Framework**
+An unofficial [MCP](https://modelcontextprotocol.io) server that gives AI
+agents a structured, queryable interface to the **FinOps Framework**
 published by the FinOps Foundation at <https://finops.org/framework>: 6
 Principles, 3 Phases, 4 Domains, 22 Capabilities (with Crawl/Walk/Run
 maturity assessments, per-persona activities, and KPIs), 11 Personas, 5
