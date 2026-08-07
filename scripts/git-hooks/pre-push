@@ -16,8 +16,8 @@ if [ "${AGENTIC_SKIP_GATES:-}" = "1" ]; then
     exit 0
 fi
 
-if [ ! -f "$REPO_ROOT/.agentic/harness/dist/cli.js" ]; then
-    echo "pre-push: WARNING — harness not built (.agentic/harness/dist/cli.js missing); skipping gates." >&2
+if ! ./scripts/agentic --help >/dev/null 2>&1; then
+    echo "pre-push: WARNING — no harness CLI resolvable (npm package not installed); skipping gates." >&2
     echo "pre-push: run ./scripts/bootstrap.sh to enable local gate enforcement. CI will still run the gates." >&2
     exit 0
 fi

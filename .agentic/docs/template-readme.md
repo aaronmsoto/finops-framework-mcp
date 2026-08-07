@@ -2,7 +2,7 @@
 
 A starter template for **agentic software projects**: repositories where AI coding agents — Claude Code and GitHub Copilot CLI — do most of the implementation work inside a supervised, capped, iterative loop, while you (the human owner) keep a small set of explicit approval points: merging to main, deploying, releasing, and changing the policy itself.
 
-The template ships a self-contained Node/TypeScript harness (`.agentic/harness/`), a policy compiler that turns one `approvals.yaml` into every enforcement surface, quality gates defined as data and run identically everywhere, and a git-native memory bank agents read at the start of every session. Nothing load-bearing needs infrastructure: it is all shell commands and committed files.
+The template's harness (consumed here as the `@aaronmsoto/agentic-harness` npm package), a policy compiler that turns one `approvals.yaml` into every enforcement surface, quality gates defined as data and run identically everywhere, and a git-native memory bank agents read at the start of every session. Nothing load-bearing needs infrastructure: it is all shell commands and committed files.
 
 ## Why this exists
 

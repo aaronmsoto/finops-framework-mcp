@@ -106,6 +106,14 @@ jobs:
   governance:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # The workflow-level block grants contents:read only, which zeroes every
+    # other scope — including packages — so this job must restate BOTH: the
+    # Acquire step's GITHUB_TOKEN needs packages:read to install the private
+    # @aaronmsoto/agentic-harness from GitHub Packages (in addition to the
+    # owner-side "Manage Actions access" grant on the package itself).
+    permissions:
+      contents: read
+      packages: read
     env:
       # Fork PRs get no secrets or trusted context, so once the harness is a
       # private npm package it cannot be acquired there. Harness steps consult
@@ -155,18 +163,23 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: .agentic/harness/package-lock.json
+          cache-dependency-path: .agentic/package-lock.json
 
-      # THE harness-acquisition step: when the harness moves to a private
-      # npm package, swapping this bootstrap for an npm install of that
-      # package is the only change this workflow needs.
+      # THE harness-acquisition step: installs @aaronmsoto/agentic-harness
+      # from GitHub Packages via the .agentic manifest (.agentic/.npmrc
+      # expands NPM_TOKEN). Auth is the built-in GITHUB_TOKEN — the package
+      # grants this repo read access via its "Manage Actions access"
+      # setting, so no long-lived secret is involved. Forks get no usable
+      # token for a private package, hence the same no-op as below.
       - name: Acquire harness
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ "$FORK_PR" = "true" ]; then
             echo "Fork PR: harness unavailable to forks; skipping so this check still reports a conclusion."
             exit 0
           fi
-          ./scripts/bootstrap.sh
+          npm ci --prefix .agentic
 
       - name: Run governance gates (designs, integrity, memory)
         run: |

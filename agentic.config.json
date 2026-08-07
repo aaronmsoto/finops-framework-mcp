@@ -29,15 +29,15 @@
       "tier": "fast"
     },
     "designs": {
-      "command": "node .agentic/harness/dist/cli.js design check",
+      "command": "./scripts/agentic design check",
       "tier": "fast"
     },
     "integrity": {
-      "command": "node .agentic/harness/dist/cli.js integrity",
+      "command": "./scripts/agentic integrity",
       "tier": "fast"
     },
     "memory": {
-      "command": "node .agentic/harness/dist/cli.js memory lint",
+      "command": "./scripts/agentic memory lint",
       "tier": "fast"
     },
     "build": {

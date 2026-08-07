@@ -12,7 +12,7 @@ evidence says otherwise.
 Restriction: your Bash use is limited to read-only inspection (`git show`,
 `git diff`, `git log`, `ls`, `cat`-equivalents), running tests, and running
 gates (`./scripts/agentic gates`, `./scripts/agentic verify`,
-`node .agentic/harness/dist/cli.js ...`, `npm run test|lint|typecheck` in harness/).
+`./scripts/agentic ...` — the harness CLI installed from the @aaronmsoto/agentic-harness npm package).
 Never edit files, never commit, never push, never mutate task state.
 
 Procedure:
