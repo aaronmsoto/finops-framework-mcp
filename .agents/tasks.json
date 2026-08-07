@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "a0a4563a07bbf108246664d6154a2daaefbe5f9b5f1d8a983a127708d665af44",
+  "chainHead": "e98433183f698a0bae0a6db2433b28c3a5898f85f0b03a529d91ac63e9b799fc",
   "tasks": [
     {
       "id": "T-001",
@@ -1441,6 +1441,27 @@
         "completedAt": "2026-08-06T06:42:02.766Z"
       },
       "hash": "a0a4563a07bbf108246664d6154a2daaefbe5f9b5f1d8a983a127708d665af44"
+    },
+    {
+      "id": "T-077",
+      "title": "Pre-publish hardening: panel blockers B1-B2 + approved items 1-9",
+      "acceptance": [
+        "fileURLToPath path fix in both bins with space-path regression coverage",
+        "Both server.json validate against 2025-09-29 registry schema (desc<=100, envVars, websiteUrl, 0.9.0)",
+        "Identity/version: SERVER_NAME=finops-framework-mcp|finops-focus-mcp, all versions 0.9.0, sync tests",
+        "Instructions derived from data; npx -y sweep; unofficial phrasing; publish workflow + runbook",
+        "CONTRIBUTING dual-path, CoC (Contributor Covenant 2.1), YAML issue forms, memory hygiene",
+        "Gates pass fast+full; packed tarballs smoke-tested over stdio from space-containing path"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Panel blockers B1/B2 + items 1-9 landed across 9 commits: fileURLToPath fix with space-path regression (packaging test 3/3), both server.json ajv-VALID vs 2025-09-29 schema with env vars + websiteUrl, identity=package names + title + 0.9.0 everywhere with version-sync and DEFAULT_VERSION guard tests, instructions counts derived from data, npx -y in 24 snippets, unofficial trademark phrasing, OIDC publish.yml + release runbook + pack-focus staleness rebuild, CONTRIBUTING external/maintainer split, Contributor Covenant 2.1 + YAML issue forms, memory hygiene. gates --tier all PASS (e2e skipped, no command); packed 0.9.0 tarballs installed in a space-containing dir answered initialize/tools-list with 11 and 9 tools.",
+        "commit": "7336f34fc0e1213cff72d4d17e478b0b69f38ced",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-07T04:22:35.457Z"
+      },
+      "hash": "e98433183f698a0bae0a6db2433b28c3a5898f85f0b03a529d91ac63e9b799fc"
     }
   ]
 }
