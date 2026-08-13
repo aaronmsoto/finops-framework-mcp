@@ -101,11 +101,24 @@ docs/guide/*.html (6 files), evals/*.xml (3 files). Gates pass (413 tests);
 live stdio probes confirm the new param names work and the old ones now
 error loudly (missing-required-field) instead of silently misbehaving.
 
+**Version dropped to 0.1.0 (2026-08-13), superseding T-077's 0.9.0 call.**
+Owner reasoning: an initial supported-beta launch conventionally starts at
+0.1.0, not 0.9.0 (which reads as "nearly 1.0/stable"); 0.x semver signals
+"expect breaking changes between releases," which is the more accurate
+signal pre-1.0. Updated every hardcoded/referenced occurrence: both
+`SERVER_VERSION` literals (`src/servers/{framework,focus}/server.ts`), both
+`package.json`s, both `server.json` manifests (2 version fields each — the
+manifest's own + the nested npm package entry), and the
+`bug_report.yml` issue-template placeholder. `tests/version-sync.test.ts`
+enforces `SERVER_VERSION` ↔ `package.json` on every gate run, so these
+can't drift apart silently. See decisions.md 2026-08-13 for the full
+rationale note.
+
 ## Next steps
 
 1. Owner: merge the T-077 PR, flip the repo public.
 2. Owner: follow `docs/release-runbook.md` — manual first `npm publish` of
-   both packages (0.9.0), configure trusted publishers, submit both
+   both packages (0.1.0), configure trusted publishers, submit both
    `server.json` manifests via `mcp-publisher`.
 3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
    demo/`; smoke-test the demo against the deployed Worker.
@@ -147,6 +160,5 @@ error loudly (missing-required-field) instead of silently misbehaving.
 
 ## Last updated
 
-2026-08-13 — T-079 session: validated `get_kpi_mapping`'s `capability`
-filter (nearest-match error, case-insensitive) and clarified `get_column`'s
-identifying-param description.
+2026-08-13 — Version bump session: dropped all version references from
+0.9.0 to 0.1.0 pre-launch (decisions.md 2026-08-13 amendment to T-077).

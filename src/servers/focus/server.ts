@@ -9,7 +9,7 @@ import { DEFAULT_VERSION, registerTools } from "./tools.js";
 // package.json at runtime. server.test.ts asserts the two stay in sync.
 export const SERVER_NAME = "finops-focus-mcp";
 export const SERVER_TITLE = "FinOps FOCUS MCP";
-export const SERVER_VERSION = "0.9.0";
+export const SERVER_VERSION = "0.1.0";
 
 /**
  * Build the MCP server from a loaded FOCUS store (data/focus/, T-029, loaded

@@ -561,3 +561,35 @@ T-079 (get_kpi_mapping capability-filter validation; get_column/get_attribute
 description clarity) remains separately pending — this rename doesn't
 substitute for it, though get_attribute's description no longer needs the
 `slug`-vs-`column` clarification since the name itself is now unambiguous.
+
+## 2026-08-13 — Drop pre-launch version from 0.9.0 to 0.1.0 (amends T-077)
+
+Decision: change every version reference — both `SERVER_VERSION` literals,
+both `package.json`s, both `server.json` manifests (manifest-level and
+nested npm-package-level fields), and the `bug_report.yml` issue-template
+placeholder — from `0.9.0` to `0.1.0`. This narrowly amends T-077's
+2026-08-07 "ALL versions moved to 0.9.0" call; nothing else about that
+pre-publish hardening pass is revisited.
+
+Rationale (owner call): an initial supported-beta launch conventionally
+starts at 0.1.0. 0.9.0 reads as "nearly stable, close to 1.0" — the
+opposite of what a first, still-settling public release should signal.
+0.x semver's whole point is "expect breaking changes between minor
+versions"; starting at 0.1.0 leaves that signal fully available for the
+run-up to 1.0, where 0.9.0 would have implied 1.0 is imminent. As with
+T-081's param renames, this costs nothing today: no git tag exists yet and
+`docs/release-runbook.md`'s manual first-publish step is still open, so no
+external consumer has observed 0.9.0.
+
+Alternatives considered:
+
+- **Keep 0.9.0.** Rejected per the above — signals the wrong maturity level
+  for a first beta-ish launch.
+- **Start at 0.0.1 or 0.0.0.** Rejected: reads as pre-alpha/scaffold-only,
+  understating a repo that already has a full evaluated tool surface,
+  Worker deployment, and a published demo; 0.1.0 is the more standard
+  "usable initial beta" convention.
+
+`tests/version-sync.test.ts` already enforces `SERVER_VERSION` ↔
+`package.json` per server on every gate run, so a future version bump that
+misses one side fails CI rather than drifting silently.
