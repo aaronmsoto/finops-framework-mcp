@@ -1513,6 +1513,19 @@
         "completedAt": "2026-08-13T03:03:05.175Z"
       },
       "hash": "0022aba9545c35f9f2e4bbcf3b4aef7ba3e6dac41ff32d7ca4e0c47685b006a8"
+    },
+    {
+      "id": "T-081",
+      "title": "Rename get_capability slug→capability and get_attribute slug→attribute",
+      "acceptance": [
+        "decisions.md records a narrow amendment to the 2026-08-07 no-rename ruling for these two single-param, no-collision tools, citing pre-publish status (no git tag, no npm release yet) as the changed premise",
+        "get_capability's input param renamed slug→capability in src/servers/framework/tools.ts; all call sites (search_framework description, render.ts nav, server.test.ts, demo-requests.test.ts) updated",
+        "get_attribute's input param renamed slug→attribute in src/servers/focus/tools.ts; all call sites (render.ts nav, server.test.ts) updated",
+        "docs/mcp-surface.md regenerated and mcp-surface.test.ts passes; docs/guide/*.html usage examples and both READMEs updated where they name the old param; ./scripts/agentic gates passes"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

@@ -88,7 +88,7 @@ describe("demo requests against the worker fetch handler", () => {
     expect(rateOptimization?.title).toBe("Rate Optimization");
     expect(rateOptimization?.domain).toBe("optimize-usage-and-cost");
 
-    // Step 2: get_capability(slug, include: [summary, kpis])
+    // Step 2: get_capability(capability, include: [summary, kpis])
     const step2 = STEPS[1]!;
     expect(step2.key).toBe("get-capability");
     const capResult = await call(

@@ -163,7 +163,7 @@ export function overviewMd(
     `- \`list_versions\` — available spec versions (no parameters).\n` +
     `- \`list_columns\` (filter by \`feature_level\`/\`column_type\`), ` +
     `\`get_column(column)\` — column records.\n` +
-    `- \`get_attribute(slug)\` — cross-cutting formatting/naming rules.\n` +
+    `- \`get_attribute(attribute)\` — cross-cutting formatting/naming rules.\n` +
     `- \`get_requirements(column)\` — a column's normative MUST/SHOULD ` +
     `bullets, verbatim.\n` +
     `- \`search_focus(query)\` — keyword search over one version's ` +

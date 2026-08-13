@@ -291,7 +291,7 @@
       <p class="srcline">Forecasting sits in the <span class="mono">quantify-business-value</span>
       domain, alongside Budgeting, KPIs &amp; Benchmarking, Planning &amp; Estimating and
       Unit Economics — five capabilities in that domain.</p>
-      <p class="callnote">framework · get_maturity_assessment {capability: "forecasting"} · get_capability {slug: "forecasting", include: ["summary","definition","kpis","headline_groups"]} · list_capabilities {domain: "quantify-business-value"}</p>
+      <p class="callnote">framework · get_maturity_assessment {capability: "forecasting"} · get_capability {capability: "forecasting", include: ["summary","definition","kpis","headline_groups"]} · list_capabilities {domain: "quantify-business-value"}</p>
     </div>
   </section>
 
@@ -401,7 +401,7 @@
       <div class="quote">“Develop and track metrics that provide an understanding of how
       an organization’s technology use and technology management practices impact the
       value of the organization’s products, services, or activities.”</div>
-      <p class="callnote">framework · get_capability {slug: "planning-estimating" | "budgeting" | "allocation" | "anomaly-management" | "rate-optimization" | "usage-optimization" | "unit-economics", include: ["summary"]} · get_kpis {capability: "forecasting", limit: 100}</p>
+      <p class="callnote">framework · get_capability {capability: "planning-estimating" | "budgeting" | "allocation" | "anomaly-management" | "rate-optimization" | "usage-optimization" | "unit-economics", include: ["summary"]} · get_kpis {capability: "forecasting", limit: 100}</p>
     </div>
   </section>
 
@@ -496,7 +496,7 @@
       Economics KPIs you can forecast <em>against</em>; treating them as forecast inputs
       is a practitioner choice, not published guidance.
       <span class="badge derived">reading</span></p>
-      <p class="callnote">framework · get_kpis {capability: "unit-economics", featured_only: true} → total 5 · get_capability {slug: "unit-economics", include: ["summary","definition"]}</p>
+      <p class="callnote">framework · get_kpis {capability: "unit-economics", featured_only: true} → total 5 · get_capability {capability: "unit-economics", include: ["summary","definition"]}</p>
     </div>
   </section>
 
@@ -607,7 +607,7 @@
           forecasting depends on being able to “fully categorize and allocate technology
           costs.” Measure your unallocated share first; if it is large, the Allocation
           work is the forecasting work.
-          <span class="mono" style="font-size:0.74rem;">get_capability {slug:"allocation"}</span></li>
+          <span class="mono" style="font-size:0.74rem;">get_capability {capability:"allocation"}</span></li>
 
           <li><b>Days 10–20 · Pick the period grain and freeze it.</b> Decide whether you
           forecast on billing periods or charge periods and write it down. Both are

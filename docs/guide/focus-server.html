@@ -244,7 +244,7 @@
     <tbody>
       <tr><td class="mono">get_column</td><td>Full record for one column: description, content constraints (type, feature level, nulls, data type, value format), allowed values, normative requirements, introduced-in version.</td><td class="mono">column (required, ID or slug); version (default "1.2")</td></tr>
       <tr><td class="mono">list_columns</td><td>All columns for one version, optionally filtered by feature_level or column_type. Default limit returns the full list in one call (43 in 1.0, 57 in 1.2).</td><td class="mono">version (default "1.2"); feature_level: Mandatory|Conditional|Recommended|unknown; column_type: Metric|Dimension|unknown; limit (≤100, default 100); cursor</td></tr>
-      <tr><td class="mono">get_attribute</td><td>Full record for one cross-cutting attribute (naming/formatting conventions like currency codes, datetime format, key-value format): description, normative requirements, exceptions.</td><td class="mono">slug (required, ID or slug); version (default "1.2")</td></tr>
+      <tr><td class="mono">get_attribute</td><td>Full record for one cross-cutting attribute (naming/formatting conventions like currency codes, datetime format, key-value format): description, normative requirements, exceptions.</td><td class="mono">attribute (required, ID or slug); version (default "1.2")</td></tr>
     </tbody>
   </table></div>
 

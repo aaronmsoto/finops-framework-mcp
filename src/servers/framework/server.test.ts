@@ -189,21 +189,21 @@ describe("tools", () => {
   });
 
   it("get_capability defaults to small include and links the resource", async () => {
-    const res = await call("get_capability", { slug: "allocation" });
+    const res = await call("get_capability", { capability: "allocation" });
     const sections = res.structuredContent?.sections as Record<string, unknown>;
     expect(Object.keys(sections).sort()).toEqual(["definition_md", "summary"]);
     expect(res.content.some((c) => c.type === "resource_link")).toBe(true);
   });
 
   it("get_capability unknown slug suggests nearest matches in-band", async () => {
-    const res = await call("get_capability", { slug: "allocaton" });
+    const res = await call("get_capability", { capability: "allocaton" });
     expect(res.isError).toBe(true);
     expect(res.content[0]?.text).toContain("allocation");
   });
 
   it("get_capability unknown persona filter errors with nearest matches", async () => {
     const res = await call("get_capability", {
-      slug: "allocation",
+      capability: "allocation",
       include: ["activities"],
       persona: "financee",
     });
@@ -215,12 +215,12 @@ describe("tools", () => {
   it("get_capability persona filter is case-insensitive", async () => {
     const [upper, lower] = await Promise.all([
       call("get_capability", {
-        slug: "allocation",
+        capability: "allocation",
         include: ["activities"],
         persona: "Finance",
       }),
       call("get_capability", {
-        slug: "allocation",
+        capability: "allocation",
         include: ["activities"],
         persona: "finance",
       }),
@@ -315,7 +315,7 @@ describe("tools", () => {
 
   it("leaf tools carry CC BY attribution in text (critique-2 M7')", async () => {
     for (const [tool, args] of [
-      ["get_capability", { slug: "allocation" }],
+      ["get_capability", { capability: "allocation" }],
       ["get_maturity_assessment", { capability: "allocation", level: "crawl" }],
       ["get_maturity_model", {}],
     ] as const) {
@@ -476,7 +476,7 @@ describe("tools", () => {
       ["get_framework_info", {}],
       ["search_framework", { query: "allocation" }],
       ["list_capabilities", {}],
-      ["get_capability", { slug: "allocation" }],
+      ["get_capability", { capability: "allocation" }],
       ["get_maturity_assessment", { capability: "allocation" }],
       ["get_kpis", { slug: "allocation-accuracy-index-aai" }],
       [

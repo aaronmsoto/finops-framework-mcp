@@ -27,7 +27,7 @@ export function listCapabilitiesRequest(id) {
 
 export function getCapabilityRequest(id) {
   return toolCallRequest(id, "get_capability", {
-    slug: CAPABILITY_SLUG,
+    capability: CAPABILITY_SLUG,
     include: ["summary", "kpis"],
   });
 }

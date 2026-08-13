@@ -490,7 +490,7 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
       <span class="mono">source_url</span> pointing at the page the text came from,
       and the CC BY 4.0 attribution footer.</p>
       <pre class="tx"><span class="c">$ node evals/framework/mcp-call.mjs call get_capability \
-    '{"slug":"anomaly-management","include":["summary"]}'</span>
+    '{"capability":"anomaly-management","include":["summary"]}'</span>
 {
   "content": [
     {
@@ -517,7 +517,7 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
     "license": "CC-BY-4.0"
   }
 }</pre>
-      <p class="callnote">framework · get_capability {slug: "anomaly-management", include: ["summary"]}</p>
+      <p class="callnote">framework · get_capability {capability: "anomaly-management", include: ["summary"]}</p>
 
       <h3 class="sec">Don't know a slug? Don't guess</h3>
       <p style="font-size:0.9rem;">Both servers ship a ranked keyword search

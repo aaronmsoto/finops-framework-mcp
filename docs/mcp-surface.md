@@ -116,7 +116,7 @@ List capabilities
 
 Get one capability
 
-- `slug`, required, string — Capability slug, e.g. 'allocation'
+- `capability`, required, string — Capability slug, e.g. 'allocation'
 - `include`, optional, array<enum(summary|definition|maturity|activities|kpis|headline_groups|inputs_outputs)> — Sections to return (default [summary, definition])
 - `persona`, optional, string — With include:['activities']: return only this persona's activities
 
@@ -284,7 +284,7 @@ Search FOCUS columns and attributes
 
 Get one FOCUS attribute
 
-- `slug`, required, string — Attribute ID or slug, e.g. 'datetime_format'
+- `attribute`, required, string — Attribute ID or slug, e.g. 'datetime_format'
 - `version`, optional, string — FOCUS spec version (1.0|1.2); default "1.2"
 
 #### `get_requirements`

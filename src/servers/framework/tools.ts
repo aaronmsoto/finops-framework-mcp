@@ -121,7 +121,7 @@ export function registerTools(
     {
       title: "Search the framework",
       description:
-        "Ranked keyword search over every entity (capabilities, KPIs, personas, principles, phases, domains, technology categories, maturity levels, scopes). Returns slug + uri per hit. Feed the slug to `get_capability(slug: …)` or `get_kpis(slug: …)`, or pass it as `capability: <slug>` to get_maturity_assessment/assess_maturity_path/map_personas and as `persona: <slug>` where a persona filter is accepted. Other entity types (principles, phases, domains, technology categories, scopes) are read via get_entity(entity_type: …) or the hit's finops:// resource uri. Use this whenever you don't already know a slug.",
+        "Ranked keyword search over every entity (capabilities, KPIs, personas, principles, phases, domains, technology categories, maturity levels, scopes). Returns slug + uri per hit. Feed the slug to `get_kpis(slug: …)`, or pass it as `capability: <slug>` to get_capability/get_maturity_assessment/assess_maturity_path/map_personas and as `persona: <slug>` where a persona filter is accepted. Other entity types (principles, phases, domains, technology categories, scopes) are read via get_entity(entity_type: …) or the hit's finops:// resource uri. Use this whenever you don't already know a slug.",
       inputSchema: {
         query: z
           .string()
@@ -316,7 +316,7 @@ export function registerTools(
       description:
         "One capability's content, section-selectable via `include` to control size. Default include is [summary, definition] (~1-2k tokens). Approximate extra cost per section: maturity ~2.5k tokens, activities ~3k (filter with `persona`), kpis ~1k, headline_groups/inputs_outputs <1k; requesting ALL sections is roughly 7k tokens — prefer the finops://framework/capabilities/{slug} resource for the full document.",
       inputSchema: {
-        slug: z.string().describe("Capability slug, e.g. 'allocation'"),
+        capability: z.string().describe("Capability slug, e.g. 'allocation'"),
         include: z
           .array(z.enum(INCLUDE))
           .optional()
@@ -339,8 +339,8 @@ export function registerTools(
       },
       annotations: RO,
     },
-    ({ slug, include, persona }) => {
-      const c = findCapability(slug);
+    ({ capability, include, persona }) => {
+      const c = findCapability(capability);
       if (isErr(c)) return c;
       const inc =
         include && include.length > 0 ? include : ["summary", "definition"];

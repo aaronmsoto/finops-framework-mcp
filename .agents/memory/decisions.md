@@ -518,3 +518,46 @@ Alternatives considered:
 The genuine defects found during the investigation (FOCUS
 `get_kpi_mapping`'s unvalidated `capability` filter; `get_attribute`
 description clarity vs `get_column`) are tracked as T-079.
+
+## 2026-08-13 — Amend the no-rename ruling: `get_capability`→`capability`, `get_attribute`→`attribute` (T-081)
+
+Decision: narrowly reopen the 2026-08-07 "no param renames" ruling for
+exactly two params, and rename them: `get_capability`'s `slug` input param
+becomes `capability`; FOCUS `get_attribute`'s `slug` input param becomes
+`attribute`. Everything else the 2026-08-07 decision covers (`get_kpis`'
+`slug`+`capability`, `map_personas`' `persona`+`capability`,
+`get_kpi_mapping`'s `kpi`+`capability`, FOCUS `column`) is unchanged — those
+genuinely need role-distinct names to avoid ambiguity between two
+independent slug-typed filters on the same call.
+
+Rationale: a live Q&A session surfaced that the 2026-08-07 decision's own
+stated rule ("`slug` = the fetched entity's own identifier; `capability` =
+always a filter on another tool's output") doesn't hold across the surface
+— `get_actions`, `get_maturity_assessment`, and `assess_maturity_path` all
+use `capability` as their sole *required* identifying param, structurally
+identical to what `get_capability`'s `slug` does. So `get_capability` was
+the actual outlier against its own true siblings, not the reverse; same
+shape one level down between FOCUS's `get_column` (`column`, ID-or-slug)
+and `get_attribute` (generic `slug`, also ID-or-slug). Both renames are
+single-param tools with no collision risk. The 2026-08-07 ruling's
+breaking-change rationale no longer holds either: no git tag exists and
+`docs/release-runbook.md`'s manual first-publish step was still open as of
+this decision — nothing external depends on today's schema, so this is the
+cheapest point at which to ever make this change.
+
+Alternatives considered:
+
+- **Leave as originally ruled (no renames at all).** Rejected: the
+  inconsistency this reopens is real, not cosmetic, and costless to fix
+  pre-publish; deferring it means paying full breaking-change cost later
+  for the same fix, or living with two known outliers forever.
+- **Rename get_kpis/map_personas/get_kpi_mapping's `capability` filters to
+  something else for full uniformity.** Rejected: not raised, and those
+  three still have the genuine two-slug-types-per-call collision the
+  2026-08-07 decision correctly identified — `capability` there is
+  filter-role naming, not an outlier.
+
+T-079 (get_kpi_mapping capability-filter validation; get_column/get_attribute
+description clarity) remains separately pending — this rename doesn't
+substitute for it, though get_attribute's description no longer needs the
+`slug`-vs-`column` clarification since the name itself is now unambiguous.

@@ -153,7 +153,7 @@ describe("tools", () => {
   });
 
   it("get_attribute returns the full record with requirements", async () => {
-    const res = await call("get_attribute", { slug: "CurrencyFormat" });
+    const res = await call("get_attribute", { attribute: "CurrencyFormat" });
     expect(res.isError).toBeFalsy();
     expect(res.structuredContent?.spec_version).toBe("1.2");
     const attribute = res.structuredContent?.attribute as {
@@ -166,7 +166,7 @@ describe("tools", () => {
   });
 
   it("get_attribute's example slug from its own tool description resolves at the default version", async () => {
-    const res = await call("get_attribute", { slug: "datetime_format" });
+    const res = await call("get_attribute", { attribute: "datetime_format" });
     expect(res.isError).toBeFalsy();
     expect(res.structuredContent?.spec_version).toBe("1.2");
     const attribute = res.structuredContent?.attribute as { id: string };
@@ -175,7 +175,7 @@ describe("tools", () => {
 
   it("get_attribute resolves version-specific attribute ids (renamed across versions)", async () => {
     const res = await call("get_attribute", {
-      slug: "CurrencyCodeFormat",
+      attribute: "CurrencyCodeFormat",
       version: "1.0",
     });
     expect(res.isError).toBeFalsy();
@@ -184,13 +184,15 @@ describe("tools", () => {
   });
 
   it("get_attribute suggests a nearest match for an unknown slug", async () => {
-    const res = await call("get_attribute", { slug: "CurrencyFromat" });
+    const res = await call("get_attribute", { attribute: "CurrencyFromat" });
     expect(res.isError).toBe(true);
     expect(res.content[0]?.text).toMatch(/Did you mean/);
   });
 
   it("get_attribute points at the other version when the slug only exists there", async () => {
-    const res = await call("get_attribute", { slug: "CurrencyCodeFormat" });
+    const res = await call("get_attribute", {
+      attribute: "CurrencyCodeFormat",
+    });
     expect(res.isError).toBe(true);
     expect(res.content[0]?.text).toContain("does not exist in FOCUS 1.2");
     expect(res.content[0]?.text).toContain("it exists in FOCUS 1.0");
@@ -777,7 +779,7 @@ describe("outputSchema conformance", () => {
       ["get_column", { column: "BilledCost" }],
       ["list_columns", { limit: 5 }],
       ["search_focus", { query: "cost" }],
-      ["get_attribute", { slug: "CurrencyFormat" }],
+      ["get_attribute", { attribute: "CurrencyFormat" }],
       ["get_requirements", { column: "BilledCost" }],
       ["compare_versions", {}],
       ["compare_versions", { column: "BillingAccountType" }],

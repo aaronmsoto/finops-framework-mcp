@@ -255,7 +255,7 @@
   <div class="tbl-wrap"><table>
     <thead><tr><th>Tool</th><th>Purpose</th><th>Key params</th></tr></thead>
     <tbody>
-      <tr><td class="mono">get_capability</td><td>One capability's content, section-selectable to control size (default [summary, definition] ≈1–2k tokens; all sections ≈7k).</td><td class="mono">slug (required); include: summary|definition|maturity|activities|kpis|headline_groups|inputs_outputs; persona (filters activities)</td></tr>
+      <tr><td class="mono">get_capability</td><td>One capability's content, section-selectable to control size (default [summary, definition] ≈1–2k tokens; all sections ≈7k).</td><td class="mono">capability (required); include: summary|definition|maturity|activities|kpis|headline_groups|inputs_outputs; persona (filters activities)</td></tr>
       <tr><td class="mono">get_kpis</td><td>Full KPI records: description, formula + data sources, related capabilities, featured-on list. Single lookup or filtered/paged library browse.</td><td class="mono">slug, capability, featured_only (default false), limit (≤100, default 25), cursor</td></tr>
       <tr><td class="mono">get_maturity_assessment</td><td>Official maturity assessment prose for a capability, verbatim, at one level or all three.</td><td class="mono">capability (required); level: crawl|walk|run (omit for all three)</td></tr>
       <tr><td class="mono">get_maturity_model</td><td>The official Crawl/Walk/Run maturity model itself — capability-agnostic characteristics and sample goals/KPIs per level. No params.</td><td class="mono">—</td></tr>
@@ -373,7 +373,7 @@
       and manage unexpected cost events in a timely manner […] Effective Allocation
       metadata are critical to effective anomaly detection […] Use of automated, machine
       learning–based anomaly detection is typical.” Domain: <span class="mono">understand-usage-and-cost</span>.</p>
-      <p class="callnote">framework · get_capability {slug: "anomaly-management", include: ["summary","definition"]}</p>
+      <p class="callnote">framework · get_capability {capability: "anomaly-management", include: ["summary","definition"]}</p>
     </div>
   </section>
 

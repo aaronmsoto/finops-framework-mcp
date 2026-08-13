@@ -51,7 +51,7 @@ export function overviewMd(artifact: Artifact, experimental = false): string {
     `- Orientation: \`get_framework_info\` (no parameters).\n` +
     `- Look up anything by keyword: \`search_framework(query)\`.\n` +
     `- Browse: \`list_capabilities\` (filter by \`domain\` or \`persona\`), ` +
-    `then \`get_capability(slug)\` with an \`include\` list to control size.\n` +
+    `then \`get_capability(capability)\` with an \`include\` list to control size.\n` +
     `- Maturity work: \`get_maturity_assessment(capability)\` (official ` +
     `assessment text per level)` +
     (experimental

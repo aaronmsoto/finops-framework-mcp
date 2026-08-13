@@ -501,9 +501,9 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     {
       title: "Get one FOCUS attribute",
       description:
-        "Full record for one cross-cutting FOCUS attribute (naming/formatting conventions like currency codes, datetime format, key-value format): description, normative requirements, exceptions. Look up by the `slug` parameter — an attribute ID or its lowercase slug, e.g. 'datetime_format'. Attribute names can change between versions; discover current slugs via search_focus with entity_types=['attribute'].",
+        "Full record for one cross-cutting FOCUS attribute (naming/formatting conventions like currency codes, datetime format, key-value format): description, normative requirements, exceptions. Look up by the `attribute` parameter — an attribute ID or its lowercase slug, e.g. 'datetime_format'. Attribute names can change between versions; discover current slugs via search_focus with entity_types=['attribute'].",
       inputSchema: {
-        slug: z
+        attribute: z
           .string()
           .describe("Attribute ID or slug, e.g. 'datetime_format'"),
         version: z
@@ -520,10 +520,10 @@ export function registerTools(server: McpServer, store: FocusStore): void {
       },
       annotations: RO,
     },
-    ({ slug, version }) => {
+    ({ attribute, version }) => {
       const resolved = resolveVersion(version);
       if (isErr(resolved)) return resolved;
-      const a = findAttribute(resolved.artifact, resolved.version, slug);
+      const a = findAttribute(resolved.artifact, resolved.version, attribute);
       if (isErr(a)) return a;
       const structured = {
         spec_version: resolved.version,

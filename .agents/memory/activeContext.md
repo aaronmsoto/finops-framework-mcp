@@ -62,21 +62,39 @@ solo_maintainer + ai_attribution toggles working, Phase C npm-harness
 complete on @aaronmsoto/agentic-harness@0.2.1) is unchanged — see journal
 20260806-* files.
 
-**T-080 in progress (2026-08-07):** description audit across both servers
+**T-080 complete (2026-08-07):** description audit across both servers
 (6 genuine inaccuracies + 10 friction fixes) implemented — completable
 ordering bug on the map-personas persona arg, param-naming guidance in
 search_framework + both overview navs, get_capability persona validation,
 findAttribute cross-version hint, and assorted description corrections.
-Gates pass, live stdio probes verified; reviewer verdict + tasks complete
-pending (first reviewer run lost to a session interruption).
+Gates pass (413 tests), live stdio probes verified, reviewer verdict PASS,
+pushed to claude/session-k75rxy.
 
-**T-079 added (2026-08-07):** live MCP testing surfaced `slug` vs
-`capability` param friction; investigation confirmed the naming is a
-deliberate role convention (decisions.md 2026-08-07 — no renames), but found
-two real defects now tracked as T-079: FOCUS `get_kpi_mapping`'s
-`capability` filter silently returns 0 results on unknown/wrong-cased
-values (no findCapability-style validation or nearest-match hints), and
-`get_attribute`/`get_column` description clarity.
+**T-079 added (2026-08-07), still pending:** live MCP testing surfaced
+`slug` vs `capability` param friction; investigation confirmed most of the
+naming is a deliberate role convention (decisions.md 2026-08-07 — no
+renames), but found two real defects tracked as T-079: FOCUS
+`get_kpi_mapping`'s `capability` filter silently returns 0 results on
+unknown/wrong-cased values (no findCapability-style validation or
+nearest-match hints), and `get_column` description clarity (its
+`get_attribute` half is now moot — see T-081).
+
+**T-081 complete (2026-08-13):** a follow-up Q&A session found the
+2026-08-07 decision's own stated rule didn't hold — `get_actions`,
+`get_maturity_assessment`, `assess_maturity_path` already use `capability`
+as their sole required param, the same role `get_capability`'s `slug`
+played, making `get_capability` the actual outlier (and `get_attribute`'s
+generic `slug` vs `get_column`'s `column` the same shape in FOCUS). Since
+neither param has a collision risk and nothing is published yet (no git
+tag, `docs/release-runbook.md` still open), the ruling was narrowly
+reopened (decisions.md 2026-08-13): `get_capability`'s `slug`→`capability`,
+`get_attribute`'s `slug`→`attribute`. Renamed across both tool schemas, all
+call sites (server.test.ts ×2, demo-requests.test.ts, demo/requests.js —
+the live Worker demo's request builder), both render.ts navs,
+search_framework's description, docs/mcp-surface.md (regenerated),
+docs/guide/*.html (6 files), evals/*.xml (3 files). Gates pass (413 tests);
+live stdio probes confirm the new param names work and the old ones now
+error loudly (missing-required-field) instead of silently misbehaving.
 
 ## Next steps
 
@@ -124,7 +142,5 @@ values (no findCapability-style validation or nearest-match hints), and
 
 ## Last updated
 
-2026-08-07 — T-077 pre-publish hardening session (review panel findings
-implemented; versions at 0.9.0; publish procedure in
-docs/release-runbook.md), then main→dev merge reconciliation
-(T-073(main) → T-078 renumbering) to unblock rolling PR #17.
+2026-08-13 — T-081 session: reopened and closed the `get_capability`/
+`get_attribute` naming outlier (decisions.md 2026-08-13 amendment).
