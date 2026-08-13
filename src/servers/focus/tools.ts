@@ -277,7 +277,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     {
       title: "Get one FOCUS column",
       description:
-        "Full record for one FOCUS column: description, content constraints (type, feature level, nulls, data type, value format), allowed values, normative requirements, and the version it was introduced in. Look up by Column ID (e.g. 'BilledCost') or its lowercase slug.",
+        "Full record for one FOCUS column: description, content constraints (type, feature level, nulls, data type, value format), allowed values, normative requirements, and the version it was introduced in. Look up by the `column` parameter — a Column ID or its lowercase slug, e.g. 'BilledCost'.",
       inputSchema: {
         column: z.string().describe("Column ID or slug, e.g. 'BilledCost'"),
         version: z
@@ -827,8 +827,22 @@ export function registerTools(server: McpServer, store: FocusStore): void {
 
       let entries = store.kpiMapping.kpis;
       if (capability) {
+        const needle = capability.toLowerCase();
+        const capabilitySlugs = [
+          ...new Set(
+            store.kpiMapping.kpis.flatMap((k) => k.related_capability_slugs),
+          ),
+        ];
+        if (!capabilitySlugs.some((s) => s.toLowerCase() === needle)) {
+          const near = nearestMatches(capability, capabilitySlugs);
+          return err(
+            `Unknown capability "${capability}" in the KPI mapping.` +
+              (near.length ? ` Did you mean: ${near.join(", ")}?` : "") +
+              ` Call get_kpi_mapping with no \`capability\` to list every mapped KPI.`,
+          );
+        }
         entries = entries.filter((k) =>
-          k.related_capability_slugs.includes(capability),
+          k.related_capability_slugs.some((s) => s.toLowerCase() === needle),
         );
       }
       const rows = entries

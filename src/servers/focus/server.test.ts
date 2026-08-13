@@ -358,12 +358,20 @@ describe("get_kpi_mapping", () => {
     }
   });
 
-  it("an unknown capability slug returns an empty, non-error result", async () => {
+  it("an unknown capability slug errors with nearest-match suggestions", async () => {
     const res = await call("get_kpi_mapping", {
-      capability: "not-a-real-capability",
+      capability: "forecastin",
     });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(/Unknown capability/);
+    expect(res.content[0]?.text).toContain("forecasting");
+  });
+
+  it("capability matching is case-insensitive", async () => {
+    const res = await call("get_kpi_mapping", { capability: "Forecasting" });
     expect(res.isError).toBeFalsy();
-    expect(res.structuredContent?.total).toBe(0);
+    const lower = await call("get_kpi_mapping", { capability: "forecasting" });
+    expect(res.structuredContent?.kpis).toEqual(lower.structuredContent?.kpis);
   });
 
   it("honors an explicit version and defaults to 1.2", async () => {

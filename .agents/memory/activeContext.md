@@ -70,14 +70,19 @@ findAttribute cross-version hint, and assorted description corrections.
 Gates pass (413 tests), live stdio probes verified, reviewer verdict PASS,
 pushed to claude/session-k75rxy.
 
-**T-079 added (2026-08-07), still pending:** live MCP testing surfaced
-`slug` vs `capability` param friction; investigation confirmed most of the
-naming is a deliberate role convention (decisions.md 2026-08-07 — no
-renames), but found two real defects tracked as T-079: FOCUS
-`get_kpi_mapping`'s `capability` filter silently returns 0 results on
-unknown/wrong-cased values (no findCapability-style validation or
-nearest-match hints), and `get_column` description clarity (its
-`get_attribute` half is now moot — see T-081).
+**T-079 complete (2026-08-13):** FOCUS `get_kpi_mapping`'s `capability`
+filter now validates against the set of capability slugs referenced by the
+KPI mapping (case-insensitive) and errors with `nearestMatches` suggestions
+on an unknown value, instead of silently returning `total: 0` — mirrors the
+`findCapability` pattern in the framework server. `get_column`'s description
+now explicitly names its identifying param ("Look up by the `column`
+parameter — a Column ID or its lowercase slug"), matching `get_attribute`'s
+existing phrasing (which T-081 already made self-documenting). Updated the
+stale "empty, non-error result" test to assert the new error behavior, plus
+a new case-insensitivity test. Gates pass (415 tests); live stdio probes
+confirm `capability: "forecastin"` errors with "Did you mean: forecasting?"
+and `capability: "Forecasting"` returns the same rows as the correctly-cased
+slug.
 
 **T-081 complete (2026-08-13):** a follow-up Q&A session found the
 2026-08-07 decision's own stated rule didn't hold — `get_actions`,
@@ -142,5 +147,6 @@ error loudly (missing-required-field) instead of silently misbehaving.
 
 ## Last updated
 
-2026-08-13 — T-081 session: reopened and closed the `get_capability`/
-`get_attribute` naming outlier (decisions.md 2026-08-13 amendment).
+2026-08-13 — T-079 session: validated `get_kpi_mapping`'s `capability`
+filter (nearest-match error, case-insensitive) and clarified `get_column`'s
+identifying-param description.
