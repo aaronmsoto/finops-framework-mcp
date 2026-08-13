@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "0022aba9545c35f9f2e4bbcf3b4aef7ba3e6dac41ff32d7ca4e0c47685b006a8",
+  "chainHead": "9af3bdba719adf5d778312f5cb85fbce90cccfcefd9735256b4869b8971b79a8",
   "tasks": [
     {
       "id": "T-001",
@@ -1523,9 +1523,15 @@
         "get_attribute's input param renamed slug→attribute in src/servers/focus/tools.ts; all call sites (render.ts nav, server.test.ts) updated",
         "docs/mcp-surface.md regenerated and mcp-surface.test.ts passes; docs/guide/*.html usage examples and both READMEs updated where they name the old param; ./scripts/agentic gates passes"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Renamed get_capability's slug->capability and get_attribute's slug->attribute (framework/FOCUS servers), amending the 2026-08-07 no-rename ruling for these two no-collision single-param tools since nothing is published yet. Updated all call sites, docs/mcp-surface.md, docs/guide/*.html, evals/*.xml, demo/requests.js. Full gate suite passes (413 tests, 7/7 gates); independent reviewer verdict PASS on all 9 criteria including live stdio probes confirming old slug param now errors loudly instead of silently misbehaving.",
+        "commit": "5dbaea5f4b71cee64bc38fde1ba3a454ff15356d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-13T05:49:58.943Z"
+      },
+      "hash": "9af3bdba719adf5d778312f5cb85fbce90cccfcefd9735256b4869b8971b79a8"
     }
   ]
 }
