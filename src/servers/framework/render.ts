@@ -48,18 +48,25 @@ export function overviewMd(artifact: Artifact, experimental = false): string {
     `(${artifact.kpis.length} entries).\n\n` +
     `## Domains\n\n${domains}\n\n` +
     `## How to navigate\n\n` +
-    `- Look up anything by keyword: \`search_framework\`.\n` +
-    `- Browse: \`list_capabilities\` (filter by domain or persona), then ` +
-    `\`get_capability\` with an \`include\` list to control size.\n` +
-    `- Maturity work: \`get_maturity_assessment\` (official assessment text ` +
-    `per level)` +
+    `- Orientation: \`get_framework_info\` (no parameters).\n` +
+    `- Look up anything by keyword: \`search_framework(query)\`.\n` +
+    `- Browse: \`list_capabilities\` (filter by \`domain\` or \`persona\`), ` +
+    `then \`get_capability(slug)\` with an \`include\` list to control size.\n` +
+    `- Maturity work: \`get_maturity_assessment(capability)\` (official ` +
+    `assessment text per level)` +
     (experimental
-      ? `, \`get_actions\` (EXPERIMENTAL: unofficial parsed characteristics ` +
-        `per level)`
+      ? `, \`get_actions(capability)\` (EXPERIMENTAL: unofficial parsed ` +
+        `characteristics per level)`
       : "") +
-    `, \`assess_maturity_path\` (gap between levels).\n` +
-    `- KPIs: \`get_kpis\` (full records incl. formulas where published).\n` +
-    `- People: \`map_personas\` (capability↔persona matrix).\n` +
+    `, \`assess_maturity_path(capability, current_level, target_level)\` ` +
+    `(gap between levels), \`get_maturity_model\` (the model itself).\n` +
+    `- KPIs: \`get_kpis\` (\`slug\` for one record, \`capability\` to ` +
+    `filter; formulas where published).\n` +
+    `- People: \`map_personas\` (\`persona\` or \`capability\`, not both; ` +
+    `neither for the persona index).\n` +
+    `- Principles, phases, domains, technology categories, scopes, and ` +
+    `persona documents: \`get_entity(entity_type)\` (\`slug\` only for ` +
+    `personas). Data provenance: \`get_changelog\`.\n` +
     `- Full documents are also resources under \`finops://framework/…\`.\n\n` +
     (experimental
       ? `Official content vs. unofficial extensions: the \`pre-crawl\` maturity ` +

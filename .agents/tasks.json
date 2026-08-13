@@ -1494,6 +1494,19 @@
       "status": "pending",
       "evidence": null,
       "hash": null
+    },
+    {
+      "id": "T-080",
+      "title": "Fix tool description audit findings across both servers",
+      "acceptance": [
+        "All six A-class inaccuracies corrected (completable ordering on map-personas prompt persona arg; get_kpi_mapping category list includes variance; FOCUS overview version-param claim; map_personas matrix title; hardcoded 1.0/1.2 in compare_versions title and nav; list_columns unknown enum) with docs/mcp-surface.md regenerated and mcp-surface test passing",
+        "search_framework description and both overview navs name each referenced tool's identifying param; framework nav lists all 11 tools, FOCUS nav all 9",
+        "get_capability persona filter errors with nearest-match hints on unknown values; findAttribute gains cross-version retry hint; both covered by new vitest cases",
+        "Silent param interactions documented (get_kpi_mapping kpi-wins, get_kpis AND-combination, get_actions maturity-wins); calculate_kpi sample availability accurate; explain-focus excludes current version; ./scripts/agentic gates passes"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

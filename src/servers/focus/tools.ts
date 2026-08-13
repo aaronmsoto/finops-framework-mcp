@@ -174,18 +174,34 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     );
   }
 
-  function findAttribute(artifact: FocusVersionArtifact, input: string) {
+  function findAttribute(
+    artifact: FocusVersionArtifact,
+    currentVersion: string,
+    input: string,
+  ) {
     const needle = input.toLowerCase();
     const a = artifact.attributes.find(
       (x) => x.id.toLowerCase() === needle || x.slug === needle,
     );
     if (a) return a;
+    for (const [otherVersion, otherArtifact] of store.versions) {
+      if (otherVersion === currentVersion) continue;
+      const otherA = otherArtifact.attributes.find(
+        (x) => x.id.toLowerCase() === needle || x.slug === needle,
+      );
+      if (otherA) {
+        return err(
+          `"${otherA.id}" does not exist in FOCUS ${currentVersion} — it exists in FOCUS ${otherVersion}. ` +
+            `Attribute names change between versions; retry with version="${otherVersion}" or discover the current slug via search_focus.`,
+        );
+      }
+    }
     const near = nearestMatches(
       input,
       artifact.attributes.map((x) => x.slug),
     );
     return err(
-      `Unknown attribute "${input}".` +
+      `Unknown attribute "${input}" in FOCUS ${currentVersion}.` +
         (near.length ? ` Did you mean: ${near.join(", ")}?` : ""),
     );
   }
@@ -306,7 +322,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     "list_columns",
     {
       title: "List FOCUS columns",
-      description: `All columns for one spec version, optionally filtered by feature_level (Mandatory|Conditional|Recommended) or column_type (Metric|Dimension). Default limit returns the full list in one call (${columnCountsBySpec}).`,
+      description: `All columns for one spec version, optionally filtered by feature_level (Mandatory|Conditional|Recommended) or column_type (Metric|Dimension); the extra enum value 'unknown' is a crawler parse fallback that matches no column in the shipped data. Default limit returns the full list in one call (${columnCountsBySpec}).`,
       inputSchema: {
         version: z
           .string()
@@ -507,7 +523,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     ({ slug, version }) => {
       const resolved = resolveVersion(version);
       if (isErr(resolved)) return resolved;
-      const a = findAttribute(resolved.artifact, slug);
+      const a = findAttribute(resolved.artifact, resolved.version, slug);
       if (isErr(a)) return a;
       const structured = {
         spec_version: resolved.version,
@@ -527,7 +543,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
     {
       title: "Get a column's normative requirements",
       description:
-        "The normative MUST/SHOULD bullets for one column, verbatim from the spec text — nothing else. Use get_column for the full record.",
+        "The normative MUST/SHOULD bullets for one column, verbatim from the spec text (plus source_url/license attribution). Use get_column for the full record.",
       inputSchema: {
         column: z.string().describe("Column ID or slug, e.g. 'BilledCost'"),
         version: z
@@ -571,7 +587,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
   server.registerTool(
     "compare_versions",
     {
-      title: "Compare FOCUS 1.0 to 1.2",
+      title: `Compare FOCUS ${store.diff.from} to ${store.diff.to}`,
       description: `The ${store.diff.from}→${store.diff.to} column diff — an UNOFFICIAL derivation computed by this server from the two tagged spec releases, source-cited per entry. Without \`column\`: the full diff (${store.diff.added_columns.length} added, ${store.diff.removed_columns.length} removed, ${store.diff.changed_columns.length} changed). With \`column\`: that one column's status and detail.`,
       inputSchema: {
         column: z
@@ -721,9 +737,10 @@ export function registerTools(server: McpServer, store: FocusStore): void {
       title: "Get the KPI-to-FOCUS-column mapping",
       description:
         "UNOFFICIAL, derived-by-this-server mapping from framework KPIs (effective savings rate, commitment " +
-        "discounts, forecast accuracy, unit economics, allocation) to the FOCUS columns needed to compute each, " +
-        "with a FOCUS-terms formula translation. Not published or endorsed by the FinOps Foundation or the FOCUS " +
-        "project. Filter by `kpi` slug, `capability` slug, or list everything for a `version`.",
+        "discounts, forecast accuracy, unit economics, allocation, variance) to the FOCUS columns needed to " +
+        "compute each, with a FOCUS-terms formula translation. Not published or endorsed by the FinOps Foundation " +
+        "or the FOCUS project. Filter by `kpi` slug or `capability` slug (if both are passed, `kpi` wins and " +
+        "`capability` is ignored), or pass neither to list everything for a `version`.",
       inputSchema: {
         kpi: z
           .string()
@@ -848,8 +865,9 @@ export function registerTools(server: McpServer, store: FocusStore): void {
       title: "Calculate a mapped KPI over bundled sample data",
       description:
         "UNOFFICIAL: computes one of the KPIs from get_kpi_mapping using this server's own derived FOCUS-terms " +
-        "formula, over a bundled sample dataset (the official FOCUS-Sample-Data 1.0 sample where available, " +
-        "otherwise this project's seeded synthetic sample) — never user-supplied data. Not every mapped KPI has " +
+        "formula, over a bundled sample dataset — never user-supplied data. The default version " +
+        `(${DEFAULT_VERSION}) bundles only this project's seeded synthetic sample; pass version:'1.0' to compute ` +
+        "over the official FOCUS-Sample-Data sample. Not every mapped KPI has " +
         "a registered formula: some need an external input (a forecast or budget figure) FOCUS doesn't carry, or " +
         "ambiguous free-text unit matching this server won't guess at; those error with guidance instead.",
       inputSchema: {
@@ -868,7 +886,7 @@ export function registerTools(server: McpServer, store: FocusStore): void {
           .enum(SAMPLE_KINDS)
           .optional()
           .describe(
-            "Which bundled sample to compute over; defaults to 'official' where one exists, else 'synthetic'",
+            "Which bundled sample to compute over; defaults to 'official' where the version has one (currently only 1.0), else 'synthetic'. Requesting 'official' for a version without one errors.",
           ),
       },
       outputSchema: {

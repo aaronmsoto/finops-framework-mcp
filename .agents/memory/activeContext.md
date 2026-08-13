@@ -62,6 +62,14 @@ solo_maintainer + ai_attribution toggles working, Phase C npm-harness
 complete on @aaronmsoto/agentic-harness@0.2.1) is unchanged — see journal
 20260806-* files.
 
+**T-080 in progress (2026-08-07):** description audit across both servers
+(6 genuine inaccuracies + 10 friction fixes) implemented — completable
+ordering bug on the map-personas persona arg, param-naming guidance in
+search_framework + both overview navs, get_capability persona validation,
+findAttribute cross-version hint, and assorted description corrections.
+Gates pass, live stdio probes verified; reviewer verdict + tasks complete
+pending (first reviewer run lost to a session interruption).
+
 **T-079 added (2026-08-07):** live MCP testing surfaced `slug` vs
 `capability` param friction; investigation confirmed the naming is a
 deliberate role convention (decisions.md 2026-08-07 — no renames), but found

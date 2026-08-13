@@ -101,7 +101,7 @@ export function registerPrompts(server: McpServer, store: FocusStore): void {
               `(a common billing data schema across cloud/SaaS providers), the Mandatory vs Conditional vs ` +
               `Recommended feature levels (call list_columns to show real examples of each), and how to look up ` +
               `a specific column (get_column) or its normative requirements (get_requirements). Close by noting ` +
-              `this server also serves other versions (${versionSlugs.join(", ")}) via compare_versions.`,
+              `this server also serves other versions (${versionSlugs.filter((s) => s !== v).join(", ")}) via compare_versions.`,
           ),
         ],
       };

@@ -189,6 +189,14 @@ describe("tools", () => {
     expect(res.content[0]?.text).toMatch(/Did you mean/);
   });
 
+  it("get_attribute points at the other version when the slug only exists there", async () => {
+    const res = await call("get_attribute", { slug: "CurrencyCodeFormat" });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toContain("does not exist in FOCUS 1.2");
+    expect(res.content[0]?.text).toContain("it exists in FOCUS 1.0");
+    expect(res.content[0]?.text).toContain('version="1.0"');
+  });
+
   it("get_requirements returns the verbatim MUST/SHOULD bullets", async () => {
     const res = await call("get_requirements", { column: "BilledCost" });
     expect(res.isError).toBeFalsy();

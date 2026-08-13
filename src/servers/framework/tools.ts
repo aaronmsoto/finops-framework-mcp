@@ -121,7 +121,7 @@ export function registerTools(
     {
       title: "Search the framework",
       description:
-        "Ranked keyword search over every entity (capabilities, KPIs, personas, principles, phases, domains, technology categories, maturity levels, scopes). Returns slug + uri per hit — feed slugs into get_capability/get_kpis/etc. Use this whenever you don't already know a slug.",
+        "Ranked keyword search over every entity (capabilities, KPIs, personas, principles, phases, domains, technology categories, maturity levels, scopes). Returns slug + uri per hit. Feed the slug to `get_capability(slug: …)` or `get_kpis(slug: …)`, or pass it as `capability: <slug>` to get_maturity_assessment/assess_maturity_path/map_personas and as `persona: <slug>` where a persona filter is accepted. Other entity types (principles, phases, domains, technology categories, scopes) are read via get_entity(entity_type: …) or the hit's finops:// resource uri. Use this whenever you don't already know a slug.",
       inputSchema: {
         query: z
           .string()
@@ -356,6 +356,17 @@ export function registerTools(
           const p = artifact.personas.find(
             (x) => x.slug === persona.toLowerCase(),
           );
+          if (!p) {
+            const near = nearestMatches(
+              persona,
+              artifact.personas.map((x) => x.slug),
+            );
+            return err(
+              `Unknown persona "${persona}".` +
+                (near.length ? ` Did you mean: ${near.join(", ")}?` : "") +
+                ` Use map_personas (no arguments) for the persona index.`,
+            );
+          }
           acts = acts.filter(
             (f) =>
               (f.persona.kind !== "allied-group" &&
@@ -418,7 +429,9 @@ export function registerTools(
           level: z
             .enum(LEVELS)
             .optional()
-            .describe("Alias for `maturity` (same values)"),
+            .describe(
+              "Alias for `maturity` (same values); if both are passed, `maturity` wins",
+            ),
         },
         outputSchema: {
           capability: z.string(),
@@ -548,7 +561,7 @@ export function registerTools(
       title: "Get KPIs (full records)",
       description: `Full KPI records: description, formula + candidate data sources (present for the ${
         artifact.kpis.filter((k) => k.formula).length
-      } KPIs the site details in capability-page popups), official related capabilities, and where each is featured. Look up one KPI with \`slug\`, or filter by capability and/or featured_only. Without filters, pages through the whole ${artifact.kpis.length}-entry library.`,
+      } KPIs the site details in capability-page popups), official related capabilities, and where each is featured. Look up one KPI with \`slug\`, or filter by capability and/or featured_only — filters combine (AND), so a \`slug\` that doesn't match the \`capability\` filter returns zero records. Without filters, pages through the whole ${artifact.kpis.length}-entry library.`,
       inputSchema: {
         slug: z
           .string()
@@ -743,9 +756,9 @@ export function registerTools(
   server.registerTool(
     "map_personas",
     {
-      title: "Persona ↔ capability matrix",
+      title: "Persona ↔ capability mapping",
       description:
-        "With `persona`: every capability that persona works in, WITH that persona's activity bullets inline (one call answers 'what does X do across the framework'). With `capability`: every persona active in it, with activities. With neither: the full persona index (slugs, categories) — use it to discover persona slugs. Allied personas are mapped at group level by the framework; responses say so explicitly.",
+        "With `persona`: every capability that persona works in, WITH that persona's activity bullets inline (one call answers 'what does X do across the framework'). With `capability`: every persona active in it, with activities. With neither: the full persona index (slugs, categories) — use it to discover persona slugs. Passing both is an error — pick one direction per call. Allied personas are mapped at group level by the framework; responses say so explicitly.",
       inputSchema: {
         capability: z
           .string()

@@ -201,6 +201,36 @@ describe("tools", () => {
     expect(res.content[0]?.text).toContain("allocation");
   });
 
+  it("get_capability unknown persona filter errors with nearest matches", async () => {
+    const res = await call("get_capability", {
+      slug: "allocation",
+      include: ["activities"],
+      persona: "financee",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(/Unknown persona "financee"/);
+    expect(res.content[0]?.text).toContain("finance");
+  });
+
+  it("get_capability persona filter is case-insensitive", async () => {
+    const [upper, lower] = await Promise.all([
+      call("get_capability", {
+        slug: "allocation",
+        include: ["activities"],
+        persona: "Finance",
+      }),
+      call("get_capability", {
+        slug: "allocation",
+        include: ["activities"],
+        persona: "finance",
+      }),
+    ]);
+    expect(upper.isError).toBeFalsy();
+    expect(upper.structuredContent?.sections).toEqual(
+      lower.structuredContent?.sections,
+    );
+  });
+
   it("get_maturity_assessment returns verbatim official text with attribution and a resource_link", async () => {
     const res = await call("get_maturity_assessment", {
       capability: "allocation",
