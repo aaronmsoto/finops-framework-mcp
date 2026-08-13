@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "9af3bdba719adf5d778312f5cb85fbce90cccfcefd9735256b4869b8971b79a8",
+  "chainHead": "b2709b735fb668e44f783d8fd8972ca0213299ef54af54af1f14bbe22c4935c0",
   "tasks": [
     {
       "id": "T-001",
@@ -1491,9 +1491,15 @@
         "get_attribute and get_column tool descriptions explicitly state their identifying param name and value domain; docs/mcp-surface.md regenerated and mcp-surface.test.ts passes",
         "New vitest coverage for unknown + wrong-cased capability in src/servers/focus/server.test.ts; ./scripts/agentic gates passes"
       ],
-      "status": "pending",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "get_kpi_mapping's capability filter now errors with nearest-match suggestions on unknown/wrong-cased values instead of silently returning total:0 (mirrors framework's findCapability); get_column description names its identifying param, matching get_attribute (T-081). Gates pass (414 tests, 7/7); reviewer verdict PASS on all 4 criteria; live stdio probes confirm both fixes.",
+        "commit": "569f7da2656ab4adfa5ea50ad0e0f0ed5da89ad3",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-13T08:21:59.515Z"
+      },
+      "hash": "b2709b735fb668e44f783d8fd8972ca0213299ef54af54af1f14bbe22c4935c0"
     },
     {
       "id": "T-080",
