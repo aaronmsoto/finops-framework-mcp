@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "99a33d831e062887c64f42d7a7d38ee539fd67235e2a6c20d930548d2cc36e98",
+  "chainHead": "0022aba9545c35f9f2e4bbcf3b4aef7ba3e6dac41ff32d7ca4e0c47685b006a8",
   "tasks": [
     {
       "id": "T-001",
@@ -1504,9 +1504,15 @@
         "get_capability persona filter errors with nearest-match hints on unknown values; findAttribute gains cross-version retry hint; both covered by new vitest cases",
         "Silent param interactions documented (get_kpi_mapping kpi-wins, get_kpis AND-combination, get_actions maturity-wins); calculate_kpi sample availability accurate; explain-focus excludes current version; ./scripts/agentic gates passes"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Fixed all 16 description-audit findings across both servers: completable/.optional() ordering on the map-personas persona arg (description+completion restored, proven in regenerated mcp-surface.md), param-naming guidance in search_framework and both overview navs (11/9 tool coverage), get_capability persona validation and findAttribute cross-version retry hint with new vitest cases (full suite 413 tests pass), variance category and kpi-wins precedence in get_kpi_mapping, accurate version/sample claims in FOCUS overview and calculate_kpi, interpolated compare_versions title, documented unknown enum fallback. Gates PASS all seven; independent reviewer verdict: pass on all four acceptance criteria.",
+        "commit": "52b8e0e8ac392da488615a5dc27b0562a3d9c65a",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-13T03:03:05.175Z"
+      },
+      "hash": "0022aba9545c35f9f2e4bbcf3b4aef7ba3e6dac41ff32d7ca4e0c47685b006a8"
     }
   ]
 }
