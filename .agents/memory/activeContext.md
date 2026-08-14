@@ -133,28 +133,39 @@ rationale note.
 
 ## Next steps
 
-1. **PR #20 (`claude/session-k75rxy` → `dev`) is merged** — bundled T-080,
-   T-081, T-079, the 0.1.0 version bump, and the guide nav restructure.
-   That automatically refreshed the rolling **"Release: dev → main" PR #21**
-   (same pattern as the already-merged #17) — Owner: review and merge **PR
-   #21** next; nothing lands on GitHub Pages or npm until it does.
-   (Correction: the old "merge the T-077 PR" step here was stale — T-077
-   merged to `main` via PR #17 on 2026-08-07, before this note was last
-   rewritten.)
-2. Owner: flip the repo public — still **private** as of 2026-08-14
-   (confirmed via the GitHub API), which is why `docs/release-runbook.md`'s
-   npm trusted-publishing flow and the "flip public" step are both still
-   open.
-3. Owner: follow `docs/release-runbook.md` — manual first `npm publish` of
+1. **Done, live (2026-08-14):** PR #20 (`claude/session-k75rxy` → `dev`,
+   T-080/T-081/T-079 + 0.1.0 + guide nav restructure) and the rolling
+   "Release: dev → main" **PR #21** it triggered were both merged by the
+   owner within ~3 minutes of #20 opening. `pages.yml` re-ran on the
+   resulting `main` push and succeeded; confirmed live at
+   https://aaronmsoto.github.io/finops-framework-mcp/ (nav + "Page 1 of 7"
+   verified via a cache-busted fetch). (Correction: the old "merge the
+   T-077 PR" step here was stale — T-077 merged via PR #17 on 2026-08-07.)
+2. **New, owner-only:** GitHub deleted the **`dev` branch** after PR #21
+   merged (its own "delete head branch on merge" setting, since `dev` was
+   #21's head ref) — `git ls-remote` confirms only `main` and
+   `claude/session-k75rxy` remain. This breaks the dev→main rolling-release
+   pattern AGENTS.md and every prior PR in this repo assume: `dev` needs
+   recreating (e.g. `git push origin main:dev`) before the next PR, or the
+   owner needs to decide feature branches now target `main` directly and
+   update `AGENTS.md`/CONTRIBUTING.md accordingly. Either way, check
+   Settings → General → "Automatically delete head branches" — if it's on,
+   it will keep doing this to `dev`.
+   Two small commits (b482600, 07950a3 — memory-note corrections tracking
+   this same fast-moving state) are stranded on `claude/session-k75rxy`
+   with nowhere to PR into until `dev` exists again.
+3. Owner: flip the repo public — still **private** as of 2026-08-14
+   (confirmed via the GitHub API; Pages serves it anyway since the account
+   is on a paid plan), which is why `docs/release-runbook.md`'s npm
+   trusted-publishing flow and the "flip public" step are both still open.
+4. Owner: follow `docs/release-runbook.md` — manual first `npm publish` of
    both packages (0.1.0), configure trusted publishers, submit both
    `server.json` manifests via `mcp-publisher`.
-4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
+5. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
    demo/`; smoke-test the demo against the deployed Worker.
-5. **Resolved:** the long-pending "`governance` CI job green on a real PR"
-   observable is now satisfied — PR #20 (merged) shows `governance:
-   success` (not skipped), proving the package-access grant works.
-   `gates-fast: success`, `gates-full: skipped` (expected — that tier is
-   manual/scheduled, not run on every PR).
+6. **Resolved:** the long-pending "`governance` CI job green on a real PR"
+   observable is now satisfied — PR #20 showed `governance: success` (not
+   skipped), proving the package-access grant works.
 
 ## Open questions
 
@@ -202,6 +213,7 @@ rationale note.
 
 ## Last updated
 
-2026-08-14 — PR #20 opened and merged same-day; rolling PR #21
-(dev → main) now the next owner action. `governance` CI green observable
-resolved. Repo confirmed still private via the GitHub API.
+2026-08-14 — PR #20 and rolling PR #21 both merged same-day; today's guide
+restructure and server fixes are live on GitHub Pages. `dev` branch got
+deleted by GitHub's merge cleanup in the process — needs recreating before
+the next feature PR. `governance` CI green observable resolved.
