@@ -133,12 +133,11 @@ rationale note.
 
 ## Next steps
 
-1. Owner: review and merge **PR #20**
-   (`claude/session-k75rxy` → `dev`, opened 2026-08-14) — bundles T-080,
+1. **PR #20 (`claude/session-k75rxy` → `dev`) is merged** — bundled T-080,
    T-081, T-079, the 0.1.0 version bump, and the guide nav restructure.
-   Merging it will make the automation refresh the rolling "Release: dev →
-   main" PR (same pattern as the already-merged #17); that second PR also
-   needs an owner merge before anything is live on GitHub Pages or npm.
+   That automatically refreshed the rolling **"Release: dev → main" PR #21**
+   (same pattern as the already-merged #17) — Owner: review and merge **PR
+   #21** next; nothing lands on GitHub Pages or npm until it does.
    (Correction: the old "merge the T-077 PR" step here was stale — T-077
    merged to `main` via PR #17 on 2026-08-07, before this note was last
    rewritten.)
@@ -151,11 +150,11 @@ rationale note.
    `server.json` manifests via `mcp-publisher`.
 4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
    demo/`; smoke-test the demo against the deployed Worker.
-5. Post-merge observable still pending: `governance` CI job green ("success",
-   not "skipped") on a real PR, proving the package-access grant — PR #20's
-   checks were still running (`gates-fast`/`governance` in_progress,
-   `gates-full` skipped) at the time this note was written; check its
-   Checks tab for the resolved status.
+5. **Resolved:** the long-pending "`governance` CI job green on a real PR"
+   observable is now satisfied — PR #20 (merged) shows `governance:
+   success` (not skipped), proving the package-access grant works.
+   `gates-fast: success`, `gates-full: skipped` (expected — that tier is
+   manual/scheduled, not run on every PR).
 
 ## Open questions
 
@@ -203,7 +202,6 @@ rationale note.
 
 ## Last updated
 
-2026-08-14 — Opened PR #20 (`claude/session-k75rxy` → `dev`) bundling
-T-080/T-081/T-079, the 0.1.0 version bump, and the guide nav restructure;
-corrected the stale "merge T-077" next-step and confirmed the repo is
-still private via the GitHub API.
+2026-08-14 — PR #20 opened and merged same-day; rolling PR #21
+(dev → main) now the next owner action. `governance` CI green observable
+resolved. Repo confirmed still private via the GitHub API.
