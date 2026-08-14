@@ -1,9 +1,9 @@
 <!doctype html>
 <!--
-  docs/guide/example-esr.html — page 5 of 6 (spec: .agents/specs/usage-guide-v1.md).
+  docs/guide/example-esr.html — page 5 of 7 (spec: .agents/specs/usage-guide-v1.md).
 
   Restyle of the standalone walkthrough artifact (scratchpad focus-walkthrough.html,
-  "From Capability to Calculation") into the shared six-page guide chrome. Content,
+  "From Capability to Calculation") into the shared seven-page guide chrome. Content,
   structure and every number are unchanged from that artifact; only the header/nav/
   footer and page framing are new. Base CSS reused verbatim from framework-server.html /
   focus-server.html (header.guide/nav.guide/footer.guide convention); page-specific
@@ -123,7 +123,7 @@
   .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
   a { color: var(--moss); }
 
-  /* --- shared chrome: guide header + nav + footer (identical on all six pages) --- */
+  /* --- shared chrome: guide header + nav + footer (identical on all seven pages) --- */
   header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
   header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
     font-weight: 600; margin: 0; letter-spacing: 0.01em; }
@@ -137,24 +137,25 @@
   nav.guide a:hover { color: var(--moss); border-color: var(--line); }
   nav.guide a[aria-current="page"] { color: var(--paper); background: var(--moss);
     border-color: var(--moss); font-weight: 600; }
+  nav.guide.sub { border-top: 0; padding-top: 0.4rem; }
+  nav.guide.sub ol { gap: 0.25rem 0.4rem; }
+  nav.guide.sub a { font-size: 0.7rem; padding: 0.14rem 0.5rem; }
+  nav.guide.sub a[aria-current="page"] { background: var(--panel); color: var(--moss-ink);
+    border-color: var(--moss); font-weight: 600; }
   main.guide-main { padding-top: 0.9rem; }
   footer.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
     border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--slate); }
   footer.guide p { margin: 0.35rem 0; }
   footer.guide .unofficial-legend { font-weight: 600; }
 
-  /* --- wide-viewport container (2026-08-06) ---
-     The six nav links needed 892px of content width to sit on one line, and
-     the Data Model's five cards needed room to share a row; the container
-     was capped at 78ch (~794px of content) at every desktop size. --wrap
-     widens it past both thresholds from 64rem up, and is the single knob
-     for all three container elements.
-
-     Prose deliberately does NOT widen with it: body text was already ~111
-     characters per line, so paragraphs and lists keep the old measure while
-     the extra room goes to the nav, tables, card grids and transcripts,
-     which are the parts that were actually cramped. .callnote is exempt —
-     it is a nowrap scroll strip that wants the full width. */
+  /* --- wide-viewport container (2026-08-06, nav shortened 2026-08-13) ---
+     The nav used to carry six long labels and needed 892px to sit on one row;
+     it now carries four short top-level labels (Intro / Framework MCP / FOCUS
+     MCP / Examples) plus, on the four Examples pages only, a second row of
+     four short sub-page labels — both rows fit one line at phone widths
+     without --wrap. --wrap still exists for the Data Model's five-card row
+     and other content that needed the extra desktop room; it is no longer
+     load-bearing for the nav itself. */
   :root { --wrap: 78ch; }
   @media (min-width: 64rem) { :root { --wrap: 62rem; } }
   header.guide, footer.guide, main { max-width: var(--wrap); }
@@ -186,18 +187,24 @@
   <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
   <nav class="guide" aria-label="Guide pages">
     <ol>
-      <li><a href="index.html">Intro &amp; Getting Started</a></li>
-      <li><a href="framework-server.html">finops-framework-mcp</a></li>
-      <li><a href="focus-server.html">finops-focus-mcp</a></li>
+      <li><a href="index.html">Intro</a></li>
+      <li><a href="framework-server.html">Framework MCP</a></li>
+      <li><a href="focus-server.html">FOCUS MCP</a></li>
+      <li><a href="example-showback.html" aria-current="page">Examples</a></li>
+    </ol>
+  </nav>
+  <nav class="guide sub" aria-label="Example pages">
+    <ol>
       <li><a href="example-showback.html">Showback</a></li>
-      <li><a href="example-esr.html" aria-current="page">Rate Optimization (ESR)</a></li>
-      <li><a href="example-forecasting.html">Forecasting Journey</a></li>
+      <li><a href="example-esr.html" aria-current="page">ESR</a></li>
+      <li><a href="example-forecasting.html">Forecasting</a></li>
+      <li><a href="example-quick-qa.html">Quick Q&amp;A</a></li>
     </ol>
   </nav>
 </header>
 
 <main class="guide-main">
-  <p class="eyebrow">Page 5 of 6 · Worked example · two MCP servers, one outcome</p>
+  <p class="eyebrow">Page 5 of 7 · Worked example · two MCP servers, one outcome</p>
   <h1>From Capability to Calculation</h1>
   <p class="lede">You want to improve your <strong>Rate Optimization</strong> practice.
   This page walks the exact chain an AI agent walks: official FinOps Framework guidance
@@ -350,9 +357,11 @@
   its own in the <a href="framework-server.html">finops-framework-mcp</a> and
   <a href="focus-server.html">finops-focus-mcp</a> reference pages, or continue to the
   other worked examples — <a href="example-showback.html">Showback Reporting</a> (an
-  Allocation-focused chain from framework capability to a computed showback table) and
+  Allocation-focused chain from framework capability to a computed showback table),
   <a href="example-forecasting.html">the Forecasting maturity journey</a> (Crawl→Walk
-  requirements plus the FOCUS columns a forecasting pipeline needs).</p>
+  requirements plus the FOCUS columns a forecasting pipeline needs), and
+  <a href="example-quick-qa.html">Quick Q&amp;A</a> (four unscripted live prompts
+  across both servers, no pre-planned chain).</p>
 </main>
 
 <footer class="guide">
