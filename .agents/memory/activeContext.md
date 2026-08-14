@@ -133,14 +133,29 @@ rationale note.
 
 ## Next steps
 
-1. Owner: merge the T-077 PR, flip the repo public.
-2. Owner: follow `docs/release-runbook.md` — manual first `npm publish` of
+1. Owner: review and merge **PR #20**
+   (`claude/session-k75rxy` → `dev`, opened 2026-08-14) — bundles T-080,
+   T-081, T-079, the 0.1.0 version bump, and the guide nav restructure.
+   Merging it will make the automation refresh the rolling "Release: dev →
+   main" PR (same pattern as the already-merged #17); that second PR also
+   needs an owner merge before anything is live on GitHub Pages or npm.
+   (Correction: the old "merge the T-077 PR" step here was stale — T-077
+   merged to `main` via PR #17 on 2026-08-07, before this note was last
+   rewritten.)
+2. Owner: flip the repo public — still **private** as of 2026-08-14
+   (confirmed via the GitHub API), which is why `docs/release-runbook.md`'s
+   npm trusted-publishing flow and the "flip public" step are both still
+   open.
+3. Owner: follow `docs/release-runbook.md` — manual first `npm publish` of
    both packages (0.1.0), configure trusted publishers, submit both
    `server.json` manifests via `mcp-publisher`.
-3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
+4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
    demo/`; smoke-test the demo against the deployed Worker.
-4. Post-merge observable still pending: `governance` CI job green ("success",
-   not "skipped") on a real PR, proving the package-access grant.
+5. Post-merge observable still pending: `governance` CI job green ("success",
+   not "skipped") on a real PR, proving the package-access grant — PR #20's
+   checks were still running (`gates-fast`/`governance` in_progress,
+   `gates-full` skipped) at the time this note was written; check its
+   Checks tab for the resolved status.
 
 ## Open questions
 
@@ -188,6 +203,7 @@ rationale note.
 
 ## Last updated
 
-2026-08-13 — Guide restructure session: 4-item nav + Examples sub-nav,
-7th page (Quick Q&A) added; version bump session (0.9.0 → 0.1.0, decisions.md
-2026-08-13 amendment to T-077) landed earlier the same day.
+2026-08-14 — Opened PR #20 (`claude/session-k75rxy` → `dev`) bundling
+T-080/T-081/T-079, the 0.1.0 version bump, and the guide nav restructure;
+corrected the stale "merge T-077" next-step and confirmed the repo is
+still private via the GitHub API.
