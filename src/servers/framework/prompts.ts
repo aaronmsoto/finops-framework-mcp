@@ -42,8 +42,10 @@ export function registerPrompts(
   const experimental = opts.experimental ?? false;
   const capSlugs = artifact.capabilities.map((c) => c.slug);
   const personaSlugs = artifact.personas.map((p) => p.slug);
-  // .describe() must be applied INSIDE completable(): zod v4 clones on
-  // describe and would drop the SDK's completable marker (critique-2 M1').
+  // .describe() and .optional() must be applied INSIDE completable(), which
+  // must stay the outermost call: zod v4 clones on both, and a clone made
+  // after completable() drops the SDK's completable marker (critique-2 M1',
+  // extended to .optional() — same reasoning as focus/prompts.ts).
   const capabilityArg = (desc: string) =>
     completable(z.string().describe(desc), (v) =>
       capSlugs.filter((s) => s.startsWith(v)),
@@ -59,8 +61,8 @@ export function registerPrompts(
     completable(z.string().describe(desc), (v) =>
       ["crawl", "walk", "run"].filter((l) => l.startsWith(v)),
     );
-  const personaArg = (desc: string) =>
-    completable(z.string().describe(desc), (v) =>
+  const optionalPersonaArg = (desc: string) =>
+    completable(z.string().optional().describe(desc), (v = "") =>
       personaSlugs.filter((s) => s.startsWith(v)),
     );
 
@@ -179,9 +181,9 @@ export function registerPrompts(
       description:
         "Engagement guide: what a persona (or every persona) does across the framework's capabilities.",
       argsSchema: {
-        persona: personaArg(
+        persona: optionalPersonaArg(
           "Persona slug (finops-practitioner, finance, itam, …); omit for all",
-        ).optional(),
+        ),
       },
     },
     ({ persona }) => ({

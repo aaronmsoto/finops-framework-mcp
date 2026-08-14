@@ -62,11 +62,80 @@ solo_maintainer + ai_attribution toggles working, Phase C npm-harness
 complete on @aaronmsoto/agentic-harness@0.2.1) is unchanged — see journal
 20260806-* files.
 
+**T-080 complete (2026-08-07):** description audit across both servers
+(6 genuine inaccuracies + 10 friction fixes) implemented — completable
+ordering bug on the map-personas persona arg, param-naming guidance in
+search_framework + both overview navs, get_capability persona validation,
+findAttribute cross-version hint, and assorted description corrections.
+Gates pass (413 tests), live stdio probes verified, reviewer verdict PASS,
+pushed to claude/session-k75rxy.
+
+**T-079 complete (2026-08-13):** FOCUS `get_kpi_mapping`'s `capability`
+filter now validates against the set of capability slugs referenced by the
+KPI mapping (case-insensitive) and errors with `nearestMatches` suggestions
+on an unknown value, instead of silently returning `total: 0` — mirrors the
+`findCapability` pattern in the framework server. `get_column`'s description
+now explicitly names its identifying param ("Look up by the `column`
+parameter — a Column ID or its lowercase slug"), matching `get_attribute`'s
+existing phrasing (which T-081 already made self-documenting). Updated the
+stale "empty, non-error result" test to assert the new error behavior, plus
+a new case-insensitivity test. Gates pass (415 tests); live stdio probes
+confirm `capability: "forecastin"` errors with "Did you mean: forecasting?"
+and `capability: "Forecasting"` returns the same rows as the correctly-cased
+slug.
+
+**T-081 complete (2026-08-13):** a follow-up Q&A session found the
+2026-08-07 decision's own stated rule didn't hold — `get_actions`,
+`get_maturity_assessment`, `assess_maturity_path` already use `capability`
+as their sole required param, the same role `get_capability`'s `slug`
+played, making `get_capability` the actual outlier (and `get_attribute`'s
+generic `slug` vs `get_column`'s `column` the same shape in FOCUS). Since
+neither param has a collision risk and nothing is published yet (no git
+tag, `docs/release-runbook.md` still open), the ruling was narrowly
+reopened (decisions.md 2026-08-13): `get_capability`'s `slug`→`capability`,
+`get_attribute`'s `slug`→`attribute`. Renamed across both tool schemas, all
+call sites (server.test.ts ×2, demo-requests.test.ts, demo/requests.js —
+the live Worker demo's request builder), both render.ts navs,
+search_framework's description, docs/mcp-surface.md (regenerated),
+docs/guide/*.html (6 files), evals/*.xml (3 files). Gates pass (413 tests);
+live stdio probes confirm the new param names work and the old ones now
+error loudly (missing-required-field) instead of silently misbehaving.
+
+**Guide restructured to 7 pages, nav shortened (2026-08-13).** Owner request
+after a live Q&A session against both servers (capabilities-by-domain,
+sustainability summary, Walk-maturity gap, Unit Economics starter KPIs).
+Top nav dropped from 6 long labels to 4 short ones (Intro / Framework MCP /
+FOCUS MCP / Examples); the 3 existing worked examples plus a new 4th page
+(`example-quick-qa.html`, the live Q&A session verbatim, real MCP output)
+became "virtual sub-pages" under Examples via a second nav row shown only
+on those 4 pages. `index.html`'s next-grid, the 3 existing examples'
+closing cross-links, `docs/README.md`, `docs/deploy-pages.md` and
+`docs/guide/404.html` updated for the new 7-page count.
+`.github/workflows/pages.yml` (protected path) intentionally NOT touched —
+its file-existence guard still lists only the original 7 filenames (6 pages
++ 404), so it doesn't explicitly check `example-quick-qa.html`, though the
+upload step ships the whole directory regardless; noted as a known gap in
+deploy-pages.md rather than silently fixed. See the mobile-overflow open
+question below for what this incidentally fixed and what's still open.
+
+**Version dropped to 0.1.0 (2026-08-13), superseding T-077's 0.9.0 call.**
+Owner reasoning: an initial supported-beta launch conventionally starts at
+0.1.0, not 0.9.0 (which reads as "nearly 1.0/stable"); 0.x semver signals
+"expect breaking changes between releases," which is the more accurate
+signal pre-1.0. Updated every hardcoded/referenced occurrence: both
+`SERVER_VERSION` literals (`src/servers/{framework,focus}/server.ts`), both
+`package.json`s, both `server.json` manifests (2 version fields each — the
+manifest's own + the nested npm package entry), and the
+`bug_report.yml` issue-template placeholder. `tests/version-sync.test.ts`
+enforces `SERVER_VERSION` ↔ `package.json` on every gate run, so these
+can't drift apart silently. See decisions.md 2026-08-13 for the full
+rationale note.
+
 ## Next steps
 
 1. Owner: merge the T-077 PR, flip the repo public.
 2. Owner: follow `docs/release-runbook.md` — manual first `npm publish` of
-   both packages (0.9.0), configure trusted publishers, submit both
+   both packages (0.1.0), configure trusted publishers, submit both
    `server.json` manifests via `mcp-publisher`.
 3. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
    demo/`; smoke-test the demo against the deployed Worker.
@@ -95,9 +164,20 @@ complete on @aaronmsoto/agentic-harness@0.2.1) is unchanged — see journal
   blocks for `get_capability`/`get_kpis`, dropping `get_actions`' `level`
   alias, glossary lookup tool, trimming `dist/shared/focus/*` from the root
   tarball.
-- Guide mobile overflow (pre-existing, noted by T-078): `index`,
-  `framework-server` and `focus-server` overflow horizontally at 414/360px.
-  Deserves its own task.
+- Guide mobile overflow (pre-existing, noted by T-078) — **partially fixed
+  2026-08-13**: shortening the nav to 4 top-level items + a 4-item Examples
+  sub-nav (see "In flight" below) eliminated the leak on `index.html` and
+  `focus-server.html` — the nav row was that overflow's source, confirmed by
+  `document.documentElement.scrollWidth` measurement at 390px width dropping
+  to exactly the viewport width on both. **Still open** on
+  `framework-server.html`, `example-showback.html` and
+  `example-forecasting.html`: a *different*, content-driven leak — certain
+  wide `.tbl-wrap` tables (long unbroken `.mono` strings in cells) escape
+  their `overflow-x:auto` container and widen `document.documentElement`
+  itself (verified real via `window.scrollTo` actually moving `scrollX`, not
+  just an inert `scrollWidth` reading). `.tbl-wrap` and its ancestor chain
+  measure correctly bounded via `getBoundingClientRect`, so the cause is
+  deeper than the container CSS — still deserves its own task.
 - Upstream porting status: the two policy toggles (`solo_maintainer`,
   `ai_attribution`) ALREADY shipped in harness 0.2.0 (starter T-012/T-013);
   the remaining harness feedback (incl. task-ID collisions — bit again in
@@ -108,7 +188,6 @@ complete on @aaronmsoto/agentic-harness@0.2.1) is unchanged — see journal
 
 ## Last updated
 
-2026-08-07 — T-077 pre-publish hardening session (review panel findings
-implemented; versions at 0.9.0; publish procedure in
-docs/release-runbook.md), then main→dev merge reconciliation
-(T-073(main) → T-078 renumbering) to unblock rolling PR #17.
+2026-08-13 — Guide restructure session: 4-item nav + Examples sub-nav,
+7th page (Quick Q&A) added; version bump session (0.9.0 → 0.1.0, decisions.md
+2026-08-13 amendment to T-077) landed earlier the same day.

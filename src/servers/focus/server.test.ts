@@ -153,7 +153,7 @@ describe("tools", () => {
   });
 
   it("get_attribute returns the full record with requirements", async () => {
-    const res = await call("get_attribute", { slug: "CurrencyFormat" });
+    const res = await call("get_attribute", { attribute: "CurrencyFormat" });
     expect(res.isError).toBeFalsy();
     expect(res.structuredContent?.spec_version).toBe("1.2");
     const attribute = res.structuredContent?.attribute as {
@@ -166,7 +166,7 @@ describe("tools", () => {
   });
 
   it("get_attribute's example slug from its own tool description resolves at the default version", async () => {
-    const res = await call("get_attribute", { slug: "datetime_format" });
+    const res = await call("get_attribute", { attribute: "datetime_format" });
     expect(res.isError).toBeFalsy();
     expect(res.structuredContent?.spec_version).toBe("1.2");
     const attribute = res.structuredContent?.attribute as { id: string };
@@ -175,7 +175,7 @@ describe("tools", () => {
 
   it("get_attribute resolves version-specific attribute ids (renamed across versions)", async () => {
     const res = await call("get_attribute", {
-      slug: "CurrencyCodeFormat",
+      attribute: "CurrencyCodeFormat",
       version: "1.0",
     });
     expect(res.isError).toBeFalsy();
@@ -184,9 +184,19 @@ describe("tools", () => {
   });
 
   it("get_attribute suggests a nearest match for an unknown slug", async () => {
-    const res = await call("get_attribute", { slug: "CurrencyFromat" });
+    const res = await call("get_attribute", { attribute: "CurrencyFromat" });
     expect(res.isError).toBe(true);
     expect(res.content[0]?.text).toMatch(/Did you mean/);
+  });
+
+  it("get_attribute points at the other version when the slug only exists there", async () => {
+    const res = await call("get_attribute", {
+      attribute: "CurrencyCodeFormat",
+    });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toContain("does not exist in FOCUS 1.2");
+    expect(res.content[0]?.text).toContain("it exists in FOCUS 1.0");
+    expect(res.content[0]?.text).toContain('version="1.0"');
   });
 
   it("get_requirements returns the verbatim MUST/SHOULD bullets", async () => {
@@ -348,12 +358,20 @@ describe("get_kpi_mapping", () => {
     }
   });
 
-  it("an unknown capability slug returns an empty, non-error result", async () => {
+  it("an unknown capability slug errors with nearest-match suggestions", async () => {
     const res = await call("get_kpi_mapping", {
-      capability: "not-a-real-capability",
+      capability: "forecastin",
     });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toMatch(/Unknown capability/);
+    expect(res.content[0]?.text).toContain("forecasting");
+  });
+
+  it("capability matching is case-insensitive", async () => {
+    const res = await call("get_kpi_mapping", { capability: "Forecasting" });
     expect(res.isError).toBeFalsy();
-    expect(res.structuredContent?.total).toBe(0);
+    const lower = await call("get_kpi_mapping", { capability: "forecasting" });
+    expect(res.structuredContent?.kpis).toEqual(lower.structuredContent?.kpis);
   });
 
   it("honors an explicit version and defaults to 1.2", async () => {
@@ -769,7 +787,7 @@ describe("outputSchema conformance", () => {
       ["get_column", { column: "BilledCost" }],
       ["list_columns", { limit: 5 }],
       ["search_focus", { query: "cost" }],
-      ["get_attribute", { slug: "CurrencyFormat" }],
+      ["get_attribute", { attribute: "CurrencyFormat" }],
       ["get_requirements", { column: "BilledCost" }],
       ["compare_versions", {}],
       ["compare_versions", { column: "BillingAccountType" }],

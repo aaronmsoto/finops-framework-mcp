@@ -21,7 +21,7 @@
     <expected>Capability slug "rate-optimization", title "Rate Optimization", domain "optimize-usage-and-cost" — one of several capabilities in that domain.</expected>
   </step>
   <step id="2" server="framework">
-    <action>get_capability(slug: "rate-optimization", include: ["summary", "kpis"])</action>
+    <action>get_capability(capability: "rate-optimization", include: ["summary", "kpis"])</action>
     <goal>Get the capability's official summary and its featured KPIs.</goal>
     <expected>Summary: rate efficiency through vendor use, negotiated discounts, commitment discounts, and pricing mechanisms. Featured KPIs (via get_kpis(capability: "rate-optimization", featured_only: true), 4 total): Effective Savings Rate Percentage (effective-savings-rate-percentage), Commitment Utilization Score (commitment-utilization-score), Percentage of Commitment Discount Waste (percentage-of-commitment-based-discount-waste), Consumption versus Commitment (consumption-versus-commitment).</expected>
   </step>

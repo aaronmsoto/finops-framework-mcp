@@ -488,3 +488,108 @@ Alternatives considered:
 Note the toggle governs *git artifacts only*. The CC BY attribution that
 must ride on every served surface (NOTICE.md) is a separate, unaffected
 obligation.
+
+## 2026-08-07 — Keep `slug`/`capability`/`column` param naming; no unification (T-079 scoping)
+
+Decision: tool input params keep their role-based names. `slug` is the
+fetched entity's own identifier (polymorphic per tool: capability slug in
+`get_capability`, KPI slug in `get_kpis`, persona slug in `get_entity`,
+attribute in `get_attribute`); `capability` is always a filter/scope on
+another tool's output; FOCUS `column` is a Column ID. This re-affirms the
+T-077 owner directive ("NO param renames") after a session hit the
+`slug`-vs-`capability` friction live and asked whether to unify.
+
+Rationale: although `get_capability({slug})` and the `capability` filters
+resolve through the same `findCapability` lookup (same value domain), the
+name encodes the param's *role*, not its value type — and every tool
+description already states "Capability slug" with an example. A rename is a
+breaking change across ~12 files including the published finops-focus-mcp
+package, docs/guide HTML, demo, and evals.
+
+Alternatives considered:
+
+- **Unify on `slug` everywhere.** Rejected: loses the fetch-target vs
+  filter distinction (`get_kpis` takes both), breaking change, owner ruled.
+- **Accept both names as aliases.** Rejected: the MCP SDK silently strips
+  unknown params (activeContext open question), so the wrong half of an
+  alias pair fails silently instead of helpfully — worse than today's
+  explicit validation error.
+
+The genuine defects found during the investigation (FOCUS
+`get_kpi_mapping`'s unvalidated `capability` filter; `get_attribute`
+description clarity vs `get_column`) are tracked as T-079.
+
+## 2026-08-13 — Amend the no-rename ruling: `get_capability`→`capability`, `get_attribute`→`attribute` (T-081)
+
+Decision: narrowly reopen the 2026-08-07 "no param renames" ruling for
+exactly two params, and rename them: `get_capability`'s `slug` input param
+becomes `capability`; FOCUS `get_attribute`'s `slug` input param becomes
+`attribute`. Everything else the 2026-08-07 decision covers (`get_kpis`'
+`slug`+`capability`, `map_personas`' `persona`+`capability`,
+`get_kpi_mapping`'s `kpi`+`capability`, FOCUS `column`) is unchanged — those
+genuinely need role-distinct names to avoid ambiguity between two
+independent slug-typed filters on the same call.
+
+Rationale: a live Q&A session surfaced that the 2026-08-07 decision's own
+stated rule ("`slug` = the fetched entity's own identifier; `capability` =
+always a filter on another tool's output") doesn't hold across the surface
+— `get_actions`, `get_maturity_assessment`, and `assess_maturity_path` all
+use `capability` as their sole *required* identifying param, structurally
+identical to what `get_capability`'s `slug` does. So `get_capability` was
+the actual outlier against its own true siblings, not the reverse; same
+shape one level down between FOCUS's `get_column` (`column`, ID-or-slug)
+and `get_attribute` (generic `slug`, also ID-or-slug). Both renames are
+single-param tools with no collision risk. The 2026-08-07 ruling's
+breaking-change rationale no longer holds either: no git tag exists and
+`docs/release-runbook.md`'s manual first-publish step was still open as of
+this decision — nothing external depends on today's schema, so this is the
+cheapest point at which to ever make this change.
+
+Alternatives considered:
+
+- **Leave as originally ruled (no renames at all).** Rejected: the
+  inconsistency this reopens is real, not cosmetic, and costless to fix
+  pre-publish; deferring it means paying full breaking-change cost later
+  for the same fix, or living with two known outliers forever.
+- **Rename get_kpis/map_personas/get_kpi_mapping's `capability` filters to
+  something else for full uniformity.** Rejected: not raised, and those
+  three still have the genuine two-slug-types-per-call collision the
+  2026-08-07 decision correctly identified — `capability` there is
+  filter-role naming, not an outlier.
+
+T-079 (get_kpi_mapping capability-filter validation; get_column/get_attribute
+description clarity) remains separately pending — this rename doesn't
+substitute for it, though get_attribute's description no longer needs the
+`slug`-vs-`column` clarification since the name itself is now unambiguous.
+
+## 2026-08-13 — Drop pre-launch version from 0.9.0 to 0.1.0 (amends T-077)
+
+Decision: change every version reference — both `SERVER_VERSION` literals,
+both `package.json`s, both `server.json` manifests (manifest-level and
+nested npm-package-level fields), and the `bug_report.yml` issue-template
+placeholder — from `0.9.0` to `0.1.0`. This narrowly amends T-077's
+2026-08-07 "ALL versions moved to 0.9.0" call; nothing else about that
+pre-publish hardening pass is revisited.
+
+Rationale (owner call): an initial supported-beta launch conventionally
+starts at 0.1.0. 0.9.0 reads as "nearly stable, close to 1.0" — the
+opposite of what a first, still-settling public release should signal.
+0.x semver's whole point is "expect breaking changes between minor
+versions"; starting at 0.1.0 leaves that signal fully available for the
+run-up to 1.0, where 0.9.0 would have implied 1.0 is imminent. As with
+T-081's param renames, this costs nothing today: no git tag exists yet and
+`docs/release-runbook.md`'s manual first-publish step is still open, so no
+external consumer has observed 0.9.0.
+
+Alternatives considered:
+
+- **Keep 0.9.0.** Rejected per the above — signals the wrong maturity level
+  for a first beta-ish launch.
+- **Start at 0.0.1 or 0.0.0.** Rejected: reads as pre-alpha/scaffold-only,
+  understating a repo that already has a full evaluated tool surface,
+  Worker deployment, and a published demo; 0.1.0 is the more standard
+  "usable initial beta" convention.
+
+`tests/version-sync.test.ts` already enforces `SERVER_VERSION` ↔
+`package.json` per server on every gate run, so a future version bump that
+misses one side fails CI rather than drifting silently.

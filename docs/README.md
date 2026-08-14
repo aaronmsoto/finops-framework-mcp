@@ -11,7 +11,7 @@ Setup and smoke test: [`deploy-pages.md`](deploy-pages.md).
 
 What lives here:
 
-- [`guide/`](guide/index.html) — the six-page usage guide; the published
+- [`guide/`](guide/index.html) — the seven-page usage guide; the published
   site's front door.
 
 - [`designs/`](designs/) — rich, self-contained HTML design docs for your
