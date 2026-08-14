@@ -34,7 +34,7 @@
   <eval id="5">
     <question>Which FOCUS attribute governs formatting for currency-related columns, and what must those columns use when the value is presented in a national (non-virtual) currency?</question>
     <expected>The Currency Format attribute (slug currency_format). National-currency values MUST be represented as a three-letter alphabetic code per ISO 4217:2015 (e.g., USD, EUR).</expected>
-    <expected_calls>search_focus(query: "currency format") then get_attribute(slug: "currency_format", version: "1.2" or "1.0") — or get_attribute directly if the slug is already known</expected_calls>
+    <expected_calls>search_focus(query: "currency format") then get_attribute(attribute: "currency_format", version: "1.2" or "1.0") — or get_attribute directly if the slug is already known</expected_calls>
   </eval>
   <eval id="6">
     <question>In FOCUS 1.2, what does the normative requirements list for BilledCost say must match the sum of BilledCost for a given InvoiceId?</question>

@@ -9,7 +9,7 @@ import { registerTools } from "./tools.js";
 // package.json at runtime. tests/index.test.ts asserts the two stay in sync.
 export const SERVER_NAME = "finops-framework-mcp";
 export const SERVER_TITLE = "FinOps Framework MCP";
-export const SERVER_VERSION = "0.9.0";
+export const SERVER_VERSION = "0.1.0";
 
 export interface ServerOptions {
   /** Restores get_actions and the unofficial pre-crawl extension (v1 default: off). */

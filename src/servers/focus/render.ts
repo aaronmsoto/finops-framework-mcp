@@ -155,18 +155,25 @@ export function overviewMd(
     `This server exposes the FOCUS (FinOps Open Cost & Usage Specification) ` +
     `spec text at ${store.versionSlugs.join(" and ")} as structured, ` +
     `version-pinned data. Columns are added, renamed, and re-semanticized ` +
-    `across releases — every tool takes a \`version\` parameter (default ` +
-    `"${store.latest}", the latest pinned version) and echoes \`spec_version\` ` +
-    `in its response.\n\n` +
+    `across releases — version-parameterized tools default to ` +
+    `"${store.latest}" (the latest pinned version) and echo \`spec_version\` ` +
+    `in their response; \`list_versions\` and \`compare_versions\` span ` +
+    `versions and take no \`version\` parameter.\n\n` +
     `## How to navigate\n\n` +
-    `- \`list_versions\` — available spec versions.\n` +
-    `- \`list_columns\` (filter by feature_level/column_type), \`get_column\` ` +
-    `— column records.\n` +
-    `- \`get_attribute\` — cross-cutting formatting/naming rules.\n` +
-    `- \`get_requirements\` — a column's normative MUST/SHOULD bullets, ` +
-    `verbatim.\n` +
-    `- \`search_focus\` — keyword search over one version's columns/attributes.\n` +
-    `- \`compare_versions\` — the 1.0→1.2 diff (unofficial derivation, source-cited).\n` +
+    `- \`list_versions\` — available spec versions (no parameters).\n` +
+    `- \`list_columns\` (filter by \`feature_level\`/\`column_type\`), ` +
+    `\`get_column(column)\` — column records.\n` +
+    `- \`get_attribute(attribute)\` — cross-cutting formatting/naming rules.\n` +
+    `- \`get_requirements(column)\` — a column's normative MUST/SHOULD ` +
+    `bullets, verbatim.\n` +
+    `- \`search_focus(query)\` — keyword search over one version's ` +
+    `columns/attributes.\n` +
+    `- \`compare_versions\` — the cross-version column diff (\`column\` to ` +
+    `narrow; unofficial derivation, source-cited).\n` +
+    `- \`get_kpi_mapping\` (\`kpi\` or \`capability\` to filter) — UNOFFICIAL ` +
+    `framework-KPI→FOCUS-column mapping.\n` +
+    `- \`calculate_kpi(kpi)\` — UNOFFICIAL: compute a mapped KPI over bundled ` +
+    `sample data.\n` +
     `- Full documents are also resources under \`focus://spec/…\`.\n\n` +
     `Data version ${latestArtifact.manifest.data_version}, crawled ` +
     `${latestArtifact.manifest.crawled_at.slice(0, 10)}.`

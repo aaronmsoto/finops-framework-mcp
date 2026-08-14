@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "io.github.aaronmsoto/finops-focus-mcp",
   "description": "Unofficial MCP server for the FOCUS spec: columns, attributes, requirements, cross-version diffs.",
-  "version": "0.9.0",
+  "version": "0.1.0",
   "websiteUrl": "https://aaronmsoto.github.io/finops-framework-mcp/",
   "repository": {
     "url": "https://github.com/aaronmsoto/finops-framework-mcp",
@@ -13,7 +13,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "finops-focus-mcp",
-      "version": "0.9.0",
+      "version": "0.1.0",
       "transport": {
         "type": "stdio"
       },

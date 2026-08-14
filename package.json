@@ -1,6 +1,6 @@
 {
   "name": "finops-framework-mcp",
-  "version": "0.9.0",
+  "version": "0.1.0",
   "description": "Unofficial MCP server exposing the FinOps Framework (finops.org/framework) to AI agents",
   "keywords": [
     "mcp",

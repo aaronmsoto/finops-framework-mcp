@@ -43,7 +43,8 @@
 
 ## Current focus
 
-- Pre-publish hardening done (T-077, versions at 0.9.0); publish is
+- Pre-publish hardening done (T-077); versions at 0.1.0 (2026-08-13 owner
+  call, superseding T-077's 0.9.0 — see decisions.md). Publish is
   owner-gated and proceduralized in `docs/release-runbook.md` (manual first
   publish → trusted publishing via publish.yml → mcp-publisher). See
   activeContext.md for ordered next steps and the deferred-polish list.

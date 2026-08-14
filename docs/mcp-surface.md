@@ -42,7 +42,7 @@ Plan a maturity roadmap
 
 Map personas to capabilities
 
-- `persona` (optional)
+- `persona` (optional) — Persona slug (finops-practitioner, finance, itam, …); omit for all
 
 ### Resources
 
@@ -116,7 +116,7 @@ List capabilities
 
 Get one capability
 
-- `slug`, required, string — Capability slug, e.g. 'allocation'
+- `capability`, required, string — Capability slug, e.g. 'allocation'
 - `include`, optional, array<enum(summary|definition|maturity|activities|kpis|headline_groups|inputs_outputs)> — Sections to return (default [summary, definition])
 - `persona`, optional, string — With include:['activities']: return only this persona's activities
 
@@ -147,7 +147,7 @@ Maturity gap between two levels
 
 #### `map_personas`
 
-Persona ↔ capability matrix
+Persona ↔ capability mapping
 
 - `capability`, optional, string — Capability slug, e.g. 'allocation'
 - `persona`, optional, string — Persona slug, e.g. 'finance'
@@ -181,7 +181,7 @@ EXPERIMENTAL: Get maturity assessment characteristics
 
 - `capability`, required, string — Capability slug
 - `maturity`, optional, enum(pre-crawl|crawl|walk|run) — One level; omit for all three official levels
-- `level`, optional, enum(pre-crawl|crawl|walk|run) — Alias for `maturity` (same values)
+- `level`, optional, enum(pre-crawl|crawl|walk|run) — Alias for `maturity` (same values); if both are passed, `maturity` wins
 
 ## finops-focus server
 
@@ -284,7 +284,7 @@ Search FOCUS columns and attributes
 
 Get one FOCUS attribute
 
-- `slug`, required, string — Attribute ID or slug, e.g. 'datetime_format'
+- `attribute`, required, string — Attribute ID or slug, e.g. 'datetime_format'
 - `version`, optional, string — FOCUS spec version (1.0|1.2); default "1.2"
 
 #### `get_requirements`
@@ -314,4 +314,4 @@ Calculate a mapped KPI over bundled sample data
 
 - `kpi`, required, string — Framework KPI slug, e.g. 'effective-savings-rate-percentage'
 - `version`, optional, string — FOCUS spec version (1.0|1.2); default "1.2"
-- `sample`, optional, enum(official|synthetic) — Which bundled sample to compute over; defaults to 'official' where one exists, else 'synthetic'
+- `sample`, optional, enum(official|synthetic) — Which bundled sample to compute over; defaults to 'official' where the version has one (currently only 1.0), else 'synthetic'. Requesting 'official' for a version without one errors.

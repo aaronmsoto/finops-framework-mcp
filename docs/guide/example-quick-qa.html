@@ -1,0 +1,437 @@
+<!doctype html>
+<!--
+  docs/guide/example-quick-qa.html - page 7 of 7 (spec: .agents/specs/usage-guide-v1.md,
+  extended 2026-08-13 to add a fourth "virtual sub-page" under Examples).
+  Shared chrome (style block, header nav, footer) copied verbatim from index.html;
+  the "page 7 additions" rules at the end of the stylesheet are this page's only
+  extension. No external assets: renders offline over file://.
+
+  Unlike the other three worked examples, this page is not a single narrative
+  chain — it is four independent, unscripted prompts asked back to back in one
+  live session against the built servers, each answered tools-only. Every quote,
+  table and number below is the actual output of that session; the exact call
+  is printed in the .callnote under each step.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick Q&amp;A — FinOps MCP Servers Usage Guide</title>
+<meta name="description" content="Four quick live prompts against both MCP servers — capabilities by domain, a capability summary, a Crawl-to-Walk maturity gap with validating KPIs, and starter Unit Economics KPIs from FOCUS 1.2 — with the exact call and real output for each.">
+<link rel="canonical" href="https://aaronmsoto.github.io/finops-framework-mcp/example-quick-qa.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="FinOps MCP Servers — Usage Guide">
+<meta property="og:title" content="Worked example · Quick Q&amp;A">
+<meta property="og:description" content="Four quick live prompts against both MCP servers — capabilities by domain, a capability summary, a Crawl-to-Walk maturity gap with validating KPIs, and starter Unit Economics KPIs from FOCUS 1.2 — with the exact call and real output for each.">
+<meta property="og:url" content="https://aaronmsoto.github.io/finops-framework-mcp/example-quick-qa.html">
+<meta name="twitter:card" content="summary">
+<style>
+  :root {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+      --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+      --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+    --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+    --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+  }
+  :root[data-theme="light"] {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+  }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+    line-height: 1.55; margin: 0; overflow-x: hidden; }
+  main { max-width: 78ch; margin: 0 auto; padding: 0 1.25rem 4rem; }
+  h1, h2 { font-family: var(--serif); text-wrap: balance; line-height: 1.15; }
+  h1 { font-size: 2.1rem; margin: 0.25rem 0 0.5rem; font-weight: 600; }
+  h2 { font-size: 1.35rem; margin: 0 0 0.6rem; font-weight: 600; }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--slate); }
+  .lede { color: var(--slate); margin: 0.4rem 0 0; }
+  .servers { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
+  .server-chip { font-family: var(--mono); font-size: 0.78rem; padding: 0.3rem 0.65rem;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); }
+  .server-chip b { color: var(--moss); font-weight: 600; }
+  .step { margin-top: 2.6rem; display: grid; grid-template-columns: 2.1rem 1fr; gap: 0.9rem; }
+  .step-n { font-family: var(--serif); font-size: 1.5rem; color: var(--moss);
+    border-top: 2px solid var(--moss); padding-top: 0.3rem; text-align: center;
+    font-variant-numeric: tabular-nums; }
+  .step-body { border-top: 1px solid var(--line); padding-top: 0.55rem; min-width: 0; }
+  .badge { display: inline-block; font-size: 0.64rem; font-weight: 700;
+    letter-spacing: 0.08em; padding: 0.14rem 0.45rem; border-radius: 3px;
+    vertical-align: 0.15em; }
+  .badge.official { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .badge.derived { color: var(--amber); border: 1px solid var(--amber); background: var(--amber-bg); }
+  .quote { border-left: 3px solid var(--moss); background: var(--panel-2);
+    padding: 0.7rem 1rem; margin: 0.9rem 0; font-family: var(--serif); font-size: 1.02rem; }
+  .callnote { font-family: var(--mono); font-size: 0.72rem; color: var(--slate);
+    margin-top: 0.5rem; overflow-x: auto; white-space: nowrap; }
+  details.kpi { border: 1px solid var(--line); border-radius: 6px; margin: 0.55rem 0;
+    background: var(--panel-2); }
+  details.kpi summary { cursor: pointer; padding: 0.6rem 0.9rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+  details.kpi summary::-webkit-details-marker { display: none; }
+  details.kpi[open] summary { border-bottom: 1px solid var(--line); }
+  .kpi-inner { padding: 0.7rem 0.9rem 0.9rem; font-size: 0.92rem; }
+  .formula { font-family: var(--mono); font-size: 0.8rem; background: var(--panel);
+    padding: 0.55rem 0.75rem; border-radius: 4px; margin: 0.5rem 0; overflow-x: auto; }
+  .cols { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+  .col-chip { font-family: var(--mono); font-size: 0.74rem; padding: 0.18rem 0.5rem;
+    border-radius: 4px; background: var(--chip-off); border: 1px solid var(--line); }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; min-width: 34rem; }
+  th { text-align: left; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--slate); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    background: var(--panel-2); }
+  td { padding: 0.45rem 0.75rem; border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, .mono { font-family: var(--mono); font-size: 0.8rem; }
+  .lvl { font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 3px; }
+  .lvl.mand { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .lvl.cond { color: var(--slate); border: 1px dashed var(--slate); }
+  .absent { color: var(--slate); font-style: italic; }
+  .new-chip { font-size: 0.62rem; font-weight: 700; color: var(--paper);
+    background: var(--moss); border-radius: 3px; padding: 0.1rem 0.35rem; margin-left: 0.35rem; }
+  .zero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.6rem; margin: 0.8rem 0; }
+  .zero-card { border: 1px solid var(--line); border-radius: 6px; padding: 0.6rem 0.75rem;
+    background: var(--panel-2); }
+  .zero-card .v { font-family: var(--mono); font-size: 1.25rem; font-weight: 700; }
+  .zero-card .n { font-size: 0.74rem; color: var(--slate); margin-top: 0.15rem; }
+  .takeaway { border: 1px solid var(--moss); border-radius: 8px; padding: 0.9rem 1.1rem;
+    margin-top: 1rem; background: var(--panel-2); }
+  .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
+  a { color: var(--moss); }
+
+  /* --- shared chrome: guide header + nav + footer (identical on all seven pages) --- */
+  header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+  header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
+    font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+  nav.guide { margin-top: 0.6rem; border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
+  nav.guide ol { list-style: none; display: flex; flex-wrap: wrap;
+    gap: 0.3rem 0.55rem; margin: 0; padding: 0; }
+  nav.guide a { font-size: 0.76rem; text-decoration: none; color: var(--slate);
+    border: 1px solid transparent; border-radius: 999px; padding: 0.18rem 0.55rem;
+    display: inline-block; }
+  nav.guide a:hover { color: var(--moss); border-color: var(--line); }
+  nav.guide a[aria-current="page"] { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); font-weight: 600; }
+  nav.guide.sub { border-top: 0; padding-top: 0.4rem; }
+  nav.guide.sub ol { gap: 0.25rem 0.4rem; }
+  nav.guide.sub a { font-size: 0.7rem; padding: 0.14rem 0.5rem; }
+  nav.guide.sub a[aria-current="page"] { background: var(--panel); color: var(--moss-ink);
+    border-color: var(--moss); font-weight: 600; }
+  main.guide-main { padding-top: 0.9rem; }
+  footer.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
+    border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--slate); }
+  footer.guide p { margin: 0.35rem 0; }
+  footer.guide .unofficial-legend { font-weight: 600; }
+
+  /* --- wide-viewport container (2026-08-06, nav shortened 2026-08-13) ---
+     The nav used to carry six long labels and needed 892px to sit on one row;
+     it now carries four short top-level labels (Intro / Framework MCP / FOCUS
+     MCP / Examples) plus, on the four Examples pages only, a second row of
+     four short sub-page labels — both rows fit one line at phone widths
+     without --wrap. --wrap still exists for the Data Model's five-card row
+     and other content that needed the extra desktop room; it is no longer
+     load-bearing for the nav itself. */
+  :root { --wrap: 78ch; }
+  @media (min-width: 64rem) { :root { --wrap: 62rem; } }
+  header.guide, footer.guide, main { max-width: var(--wrap); }
+  main p:not(.callnote), main ul, main ol { max-width: 78ch; }
+  nav.guide a { white-space: nowrap; }
+
+  /* --- page 7 additions --- */
+  .prompt-box { border: 1px dashed var(--line); border-radius: 6px; padding: 0.6rem 0.9rem;
+    margin: 0.7rem 0; background: var(--panel-2); font-size: 0.92rem; }
+  .prompt-box .who { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--slate); display: block; margin-bottom: 0.3rem; }
+  h3.sec { font-family: var(--sans); font-size: 0.82rem; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--slate); margin: 1.4rem 0 0.3rem; }
+  ul.tight { font-size: 0.9rem; padding-left: 1.15rem; margin: 0.5rem 0; }
+  ul.tight li { margin: 0.3rem 0; }
+  th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<header class="guide">
+  <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+  <nav class="guide" aria-label="Guide pages">
+    <ol>
+      <li><a href="index.html">Intro</a></li>
+      <li><a href="framework-server.html">Framework MCP</a></li>
+      <li><a href="focus-server.html">FOCUS MCP</a></li>
+      <li><a href="example-showback.html" aria-current="page">Examples</a></li>
+    </ol>
+  </nav>
+  <nav class="guide sub" aria-label="Example pages">
+    <ol>
+      <li><a href="example-showback.html">Showback</a></li>
+      <li><a href="example-esr.html">ESR</a></li>
+      <li><a href="example-forecasting.html">Forecasting</a></li>
+      <li><a href="example-quick-qa.html" aria-current="page">Quick Q&amp;A</a></li>
+    </ol>
+  </nav>
+</header>
+
+<main class="guide-main">
+  <p class="eyebrow">Page 7 of 7 · Worked example · four live prompts, no script</p>
+  <h1>Ask As You Go</h1>
+  <p class="lede">The other three examples are pre-planned walkthroughs. This one
+  is not: four ordinary questions asked back to back in one live session, each
+  answered tools-only against the built servers with no lookup at the raw
+  markdown artifact. It is the shape of day-to-day use — a practitioner
+  exploring, not a script running.</p>
+  <div class="servers">
+    <span class="server-chip"><b>finops-framework-mcp</b> · capabilities, maturity, KPIs</span>
+    <span class="server-chip"><b>finops-focus-mcp</b> · FOCUS 1.2 KPI mapping</span>
+  </div>
+
+  <!-- STEP 1 -->
+  <section class="step">
+    <div class="step-n">1</div>
+    <div class="step-body">
+      <h2>List capabilities by domain <span class="badge official">official</span></h2>
+      <div class="prompt-box"><span class="who">Prompt</span>Using only the MCP server
+      for testing, list capabilities by domain.</div>
+      <p>One call returns all 22 capabilities with their domain already attached;
+      grouping is just a client-side sort of the response:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Domain</th><th class="num">Capabilities</th><th>Members</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Understand Usage &amp; Cost</strong></td><td class="num">4</td>
+            <td><div class="cols">
+              <span class="col-chip">Allocation</span>
+              <span class="col-chip">Anomaly Management</span>
+              <span class="col-chip">Data Ingestion</span>
+              <span class="col-chip">Reporting &amp; Analytics</span>
+            </div></td></tr>
+          <tr><td><strong>Quantify Business Value</strong></td><td class="num">5</td>
+            <td><div class="cols">
+              <span class="col-chip">Budgeting</span>
+              <span class="col-chip">Forecasting</span>
+              <span class="col-chip">KPIs &amp; Benchmarking</span>
+              <span class="col-chip">Planning &amp; Estimating</span>
+              <span class="col-chip">Unit Economics</span>
+            </div></td></tr>
+          <tr><td><strong>Optimize Usage &amp; Cost</strong></td><td class="num">5</td>
+            <td><div class="cols">
+              <span class="col-chip">Architecting &amp; Workload Placement</span>
+              <span class="col-chip">Licensing &amp; SaaS</span>
+              <span class="col-chip">Rate Optimization</span>
+              <span class="col-chip">Sustainability</span>
+              <span class="col-chip">Usage Optimization</span>
+            </div></td></tr>
+          <tr><td><strong>Manage the FinOps Practice</strong></td><td class="num">8</td>
+            <td><div class="cols">
+              <span class="col-chip">Automation, Tools, &amp; Services</span>
+              <span class="col-chip">Executive Strategy Alignment</span>
+              <span class="col-chip">FinOps Assessment</span>
+              <span class="col-chip">FinOps Education &amp; Enablement</span>
+              <span class="col-chip">FinOps Practice Operations</span>
+              <span class="col-chip">Governance, Policy &amp; Risk</span>
+              <span class="col-chip">Intersecting Disciplines</span>
+              <span class="col-chip">Invoicing &amp; Chargeback</span>
+            </div></td></tr>
+        </tbody>
+      </table></div>
+      <p class="fnote" style="font-size:0.8rem;color:var(--slate);margin-top:0.5rem;">
+      4 + 5 + 5 + 8 = 22, matching the tool's own <span class="mono">total</span> field —
+      every capability the server knows about is accounted for in exactly one domain.</p>
+      <p class="callnote">framework · list_capabilities {}</p>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step">
+    <div class="step-n">2</div>
+    <div class="step-body">
+      <h2>Summarize a capability <span class="badge official">official</span></h2>
+      <div class="prompt-box"><span class="who">Prompt</span>Summarize the
+      sustainability capability.</div>
+      <div class="quote">“Incorporating sustainability criteria and metrics into
+      FinOps activities to ensure environmental efficiency is balanced with
+      financial value, and optimization decisions are aligned with organizational
+      goals.”</div>
+      <p>Sustainability sits in the <strong>Optimize Usage &amp; Cost</strong>
+      domain. Its five featured KPIs, all carrying a published formula:</p>
+      <ul class="tight">
+        <li>Carbon per Unit of Cloud Service SKU</li>
+        <li>Carbon per Unit of Cloud Spend</li>
+        <li>Carbon Waste / Carbon Efficiency</li>
+        <li>Forecast Accuracy Rate for Carbon Emissions</li>
+        <li>Percentage of CSP Cloud Carbon that is Tagging Policy Compliant</li>
+      </ul>
+      <p class="callnote">framework · get_capability {capability: "sustainability", include: ["summary","kpis"]}</p>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step">
+    <div class="step-n">3</div>
+    <div class="step-body">
+      <h2>Close a maturity gap <span class="badge official">official</span></h2>
+      <div class="prompt-box"><span class="who">Prompt</span>How can we get to
+      Walk maturity for this capability? How could we measure and validate our
+      maturity?</div>
+      <p>The official assessment names the gap directly — Walk widens Crawl's
+      narrow awareness and reactive optimization into org-wide, upstream, more
+      formal practice:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>At Crawl</th><th>Move to Walk</th></tr></thead>
+        <tbody>
+          <tr><td>Basic awareness in a few key teams</td>
+            <td>All engineering teams and most other personas aware of impact on sustainability goals</td></tr>
+          <tr><td>Optimization = mostly elasticity / turning off unused resources</td>
+            <td>Expand to re-architecting / re-factoring workloads for both cost and carbon efficiency</td></tr>
+          <tr><td>Carbon data exists but poorly integrated</td>
+            <td>Share carbon data with engineering/product teams at finer granularity</td></tr>
+          <tr><td>Cost/carbon tradeoffs evaluated broadly, mostly on existing workloads</td>
+            <td>Evaluate more granularly; consider before migration/build decisions, not just after</td></tr>
+          <tr><td>Informal, inconsistent cross-persona collaboration</td>
+            <td>Structured collaboration with defined touchpoints and shared reporting</td></tr>
+          <tr><td>Sustainability reporting is manual / ad hoc</td>
+            <td>Begin incorporating sustainability metrics into allocation and chargeback models</td></tr>
+        </tbody>
+      </table></div>
+      <p>The maturity levels are qualitative, not KPI thresholds — so validation
+      pairs the checklist above with the capability's own KPIs as quantitative
+      evidence the checklist items are actually true, not just self-reported:</p>
+      <ul class="tight">
+        <li><strong>Carbon Waste / Carbon Efficiency</strong> — a shrinking waste
+        value is evidence optimization has moved from “turn off unused” to
+        “re-architect for efficiency.”</li>
+        <li><strong>% of CSP Cloud Carbon that is Tagging Policy Compliant</strong> —
+        rising compliance is evidence carbon data is granular enough to allocate,
+        the prerequisite for chargeback integration.</li>
+        <li><strong>Forecast Accuracy Rate for Carbon Emissions</strong> — evidence
+        carbon has actually entered the forecasting process, not just reporting.</li>
+      </ul>
+      <p class="callnote">framework · get_maturity_assessment {capability: "sustainability"} · get_kpis {capability: "sustainability"}</p>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step">
+    <div class="step-n">4</div>
+    <div class="step-body">
+      <h2>Cross-server starter KPIs <span class="badge official">official</span> + <span class="badge derived">UNOFFICIAL</span></h2>
+      <div class="prompt-box"><span class="who">Prompt</span>What are some
+      initial simple KPIs to start our Unit Economics capability via FOCUS 1.2
+      data?</div>
+      <p>Unit Economics carries 9 official framework KPIs. Cross-referenced
+      against the FOCUS server's derived KPI→column mapping, only <strong>2</strong>
+      are computable from FOCUS billing data alone — the rest need external
+      systems (carbon tooling, AI platform logs, finance/product analytics)
+      the FOCUS spec does not carry:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>KPI</th><th>Derived FOCUS 1.2 formula</th><th>Columns</th></tr></thead>
+        <tbody>
+          <tr><td>Cost per API Call</td>
+            <td class="mono">SUM(EffectiveCost) WHERE ChargeCategory=&#39;Usage&#39; AND ConsumedUnit denotes API calls / SUM(ConsumedQuantity)</td>
+            <td><div class="cols">
+              <span class="col-chip">ChargeCategory</span>
+              <span class="col-chip">EffectiveCost</span>
+              <span class="col-chip">ConsumedQuantity</span>
+              <span class="col-chip">ConsumedUnit</span>
+            </div></td></tr>
+          <tr><td>Cost per Gigabytes Stored</td>
+            <td class="mono">SUM(EffectiveCost) WHERE ServiceCategory=&#39;Storage&#39; / SUM(ConsumedQuantity) WHERE ConsumedUnit=&#39;GB&#39;</td>
+            <td><div class="cols">
+              <span class="col-chip">ServiceCategory</span>
+              <span class="col-chip">EffectiveCost</span>
+              <span class="col-chip">ConsumedQuantity</span>
+              <span class="col-chip">ConsumedUnit</span>
+            </div></td></tr>
+        </tbody>
+      </table></div>
+      <p>Both are a plain <span class="mono">SUM(cost) / SUM(quantity)</span> group-by
+      — good first KPIs precisely because they validate the pipeline's basic
+      cost/usage join without needing anything beyond billing data. Neither is
+      in the server's small auto-<span class="mono">calculate_kpi</span> list,
+      though — asking for either returns:</p>
+      <div class="quote" style="font-family:var(--mono);font-size:0.82rem;">“No
+      calculable formula is registered for KPI &#39;cost-per-gigabytes-stored&#39;:
+      its FOCUS-terms formula needs ambiguous free-text unit matching this server
+      does not attempt to resolve automatically.”</div>
+      <p class="fnote" style="font-size:0.8rem;color:var(--slate);">
+      Both the mapping and the formulas above are <strong>UNOFFICIAL</strong> —
+      this server's own derived inference, not published by the FinOps Foundation
+      or the FOCUS project — <span class="mono">official: false</span> on every
+      response. Compute manually, or verify against
+      <span class="mono">get_column</span>/<span class="mono">get_requirements</span>
+      before production use.</p>
+      <p class="callnote">framework · get_kpis {capability: "unit-economics"} · focus · get_kpi_mapping {capability: "unit-economics", version: "1.2"} · calculate_kpi {kpi: "cost-per-gigabytes-stored"|"cost-per-api-call", version: "1.2"} → error (not calculable)</p>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="step">
+    <div class="step-n">5</div>
+    <div class="step-body">
+      <h2>Takeaways</h2>
+      <div class="takeaway">
+        <h3>What this session shows that the other three don't</h3>
+        <ul class="tight" style="margin-bottom:0;">
+          <li><strong>Ad hoc questions work as well as planned walkthroughs.</strong>
+          Nothing here was set up in advance — each prompt was answered from
+          whatever the previous answer surfaced, the same way a practitioner
+          would actually use it.</li>
+          <li><strong>“Summarize” and “list” need no special tooling.</strong> A
+          plain-language request maps directly onto one or two tool calls; the
+          server does the structuring.</li>
+          <li><strong>Maturity questions get qualitative answers with quantitative
+          checks attached.</strong> The framework's Crawl→Walk bullets are prose,
+          not thresholds — pair them with the capability's own KPIs to turn “we
+          think we're doing this” into a trend you can chart.</li>
+          <li><strong>Not every official KPI is FOCUS-computable, and the server
+          says so.</strong> 7 of Unit Economics' 9 KPIs need data outside FOCUS
+          entirely; of the 2 that don't, neither is in the auto-calculate list
+          because “what counts as an API call” is provider-specific free text.
+          A tool that names its own limits is more useful than one that guesses.</li>
+        </ul>
+      </div>
+      <p style="margin-top:0.9rem;">Back to the planned walkthroughs:
+      <a href="example-showback.html">Showback Reporting</a>,
+      <a href="example-esr.html">Rate Optimization (ESR)</a>, and
+      <a href="example-forecasting.html">the Forecasting maturity journey</a> —
+      or the two server references,
+      <a href="framework-server.html">finops-framework-mcp</a> and
+      <a href="focus-server.html">finops-focus-mcp</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="guide">
+  <p>FinOps Framework content © FinOps Foundation, licensed
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
+  specification content and sample data © FinOps Foundation / FOCUS project
+  contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
+  Foundation. Content on this page has been restructured and adapted from
+  those sources; this guide and these servers are community projects —
+  <strong>not published or endorsed by the FinOps Foundation or the FOCUS
+  project</strong>.</p>
+  <p class="unofficial-legend"><strong>UNOFFICIAL legend:</strong> anything marked
+  <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
+  values, and cross-version diffs — is derived by these servers
+  (<span class="mono">official: false</span>), not published upstream; verify before
+  production use.</p>
+</footer>
+
+</body>
+</html>
