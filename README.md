@@ -1,32 +1,48 @@
 # finops-framework-mcp
 
-An unofficial [MCP](https://modelcontextprotocol.io) server that gives AI
-agents a structured, queryable interface to the **FinOps Framework**
-published by the FinOps Foundation at <https://finops.org/framework>: 6
-Principles, 3 Phases, 4 Domains, 22 Capabilities (with Crawl/Walk/Run
-maturity assessments, per-persona activities, and KPIs), 11 Personas, 5
-Technology Categories, the Scopes concept, and an 88-entry KPI library.
+An unofficial [MCP](https://modelcontextprotocol.io) server pair that gives
+AI assistants a structured, sourced interface to the FinOps Foundation's
+published guidance — the **FinOps Framework** (capabilities, maturity
+assessments, KPIs, personas) and the **FOCUS** billing-data specification —
+so an assistant answers FinOps questions with the Foundation's actual text
+and formulas instead of improvising.
 
-v1 is deliberately **official-only by default** — no invented relationship
-graph, no parsed-out assessment items — with two unofficial extensions
-available opt-in behind a flag (see below).
+## Start here: the usage guide
 
-Three fully decoupled parts:
+**[aaronmsoto.github.io/finops-framework-mcp](https://aaronmsoto.github.io/finops-framework-mcp/)**
+is a free, no-install walkthrough written for FinOps practitioners as much
+as engineers — nothing to configure, just click through. It explains what
+these two servers do and why, connects one to Claude in a couple of
+minutes, and works through four real worked examples (a showback report, a
+rate-optimization calculation, a Crawl-to-Walk maturity journey, and a live
+Q&A session) with every number and quote pulled from an actual run of these
+servers. See [Documentation](#documentation) below for the full page list.
 
-```
-crawler ──▶ data artifact ──▶ MCP server
-(src/crawlers/framework)   (data/framework/)   (src/servers/framework)
- fetch → parse → sanitize   versioned JSON +    resources + tools +
- → compose → derive         markdown + JSON     prompts over stdio
- → validate → diff → emit   Schemas + manifest
-```
+## Why this exists
 
-`content/markdown/` is the **canonical** intermediate: the crawler composes
-it from parsed HTML, and every JSON file is regenerated from that markdown
-by an offline `derive` step (no network access) — so a schema or JSON-only
-fix can be regenerated without recrawling finops.org. A re-crawl refreshes
-the server with **zero code changes**; the server validates the artifact
-against its schemas at startup and refuses to start on a bad artifact.
+Ask an AI assistant "how mature is our Allocation practice?" or "which
+FOCUS columns feed Effective Savings Rate?" without this, and it will
+happily improvise a plausible-sounding answer. These two servers exist so
+it doesn't have to: every response is the FinOps Foundation's own published
+text and formulas, structured for an assistant to read, with the source URL
+and license attached to it. Anything these servers had to work out
+themselves — a KPI-to-FOCUS-column mapping, a computed KPI value, a
+cross-version diff — is clearly labeled **UNOFFICIAL** rather than
+presented as if the Foundation published it.
+
+- **finops-framework-mcp** (this package) covers the FinOps Framework: 6
+  Principles, 3 Phases, 4 Domains, 22 Capabilities (each with Crawl/Walk/Run
+  maturity assessments, per-persona activities, and KPIs), 11 Personas, 5
+  Technology Categories, the Scopes concept, and an 88-entry KPI library.
+- **finops-focus-mcp** (published separately, see below) covers FOCUS — the
+  standardized billing/usage data spec — pinned to a spec version (1.0 or
+  1.2) on every answer, so nothing gets blended across releases that
+  actually changed a column's meaning.
+
+Both servers are **read-only**: there's no way for an AI agent to change
+your FinOps practice or your billing data through them, only to read
+published guidance about it. Both are also **offline once installed** — no
+network access at runtime, no telemetry, no external calls.
 
 ## Quickstart
 
@@ -35,7 +51,8 @@ npx -y finops-framework-mcp
 ```
 
 (`-y` skips npx's first-run install prompt, which can hang non-interactive
-MCP clients; pin a version with `npx -y finops-framework-mcp@latest` or `@0.9`.)
+MCP clients; pin a version with `npx -y finops-framework-mcp@latest` or
+`@0.1`.)
 
 or, from a clone:
 
@@ -73,6 +90,30 @@ Surface (default, official-only): 11 read-only tools —
 `finops://framework/…` resources for full documents, and 4 prompts
 (`explain-framework`, `assess-capability-maturity`, `plan-maturity-roadmap`,
 `map-personas-to-capabilities`).
+
+## How it's built
+
+Three fully decoupled parts, so a content refresh never needs a code
+change:
+
+```
+crawler ──▶ data artifact ──▶ MCP server
+(src/crawlers/framework)   (data/framework/)   (src/servers/framework)
+ fetch → parse → sanitize   versioned JSON +    resources + tools +
+ → compose → derive         markdown + JSON     prompts over stdio
+ → validate → diff → emit   Schemas + manifest
+```
+
+`content/markdown/` is the **canonical** intermediate: the crawler composes
+it from parsed HTML, and every JSON file is regenerated from that markdown
+by an offline `derive` step (no network access) — so a schema or JSON-only
+fix can be regenerated without recrawling finops.org. A re-crawl refreshes
+the server with **zero code changes**; the server validates the artifact
+against its schemas at startup and refuses to start on a bad artifact.
+
+v1 is deliberately **official-only by default** — no invented relationship
+graph, no parsed-out assessment items — with two unofficial extensions
+available opt-in behind a flag.
 
 ### Experimental extensions (opt-in)
 
@@ -133,12 +174,14 @@ Schema-breaking changes bump `schema_version` and require a server release.
 Code: MIT (see `LICENSE`). Framework content in `data/framework/**` and
 FOCUS specification content in `data/focus/**`: © FinOps Foundation /
 FOCUS project contributors, **CC BY 4.0**, restructured/adapted — see
-`NOTICE.md` for the required attribution and modification notices.
+`NOTICE.md` for the required attribution and modification notices. FinOps™,
+FinOps Foundation™, and FOCUS™ are trademarks of the FinOps Foundation;
+this project is independent and not affiliated with or endorsed by the
+FinOps Foundation.
 
 ## Sibling server: finops-focus-mcp
 
-What the Roadmap once sketched is now built and ships from this repo: a
-version-aware **FOCUS specification** MCP server (`src/crawlers/focus`,
+A version-aware **FOCUS specification** MCP server (`src/crawlers/focus`,
 `src/servers/focus`, `data/focus/` — FOCUS 1.0 and 1.2) reusing
 `src/shared`. It publishes separately as
 [`packages/finops-focus-mcp`](packages/finops-focus-mcp/) (npm bin
@@ -159,7 +202,7 @@ URIs, param defaults/limits — is generated from live MCP output at
 
 ## Documentation
 
-[**`docs/guide/`**](docs/guide/index.html) is the usage guide — six
+[**`docs/guide/`**](docs/guide/index.html) is the usage guide — seven
 self-contained pages in which every number, quote, and transcript was
 captured from a live probe of these servers or computed from the committed
 sample data. It is also the published site: `.github/workflows/pages.yml`
@@ -168,14 +211,15 @@ deploys `docs/guide/` — and only that directory — to
 that touches it (setup and smoke test in
 [`docs/deploy-pages.md`](docs/deploy-pages.md)).
 
-| Page                                                       | What it covers                                                                                                                                         |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [Intro &amp; Getting Started](docs/guide/index.html)       | Both servers side by side; install, Claude Code / Claude Desktop / `.mcp.json` config, the Worker remote option, first call per server                 |
-| [finops-framework-mcp](docs/guide/framework-server.html)   | Data model, all 11 tools grouped by job, prompts and resources, pagination, an Anomaly Management demo                                                 |
-| [finops-focus-mcp](docs/guide/focus-server.html)           | Version model, all 9 tools, `focus://` resources, a BilledCost deep-dive and the 1.0→1.2 diff                                                          |
-| [Showback Reporting](docs/guide/example-showback.html)     | Understand Usage &amp; Cost → Allocation + Reporting &amp; Analytics → the FOCUS columns a showback needs → a report computed from the official sample |
-| [Rate Optimization (ESR)](docs/guide/example-esr.html)     | Capability → featured KPIs → FOCUS columns at 1.0 vs 1.2 → Effective Savings Rate on the official sample                                               |
-| [Forecasting Journey](docs/guide/example-forecasting.html) | A maturity journey to Walk-level Forecasting: official Crawl/Walk characteristics, KPIs, and the data that feeds a forecast                            |
+| Page                                                        | What it covers                                                                                                                                          |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Intro & Getting Started](docs/guide/index.html)             | Both servers side by side; install, Claude Code / Claude Desktop / `.mcp.json` config, the Worker remote option, first call per server                 |
+| [Framework MCP reference](docs/guide/framework-server.html)  | Data model, all 11 tools grouped by job, prompts and resources, pagination, an Anomaly Management demo                                                 |
+| [FOCUS MCP reference](docs/guide/focus-server.html)          | Version model, all 9 tools, `focus://` resources, a BilledCost deep-dive and the 1.0→1.2 diff                                                          |
+| [Showback Reporting](docs/guide/example-showback.html)       | Understand Usage & Cost → Allocation + Reporting & Analytics → the FOCUS columns a showback needs → a report computed from the official sample |
+| [Rate Optimization (ESR)](docs/guide/example-esr.html)       | Capability → featured KPIs → FOCUS columns at 1.0 vs 1.2 → Effective Savings Rate on the official sample                                               |
+| [Forecasting Journey](docs/guide/example-forecasting.html)   | A maturity journey to Walk-level Forecasting: official Crawl/Walk characteristics, KPIs, and the data that feeds a forecast                            |
+| [Quick Q&A](docs/guide/example-quick-qa.html)                | Four unscripted live prompts in one session: capabilities by domain, a capability summary, a Crawl→Walk maturity gap with validating KPIs, and starter Unit Economics KPIs from FOCUS 1.2 |
 
 Every page opens over `file://` too — the guide has no external assets.
 Guide pages are rich HTML by design — an intentional exception to this
