@@ -177,9 +177,7 @@ function formatParams(inputSchema) {
   const required = new Set(inputSchema.required ?? []);
   const names = Object.keys(props);
   if (names.length === 0) return "_(no parameters)_";
-  return names
-    .map((n) => formatParam(n, props[n], required.has(n)))
-    .join("\n");
+  return names.map((n) => formatParam(n, props[n], required.has(n))).join("\n");
 }
 
 function formatTool(t) {
@@ -249,9 +247,12 @@ function formatServerSection(heading, meta, surface) {
 }
 
 async function frameworkMeta(client) {
-  const res = await client.callTool({ name: "get_framework_info", arguments: {} });
+  const res = await client.callTool({
+    name: "get_framework_info",
+    arguments: {},
+  });
   const info = res.structuredContent;
-  return `Data v${info.data_version}, crawled ${String(info.crawled_at).slice(0, 10)}. Default (non-experimental) posture — the shipped default.`;
+  return `Data v${info.data_version}, crawled ${String(info.crawled_at).slice(0, 10)}. The surface a default \`npx finops-framework-mcp\` serves.`;
 }
 
 async function focusMeta(client) {
@@ -265,22 +266,15 @@ async function main() {
   ensureBuilt();
 
   const fw = await connect("framework");
-  const fwExp = await connect("framework", { FINOPS_MCP_EXPERIMENTAL: "1" });
   const focus = await connect("focus");
 
   const fwMetaLine = await frameworkMeta(fw);
   const focusMetaLine = await focusMeta(focus);
 
   const fwSurface = await surfaceFor(fw);
-  const fwExpSurface = await surfaceFor(fwExp);
   const focusSurface = await surfaceFor(focus);
 
-  const extraTools = fwExpSurface.tools.filter(
-    (t) => !fwSurface.tools.some((x) => x.name === t.name),
-  );
-
   await fw.close();
-  await fwExp.close();
   await focus.close();
 
   const header = [
@@ -303,33 +297,19 @@ async function main() {
     "",
     "## Legend",
     "",
-    '- **[UNOFFICIAL/EXPERIMENTAL]** — title or description contains ' +
+    "- **[UNOFFICIAL/EXPERIMENTAL]** — title or description contains " +
       '"unofficial" or "experimental": content derived/parsed by this ' +
       "server rather than published or endorsed by the FinOps Foundation " +
-      "or the FOCUS project (`official: false` in structured output), " +
-      "and/or gated behind an opt-in environment flag. Unmarked entries " +
-      "are official framework/FOCUS content, restructured.",
+      "or the FOCUS project (`official: false` in structured output). " +
+      "Unmarked entries are official framework/FOCUS content, restructured.",
   ].join("\n");
-
-  const experimentalSection = extraTools.length
-    ? [
-        "### Experimental extensions (`FINOPS_MCP_EXPERIMENTAL=1`)",
-        "",
-        `Adds ${extraTools.length} tool(s) not present in the default posture above:`,
-        "",
-        extraTools.map(formatTool).join("\n\n"),
-      ].join("\n")
-    : null;
 
   const doc =
     [
       header,
       formatServerSection("finops-framework server", fwMetaLine, fwSurface),
-      experimentalSection,
       formatServerSection("finops-focus server", focusMetaLine, focusSurface),
-    ]
-      .filter(Boolean)
-      .join("\n\n") + "\n";
+    ].join("\n\n") + "\n";
 
   if (process.argv.includes("--check")) {
     const existing = existsSync(OUT_PATH) ? readFileSync(OUT_PATH, "utf8") : "";

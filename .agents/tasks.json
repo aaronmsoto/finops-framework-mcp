@@ -1538,6 +1538,19 @@
         "completedAt": "2026-08-13T05:49:58.943Z"
       },
       "hash": "9af3bdba719adf5d778312f5cb85fbce90cccfcefd9735256b4869b8971b79a8"
+    },
+    {
+      "id": "T-082",
+      "title": "Public-launch surface: repo link in guide, scrub experimental from public docs",
+      "acceptance": [
+        "Every guide page (7 + 404.html) carries a persistent link to https://github.com/aaronmsoto/finops-framework-mcp in its shared header, plus a prominent callout on index.html; no external assets introduced (still zero img/script src/stylesheet links)",
+        "No public discovery surface mentions FINOPS_MCP_EXPERIMENTAL, --experimental, get_actions, or Pre-Crawl: README.md, docs/guide/*.html, root server.json environmentVariables, and regenerated docs/mcp-surface.md are all clean",
+        "The experimental code path is untouched and still works: default stdio tools/list serves 11 tools without get_actions, FINOPS_MCP_EXPERIMENTAL=1 serves 12 including get_actions, proven by live probe",
+        "scripts/gen-mcp-surface.mjs no longer emits an experimental section and src/servers/mcp-surface.test.ts asserts the inverse (flag-only tools absent from the doc); node scripts/gen-mcp-surface.mjs --check clean and ./scripts/agentic gates --tier full passes"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

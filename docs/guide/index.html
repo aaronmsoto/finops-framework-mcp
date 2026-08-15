@@ -132,6 +132,13 @@
   header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
   header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
     font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+  header.guide .title-row { display: flex; flex-wrap: wrap; align-items: baseline;
+    justify-content: space-between; gap: 0.35rem 0.75rem; }
+  a.repo-link { font-size: 0.72rem; text-decoration: none; color: var(--moss);
+    border: 1px solid var(--line); border-radius: 999px; padding: 0.16rem 0.6rem;
+    background: var(--panel-2); white-space: nowrap; }
+  a.repo-link:hover { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); }
   nav.guide { margin-top: 0.6rem; border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
   nav.guide ol { list-style: none; display: flex; flex-wrap: wrap;
@@ -192,6 +199,8 @@
     border-radius: 6px; padding: 0.6rem 0.8rem; background: var(--panel-2); min-width: 0; }
   .next-card a { font-weight: 600; font-size: 0.92rem; text-decoration: none; }
   .next-card p { font-size: 0.8rem; color: var(--slate); margin: 0.25rem 0 0; }
+  .repo-card { margin-top: 0.9rem; }
+  .repo-card a { font-family: var(--mono); font-size: 0.82rem; word-break: break-word; }
   h3.sec { font-family: var(--sans); font-size: 0.82rem; letter-spacing: 0.09em;
     text-transform: uppercase; color: var(--slate); margin: 1.4rem 0 0.3rem; }
   ul.tight { font-size: 0.9rem; padding-left: 1.15rem; margin: 0.5rem 0; }
@@ -201,7 +210,11 @@
 <body>
 
 <header class="guide">
-  <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+  <div class="title-row">
+    <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+    <a class="repo-link" href="https://github.com/aaronmsoto/finops-framework-mcp"
+      >Source on GitHub ↗</a>
+  </div>
   <nav class="guide" aria-label="Guide pages">
     <ol>
       <li><a href="index.html" aria-current="page">Intro</a></li>
@@ -227,6 +240,14 @@
     <span class="server-chip"><b>finops-focus-mcp</b> · 9 tools · FOCUS 1.0 + 1.2</span>
   </div>
 
+  <div class="next-card repo-card">
+    <a href="https://github.com/aaronmsoto/finops-framework-mcp"
+      >github.com/aaronmsoto/finops-framework-mcp ↗</a>
+    <p>Everything on this site is open source: both servers, the crawlers that
+    build their data, the committed data artifacts, and the pages of this guide.
+    MIT-licensed code, CC BY 4.0 content. Issues and pull requests welcome.</p>
+  </div>
+
   <!-- STEP 1 — what this is -->
   <section class="step">
     <div class="step-n">1</div>
@@ -241,11 +262,10 @@
       run with no network access at all:</p>
       <div class="formula">crawler ──▶ markdown-canonical data artifact ──▶ stdio MCP server</div>
       <ul class="tight">
-        <li><strong>Official by default.</strong> The framework server's default
-        surface is official content only. Its two derived extras (a
-        below-Crawl <span class="mono">Pre-Crawl</span> level and the parsed
-        <span class="mono">get_actions</span> characteristics) are hidden behind
-        <span class="mono">FINOPS_MCP_EXPERIMENTAL=1</span>.</li>
+        <li><strong>Official by default.</strong> Everything the framework
+        server serves is content published on finops.org/framework,
+        restructured — no invented relationships between capabilities, no
+        maturity levels the Foundation doesn't define.</li>
         <li><strong>Unofficial work is labelled, not hidden.</strong> The FOCUS
         server's KPI mapping, KPI calculation and 1.0→1.2 diff ship in the
         default surface but carry <span class="badge derived">UNOFFICIAL</span>
@@ -345,11 +365,7 @@ npm install &amp;&amp; npm run build &amp;&amp; npm run server</pre>
       <p style="font-size:0.88rem;">The framework server loads the data
       artifact packaged with its release (<span class="mono">data/framework</span>);
       point it at a locally-refreshed artifact with
-      <span class="mono">FINOPS_MCP_DATA</span> or the first CLI argument. To expose
-      the framework server's opt-in derived extras, add
-      <span class="mono">FINOPS_MCP_EXPERIMENTAL=1</span> or the
-      <span class="mono">--experimental</span> flag — that adds exactly one tool,
-      <span class="mono">get_actions</span>, marked EXPERIMENTAL.</p>
+      <span class="mono">FINOPS_MCP_DATA</span> or the first CLI argument.</p>
 
       <h3 class="sec">Claude Code — one command per server</h3>
       <pre class="tx">claude mcp add finops-framework -- npx -y finops-framework-mcp
