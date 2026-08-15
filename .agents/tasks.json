@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "06fce1e20b5581b6655bf5031033202f71e9d412d54ce57304775150e6334498",
+  "chainHead": "bdea7e138f6726b09abedd94032b824260c8dd0460c3cd191d09108e391c869e",
   "tasks": [
     {
       "id": "T-001",
@@ -1640,9 +1640,15 @@
         "A registry failure cannot corrupt or obscure the npm publish result: the registry work is a separate job depending on publish, so npm success stays visible and the registry step can be re-run alone",
         "docs/release-runbook.md reflects that the registry submission is now automatic on tag push, with the manual commands retained for the bootstrap case; ./scripts/agentic gates --tier all passes and the workflow YAML parses"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Added a registry job to publish.yml that submits both server.json manifests to the MCP Registry over OIDC after the npm publish job. Protected-path edit, explicitly authorized by the owner in-session; the PreToolUse hook's documented override marker was placed and removed, no standing bypass left. Separate job with needs: publish so an irreversible npm publish stays green and only the registry step re-runs on failure; publisher pinned at v1.8.1 and installed from the registry's Go module (never the unrelated npm package of that name); both manifests validated before either is submitted. Fast gates PASS (414 tests) plus build clean. Verified as far as possible without a tag: YAML inspected, pinned version confirmed to build via the module proxy with checksums on, and publisher validate returns valid for both manifests using the exact argument form the job uses. That caught a real defect — setup-go was pinned to 1.25 but registry v1.8.1 requires go 1.26, so the install step would have failed at release time after npm had already published; now 1.26 with a comment tying it to the publisher pin. Honest limitation: the workflow only triggers on tags, so it cannot be exercised until the first real release.",
+        "commit": "8803a370ebeda19da2f59a0497d217aca79e7006",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-15T08:44:44.073Z"
+      },
+      "hash": "bdea7e138f6726b09abedd94032b824260c8dd0460c3cd191d09108e391c869e"
     }
   ]
 }
