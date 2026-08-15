@@ -19,12 +19,6 @@
       },
       "environmentVariables": [
         {
-          "name": "FINOPS_MCP_EXPERIMENTAL",
-          "description": "Set to 1 to enable unofficial extensions (pre-crawl maturity level, parsed assessment items); default surface is official-only.",
-          "isRequired": false,
-          "format": "string"
-        },
-        {
           "name": "FINOPS_MCP_DATA",
           "description": "Override the bundled data artifact directory (defaults to the packaged data/framework).",
           "isRequired": false,

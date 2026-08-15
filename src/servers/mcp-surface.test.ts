@@ -108,21 +108,36 @@ describe("docs/mcp-surface.md matches the live server surface", () => {
     await client.close();
   });
 
-  it("documents the framework server's experimental extras", async () => {
+  // The inverse of the check above: flag-gated tools are deliberately absent
+  // from the public surface doc (T-082 — the extensions stay in the code but
+  // are no longer advertised). Boots the experimental server so a new gated
+  // tool is still discovered here rather than silently leaking into the doc.
+  it("keeps flag-gated tools out of the surface doc", async () => {
     const artifact = loadArtifact(
       join(import.meta.dirname, "../../data/framework"),
     );
-    const client = await linked(
-      createFrameworkServer(artifact, { experimental: true }),
+    const [dflt, exp] = await Promise.all([
+      linked(createFrameworkServer(artifact, { experimental: false })),
+      linked(createFrameworkServer(artifact, { experimental: true })),
+    ]);
+    const defaultNames = new Set(
+      (await dflt.listTools()).tools.map((t) => t.name),
     );
-    const tools = (await client.listTools()).tools;
-    for (const t of tools) {
+    const gated = (await exp.listTools()).tools.filter(
+      (t) => !defaultNames.has(t.name),
+    );
+    expect(
+      gated.length,
+      "expected at least one flag-gated tool",
+    ).toBeGreaterThan(0);
+    for (const t of gated) {
       expect(
         doc,
-        `experimental tool "${t.name}" missing from docs/mcp-surface.md`,
-      ).toContain(`\`${t.name}\``);
+        `flag-gated tool "${t.name}" must not appear in docs/mcp-surface.md`,
+      ).not.toContain(`\`${t.name}\``);
     }
-    await client.close();
+    await dflt.close();
+    await exp.close();
   });
 
   it("documents the focus server's surface", async () => {

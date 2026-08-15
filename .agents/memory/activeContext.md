@@ -38,28 +38,45 @@
   `packages/finops-focus-mcp/README.md`'s opening line (its own
   `package.json` description already said it; the README didn't) and
   added the README's guide table's missing 7th row.
+- **2026-08-15:** T-082 public-launch surface pass. Repo is now **public**
+  and PRs #22/#23 are merged (`dev` survived #23's merge this time). Added
+  a persistent "Source on GitHub" link to the shared header of all 7 guide
+  pages plus a callout on `index.html` and a link on `404.html` — the
+  guide had no repo link at all. Scrubbed every *public* mention of the
+  flag-gated extensions (`FINOPS_MCP_EXPERIMENTAL`, `--experimental`,
+  `get_actions`, Pre-Crawl) from README.md, the guide, root `server.json`,
+  and `docs/mcp-surface.md`; the code, the flag, and their tests are
+  untouched (decisions.md 2026-08-15).
 
 ## Next steps
 
-1. **Resolved (2026-08-14):** GitHub deleted the **`dev` branch** when PR
-   #21 merged (its own "delete head branch on merge" setting, since `dev`
-   was #21's head ref). Owner chose to keep the existing dev→main
-   rolling-release pattern; `dev` recreated from `main`'s current tip
-   (`git push origin main:dev`, confirmed via `git ls-remote`: `dev` and
-   `main` both at `77f48dc`). **Still worth checking:** Settings → General
-   → "Automatically delete head branches" — if on, it will delete `dev`
-   again the next time a PR with `dev` as its head branch merges (i.e.
-   every "Release: dev → main" rolling PR). Turning that setting off is
-   the actual fix; recreating the branch is just a one-time patch.
-2. Owner: flip the repo public — still **private** as of 2026-08-14
-   (confirmed via the GitHub API; Pages serves it anyway on the paid
-   plan), which is why `docs/release-runbook.md`'s npm trusted-publishing
-   flow and the "flip public" step are both still open.
-3. Owner: follow `docs/release-runbook.md` — manual first `npm publish` of
-   both packages (0.1.0), configure trusted publishers, submit both
-   `server.json` manifests via `mcp-publisher`.
-4. Owner: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages deploy
-   demo/`; smoke-test the demo against the deployed Worker.
+1. **Owner (blocks everything below):** set the GitHub About description —
+   the session token is proxied and 403s on repository-settings writes
+   ("Repository settings writes are not permitted through this proxy"), so
+   this cannot be automated from an agent session. Agreed wording:
+   `Two unofficial MCP servers giving AI assistants sourced answers from
+   the FinOps Framework and the FOCUS billing-data spec.` While in there:
+   set the website field to the Pages URL, add topics (`mcp`,
+   `model-context-protocol`, `finops`, `focus`, `cloud-cost`), and confirm
+   Settings → General → "Automatically delete head branches" is **off** —
+   it deleted `dev` when PR #21 merged; it did not fire for #23, but an
+   unconfirmed setting will bite again on a future rolling release.
+2. npm first publish (0.1.0, both packages) per
+   `docs/release-runbook.md`. Owner authorized an agent session to run it
+   with a pasted npm **automation** token (`npm login` cannot complete
+   headlessly; a classic token with 2FA-on-publish 403s). `npm publish` is
+   an `ask` rule in `.claude/settings.json` — that prompt is the human
+   gate. Then the two owner-only web steps: per-package trusted-publisher
+   config, then `mcp-publisher publish` for both `server.json` manifests
+   (must run after npm — registry ownership validation reads `mcpName`
+   from the published tarball).
+3. Cloudflare: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages
+   deploy demo/`, smoke-test the demo against the deployed Worker.
+   Needs `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` pasted in —
+   `wrangler login` is browser-based. wrangler 4.123.0 is available.
+4. Post-publish: install smoke test from a clean npm cache
+   (`npx -y finops-framework-mcp@0.1.0`, same for the FOCUS package) —
+   the one check `npm pack --dry-run` cannot give you.
 
 ## Open questions
 
@@ -104,9 +121,9 @@
 
 ## Last updated
 
-2026-08-14 — Reorganized root README.md and the FOCUS package README for
-FinOps-practitioner readability; fixed leftover `@0.9` npm version pins
-and a missing "unofficial" self-description. Recreated the `dev` branch
-(owner-approved) after GitHub's merge cleanup deleted it; flagged that
-"Automatically delete head branches" needs turning off or this repeats
-every rolling-release merge.
+2026-08-15 — T-082: added a repo link to every guide page and scrubbed the
+flag-gated extensions from every public doc surface without touching the
+code (11 default tools / 12 with the flag, verified live). Repo settings
+writes are blocked by the session's GitHub proxy, so the About description
+is an owner step; npm publish and the Cloudflare deploy are queued behind
+the tokens the owner will paste.

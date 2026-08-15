@@ -593,3 +593,51 @@ Alternatives considered:
 `tests/version-sync.test.ts` already enforces `SERVER_VERSION` ↔
 `package.json` per server on every gate run, so a future version bump that
 misses one side fails CI rather than drifting silently.
+
+## 2026-08-15 — Stop advertising the flag-gated extensions, keep the code
+
+Decision: remove every reference to `FINOPS_MCP_EXPERIMENTAL`,
+`--experimental`, `get_actions`, and the Pre-Crawl maturity level from the
+project's *public discovery surfaces* — `README.md`, the published
+`docs/guide/` pages, the root `server.json` registry manifest, and the
+generated `docs/mcp-surface.md` — while leaving the flag, the tool, the
+level, and all their tests exactly as they are. The extensions still work
+for anyone who sets the flag; they are simply no longer promoted.
+
+Rationale (owner call, ahead of the first npm publish): that content is not
+ready to be presented to first-time users. Advertising an "EXPERIMENTAL"
+opt-in on a launch README invites people to enable something the project
+does not yet want to support. Docs-only removal keeps the decision cheap to
+reverse — re-advertising later is a documentation change, not a
+re-implementation, and no artifact schema, derive step, or test had to move.
+
+The scrub deliberately stops at the discovery surface. Left untouched:
+
+- `docs/architecture.md`, `docs/critique-*.md`, `docs/eval-results.md`,
+  `evals/`, `.agents/**`, `AGENTS.md` — engineering design record and
+  session history. These describe how the shipped code actually behaves;
+  scrubbing them would make the design docs lie about the codebase.
+- `NOTICE.md` — it names the `pre-crawl` level and parsed `Action` records
+  as modifications made to CC BY 4.0 content, and that data still ships in
+  the package (`data/framework/derived/maturity-extension.json`). Removing
+  it would be a licensing regression, not a cleanup.
+
+Alternatives considered:
+
+- **Delete the code outright.** Rejected: the cleanest public surface, but
+  it turns "add it back when it's ready" into a re-implementation touching
+  the crawler's derive step, the artifact schemas, and the Worker data
+  bundle. The owner explicitly wants this reversible.
+- **Leave `server.json`'s env-var declaration in place** on the grounds
+  that a registry manifest is machine-readable config rather than marketing
+  copy. Rejected: the MCP registry renders it to humans browsing servers,
+  which is exactly the discovery surface this decision is about.
+
+Enforcement note: `scripts/gen-mcp-surface.mjs` no longer opens a second
+flag-on stdio connection, and `src/servers/mcp-surface.test.ts`'s
+experimental case was **inverted** rather than deleted — it still boots the
+flag-on server, diffs its tool list against the default one, and now asserts
+those gated tools are *absent* from the doc. A newly added gated tool
+therefore still fails the suite instead of silently leaking into the public
+surface. `README.md` and the guide HTML have no equivalent guard; a
+grep-based docs gate is queued as follow-on work.
