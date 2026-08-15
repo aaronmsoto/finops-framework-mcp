@@ -1,8 +1,8 @@
 # finops-focus-mcp
 
-An [MCP](https://modelcontextprotocol.io) server that gives AI agents a
-structured, **version-aware** interface to the **FOCUS** (FinOps Open Cost &
-Usage Specification) published by the FinOps Foundation /
+An unofficial [MCP](https://modelcontextprotocol.io) server that gives AI
+agents a structured, **version-aware** interface to the **FOCUS** (FinOps
+Open Cost & Usage Specification) published by the FinOps Foundation /
 FinOps-Open-Cost-and-Usage-Spec project. FOCUS columns are added, renamed,
 deprecated, and re-semanticized across releases — this server pins every
 answer to a spec version (`1.0` or `1.2`, default `1.2`) instead of blending
@@ -22,7 +22,7 @@ npx -y finops-focus-mcp
 ```
 
 (`-y` skips npx's first-run install prompt, which can hang non-interactive
-MCP clients; pin a version with `npx -y finops-focus-mcp@latest` or `@0.9`.)
+MCP clients; pin a version with `npx -y finops-focus-mcp@latest` or `@0.1`.)
 
 Claude Code:
 
