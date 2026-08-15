@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "c72ab1f6a376b5ea8c8cdfe4ff1d3b4d7ac84057ebb8cdbad12cb15ea314a202",
+  "chainHead": "ad8338f54bf3f07de06fc7315c9c75fcf714a84def5daf72e618d72edf087502",
   "tasks": [
     {
       "id": "T-001",
@@ -1566,9 +1566,15 @@
         "npm audit on the production tree reports 0 vulnerabilities (was 2 high + 2 moderate via hono and ip-address)",
         "./scripts/agentic gates --tier all passes and both servers still serve their documented surfaces over stdio (framework 11 tools, focus 9 tools) under the new SDK"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Bumped @modelcontextprotocol/sdk ^1.29.0 -> ^1.30.0 in both package.json files after the publish pre-flight found 2 high + 2 moderate advisories transitive through it (hono, ip-address) in the production tree. npm install alone did not move the already-resolved transitive versions; npm update on hono/@hono/node-server/ip-address/express-rate-limit was required, which then surfaced fast-uri via ajv (3.1.4->3.1.5) and four dev-only advisories, all cleared within existing ranges. npm audit --omit=dev and full-tree npm audit both report 0 vulnerabilities. gates --tier all PASS; both servers exercised live under the new SDK (framework 11 tools with get_actions still gated out, focus 9 tools, real get_capability and list_versions calls returning correct content).",
+        "commit": "2c1df1781f2499654d2d607debe55d04e2e62fd0",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-15T07:13:04.760Z"
+      },
+      "hash": "ad8338f54bf3f07de06fc7315c9c75fcf714a84def5daf72e618d72edf087502"
     }
   ]
 }
