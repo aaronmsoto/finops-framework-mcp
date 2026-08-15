@@ -1557,6 +1557,18 @@
         "completedAt": "2026-08-15T06:38:37.966Z"
       },
       "hash": "c72ab1f6a376b5ea8c8cdfe4ff1d3b4d7ac84057ebb8cdbad12cb15ea314a202"
+    },
+    {
+      "id": "T-083",
+      "title": "Bump @modelcontextprotocol/sdk to ^1.30.0 to clear transitive advisories",
+      "acceptance": [
+        "Both package.json files (root and packages/finops-focus-mcp) declare @modelcontextprotocol/sdk ^1.30.0; package-lock.json regenerated with no unrelated dependency churn",
+        "npm audit on the production tree reports 0 vulnerabilities (was 2 high + 2 moderate via hono and ip-address)",
+        "./scripts/agentic gates --tier all passes and both servers still serve their documented surfaces over stdio (framework 11 tools, focus 9 tools) under the new SDK"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
