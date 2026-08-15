@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "15667cd78bc69bd1475985a62ca19f2de7f3251aab837122021d8eb61c4abb5c",
+  "chainHead": "bb39e0e63a5f6c37fa9023a0f6b8bfa72766ac4ef6ae10389571084376634b13",
   "tasks": [
     {
       "id": "T-001",
@@ -1593,6 +1593,25 @@
         "completedAt": "2026-08-15T07:44:07.119Z"
       },
       "hash": "15667cd78bc69bd1475985a62ca19f2de7f3251aab837122021d8eb61c4abb5c"
+    },
+    {
+      "id": "T-085",
+      "title": "Announce the npm release in the README and guide",
+      "acceptance": [
+        "Both READMEs carry a badge row linking to their npm package pages, and their Quickstart sections state the packages are published rather than describing a hypothetical install",
+        "docs/guide/index.html's install step states both packages are live on npm with text links to npmjs.com, and the guide still has ZERO external assets (no img/src=/stylesheet/@import across all 8 pages) so it keeps rendering over file://",
+        "The hosted Worker URL and demo URL are NOT advertised anywhere public; the guide's 'no public hosted endpoint' paragraph and the README's 'deployable' Worker framing are unchanged",
+        "docs/deploy-worker.md no longer recommends 'wrangler secret put ALLOWED_ORIGINS', which the Cloudflare API rejects with code 10053 when a [vars] binding of that name exists; ./scripts/agentic gates --tier all passes"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Added npm badge rows and published-on-npm lead-ins to both READMEs, and stated in docs/guide/index.html's install step that both packages are live on npm with text links. Badges are READMEs-only by design: they are shields.io <img> tags and the guide asserts zero external assets so it renders over file:// — verified still zero img/src=/stylesheet/@import across all 8 guide pages, and headless renders at 390px/1280px are byte-identical to baseline. Badge endpoints verified live (200, reporting 0.1.0) and both packages confirmed via registry.npmjs.org. The hosted Worker and demo URLs are deliberately not advertised (decisions.md 2026-08-15); grep confirms neither appears in either README or any guide page. Also corrected docs/deploy-worker.md step 2, which recommended a wrangler secret put the API rejects with code 10053, and warned forkers that ALLOWED_ORIGINS ships set to this project's demo origin so they replace rather than append. gates --tier all PASS; reviewer subagent verdict pass, both of its findings fixed.",
+        "commit": "665eb8fd5f6ecda1d07c4b70ab9895118e7136e7",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-15T08:13:15.360Z"
+      },
+      "hash": "bb39e0e63a5f6c37fa9023a0f6b8bfa72766ac4ef6ae10389571084376634b13"
     }
   ]
 }

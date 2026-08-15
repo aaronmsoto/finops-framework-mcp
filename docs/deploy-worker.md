@@ -41,16 +41,24 @@ should stay green, including the drift check in `bundle-data.test.ts`.
 
 ## 2. Configure the Origin allowlist
 
-`wrangler.toml`'s `[vars]` block ships with `ALLOWED_ORIGINS = ""` (empty —
-only non-browser MCP clients, which send no `Origin` header, are allowed).
-Before pointing a browser-based client (e.g. the T-038 demo app) at the
-Worker, set a comma-separated allowlist, either in `wrangler.toml` directly
-or as a per-environment override:
+`ALLOWED_ORIGINS` is a comma-separated allowlist declared in `wrangler.toml`'s
+`[vars]` block. It ships set to this project's own demo origin
+(`https://finops-mcp-demo.pages.dev`), so on a fork **replace** that value with
+your own client's origin rather than appending to it — otherwise your Worker
+keeps allowlisting someone else's page. Then redeploy:
 
-```sh
-npx wrangler secret put ALLOWED_ORIGINS   # or edit wrangler.toml [vars] and redeploy
-# e.g.: https://your-demo.pages.dev,https://your-other-client.example.com
+```toml
+# wrangler.toml
+[vars]
+ALLOWED_ORIGINS = "https://your-demo.pages.dev,https://your-other-client.example.com"
 ```
+
+Edit the file — do not reach for `wrangler secret put ALLOWED_ORIGINS`. A
+secret cannot shadow a `[vars]` binding of the same name: the API rejects it
+with `Binding name 'ALLOWED_ORIGINS' already in use [code: 10053]`. A
+`--var ALLOWED_ORIGINS:...` override on the deploy command does work, but only
+until the next plain `wrangler deploy` silently restores this file's value —
+fine for a one-off test, wrong for the deployed configuration.
 
 A request with no `Origin` header is always allowed regardless of this
 list (that's how stdio-bridged and server-to-server MCP clients call it);

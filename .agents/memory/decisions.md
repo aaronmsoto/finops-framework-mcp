@@ -641,3 +641,44 @@ those gated tools are *absent* from the doc. A newly added gated tool
 therefore still fails the suite instead of silently leaking into the public
 surface. `README.md` and the guide HTML have no equivalent guard; a
 grep-based docs gate is queued as follow-on work.
+
+## 2026-08-15 — Announce npm, but do not advertise the hosted Worker
+
+Decision: the READMEs and the published guide now state that
+`finops-framework-mcp` and `finops-focus-mcp` are live on npm (badge rows,
+links to both package pages). The deployed Cloudflare Worker
+(`finops-mcp-worker.soto-c30.workers.dev`) and the demo
+(`finops-mcp-demo.pages.dev`) are **not advertised** as things to point a
+client at. (Both do appear in the public repo — `wrangler.toml`'s allowlist,
+`demo/config.js`, `docs/deploy-demo.md` — so this is "not promoted", not
+"secret".) The guide's
+"There is no public hosted endpoint to point you at here" paragraph stands,
+and the README keeps its "deployable" framing for the Worker.
+
+Rationale (owner call): `docs/deploy-worker.md` documents, deliberately, that
+the Worker has no authentication and no rate limiting — justified because it
+serves only public read-only content with no per-user state. That reasoning
+holds for a demo endpoint; it does not hold for an endpoint advertised in a
+launch README, which would put unbounded public traffic on the owner's
+Cloudflare account with no lever short of taking it down. Self-hosting
+instructions already exist for anyone who wants a remote endpoint.
+
+Alternatives considered:
+
+- **Publish the endpoint as a public service.** Rejected for now: lowest
+  friction for readers (no install at all), but it needs Cloudflare rate-
+  limiting rules and an explicit decision to accept the traffic and cost
+  first. `docs/deploy-worker.md` already points at the rate-limiting docs as
+  the right lever if this is ever revisited.
+- **Link the demo but not the Worker.** Rejected as illusory: the demo page
+  ships the Worker URL in its own `config.js`, so linking it publishes the
+  endpoint indirectly while appearing not to.
+
+Known consequence, recorded so it is revisited deliberately: the live demo is
+currently undiscoverable — it exists, works, and nothing points at it. That is
+a separate decision from this one and should be taken on its own terms.
+
+Guide constraint that shaped the implementation: badges are shields.io
+`<img>` tags, and `docs/guide/` asserts in its own header comment that it has
+zero external assets so it renders over `file://`. Badges therefore live in
+the two READMEs only; the guide states the same fact with plain text links.
