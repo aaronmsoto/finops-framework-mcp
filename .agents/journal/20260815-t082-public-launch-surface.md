@@ -80,3 +80,42 @@
 - next: owner sets the About description/topics/website; then npm first
   publish of both packages at 0.1.0 and the Cloudflare Worker + Pages deploy,
   both queued behind tokens the owner will paste into a session.
+
+## T-082 — reviewer findings applied — 2026-08-15T00:00:00Z
+
+- did: Independent `reviewer` subagent pass (verdict: pass, all four
+  acceptance criteria reproduced independently — it re-ran the build, both
+  stdio postures, `--experimental` as well as the env var, a live
+  `tools/call get_actions`, `gen-mcp-surface --check`, and the full gate
+  suite; it also hashed the two inserted chrome blocks and confirmed they
+  are byte-identical across all 7 pages, and walked four mutation cases
+  against the inverted mcp-surface test to confirm it still fails on a real
+  regression rather than passing vacuously).
+  - **Fixed the one real regression it found.** Rewriting the README's
+    official-only paragraph, I dropped the original's "by default"
+    qualifier, turning a scoped claim into an absolute one — and the
+    absolute version is contradicted inside the same npm tarball, since
+    `NOTICE.md` discloses the pre-crawl level and parsed Action records and
+    `data/framework/derived/{actions,maturity-extension}.json` are in
+    `package.json`'s `files`. Same shape had crept into
+    `docs/guide/index.html`'s "Official by default" bullet. Both now scoped
+    with "Out of the box"; `docs/guide/framework-server.html`'s equivalent
+    ("Everything in this server's default posture…") re-scoped the same way,
+    which also removes the last "default posture" phrasing implying a
+    non-default one exists. Worth naming plainly: the scrub's goal was to
+    stop advertising a feature, and the failure mode of that goal is
+    over-claiming its absence.
+  - Also tightened the provenance sentence on `framework-server.html`: it
+    claimed an answer's `structuredContent` "can be traced back to the
+    `source_url` it carries", but `get_maturity_model`'s structuredContent
+    has no `source_url` (its provenance is in the text footer). Reworded to
+    say content records carry `source_url` alongside the footer.
+- result: `./scripts/agentic gates --tier all` PASS again after the edits;
+  `node scripts/gen-mcp-surface.mjs --check` still clean.
+- implementer notes: two reviewer observations left as-is, both cosmetic and
+  both recorded here rather than silently dropped. (a) `docs/mcp-surface.md`'s
+  legend still labels the badge `[UNOFFICIAL/EXPERIMENTAL]` while its text now
+  only describes unofficial derived content — the label is generated from a
+  regex matching either word, so it is accurate about its own derivation, and
+  no currently-badged entry is flag-gated. (b) The task hash chain is extended
+  by `tasks complete`, run after this entry.

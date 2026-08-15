@@ -111,9 +111,10 @@ fix can be regenerated without recrawling finops.org. A re-crawl refreshes
 the server with **zero code changes**; the server validates the artifact
 against its schemas at startup and refuses to start on a bad artifact.
 
-This server is deliberately **official-only**: no invented relationship graph
-between capabilities, no maturity levels the Foundation doesn't define, no
-parsed-out assessment items. An early capability relationship graph
+Out of the box this server is deliberately **official-only**: no invented
+relationship graph between capabilities, no maturity levels beyond the
+Foundation's Crawl/Walk/Run, no parsed-out assessment items. An early
+capability relationship graph
 (`get_prerequisites`/`get_related`) was built, evaluated, and **deleted
 outright** — see `.agents/specs/v1-official-only.md` — because neither the
 harvested nor the inferred edges cleared the accuracy bar. The only derived

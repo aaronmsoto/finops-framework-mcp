@@ -344,7 +344,7 @@
   reordering results underneath them).</p>
 
   <h2 id="provenance">Official vs. UNOFFICIAL, and provenance</h2>
-  <p>Everything in this server's default posture is <span class="badge official">official</span>
+  <p>Out of the box, everything this server returns is <span class="badge official">official</span>
   restructured FinOps Foundation content — the Framework, KPI library, personas, maturity
   model, all as published at finops.org/framework. Every tool response carries a provenance
   footer citing the source URL, CC BY 4.0 license, and the data version/crawl date, e.g.:</p>
@@ -356,8 +356,9 @@
   <p>What a fresh <code>npx finops-framework-mcp</code> serves — every tool, prompt
   and resource on this page — is content from the official framework pages,
   restructured and adapted under CC BY 4.0. Nothing this server invented is mixed
-  in, so an answer's <code>structuredContent</code> can be traced back to the
-  <code>source_url</code> it carries.</p>
+  in, and the content records that make up an answer carry their own
+  <code>source_url</code> in <code>structuredContent</code> alongside the footer
+  above, so any claim can be taken back to the page it came from.</p>
 
   <h2 id="demo">Worked demo: Anomaly Management end to end</h2>
   <p>The chain an agent walks for one capability: <code>get_capability</code> for what it
