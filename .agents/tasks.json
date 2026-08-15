@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "bb39e0e63a5f6c37fa9023a0f6b8bfa72766ac4ef6ae10389571084376634b13",
+  "chainHead": "06fce1e20b5581b6655bf5031033202f71e9d412d54ce57304775150e6334498",
   "tasks": [
     {
       "id": "T-001",
@@ -1621,9 +1621,15 @@
         "The runbook states which authentication methods the publisher supports and records that GitHub interactive (device-flow) login cannot complete from a proxied agent session, so the registry step is human-run from a normal machine",
         "The runbook records that both manifests currently validate but declare the 2025-09-29 schema while 2025-12-11 is current, so a future migration is expected; ./scripts/agentic gates --tier all passes"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Fixed docs/release-runbook.md's mcp-publisher step. It named no install source, and the npm package called 'mcp-publisher' is an unrelated third-party package (different author, no repo, browser-automation description) whose bin shadows the official CLI — added an explicit warning plus three verifiable install routes, including a GitHub-free one via the Go module proxy with checksums left ON. Recorded the auth constraint proven by attempting it: mcp-publisher login github fails from this session because GitHub's device-code endpoint is not repository-scoped and the agent proxy refuses it; dns/http need a domain and key, none is test-only, github-oidc is Actions-only. Everything short of login works here — mcp-publisher validate reports both manifests valid. Also added a do-not-tag-before-trusted-publishing warning to the subsequent-release section and recorded the deferred 2025-09-29 to 2025-12-11 schema migration. gates --tier all PASS.",
+        "commit": "6c650060023458d11adfecdc49f4f899e4b28416",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-15T08:33:23.145Z"
+      },
+      "hash": "06fce1e20b5581b6655bf5031033202f71e9d412d54ce57304775150e6334498"
     }
   ]
 }
