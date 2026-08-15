@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "ad8338f54bf3f07de06fc7315c9c75fcf714a84def5daf72e618d72edf087502",
+  "chainHead": "15667cd78bc69bd1475985a62ca19f2de7f3251aab837122021d8eb61c4abb5c",
   "tasks": [
     {
       "id": "T-001",
@@ -1584,9 +1584,15 @@
         "wrangler.toml [vars] ALLOWED_ORIGINS lists the deployed Pages origin, so the setting survives a plain wrangler deploy instead of relying on a --var override",
         "./scripts/agentic gates --tier all passes, and after redeploying, a CORS preflight from the Pages origin returns 204 with the matching access-control-allow-origin while an unlisted origin still gets 403"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Replaced the deploy-time --var CORS override with real values in wrangler.toml (ALLOWED_ORIGINS = the Pages origin) and demo/config.js (workerBaseUrl = the deployed Worker), and corrected docs/deploy-demo.md which still told readers the demo defaults to localhost. wrangler secret put cannot be used here: the API rejects a secret shadowing a [vars] binding (code 10053), so the toml is the only durable home; recorded that in a comment. gates --tier all PASS. Verified by redeploying with a PLAIN wrangler deploy (no --var): binding table shows the Pages origin, preflight from that origin returns 204 with matching access-control-allow-origin, unlisted origin still 403, and the deployed config.js now carries the Worker URL.",
+        "commit": "06c03d00fced0b9ea81bc17f6eb219da5c369e2d",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-15T07:44:07.119Z"
+      },
+      "hash": "15667cd78bc69bd1475985a62ca19f2de7f3251aab837122021d8eb61c4abb5c"
     }
   ]
 }
