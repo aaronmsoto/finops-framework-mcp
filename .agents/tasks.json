@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "b2709b735fb668e44f783d8fd8972ca0213299ef54af54af1f14bbe22c4935c0",
+  "chainHead": "c72ab1f6a376b5ea8c8cdfe4ff1d3b4d7ac84057ebb8cdbad12cb15ea314a202",
   "tasks": [
     {
       "id": "T-001",
@@ -1548,9 +1548,15 @@
         "The experimental code path is untouched and still works: default stdio tools/list serves 11 tools without get_actions, FINOPS_MCP_EXPERIMENTAL=1 serves 12 including get_actions, proven by live probe",
         "scripts/gen-mcp-surface.mjs no longer emits an experimental section and src/servers/mcp-surface.test.ts asserts the inverse (flag-only tools absent from the doc); node scripts/gen-mcp-surface.mjs --check clean and ./scripts/agentic gates --tier full passes"
       ],
-      "status": "in_progress",
-      "evidence": null,
-      "hash": null
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Added a persistent 'Source on GitHub' link to the shared header of all 7 guide pages plus a callout on index.html and a link on 404.html (the guide previously had no repo link at all); removed every public reference to the flag-gated extensions from README.md, the guide, root server.json and the generated docs/mcp-surface.md while leaving the flag, get_actions, Pre-Crawl and their tests untouched. Verified live: default tools/list 11 tools without get_actions, FINOPS_MCP_EXPERIMENTAL=1 12 tools with it. gates --tier all PASS; gen-mcp-surface --check clean; all 8 guide pages rendered headless at 390px and 1280px with the link visible and no new overflow. Reviewer subagent verdict pass; its one real finding (dropped 'by default' qualifier over-claiming official-only) fixed in a follow-up commit. Repo About description could not be applied — the session's GitHub proxy 403s repository-settings writes; recorded as an owner step.",
+        "commit": "96c59931a933af79422ec1459211bfe400247280",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-15T06:38:37.966Z"
+      },
+      "hash": "c72ab1f6a376b5ea8c8cdfe4ff1d3b4d7ac84057ebb8cdbad12cb15ea314a202"
     }
   ]
 }
