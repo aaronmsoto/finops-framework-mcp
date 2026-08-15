@@ -8,11 +8,11 @@ This page is the machine-facing reference. For narrative documentation of the sa
 
 ## Legend
 
-- **[UNOFFICIAL/EXPERIMENTAL]** — title or description contains "unofficial" or "experimental": content derived/parsed by this server rather than published or endorsed by the FinOps Foundation or the FOCUS project (`official: false` in structured output), and/or gated behind an opt-in environment flag. Unmarked entries are official framework/FOCUS content, restructured.
+- **[UNOFFICIAL/EXPERIMENTAL]** — title or description contains "unofficial" or "experimental": content derived/parsed by this server rather than published or endorsed by the FinOps Foundation or the FOCUS project (`official: false` in structured output). Unmarked entries are official framework/FOCUS content, restructured.
 
 ## finops-framework server
 
-Data v2.1.1, crawled 2026-07-23. Default (non-experimental) posture — the shipped default.
+Data v2.1.1, crawled 2026-07-23. The surface a default `npx finops-framework-mcp` serves.
 
 **4 prompt(s) · 11 fixed resource(s) + 4 template(s) (44 concrete resource(s) listed) · 11 tool(s)**
 
@@ -170,18 +170,6 @@ _(no parameters)_
 Data changelog
 
 - `limit`, optional, integer, default `5`, range 1–20
-
-### Experimental extensions (`FINOPS_MCP_EXPERIMENTAL=1`)
-
-Adds 1 tool(s) not present in the default posture above:
-
-#### `get_actions` **[UNOFFICIAL/EXPERIMENTAL]**
-
-EXPERIMENTAL: Get maturity assessment characteristics
-
-- `capability`, required, string — Capability slug
-- `maturity`, optional, enum(pre-crawl|crawl|walk|run) — One level; omit for all three official levels
-- `level`, optional, enum(pre-crawl|crawl|walk|run) — Alias for `maturity` (same values); if both are passed, `maturity` wins
 
 ## finops-focus server
 

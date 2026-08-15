@@ -115,6 +115,13 @@
   header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
   header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
     font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+  header.guide .title-row { display: flex; flex-wrap: wrap; align-items: baseline;
+    justify-content: space-between; gap: 0.35rem 0.75rem; }
+  a.repo-link { font-size: 0.72rem; text-decoration: none; color: var(--moss);
+    border: 1px solid var(--line); border-radius: 999px; padding: 0.16rem 0.6rem;
+    background: var(--panel-2); white-space: nowrap; }
+  a.repo-link:hover { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); }
   nav.guide { margin-top: 0.6rem; border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
   nav.guide ol { list-style: none; display: flex; flex-wrap: wrap;
@@ -179,7 +186,11 @@
 <body>
 
 <header class="guide">
-  <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+  <div class="title-row">
+    <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+    <a class="repo-link" href="https://github.com/aaronmsoto/finops-framework-mcp"
+      >Source on GitHub ↗</a>
+  </div>
   <nav class="guide" aria-label="Guide pages">
     <ol>
       <li><a href="index.html">Intro</a></li>
@@ -279,12 +290,6 @@
     </tbody>
   </table></div>
 
-  <p style="font-size:0.88rem;">Behind <code>FINOPS_MCP_EXPERIMENTAL=1</code>, one additional
-  tool ships: <code class="mono">get_actions</code> <span class="badge derived">UNOFFICIAL/EXPERIMENTAL</span>
-  — maturity assessment characteristics via <code>capability</code> + <code>maturity</code>/<code>level</code>
-  (pre-crawl|crawl|walk|run, an alias pair for the same values). Off by default; this page
-  covers the shipped default posture. Source: docs/mcp-surface.md.</p>
-
   <h2 id="prompts-resources">Prompts &amp; resources</h2>
   <h3>Prompts (4)</h3>
   <div class="tbl-wrap"><table>
@@ -339,7 +344,7 @@
   reordering results underneath them).</p>
 
   <h2 id="provenance">Official vs. UNOFFICIAL, and provenance</h2>
-  <p>Everything in this server's default posture is <span class="badge official">official</span>
+  <p>Out of the box, everything this server returns is <span class="badge official">official</span>
   restructured FinOps Foundation content — the Framework, KPI library, personas, maturity
   model, all as published at finops.org/framework. Every tool response carries a provenance
   footer citing the source URL, CC BY 4.0 license, and the data version/crawl date, e.g.:</p>
@@ -348,12 +353,12 @@
   licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Content restructured
   and adapted by finops-framework-mcp (data v2.1.1, crawled 2026-07-23); unofficial
   extensions are always marked.</div>
-  <p>The one <span class="badge derived">UNOFFICIAL/EXPERIMENTAL</span> tool
-  (<code>get_actions</code>) only exists behind the opt-in
-  <code>FINOPS_MCP_EXPERIMENTAL=1</code> flag and is absent from every response's
-  <code>structuredContent</code> unless requested — the default posture (what a fresh
-  <code>npx finops-framework-mcp</code> serves) contains only content from the
-  official framework pages, adapted under CC BY 4.0.</p>
+  <p>What a fresh <code>npx finops-framework-mcp</code> serves — every tool, prompt
+  and resource on this page — is content from the official framework pages,
+  restructured and adapted under CC BY 4.0. Nothing this server invented is mixed
+  in, and the content records that make up an answer carry their own
+  <code>source_url</code> in <code>structuredContent</code> alongside the footer
+  above, so any claim can be taken back to the page it came from.</p>
 
   <h2 id="demo">Worked demo: Anomaly Management end to end</h2>
   <p>The chain an agent walks for one capability: <code>get_capability</code> for what it

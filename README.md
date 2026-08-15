@@ -111,34 +111,16 @@ fix can be regenerated without recrawling finops.org. A re-crawl refreshes
 the server with **zero code changes**; the server validates the artifact
 against its schemas at startup and refuses to start on a bad artifact.
 
-v1 is deliberately **official-only by default** — no invented relationship
-graph, no parsed-out assessment items — with two unofficial extensions
-available opt-in behind a flag.
-
-### Experimental extensions (opt-in)
-
-Two things this server derives but the FinOps Foundation doesn't publish are
-hidden by default and served only when explicitly requested:
-
-- **`Pre-Crawl`** — an unofficial maturity level below Crawl (the official
-  model defines exactly three: Crawl, Walk, Run).
-- **Parsed assessment "Actions"** — the `get_actions` tool, itemized
-  characteristics parsed out of the official Crawl/Walk/Run prose (rubric
-  states an assessor checks for, not to-do steps).
-
-Enable both with an environment variable or flag:
-
-```bash
-FINOPS_MCP_EXPERIMENTAL=1 npx -y finops-framework-mcp
-# or
-npx -y finops-framework-mcp --experimental
-```
-
-Everything experimental is labeled `official: false` / EXPERIMENTAL wherever
-it appears, and the default surface never mentions it. The v0.1 capability
-relationship graph (`get_prerequisites`/`get_related`) was evaluated and
-**deleted outright** — see `.agents/specs/v1-official-only.md` — because
-neither the harvested nor the inferred edges cleared the accuracy bar.
+Out of the box this server is deliberately **official-only**: no invented
+relationship graph between capabilities, no maturity levels beyond the
+Foundation's Crawl/Walk/Run, no parsed-out assessment items. An early
+capability relationship graph
+(`get_prerequisites`/`get_related`) was built, evaluated, and **deleted
+outright** — see `.agents/specs/v1-official-only.md` — because neither the
+harvested nor the inferred edges cleared the accuracy bar. The only derived
+content either server returns is the FOCUS server's KPI-to-column mappings,
+computed KPI values, and cross-version diffs — each labeled `official: false`
+with an in-text UNOFFICIAL banner.
 
 ## Refreshing the data
 
