@@ -90,11 +90,22 @@
    `v0.1.0` tag**: `.github/workflows/publish.yml` fires on tag push and
    would fail. 0.1.0 was published manually and carries no provenance;
    provenance starts with the first CI publish.
-3. **Owner:** `mcp-publisher publish` for the root and
-   `packages/finops-focus-mcp/` `server.json` manifests. The npm packages
-   are live now, so registry ownership validation (which reads `mcpName`
-   from the published tarball) will pass. `mcp-publisher` was not present
-   in the session container — install it locally.
+3. **Owner, from a normal machine — ONE TIME ONLY (T-087 automated the
+   rest):** submit both `server.json` manifests to the MCP Registry once, to
+   claim the listings. From then on `publish.yml`'s `registry` job does it
+   automatically on every tag push via OIDC, which sidesteps the device-code
+   block entirely. Attempted 2026-08-15 from
+   this session and **blocked at the login step** — `mcp-publisher login
+   github` needs GitHub's device-code endpoint, which the agent proxy
+   refuses ("sessions are bound to their configured repositories"). The
+   `dns`/`http` auth methods need a domain plus private key; `none` is
+   test-only. Everything short of login does work here: the official CLI
+   installs cleanly via `GOBIN=/tmp/mcpbin go install
+   github.com/modelcontextprotocol/registry/cmd/publisher@latest` (Go module
+   proxy, checksums verified, no GitHub access needed) and
+   `mcp-publisher validate` reports **both manifests valid**. Full steps and
+   the npm-name-collision warning are in `docs/release-runbook.md`.
+   Registry confirmed live and neither name is listed yet.
 4. **Done (T-085):** both READMEs and the guide now say the packages are
    live on npm (badge rows + links). **The hosted Worker and demo URLs are
    deliberately NOT advertised** — owner decision, 2026-08-15: the Worker
