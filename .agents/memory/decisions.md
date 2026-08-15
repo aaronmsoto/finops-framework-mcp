@@ -648,7 +648,10 @@ Decision: the READMEs and the published guide now state that
 `finops-framework-mcp` and `finops-focus-mcp` are live on npm (badge rows,
 links to both package pages). The deployed Cloudflare Worker
 (`finops-mcp-worker.soto-c30.workers.dev`) and the demo
-(`finops-mcp-demo.pages.dev`) are **not** named anywhere public. The guide's
+(`finops-mcp-demo.pages.dev`) are **not advertised** as things to point a
+client at. (Both do appear in the public repo — `wrangler.toml`'s allowlist,
+`demo/config.js`, `docs/deploy-demo.md` — so this is "not promoted", not
+"secret".) The guide's
 "There is no public hosted endpoint to point you at here" paragraph stands,
 and the README keeps its "deployable" framing for the Worker.
 

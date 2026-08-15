@@ -42,8 +42,10 @@ should stay green, including the drift check in `bundle-data.test.ts`.
 ## 2. Configure the Origin allowlist
 
 `ALLOWED_ORIGINS` is a comma-separated allowlist declared in `wrangler.toml`'s
-`[vars]` block. Before pointing a browser-based client (e.g. the demo app) at
-the Worker, add that client's origin there and redeploy:
+`[vars]` block. It ships set to this project's own demo origin
+(`https://finops-mcp-demo.pages.dev`), so on a fork **replace** that value with
+your own client's origin rather than appending to it — otherwise your Worker
+keeps allowlisting someone else's page. Then redeploy:
 
 ```toml
 # wrangler.toml
