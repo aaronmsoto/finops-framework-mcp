@@ -31,12 +31,49 @@ exists, so the very first publish of each package is manual:
 
 3. Submit both MCP-registry manifests (after the npm packages are live —
    registry ownership validation reads `mcpName` from the published
-   tarball's package.json):
+   tarball's package.json). This is a **listing**, not a release: it adds
+   the servers to the directory MCP clients browse
+   (`registry.modelcontextprotocol.io`). The packages are installable
+   without it.
+
+   > **Do not `npm install -g mcp-publisher`.** That npm name belongs to an
+   > unrelated third-party package (different author, no source repository)
+   > which claims the same `mcp-publisher` binary name and would shadow the
+   > real tool. The official CLI is published only from the
+   > `modelcontextprotocol/registry` repository.
+
+   Install the real one — Homebrew (`brew install mcp-publisher`), a release
+   binary from that repo, or from source via the Go module proxy, which
+   verifies checksums and needs no GitHub access:
 
    ```bash
-   mcp-publisher publish            # root server.json
+   GOBIN=/tmp/mcpbin go install github.com/modelcontextprotocol/registry/cmd/publisher@latest
+   /tmp/mcpbin/publisher --help      # the binary is named `publisher`
+   ```
+
+   Then authenticate and publish, once per manifest:
+
+   ```bash
+   mcp-publisher login github        # opens a browser / device-code flow
+   mcp-publisher validate            # optional; checks without submitting
+   mcp-publisher publish             # root server.json
    cd packages/finops-focus-mcp && mcp-publisher publish
    ```
+
+   **Run this from a normal machine, not an agent session.** `login github`
+   needs GitHub's device-code endpoint, which proxied agent environments
+   block (sessions there are scoped to specific repositories, so arbitrary
+   `github.com` API paths are refused). The remaining auth methods —
+   `login dns` / `login http` — need a domain you control plus a private
+   key, and `login none` is test-only. Verified 2026-08-15: everything up to
+   and including `mcp-publisher validate` runs fine in an agent session;
+   only the login step is blocked.
+
+   Schema note: both manifests declare the `2025-09-29` server schema and
+   validate cleanly, but `2025-12-11` is current and the tool advises new
+   servers to migrate. Migration is deferred, not forgotten — re-submitting
+   a manifest is a normal per-release operation (see step 4 below), so this
+   costs nothing to do later.
 
 ## Every subsequent release
 
@@ -50,9 +87,18 @@ exists, so the very first publish of each package is manual:
 2. Gates green, PR merged to `main` per the normal approval flow.
 3. Tag and push: `git tag v<version> && git push origin v<version>`.
    `.github/workflows/publish.yml` builds, tests, and publishes both
-   packages via OIDC (no token, provenance automatic).
+   packages via OIDC (no token, provenance automatic). **Do not tag until
+   step 2 of the bootstrap is done for both packages** — the workflow fires
+   on tag push and a package without a trusted publisher configured returns
+   403.
 4. Re-submit the updated `server.json` manifests with `mcp-publisher publish`
    (the registry requires manifest versions to match the published packages).
+   Same tool and the same login caveat as bootstrap step 3 — if you would
+   rather not repeat it by hand each release, `mcp-publisher login
+   github-oidc` is designed to run inside GitHub Actions, which would let
+   `publish.yml` do the registry submission alongside the npm publish.
+   That means editing a protected path, so it needs explicit owner sign-off
+   as its own task.
 
 ## Notes
 

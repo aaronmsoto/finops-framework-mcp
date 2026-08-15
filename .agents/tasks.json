@@ -1612,6 +1612,18 @@
         "completedAt": "2026-08-15T08:13:15.360Z"
       },
       "hash": "bb39e0e63a5f6c37fa9023a0f6b8bfa72766ac4ef6ae10389571084376634b13"
+    },
+    {
+      "id": "T-086",
+      "title": "Fix the release runbook's mcp-publisher step: install source, name collision, auth limits",
+      "acceptance": [
+        "docs/release-runbook.md names a verifiable install source for the official mcp-publisher CLI and explicitly warns that the npm package named 'mcp-publisher' is an unrelated third-party package that shadows the real binary",
+        "The runbook states which authentication methods the publisher supports and records that GitHub interactive (device-flow) login cannot complete from a proxied agent session, so the registry step is human-run from a normal machine",
+        "The runbook records that both manifests currently validate but declare the 2025-09-29 schema while 2025-12-11 is current, so a future migration is expected; ./scripts/agentic gates --tier all passes"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }
