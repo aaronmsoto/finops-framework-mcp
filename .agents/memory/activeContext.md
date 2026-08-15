@@ -48,6 +48,16 @@
   and `docs/mcp-surface.md`; the code, the flag, and their tests are
   untouched (decisions.md 2026-08-15).
 
+- **2026-08-15 (later):** T-083 dependency bump, caught during the npm
+  publish pre-flight — `npm audit` on the production tree showed 2 high +
+  2 moderate advisories, all transitive through
+  `@modelcontextprotocol/sdk@1.29.0`. Bumped to `^1.30.0` in both
+  `package.json`s; `npm install` alone did **not** move the already-resolved
+  transitive versions, so `npm update` was needed on `hono`,
+  `@hono/node-server`, `ip-address`, `express-rate-limit`, plus `fast-uri`
+  (via `ajv`, 3.1.4 → 3.1.5) and four dev-only ones. Whole tree now audits
+  clean.
+
 ## Next steps
 
 1. **Owner (blocks everything below):** set the GitHub About description —
@@ -62,7 +72,9 @@
    it deleted `dev` when PR #21 merged; it did not fire for #23, but an
    unconfirmed setting will bite again on a future rolling release.
 2. npm first publish (0.1.0, both packages) per
-   `docs/release-runbook.md`. Owner authorized an agent session to run it
+   `docs/release-runbook.md` — **blocked on T-083's SDK bump reaching
+   `main`**, so that the published tarballs are the audit-clean ones.
+   Owner authorized an agent session to run it
    with a pasted npm **automation** token (`npm login` cannot complete
    headlessly; a classic token with 2FA-on-publish 403s). `npm publish` is
    an `ask` rule in `.claude/settings.json` — that prompt is the human
