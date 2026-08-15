@@ -69,6 +69,11 @@ exists, so the very first publish of each package is manual:
    and including `mcp-publisher validate` runs fine in an agent session;
    only the login step is blocked.
 
+   This manual step is **bootstrap-only**. From the first tag push onward
+   `publish.yml`'s `registry` job does it automatically over OIDC (which
+   sidesteps the device-code problem entirely, since Actions mints the token
+   directly) — see step 4 of the next section.
+
    Schema note: both manifests declare the `2025-09-29` server schema and
    validate cleanly, but `2025-12-11` is current and the tool advises new
    servers to migrate. Migration is deferred, not forgotten — re-submitting
@@ -91,14 +96,23 @@ exists, so the very first publish of each package is manual:
    step 2 of the bootstrap is done for both packages** — the workflow fires
    on tag push and a package without a trusted publisher configured returns
    403.
-4. Re-submit the updated `server.json` manifests with `mcp-publisher publish`
-   (the registry requires manifest versions to match the published packages).
-   Same tool and the same login caveat as bootstrap step 3 — if you would
-   rather not repeat it by hand each release, `mcp-publisher login
-   github-oidc` is designed to run inside GitHub Actions, which would let
-   `publish.yml` do the registry submission alongside the npm publish.
-   That means editing a protected path, so it needs explicit owner sign-off
-   as its own task.
+4. **Nothing to do — the registry submission is automatic.** The same tag
+   push runs `publish.yml`'s `registry` job, which authenticates with
+   `publisher login github-oidc` and submits both manifests. It is a
+   separate job that `needs: publish`, so npm publishing (irreversible)
+   stays green and visible even if the registry step fails, and only that
+   job is re-run. Because the registry requires manifest versions to match
+   the published packages, step 1's version bump is what keeps this
+   correct — the job just submits whatever is committed.
+
+   If the `registry` job fails, re-run it from the Actions UI. If it keeps
+   failing, the manual commands in bootstrap step 3 are still the fallback;
+   nothing about them changed.
+
+   The publisher version is **pinned** in the workflow
+   (`...cmd/publisher@v1.8.1`) and `actions/setup-go` must stay at or above
+   that release's minimum Go (v1.8.1 declares `go 1.26`). Bump both together
+   and deliberately.
 
 ## Notes
 

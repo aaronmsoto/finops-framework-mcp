@@ -90,8 +90,11 @@
    `v0.1.0` tag**: `.github/workflows/publish.yml` fires on tag push and
    would fail. 0.1.0 was published manually and carries no provenance;
    provenance starts with the first CI publish.
-3. **Owner, from a normal machine (not an agent session):** submit both
-   `server.json` manifests to the MCP Registry. Attempted 2026-08-15 from
+3. **Owner, from a normal machine — ONE TIME ONLY (T-087 automated the
+   rest):** submit both `server.json` manifests to the MCP Registry once, to
+   claim the listings. From then on `publish.yml`'s `registry` job does it
+   automatically on every tag push via OIDC, which sidesteps the device-code
+   block entirely. Attempted 2026-08-15 from
    this session and **blocked at the login step** — `mcp-publisher login
    github` needs GitHub's device-code endpoint, which the agent proxy
    refuses ("sessions are bound to their configured repositories"). The

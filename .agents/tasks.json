@@ -1630,6 +1630,19 @@
         "completedAt": "2026-08-15T08:33:23.145Z"
       },
       "hash": "06fce1e20b5581b6655bf5031033202f71e9d412d54ce57304775150e6334498"
+    },
+    {
+      "id": "T-087",
+      "title": "Automate MCP-registry submission in publish.yml via OIDC (protected-path edit AUTHORIZED by owner)",
+      "acceptance": [
+        "publish.yml gains a registry job that runs after the npm publish job, authenticates with mcp-publisher login github-oidc, and submits both server.json manifests",
+        "The publisher CLI is installed at a PINNED version rather than @latest, and never from the npm package of that name, which is an unrelated third-party package",
+        "A registry failure cannot corrupt or obscure the npm publish result: the registry work is a separate job depending on publish, so npm success stays visible and the registry step can be re-run alone",
+        "docs/release-runbook.md reflects that the registry submission is now automatic on tag push, with the manual commands retained for the bootstrap case; ./scripts/agentic gates --tier all passes and the workflow YAML parses"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

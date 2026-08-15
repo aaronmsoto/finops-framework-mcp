@@ -682,3 +682,53 @@ Guide constraint that shaped the implementation: badges are shields.io
 `<img>` tags, and `docs/guide/` asserts in its own header comment that it has
 zero external assets so it renders over `file://`. Badges therefore live in
 the two READMEs only; the guide states the same fact with plain text links.
+
+## 2026-08-15 — Automate the MCP-registry submission in publish.yml (OIDC)
+
+Decision: `.github/workflows/publish.yml` gains a second job, `registry`, that
+runs after the npm publish job on a version tag, authenticates with
+`publisher login github-oidc`, and submits both `server.json` manifests. The
+manual `mcp-publisher` commands remain in the runbook as the bootstrap path
+and the fallback.
+
+**This edits a protected path** (`.github/workflows/**` in
+`approvals.yaml`). Explicitly authorized by the owner in-session on
+2026-08-15 ("Set up the OIDC workflow so this is automatic"), which is the
+exemption AGENTS.md's hard rule allows ("unless the task explicitly says
+so"), and matches the precedent of T-059 and T-066. The PreToolUse hook's
+documented override marker (`.agents/.cache/policy-edit-ok`) was placed for
+the edit and removed immediately after — no standing bypass remains.
+
+Rationale: OIDC sidesteps the problem that blocked the manual route entirely.
+`mcp-publisher login github` needs GitHub's device-code endpoint, which
+proxied agent sessions cannot reach; inside Actions the token is minted
+directly, so no device code is involved. It also removes a per-release manual
+step that is easy to forget, and forgetting it silently leaves the registry
+listing pinned to an older version than npm.
+
+Design points, each chosen against an alternative:
+
+- **A separate job, not more steps on `publish`.** npm publish is
+  irreversible. If the registry submission were a trailing step and failed,
+  the whole workflow would go red even though both packages published fine,
+  and re-running it would attempt to re-publish to npm. As its own job with
+  `needs: publish`, the npm result stays green and only the registry job is
+  re-run.
+- **A pinned publisher version (`@v1.8.1`), not `@latest`.** A release
+  pipeline that installs `@latest` is not reproducible, and this is precisely
+  the tool whose npm namesake is a different package by a different author —
+  supply-chain caution is warranted here specifically.
+- **Built via `go install` from the registry's own module**, not an npm
+  install and not an unpinned release download. The module proxy verifies
+  checksums.
+- **Both manifests validated before either is submitted**, so a malformed
+  file cannot leave one server listed at the new version and the other not.
+
+Known limitation, stated rather than hidden: this workflow cannot be tested
+until an actual tag push, because it triggers only on `tags: v*`. It was
+verified as far as is possible without one — YAML structure, the pinned
+version building from the module proxy, and `publisher validate <path>`
+succeeding for both manifests using the exact argument form the job uses.
+That verification caught a real defect: the job first pinned
+`actions/setup-go` to 1.25, but registry v1.8.1's `go.mod` declares `go
+1.26`, so the install step would have failed at release time.
