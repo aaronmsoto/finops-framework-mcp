@@ -1593,6 +1593,19 @@
         "completedAt": "2026-08-15T07:44:07.119Z"
       },
       "hash": "15667cd78bc69bd1475985a62ca19f2de7f3251aab837122021d8eb61c4abb5c"
+    },
+    {
+      "id": "T-085",
+      "title": "Announce the npm release in the README and guide",
+      "acceptance": [
+        "Both READMEs carry a badge row linking to their npm package pages, and their Quickstart sections state the packages are published rather than describing a hypothetical install",
+        "docs/guide/index.html's install step states both packages are live on npm with text links to npmjs.com, and the guide still has ZERO external assets (no img/src=/stylesheet/@import across all 8 pages) so it keeps rendering over file://",
+        "The hosted Worker URL and demo URL are NOT advertised anywhere public; the guide's 'no public hosted endpoint' paragraph and the README's 'deployable' Worker framing are unchanged",
+        "docs/deploy-worker.md no longer recommends 'wrangler secret put ALLOWED_ORIGINS', which the Cloudflare API rejects with code 10053 when a [vars] binding of that name exists; ./scripts/agentic gates --tier all passes"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

@@ -1,5 +1,9 @@
 # finops-focus-mcp
 
+[![finops-focus-mcp on npm](https://img.shields.io/npm/v/finops-focus-mcp?label=finops-focus-mcp)](https://www.npmjs.com/package/finops-focus-mcp)
+[![finops-framework-mcp on npm](https://img.shields.io/npm/v/finops-framework-mcp?label=finops-framework-mcp)](https://www.npmjs.com/package/finops-framework-mcp)
+[![license MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 An unofficial [MCP](https://modelcontextprotocol.io) server that gives AI
 agents a structured, **version-aware** interface to the **FOCUS** (FinOps
 Open Cost & Usage Specification) published by the FinOps Foundation /
@@ -16,6 +20,12 @@ FinOps Framework published at finops.org/framework). See that repository for
 source, tests, and contribution docs.
 
 ## Quickstart
+
+Published on npm as
+[`finops-focus-mcp`](https://www.npmjs.com/package/finops-focus-mcp) — nothing to
+clone or build. The FOCUS spec data and the sample datasets ship inside the package,
+so `calculate_kpi` works offline straight after install; Node >= 22 is the only
+requirement.
 
 ```bash
 npx -y finops-focus-mcp

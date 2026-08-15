@@ -353,9 +353,13 @@
     <div class="step-n">3</div>
     <div class="step-body">
       <h2>Getting started — install</h2>
-      <p>Each server publishes as its own npm package with a stdio binary, so
-      an MCP client only ever needs a command and its arguments. Node
-      <span class="mono">&gt;=22</span> is required by both packages.</p>
+      <p>Both servers are published on npm —
+      <a href="https://www.npmjs.com/package/finops-framework-mcp">finops-framework-mcp</a>
+      and <a href="https://www.npmjs.com/package/finops-focus-mcp">finops-focus-mcp</a>,
+      each a stdio binary — so an MCP client only ever needs a command and its
+      arguments, and there is nothing to clone or build. Each package carries its
+      own data artifact, so both run offline after install. Node
+      <span class="mono">&gt;=22</span> is required by both.</p>
       <pre class="tx"><span class="c"># run either server directly — stdio, nothing to configure</span>
 npx -y finops-framework-mcp
 npx -y finops-focus-mcp

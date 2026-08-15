@@ -1,5 +1,9 @@
 # finops-framework-mcp
 
+[![finops-framework-mcp on npm](https://img.shields.io/npm/v/finops-framework-mcp?label=finops-framework-mcp)](https://www.npmjs.com/package/finops-framework-mcp)
+[![finops-focus-mcp on npm](https://img.shields.io/npm/v/finops-focus-mcp?label=finops-focus-mcp)](https://www.npmjs.com/package/finops-focus-mcp)
+[![license MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 An unofficial [MCP](https://modelcontextprotocol.io) server pair that gives
 AI assistants a structured, sourced interface to the FinOps Foundation's
 published guidance — the **FinOps Framework** (capabilities, maturity
@@ -45,6 +49,12 @@ published guidance about it. Both are also **offline once installed** — no
 network access at runtime, no telemetry, no external calls.
 
 ## Quickstart
+
+Both servers are published on npm —
+[`finops-framework-mcp`](https://www.npmjs.com/package/finops-framework-mcp) and
+[`finops-focus-mcp`](https://www.npmjs.com/package/finops-focus-mcp) — so there is
+nothing to clone or build. Each ships its data artifact inside the package and runs
+offline after install; Node >= 22 is the only requirement.
 
 ```bash
 npx -y finops-framework-mcp

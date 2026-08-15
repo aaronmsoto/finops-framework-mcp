@@ -95,11 +95,15 @@
    are live now, so registry ownership validation (which reads `mcpName`
    from the published tarball) will pass. `mcp-publisher` was not present
    in the session container — install it locally.
-4. Nothing in the guide, README, or `docs/` yet tells a reader the servers
-   are on npm or that a hosted Worker exists — the install instructions
-   still read as "this is how you'd run it", not "this is live". Worth a
-   pass: npm version badges, the Worker URL in the guide's remote-option
-   section, and the demo linked from the guide.
+4. **Done (T-085):** both READMEs and the guide now say the packages are
+   live on npm (badge rows + links). **The hosted Worker and demo URLs are
+   deliberately NOT advertised** — owner decision, 2026-08-15: the Worker
+   has no auth and no rate limiting by design, so publishing it invites
+   unbounded public traffic onto the owner's Cloudflare account. It exists
+   for the demo, not as a public service. A consequence worth revisiting on
+   purpose rather than by accident: the live demo is currently
+   undiscoverable to readers, since linking it would surface the Worker URL
+   indirectly (it is in the demo's `config.js`).
 
 ## Open questions
 
