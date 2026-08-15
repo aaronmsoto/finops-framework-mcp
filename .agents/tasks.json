@@ -1575,6 +1575,18 @@
         "completedAt": "2026-08-15T07:13:04.760Z"
       },
       "hash": "ad8338f54bf3f07de06fc7315c9c75fcf714a84def5daf72e618d72edf087502"
+    },
+    {
+      "id": "T-084",
+      "title": "Point the demo at the deployed Worker and allowlist its origin",
+      "acceptance": [
+        "demo/config.js workerBaseUrl defaults to the deployed Worker URL instead of http://localhost:8787, with the localhost value documented as the wrangler dev fallback",
+        "wrangler.toml [vars] ALLOWED_ORIGINS lists the deployed Pages origin, so the setting survives a plain wrangler deploy instead of relying on a --var override",
+        "./scripts/agentic gates --tier all passes, and after redeploying, a CORS preflight from the Pages origin returns 204 with the matching access-control-allow-origin while an unlisted origin still gets 403"
+      ],
+      "status": "in_progress",
+      "evidence": null,
+      "hash": null
     }
   ]
 }

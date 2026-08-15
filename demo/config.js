@@ -4,8 +4,10 @@
 // HTTPS. Override `workerBaseUrl` here, or leave the default and change it
 // from the page's "Worker URL" field at runtime (kept in memory only, never
 // persisted).
+// For a local `wrangler dev`, set workerBaseUrl to "http://localhost:8787"
+// (or type it into the page's "Worker URL" field, which needs no rebuild).
 export const CONFIG = {
-  workerBaseUrl: "http://localhost:8787",
+  workerBaseUrl: "https://finops-mcp-worker.soto-c30.workers.dev",
   routes: {
     framework: "/mcp/framework",
     focus: "/mcp/focus",

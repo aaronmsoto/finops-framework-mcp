@@ -5,8 +5,13 @@ compatibility_flags = ["nodejs_compat"]
 
 # Comma-separated allowlist of Origin header values permitted to call this
 # worker from a browser. Requests with no Origin header (non-browser MCP
-# clients) are always allowed regardless of this setting. Empty by default —
-# set per environment before deploying a browser-facing client (see
-# docs/deploy-worker.md).
+# clients) are always allowed regardless of this setting. This is also what
+# drives CORS — an origin absent here gets a 403 and, for browser callers,
+# no Access-Control-Allow-Origin header (see docs/deploy-worker.md).
+#
+# Set here rather than via `wrangler secret put`: a secret cannot shadow a
+# [vars] binding of the same name (the API rejects it with "Binding name
+# already in use"), and a `--var` override on the deploy command silently
+# reverts to this file's value on the next plain `wrangler deploy`.
 [vars]
-ALLOWED_ORIGINS = ""
+ALLOWED_ORIGINS = "https://finops-mcp-demo.pages.dev"
