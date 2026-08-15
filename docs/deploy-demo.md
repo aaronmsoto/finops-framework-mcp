@@ -34,10 +34,11 @@ testing). These instructions cover Cloudflare Pages, since the Worker
 
 ## 1. Point the demo at your Worker
 
-Edit `demo/config.js`'s `workerBaseUrl` to your deployed Worker's URL
-(`https://<your-worker-subdomain>.workers.dev`, or a custom domain), or
-leave the default (`http://localhost:8787`, `wrangler dev`'s default) and
-let visitors override it from the page's "Worker URL" field at runtime —
+`demo/config.js`'s `workerBaseUrl` defaults to this project's own deployed
+Worker (`https://finops-mcp-worker.soto-c30.workers.dev`). Point it at your
+own (`https://<your-worker-subdomain>.workers.dev`, or a custom domain), or
+set it to `http://localhost:8787` for a local `wrangler dev`. Either way
+visitors can override it from the page's "Worker URL" field at runtime —
 the field's value is used as-is and never persisted.
 
 ## 2. Allow the demo's origin on the Worker
