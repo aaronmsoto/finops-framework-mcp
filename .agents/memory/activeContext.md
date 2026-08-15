@@ -58,6 +58,16 @@
   (via `ajv`, 3.1.4 → 3.1.5) and four dev-only ones. Whole tree now audits
   clean.
 
+- **2026-08-15 (launch):** **Both packages are published to npm at 0.1.0**
+  (`finops-framework-mcp`, `finops-focus-mcp`) — verified by clean-cache
+  `npx` and a real MCP handshake against the published tarball (11 tools,
+  `get_actions` still gated out). **Cloudflare is live**: Worker at
+  `https://finops-mcp-worker.soto-c30.workers.dev` (`/mcp/framework`,
+  `/mcp/focus`) and the demo at `https://finops-mcp-demo.pages.dev`.
+  T-084 then made the demo wiring durable — `wrangler.toml`'s
+  `ALLOWED_ORIGINS` and `demo/config.js`'s `workerBaseUrl` now hold the real
+  values, so a plain `wrangler deploy` no longer resets CORS.
+
 ## Next steps
 
 1. **Owner (blocks everything below):** set the GitHub About description —
@@ -71,24 +81,25 @@
    Settings → General → "Automatically delete head branches" is **off** —
    it deleted `dev` when PR #21 merged; it did not fire for #23, but an
    unconfirmed setting will bite again on a future rolling release.
-2. npm first publish (0.1.0, both packages) per
-   `docs/release-runbook.md` — **blocked on T-083's SDK bump reaching
-   `main`**, so that the published tarballs are the audit-clean ones.
-   Owner authorized an agent session to run it
-   with a pasted npm **automation** token (`npm login` cannot complete
-   headlessly; a classic token with 2FA-on-publish 403s). `npm publish` is
-   an `ask` rule in `.claude/settings.json` — that prompt is the human
-   gate. Then the two owner-only web steps: per-package trusted-publisher
-   config, then `mcp-publisher publish` for both `server.json` manifests
-   (must run after npm — registry ownership validation reads `mcpName`
-   from the published tarball).
-3. Cloudflare: `wrangler deploy` (set `ALLOWED_ORIGINS`), `wrangler pages
-   deploy demo/`, smoke-test the demo against the deployed Worker.
-   Needs `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` pasted in —
-   `wrangler login` is browser-based. wrangler 4.123.0 is available.
-4. Post-publish: install smoke test from a clean npm cache
-   (`npx -y finops-framework-mcp@0.1.0`, same for the FOCUS package) —
-   the one check `npm pack --dry-run` cannot give you.
+2. **Owner, npm web UI:** configure a **trusted publisher** on *each*
+   package (settings are per-package): Package → Settings → Trusted
+   publisher → GitHub Actions → repo `aaronmsoto/finops-framework-mcp`,
+   workflow `publish.yml`, and **explicitly tick the allowed `npm publish`
+   action** — configurations created after May 2026 require at least one
+   allowed action or the publish 403s. Until this exists, **do not push a
+   `v0.1.0` tag**: `.github/workflows/publish.yml` fires on tag push and
+   would fail. 0.1.0 was published manually and carries no provenance;
+   provenance starts with the first CI publish.
+3. **Owner:** `mcp-publisher publish` for the root and
+   `packages/finops-focus-mcp/` `server.json` manifests. The npm packages
+   are live now, so registry ownership validation (which reads `mcpName`
+   from the published tarball) will pass. `mcp-publisher` was not present
+   in the session container — install it locally.
+4. Nothing in the guide, README, or `docs/` yet tells a reader the servers
+   are on npm or that a hosted Worker exists — the install instructions
+   still read as "this is how you'd run it", not "this is live". Worth a
+   pass: npm version badges, the Worker URL in the guide's remote-option
+   section, and the demo linked from the guide.
 
 ## Open questions
 
@@ -133,9 +144,11 @@
 
 ## Last updated
 
-2026-08-15 — T-082: added a repo link to every guide page and scrubbed the
-flag-gated extensions from every public doc surface without touching the
-code (11 default tools / 12 with the flag, verified live). Repo settings
-writes are blocked by the session's GitHub proxy, so the About description
-is an owner step; npm publish and the Cloudflare deploy are queued behind
-the tokens the owner will paste.
+2026-08-15 — **Launch day.** T-082 (repo link in the guide + experimental
+scrub), T-083 (MCP SDK → ^1.30.0, clearing 2 high + 2 moderate transitive
+advisories found in the publish pre-flight), then the launch itself: both
+packages published to npm at 0.1.0 and the Cloudflare Worker + demo
+deployed, each verified end to end. T-084 replaced the deploy-time `--var`
+CORS override with real values in `wrangler.toml` and `demo/config.js`.
+Remaining owner steps are the npm trusted-publisher config and the two
+`mcp-publisher` manifest submissions.
