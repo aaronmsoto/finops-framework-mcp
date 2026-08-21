@@ -40,24 +40,35 @@ from GitHub Packages and needs a `read:packages` token in `NPM_TOKEN`:
 ## Testing the servers locally
 
 The repo ships a `.mcp.json` that loads both servers into MCP clients that
-read it (Claude Code among them), pointed at the local build:
+read it (Claude Code among them). It runs the **published** packages, so
+opening this repo in a client works with no build:
 
 ```json
 {
-  "finops-framework": "node dist/servers/framework/main.js",
-  "finops-focus": "node dist/servers/focus/main.js"
+  "mcpServers": {
+    "finops-framework": { "command": "npx", "args": ["-y", "finops-framework-mcp"] },
+    "focus-spec": { "command": "npx", "args": ["-y", "finops-focus-mcp"] }
+  }
 }
 ```
 
-`dist/` is gitignored, so **build first** (`npm ci && npm run build`, or
-`bootstrap.sh` on the maintainer path) — otherwise the config points at
-files that don't exist yet. Clients read MCP config at startup, so restart the client
-after a first build.
+That is deliberately *not* what you want while changing server code — it
+would exercise the release, not your working tree. For that, copy the
+contributor variant over it:
 
-This is the _contributor_ form. The `npx`-based config documented for
-end users in [`docs/guide/index.html`](docs/guide/index.html) is
-deliberately different: it runs the published packages rather than your
-working tree.
+```bash
+cp .mcp.json.example .mcp.json     # runs dist/ from your working tree
+npm ci && npm run build            # dist/ is gitignored — build first
+```
+
+Do not commit that swap. `dist/` not existing is the failure mode worth
+knowing about: the client spawns a command that fails instantly, registers
+zero tools, and reports nothing useful — it looks like the servers are
+broken rather than unbuilt. Clients also read MCP config only at startup,
+so restart yours after the first build.
+
+To check what your client actually registered, `claude mcp list` (or `/mcp`
+inside a session) is faster than guessing.
 
 For one-off calls without an MCP client, use the stdio bridge directly —
 this is what the eval suites and every documented transcript use:

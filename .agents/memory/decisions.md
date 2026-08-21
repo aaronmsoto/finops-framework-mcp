@@ -732,3 +732,58 @@ succeeding for both manifests using the exact argument form the job uses.
 That verification caught a real defect: the job first pinned
 `actions/setup-go` to 1.25, but registry v1.8.1's `go.mod` declares `go
 1.26`, so the install step would have failed at release time.
+
+## 2026-08-21 — .mcp.json runs the published packages, not the working tree
+
+Decision: the checked-in `.mcp.json` now spawns `npx -y finops-framework-mcp`
+/ `npx -y finops-focus-mcp` instead of `node dist/servers/*/main.js`. The
+working-tree variant moves to `.mcp.json.example`, copied over deliberately
+by contributors changing server code.
+
+Rationale: `.mcp.json` is auto-loaded by any MCP client that opens this repo,
+and `dist/` is gitignored. In a fresh clone the old config spawned a command
+that fails instantly — the client registers zero tools and reports nothing
+useful, so the servers look broken rather than unbuilt. Reproduced directly:
+a fresh clone running the committed config's command gets `Cannot find
+module`. This is the most plausible cause of an external report concluding
+the servers "may not have actual tool endpoints implemented yet."
+
+The trade-off is real and went the other way on purpose: a contributor
+testing server changes now needs one `cp` first, where before it was
+automatic. That costs a known step for people who have read CONTRIBUTING.
+The old default cost an unknown, silent failure to everyone else — including
+people evaluating whether the project works at all. Optimising the default
+for the larger, less-informed audience is the right way round.
+
+Alternatives considered:
+
+- **Keep `dist/` and document the build harder.** Rejected: the failure is
+  invisible at the client, so no amount of documentation helps someone who
+  did not read it first — which is exactly the person who hits it.
+- **`npm run --silent server`** (build-then-run in one command). Rejected:
+  `npm run` writes its own lines to stdout, and a stdio MCP server must emit
+  nothing on stdout but JSON-RPC frames. `--silent` suppresses npm's banner
+  but the risk of any tooling output corrupting the stream is not worth it.
+
+## 2026-08-21 — Build dist/ in vitest globalSetup
+
+Decision: `vitest.config.ts` gains `globalSetup: ["scripts/vitest-global-setup.mjs"]`,
+which runs `npm run build` when `dist/` is missing.
+
+Rationale: `src/servers/framework/main.test.ts` and `src/servers/focus/main.test.ts`
+execute the BUILT bin through a `node_modules/.bin`-style symlink, gated on
+`describe.skipIf(!existsSync(DIST_MAIN))`. They are the regression guard for
+the shipped-broken-bin incident in `docs/critique-3-publish-gate.md`. CI's
+fast tier runs `npm test` with no build and the full tier runs the build with
+no tests, so the guard **never executed in CI** — it only fired for someone
+who happened to have built locally. Measured on a dist-free tree: 8 passed
+| 2 skipped before, 10 passed after.
+
+Chosen over changing gate tiers because `.github/workflows/ci.yml` and
+`agentic.config.json` are both protected paths, and because coupling the
+tests to their own prerequisite is more robust than relying on a particular
+CI tier ordering that a future edit could silently undo.
+
+Kept deliberately dumb — existence check, no staleness comparison — matching
+`ensureBuilt()` in `scripts/gen-mcp-surface.mjs`. A stale `dist/` is the
+build's problem, not the test runner's.
