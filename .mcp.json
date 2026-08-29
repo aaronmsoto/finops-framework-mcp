@@ -1,12 +1,12 @@
 {
   "mcpServers": {
     "finops-framework": {
-      "command": "node",
-      "args": ["dist/servers/framework/main.js"]
+      "command": "npx",
+      "args": ["-y", "finops-framework-mcp"]
     },
-    "finops-focus": {
-      "command": "node",
-      "args": ["dist/servers/focus/main.js"]
+    "focus-spec": {
+      "command": "npx",
+      "args": ["-y", "finops-focus-mcp"]
     }
   }
 }

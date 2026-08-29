@@ -6,6 +6,10 @@ export default defineConfig({
   test: {
     include: ["tests/**/*.test.ts", "src/**/*.test.ts"],
     exclude: ["harness/**", "node_modules/**"],
+    // Builds dist/ when missing so the dist-gated integration tests that
+    // execute the built bins actually run instead of silently skipping —
+    // see the file's own comment for why that mattered.
+    globalSetup: ["scripts/vitest-global-setup.mjs"],
     coverage: {
       include: ["src/**"],
       exclude: ["src/**/fixtures/**", "src/**/*.test.ts"],

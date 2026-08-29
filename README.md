@@ -226,8 +226,9 @@ repo's markdown-for-docs convention, recorded in
   `docs/final-status-review.md`)
 - Gates: `./scripts/agentic gates` · tests: `npm test` (fixture-based, no
   network) · evals: `evals/framework/` (`docs/eval-results.md`)
-- Working in a clone: the checked-in `.mcp.json` loads **both** servers from
-  `dist/` into MCP clients that read it — build first (`dist/` is
-  gitignored), then restart the client. See
-  [CONTRIBUTING.md](CONTRIBUTING.md#testing-the-servers-locally); the
-  `npx` config in the guide is the end-user form.
+- Working in a clone: the checked-in `.mcp.json` loads **both** servers into
+  MCP clients that read it, running the published packages via `npx` so a
+  fresh clone works with no build. To exercise your working tree instead,
+  `cp .mcp.json.example .mcp.json` and build first (`dist/` is gitignored),
+  then restart the client — clients read MCP config only at startup. See
+  [CONTRIBUTING.md](CONTRIBUTING.md#testing-the-servers-locally).

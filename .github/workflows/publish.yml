@@ -1,5 +1,6 @@
 # Publishes both npm packages on a version tag via npm trusted publishing
-# (OIDC — no NPM_TOKEN secret; provenance is generated automatically).
+# (OIDC — no NPM_TOKEN secret; provenance is generated automatically), then
+# submits both server.json manifests to the MCP Registry, also via OIDC.
 # Prerequisite: each package must already exist on npm with a trusted
 # publisher configured for this repo + this workflow file — see
 # docs/release-runbook.md for the one-time bootstrap.
@@ -32,3 +33,41 @@ jobs:
       - name: Publish finops-focus-mcp
         run: npm publish --access public --provenance
         working-directory: packages/finops-focus-mcp
+
+  # Registry listing, deliberately a SEPARATE job rather than more steps on
+  # `publish`. npm publish is irreversible; if the registry submission fails,
+  # the npm job stays green and only this job is re-run. Registry ownership
+  # validation reads `mcpName` from the published tarball, so this must not
+  # start until `publish` has succeeded.
+  registry:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # OIDC token for `mcp-publisher login github-oidc`
+    steps:
+      - uses: actions/checkout@v4
+      # registry v1.8.1's go.mod declares `go 1.26`; an older toolchain here
+      # fails the install step. Keep this >= the pinned publisher's minimum.
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+      # Pinned, and built from the registry's own module — never `npm i -g
+      # mcp-publisher`: that npm name belongs to an unrelated third-party
+      # package that claims the same binary name (docs/release-runbook.md).
+      # Bump this pin deliberately; `@latest` would make the release
+      # non-reproducible.
+      - name: Install mcp-publisher
+        run: go install github.com/modelcontextprotocol/registry/cmd/publisher@v1.8.1
+      - name: Authenticate to the MCP Registry
+        run: publisher login github-oidc
+      # Fails the job on a malformed manifest before either submission, so a
+      # bad file cannot leave one server listed and the other not.
+      - name: Validate both manifests
+        run: |
+          publisher validate server.json
+          publisher validate packages/finops-focus-mcp/server.json
+      - name: Submit finops-framework-mcp
+        run: publisher publish server.json
+      - name: Submit finops-focus-mcp
+        run: publisher publish packages/finops-focus-mcp/server.json

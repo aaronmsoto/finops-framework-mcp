@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "chainHead": "bb39e0e63a5f6c37fa9023a0f6b8bfa72766ac4ef6ae10389571084376634b13",
+  "chainHead": "bdea7e138f6726b09abedd94032b824260c8dd0460c3cd191d09108e391c869e",
   "tasks": [
     {
       "id": "T-001",
@@ -1612,6 +1612,43 @@
         "completedAt": "2026-08-15T08:13:15.360Z"
       },
       "hash": "bb39e0e63a5f6c37fa9023a0f6b8bfa72766ac4ef6ae10389571084376634b13"
+    },
+    {
+      "id": "T-086",
+      "title": "Fix the release runbook's mcp-publisher step: install source, name collision, auth limits",
+      "acceptance": [
+        "docs/release-runbook.md names a verifiable install source for the official mcp-publisher CLI and explicitly warns that the npm package named 'mcp-publisher' is an unrelated third-party package that shadows the real binary",
+        "The runbook states which authentication methods the publisher supports and records that GitHub interactive (device-flow) login cannot complete from a proxied agent session, so the registry step is human-run from a normal machine",
+        "The runbook records that both manifests currently validate but declare the 2025-09-29 schema while 2025-12-11 is current, so a future migration is expected; ./scripts/agentic gates --tier all passes"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Fixed docs/release-runbook.md's mcp-publisher step. It named no install source, and the npm package called 'mcp-publisher' is an unrelated third-party package (different author, no repo, browser-automation description) whose bin shadows the official CLI — added an explicit warning plus three verifiable install routes, including a GitHub-free one via the Go module proxy with checksums left ON. Recorded the auth constraint proven by attempting it: mcp-publisher login github fails from this session because GitHub's device-code endpoint is not repository-scoped and the agent proxy refuses it; dns/http need a domain and key, none is test-only, github-oidc is Actions-only. Everything short of login works here — mcp-publisher validate reports both manifests valid. Also added a do-not-tag-before-trusted-publishing warning to the subsequent-release section and recorded the deferred 2025-09-29 to 2025-12-11 schema migration. gates --tier all PASS.",
+        "commit": "6c650060023458d11adfecdc49f4f899e4b28416",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-15T08:33:23.145Z"
+      },
+      "hash": "06fce1e20b5581b6655bf5031033202f71e9d412d54ce57304775150e6334498"
+    },
+    {
+      "id": "T-087",
+      "title": "Automate MCP-registry submission in publish.yml via OIDC (protected-path edit AUTHORIZED by owner)",
+      "acceptance": [
+        "publish.yml gains a registry job that runs after the npm publish job, authenticates with mcp-publisher login github-oidc, and submits both server.json manifests",
+        "The publisher CLI is installed at a PINNED version rather than @latest, and never from the npm package of that name, which is an unrelated third-party package",
+        "A registry failure cannot corrupt or obscure the npm publish result: the registry work is a separate job depending on publish, so npm success stays visible and the registry step can be re-run alone",
+        "docs/release-runbook.md reflects that the registry submission is now automatic on tag push, with the manual commands retained for the bootstrap case; ./scripts/agentic gates --tier all passes and the workflow YAML parses"
+      ],
+      "status": "done",
+      "evidence": {
+        "gates": "pass",
+        "summary": "Added a registry job to publish.yml that submits both server.json manifests to the MCP Registry over OIDC after the npm publish job. Protected-path edit, explicitly authorized by the owner in-session; the PreToolUse hook's documented override marker was placed and removed, no standing bypass left. Separate job with needs: publish so an irreversible npm publish stays green and only the registry step re-runs on failure; publisher pinned at v1.8.1 and installed from the registry's Go module (never the unrelated npm package of that name); both manifests validated before either is submitted. Fast gates PASS (414 tests) plus build clean. Verified as far as possible without a tag: YAML inspected, pinned version confirmed to build via the module proxy with checksums on, and publisher validate returns valid for both manifests using the exact argument form the job uses. That caught a real defect — setup-go was pinned to 1.25 but registry v1.8.1 requires go 1.26, so the install step would have failed at release time after npm had already published; now 1.26 with a comment tying it to the publisher pin. Honest limitation: the workflow only triggers on tags, so it cannot be exercised until the first real release.",
+        "commit": "8803a370ebeda19da2f59a0497d217aca79e7006",
+        "verifiedBy": "gates",
+        "completedAt": "2026-08-15T08:44:44.073Z"
+      },
+      "hash": "bdea7e138f6726b09abedd94032b824260c8dd0460c3cd191d09108e391c869e"
     }
   ]
 }

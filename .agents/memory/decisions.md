@@ -682,3 +682,108 @@ Guide constraint that shaped the implementation: badges are shields.io
 `<img>` tags, and `docs/guide/` asserts in its own header comment that it has
 zero external assets so it renders over `file://`. Badges therefore live in
 the two READMEs only; the guide states the same fact with plain text links.
+
+## 2026-08-15 — Automate the MCP-registry submission in publish.yml (OIDC)
+
+Decision: `.github/workflows/publish.yml` gains a second job, `registry`, that
+runs after the npm publish job on a version tag, authenticates with
+`publisher login github-oidc`, and submits both `server.json` manifests. The
+manual `mcp-publisher` commands remain in the runbook as the bootstrap path
+and the fallback.
+
+**This edits a protected path** (`.github/workflows/**` in
+`approvals.yaml`). Explicitly authorized by the owner in-session on
+2026-08-15 ("Set up the OIDC workflow so this is automatic"), which is the
+exemption AGENTS.md's hard rule allows ("unless the task explicitly says
+so"), and matches the precedent of T-059 and T-066. The PreToolUse hook's
+documented override marker (`.agents/.cache/policy-edit-ok`) was placed for
+the edit and removed immediately after — no standing bypass remains.
+
+Rationale: OIDC sidesteps the problem that blocked the manual route entirely.
+`mcp-publisher login github` needs GitHub's device-code endpoint, which
+proxied agent sessions cannot reach; inside Actions the token is minted
+directly, so no device code is involved. It also removes a per-release manual
+step that is easy to forget, and forgetting it silently leaves the registry
+listing pinned to an older version than npm.
+
+Design points, each chosen against an alternative:
+
+- **A separate job, not more steps on `publish`.** npm publish is
+  irreversible. If the registry submission were a trailing step and failed,
+  the whole workflow would go red even though both packages published fine,
+  and re-running it would attempt to re-publish to npm. As its own job with
+  `needs: publish`, the npm result stays green and only the registry job is
+  re-run.
+- **A pinned publisher version (`@v1.8.1`), not `@latest`.** A release
+  pipeline that installs `@latest` is not reproducible, and this is precisely
+  the tool whose npm namesake is a different package by a different author —
+  supply-chain caution is warranted here specifically.
+- **Built via `go install` from the registry's own module**, not an npm
+  install and not an unpinned release download. The module proxy verifies
+  checksums.
+- **Both manifests validated before either is submitted**, so a malformed
+  file cannot leave one server listed at the new version and the other not.
+
+Known limitation, stated rather than hidden: this workflow cannot be tested
+until an actual tag push, because it triggers only on `tags: v*`. It was
+verified as far as is possible without one — YAML structure, the pinned
+version building from the module proxy, and `publisher validate <path>`
+succeeding for both manifests using the exact argument form the job uses.
+That verification caught a real defect: the job first pinned
+`actions/setup-go` to 1.25, but registry v1.8.1's `go.mod` declares `go
+1.26`, so the install step would have failed at release time.
+
+## 2026-08-21 — .mcp.json runs the published packages, not the working tree
+
+Decision: the checked-in `.mcp.json` now spawns `npx -y finops-framework-mcp`
+/ `npx -y finops-focus-mcp` instead of `node dist/servers/*/main.js`. The
+working-tree variant moves to `.mcp.json.example`, copied over deliberately
+by contributors changing server code.
+
+Rationale: `.mcp.json` is auto-loaded by any MCP client that opens this repo,
+and `dist/` is gitignored. In a fresh clone the old config spawned a command
+that fails instantly — the client registers zero tools and reports nothing
+useful, so the servers look broken rather than unbuilt. Reproduced directly:
+a fresh clone running the committed config's command gets `Cannot find
+module`. This is the most plausible cause of an external report concluding
+the servers "may not have actual tool endpoints implemented yet."
+
+The trade-off is real and went the other way on purpose: a contributor
+testing server changes now needs one `cp` first, where before it was
+automatic. That costs a known step for people who have read CONTRIBUTING.
+The old default cost an unknown, silent failure to everyone else — including
+people evaluating whether the project works at all. Optimising the default
+for the larger, less-informed audience is the right way round.
+
+Alternatives considered:
+
+- **Keep `dist/` and document the build harder.** Rejected: the failure is
+  invisible at the client, so no amount of documentation helps someone who
+  did not read it first — which is exactly the person who hits it.
+- **`npm run --silent server`** (build-then-run in one command). Rejected:
+  `npm run` writes its own lines to stdout, and a stdio MCP server must emit
+  nothing on stdout but JSON-RPC frames. `--silent` suppresses npm's banner
+  but the risk of any tooling output corrupting the stream is not worth it.
+
+## 2026-08-21 — Build dist/ in vitest globalSetup
+
+Decision: `vitest.config.ts` gains `globalSetup: ["scripts/vitest-global-setup.mjs"]`,
+which runs `npm run build` when `dist/` is missing.
+
+Rationale: `src/servers/framework/main.test.ts` and `src/servers/focus/main.test.ts`
+execute the BUILT bin through a `node_modules/.bin`-style symlink, gated on
+`describe.skipIf(!existsSync(DIST_MAIN))`. They are the regression guard for
+the shipped-broken-bin incident in `docs/critique-3-publish-gate.md`. CI's
+fast tier runs `npm test` with no build and the full tier runs the build with
+no tests, so the guard **never executed in CI** — it only fired for someone
+who happened to have built locally. Measured on a dist-free tree: 8 passed
+| 2 skipped before, 10 passed after.
+
+Chosen over changing gate tiers because `.github/workflows/ci.yml` and
+`agentic.config.json` are both protected paths, and because coupling the
+tests to their own prerequisite is more robust than relying on a particular
+CI tier ordering that a future edit could silently undo.
+
+Kept deliberately dumb — existence check, no staleness comparison — matching
+`ensureBuilt()` in `scripts/gen-mcp-surface.mjs`. A stale `dist/` is the
+build's problem, not the test runner's.
