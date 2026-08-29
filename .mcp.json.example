@@ -1,0 +1,27 @@
+{
+  "_comment": [
+    "Contributor variant: runs the servers from YOUR WORKING TREE instead of",
+    "the published packages. Copy over .mcp.json when you want a client to",
+    "exercise local changes:  cp .mcp.json.example .mcp.json",
+    "",
+    "Requires a build first — dist/ is gitignored, so these paths do not",
+    "exist in a fresh clone:  npm ci && npm run build",
+    "",
+    "The paths are relative, so the client's working directory must be the",
+    "repo root. Clients read MCP config at startup: restart yours after the",
+    "first build, or it will have already given up on a command that failed.",
+    "",
+    "Do not commit the result — the checked-in .mcp.json deliberately uses",
+    "npx so that opening this repo in any MCP client works with no build."
+  ],
+  "mcpServers": {
+    "finops-framework": {
+      "command": "node",
+      "args": ["dist/servers/framework/main.js"]
+    },
+    "focus-spec": {
+      "command": "node",
+      "args": ["dist/servers/focus/main.js"]
+    }
+  }
+}

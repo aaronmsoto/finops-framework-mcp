@@ -68,8 +68,26 @@
   `ALLOWED_ORIGINS` and `demo/config.js`'s `workerBaseUrl` now hold the real
   values, so a plain `wrangler deploy` no longer resets CORS.
 
+- **2026-08-21:** Investigated an external report claiming the servers have
+  no real tool endpoints and need "backend integration" to register with a
+  client. Both conclusions are **wrong** — discovery is entirely client-side
+  and no server-side mechanism exists — but auditing rather than dismissing
+  it found two real defects, both now fixed: the checked-in `.mcp.json`
+  pointed at a gitignored `dist/` (so any client opening the repo before a
+  build saw two dead servers with no diagnostic), and the built-bin
+  regression tests were `skipIf`-gated on `dist/` and therefore **never ran
+  in CI**. See decisions.md 2026-08-21 (x2).
+
 ## Next steps
 
+0. **Harness unavailable in agent sessions right now.** `npm ci --prefix
+   .agentic` returns `401` from `npm.pkg.github.com`; it needs a
+   `read:packages` token in `NPM_TOKEN` and the session `GITHUB_TOKEN` is
+   rejected. Consequence: no `tasks add/start/complete`, no hash-chain
+   extension, no `./scripts/agentic gates` — the 2026-08-21 work is committed
+   **untracked** (tasks.json deliberately untouched, chain intact) and
+   verified with the individual npm gate commands instead. Supply a token, or
+   retro-file that work as a task.
 1. **Owner (blocks everything below):** set the GitHub About description —
    the session token is proxied and 403s on repository-settings writes
    ("Repository settings writes are not permitted through this proxy"), so
