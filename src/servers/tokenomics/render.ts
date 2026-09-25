@@ -166,9 +166,23 @@ export function leverMd(a: TokenomicsArtifact, l: TkLever): string {
   return withFooter(a, parts.join("\n\n"), l.provenance);
 }
 
+/** A ratified FOCUS column cited from the 1.5 status page: the page is
+ * describing work that extends the column, not what 1.2 already carries. */
+function targetNote(l: TkCrossLink): string {
+  if (l.target.uri === null) {
+    return " (FOCUS working draft, not in any ratified release yet)";
+  }
+  const note =
+    l.target.server === "focus" && l.document === "focus-1-5-for-ai"
+      ? " — ratified 1.2 column; the FOCUS 1.5 work quoted here is not in it yet"
+      : "";
+  return ` (\`${l.target.uri}\`)${note}`;
+}
+
 export function linksMd(
   links: TkCrossLink[],
   crosswalk: TkCrosswalkEntry[],
+  opts: { showSource?: boolean } = {},
 ): string {
   const parts: string[] = [];
   if (links.length) {
@@ -177,7 +191,7 @@ export function linksMd(
         links
           .map(
             (l) =>
-              `- → ${l.target.server} ${l.target.kind} **${l.target.id}**${l.target.uri ? ` (\`${l.target.uri}\`)` : " (FOCUS working draft, no published column yet)"} — evidence: “${l.evidence}”`,
+              `- ${opts.showSource ? `${l.from.type} \`${l.from.slug}\` ` : ""}→ ${l.target.server} ${l.target.kind} **${l.target.id}**${targetNote(l)} — evidence: “${l.evidence}” (${l.document})`,
           )
           .join("\n"),
     );

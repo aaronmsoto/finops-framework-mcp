@@ -469,6 +469,58 @@ describe("tools — default surface", () => {
   });
 });
 
+describe("eval-driven refinements", () => {
+  it("flags writes exceeding reads and reports the write:read ratio", async () => {
+    const res = await call("calculate_cache_metrics", {
+      cache_read_tokens: 200000,
+      cache_write_tokens: 300000,
+      uncached_input_tokens: 500000,
+      base_input_price_per_mtok: 3,
+      cache_read_multiplier: 0.1,
+      cache_write_multiplier: 1.25,
+    });
+    expect(res.structuredContent?.cache_cost_efficiency).toBe(0.105);
+    expect(res.structuredContent?.cache_write_to_read_ratio).toBe(1.5);
+    expect(String(res.structuredContent?.interpretation)).toContain(
+      "pays back only if that entry is read again",
+    );
+    const noReads = await call("calculate_cache_metrics", {
+      cache_read_tokens: 0,
+      cache_write_tokens: 1,
+      uncached_input_tokens: 1,
+    });
+    expect(noReads.structuredContent?.cache_write_to_read_ratio).toBeNull();
+  });
+
+  it("define_term prefers exact terms over substrings", async () => {
+    const res = await call("define_term", { term: "tokenmaxing" });
+    const m = res.structuredContent?.matches as { term: string }[];
+    expect(m.map((x) => x.term)).toEqual(["Tokenmaxing"]);
+    const partial = await call("define_term", { term: "cache" });
+    expect(
+      (partial.structuredContent?.matches as unknown[]).length,
+    ).toBeGreaterThan(1);
+  });
+
+  it("get_crosslinks text names each link's source and flags unratified FOCUS work", async () => {
+    const res = await call("get_crosslinks", {
+      entity_type: "metric",
+      slug: "cache-hit-rate",
+    });
+    const text = res.content[0]?.text ?? "";
+    expect(text).toContain("metric `cache-hit-rate`");
+    expect(text).toContain("not in it yet");
+    expect(text).toContain("not in any ratified release");
+  });
+
+  it("list_layers text shows the layer name next to the summary label", async () => {
+    const res = await call("list_layers");
+    expect(res.content[0]?.text).toContain(
+      "L4 Model management and selection (summary label: “L4 Model and quantization”)",
+    );
+  });
+});
+
 describe("experimental surface", () => {
   it("adds get_crosswalk with an UNOFFICIAL banner, but no curriculum tools without an overlay", async () => {
     const names = (await expClient.listTools()).tools.map((t) => t.name);

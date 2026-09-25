@@ -22,6 +22,10 @@
     "focus-spec": {
       "command": "node",
       "args": ["dist/servers/focus/main.js"]
+    },
+    "tokenomics-overview": {
+      "command": "node",
+      "args": ["dist/servers/tokenomics/main.js"]
     }
   }
 }

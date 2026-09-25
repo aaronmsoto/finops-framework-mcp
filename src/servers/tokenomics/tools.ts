@@ -316,7 +316,7 @@ export function registerTools(
     {
       title: "Tokenomics server overview",
       description:
-        "Start here. Data version, entity counts, every source document with its publication status (Working Draft, Release Candidate, …), and which optional layers (experimental crosswalk, curriculum overlay) are active. No parameters.",
+        "Start here. Data version, entity counts, and every source document with its publication status (Working Draft, Release Candidate, …). No parameters.",
       inputSchema: {},
       outputSchema: {
         data_version: z.string(),
@@ -466,7 +466,7 @@ export function registerTools(
           rows
             .map(
               (l) =>
-                `| ${l.table_label} | ${l.multiplier_effect} | ${l.key_metric} | ${l.primary_levers.join("; ")} |`,
+                `| L${l.number} ${l.name} (summary label: “${l.table_label}”) | ${l.multiplier_effect} | ${l.key_metric} | ${l.primary_levers.join("; ")} |`,
             )
             .join("\n") +
           `\n\n_${statusLine(d)}_` +
@@ -763,7 +763,7 @@ export function registerTools(
     {
       title: "Get one reference metric",
       description:
-        "One metric's published formula, definition, inputs, 'what good looks like' targets, and its cross-links to the FinOps Framework / FOCUS servers (plus curated crosswalk entries in experimental mode). E.g. 'cache-hit-rate', 'cache-cost-efficiency'.",
+        "One metric's published formula, definition, inputs, 'what good looks like' targets, and its cross-links to the FinOps Framework / FOCUS servers. E.g. 'cache-hit-rate', 'cache-cost-efficiency'.",
       inputSchema: { metric: z.string() },
       outputSchema: {
         metric: metricRecord,
@@ -824,6 +824,7 @@ export function registerTools(
         actual_prompt_cost: z.number().nullable(),
         actual_prompt_cost_source: z.enum(["given", "computed", "unavailable"]),
         cache_cost_efficiency: z.number().nullable(),
+        cache_write_to_read_ratio: z.number().nullable(),
         interpretation: z.string(),
         formulas: z.array(z.string()),
       },
@@ -881,10 +882,22 @@ export function registerTools(
           ? `Cache hit rate ${(hit * 100).toFixed(1)}% (coverage). Add prices to measure payback (cache cost efficiency).`
           : `Cache hit rate ${(hit * 100).toFixed(1)}%; cache cost efficiency ${(cce * 100).toFixed(1)}% — ` +
             (cce > 0
-              ? "caching is paying for itself (the page's target: clearly above zero)."
+              ? "positive: caching avoided that share of prompt spend. The page's target is 'clearly above zero'; a workload hovering just over zero is doing payback-once work (rare hits, prompt ordering, short sessions)."
               : cce === 0
                 ? "exactly break-even: the write premium is only just repaid."
                 : "negative: caching is costing more than it saves (writes not read back enough).");
+      const writeRead =
+        x.cache_read_tokens > 0
+          ? x.cache_write_tokens / x.cache_read_tokens
+          : null;
+      const cachePage = a.documentBodies.get("cache-explainer") ?? "";
+      const writeFlag =
+        x.cache_write_tokens > x.cache_read_tokens
+          ? ` Cache writes (${x.cache_write_tokens}) exceed cache reads (${x.cache_read_tokens})` +
+            (cachePage.includes("pays back only if that entry is read again")
+              ? ": per the cache explainer, a write “pays back only if that entry is read again, ideally many times.”"
+              : ".")
+          : "";
       const metrics = [
         "cache-hit-rate",
         "cache-cost-efficiency",
@@ -900,12 +913,13 @@ export function registerTools(
         actual_prompt_cost: actual === null ? null : round(actual),
         actual_prompt_cost_source: source,
         cache_cost_efficiency: cce === null ? null : round(cce),
-        interpretation,
+        cache_write_to_read_ratio: writeRead === null ? null : round(writeRead),
+        interpretation: interpretation + writeFlag,
         formulas: metrics,
       };
       return ok(
         structured,
-        `${interpretation}\n\n` +
+        `${interpretation}${writeFlag}\n\n` +
           `- cache hit rate: ${structured.cache_hit_rate}\n` +
           (uec !== null
             ? `- uncached equivalent cost: ${structured.uncached_equivalent_cost}\n`
@@ -1051,7 +1065,7 @@ export function registerTools(
     {
       title: "Get one persona",
       description:
-        "One persona's responsibilities, key decisions, signals and metrics, and stated links to FinOps Framework capabilities (plus name-correspondence crosswalk to FinOps personas in experimental mode).",
+        "One persona's responsibilities, key decisions, signals and metrics, and stated links to FinOps Framework capabilities.",
       inputSchema: { persona: z.string() },
       outputSchema: {
         persona: personaRecord,
@@ -1181,12 +1195,17 @@ export function registerTools(
     },
     ({ term }) => {
       const q = slugify(term);
-      const matches = a.glossary.filter(
-        (g) =>
-          g.slug === q ||
-          slugify(g.term).includes(q) ||
-          q.includes(slugify(g.term)),
+      // Exact term matches win; substring matches only when none exist
+      // ("tokenmaxing" must not also return "Token").
+      const bare = (t: string) => slugify(t.replace(/\([^)]*\)/g, " "));
+      const exact = a.glossary.filter(
+        (g) => bare(g.term) === q || g.slug === q,
       );
+      const matches = exact.length
+        ? exact
+        : a.glossary.filter(
+            (g) => slugify(g.term).includes(q) || q.includes(slugify(g.term)),
+          );
       const cur =
         opts.experimental && opts.curriculum
           ? opts.curriculum.glossary
@@ -1304,7 +1323,8 @@ export function registerTools(
           total: rows.length,
           ...(pg.nextCursor ? { nextCursor: pg.nextCursor } : {}),
         },
-        `${rows.length} stated link(s)\n\n` + linksMd(pg.page, []),
+        `${rows.length} stated link(s)\n\n` +
+          linksMd(pg.page, [], { showSource: true }),
       );
     },
   );

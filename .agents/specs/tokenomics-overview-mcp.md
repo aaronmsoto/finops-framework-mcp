@@ -118,15 +118,19 @@ banks are never imported (exam-integrity).
 [dist, data/tokenomics, README, LICENSE, NOTICE], prepack
 `scripts/pack-tokenomics.mjs`, mcpName
 io.github.aaronmsoto/tokenomics-overview-mcp, server.json with
-`TOKENOMICS_MCP_DATA`, `TOKENOMICS_MCP_CURRICULUM`). Version 0.1.0.
+`TOKENOMICS_MCP_DATA` only — the experimental overlay variable is not
+advertised, per decisions.md 2026-08-15). Version 0.1.0. The checked-in
+`.mcp.json` gains the server only after it is on npm (fresh-clone rule);
+`.mcp.json.example` gains it now.
 
 ## Acceptance criteria
 
 - [ ] `refresh` against the live site produces data/tokenomics with the
       pinned counts; a second `refresh` from cache and a `derive` are
       byte-identical; artifact ≤1.5MB; fixtures make parser tests offline.
-- [ ] Cache Hit Rate and Cache Cost Efficiency formulas in the artifact match
-      the cache-explainer page text verbatim; `calculate_cache_metrics`
+- [ ] Cache Hit Rate and Cache Cost Efficiency formulas in the artifact are
+      built only from the cache-explainer's own formula text (stacked
+      fractions linearized as `num / (den)`); `calculate_cache_metrics`
       reproduces a hand-computed fixture exactly and rejects negative/zero-
       denominator input with an error, not NaN.
 - [ ] Every stated cross-link's evidence quote is found in its document and

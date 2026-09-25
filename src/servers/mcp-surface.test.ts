@@ -14,6 +14,8 @@ import { describe, expect, it } from "vitest";
 import { loadArtifact, loadFocusStore } from "../shared/index.js";
 import { createServer as createFocusServer } from "./focus/server.js";
 import { createServer as createFrameworkServer } from "./framework/server.js";
+import { loadTokenomicsArtifact } from "../shared/tokenomics/artifact.js";
+import { createServer as createTokenomicsServer } from "./tokenomics/server.js";
 
 const DOC_PATH = join(import.meta.dirname, "../../docs/mcp-surface.md");
 const doc = readFileSync(DOC_PATH, "utf8");
@@ -145,5 +147,38 @@ describe("docs/mcp-surface.md matches the live server surface", () => {
     const client = await linked(createFocusServer(store));
     await assertSectionMatchesLiveSurface(client, "finops-focus server");
     await client.close();
+  });
+
+  it("documents the tokenomics server's default surface and hides gated tools", async () => {
+    const artifact = loadTokenomicsArtifact(
+      join(import.meta.dirname, "../../data/tokenomics"),
+    );
+    const dflt = await linked(createTokenomicsServer(artifact));
+    await assertSectionMatchesLiveSurface(dflt, "tokenomics-overview server");
+    const exp = await linked(
+      createTokenomicsServer(artifact, {
+        experimental: true,
+        curriculum: {
+          kind: "cert-prep-curriculum",
+          official: false,
+          imported_at: "x",
+          modules: [],
+          glossary: [],
+          numbers: [],
+        },
+      }),
+    );
+    const defaultNames = new Set(
+      (await dflt.listTools()).tools.map((t) => t.name),
+    );
+    const gated = (await exp.listTools()).tools.filter(
+      (t) => !defaultNames.has(t.name),
+    );
+    expect(gated.length).toBe(4);
+    for (const t of gated) {
+      expect(doc).not.toContain(`\`${t.name}\``);
+    }
+    await dflt.close();
+    await exp.close();
   });
 });

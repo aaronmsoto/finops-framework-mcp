@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Generates docs/mcp-surface.md from LIVE MCP protocol output — tools/list,
 // resources/list, resources/templates/list, prompts/list, plus
-// completion/complete probes for resource-template arguments — against both
-// built stdio servers. Same client bridge as evals/framework/mcp-call.mjs,
+// completion/complete probes for resource-template arguments — against all
+// three built stdio servers. Same client bridge as evals/framework/mcp-call.mjs,
 // connected directly here so full inputSchema/argument detail (not the
 // name+description-only shape mcp-call.mjs's list-tools intentionally keeps
 // stable) is available for rendering. Nothing in the doc is hand-typed.
@@ -27,7 +27,8 @@ const UNOFFICIAL_RE = /\bunofficial\b|\bexperimental\b/i;
 function ensureBuilt() {
   if (
     !existsSync(join(ROOT, "dist/servers/framework/main.js")) ||
-    !existsSync(join(ROOT, "dist/servers/focus/main.js"))
+    !existsSync(join(ROOT, "dist/servers/focus/main.js")) ||
+    !existsSync(join(ROOT, "dist/servers/tokenomics/main.js"))
   ) {
     execFileSync("npm", ["run", "build"], { cwd: ROOT, stdio: "inherit" });
   }
@@ -262,20 +263,33 @@ async function focusMeta(client) {
   return `FOCUS spec versions ${versions}; latest ${info.latest}.`;
 }
 
+async function tokenomicsMeta(client) {
+  const res = await client.callTool({
+    name: "get_tokenomics_info",
+    arguments: {},
+  });
+  const info = res.structuredContent;
+  return `Data v${info.data_version}, crawled ${String(info.crawled_at).slice(0, 10)}; ${info.documents.length} Tokenomics Foundation documents. The surface a default \`npx tokenomics-overview-mcp\` serves.`;
+}
+
 async function main() {
   ensureBuilt();
 
   const fw = await connect("framework");
   const focus = await connect("focus");
+  const tokenomics = await connect("tokenomics");
 
   const fwMetaLine = await frameworkMeta(fw);
   const focusMetaLine = await focusMeta(focus);
+  const tokenomicsMetaLine = await tokenomicsMeta(tokenomics);
 
   const fwSurface = await surfaceFor(fw);
   const focusSurface = await surfaceFor(focus);
+  const tokenomicsSurface = await surfaceFor(tokenomics);
 
   await fw.close();
   await focus.close();
+  await tokenomics.close();
 
   const header = [
     "# MCP surface",
@@ -284,7 +298,7 @@ async function main() {
       "`node scripts/gen-mcp-surface.mjs` after any prompt/resource/tool change " +
       "and commit the diff. -->",
     "",
-    "Live prompts → resources → tools hierarchy of both MCP servers shipped " +
+    "Live prompts → resources → tools hierarchy of all three MCP servers shipped " +
       "from this repo, captured from each server's own `tools/list`, " +
       "`resources/list`, `resources/templates/list`, and `prompts/list` " +
       "responses (plus `completion/complete` probes for resource-template " +
@@ -299,9 +313,10 @@ async function main() {
     "",
     "- **[UNOFFICIAL/EXPERIMENTAL]** — title or description contains " +
       '"unofficial" or "experimental": content derived/parsed by this ' +
-      "server rather than published or endorsed by the FinOps Foundation " +
-      "or the FOCUS project (`official: false` in structured output). " +
-      "Unmarked entries are official framework/FOCUS content, restructured.",
+      "server rather than published or endorsed by the FinOps Foundation, " +
+      "the FOCUS project, or the Tokenomics Foundation (`official: false` " +
+      "in structured output). Unmarked entries are official " +
+      "framework/FOCUS/Tokenomics Foundation content, restructured.",
   ].join("\n");
 
   const doc =
@@ -309,6 +324,11 @@ async function main() {
       header,
       formatServerSection("finops-framework server", fwMetaLine, fwSurface),
       formatServerSection("finops-focus server", focusMetaLine, focusSurface),
+      formatServerSection(
+        "tokenomics-overview server",
+        tokenomicsMetaLine,
+        tokenomicsSurface,
+      ),
     ].join("\n\n") + "\n";
 
   if (process.argv.includes("--check")) {
