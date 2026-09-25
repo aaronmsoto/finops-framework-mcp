@@ -36,6 +36,12 @@ export const target = {
     id,
     uri: `focus://spec/${FOCUS_LINK_VERSION}/columns/${id.toLowerCase()}`,
   }),
+  focusAttribute: (id: string, slug: string): TkCrossLinkTarget => ({
+    server: "focus",
+    kind: "attribute",
+    id,
+    uri: `focus://spec/${FOCUS_LINK_VERSION}/attributes/${slug}`,
+  }),
   focusDraft: (id: string): TkCrossLinkTarget => ({
     server: "focus-working-draft",
     kind: "draft-identifier",
@@ -49,11 +55,18 @@ export interface StatedLinkSpec {
   document: string;
   evidence: string;
   targets: TkCrossLinkTarget[];
+  /** Framework targets: target id → the words in `evidence` that name it
+   * (the capability's name or its defining activity, e.g. "anomaly
+   * detection" for anomaly-management). Checked case-insensitively. */
+  mentions?: Record<string, string>;
 }
 
 /** Hand-registered stated links. `evidence` must appear verbatim (markdown
- * markup and whitespace normalized) in the document's canonical markdown,
- * and must itself name the target — refresh fails otherwise. */
+ * markup and whitespace normalized) in the document's canonical markdown.
+ * A framework target's `mentions` phrase must appear in the evidence itself;
+ * a FOCUS target's identifier must appear in the evidence's paragraph (the
+ * tracker cards name identifiers in the sentence before the one that states
+ * the use). Refresh fails otherwise. */
 export const STATED_LINKS: StatedLinkSpec[] = [
   {
     from: { type: "document", slug: "five-layer-stack-paper" },
@@ -64,6 +77,11 @@ export const STATED_LINKS: StatedLinkSpec[] = [
       target.capability("budgeting"),
       target.capability("anomaly-management"),
     ],
+    mentions: {
+      allocation: "Allocation",
+      budgeting: "budgeting",
+      "anomaly-management": "anomaly detection",
+    },
   },
   {
     from: { type: "document", slug: "big-t-notation-paper" },
@@ -74,36 +92,45 @@ export const STATED_LINKS: StatedLinkSpec[] = [
       target.capability("anomaly-management"),
       target.capability("unit-economics"),
     ],
+    mentions: {
+      "anomaly-management": "anomaly detection",
+      "unit-economics": "unit economics",
+    },
   },
   {
     from: { type: "document", slug: "big-t-notation" },
     document: "big-t-notation",
     evidence: "then visibility, then optimization, then unit economics",
     targets: [target.capability("unit-economics")],
+    mentions: { "unit-economics": "unit economics" },
   },
   {
     from: { type: "persona", slug: "finops-practitioner" },
     document: "personas-operating-model",
     evidence: "Anomaly detection shifts from spend spikes to complexity shifts",
     targets: [target.capability("anomaly-management")],
+    mentions: { "anomaly-management": "anomaly detection" },
   },
   {
     from: { type: "persona", slug: "finops-practitioner" },
     document: "personas-operating-model",
     evidence: "Cost attribution and budgets | FinOps Practitioner",
-    targets: [target.capability("allocation"), target.capability("budgeting")],
+    targets: [target.capability("budgeting")],
+    mentions: { budgeting: "budgets" },
   },
   {
     from: { type: "persona", slug: "finops-practitioner" },
     document: "personas-operating-model",
     evidence: "Forecasting and variance | FinOps Practitioner",
     targets: [target.capability("forecasting")],
+    mentions: { forecasting: "forecasting" },
   },
   {
     from: { type: "persona", slug: "finance" },
     document: "personas-operating-model",
     evidence: "forecasting for compounding demand",
     targets: [target.capability("forecasting")],
+    mentions: { forecasting: "forecasting" },
   },
   {
     from: { type: "metric", slug: "cache-hit-rate" },
@@ -122,13 +149,27 @@ export const STATED_LINKS: StatedLinkSpec[] = [
 export function trackerLinkTargets(
   item: TkFocusTrackerItem,
   focusColumnIds: Set<string>,
+  focusAttributes: Map<string, string> = new Map(),
 ): { id: string; target: TkCrossLinkTarget }[] {
-  return item.identifiers.map((id) => ({
-    id,
-    target: focusColumnIds.has(id)
-      ? target.focusColumn(id)
-      : target.focusDraft(id),
-  }));
+  // Single-word identifiers (Email, Name, Type) are JSON keys inside a
+  // property value on the tracker page, not FOCUS column/property names.
+  const named = item.identifiers.filter(
+    (id) =>
+      focusColumnIds.has(id) ||
+      focusAttributes.has(id) ||
+      /^[A-Z][a-z0-9]+[A-Z]/.test(id),
+  );
+  return named.map((id) => {
+    const attrSlug = focusAttributes.get(id);
+    return {
+      id,
+      target: focusColumnIds.has(id)
+        ? target.focusColumn(id)
+        : attrSlug !== undefined
+          ? target.focusAttribute(id, attrSlug)
+          : target.focusDraft(id),
+    };
+  });
 }
 
 export interface CrosswalkSpec {

@@ -14,8 +14,8 @@
     "stages": 3,
     "value_categories": 10
   },
-  "crawled_at": "2026-09-25T08:29:16.211Z",
-  "data_version": "1.0.0",
+  "crawled_at": "2026-09-25T08:52:54.064Z",
+  "data_version": "1.0.1",
   "parse_warnings": [
     "five-layer-stack: no status label on page; using registry label \"Draft paper (projects index label)\"",
     "five-layer-stack-paper: no status label on page; using registry label \"Draft paper (projects index label)\"",
@@ -61,8 +61,8 @@
     "content/personas.json": "346a80741332ab39fec913dfb4275df05bbf591f05c824345a36e6e4d5f607ac",
     "content/stages.json": "d86bee95b1d69c66c7bba20563b0e96cb663d7c339359f3391c695a02c1e9edd",
     "content/value.json": "2e164c06d24f5f71250138801c0d9ef4daa2ab8127b15c616785c8c66e3a6c6a",
-    "derived/changelog.json": "f49dcb65331eb8a146439714d42235cf2edb783536fd86afbefe994392a25a92",
-    "derived/crosslinks.json": "27706d7285ade18977000a1643de2be7ca7826056938016cecc7533ae62bd9fe",
+    "derived/changelog.json": "ac50f8d8a1698c32335f26934b1d0fb012432205515d440fc159b31b8dfcb738",
+    "derived/crosslinks.json": "4fa3363a7792e2de7fa94ca7bd56095889bcf2af58314c0b253be1e4e320e733",
     "derived/crosswalk.json": "1c8c03012df3af8a28115eb63c22873a73f667db041418389e644fef69a01cda",
     "schema/bigt.schema.json": "0ff0622916d97b89b676cdb10835f36c710e44310579fbd48ce07068210aff06",
     "schema/cache-providers.schema.json": "45c05bc1b7b9a5d3baf618567798f7981464dbac5cd72081973c527cbad73abe",

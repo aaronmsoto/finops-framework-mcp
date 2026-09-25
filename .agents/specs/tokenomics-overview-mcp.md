@@ -69,7 +69,9 @@ cache-cost-efficiency, uncached-equivalent-cost, net-benefit, cost-per-token,
 risk-expected-loss, ai-unit-economics), personas 12 (8 core + 4 allied),
 value_categories 10, booking_destinations 5, cache_providers 3. Levers,
 glossary terms, FOCUS-tracker items: minimum bounds. Every record carries
-`{source_url, section?, license: "CC-BY-4.0", status}`; formulas verbatim.
+`{document, section, source_url, license: "CC-BY-4.0"}`; the publication
+status lives on the document record and is rendered into every output
+(single records via a status line, lists via a sources-and-status footer).
 
 ## Cross-links
 
@@ -108,8 +110,9 @@ public, so its text never enters `data/` or the npm tarball. The importer
 emits overlay JSON to a local path; the server loads it only when both the
 experimental flag and `TOKENOMICS_MCP_CURRICULUM=<dir>` are set, validates it
 with ajv, and labels every output `official: false`, "cert-prep curriculum
-(unofficial)". Module-original formulas are tagged `module_method`. Practice
-banks are never imported (exam-integrity).
+(unofficial)". Slides keep their source lines and facilitator notes (which
+mark module-original methods). Practice banks are never imported
+(exam-integrity).
 
 ## Packaging
 

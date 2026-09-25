@@ -521,6 +521,50 @@ describe("eval-driven refinements", () => {
   });
 });
 
+describe("review-driven refinements", () => {
+  it("rejects a lone multiplier and a multiplier without a base price", async () => {
+    const lone = await call("calculate_cache_metrics", {
+      cache_read_tokens: 1,
+      cache_write_tokens: 1,
+      uncached_input_tokens: 1,
+      base_input_price_per_mtok: 3,
+      cache_read_multiplier: 0.1,
+    });
+    expect(lone.isError).toBe(true);
+    const noBase = await call("calculate_cache_metrics", {
+      cache_read_tokens: 1,
+      cache_write_tokens: 1,
+      uncached_input_tokens: 1,
+      cache_read_multiplier: 0.1,
+      cache_write_multiplier: 1.25,
+    });
+    expect(noBase.isError).toBe(true);
+  });
+
+  it("list and search outputs carry source status and CC BY attribution", async () => {
+    for (const [name, args] of [
+      ["list_levers", { layer: 3 }],
+      ["list_metrics", {}],
+      ["list_personas", {}],
+      ["get_crosslinks", { server: "focus" }],
+      ["search_tokenomics", { query: "quantization" }],
+      ["list_documents", {}],
+      ["get_tokenomics_info", {}],
+    ] as const) {
+      const text = (await call(name, args)).content[0]?.text ?? "";
+      expect(text, name).toContain("CC BY 4.0");
+    }
+    const levers = await call("list_levers", { layer: 3 });
+    expect(levers.content[0]?.text).toContain("Draft paper");
+  });
+
+  it("define_term misses point at related records", async () => {
+    const res = await call("define_term", { term: "cache hit rate" });
+    expect(res.isError).toBe(true);
+    expect(res.content[0]?.text).toContain("Cache hit rate");
+  });
+});
+
 describe("experimental surface", () => {
   it("adds get_crosswalk with an UNOFFICIAL banner, but no curriculum tools without an overlay", async () => {
     const names = (await expClient.listTools()).tools.map((t) => t.name);

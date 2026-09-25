@@ -180,7 +180,7 @@
         <li><code>content/</code> holds only parsed Foundation text. Formulas are verbatim, and every record carries <code>status</code>.</li>
         <li><code>derived/crosslinks.json</code> is <em>official</em> only because each link carries an evidence quote found verbatim in the composed document. A test enforces this.</li>
         <li><code>derived/crosswalk.json</code> is <code>official:false</code>, carries a rationale, and is only served under <code>FINOPS_MCP_EXPERIMENTAL=1</code>.</li>
-        <li>The curriculum overlay is <code>official:false</code>, labeled "cert-prep curriculum (unofficial)", loaded only with the flag <em>and</em> <code>TOKENOMICS_MCP_CURRICULUM</code>. Module-original formulas (TK-202 multipliers, TK-205 break-even, TK-305 PVM, TK-303 hit-rate working formula) are tagged <code>module_method</code>.</li>
+        <li>The curriculum overlay is <code>official:false</code>, labeled "cert-prep curriculum (unofficial)", loaded only with the flag <em>and</em> <code>TOKENOMICS_MCP_CURRICULUM</code>. Each slide keeps its own source line and facilitator notes, which already say where a formula is the module's own method rather than Foundation guidance.</li>
       </ul>
     </details>
     <details>

@@ -55,6 +55,15 @@ function focusColumnIds(focusDir: string): Set<string> {
   return new Set(cols.map((c) => c.id));
 }
 
+function focusAttributes(focusDir: string): Map<string, string> {
+  const p = join(focusDir, "1.2", "attributes.json");
+  const attrs = JSON.parse(readFileSync(p, "utf8")) as {
+    id: string;
+    slug: string;
+  }[];
+  return new Map(attrs.map((a) => [a.id, a.slug]));
+}
+
 function isDenied(url: string): boolean {
   try {
     const path = new URL(url).pathname;
@@ -85,6 +94,7 @@ function jsonFiles(
   e: Entities,
   md: Map<string, string>,
   focusIds: Set<string>,
+  focusAttrs: Map<string, string>,
 ): Map<string, unknown> {
   const bodies = new Map<string, string>();
   for (const d of e.documents) {
@@ -103,7 +113,10 @@ function jsonFiles(
     ["content/glossary.json", e.glossary],
     ["content/focus-tracker.json", e.focusTracker],
     ["content/cache-providers.json", e.cacheProviders],
-    ["derived/crosslinks.json", buildCrossLinks(e, bodies, focusIds)],
+    [
+      "derived/crosslinks.json",
+      buildCrossLinks(e, bodies, focusIds, focusAttrs),
+    ],
     ["derived/crosswalk.json", buildCrosswalk()],
   ]);
   for (const [rel, text] of md) files.set(rel, text);
@@ -127,7 +140,12 @@ function finish(
     for (const x of hardErrors) opts.log(`error: ${x}`);
     return 1;
   }
-  const files = jsonFiles(entities, md, focusColumnIds(opts.focusDir));
+  const files = jsonFiles(
+    entities,
+    md,
+    focusColumnIds(opts.focusDir),
+    focusAttributes(opts.focusDir),
+  );
   const schemaErrors = validateAll(files);
   if (schemaErrors.length) {
     for (const x of schemaErrors) opts.log(`schema: ${x}`);

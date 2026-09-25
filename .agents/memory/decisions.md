@@ -883,3 +883,18 @@ something to rely on for a strict quota.
 - Alternatives considered: a tokenomics-local copy of the scanner (rejected —
   two scanners drift); dropping the pattern globally (rejected — still a
   useful signal on FinOps prose).
+
+## 2026-09-25 — Stated-link naming rule, made explicit (amends the entry above)
+
+- Decision: after independent review found framework targets exempt from
+  the "evidence names the target" check, each framework target now carries
+  a `mentions` phrase (the capability's name or its defining activity, e.g.
+  "anomaly detection" → anomaly-management) that must appear in the
+  evidence; refresh fails otherwise. The one link whose quote named no
+  target ("Cost attribution …" → allocation) was dropped. FOCUS targets keep
+  the paragraph rule (tracker cards name the identifier one sentence before
+  the use) and single-word JSON keys (Email, Name, Type) are no longer
+  treated as FOCUS identifiers.
+- Alternatives considered: exact capability-title match only (rejected —
+  the Foundation writes "anomaly detection", never "Anomaly Management");
+  keeping the exemption (rejected — silent wrong targets).

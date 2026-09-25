@@ -121,22 +121,6 @@
     "official": true,
     "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
     "target": {
-      "id": "allocation",
-      "kind": "capability",
-      "server": "framework",
-      "uri": "finops://framework/capabilities/allocation"
-    }
-  },
-  {
-    "document": "personas-operating-model",
-    "evidence": "Cost attribution and budgets | FinOps Practitioner",
-    "from": {
-      "slug": "finops-practitioner",
-      "type": "persona"
-    },
-    "official": true,
-    "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
-    "target": {
       "id": "budgeting",
       "kind": "capability",
       "server": "framework",
@@ -465,38 +449,6 @@
   },
   {
     "document": "focus-1-5-for-ai",
-    "evidence": "RequesterDetails is a JSON array of key-value entries carrying descriptive attributes, Type, Name, and Email, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape.",
-    "from": {
-      "slug": "fr-2358-requester-details-and-credential",
-      "type": "focus-item"
-    },
-    "official": true,
-    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
-    "target": {
-      "id": "Email",
-      "kind": "draft-identifier",
-      "server": "focus-working-draft",
-      "uri": null
-    }
-  },
-  {
-    "document": "focus-1-5-for-ai",
-    "evidence": "RequesterDetails is a JSON array of key-value entries carrying descriptive attributes, Type, Name, and Email, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape.",
-    "from": {
-      "slug": "fr-2358-requester-details-and-credential",
-      "type": "focus-item"
-    },
-    "official": true,
-    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
-    "target": {
-      "id": "Name",
-      "kind": "draft-identifier",
-      "server": "focus-working-draft",
-      "uri": null
-    }
-  },
-  {
-    "document": "focus-1-5-for-ai",
     "evidence": "#### What it adds Two more Cost and Usage columns beside the merged PrincipalId.",
     "from": {
       "slug": "fr-2358-requester-details-and-credential",
@@ -529,22 +481,6 @@
   },
   {
     "document": "focus-1-5-for-ai",
-    "evidence": "RequesterDetails is a JSON array of key-value entries carrying descriptive attributes, Type, Name, and Email, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape.",
-    "from": {
-      "slug": "fr-2358-requester-details-and-credential",
-      "type": "focus-item"
-    },
-    "official": true,
-    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
-    "target": {
-      "id": "Type",
-      "kind": "draft-identifier",
-      "server": "focus-working-draft",
-      "uri": null
-    }
-  },
-  {
-    "document": "focus-1-5-for-ai",
     "evidence": "#### What it does The review of how tokens, credits, and crypto are treated as virtual currency (Action Item 2550, closed 18 August) found the CurrencyFormat attribute contradicting itself: it lists virtual currency as an allowed currency type while requiring an ISO 4217 code for every value, and no provider-issued unit has one.",
     "from": {
       "slug": "pr-2617",
@@ -554,9 +490,9 @@
     "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
     "target": {
       "id": "CurrencyFormat",
-      "kind": "draft-identifier",
-      "server": "focus-working-draft",
-      "uri": null
+      "kind": "attribute",
+      "server": "focus",
+      "uri": "focus://spec/1.2/attributes/currency_format"
     }
   },
   {

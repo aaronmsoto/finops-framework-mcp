@@ -243,6 +243,7 @@ export function buildCrossLinks(
   e: Entities,
   bodies: Map<string, string>,
   focusColumnIds: Set<string>,
+  focusAttributes: Map<string, string> = new Map(),
 ): TkCrossLink[] {
   const urlOf = new Map(e.documents.map((d) => [d.slug, d.url]));
   const out: TkCrossLink[] = [];
@@ -257,7 +258,19 @@ export function buildCrossLinks(
       );
     }
     for (const t of spec.targets) {
-      if (t.server !== "framework" && !new RegExp(`\\b${t.id}\\b`).test(para)) {
+      if (t.server === "framework") {
+        const mention = spec.mentions?.[t.id];
+        if (
+          !mention ||
+          !normalizeForEvidence(spec.evidence)
+            .toLowerCase()
+            .includes(mention.toLowerCase())
+        ) {
+          throw new Error(
+            `cross-link target ${t.id} is not named by its evidence in ${spec.document}`,
+          );
+        }
+      } else if (!new RegExp(`\\b${t.id}\\b`).test(para)) {
         throw new Error(
           `cross-link target ${t.id} is not named near its evidence in ${spec.document}`,
         );
@@ -274,7 +287,11 @@ export function buildCrossLinks(
   };
   for (const spec of STATED_LINKS) check(spec);
   for (const item of e.focusTracker) {
-    for (const { id, target } of trackerLinkTargets(item, focusColumnIds)) {
+    for (const { id, target } of trackerLinkTargets(
+      item,
+      focusColumnIds,
+      focusAttributes,
+    )) {
       const sentence = firstSentenceWith(item.body_md, id);
       if (!sentence) continue; // identifier only in a heading/label: no sentence to cite
       check({

@@ -37,6 +37,31 @@ export function footer(a: TokenomicsArtifact, sourceUrl: string): string {
   });
 }
 
+/** Footer for multi-record outputs: each cited document's status, then the
+ * CC BY attribution (single-record outputs use provenanceLine + footer). */
+export function sourcesFooter(
+  a: TokenomicsArtifact,
+  docSlugs: Iterable<string>,
+): string {
+  const slugs = [...new Set(docSlugs)];
+  const lines = slugs
+    .map((s) => a.documents.find((d) => d.slug === s))
+    .filter((d): d is TkDocument => d !== undefined)
+    .map(
+      (d) =>
+        `- ${d.title} — ${d.status}${d.status_date ? ` (${d.status_date})` : ""}`,
+    );
+  const first =
+    slugs.length === 1
+      ? a.documents.find((d) => d.slug === slugs[0])
+      : undefined;
+  return (
+    (lines.length
+      ? `\n\n_Sources and publication status:_\n${lines.join("\n")}`
+      : "") + footer(a, first?.url ?? "https://www.tokeneconomics.com/")
+  );
+}
+
 export function docBySlug(a: TokenomicsArtifact, slug: string): TkDocument {
   const d = a.documents.find((x) => x.slug === slug);
   if (!d) throw new Error(`unknown document ${slug}`);

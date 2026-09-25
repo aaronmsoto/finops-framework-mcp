@@ -19,6 +19,11 @@ const framework: Record<string, Set<string>> = {
   persona: slugs("data/framework/content/personas.json"),
   kpi: slugs("data/framework/content/kpis.json"),
 };
+const focusAttrs = new Map(
+  read<{ id: string; slug: string }[]>("data/focus/1.2/attributes.json").map(
+    (c) => [c.id, c.slug],
+  ),
+);
 const focus = new Map(
   read<{ id: string; slug: string }[]>("data/focus/1.2/columns.json").map(
     (c) => [c.id, c.slug],
@@ -51,11 +56,18 @@ describe("cross-server links", () => {
 
   it("FOCUS column targets exist in 1.2; working-draft ids do not and have no URI", () => {
     for (const t of targets.filter((x) => x.server === "focus")) {
-      expect(focus.has(t.id), t.id).toBe(true);
-      expect(t.uri).toBe(`focus://spec/1.2/columns/${focus.get(t.id)}`);
+      if (t.kind === "attribute") {
+        expect(focusAttrs.has(t.id), t.id).toBe(true);
+        expect(t.uri).toBe(
+          `focus://spec/1.2/attributes/${focusAttrs.get(t.id)}`,
+        );
+      } else {
+        expect(focus.has(t.id), t.id).toBe(true);
+        expect(t.uri).toBe(`focus://spec/1.2/columns/${focus.get(t.id)}`);
+      }
     }
     for (const t of targets.filter((x) => x.server === "focus-working-draft")) {
-      expect(focus.has(t.id), t.id).toBe(false);
+      expect(focus.has(t.id) || focusAttrs.has(t.id), t.id).toBe(false);
       expect(t.uri).toBeNull();
     }
   });

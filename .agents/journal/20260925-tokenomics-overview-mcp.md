@@ -39,3 +39,20 @@
   checked-in `.mcp.json` does not list the unpublished package; experimental
   surface not advertised in README/server.json/mcp-surface (2026-08-15 rule).
 - Next: owner review; protected-path edits for publishing.
+
+## Independent review — 2026-09-25T09:10Z
+
+- Reviewer subagent verdict: PASS-with-findings (no blockers). Fixed:
+  M1 framework links now need a `mentions` phrase present in the evidence
+  (one unnamed link dropped; decisions.md amendment); M2 list/search/info
+  tools now end with a sources-and-status footer + CC BY attribution;
+  L1/L2 calculator rejects a lone multiplier, a multiplier without a base
+  price, and non-finite totals; L5 JSON sub-keys no longer treated as FOCUS
+  identifiers and CurrencyFormat links to its FOCUS 1.2 attribute URI; L6
+  private module names removed from the design doc; L7 define_term misses
+  suggest related records. Data regenerated from cache → v1.0.1 (39 links).
+- Not changed: L3 (invalid overlay fails the server closed — deliberate),
+  L4 (dist/shared/tokenomics ships in the other tarballs, as
+  dist/shared/focus already does), changelog carrying crawled_at (same as
+  the framework emitter).
+- Also committed: eval bridge forwards TOKENOMICS_MCP_CURRICULUM.

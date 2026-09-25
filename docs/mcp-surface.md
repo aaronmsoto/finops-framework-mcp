@@ -306,7 +306,7 @@ Calculate a mapped KPI over bundled sample data
 
 ## tokenomics-overview server
 
-Data v1.0.0, crawled 2026-09-25; 12 Tokenomics Foundation documents. The surface a default `npx tokenomics-overview-mcp` serves.
+Data v1.0.1, crawled 2026-09-25; 12 Tokenomics Foundation documents. The surface a default `npx tokenomics-overview-mcp` serves.
 
 **3 prompt(s) · 5 fixed resource(s) + 6 template(s) (72 concrete resource(s) listed) · 20 tool(s)**
 

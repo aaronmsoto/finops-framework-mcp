@@ -36,6 +36,7 @@ import {
   linksMd,
   metricMd,
   personaMd,
+  sourcesFooter,
   statusLine,
 } from "./render.js";
 import { buildSearchIndex, search, SEARCH_ENTITY_TYPES } from "./search.js";
@@ -284,6 +285,32 @@ export function registerTools(
       )
     );
   }
+  const provenanceOf = new Map<string, string>([
+    ...a.layers.map((x) => [`layer:${x.slug}`, x.provenance.document] as const),
+    ...a.bigt.classes.map(
+      (x) => [`bigt-class:${x.slug}`, x.provenance.document] as const,
+    ),
+    ...a.levers.map((x) => [`lever:${x.slug}`, x.provenance.document] as const),
+    ...a.metrics.map(
+      (x) => [`metric:${x.slug}`, x.provenance.document] as const,
+    ),
+    ...a.personas.map(
+      (x) => [`persona:${x.slug}`, x.provenance.document] as const,
+    ),
+    ...a.value.categories.map(
+      (x) => [`value-category:${x.slug}`, x.provenance.document] as const,
+    ),
+    ...a.glossary.map(
+      (x) => [`glossary-term:${x.slug}`, x.provenance.document] as const,
+    ),
+    ...a.focusTracker.map(
+      (x) => [`focus-item:${x.slug}`, x.provenance.document] as const,
+    ),
+  ]);
+  const docOfHit = (type: string, slug: string): string =>
+    type === "document-section"
+      ? (slug.split("#")[0] ?? slug)
+      : (provenanceOf.get(`${type}:${slug}`) ?? "");
   const docRowOf = (slug: string) => {
     const d = docBySlug(a, slug);
     return {
@@ -354,7 +381,8 @@ export function registerTools(
                 `- ${d.title} — ${d.status}${d.status_date ? ` (${d.status_date})` : ""} [${d.slug}]`,
             )
             .join("\n") +
-          `\n\nStart here:\n${start_here.map((s) => `- ${s}`).join("\n")}`,
+          `\n\nStart here:\n${start_here.map((s) => `- ${s}`).join("\n")}` +
+          footer(a, "https://www.tokeneconomics.com/"),
       );
     },
   );
@@ -389,7 +417,7 @@ export function registerTools(
             (d) =>
               `- **${d.title}** (\`${d.slug}\`, ${d.kind}) — ${d.status}\n  sections: ${d.sections.map((s) => s.id).join(", ")}`,
           )
-          .join("\n"),
+          .join("\n") + footer(a, "https://www.tokeneconomics.com/"),
       );
     },
   );
@@ -686,9 +714,13 @@ export function registerTools(
           page
             .map(
               (l) =>
-                `- **${l.name}** (\`${l.slug}\`, ${l.kind}${l.layer !== null ? `, L${l.layer}` : ""}${l.bigt_classes.length ? `, ${l.bigt_classes.join("/")}` : ""})${l.effect ? ` — ${l.effect}` : ""}`,
+                `- **${l.name}** (\`${l.slug}\`, ${l.kind}${l.layer !== null ? `, L${l.layer}` : ""}${l.bigt_classes.length ? `, ${l.bigt_classes.join("/")}` : ""})${l.effect ? ` — ${l.effect}` : ""} [${l.provenance.document}]`,
             )
-            .join("\n"),
+            .join("\n") +
+          sourcesFooter(
+            a,
+            page.map((l) => l.provenance.document),
+          ),
       );
     },
   );
@@ -753,7 +785,11 @@ export function registerTools(
             (m) =>
               `- **${m.name}** (\`${m.slug}\`, ${m.status}): ${m.formula ?? `“${m.formula_text}”`}`,
           )
-          .join("\n"),
+          .join("\n") +
+          sourcesFooter(
+            a,
+            rows.map((m) => m.document),
+          ),
       );
     },
   );
@@ -833,6 +869,17 @@ export function registerTools(
     (x) => {
       const total =
         x.cache_read_tokens + x.cache_write_tokens + x.uncached_input_tokens;
+      if (!Number.isFinite(total)) {
+        return err("Token counts are too large to sum as finite numbers.");
+      }
+      const oneMultiplier =
+        (x.cache_read_multiplier === undefined) !==
+        (x.cache_write_multiplier === undefined);
+      if (oneMultiplier) {
+        return err(
+          "Give both cache_read_multiplier and cache_write_multiplier (or neither and pass actual_prompt_cost); with only one, the actual prompt cost cannot be computed.",
+        );
+      }
       if (total <= 0) {
         return err(
           "All token counts are zero: cache hit rate is undefined (0/0). Provide at least one non-zero bucket.",
@@ -861,7 +908,8 @@ export function registerTools(
         }
       } else if (
         x.actual_prompt_cost !== undefined ||
-        x.cache_read_multiplier !== undefined
+        x.cache_read_multiplier !== undefined ||
+        x.cache_write_multiplier !== undefined
       ) {
         return err(
           "Cache cost efficiency needs base_input_price_per_mtok (for the uncached equivalent cost). Add it, or drop the cost inputs to get cache hit rate only.",
@@ -1055,7 +1103,7 @@ export function registerTools(
             (p) =>
               `- **${p.name}**${p.core ? "" : " (allied)"} [${p.stages.join(", ")}] — ${p.responsibility}`,
           )
-          .join("\n"),
+          .join("\n") + sourcesFooter(a, ["personas-operating-model"]),
       );
     },
   );
@@ -1213,7 +1261,7 @@ export function registerTools(
               .map((g) => ({ ...g, official: false as const }))
           : [];
       if (!matches.length && !cur.length) {
-        const hits = search(index, term, ["glossary-term"]).slice(0, 3);
+        const hits = search(index, term).slice(0, 3);
         return err(
           `No glossary term matches "${term}".` +
             (hits.length
@@ -1324,7 +1372,11 @@ export function registerTools(
           ...(pg.nextCursor ? { nextCursor: pg.nextCursor } : {}),
         },
         `${rows.length} stated link(s)\n\n` +
-          linksMd(pg.page, [], { showSource: true }),
+          linksMd(pg.page, [], { showSource: true }) +
+          sourcesFooter(
+            a,
+            pg.page.map((l) => l.document),
+          ),
       );
     },
   );
@@ -1364,7 +1416,11 @@ export function registerTools(
                 (r) =>
                   `- [${r.entity_type}] **${r.title}** (\`${r.slug}\`) — ${r.snippet}`,
               )
-              .join("\n")
+              .join("\n") +
+              sourcesFooter(
+                a,
+                results.map((r) => docOfHit(r.entity_type, r.slug)),
+              )
           : `No results for "${query}".`,
       );
     },
