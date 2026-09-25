@@ -1,0 +1,312 @@
+<!doctype html>
+<!--
+  Design doc: tokenomics-overview-mcp. Self-contained (no external assets).
+  Companion spec: .agents/specs/tokenomics-overview-mcp.md (the spec wins on conflict).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tokenomics Overview MCP — design</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1d21; --muted: #5c6570; --line: #d9dee3;
+    --accent: #0b6bcb; --accent-bg: #eaf2fb; --warn-bg: #fff7e0;
+    --code-bg: #f4f6f8; --max: 60rem;
+    --l1: #e8eef7; --l3: #e3f4ea; --l5: #fbeee4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171a; --fg: #e6e9ec; --muted: #9aa4ae; --line: #333a41;
+      --accent: #5ba3ea; --accent-bg: #1b2836; --warn-bg: #2e2a18;
+      --code-bg: #1d2226; --l1: #1c2533; --l3: #1a2c22; --l5: #33261c;
+    }
+  }
+  html { background: var(--bg); color: var(--fg); }
+  body { font: 16px/1.55 system-ui, sans-serif; margin: 2rem auto; max-width: var(--max); padding: 0 1.25rem; }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+  h2 { font-size: 1.15rem; border-bottom: 1px solid var(--line); padding-bottom: .25rem; margin-top: 2rem; }
+  h3 { font-size: 1rem; margin-top: 1.4rem; }
+  code, pre { background: var(--code-bg); border-radius: 4px; font-size: .92em; }
+  code { padding: .1em .35em; }
+  pre { padding: .75rem 1rem; overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  th { background: var(--code-bg); }
+  figure { margin: 1.5rem 0; text-align: center; }
+  figure svg { max-width: 100%; height: auto; }
+  figcaption { color: var(--muted); font-size: .9em; margin-top: .5rem; }
+  details { border: 1px solid var(--line); border-radius: 6px; padding: .5rem .9rem; margin: .75rem 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  .meta { color: var(--muted); font-size: .9em; margin-bottom: 1.5rem; }
+  .meta .status { background: var(--accent-bg); color: var(--accent); border-radius: 999px; padding: .1em .7em; font-weight: 600; }
+  .callout { background: var(--accent-bg); border-left: 3px solid var(--accent); padding: .6rem 1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; }
+  .callout.warn { background: var(--warn-bg); border-left-color: #b58900; }
+  .tabs { margin-top: 1.5rem; }
+  .tabs > input { position: absolute; opacity: 0; pointer-events: none; }
+  .tabs > label { display: inline-block; padding: .45rem 1rem; cursor: pointer; border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; color: var(--muted); margin-right: .25rem; }
+  .tabs > input:checked + label { color: var(--fg); font-weight: 600; background: var(--code-bg); }
+  .tabs > .panel { display: none; border: 1px solid var(--line); border-radius: 0 6px 6px 6px; padding: .25rem 1.25rem 1.25rem; }
+  #tab-1:checked ~ .panel-1, #tab-2:checked ~ .panel-2,
+  #tab-3:checked ~ .panel-3, #tab-4:checked ~ .panel-4, #tab-5:checked ~ .panel-5 { display: block; }
+  .formula { font-family: ui-monospace, monospace; background: var(--code-bg); padding: .5rem .8rem; border-radius: 6px; display: block; margin: .4rem 0; }
+</style>
+</head>
+<body>
+
+<h1>Tokenomics Overview MCP</h1>
+<p class="meta">
+  <span class="status">approved in question round · 2026-09-25</span>
+  &nbsp;·&nbsp; spec: <a href="../../.agents/specs/tokenomics-overview-mcp.md">.agents/specs/tokenomics-overview-mcp.md</a>
+  &nbsp;·&nbsp; roadmap: <a href="../../.agents/roadmap.md">.agents/roadmap.md</a>
+</p>
+
+<div class="callout">
+  <strong>Summary.</strong> A third MCP server, <code>tokenomics-overview-mcp</code>, gives agents
+  grounded context on AI tokenomics from the Tokenomics Foundation's CC&nbsp;BY pages. It covers the
+  Five-Layer Stack, Big-T notation, prompt-caching mechanics and the two official cache metrics,
+  consumption levers, personas, value classification, and the FOCUS&nbsp;1.5 AI tracker. It is built on
+  the same <em>crawler → markdown-canonical artifact → stdio server</em> pipeline as the framework and
+  FOCUS servers. It links to them through <strong>stated cross-links</strong>: a quote from the Foundation
+  page that names a FinOps capability or a FOCUS column, checked by tests against the other two
+  artifacts. <strong>The decision with the most consequence:</strong> this repo is public, and your cert-prep
+  curriculum is private (its site is passcode-gated). So the "labeled extras" layer is a
+  <em>local overlay</em>: it is imported from your checkout at runtime behind the experimental flag, and
+  it never lands in <code>data/</code> or the npm tarball.
+</div>
+
+<div class="tabs">
+  <input type="radio" name="tabs" id="tab-1" checked><label for="tab-1">Overview</label>
+  <input type="radio" name="tabs" id="tab-2"><label for="tab-2">Architecture</label>
+  <input type="radio" name="tabs" id="tab-3"><label for="tab-3">Data model</label>
+  <input type="radio" name="tabs" id="tab-4"><label for="tab-4">Interfaces</label>
+  <input type="radio" name="tabs" id="tab-5"><label for="tab-5">Alternatives</label>
+
+  <div class="panel panel-1">
+    <h2>Problem &amp; outcome</h2>
+    <p>Our two servers answer <em>what FinOps says</em> and <em>which billing column holds it</em>. Neither
+    can answer "why does our agent cost 34× what the prototype did?" or "is our prompt cache paying for
+    itself?". The Tokenomics Foundation publishes that vocabulary: T(n·k·a), the five layers, cache hit
+    rate, and cache cost efficiency. It publishes it as bespoke HTML, in Working Draft or Release Candidate
+    status, and the pages change weekly (the cache explainer went through four revisions in September).</p>
+    <p>When this ships, an agent can:</p>
+    <ul>
+      <li>Classify a workload's Big-T class and find the levers that change the class or reduce the constant.</li>
+      <li>Compute Cache Hit Rate and Cache Cost Efficiency from its own token counts using the official formulas.</li>
+      <li>Look up per-provider cache pricing behavior, as dated in the source.</li>
+      <li>Hop to the FinOps capability, the FOCUS column (or the FOCUS&nbsp;1.5 draft item) the Foundation itself names.</li>
+    </ul>
+    <p>Every answer carries the source document's <strong>status</strong>, so an agent never presents a
+    Working Draft as a standard.</p>
+
+    <h2>Consumption focus</h2>
+    <p>The owner asked for weight on the Consumption stage. The artifact makes the following first-class records:</p>
+    <table>
+      <tr><th>Record</th><th>Source</th><th>Why it matters</th></tr>
+      <tr><td>Metrics (7) with verbatim formulas and targets</td><td>cache-explainer RC1, value classification RC2, definition v0.5.2</td><td>The KPI analog: Cache Hit Rate and Cache Cost Efficiency (plus uncached equivalent cost) are the reference metrics.</td></tr>
+      <tr><td>Levers, keyed by layer and by Big-T effect</td><td>Five-Layer paper L2–L5, Big-T five levers</td><td>Caching, batching, speculative decoding, disaggregation, quantization, distillation, pruning, LoRA, complexity routing, semantic caching, budgets, fan-out caps, circuit breakers, prompt serialization/compression.</td></tr>
+      <tr><td>Big-T classes (6) + variables n, k, a</td><td>Big-T explainer + paper</td><td>Covers T-notation; each class has a "fix" and the layers that can move it.</td></tr>
+      <tr><td>Cache mechanics</td><td>cache-explainer sections</td><td>KV / prefix / prompt cache definitions, the three matching rules, model switching, access modes.</td></tr>
+      <tr><td>Provider cache snapshot (3)</td><td>cache-explainer, "as reviewed August 2026"</td><td>Write/read multipliers, TTLs and minimum prefixes, served with the review date.</td></tr>
+    </table>
+
+    <h2>Scope</h2>
+    <table>
+      <tr><th>In (v1)</th><th>Out (non-goals)</th></tr>
+      <tr><td>12 Foundation documents (registry is data); stated cross-links; experimental crosswalk; local curriculum overlay; published shim package (stdio); evals; surface docs</td>
+          <td>Worker route/demo; State of Tokenomics text (all rights reserved); off-site podcast copies; unlisted TSC and 101-draft pages; committing curriculum text; practice banks; editing protected paths; publishing</td></tr>
+    </table>
+  </div>
+
+  <div class="panel panel-2">
+    <h2>How it works</h2>
+    <figure>
+      <svg viewBox="0 0 760 300" width="760" height="300" role="img" aria-label="Pipeline: tokeneconomics.com through crawler to data artifact to server, with cert-prep overlay and sibling servers">
+        <defs>
+          <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M0 0 L8 4 L0 8 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="10" y="20" width="150" height="60" rx="8"/>
+          <rect x="200" y="20" width="170" height="60" rx="8"/>
+          <rect x="410" y="20" width="160" height="60" rx="8"/>
+          <rect x="610" y="20" width="140" height="60" rx="8"/>
+          <rect x="10" y="190" width="150" height="60" rx="8" stroke-dasharray="5 4"/>
+          <rect x="200" y="190" width="170" height="60" rx="8" stroke-dasharray="5 4"/>
+          <rect x="410" y="190" width="160" height="60" rx="8"/>
+          <rect x="610" y="190" width="140" height="60" rx="8"/>
+          <line x1="160" y1="50" x2="197" y2="50" marker-end="url(#arr)"/>
+          <line x1="370" y1="50" x2="407" y2="50" marker-end="url(#arr)"/>
+          <line x1="570" y1="50" x2="607" y2="50" marker-end="url(#arr)"/>
+          <line x1="160" y1="220" x2="197" y2="220" marker-end="url(#arr)"/>
+          <path d="M370 220 C 600 220, 640 140, 670 84" marker-end="url(#arr)" stroke-dasharray="5 4"/>
+          <path d="M490 186 L490 84" marker-end="url(#arr)"/>
+          <path d="M680 186 L680 84" marker-end="url(#arr)"/>
+        </g>
+        <g font-size="12.5" text-anchor="middle" fill="currentColor">
+          <text x="85" y="44">tokeneconomics.com</text><text x="85" y="62">REST discovery + HTML</text>
+          <text x="285" y="44">crawler: refresh</text><text x="285" y="62">parse → md → derive → ajv</text>
+          <text x="490" y="44">data/tokenomics/</text><text x="490" y="62">md canonical + JSON</text>
+          <text x="680" y="44">tokenomics server</text><text x="680" y="62">stdio · tokenomics://</text>
+          <text x="85" y="214">cert-prep (local,</text><text x="85" y="232">private) ai-tokenomics/</text>
+          <text x="285" y="214">import-curriculum</text><text x="285" y="232">→ .cache overlay JSON</text>
+          <text x="490" y="214">data/framework + focus</text><text x="490" y="232">(tests cross-read)</text>
+          <text x="680" y="214">framework + FOCUS</text><text x="680" y="232">servers (URIs only)</text>
+          <text x="545" y="150" font-size="11">flag + env var only</text>
+          <text x="440" y="135" font-size="11">stated links validated</text>
+        </g>
+      </svg>
+      <figcaption>Solid = committed and published. Dashed = local only, never committed. The servers never import each other; the links between them are URIs checked in tests.</figcaption>
+    </figure>
+
+    <h3>Why HTML and not the REST API</h3>
+    <p>Probing showed the WordPress REST API cannot supply page bodies:</p>
+    <ul>
+      <li>Project pages arrive as one Custom HTML block with inline script.</li>
+      <li>Theme-template pages return empty content.</li>
+      <li><code>te_page</code> (Big-T) and <code>asset</code> have no content field at all.</li>
+      <li>The site's own <code>search-data</code> endpoint truncates at 6,000 characters.</li>
+    </ul>
+    <p>So REST is used for <em>discovery and <code>modified</code> dates</em>, and bodies come from the rendered
+    HTML. The pages share one structure, <code>main#primary section.te-section[id]</code>, and docs pages
+    use h2 headings. Pages that exist on the site but are not in the registry are listed in
+    <code>manifest.unregistered</code>. When the Optimization Playbook's other layer companions ship, a
+    refresh surfaces them instead of silently ignoring them.</p>
+
+    <details>
+      <summary>Official vs. unofficial separation (same invariant as the framework server)</summary>
+      <ul>
+        <li><code>content/</code> holds only parsed Foundation text. Formulas are verbatim, and every record carries <code>status</code>.</li>
+        <li><code>derived/crosslinks.json</code> is <em>official</em> only because each link carries an evidence quote found verbatim in the composed document. A test enforces this.</li>
+        <li><code>derived/crosswalk.json</code> is <code>official:false</code>, carries a rationale, and is only served under <code>FINOPS_MCP_EXPERIMENTAL=1</code>.</li>
+        <li>The curriculum overlay is <code>official:false</code>, labeled "cert-prep curriculum (unofficial)", loaded only with the flag <em>and</em> <code>TOKENOMICS_MCP_CURRICULUM</code>. Module-original formulas (TK-202 multipliers, TK-205 break-even, TK-305 PVM, TK-303 hit-rate working formula) are tagged <code>module_method</code>.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>Failure modes &amp; edge cases</summary>
+      <ul>
+        <li><strong>A page is redesigned.</strong> A parser can fall back to markdown-only for one document; the per-document ingest report records it in <code>parse_warnings</code>. A pinned-count mismatch is a hard error (<code>--soft-counts</code> overrides), so a silent loss of entities fails the refresh.</li>
+        <li><strong>A formula changes between RC revisions.</strong> The changelog diff surfaces it. The metrics test compares the artifact formula with the fixture text, so changing the fixture is a deliberate act.</li>
+        <li><strong>Injection text in pages.</strong> <code>scanForInjection</code> runs over every composed document, which the FOCUS crawler skipped.</li>
+        <li><strong>Cross-link target renamed upstream.</strong> The test fails because it cross-reads <code>data/framework</code> and <code>data/focus</code>. At runtime the link is only a URI, so nothing breaks.</li>
+        <li><strong><code>calculate_cache_metrics</code> is given nonsense.</strong> Negative values or a zero denominator return a tool error, never NaN. Prices are optional; without them, only Cache Hit Rate is computed.</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="panel panel-3">
+    <h2>Artifact layout</h2>
+<pre>data/tokenomics/
+  content/markdown/documents/&lt;slug&gt;.md   # canonical: front-matter + "## Heading {section=id}"
+  content/markdown/{layers,bigt,metrics,levers,personas,value,glossary,
+                    focus-tracker,cache-providers}.md
+  content/*.json                           # derived from the markdown (derive is offline)
+  derived/crosslinks.json                  # stated, evidence-checked (official)
+  derived/crosswalk.json                   # curated, official:false (experimental)
+  derived/changelog.json
+  schema/*.schema.json   manifest.json     # sha256, counts, parse_warnings, unregistered</pre>
+
+    <h2>Reference metrics (the "KPI" analog)</h2>
+    <p>These are verbatim from the cache explainer (Release Candidate 1, 2026-09-22):</p>
+    <span class="formula">Cache hit rate = cache read / (cache read + cache write + uncached input)</span>
+    <span class="formula">Cache cost efficiency = 1 − actual prompt cost / uncached equivalent cost</span>
+    <span class="formula">uncached equivalent cost = (cache read + cache write + uncached input) × base input price</span>
+    <p>The page's own targets are that hit rate should "climb toward your workload's ceiling" and that
+    cache cost efficiency should be "clearly above zero" (zero is break-even). The other metrics are:</p>
+    <ul>
+      <li><em>net benefit</em>: gross delta × volume − outputs that missed the floor − cost created − harm from misses.</li>
+      <li><em>risk expected loss</em>: incidents per period × cost per incident.</li>
+      <li><em>cost per token</em>: hardware cost ÷ tokens produced.</li>
+      <li><em>AI unit economics</em>: TCA as the numerator over realized value. It is stated in prose and marked "proposed".</li>
+    </ul>
+
+    <h2>Entities</h2>
+    <table>
+      <tr><th>Entity</th><th>Count</th><th>Key fields</th></tr>
+      <tr><td>Document</td><td>12</td><td>slug, kind (docs/project/paper/insight), status, status_date, modified, author, sections[]</td></tr>
+      <tr><td>Stage</td><td>3</td><td>Production, Consumption, Value</td></tr>
+      <tr><td>Layer</td><td>5</td><td>number, name, role ("Sets cost per token"…), key_metric, primary_lever, bigt_effect, lever_slugs</td></tr>
+      <tr><td>BigT class</td><td>6</td><td>notation, name, typical form, fix (verbatim), movable_by_layers</td></tr>
+      <tr><td>Lever</td><td>≥20</td><td>name, layer, bigt_effect?, document+section (no cross-document merging; we don't invent equivalences)</td></tr>
+      <tr><td>Metric</td><td>7</td><td>formula (verbatim), definition, targets, variables, focus_links</td></tr>
+      <tr><td>Persona</td><td>8 + 4 allied</td><td>stage, signals[], responsibilities</td></tr>
+      <tr><td>Value category / booking destination</td><td>10 / 5</td><td>group, definition</td></tr>
+      <tr><td>Glossary term</td><td>≥15</td><td>term, definition, document</td></tr>
+      <tr><td>FOCUS AI tracker item</td><td>≥10</td><td>name, status (done/flight/consider/out), kind, note</td></tr>
+      <tr><td>Cache provider snapshot</td><td>3</td><td>provider, write/read multipliers, TTL, minimum prefix, reviewed "August 2026"</td></tr>
+    </table>
+  </div>
+
+  <div class="panel panel-4">
+    <h2>Tools (default surface)</h2>
+    <table>
+      <tr><th>Tool</th><th>Returns</th></tr>
+      <tr><td><code>get_tokenomics_info</code></td><td>Counts, document statuses, data version, start-here pointers</td></tr>
+      <tr><td><code>list_documents</code> / <code>get_document(document, section?)</code></td><td>Canonical markdown with status banner</td></tr>
+      <tr><td><code>list_layers</code> / <code>get_layer</code></td><td>Five-Layer Stack record + its levers</td></tr>
+      <tr><td><code>get_bigt_notation</code> / <code>get_bigt_class</code></td><td>T(n·k·a) variables, ladder, fixes. Accepts <code>T(n·k)</code>, <code>n*k</code> and <code>multiplicative</code></td></tr>
+      <tr><td><code>list_levers(layer?, bigt_class?, document?)</code> / <code>get_lever</code></td><td>Consumption levers with provenance</td></tr>
+      <tr><td><code>list_metrics</code> / <code>get_metric</code></td><td>Formula, targets, stated FOCUS and FinOps links</td></tr>
+      <tr><td><code>calculate_cache_metrics</code></td><td>Cache Hit Rate and Cache Cost Efficiency from token counts and prices</td></tr>
+      <tr><td><code>get_provider_cache_snapshot</code></td><td>Dated provider cache behavior table</td></tr>
+      <tr><td><code>list_personas</code> / <code>get_persona</code>, <code>list_value_categories</code>, <code>define_term</code></td><td>Operating model and vocabulary</td></tr>
+      <tr><td><code>get_focus_ai_tracker(status?)</code></td><td>FOCUS 1.5 AI work items (merged / in review / 1.6 candidates)</td></tr>
+      <tr><td><code>get_crosslinks(entity?, server?)</code></td><td>Stated links with <code>finops://</code> / <code>focus://</code> URIs and evidence quotes</td></tr>
+      <tr><td><code>search_tokenomics</code></td><td>Ranked hits across all records</td></tr>
+    </table>
+    <p><strong>Experimental:</strong> <code>get_crosswalk</code>. With a curriculum overlay also:
+    <code>list_curriculum_modules</code>, <code>get_curriculum_module</code> and <code>get_numbers_register</code>.
+    <strong>Prompts:</strong> <code>optimize_consumption</code>, <code>assess_prompt_caching</code> and
+    <code>bigt_review</code>.</p>
+
+    <h2>Example: calculate_cache_metrics</h2>
+<pre>→ {"cache_read_tokens": 800000, "cache_write_tokens": 50000,
+   "uncached_input_tokens": 150000, "base_input_price_per_mtok": 3.00,
+   "cache_read_multiplier": 0.1, "cache_write_multiplier": 1.25}
+← cache_hit_rate: 0.8        (800k / 1,000k)
+  uncached_equivalent_cost: $3.00
+  actual_prompt_cost: $0.8775 (0.24 read + 0.1875 write + 0.45 uncached)
+  cache_cost_efficiency: 0.7075
+  formulas cited: cache-explainer#tcMonitoring (Release Candidate 1, 2026-09-22)</pre>
+
+    <h2>CLI</h2>
+<pre>$ node dist/crawlers/tokenomics/cli.js refresh [--no-cache] [--soft-counts]
+$ node dist/crawlers/tokenomics/cli.js derive
+$ node dist/crawlers/tokenomics/cli.js import-curriculum --from ../cert-prep/ai-tokenomics
+$ FINOPS_MCP_EXPERIMENTAL=1 TOKENOMICS_MCP_CURRICULUM=.cache/tokenomics-curriculum \
+    npx tokenomics-overview-mcp</pre>
+
+    <h2>Using all three together</h2>
+<pre>"Our support agent's bill tripled."
+ → bigt_review: T(n·k·a) (fan-out 3, depth 2) → levers at L5 (bounds) + L3 (caching)
+ → calculate_cache_metrics on last week's token counts → CCE 0.12 (barely above break-even)
+ → get_crosslinks(cache-hit-rate) → FOCUS 1.5 draft TokenCacheAction (in review)
+ → focus server: get_column(ConsumedQuantity, 1.2) for today's data
+ → framework server: get_capability(usage-optimization) for the owning practice</pre>
+  </div>
+
+  <div class="panel panel-5">
+    <h2>Alternatives considered</h2>
+    <table>
+      <tr><th>Option</th><th>Verdict</th></tr>
+      <tr><td>Build from the cert-prep <code>tf-*.txt</code> snapshots (Sep 19) instead of crawling</td><td>Rejected as the primary source. They are already stale: the cache explainer and value classification both changed after Sep 19. The crawler keeps "refresh" alive. The snapshots still serve as the parser-test starting point via fixtures.</td></tr>
+      <tr><td>Use the site's own MCP / markdown endpoints</td><td>Not possible: both need login (401).</td></tr>
+      <tr><td>Commit the curriculum as <code>derived/</code> <code>official:false</code> data (like Actions)</td><td>Rejected for v1. It would publish passcode-gated, private material in a public repo and npm. The overlay keeps your "labeled extras" choice without that leak. Flipping it later is a data-path change.</td></tr>
+      <tr><td>Map Tokenomics personas to FinOps personas by name</td><td>Rejected on the default surface. The personas page says reconciling with the FinOps catalog "is a deliberate next step", so the source does not state it. It can go in the experimental crosswalk.</td></tr>
+      <tr><td>Fold tokenomics into the framework server</td><td>Rejected: different license holder, cadence and status model, and it would break the package boundaries the FOCUS split established.</td></tr>
+      <tr><td>Worker route now</td><td>Deferred to keep v1 scoped. The server stays fs-free (literal version, no <code>readFileSync</code> in server modules), so adding a route later is mechanical.</td></tr>
+    </table>
+    <div class="callout warn">
+      <strong>Open questions for the owner.</strong>
+      <ol>
+        <li><strong>Curriculum privacy.</strong> I kept it as a local overlay because this repo is public. If you <em>want</em> TK modules, the glossary or the numbers register published, say so and they move into <code>derived/</code> as <code>official:false</code>.</li>
+        <li><strong>Unlisted pages.</strong> The Tokenomics 101 draft has the cleanest "four families of optimization" framing. It is excluded until the Foundation lists it. Add it now?</li>
+        <li><strong>Protected files you'll need to edit:</strong> <code>tests/version-sync.test.ts</code> (a tokenomics case) and <code>.github/workflows/publish.yml</code> (publish, validate and submit steps). You also need an npm trusted-publisher bootstrap for the new name.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
