@@ -1,0 +1,21 @@
+# Synthetic module used only by the import-curriculum test (not real curriculum content).
+id: TK-900
+title: Synthetic Caching Module
+level: 200
+minutes: 30
+personas: [Engineering]
+prerequisites:
+  required: [TK-101]
+  recommended: []
+objectives:
+  - Explain why prompt order decides cache hits.
+agenda:
+  - {id: b1, minutes: 10, title: Mechanics}
+deliverable: A reordered prompt.
+anchors:
+  - {source: tf-cache, section: "Monitoring"}
+refresh_triggers: [cache explainer revision]
+deck:
+  slides:
+    - {id: s1, block: b1}
+    - {id: missing-slide, block: b1}

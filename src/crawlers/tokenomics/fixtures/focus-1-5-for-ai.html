@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en-US" data-brand="tf" data-theme="dark">
+<head>
+    <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
+  	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	
+	<title>FOCUS 1.5: AI + Token Cost Specification &#8211; Tokenomics Foundation</title>
+<meta name='robots' content='max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+<meta name="description" content="FOCUS Working Group / Release 1.5 What 1.5 does for AI cost , and what it does not Every AI-related item in the FOCUS 1.5 release, sorted by how likely it is to">
+<meta property="og:title" content="FOCUS 1.5: AI + Token Cost Specification &#8211; Tokenomics Foundation">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/meta/TF-meta.png">
+<meta property="og:description" content="FOCUS Working Group / Release 1.5 What 1.5 does for AI cost , and what it does not Every AI-related item in the FOCUS 1.5 release, sorted by how likely it is to">
+<meta property="og:url" content="https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Tokenomics Foundation">
+<meta property="article:published_time" content="2026-07-29T17:00:47+00:00">
+<meta property="article:modified_time" content="2026-09-21T07:04:42+00:00">
+<meta property="og:updated_time" content="2026-09-21T07:04:42+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/meta/TF-meta.png">
+
+
+
+	
+	
+	<noscript></noscript>
+	
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="WordPress 7.1.2" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.tokeneconomics.com/#website","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Defining the best practices and primitives of AI economics","inLanguage":"en-US","potentialAction":{"@type":"SearchAction","target":"https://www.tokeneconomics.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://www.tokeneconomics.com/#organization","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Tokenomics Foundation defines the best practices and primitives of the token economy","knowsAbout":["Tokenomics","AI cost management","AI infrastructure","FinOps"],"sameAs":["https://www.linkedin.com/company/tokenomics-foundation/","https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA","https://substack.com/@tokenomicsfoundation","https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c"]},{"@type":"WebPage","@id":"https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/#webpage","url":"https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/","name":"FOCUS 1.5: AI + Token Cost Specification – Tokenomics Foundation","inLanguage":"en-US","isPartOf":{"@id":"https://www.tokeneconomics.com/#website"},"datePublished":"2026-07-29T17:00:47+00:00","dateModified":"2026-09-21T07:04:42+00:00"}]}</script>
+
+
+
+<meta name="msapplication-TileImage" content="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-270x270.png" />
+</head>
+<body class="wp-singular page-template page-template-templates page-template-page-html page-template-templatespage-html-php page page-id-1121 page-child parent-pageid-1007 wp-theme-tokeneconomics bg-surface-dark overflow-x-hidden no-global-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPPHJ9DM"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<a class="screen-reader-text" href="#primary">Skip to content</a>
+	<header id="site-header" class="z-50 max-w-8xl mx-auto w-full">
+    <nav aria-label="Global" class="flex items-center justify-between px-6 py-8 lg:px-8">
+      <div class="flex lg:flex-1">
+        <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+          <span class="sr-only">Tokenomics Foundation</span>
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+        </a>
+      </div>
+      <div class="flex lg:hidden">
+        <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 cursor-pointer">
+          <span class="sr-only">Open main menu</span>
+          
+        </button>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12 lg:items-center">
+        <a href="https://www.tokeneconomics.com/insights/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="te-nav-link text-sm/6 font-semibold text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="te-nav-link text-sm/6 font-semibold text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="te-nav-link text-sm/6 font-semibold text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a><div class="te-dropdown-panel"><a href="https://www.tokeneconomics.com/membership/" class="te-dropdown-link">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="te-dropdown-link">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="te-dropdown-link">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="te-dropdown-link">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="te-dropdown-link">Tokenomics Press and Media</a></div></div>      </div>
+      <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+        <a href="#" class="text-sm/6 font-semibold text-brand-light">Log in <span aria-hidden="true">&rarr;</span></a>
+      </div> -->
+    </nav>
+    <el-dialog>
+      <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
+        <div tabindex="0" class="fixed inset-0 focus:outline-none">
+          <el-dialog-panel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-surface-dark p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
+            <div class="flex items-center justify-between">
+              <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+                <span class="sr-only">Tokenomics Foundation</span>
+                <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-8 w-auto" width="117" height="32" />
+              </a>
+              <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-200">
+                <span class="sr-only">Close menu</span>
+                
+              </button>
+            </div>
+            <div class="mt-6 flow-root">
+              <div class="-my-6 divide-y divide-white/10">
+                <div class="space-y-2 py-6">
+                  <a href="https://www.tokeneconomics.com/insights/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Members</a><div class="te-dropdown"><button type="button" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5 te-dropdown-trigger w-full flex items-center justify-between">About</button><div class="te-dropdown-panel te-dropdown-panel--mobile hidden pl-4 mt-1 space-y-1"><a href="https://www.tokeneconomics.com/about/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">About</a><a href="https://www.tokeneconomics.com/membership/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Tokenomics Press and Media</a></div></div>                </div>
+              </div>
+            </div>
+          </el-dialog-panel>
+        </div>
+      </dialog>
+    </el-dialog>
+  </header>
+
+	<div class="w-full bg-primary text-primary-fg">
+		<a class="flex max-w-8xl mx-auto items-center justify-center gap-3 px-6 py-2.5 text-base/7 font-medium lg:px-8 hover:opacity-80" href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals">
+						<span>AI Tokenomics Fundamentals Certification Now Available &rarr;</span>
+								</a>
+	</div>
+	
+
+<main id="primary" class="site-main mt-0">
+	<div class="te-html-embed-1121"><div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">FOCUS Working Group / Release 1.5</p>
+    <h1>What 1.5 does for AI cost<span class="thin">, and what it does not</span></h1>
+    <p class="standfirst">Every AI-related item in the FOCUS 1.5 release, sorted by how likely it is to ship. Buckets 1 and 2 are the release story: merged into the working draft, or in review and moving through the release gates. Bucket 3 is work that has started with no decision yet on whether it lands in 1.5. Bucket 4 is the answer to "why isn't X in there." FOCUS is the FinOps Open Cost and Usage Specification, an open standard for cloud, SaaS, and AI billing data supported by the FinOps Foundation; the specification and its adoption resources are at <a href="https://focus.finops.org/" target="_blank" rel="noopener">focus.finops.org</a>.</p>
+    <div class="byline">
+      <span>Prepared by Matt Cowsert</span>
+      <span>Status as of 17 Sep 2026</span>
+      <span>Ratifies 3 Dec 2026</span>
+      <span>Announced Dec 2026</span>
+    </div>
+  </header>
+
+  <section class="outlook" aria-label="What FOCUS 1.5 delivers for AI cost, and what is still open">
+
+    <div class="outlook-col" style="--cap-mark: var(--flight);">
+      <p class="eyebrow">What 1.5 delivers for AI</p>
+      <p class="outlook-lede">Merged into the working draft, or in review with a pull request moving through the release gates.</p>
+      <ul class="cap">
+        <li><b>Cost data names the model.</b> Which model ran, who built it, and which version are recorded the same way regardless of which provider sent the bill. <span class="cap-tag">Merged</span></li>
+        <li><b>Cache economics become visible.</b> Tokens served from cache separate from tokens processed fresh, and input separate from output, declared on the price itself. A rising bill from a falling cache hit rate becomes distinguishable from one driven by more traffic. In review.</li>
+        <li><b>Worked examples for AI billing.</b> Six scenarios showing how to turn a token or generation bill into FOCUS, including capacity bought up front and drawn down, a model served first-party by a cloud provider, and a multi-model marketplace invoice. In review.</li>
+        <li><b>Cost rows name who spent it.</b> A Principal ID column is merged; Requester Details and Credential ID are in Member review. A charge can be attributed to the person, service account, or automated agent behind it rather than landing in one pool. <span class="cap-tag">Partly merged</span></li>
+        <li><b>Model rates become readable before purchase.</b> A published price catalog, so a planned workload can be priced from published token rates and the rate already being paid can be tested, rather than reconstructed after the invoice. In review.</li>
+        <li><b>Prepaid tokens and credits get a consistent home.</b> The currency attribute is being scoped so provider-issued units such as token bundles and platform credits are handled as consumption currency instead of falling out of cost reporting. In review.</li>
+      </ul>
+    </div>
+
+    <div class="outlook-col" style="--cap-mark: var(--consider);">
+      <p class="eyebrow">Started, not yet certain</p>
+      <p class="outlook-lede">Real work with an open question over whether it lands in 1.5 or the next release. Not promised for December.</p>
+      <ul class="cap">
+        <li><b>Global and region-pinned serving separate.</b> A pricing region scope property, the one AI cost dimension that is a rate question and a data residency question at the same time. TF-2 sent it to the Open Forum of 18 September; it moves to 1.6 if it is not settled there.</li>
+        <li><b>A FinOps Foundation paper on FOCUS for AI.</b> The narrative case for people who will not read column definitions. On hold since August until dedicated FOCUS-for-AI staff can take it up, and not tied to the release date.</li>
+      </ul>
+      <p class="cap-refs">
+        Detail in bucket 3:
+        <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2414" target="_blank" rel="noopener">FR 2414</a> and
+        <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1857" target="_blank" rel="noopener">Action Item 1857</a>.
+        The other AI price dimensions filed this year, reasoning tokens, cache storage, input modality, inference tier, context window, provisioned throughput, and layered subcategories, did not enter the 1.5 window and sit in bucket 4.
+      </p>
+    </div>
+
+  </section>
+
+  <p class="outlook-tail">Everything above assumes the work clears Task Force and Member review before the 3 December ratification. The first list is the release story as it stands today; the second is open, not forecast.</p>
+
+  <section class="terms" aria-label="Plain English glossary">
+    <p class="eyebrow">Terms used here</p>
+    <dl>
+      <div>
+        <dt>Token</dt>
+        <dd>The unit AI models bill on, roughly a fragment of a word. Input tokens are what you send the model, output tokens are what it sends back, and they are usually priced differently.</dd>
+      </div>
+      <div>
+        <dt>SKU</dt>
+        <dd>The specific thing being bought, at the granularity the provider prices it. A given model at a given rate is a SKU.</dd>
+      </div>
+      <div>
+        <dt>SKU price detail</dt>
+        <dd>A set of attributes describing what a priced item actually is. Model name, family, and version live here, and the cache and direction properties in review join them, which is why none of it needed new columns.</dd>
+      </div>
+      <div>
+        <dt>Meter</dt>
+        <dd>What is being counted on a charge line, such as input tokens or output tokens. It is how a bill distinguishes two charges for the same model.</dd>
+      </div>
+      <div>
+        <dt>Prompt cache</dt>
+        <dd>A provider feature that stores part of a prompt so repeated tokens are served from cache at a lower rate. Writing to the cache and reading from it are often priced separately, and some providers also charge for holding the cache over time.</dd>
+      </div>
+      <div>
+        <dt>Drawdown</dt>
+        <dd>Capacity bought up front and consumed over time. The purchase and the usage land on different lines, which is why it needs explicit treatment.</dd>
+      </div>
+      <div>
+        <dt>Working draft</dt>
+        <dd>The live version of the specification between releases. Merged work sits there until 1.5 publishes in December.</dd>
+      </div>
+      <div>
+        <dt>Feature request (FR)</dt>
+        <dd>A proposal filed in the FOCUS repository for a change to the specification. The numbers on this page are GitHub issue and pull request numbers.</dd>
+      </div>
+      <div>
+        <dt>Task Force</dt>
+        <dd>The subteam that owns an item. TF-1 covers pricing and the SKU Price dataset, TF-2 covers AI and allocation, TF-RM covers the Requirements Model, and F2 is the FinOps Foundation.</dd>
+      </div>
+      <div>
+        <dt>Supported feature</dt>
+        <dd>A documented use case in the specification, with the columns it depends on and example queries that show the data answering it.</dd>
+      </div>
+      <div>
+        <dt>Operating model condition</dt>
+        <dd>A documented fact about how a data generator operates, such as whether it publishes unit prices, that decides whether a Conditional column or dataset must be present.</dd>
+      </div>
+      <div>
+        <dt>Enabler</dt>
+        <dd>An item on this page that is not AI-specific but that the AI story depends on. The toggle above the cards hides them.</dd>
+      </div>
+      <div>
+        <dt>Member review</dt>
+        <dd>The second review gate, where the full working group membership reviews a pull request after its Task Force has approved it. Member approval is what merges it into the working draft.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="rail-block" aria-label="Release 1.5 gate schedule">
+    <p class="eyebrow">Gate schedule</p>
+    <div class="rail-scroll">
+      <div class="rail" style="min-width: 800px;">
+        <div class="rail-line"></div>
+        <div class="rail-line-done"></div>
+
+        <div class="gate first passed" style="left: 0%;">
+          <div class="gate-name">FOCUS 1.4</div>
+          <div class="gate-dot"></div>
+          <div class="gate-date">Published</div>
+          <div class="gate-days">current release</div>
+        </div>
+
+        <div class="gate passed" style="left: 17%;">
+          <div class="gate-name">Start TF review</div>
+          <div class="gate-dot"></div>
+          <div class="gate-date">Sep 10</div>
+          <div class="gate-days">passed</div>
+        </div>
+
+        <div class="gate next" style="left: 34%;">
+          <div class="gate-name">Start Member review</div>
+          <div class="gate-dot"></div>
+          <div class="gate-date">Sep 24</div>
+          <div class="gate-days">next gate</div>
+        </div>
+
+        <div class="gate" style="left: 51%;">
+          <div class="gate-name">Member approval</div>
+          <div class="gate-dot"></div>
+          <div class="gate-date">Oct 8</div>
+          <div class="gate-days">PRs approved</div>
+        </div>
+
+        <div class="gate" style="left: 68%;">
+          <div class="gate-name">Consistency review</div>
+          <div class="gate-dot"></div>
+          <div class="gate-date">Oct 29</div>
+          <div class="gate-days">then IPR review</div>
+        </div>
+
+        <div class="gate" style="left: 85%;">
+          <div class="gate-name">Ratified</div>
+          <div class="gate-dot"></div>
+          <div class="gate-date">Dec 3</div>
+          <div class="gate-days">WG and SC vote</div>
+        </div>
+
+        <div class="gate last" style="left: 100%;">
+          <div class="gate-name">Announced</div>
+          <div class="gate-dot"></div>
+          <div class="gate-date">Dec</div>
+          <div class="gate-days">Virtual Summit</div>
+        </div>
+
+        <div class="today" style="left: 25%;" aria-hidden="true"><span class="today-flag">17 Sep</span></div>
+
+      </div>
+    </div>
+    <p class="bucket-note">The 1.5 working draft is in its review gates now. Pull requests had to start Task Force review by 10 September, must start Member review by 24 September with one approval on their latest commit, and must complete Member approval by 8 October. A three-week consistency review follows, then a 30-day intellectual property review. The working group approves and the Steering Committee ratifies on 3 December, and the public announcement is planned for the December Virtual Summit, with the publication date confirmed in December.</p>
+  </section>
+
+  <p class="bucket-note" style="margin-top: 2.5rem;"><b>How to read the buckets.</b> They are sorted by release confidence, not by importance. An item in bucket 3 may matter more to FinOps Practitioners than one in bucket 1; it simply has less certainty of shipping in this release.</p>
+
+  <div class="controls">
+    <button class="chip" type="button" data-filter="all" aria-pressed="true">All <span class="n" data-count="all"></span></button>
+    <button class="chip" type="button" data-filter="done" aria-pressed="false"><span class="dot" style="background: var(--done);"></span>In the working draft <span class="n" data-count="done"></span></button>
+    <button class="chip" type="button" data-filter="flight" aria-pressed="false"><span class="dot" style="background: var(--flight);"></span>In review <span class="n" data-count="flight"></span></button>
+    <button class="chip" type="button" data-filter="consider" aria-pressed="false"><span class="dot" style="background: var(--consider);"></span>Not yet certain <span class="n" data-count="consider"></span></button>
+    <button class="chip" type="button" data-filter="out" aria-pressed="false"><span class="dot" style="background: var(--out);"></span>Not 1.5 <span class="n" data-count="out"></span></button>
+    <input class="search" type="search" id="q" placeholder="Search items, columns, issue numbers" aria-label="Search items">
+    <label class="toggle"><input type="checkbox" id="enablers" checked> Show enablers</label>
+    <button class="textbtn" type="button" id="expandAll">Expand all</button>
+  </div>
+
+  <p class="empty" id="empty">No items match that filter.</p>
+
+  <!-- ================= BUCKET 1 ================= -->
+  <section class="bucket" data-bucket="done" style="--bucket-color: var(--done); --bucket-bg: var(--done-bg);">
+    <div class="bucket-head">
+      <span class="bucket-num">1</span>
+      <h2>In the working draft</h2>
+      <span class="bucket-count" data-bucketcount="done"></span>
+    </div>
+    <p class="bucket-note">Merged. These ship in 1.5 unless something is pulled during the consistency review, which is rare.</p>
+
+    <div class="cards">
+
+      <details class="card" data-status="done" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">Merged 20 Jul</span>
+            <span class="pill ref">FR 2018</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Cost data can now say which model was billed and who built it.</p>
+          <div class="card-meta">
+            <span><span class="k">owner</span> Matt Cowsert</span>
+            <span><span class="k">group</span> TF-2</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>What it adds</h4>
+          <p>Four FOCUS-defined properties on <code>SkuPriceDetails</code>: <code>ModelDeveloper</code>, <code>ModelFamily</code>, <code>ModelId</code>, and <code>ModelVersion</code>. No new columns, and no change to the existing <code>SkuPriceDetails</code> requirements, so this is additive for every data generator.</p>
+          <p>It also lands a worked appendix example with two scenarios and backing CSV data: a model purchased directly from its developer, and the same model resold by a cloud provider as a first-party service. The second scenario is the one practitioners get wrong today, because the service provider and the model developer are different companies.</p>
+          <h4>A deliberate omission, since revisited</h4>
+          <p>The input versus output token split shipped structurally, as separate SKUs distinguished by <code>SkuMeter</code>, rather than through a dedicated property. The cached-token work in review (bucket 2) adds a <code>TokenDirection</code> property, so the split can also be declared on the price itself.</p>
+          <h4>Why it matters</h4>
+          <p>This is the piece that makes multi-provider AI spend comparable. Without it, an organization can say it spent a given amount on models last quarter but cannot break that down by model without provider-specific parsing.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2018" target="_blank" rel="noopener">FR 2018</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2442" target="_blank" rel="noopener">PR 2442</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-status="done" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">Merged 10 Sep</span>
+            <span class="pill ref">FR 2358</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Cost rows can identify the principal that drove the spend.</p>
+          <div class="card-meta">
+            <span><span class="k">owner</span> Matt Cowsert</span>
+            <span><span class="k">group</span> TF-2</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>What it adds</h4>
+          <p>A <code>PrincipalId</code> column on the Cost and Usage dataset, identifying the principal: the user, service account, or other entity in an identity and access management model that was granted access to the resource or service. It preserves a principal-level audit trail across PaaS, SaaS, and generative AI billing. The actor columns are delivered incrementally: Requester Details and Credential ID follow in Member review (bucket 2).</p>
+          <h4>Why it belongs in the AI story</h4>
+          <p>This is the attribution primitive behind per-user and per-agent cost. As spend shifts from provisioned infrastructure to per-call model invocations, the question changes from "which account owns this instance" to "which developer, team, or autonomous agent burned these tokens." <code>PrincipalId</code> is what makes that answerable inside billing data rather than by joining to observability. The AI billing examples in review populate it.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2358" target="_blank" rel="noopener">FR 2358</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2360" target="_blank" rel="noopener">PR 2360</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-status="done" data-kind="enabler">
+        <summary>
+          <div class="tags">
+            <span class="pill">Merged 10 Sep</span>
+            <span class="pill enabler">Enabler</span>
+            <span class="pill ref">FR 2377</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Service category definitions no longer assume cloud, and Compute now tells bare metal from virtual machines.</p>
+          <div class="card-meta">
+            <span><span class="k">owners</span> Shawn Alpay, Irena Jurica</span>
+            <span><span class="k">group</span> TF-1</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>What it changes</h4>
+          <p>In July, the <code>ServiceCategory</code> descriptions that referred to "cloud" were rewritten so they apply equally to hybrid, SaaS, and on-premises environments (Action Item 2378). In September, the Compute category description picked up physical compute and the Virtual Machines subcategory split into Bare Metal and Virtual Machines. The feature request closed as complete on 17 September. A broader expansion of the allowed values for on-premises, SaaS, and physical infrastructure (PR 2518) remains a draft and is not part of 1.5.</p>
+          <h4>Context for AI</h4>
+          <p>An "AI and Machine Learning" service category already exists, with subcategories for AI Platforms, Bots, Generative AI, Machine Learning, Natural Language Processing, and "Other (AI and Machine Learning)". This work removes the cloud-only framing around it, which mattered because a large share of AI spend now arrives from vendors that are not cloud providers, and it lets GPU capacity bought as bare metal classify apart from virtual machines. Deeper AI subcategories (FR 1943) did not enter 1.5 and sit in bucket 4.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2377" target="_blank" rel="noopener">FR 2377</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2379" target="_blank" rel="noopener">PR 2379</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2624" target="_blank" rel="noopener">PR 2624</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2378" target="_blank" rel="noopener">Action Item 2378</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2518" target="_blank" rel="noopener">PR 2518</a>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- ================= BUCKET 2 ================= -->
+  <section class="bucket" data-bucket="flight" style="--bucket-color: var(--flight); --bucket-bg: var(--flight-bg);">
+    <div class="bucket-head">
+      <span class="bucket-num">2</span>
+      <h2>In review</h2>
+      <span class="bucket-count" data-bucketcount="flight"></span>
+    </div>
+    <p class="bucket-note">Open pull requests in Task Force or Member review. Expected in 1.5, and each card says what is left, including whether the approvals sit on the current commit. The next gate is 24 September, when a pull request needs one approval on its latest commit to start Member review.</p>
+
+    <div class="cards">
+
+      <details class="card" data-status="flight" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill stage">Member review</span>
+            <span class="pill ref">FR 2099</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Separate tokens served from cache from tokens processed fresh, and input from output, on the price itself.</p>
+          <div class="card-meta">
+            <span><span class="k">owner</span> Matt Cowsert</span>
+            <span><span class="k">group</span> TF-2</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>The problem it answers</h4>
+          <p>Cached and uncached tokens can differ in price by an order of magnitude at the same provider. Without the distinction, a rise in token cost cannot be separated from a fall in cache hit rate, so the single most actionable AI optimization lever is invisible in cost data.</p>
+          <h4>What it adds</h4>
+          <p>Two FOCUS-defined properties on <code>SkuPriceDetails</code>, each with allowed values and no new columns. <code>TokenCacheAction</code> carries "Uncached", "Read", "Write", or "Other" on SKU prices that meter tokens consumed from a request. <code>TokenDirection</code> carries "Input" or "Output" on token-metered SKU prices whose tokens share a direction, so a SKU that bills both on one meter omits it. They replace the single <code>TokenType</code> property drafted earlier and are the first FOCUS-defined properties to carry allowed values. One requirement stops a cached token being counted twice: consumed quantity on an "Uncached" row excludes tokens counted on a "Read" or "Write" row. A footnote marks the edges: reasoning tokens carry "Output", and modality, reasoning effort, cache retention duration, and context window size are not values of these properties. A glossary entry separates token as a unit of measure from token as a store of value. An "AI Prompt Caching" appendix example with two scenarios and CSV data ships with it, plus two queries under the Resource Usage supported feature: cache hit rate for token-metered SKUs, and the input-to-output token ratio by model.</p>
+          <h4>Where it stands</h4>
+          <p>The two-property shape was decided by TF-2 on 2 September and merged into the pull request on 15 September. It moved to Member review on 17 September, with an approval on its current commit and two on earlier ones. Open: the two property descriptions are being rewritten, and whether "Uncached" becomes "None" and whether output-token rows carry a cache action at all. A cache cost efficiency query drafted for the Cost Comparison supported feature came out before Member review, to return once the SKU Price dataset and these properties have been tested together.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2099" target="_blank" rel="noopener">FR 2099</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2606" target="_blank" rel="noopener">PR 2606</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-status="flight" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill stage">Task Force review</span>
+            <span class="pill ref">FR 1941</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Worked examples showing how to map token and generation billing from any AI provider into FOCUS.</p>
+          <div class="card-meta">
+            <span><span class="k">owner</span> Larry Advey</span>
+            <span><span class="k">group</span> TF-2</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>The problem it answers</h4>
+          <p>The gap is not the schema. FOCUS already has the columns needed to carry token consumption. The gap is that practitioners cannot tell how those columns apply to AI billing, so every provider gets normalized differently.</p>
+          <blockquote>every single one has a different data format<cite>Becky Canterbury, Shutterstock, on working with 20-plus AI vendors</cite></blockquote>
+          <p>Requested by NatWest, SLB, UK Government Digital Service, Shutterstock, Syngenta, Anglepoint, AWS, and the FinOps Foundation.</p>
+          <h4>What it delivers</h4>
+          <p>No columns are added or changed. An "AI Billing" appendix section with six scenarios, each backed by a CSV: a foundation model billed per token by its developer; capacity bought up front through a prepayment and drawn down by usage, so billed cost is zero on usage rows and effective cost reflects consumption; a foundation model invoiced through a cloud provider marketplace, which also covers cached tokens; a multi-model invoice through that marketplace; multi-model usage; and a foundation model served first-party by a cloud provider. An "AI Billing" supported feature with two example SQL queries registers alongside. Token direction is carried per SKU through <code>SkuMeter</code>, consistent with the model identity examples, and the rows populate <code>PrincipalId</code>.</p>
+          <h4>Where it stands</h4>
+          <p>TF-2 confirmed on 16 September that it stays in 1.5. Dave Moreau and Graham Murphy joined the author on it, and the work is due to finish over the following three weeks. Six findings posted in that session on the newest scenarios, including two conformance errors in the drawdown example, are being fixed. It holds one approval, on an earlier commit, and sequences behind the cached-token pull request so the examples use its property names, with a custom property allowed where the examples need to say more. The examples may keep improving during Member review as long as the data shape holds.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1941" target="_blank" rel="noopener">FR 1941</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2605" target="_blank" rel="noopener">PR 2605</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-status="flight" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill stage">Member review</span>
+            <span class="pill ref">FR 2358</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Requester Details and Credential ID complete the actor columns.</p>
+          <div class="card-meta">
+            <span><span class="k">owner</span> Matt Cowsert</span>
+            <span><span class="k">group</span> TF-2</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>What it adds</h4>
+          <p>Two more Cost and Usage columns beside the merged <code>PrincipalId</code>. <code>CredentialId</code> identifies the credential presented on the request that produced the charge: an identifier that references a credential, never a value that authenticates one. <code>RequesterDetails</code> is a JSON array of key-value entries carrying descriptive attributes, <code>Type</code>, <code>Name</code>, and <code>Email</code>, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape. An entry appears only when its identifier is populated, and a published schema pins the keys.</p>
+          <h4>The July question, resolved</h4>
+          <p>The open decision on the last edition of this page, whether identity attributes ship alongside <code>PrincipalId</code> or wait, closed in August. The attributes ride in <code>RequesterDetails</code>, keyed to the identifiers, rather than in a separate identity column. The model covers a person, a service account, or an automated agent acting through one, which is the shape agentic spend takes.</p>
+          <h4>Where it stands</h4>
+          <p>Approved by four reviewers, two of them on the current commit, and in Member review since 17 September. Not in it: a Consumer ID column (PR 2495) is postponed and not part of 1.5, and scoped detail configuration, which would let practitioners choose how much actor detail a dataset carries, moved to 1.6 on 16 September (bucket 4).</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2358" target="_blank" rel="noopener">FR 2358</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2553" target="_blank" rel="noopener">PR 2553</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2495" target="_blank" rel="noopener">PR 2495</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-status="flight" data-kind="enabler">
+        <summary>
+          <div class="tags">
+            <span class="pill stage">Task Force review</span>
+            <span class="pill enabler">Enabler</span>
+            <span class="pill ref">FR 1057</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">A published price catalog, which is where model identity actually lives.</p>
+          <div class="card-meta">
+            <span><span class="k">owner</span> Shawn Alpay</span>
+            <span><span class="k">group</span> TF-1</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>What it adds</h4>
+          <p>A new SKU Price dataset, carrying prices independently of consumption, so a rate can be read before anyone buys, with the window it applies in and the accounts eligible for it.</p>
+          <h4>Where it stands</h4>
+          <p>Two decisions landed in September. The dataset is Conditional: a data generator must publish it only if it publishes unit prices, the same operating model condition that already governs the four Cost and Usage columns pointing into it. That was settled on 15 September. And its two unit price columns collapse into one, so a list price and a contracted price each get their own row, confirmed by TF-1 the same day. That reshape is being applied now and resets approvals, so the pull request needs fresh approval on the new head before it can start Member review. The two SKU Price supported features (PR 2595) are approved on their current commit and wait on the reshape; the consumption currency scoping (PR 2617) is the next card.</p>
+          <h4>The connection to AI</h4>
+          <p>The model-identity properties in bucket 1, and the cache and direction properties in review, all describe a SKU price rather than a usage row. This dataset is where an organization reads a provider's token rates before spending, prices a planned workload against them, and tests what a negotiated rate is worth. It is the difference between reporting on AI cost and negotiating it.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1057" target="_blank" rel="noopener">FR 1057</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2424" target="_blank" rel="noopener">PR 2424</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2595" target="_blank" rel="noopener">PR 2595</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-status="flight" data-kind="enabler">
+        <summary>
+          <div class="tags">
+            <span class="pill stage">Member review</span>
+            <span class="pill enabler">Enabler</span>
+            <span class="pill ref">PR 2617</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Prepaid tokens and provider credits handled as consumption currency.</p>
+          <div class="card-meta">
+            <span><span class="k">owner</span> Matt Cowsert</span>
+            <span><span class="k">group</span> TF-1</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>What it does</h4>
+          <p>The review of how tokens, credits, and crypto are treated as virtual currency (Action Item 2550, closed 18 August) found the <code>CurrencyFormat</code> attribute contradicting itself: it lists virtual currency as an allowed currency type while requiring an ISO 4217 code for every value, and no provider-issued unit has one. The pull request scopes the virtual currency allowance to consumption currency and carries the scoping through to the examples.</p>
+          <h4>Where it stands</h4>
+          <p>In Member review with one change request outstanding, and a review on 16 September raised one normative point: the broadened virtual currency definition would also cover cryptocurrency, which needs scoping. The glossary text is shared with the SKU Price dataset, so the two move together.</p>
+          <h4>Why it matters for AI</h4>
+          <p>A large share of AI spend is transacted in something other than a national currency. Buyers purchase token bundles or platform credits up front and draw them down. If FOCUS treats those units inconsistently, prepaid AI spend either disappears from cost reporting or double counts against the cash that bought it. This work and the prepayment drawdown example in FR 1941 address two halves of the same problem.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2550" target="_blank" rel="noopener">Action Item 2550</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2617" target="_blank" rel="noopener">PR 2617</a>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- ================= BUCKET 3 ================= -->
+  <section class="bucket" data-bucket="consider" style="--bucket-color: var(--consider); --bucket-bg: var(--consider-bg);">
+    <div class="bucket-head">
+      <span class="bucket-num">3</span>
+      <h2>Started, not yet certain</h2>
+      <span class="bucket-count" data-bucketcount="consider"></span>
+    </div>
+    <p class="bucket-note">Work has begun on these, and whether they land in 1.5 is still open. Nothing here is promised for December.</p>
+
+    <div class="cards">
+
+      <details class="card" data-status="consider" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">Open Forum 18 Sep</span>
+            <span class="pill ref">FR 2414</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Distinguish globally served models from region-pinned ones.</p>
+          <div class="card-meta">
+            <span><span class="k">owner</span> Matt Cowsert</span>
+            <span><span class="k">group</span> TF-2</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>The problem it answers</h4>
+          <p>Global and regional serving carry different rates and different data residency characteristics. This is one of the few AI cost dimensions that is simultaneously a finance question and a compliance question, which makes it awkward to leave undeclared in billing data.</p>
+          <h4>Where it stands</h4>
+          <p>A <code>SkuPriceDetails</code> property carrying the pricing region scope. PR 2613 introduces it as <code>ServingScope</code> and holds two approvals; PR 2667, stacked on it, renames it to <code>RegionScope</code>, the name the working group's research recommended, adopted on 17 September. TF-2 sent the property to the Open Forum of 18 September; if it is not sufficiently complete after that, it moves to 1.6. Consistency with the SKU Price columns being introduced is the other check.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2414" target="_blank" rel="noopener">FR 2414</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2613" target="_blank" rel="noopener">PR 2613</a>
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2667" target="_blank" rel="noopener">PR 2667</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="card" data-status="consider" data-kind="enabler">
+        <summary>
+          <div class="tags">
+            <span class="pill">On hold</span>
+            <span class="pill enabler">Enabler</span>
+            <span class="pill ref">Action Item 1857</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">A FinOps Foundation paper on FOCUS for AI, sitting outside the specification itself.</p>
+          <div class="card-meta">
+            <span><span class="k">group</span> F2</span>
+            <span><span class="k">state</span> On hold since 4 Aug</span>
+          </div>
+        </summary>
+        <div class="card-body">
+          <h4>What it is</h4>
+          <p>Supporting content rather than a specification change. It is the narrative piece that explains the position to an audience that will not read column definitions.</p>
+          <h4>Where it stands</h4>
+          <p>On hold since 4 August. The FinOps Foundation chose to wait for the Task Force staff dedicated to FOCUS for AI to work on it, and moved its date to 31 October. It is not tied to the release date, so it may follow 1.5 rather than accompany it.</p>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1857" target="_blank" rel="noopener">Action Item 1857</a>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- ================= BUCKET 4 ================= -->
+  <section class="bucket" data-bucket="out" style="--bucket-color: var(--out); --bucket-bg: var(--out-bg);">
+    <div class="bucket-head">
+      <span class="bucket-num">4</span>
+      <h2>Not in 1.5</h2>
+      <span class="bucket-count" data-bucketcount="out"></span>
+    </div>
+    <p class="bucket-note">Three groups live here. AI price dimensions filed this year that did not enter the 1.5 window, which fall out on timing alone and are the natural start of 1.6 scoping. Work moved to 1.6 by a decision during this cycle. And items ruled out on the merits, with reasons on the record.</p>
+
+    <p class="subhead">Filed, not taken up in 1.5</p>
+    <div class="cards">
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">1.6 candidate</span>
+            <span class="pill ref">FR 2487</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Represent reasoning tokens, which are billed but never appear in the response.</p>
+        </summary>
+        <div class="card-body">
+          <p>Reasoning models charge for intermediate tokens the customer never sees. Finance teams reconciling an invoice against application logs find output token counts that do not match the bill, with no standard field explaining the gap.</p>
+          <p>Partly answered by the cached-token work in review, whose footnote states that reasoning tokens carry <code>TokenDirection</code> "Output", so the count reconciles as output. A property for reasoning effort is explicitly not among that work's values and remains open.</p>
+          <div class="links"><a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2487" target="_blank" rel="noopener">FR 2487</a></div>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">1.6 candidate</span>
+            <span class="pill ref">FR 2488</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Represent the standing charge for keeping a context cache warm.</p>
+        </summary>
+        <div class="card-body">
+          <p>Context caching bills on two axes: the tokens processed, and the storage held over time. The second behaves like a storage charge rather than a usage charge, and it accrues whether or not the cache is read.</p>
+          <p>A contributor tabulated live prices in August on FR 2488 and showed storage and cache-read rates diverging under context tiering at the same provider, so a single meter cannot carry both. Cache retention duration is explicitly not a value of the new cache properties in review, so this stays its own piece of work.</p>
+          <div class="links"><a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2488" target="_blank" rel="noopener">FR 2488</a></div>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">1.6 candidate</span>
+            <span class="pill ref">FR 2489</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Distinguish text, image, audio, and video inputs, which are priced on different units and rates.</p>
+        </summary>
+        <div class="card-body">
+          <p>Adds input modality classification along with recommended <code>SkuMeter</code> values. Multimodal traffic is billed per token, per image, per second of audio, and per frame, depending on provider and input type. Without a modality dimension, those units collapse into an aggregate that cannot be compared or forecast.</p>
+          <p>Modality is explicitly not a value of the new token properties in review. The classification and the recommended meter values are two jobs rather than one, which kept it outside the 1.5 window.</p>
+          <div class="links"><a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2489" target="_blank" rel="noopener">FR 2489</a></div>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">1.6 candidate</span>
+            <span class="pill ref">FR 2521</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Distinguish model costs that vary by context window size.</p>
+        </summary>
+        <div class="card-body">
+          <p>Several providers price the same model differently above a context length threshold. The rate change is invisible in cost data today, so a cost increase driven by longer prompts is indistinguishable from one driven by more calls.</p>
+          <p>Context window size is explicitly not a value of the new token properties in review. Owner and Task Force are still unassigned.</p>
+          <div class="links"><a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2521" target="_blank" rel="noopener">FR 2521</a></div>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">1.6 candidate</span>
+            <span class="pill ref">FR 2437</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Distinguish priority, standard, and batch inference, which carry different rates.</p>
+        </summary>
+        <div class="card-body">
+          <p>Batch and off-peak processing tiers are commonly discounted by half or more against real-time inference. Making the tier visible turns "move this workload to batch" from an intuition into a measurable saving, and lets an organization verify it actually happened. Confirmed in June as a standalone feature request rather than part of model identity.</p>
+          <div class="links"><a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2437" target="_blank" rel="noopener">FR 2437</a></div>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">1.6 candidate</span>
+            <span class="pill ref">FR 2371</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Represent committed AI capacity the way other commitment discounts are represented.</p>
+        </summary>
+        <div class="card-body">
+          <p>Provisioned throughput is a commitment purchase, structurally similar to a reserved instance or savings plan. FOCUS already has a mature commitment discount model. The question is whether provisioned AI capacity maps onto it cleanly or needs its own treatment.</p>
+          <p>Of everything in this bucket, this is the one most likely to matter at the leadership level, because it is where committed AI dollars sit and where utilization against those commitments gets measured.</p>
+          <div class="links"><a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2371" target="_blank" rel="noopener">FR 2371</a></div>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">1.6 candidate</span>
+            <span class="pill ref">FR 1943</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Deeper AI service subcategories, so AI spend can be analyzed in layers.</p>
+        </summary>
+        <div class="card-body">
+          <p>Extends the existing AI and Machine Learning subcategories to support layered analysis, separating the infrastructure an AI workload runs on from the model serving it from the application consuming it. Today those three layers can all land in one bucket, which is the reason "what did AI cost us" is hard to answer consistently across organizations. The Service Category work merged this cycle (bucket 1) removed the cloud-only framing but did not add AI layers.</p>
+          <div class="links"><a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1943" target="_blank" rel="noopener">FR 1943</a></div>
+        </div>
+      </details>
+
+    </div>
+
+    <p class="subhead">Moved to 1.6 during the cycle</p>
+    <div class="cards">
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">1.6</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Two actor-column follow-ons deferred by decision in September.</p>
+          <div class="card-meta"><span><span class="k">decided</span> TF-2, 16 Sep 2026</span></div>
+        </summary>
+        <div class="card-body">
+          <ul>
+            <li><b>Scoped detail configuration</b> <span style="font-family:var(--font-mono);font-size:.85em;color:var(--slate)">(PR 2473)</span>. An extension of the Dataset Configuration attribute letting practitioners select optional, higher-cardinality detail, such as principal-level attribution, for documented areas of a dataset without every row carrying it. Moved to 1.6 with no objection; a simplified draft will be reposted for that cycle. Until then, column selection and the data generator's documentation govern how much actor detail appears.</li>
+            <li><b><code>JsonObjectFormat</code> support for arrays</b> beyond what Requester Details needs: the attribute name, key uniqueness for array entries, and nesting rules become a 1.6 feature request.</li>
+          </ul>
+          <div class="links">
+            <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2473" target="_blank" rel="noopener">PR 2473</a>
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+    <p class="subhead">Ruled out on the merits</p>
+    <div class="cards">
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">Out of scope</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Per-request maximum token limits alongside cost.</p>
+          <div class="card-meta"><span><span class="k">from</span> FR 2018, third use case</span></div>
+        </summary>
+        <div class="card-body">
+          <p>Request-level configuration sits closer to observability than to billing, consistent with the feature request's own exclusion of telemetry. It was not routed to any of the parallel AI feature requests, so it is a deliberate stop rather than a deferral.</p>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">Out of scope</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Tool or harness identity, meaning which tool produced the tokens.</p>
+          <div class="card-meta"><span><span class="k">decided</span> TF-2, 8 Jul 2026</span></div>
+        </summary>
+        <div class="card-body">
+          <p>Ruled out of the first example pass. This is the one most likely to come back, because agentic tooling is where attribution questions are heading. It is a sequencing call, not a rejection of the concept. The Requester Details column in review can carry a delegating identity as a custom entry, which is the nearest home today.</p>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">Out of scope</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Session and event identifiers.</p>
+          <div class="card-meta"><span><span class="k">decided</span> TF-2, 8 Jul 2026</span></div>
+        </summary>
+        <div class="card-body">
+          <p>These are observability-side join signals with no FOCUS-defined home. Billing data does not carry them, and inventing a place for them inside FOCUS would put the specification in the business of describing application telemetry.</p>
+        </div>
+      </details>
+
+      <details class="card" data-status="out" data-kind="ai">
+        <summary>
+          <div class="tags">
+            <span class="pill">Superseded</span>
+            <span class="chevron"><span class="more">Detail +</span><span class="less">Detail &minus;</span></span>
+          </div>
+          <p class="card-title">Token type, input versus output, as a first-class column.</p>
+          <div class="card-meta"><span><span class="k">deferred</span> TF-2, 15 Jul 2026</span> <span><span class="k">resolved</span> TF-2, 2 Sep 2026</span></div>
+        </summary>
+        <div class="card-body">
+          <p>Deferred in July, then resolved differently. The split arrives as the <code>TokenDirection</code> property on SKU price details in the cached-token work in review, not as a column. The structural carry through separate SKUs and <code>SkuMeter</code>, which is what shipped with model identity, stays valid alongside it.</p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <footer class="footnotes">
+    <p><strong>A terminology note.</strong> Inside the FOCUS repository, an issue prefixed "AI" is an Action Item, a unit of working-group work. It has nothing to do with artificial intelligence. Every such reference on this page is spelled out as "Action Item" to avoid the collision.</p>
+    <p><strong>Sources.</strong> The <a href="https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/milestone/7" target="_blank" rel="noopener">FOCUS 1.5 milestone</a>, the <a href="https://github.com/orgs/FinOps-Open-Cost-and-Usage-Spec/projects/5/views/36" target="_blank" rel="noopener">working-group board</a>, merged commits on the working draft, and the Task Force 2 record of 16 September 2026. Status is live and moves weekly; this page reflects 17 September 2026 and supersedes the 28 July edition. The whole-release view, beyond AI, is the <a href="https://focus.finops.org/focus-1-5-release-scope/" target="_blank" rel="noopener">FOCUS 1.5 release scope</a> page on focus.finops.org. Nothing here is a commitment on behalf of the working group.</p>
+  </footer>
+
+</div>
+
+</div></main>
+
+
+<footer class="px-6 lg:px-8 py-8 mt-12">
+  <div class="p-1.5 rounded-3xl bg-linear-to-r from-brand-primary  to-brand-tertiary">
+    <div class="relative isolate mx-auto max-w-full overflow-hidden rounded-2xl bg-surface-darker  px-6 py-12 ring-1 ring-gray-800 lg:px-16">
+      <div class="xl:flex flex-col items-center justify-between gap-10 sm:flex-row sm:items-start mx-auto max-w-8xl">
+        <div class="flex w-full flex-col items-center gap-8 sm:w-auto sm:min-w-xl sm:items-start">
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+          
+<div class="te-footer-newsletter w-full max-w-md"
+	data-te-newsletter-form
+	data-te-portal-id="5432286"
+	data-te-form-id="6815e400-fd7c-4efb-a9c1-e9d6a6cee7d3">
+	<h2 class="text-left text-sm/6 font-normal text-brand-light">Subscribe to our newsletter</h2>
+
+	<form data-step="1" class="mt-2 flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-x-4" novalidate>
+		<div class="min-w-0 flex-auto">
+			<input type="email" name="email" required
+				aria-label="Email address"
+				placeholder="Add your email address*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+	</form>
+
+	<form data-step="2" hidden class="te-newsletter-step2 mt-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-x-3 sm:flex-wrap" novalidate>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="firstname" required
+				aria-label="First name"
+				placeholder="First name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="lastname" required
+				aria-label="Last name"
+				placeholder="Last name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+		<p data-te-newsletter-msg hidden class="text-sm text-red-400 sm:basis-full"></p>
+	</form>
+</div>
+        </div>
+        <div>
+        <nav aria-label="Footer" class="flex flex-col lg:flex-row justify-start xl:justify-end gap-x-12 gap-y-3 text-sm/6">
+          <a href="https://www.tokeneconomics.com/insights/" class="text-sm/6 font-normal text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="text-sm/6 font-normal text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="text-sm/6 font-normal text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="text-sm/6 font-normal text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="text-sm/6 font-normal text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="text-sm/6 font-normal text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="text-sm/6 font-normal text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a></div>    
+            </nav>
+                            <div class="mt-10 flex xl:justify-end gap-6 max-w-8xl mx-auto">
+                                                    <a href="https://www.linkedin.com/company/tokenomics-foundation/" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Linkedin">
+                                      </a>
+                                                                      <a href="https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Youtube">
+                                      </a>
+                                                                      <a href="https://substack.com/@tokenomicsfoundation" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Substack">
+                                      </a>
+                                                                      <a href="https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Spotify">
+                                      </a>
+                                                </div>
+                      </div>      
+        </div>
+      
+      <div class="mt-16 space-y-2  pt-8 text-left text-xs font-light text-brand-light max-w-8xl mx-auto opacity-70">
+        <p><a class="underline" href="https://www.finops.org/introduction/how-to-use/" target="_blank" rel="noopener noreferrer">This work is licensed under Attribution 4.0 International</a></p>
+        <p>© 2026 Tokenomics Foundation Project a Series of LF Projects, LLC.</p>
+        <p>For web site terms of use, trademark policy and other project policies please see <a class="underline" href="https://lfprojects.org/" target="_blank" rel="noopener noreferrer">https://lfprojects.org.</a></p>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

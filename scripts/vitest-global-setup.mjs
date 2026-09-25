@@ -27,6 +27,7 @@ export default function setup() {
   const builtBins = [
     join(ROOT, "dist/servers/framework/main.js"),
     join(ROOT, "dist/servers/focus/main.js"),
+    join(ROOT, "dist/servers/tokenomics/main.js"),
   ];
   if (builtBins.every((p) => existsSync(p))) return;
   execFileSync("npm", ["run", "build"], { cwd: ROOT, stdio: "inherit" });

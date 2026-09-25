@@ -1,0 +1,138 @@
+[
+  {
+    "definition_md": "One number, built from the three buckets above, bounded between 0 and 100%. Bounded is what makes it *composable*: you can average it, roll it up across teams and workloads, and put it on the same slide as any other percentage. An unbounded ratio (\"3,400% reuse\") means nothing to a human reader and cannot be averaged. This is unfortunately a metric that is reported by default by many model providers.",
+    "formula": "Cache hit rate = cache read / (cache read + cache write + uncached input)",
+    "formula_text": null,
+    "inputs": [
+      "cache read",
+      "cache write",
+      "uncached input"
+    ],
+    "name": "Cache hit rate",
+    "provenance": {
+      "document": "cache-explainer",
+      "license": "CC-BY-4.0",
+      "section": "tcmonitoring",
+      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+    },
+    "slug": "cache-hit-rate",
+    "targets": [
+      "climb toward your workload's ceiling. Cache hit rate is coverage, driven mostly by prompt ordering. A live chat can never reach 100% because the conversation grows, so track the trend against the structural ceiling, not toward perfection. A flat or falling line while volumes grow means something upstream started breaking the prefix."
+    ]
+  },
+  {
+    "definition_md": "The fraction of prompt spend that caching actually avoided. Cache cost efficiency is **zero at break-even**: the write premium exactly repaid. Positive once paying the cache surcharge is worth it, negative when caching is losing you money. That scale is what you want while tuning: a direct comparison that holds across tuning option changes, like choosing the more expensive high TTL cache.\n\nHowever, this metric assumes you can get the *actual* prompt cost, which is easy on the direct API, murky on subscription plans, and impossible where the provider reports no write bucket. Keep in mind that the three buckets are not the whole invoice: output tokens, batch and committed-use discounts, and contracted rates all sit outside this input-side ratio.",
+    "formula": "Cache cost efficiency = 1 − actual prompt cost / uncached equivalent cost",
+    "formula_text": null,
+    "inputs": [
+      "actual prompt cost",
+      "uncached equivalent cost"
+    ],
+    "name": "Cache cost efficiency",
+    "provenance": {
+      "document": "cache-explainer",
+      "license": "CC-BY-4.0",
+      "section": "tcmonitoring",
+      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+    },
+    "slug": "cache-cost-efficiency",
+    "targets": [
+      "clearly above zero. A cache that is paying for itself sits well above zero, which means each cached entry is read back many times before it expires. A workload hovering just over zero is doing payback-once work: rare hits, misconfigured prompt ordering, or very short sessions could cause this."
+    ]
+  },
+  {
+    "definition_md": "Denominator of Cache cost efficiency: what the same prompt tokens would have cost with no caching at all.",
+    "formula": "uncached equivalent cost = (cache read + cache write + uncached input) × base input price",
+    "formula_text": null,
+    "inputs": [
+      "cache read",
+      "cache write",
+      "uncached input",
+      "base input price"
+    ],
+    "name": "Uncached equivalent cost",
+    "provenance": {
+      "document": "cache-explainer",
+      "license": "CC-BY-4.0",
+      "section": "tcmonitoring",
+      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+    },
+    "slug": "uncached-equivalent-cost",
+    "targets": []
+  },
+  {
+    "definition_md": "the cost of producing one token, hardware cost divided by tokens produced; an output metric that reflects true infrastructure return, as opposed to input metrics like cost per GPU hour or floating-point operations per dollar.",
+    "formula": null,
+    "formula_text": "hardware cost divided by tokens produced",
+    "inputs": [
+      "hardware cost",
+      "tokens produced"
+    ],
+    "name": "Cost per token",
+    "provenance": {
+      "document": "what-is-tokenomics",
+      "license": "CC-BY-4.0",
+      "section": "terminology-reference",
+      "source_url": "https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/"
+    },
+    "slug": "cost-per-token",
+    "targets": []
+  },
+  {
+    "definition_md": "Net produces one number, in one unit, over one period, with one confidence mark. It is the first point at which a claim exists.\n\nTwo of these lines need a word.\n\n**Harm from misses.** The Quality Floor makes bad output not count. It does not make bad output cost anything. Those are different operations. An incorrect support resolution, a bad routing decision, or a compliance miss is net negative, not merely zero, and the damage is subtracted here in the baseline's unit. Most claims will carry zero on this line.\n\n**Redeployment.** Freed capacity that was not redeployed nets to zero realized benefit. It is tracked as an FTE estimate, not claimed, until the capacity is spent on work that produces an outcome. This applies to every labor category, not only capacity gain.\n\nThe confidence mark carries the weakest provenance among the inputs: a net built on one estimated input is an estimated net.",
+    "formula": "gross delta × volume - outputs that missed the floor - cost created - harm from misses = net benefit",
+    "formula_text": null,
+    "inputs": [
+      "gross delta",
+      "volume",
+      "outputs that missed the floor",
+      "cost created",
+      "harm from misses"
+    ],
+    "name": "Net benefit",
+    "provenance": {
+      "document": "value-classification",
+      "license": "CC-BY-4.0",
+      "section": "vfstep4",
+      "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+    },
+    "slug": "net-benefit",
+    "targets": []
+  },
+  {
+    "definition_md": "Security incidents prevented, product outages avoided, compliance failures caught earlier. The value is a loss that did not occur; the claim rests on an expected-loss estimate: for example, incident rate x incident cost.",
+    "formula": null,
+    "formula_text": "incidents per period x cost per incident",
+    "inputs": [
+      "incidents per period",
+      "cost per incident"
+    ],
+    "name": "Risk reduction expected loss",
+    "provenance": {
+      "document": "value-classification",
+      "license": "CC-BY-4.0",
+      "section": "vfstep3",
+      "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+    },
+    "slug": "risk-expected-loss",
+    "targets": []
+  },
+  {
+    "definition_md": "TCA is the numerator of AI unit economics. Everything you convert into AI capability, the full input side, and the denominator is realized value. (Total Cost of AI is a proposal on this page, not a ratified standard.)",
+    "formula": null,
+    "formula_text": "TCA over value",
+    "inputs": [
+      "total cost of AI (TCA)",
+      "realized value"
+    ],
+    "name": "AI unit economics (TCA over realized value)",
+    "provenance": {
+      "document": "total-cost-of-ai",
+      "license": "CC-BY-4.0",
+      "section": "episode-highlights",
+      "source_url": "https://www.tokeneconomics.com/insights/total-cost-of-ai-tca/"
+    },
+    "slug": "ai-unit-economics",
+    "targets": []
+  }
+]

@@ -42,6 +42,11 @@ presented as if the Foundation published it.
   standardized billing/usage data spec — pinned to a spec version (1.0 or
   1.2) on every answer, so nothing gets blended across releases that
   actually changed a column's meaning.
+- **tokenomics-overview-mcp** (new sibling, not yet on npm — see below)
+  covers AI tokenomics from the Tokenomics Foundation: the Five-Layer Stack,
+  Big-T notation, prompt-cache metrics (Cache Hit Rate, Cache Cost
+  Efficiency), consumption levers, and stated cross-links into the other
+  two servers.
 
 Both servers are **read-only**: there's no way for an AI agent to change
 your FinOps practice or your billing data through them, only to read
@@ -188,7 +193,24 @@ Cloudflare Worker (`src/workers/`, endpoints `/mcp/framework` and
 [`demo/`](demo/) is a static browser walkthrough that drives both servers
 end-to-end through the Worker.
 
-The full prompts/resources/tools hierarchy of both servers — names, args,
+## Sibling server: tokenomics-overview-mcp
+
+An **AI tokenomics** MCP server (`src/crawlers/tokenomics`,
+`src/servers/tokenomics`, `data/tokenomics/`) built on the same pipeline
+from the [Tokenomics Foundation](https://www.tokeneconomics.com)'s CC BY
+pages: the Five-Layer Tokenomics Stack, Big-T notation (`T(n · k · a)`),
+the prompt cache explainer's two reference metrics with a
+`calculate_cache_metrics` tool, consumption levers, personas, value
+classification, and the FOCUS 1.5 AI-cost tracker. Every answer states the
+source's publication status (most are Working Drafts or Release
+Candidates). `get_crosslinks` returns `finops://framework/…` and
+`focus://spec/…` URIs for the two servers above, each backed by a quote
+from the Foundation page. It publishes separately as
+[`packages/tokenomics-overview-mcp`](packages/tokenomics-overview-mcp/);
+design and spec: [`docs/designs/tokenomics-overview-mcp.html`](docs/designs/tokenomics-overview-mcp.html),
+[`.agents/specs/tokenomics-overview-mcp.md`](.agents/specs/tokenomics-overview-mcp.md).
+
+The full prompts/resources/tools hierarchy of all three servers — names, args,
 URIs, param defaults/limits — is generated from live MCP output at
 [`docs/mcp-surface.md`](docs/mcp-surface.md).
 

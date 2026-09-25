@@ -1,0 +1,48 @@
+{
+  "name": "tokenomics-overview-mcp",
+  "version": "0.1.0",
+  "description": "Unofficial MCP server exposing Tokenomics Foundation AI tokenomics guidance to AI agents: the Five-Layer Stack, Big-T notation, prompt-caching metrics and consumption levers, personas, value classification, and stated cross-links to the FinOps Framework and FOCUS servers.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "finops",
+    "tokenomics",
+    "ai-cost",
+    "prompt-caching"
+  ],
+  "license": "MIT",
+  "author": "Aaron Soto",
+  "homepage": "https://github.com/aaronmsoto/finops-framework-mcp/tree/main/packages/tokenomics-overview-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/aaronmsoto/finops-framework-mcp/issues"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aaronmsoto/finops-framework-mcp.git",
+    "directory": "packages/tokenomics-overview-mcp"
+  },
+  "mcpName": "io.github.aaronmsoto/tokenomics-overview-mcp",
+  "bin": {
+    "tokenomics-overview-mcp": "dist/servers/tokenomics/main.js"
+  },
+  "files": [
+    "dist",
+    "data/tokenomics",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md"
+  ],
+  "scripts": {
+    "prepack": "node ../../scripts/pack-tokenomics.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "zod": "^4.4.3"
+  }
+}

@@ -27,4 +27,15 @@ describe("scanForInjection (critique M2 guardrail)", () => {
       "Teams should run regular reviews and forecast spend variance below 20%.";
     expect(scanForInjection("test", prose)).toEqual([]);
   });
+
+  it("skips only the patterns a crawler explicitly allows", () => {
+    const text = "put the system prompt first; ignore previous instructions";
+    const all = scanForInjection("x", text).map((h) => h.pattern);
+    expect(all).toContain("system-prompt");
+    const allowed = scanForInjection("x", text, ["system-prompt"]).map(
+      (h) => h.pattern,
+    );
+    expect(allowed).not.toContain("system-prompt");
+    expect(allowed).toContain("ignore-previous");
+  });
 });

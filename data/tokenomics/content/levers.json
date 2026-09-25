@@ -1,0 +1,410 @@
+[
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L1 Silicon (key metric: Dollars and watts per token). No, sets cost per token.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 1,
+    "name": "Match silicon class to workload",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l1-match-silicon-class-to-workload"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L1 Silicon (key metric: Dollars and watts per token). No, sets cost per token.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 1,
+    "name": "Adopt newer generations",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l1-adopt-newer-generations"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L2 Capacity (key metric: Utilization, idle hours). No, sets effective cost per token.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 2,
+    "name": "Batch the troughs",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l2-batch-the-troughs"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L2 Capacity (key metric: Utilization, idle hours). No, sets effective cost per token.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 2,
+    "name": "Autoscale",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l2-autoscale"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L2 Capacity (key metric: Utilization, idle hours). No, sets effective cost per token.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 2,
+    "name": "Place by region",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l2-place-by-region"
+  },
+  {
+    "bigt_classes": [
+      "t-1",
+      "t-log-n"
+    ],
+    "description_md": "Primary lever for L3 Inference stack (key metric: Cache hit rate, time to first token, throughput). Yes, toward T(1) and T(log n).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 3,
+    "name": "Right engine",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l3-right-engine"
+  },
+  {
+    "bigt_classes": [
+      "t-1",
+      "t-log-n"
+    ],
+    "description_md": "Primary lever for L3 Inference stack (key metric: Cache hit rate, time to first token, throughput). Yes, toward T(1) and T(log n).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 3,
+    "name": "Prefix and KV cache",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l3-prefix-and-kv-cache"
+  },
+  {
+    "bigt_classes": [
+      "t-1",
+      "t-log-n"
+    ],
+    "description_md": "Primary lever for L3 Inference stack (key metric: Cache hit rate, time to first token, throughput). Yes, toward T(1) and T(log n).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 3,
+    "name": "Disaggregation",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l3-disaggregation"
+  },
+  {
+    "bigt_classes": [
+      "t-n-k",
+      "t-n"
+    ],
+    "description_md": "Primary lever for L4 Model and quantization (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 4,
+    "name": "Right-size the model",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l4-right-size-the-model"
+  },
+  {
+    "bigt_classes": [
+      "t-n-k",
+      "t-n"
+    ],
+    "description_md": "Primary lever for L4 Model and quantization (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 4,
+    "name": "Quantize",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l4-quantize"
+  },
+  {
+    "bigt_classes": [
+      "t-n-k",
+      "t-n"
+    ],
+    "description_md": "Primary lever for L4 Model and quantization (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 4,
+    "name": "Adapt",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l4-adapt"
+  },
+  {
+    "bigt_classes": [
+      "t-n-k-a",
+      "t-infinity"
+    ],
+    "description_md": "Primary lever for L5 Routing and governance (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 5,
+    "name": "Complexity routing",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l5-complexity-routing"
+  },
+  {
+    "bigt_classes": [
+      "t-n-k-a",
+      "t-infinity"
+    ],
+    "description_md": "Primary lever for L5 Routing and governance (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 5,
+    "name": "Budgets",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l5-budgets"
+  },
+  {
+    "bigt_classes": [
+      "t-n-k-a",
+      "t-infinity"
+    ],
+    "description_md": "Primary lever for L5 Routing and governance (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 5,
+    "name": "Agent caps",
+    "provenance": {
+      "document": "five-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l5-agent-caps"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Send each task to the cheapest model that clears the quality floor. Same pattern as database read replicas.",
+    "effect": null,
+    "kind": "bigt-lever",
+    "layer": null,
+    "name": "Model routing",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "howto",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "bigt-model-routing"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Compact formats can halve token counts with no quality loss. Let the decoder handle deterministic structure instead of generating it.",
+    "effect": null,
+    "kind": "bigt-lever",
+    "layer": null,
+    "name": "Prompt engineering & serialization",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "howto",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "bigt-prompt-engineering-and-serialization"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Prompt-prefix caching cuts input cost; semantic caching eliminates calls entirely. Evaluate every linear workload for reduction to constant.",
+    "effect": null,
+    "kind": "bigt-lever",
+    "layer": null,
+    "name": "Caching as a design principle",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "howto",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "bigt-caching-as-a-design-principle"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Credit bundles and seat licenses hide token economics. You cannot optimize what you cannot measure.",
+    "effect": null,
+    "kind": "bigt-lever",
+    "layer": null,
+    "name": "Abstraction transparency",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "howto",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "bigt-abstraction-transparency"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Tie the highest-consumption workloads to the highest-value outcomes. Governance is alignment, not restriction.",
+    "effect": null,
+    "kind": "bigt-lever",
+    "layer": null,
+    "name": "Workload classification & governance",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "howto",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "bigt-workload-classification-and-governance"
+  },
+  {
+    "bigt_classes": [
+      "t-n-k"
+    ],
+    "description_md": "Each operation is a full agent turn that replays accumulated context",
+    "effect": "Token reduction: baseline",
+    "kind": "architectural-approach",
+    "layer": null,
+    "name": "Standard tool calls",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "concepts",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "approach-standard-tool-calls"
+  },
+  {
+    "bigt_classes": [
+      "t-n"
+    ],
+    "description_md": "One generated script executes the batch in a sandboxed runtime",
+    "effect": "Token reduction: ~80%",
+    "kind": "architectural-approach",
+    "layer": null,
+    "name": "Code-generation mode",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "concepts",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "approach-code-generation-mode"
+  },
+  {
+    "bigt_classes": [
+      "t-log-n"
+    ],
+    "description_md": "SQL, regex, and embedding search shrink input before inference",
+    "effect": "Token reduction: 92–99.9%",
+    "kind": "architectural-approach",
+    "layer": null,
+    "name": "Filtered retrieval (RAG done right)",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "concepts",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "approach-filtered-retrieval"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Kill context replay: Don't stack multiple documents in one chat. Use scripts or fresh chats so you only pay for the context the current task needs.",
+    "effect": "Part of the worked example that moves ten summaries from $3.04 (T(n·k)) to $0.09 (T(n)), roughly 34×",
+    "kind": "worked-example-step",
+    "layer": null,
+    "name": "Use isolated contexts",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "savings",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "example-use-isolated-contexts"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Right-size the model: Reserve flagship models for deep reasoning and synthesis. Use efficient models for standard tasks like summarization.",
+    "effect": "Part of the worked example that moves ten summaries from $3.04 (T(n·k)) to $0.09 (T(n)), roughly 34×",
+    "kind": "worked-example-step",
+    "layer": null,
+    "name": "Route by complexity",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "savings",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "example-route-by-complexity"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Constrain the output: Replace \"summarize this\" with a structured template (problem, method, findings, ~150 words) to trim the costly output axis and improve comparability.",
+    "effect": "Part of the worked example that moves ten summaries from $3.04 (T(n·k)) to $0.09 (T(n)), roughly 34×",
+    "kind": "worked-example-step",
+    "layer": null,
+    "name": "Use bounded templates",
+    "provenance": {
+      "document": "big-t-notation",
+      "license": "CC-BY-4.0",
+      "section": "savings",
+      "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+    },
+    "slug": "example-use-bounded-templates"
+  }
+]

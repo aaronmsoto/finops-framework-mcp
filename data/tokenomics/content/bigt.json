@@ -1,0 +1,131 @@
+{
+  "classes": [
+    {
+      "description": "The model is not called per request. A cache hit, a static lookup, an embedding search. Reuse of a precomputed answer. The O(1) of AI.",
+      "fix": "Cache and precompute aggressively.",
+      "headline": "The model is not called per request.",
+      "name": "Constant",
+      "notation": "T(1)",
+      "order": 1,
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "ladder",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "slug": "t-1"
+    },
+    {
+      "description": "Deterministic code shrinks the input before the model sees it. The class most organizations miss entirely. RAG done right; code is the new cache layer. Published results: SQL views shrinking clinical data from ~240,000 tokens to 19,000 before the model is called, and retrieval pipelines eliminating better than 99.9 percent of a million-token corpus.",
+      "fix": "Filter and retrieve before inference, not after.",
+      "headline": "Deterministic code shrinks the input before the model sees it.",
+      "name": "Sublinear",
+      "notation": "T(log n)",
+      "order": 2,
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "ladder",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "slug": "t-log-n"
+    },
+    {
+      "description": "One model call per request, cost proportional to input size. Summarize, answer, translate. The healthy default, and what most budgets implicitly assume. Watch for fixed per-call overhead from large tool catalogs.",
+      "fix": "Trim per-call overhead; keep this the default.",
+      "headline": "One model call per request, cost proportional to input size.",
+      "name": "Linear",
+      "notation": "T(n)",
+      "order": 3,
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "ladder",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "slug": "t-n"
+    },
+    {
+      "description": "k model calls per request, and k is usually invisible. Extended thinking can burn over a hundred thousand tokens per request while producing a few hundred visible ones. Non-composable tools that replay full context each turn can make a five-step chain cost 10 to 20x the composed version.",
+      "fix": "Compose tool pipelines; instrument for hidden k.",
+      "headline": "k model calls per request, and k is usually invisible.",
+      "name": "Multiplicative",
+      "notation": "T(n·k)",
+      "order": 4,
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "ladder",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "slug": "t-n-k"
+    },
+    {
+      "description": "An orchestrator spawns sub-agents that spawn tool calls. The O(n²) of AI: architecturally powerful, economically dangerous if unmonitored. The danger is not delegation; it is unbounded depth and unscoped context running unwatched.",
+      "fix": "Bound agent depth; add circuit breakers and budgets.",
+      "headline": "An orchestrator spawns sub-agents that spawn tool calls.",
+      "name": "Agent-multiplicative",
+      "notation": "T(n·k·a)",
+      "order": 5,
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "ladder",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "slug": "t-n-k-a"
+    },
+    {
+      "description": "Loops with no termination condition. Retry-on-failure with no cap, recursive self-rewriting. The infinite loops of the token economy, and they exist today in production systems that lack circuit breakers.",
+      "fix": "Hard termination conditions and circuit breakers. Always.",
+      "headline": "Loops with no termination condition.",
+      "name": "Unbounded",
+      "notation": "T(∞)",
+      "order": 6,
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "ladder",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "slug": "t-infinity"
+    }
+  ],
+  "expansion": "requests × model calls per request × agent depth",
+  "notation": "T(n · k · a)",
+  "variables": [
+    {
+      "description": "Covers two things that often move together: how many requests hit the workload, and how large each request's input is. Either or both can be the scaling dimension.",
+      "name": "Requests, or input size",
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "notation",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "symbol": "n"
+    },
+    {
+      "description": "Reasoning steps, multi-turn chains, tool calls that replay context. The trap: k is usually invisible. It rarely appears in the request itself.",
+      "name": "Model calls per request",
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "notation",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "symbol": "k"
+    },
+    {
+      "description": "Sub-agents calling sub-agents. An orchestrator spawning workers multiplies everything above it in the tree.",
+      "name": "Agent depth",
+      "provenance": {
+        "document": "big-t-notation",
+        "license": "CC-BY-4.0",
+        "section": "notation",
+        "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/"
+      },
+      "symbol": "a"
+    }
+  ]
+}

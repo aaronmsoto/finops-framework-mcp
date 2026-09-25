@@ -1,0 +1,84 @@
+{
+  "$id": "tokenomics-overview-mcp/levers",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "bigt_classes": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "description_md": {
+        "type": "string"
+      },
+      "effect": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "kind": {
+        "enum": [
+          "stack-primary-lever",
+          "bigt-lever",
+          "architectural-approach",
+          "worked-example-step"
+        ]
+      },
+      "layer": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "provenance": {
+        "additionalProperties": false,
+        "properties": {
+          "document": {
+            "type": "string"
+          },
+          "license": {
+            "const": "CC-BY-4.0"
+          },
+          "section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_url": {
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document",
+          "section",
+          "source_url",
+          "license"
+        ],
+        "type": "object"
+      },
+      "slug": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "slug",
+      "name",
+      "kind",
+      "layer",
+      "bigt_classes",
+      "description_md",
+      "effect",
+      "provenance"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

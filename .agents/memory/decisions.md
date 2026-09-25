@@ -840,3 +840,61 @@ its accuracy under concurrent/distributed load matches whatever consistency
 guarantees Cloudflare's Rate Limiting binding documents (approximate, not a
 hard atomic counter) — acceptable for a test/abuse-deterrence gate, not
 something to rely on for a strict quota.
+
+## 2026-09-25 — tokenomics-overview-mcp: curriculum is a local overlay, not data
+
+- Decision: the owner chose "Foundation pages + labeled extras" (cert-prep
+  curriculum behind `FINOPS_MCP_EXPERIMENTAL`). Implemented the extras as a
+  runtime overlay: `cli.js import-curriculum --from <cert-prep>/ai-tokenomics`
+  writes `curriculum.json` to a local dir (default `.cache/`), and the server
+  loads it only with the flag AND `TOKENOMICS_MCP_CURRICULUM`. Nothing from
+  the curriculum is committed or packaged; practice banks are never read.
+- Why: this repo and its npm packages are public; the curriculum site is
+  passcode-gated and the Fundamentals guide is marked private in cert-prep.
+  Committing it under `derived/` would publish it.
+- Alternatives considered: commit as `derived/*.json` `official: false`
+  (rejected — publishes private material); drop the extras (rejected —
+  contradicts the owner's answer). Reversing is a data-path change, flagged
+  as open question 1 in the design.
+
+## 2026-09-25 — Stated cross-links require a verbatim evidence quote
+
+- Decision: a tokenomics→framework/FOCUS link is on the default surface
+  only if it carries a quote found verbatim (markup/whitespace-normalized)
+  in the composed source document; FOCUS targets must also be named in the
+  quote's paragraph. Refresh fails otherwise; `crosslinks.test.ts`
+  cross-reads data/framework and data/focus for target existence. Name
+  correspondences (Tokenomics personas ↔ FinOps personas, cache-hit-rate ↔
+  the framework KPI of the same name) live in the experimental crosswalk.
+- Why: the framework server deleted its inferred relationship graph because
+  inference did not clear the bar (v1-official-only); the personas page
+  itself says reconciling with the FinOps persona catalog is "a deliberate
+  next step, not attempted here".
+- Alternatives considered: name matching on the default surface (rejected
+  for the reason above); hand-curated links without evidence (rejected —
+  unverifiable).
+
+## 2026-09-25 — scanForInjection gains an opt-in allow-list
+
+- Decision: `scanForInjection(where, text, allow = [])`; the tokenomics
+  crawler allows only `system-prompt`. Framework/FOCUS behavior unchanged.
+- Why: "system prompt" is core vocabulary across AI-cost guidance (prompt
+  caching, gateway routing); the heuristic fired on 5 legitimate pages.
+- Alternatives considered: a tokenomics-local copy of the scanner (rejected —
+  two scanners drift); dropping the pattern globally (rejected — still a
+  useful signal on FinOps prose).
+
+## 2026-09-25 — Stated-link naming rule, made explicit (amends the entry above)
+
+- Decision: after independent review found framework targets exempt from
+  the "evidence names the target" check, each framework target now carries
+  a `mentions` phrase (the capability's name or its defining activity, e.g.
+  "anomaly detection" → anomaly-management) that must appear in the
+  evidence; refresh fails otherwise. The one link whose quote named no
+  target ("Cost attribution …" → allocation) was dropped. FOCUS targets keep
+  the paragraph rule (tracker cards name the identifier one sentence before
+  the use) and single-word JSON keys (Email, Name, Type) are no longer
+  treated as FOCUS identifiers.
+- Alternatives considered: exact capability-title match only (rejected —
+  the Foundation writes "anomaly detection", never "Anomaly Management");
+  keeping the exemption (rejected — silent wrong targets).

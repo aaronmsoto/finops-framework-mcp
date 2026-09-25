@@ -1,0 +1,42 @@
+{
+  "$id": "tokenomics-overview-mcp/changelog",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "added": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "changed": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "crawled_at": {
+        "type": "string"
+      },
+      "data_version": {
+        "type": "string"
+      },
+      "removed": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "data_version",
+      "crawled_at",
+      "added",
+      "removed",
+      "changed"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

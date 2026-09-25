@@ -7,11 +7,15 @@
 ## Project
 
 - Name: finops-framework-mcp
-- What: two MCP servers acting as an agentic interface to the FinOps
+- What: three MCP servers acting as an agentic interface to the FinOps
   Foundation's official guidance — `src/servers/framework` (the Framework:
   Principles, Phases, Domains, Capabilities, Personas, Technology
-  Categories, Scopes, KPI library) and `packages/finops-focus-mcp` (the
-  FOCUS spec: columns, KPI-to-column mappings, cross-version diffs).
+  Categories, Scopes, KPI library), `packages/finops-focus-mcp` (the
+  FOCUS spec: columns, KPI-to-column mappings, cross-version diffs), and
+  `packages/tokenomics-overview-mcp` (Tokenomics Foundation AI-cost
+  guidance: Five-Layer Stack, Big-T, cache metrics, levers; CC BY 4.0,
+  © Tokenomics Foundation / LF Projects — spec
+  `.agents/specs/tokenomics-overview-mcp.md`).
 - Phase: v1 built — both servers, a Worker (Streamable HTTP) deployment of
   the framework server, and a browser demo against it. Four critique gates
   plus a five-lens final pre-launch review (`docs/final-status-review.md`,
@@ -21,7 +25,13 @@
 ## Invariants
 
 - Crawler and server never import each other; the data artifact is the only
-  interface (ESLint boundaries enforce).
+  interface (ESLint boundaries enforce). Servers never import each other
+  either: cross-server links are fixed URI strings checked by tests.
+- Tokenomics: a default-surface cross-link is "stated" only if its evidence
+  quote is found verbatim in the source document (refresh fails otherwise);
+  anything else is the experimental crosswalk (`official: false`). The
+  owner's cert-prep curriculum is private: it is only ever a local overlay
+  (`import-curriculum` → .cache/), never committed or packaged.
 - Official content lives in data/{framework,focus}/content/; everything
   unofficial (pre-crawl level, parsed Actions) is official:false in
   derived/ and labeled in every server output. Never blend or invent.
