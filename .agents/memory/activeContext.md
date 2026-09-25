@@ -78,6 +78,26 @@
   regression tests were `skipIf`-gated on `dist/` and therefore **never ran
   in CI**. See decisions.md 2026-08-21 (x2).
 
+- **2026-09-25:** Investigated an owner report of "errors after clicking Run
+  Walkthrough" on the live demo — reproduced live in a real headless
+  Chromium, not from reading code. **No defect**: 3 of 4 `calculate_kpi`
+  calls in the walkthrough's last step are structurally uncomputable over
+  the FOCUS 1.0 bundled sample (zero qualifying commitment-purchase rows),
+  which `calculate_kpi` correctly reports as guidance rather than a
+  fabricated number — already asserted in `demo-requests.test.ts` and
+  documented in `demo/app.js`. It happens on every run because
+  `demo/requests.js` hardcodes `CALCULATE_VERSION = "1.0"`; whether to move
+  it to `"1.2"` (real numbers for all 4 KPIs, but a different demo
+  narrative) is an **open question**, not decided. Also added Worker rate
+  limiting on explicit owner instruction, scoped as test-only prep, not a
+  publish decision: `wrangler.toml`'s `[[ratelimits]]` binding + enforcement
+  in `src/workers/app.ts` (60 req/60s per IP, 429 + Retry-After on both MCP
+  routes), reversing `docs/deploy-worker.md`'s prior "use edge WAF rules"
+  guidance (that product needs a custom-domain zone this `*.workers.dev`
+  deployment doesn't have — decisions.md 2026-09-25). Validated via 7 new
+  `app.test.ts` cases and `wrangler deploy --dry-run`; **not deployed** —
+  deploying is the owner's step.
+
 ## Next steps
 
 0. **Harness unavailable in agent sessions right now.** `npm ci --prefix
@@ -88,6 +108,22 @@
    **untracked** (tasks.json deliberately untouched, chain intact) and
    verified with the individual npm gate commands instead. Supply a token, or
    retro-file that work as a task.
+0b. **Owner, when ready to test:** `npx wrangler deploy` to activate the new
+   `RATE_LIMITER` binding (2026-09-25, decisions.md) on the live Worker —
+   not deployed yet, deploying is an owner-only step. Then smoke-test with
+   `docs/deploy-worker.md` step 5 (now includes the 429/Retry-After case).
+   Once satisfied it holds up, that's the trigger to revisit whether to
+   advertise the Worker URL (Iteration A's second half — see next item).
+0c. **Owner decision needed, not yet made:** should `demo/requests.js`'s
+   `CALCULATE_VERSION` change from `"1.0"` to `"1.2"`? Right now the
+   walkthrough's last step always shows 3 of 4 featured KPIs as "not
+   computable" (FOCUS 1.0's bundled sample has no qualifying commitment-
+   purchase rows) — correct, guided, and tested behavior, but it happens on
+   *every* run and could read as broken to a first-time visitor. Switching
+   to 1.2 would make all 4 compute real numbers but requires rewriting
+   `demo-requests.test.ts`'s hardcoded expected values and changes what the
+   walkthrough demonstrates. See journal `20260925-demo-walkthrough-errors-
+   and-worker-rate-limit.md`.
 1. **Owner (blocks everything below):** set the GitHub About description —
    the session token is proxied and 403s on repository-settings writes
    ("Repository settings writes are not permitted through this proxy"), so
@@ -176,6 +212,15 @@
   feedback list is superseded by the starter-repo list.
 
 ## Last updated
+
+2026-09-25 — Explained the owner's "errors on Run Walkthrough" report
+(reproduced live in headless Chromium: no defect, 3 of 4 featured-KPI
+calculations are correctly-and-deliberately "not computable" over the FOCUS
+1.0 sample on every run — open question filed on whether the demo should use
+1.2 instead) and added Worker rate limiting (`wrangler.toml` `[[ratelimits]]`
++ `src/workers/app.ts` enforcement, 60 req/60s/IP) as owner-instructed
+test-only prep, not yet deployed. See journal `20260925-demo-walkthrough-
+errors-and-worker-rate-limit.md` and decisions.md 2026-09-25.
 
 2026-08-15 — **Launch day.** T-082 (repo link in the guide + experimental
 scrub), T-083 (MCP SDK → ^1.30.0, clearing 2 high + 2 moderate transitive

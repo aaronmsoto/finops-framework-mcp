@@ -114,7 +114,8 @@ curl -s "$WORKER_URL/mcp/focus" \
 
 Expect a `200` with a JSON-RPC `result` from both. An unknown path (e.g.
 `/mcp/nope`) should 404; a disallowed `Origin` header should 403; an
-unsupported method (e.g. `PUT`) should 405.
+unsupported method (e.g. `PUT`) should 405; more than 60 requests to the same
+route within 60 seconds from the same IP should 429 with `Retry-After: 60`.
 
 ## 6. Rollback
 
@@ -137,10 +138,23 @@ npx wrangler rollback [deployment-id]
 - Refreshing the framework/FOCUS data (`npm run refresh`, FOCUS ingestion)
   does not auto-deploy anything — re-run step 1, review the diff, commit,
   then repeat step 4 when ready.
-- No authentication and no rate limiting: deliberate, not an oversight. The
-  Worker serves only public, read-only FinOps Foundation/FOCUS content
-  (§CORS above already restricts browser callers, not API access) with no
-  per-user state to protect — there is nothing behind it worth gating. If
-  abuse becomes a problem, add rate limiting at the edge via [Cloudflare
-  Rate Limiting rules](https://developers.cloudflare.com/waf/rate-limiting-rules/)
-  rather than in application code.
+- No authentication: deliberate, not an oversight. The Worker serves only
+  public, read-only FinOps Foundation/FOCUS content (§CORS above already
+  restricts browser callers, not API access) with no per-user state to
+  protect — there is nothing behind it worth gating.
+- **Rate limiting** (added 2026-09-25, decisions.md): `wrangler.toml` declares
+  a `[[ratelimits]]` binding (`RATE_LIMITER`, 60 requests/60s per caller IP),
+  enforced in `src/workers/app.ts` on `/mcp/framework` and `/mcp/focus` only —
+  a denied request gets `429` with `Retry-After: 60`. This is edge-adjacent
+  [Workers Rate Limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/),
+  **not** the zone-level [Rate Limiting (WAF) rules](https://developers.cloudflare.com/waf/rate-limiting-rules/)
+  product this doc previously pointed at — that product is configured on a
+  Cloudflare **zone** (a custom domain you've added to the account), and this
+  Worker is served from the shared `*.workers.dev` subdomain, which isn't a
+  zone the owner controls WAF rules on. The Workers Rate Limiting binding is
+  Cloudflare's supported mechanism for gating a Worker's own routes
+  regardless of domain, requires Wrangler >= 4.36.0, and needs no separate
+  dashboard/CLI provisioning step — it activates on the next `wrangler
+  deploy`. If this Worker is later put behind a custom domain/zone, the WAF
+  product becomes available too, but the in-Worker binding still works and
+  there's no need to run both.

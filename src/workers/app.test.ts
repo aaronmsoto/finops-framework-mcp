@@ -8,7 +8,11 @@
 import { join } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadArtifact, loadFocusStore } from "../shared/index.js";
-import { createFetchHandler, type FetchHandler } from "./app.js";
+import {
+  createFetchHandler,
+  type FetchHandler,
+  type RateLimiter,
+} from "./app.js";
 
 const FRAMEWORK_DIR = join(import.meta.dirname, "../../data/framework");
 const FOCUS_DIR = join(import.meta.dirname, "../../data/focus");
@@ -238,5 +242,100 @@ describe("routing edge cases", () => {
       new Request("https://worker.example/mcp/unknown", { method: "GET" }),
     );
     expect(res.status).toBe(404);
+  });
+});
+
+describe("rate limiting", () => {
+  let frameworkArtifact: ReturnType<typeof loadArtifact>;
+  let focusStore: ReturnType<typeof loadFocusStore>;
+
+  beforeAll(() => {
+    frameworkArtifact = loadArtifact(FRAMEWORK_DIR);
+    focusStore = loadFocusStore(FOCUS_DIR);
+  });
+
+  function fixedLimiter(success: boolean): RateLimiter {
+    return { limit: async () => ({ success }) };
+  }
+
+  function handlerWith(rateLimiter: RateLimiter): FetchHandler {
+    return createFetchHandler({
+      frameworkArtifact,
+      focusStore,
+      allowedOrigins: [ALLOWED_ORIGIN],
+      rateLimiter,
+    });
+  }
+
+  it("passes through when the limiter allows the request", async () => {
+    const res = await handlerWith(fixedLimiter(true))(
+      rpcRequest("mcp/framework", INITIALIZE_BODY),
+    );
+    expect(res.status).toBe(200);
+  });
+
+  it("returns 429 with Retry-After when the limiter denies the request", async () => {
+    const res = await handlerWith(fixedLimiter(false))(
+      rpcRequest("mcp/framework", INITIALIZE_BODY, { Origin: ALLOWED_ORIGIN }),
+    );
+    expect(res.status).toBe(429);
+    expect(res.headers.get("Retry-After")).toBe("60");
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toMatch(/rate limit/);
+  });
+
+  it("applies to /mcp/focus too", async () => {
+    const res = await handlerWith(fixedLimiter(false))(
+      rpcRequest("mcp/focus", { jsonrpc: "2.0", id: 1, method: "tools/list" }),
+    );
+    expect(res.status).toBe(429);
+  });
+
+  it("does not gate a non-MCP route", async () => {
+    const res = await handlerWith(fixedLimiter(false))(
+      new Request("https://worker.example/mcp/unknown"),
+    );
+    expect(res.status).toBe(404);
+  });
+
+  it("checks Origin and method before consulting the limiter", async () => {
+    const denyAll = handlerWith(fixedLimiter(false));
+
+    const getRes = await denyAll(
+      new Request("https://worker.example/mcp/framework", { method: "GET" }),
+    );
+    expect(getRes.status).toBe(405);
+
+    const originRes = await denyAll(
+      rpcRequest("mcp/framework", INITIALIZE_BODY, {
+        Origin: "https://evil.example.com",
+      }),
+    );
+    expect(originRes.status).toBe(403);
+  });
+
+  it('keys the limiter by cf-connecting-ip, falling back to "unknown"', async () => {
+    const seenKeys: string[] = [];
+    const handler = createFetchHandler({
+      frameworkArtifact,
+      focusStore,
+      allowedOrigins: [],
+      rateLimiter: {
+        limit: async ({ key }) => {
+          seenKeys.push(key);
+          return { success: true };
+        },
+      },
+    });
+
+    await handler(
+      rpcRequest("mcp/framework", INITIALIZE_BODY, {
+        "cf-connecting-ip": "203.0.113.5",
+      }),
+    );
+    await handler(rpcRequest("mcp/framework", INITIALIZE_BODY));
+
+    expect(seenKeys).toEqual(["203.0.113.5", "unknown"]);
   });
 });
