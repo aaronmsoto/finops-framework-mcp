@@ -1,0 +1,95 @@
+{
+  "$id": "tokenomics-overview-mcp/documents",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "author": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "kind": {
+        "enum": [
+          "docs",
+          "project",
+          "paper",
+          "insight"
+        ]
+      },
+      "license": {
+        "const": "CC-BY-4.0"
+      },
+      "modified": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "sections": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "title"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "status_date": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "status_source": {
+        "enum": [
+          "page",
+          "registry"
+        ]
+      },
+      "title": {
+        "type": "string"
+      },
+      "url": {
+        "format": "uri",
+        "type": "string"
+      },
+      "word_count": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "slug",
+      "title",
+      "url",
+      "kind",
+      "status",
+      "status_source",
+      "status_date",
+      "modified",
+      "author",
+      "license",
+      "sections",
+      "word_count"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

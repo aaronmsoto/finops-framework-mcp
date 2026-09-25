@@ -1,0 +1,111 @@
+{
+  "$id": "tokenomics-overview-mcp/layers",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "components": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "items"
+          ],
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "description_md": {
+        "type": "string"
+      },
+      "key_metric": {
+        "type": "string"
+      },
+      "moves_multiplier": {
+        "type": "boolean"
+      },
+      "multiplier_effect": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "number": {
+        "type": "integer"
+      },
+      "primary_levers": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "provenance": {
+        "additionalProperties": false,
+        "properties": {
+          "document": {
+            "type": "string"
+          },
+          "license": {
+            "const": "CC-BY-4.0"
+          },
+          "section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_url": {
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document",
+          "section",
+          "source_url",
+          "license"
+        ],
+        "type": "object"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "table_label": {
+        "type": "string"
+      },
+      "tooling_md": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "slug",
+      "number",
+      "name",
+      "table_label",
+      "multiplier_effect",
+      "moves_multiplier",
+      "key_metric",
+      "primary_levers",
+      "description_md",
+      "components",
+      "tooling_md",
+      "provenance"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

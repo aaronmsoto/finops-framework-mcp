@@ -1,0 +1,690 @@
+[
+  {
+    "document": "five-layer-stack-paper",
+    "evidence": "Allocation, budgeting, and anomaly detection",
+    "from": {
+      "slug": "five-layer-stack-paper",
+      "type": "document"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/",
+    "target": {
+      "id": "allocation",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/allocation"
+    }
+  },
+  {
+    "document": "five-layer-stack-paper",
+    "evidence": "Allocation, budgeting, and anomaly detection",
+    "from": {
+      "slug": "five-layer-stack-paper",
+      "type": "document"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/",
+    "target": {
+      "id": "budgeting",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/budgeting"
+    }
+  },
+  {
+    "document": "five-layer-stack-paper",
+    "evidence": "Allocation, budgeting, and anomaly detection",
+    "from": {
+      "slug": "five-layer-stack-paper",
+      "type": "document"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/",
+    "target": {
+      "id": "anomaly-management",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/anomaly-management"
+    }
+  },
+  {
+    "document": "big-t-notation-paper",
+    "evidence": "anomaly detection on consumption spikes, and dashboards that make unit economics visible",
+    "from": {
+      "slug": "big-t-notation-paper",
+      "type": "document"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/",
+    "target": {
+      "id": "anomaly-management",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/anomaly-management"
+    }
+  },
+  {
+    "document": "big-t-notation-paper",
+    "evidence": "anomaly detection on consumption spikes, and dashboards that make unit economics visible",
+    "from": {
+      "slug": "big-t-notation-paper",
+      "type": "document"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/",
+    "target": {
+      "id": "unit-economics",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/unit-economics"
+    }
+  },
+  {
+    "document": "big-t-notation",
+    "evidence": "then visibility, then optimization, then unit economics",
+    "from": {
+      "slug": "big-t-notation",
+      "type": "document"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/big-t-notation/",
+    "target": {
+      "id": "unit-economics",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/unit-economics"
+    }
+  },
+  {
+    "document": "personas-operating-model",
+    "evidence": "Anomaly detection shifts from spend spikes to complexity shifts",
+    "from": {
+      "slug": "finops-practitioner",
+      "type": "persona"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
+    "target": {
+      "id": "anomaly-management",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/anomaly-management"
+    }
+  },
+  {
+    "document": "personas-operating-model",
+    "evidence": "Cost attribution and budgets | FinOps Practitioner",
+    "from": {
+      "slug": "finops-practitioner",
+      "type": "persona"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
+    "target": {
+      "id": "allocation",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/allocation"
+    }
+  },
+  {
+    "document": "personas-operating-model",
+    "evidence": "Cost attribution and budgets | FinOps Practitioner",
+    "from": {
+      "slug": "finops-practitioner",
+      "type": "persona"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
+    "target": {
+      "id": "budgeting",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/budgeting"
+    }
+  },
+  {
+    "document": "personas-operating-model",
+    "evidence": "Forecasting and variance | FinOps Practitioner",
+    "from": {
+      "slug": "finops-practitioner",
+      "type": "persona"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
+    "target": {
+      "id": "forecasting",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/forecasting"
+    }
+  },
+  {
+    "document": "personas-operating-model",
+    "evidence": "forecasting for compounding demand",
+    "from": {
+      "slug": "finance",
+      "type": "persona"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
+    "target": {
+      "id": "forecasting",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/forecasting"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "cache hit rate for token-metered SKUs",
+    "from": {
+      "slug": "cache-hit-rate",
+      "type": "metric"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "TokenCacheAction",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "cache hit rate for token-metered SKUs",
+    "from": {
+      "slug": "cache-hit-rate",
+      "type": "metric"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "SkuPriceDetails",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/skupricedetails"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it adds Four FOCUS-defined properties on SkuPriceDetails: ModelDeveloper, ModelFamily, ModelId, and ModelVersion.",
+    "from": {
+      "slug": "fr-2018",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "ModelDeveloper",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it adds Four FOCUS-defined properties on SkuPriceDetails: ModelDeveloper, ModelFamily, ModelId, and ModelVersion.",
+    "from": {
+      "slug": "fr-2018",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "ModelFamily",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it adds Four FOCUS-defined properties on SkuPriceDetails: ModelDeveloper, ModelFamily, ModelId, and ModelVersion.",
+    "from": {
+      "slug": "fr-2018",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "ModelId",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it adds Four FOCUS-defined properties on SkuPriceDetails: ModelDeveloper, ModelFamily, ModelId, and ModelVersion.",
+    "from": {
+      "slug": "fr-2018",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "ModelVersion",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### A deliberate omission, since revisited The input versus output token split shipped structurally, as separate SKUs distinguished by SkuMeter, rather than through a dedicated property.",
+    "from": {
+      "slug": "fr-2018",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "SkuMeter",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/skumeter"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it adds Four FOCUS-defined properties on SkuPriceDetails: ModelDeveloper, ModelFamily, ModelId, and ModelVersion.",
+    "from": {
+      "slug": "fr-2018",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "SkuPriceDetails",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/skupricedetails"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "The cached-token work in review (bucket 2) adds a TokenDirection property, so the split can also be declared on the price itself.",
+    "from": {
+      "slug": "fr-2018",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "TokenDirection",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it adds A PrincipalId column on the Cost and Usage dataset, identifying the principal: the user, service account, or other entity in an identity and access management model that was granted access to the resource or service.",
+    "from": {
+      "slug": "fr-2358",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "PrincipalId",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it changes In July, the ServiceCategory descriptions that referred to \"cloud\" were rewritten so they apply equally to hybrid, SaaS, and on-premises environments (Action Item 2378).",
+    "from": {
+      "slug": "fr-2377",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "ServiceCategory",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/servicecategory"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it adds Two FOCUS-defined properties on SkuPriceDetails, each with allowed values and no new columns.",
+    "from": {
+      "slug": "fr-2099",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "SkuPriceDetails",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/skupricedetails"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "TokenCacheAction carries \"Uncached\", \"Read\", \"Write\", or \"Other\" on SKU prices that meter tokens consumed from a request.",
+    "from": {
+      "slug": "fr-2099",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "TokenCacheAction",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "TokenDirection carries \"Input\" or \"Output\" on token-metered SKU prices whose tokens share a direction, so a SKU that bills both on one meter omits it.",
+    "from": {
+      "slug": "fr-2099",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "TokenDirection",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "They replace the single TokenType property drafted earlier and are the first FOCUS-defined properties to carry allowed values.",
+    "from": {
+      "slug": "fr-2099",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "TokenType",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "Token direction is carried per SKU through SkuMeter, consistent with the model identity examples, and the rows populate PrincipalId.",
+    "from": {
+      "slug": "fr-1941",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "PrincipalId",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "Token direction is carried per SKU through SkuMeter, consistent with the model identity examples, and the rows populate PrincipalId.",
+    "from": {
+      "slug": "fr-1941",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "SkuMeter",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/skumeter"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "CredentialId identifies the credential presented on the request that produced the charge: an identifier that references a credential, never a value that authenticates one.",
+    "from": {
+      "slug": "fr-2358-requester-details-and-credential",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "CredentialId",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "RequesterDetails is a JSON array of key-value entries carrying descriptive attributes, Type, Name, and Email, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape.",
+    "from": {
+      "slug": "fr-2358-requester-details-and-credential",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "Email",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "RequesterDetails is a JSON array of key-value entries carrying descriptive attributes, Type, Name, and Email, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape.",
+    "from": {
+      "slug": "fr-2358-requester-details-and-credential",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "Name",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it adds Two more Cost and Usage columns beside the merged PrincipalId.",
+    "from": {
+      "slug": "fr-2358-requester-details-and-credential",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "PrincipalId",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "RequesterDetails is a JSON array of key-value entries carrying descriptive attributes, Type, Name, and Email, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape.",
+    "from": {
+      "slug": "fr-2358-requester-details-and-credential",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "RequesterDetails",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "RequesterDetails is a JSON array of key-value entries carrying descriptive attributes, Type, Name, and Email, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape.",
+    "from": {
+      "slug": "fr-2358-requester-details-and-credential",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "Type",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### What it does The review of how tokens, credits, and crypto are treated as virtual currency (Action Item 2550, closed 18 August) found the CurrencyFormat attribute contradicting itself: it lists virtual currency as an allowed currency type while requiring an ISO 4217 code for every value, and no provider-issued unit has one.",
+    "from": {
+      "slug": "pr-2617",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "CurrencyFormat",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "PR 2613 introduces it as ServingScope and holds two approvals; PR 2667, stacked on it, renames it to RegionScope, the name the working group's research recommended, adopted on 17 September.",
+    "from": {
+      "slug": "fr-2414",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "RegionScope",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "PR 2613 introduces it as ServingScope and holds two approvals; PR 2667, stacked on it, renames it to RegionScope, the name the working group's research recommended, adopted on 17 September.",
+    "from": {
+      "slug": "fr-2414",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "ServingScope",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "#### Where it stands A SkuPriceDetails property carrying the pricing region scope.",
+    "from": {
+      "slug": "fr-2414",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "SkuPriceDetails",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/skupricedetails"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "Partly answered by the cached-token work in review, whose footnote states that reasoning tokens carry TokenDirection \"Output\", so the count reconciles as output.",
+    "from": {
+      "slug": "fr-2487",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "TokenDirection",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "Adds input modality classification along with recommended SkuMeter values.",
+    "from": {
+      "slug": "fr-2489",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "SkuMeter",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/skumeter"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "- JsonObjectFormat support for arrays beyond what Requester Details needs: the attribute name, key uniqueness for array entries, and nesting rules become a 1.6 feature request.",
+    "from": {
+      "slug": "two-actor-column-follow-ons-deferred-by-decision",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "JsonObjectFormat",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "The structural carry through separate SKUs and SkuMeter, which is what shipped with model identity, stays valid alongside it.",
+    "from": {
+      "slug": "token-type-input-versus-output-as",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "SkuMeter",
+      "kind": "column",
+      "server": "focus",
+      "uri": "focus://spec/1.2/columns/skumeter"
+    }
+  },
+  {
+    "document": "focus-1-5-for-ai",
+    "evidence": "The split arrives as the TokenDirection property on SKU price details in the cached-token work in review, not as a column.",
+    "from": {
+      "slug": "token-type-input-versus-output-as",
+      "type": "focus-item"
+    },
+    "official": true,
+    "source_url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "target": {
+      "id": "TokenDirection",
+      "kind": "draft-identifier",
+      "server": "focus-working-draft",
+      "uri": null
+    }
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "lifetime_notes": "5 min or 1 hour, refreshed free on each read. Ages from request start. 20-block lookback finds prior writes. Isolated per workspace.",
+    "minimum_prefix": "Model-dependent: 512 to 4,096 tokens. Too short? No error, just silently no cache.",
+    "provenance": {
+      "document": "cache-explainer",
+      "license": "CC-BY-4.0",
+      "section": "tcprovidersnapshot",
+      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+    },
+    "provider": "Anthropic (Claude API)",
+    "read_charge": "0.1× base",
+    "reviewed": "Provider documentation reviewed Aug 2026",
+    "slug": "anthropic",
+    "write_charge": "1.25× base (5-minute TTL) or 2× (1-hour TTL). Caching is opt-in: explicit breakpoints, or a single automatic caching flag."
+  },
+  {
+    "lifetime_notes": "At least 30 minutes after the latest write or reuse. Automatic caching on by default; a cache-hit-rate dashboard exists. Overflow routing can evict entries. Isolated per organization and region.",
+    "minimum_prefix": "1,024 visible tokens (GPT-5.6 and later), 2,048 earlier. Hidden harness tokens do not count toward the minimum.",
+    "provenance": {
+      "document": "cache-explainer",
+      "license": "CC-BY-4.0",
+      "section": "tcprovidersnapshot",
+      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+    },
+    "provider": "OpenAI (OpenAI platform)",
+    "read_charge": "0.1× base on GPT-5.6 and later; model-dependent cached rates on earlier models (advertised up to 90% off).",
+    "reviewed": "Provider documentation reviewed Aug 2026",
+    "slug": "openai",
+    "write_charge": "**Changed with the GPT-5.6 series (July 2026): now 1.25× base.** Earlier models: no write charge. On the new models, explicit breakpoints, or an implicit mode you opt into."
+  },
+  {
+    "lifetime_notes": "Provider-managed, not exposed. The usage report shows a single cached-tokens field; there is no write bucket to measure.",
+    "minimum_prefix": "Model-dependent: 2,048 to 4,096 input tokens.",
+    "provenance": {
+      "document": "cache-explainer",
+      "license": "CC-BY-4.0",
+      "section": "tcprovidersnapshot",
+      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+    },
+    "provider": "Google (Gemini API)",
+    "read_charge": "Read discount passed through automatically; explicit cache objects exist on the older request style.",
+    "reviewed": "Provider documentation reviewed Aug 2026",
+    "slug": "google",
+    "write_charge": "No write charge. Implicit caching only on current models: enabled by default, nothing to configure."
+  }
+]

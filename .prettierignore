@@ -4,3 +4,5 @@ data/framework/
 data/focus/
 coverage/
 dist/
+src/crawlers/tokenomics/fixtures/
+data/tokenomics/

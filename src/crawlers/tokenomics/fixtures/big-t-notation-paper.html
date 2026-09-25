@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en-US" data-brand="tf" data-theme="dark">
+<head>
+    <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
+  	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	
+	<title>Big-T Notation Paper</title>
+<meta name='robots' content='max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+<meta name="description" content="Big-T groups AI workloads by how token use scales with usage, complexity, and autonomy, guiding model choice without benchmarking every input.">
+<meta property="og:title" content="Big-T Notation Paper">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/meta/TF-meta.png">
+<meta property="og:description" content="Big-T groups AI workloads by how token use scales with usage, complexity, and autonomy, guiding model choice without benchmarking every input.">
+<meta property="og:url" content="https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Tokenomics Foundation">
+<meta property="article:published_time" content="2026-07-28T21:43:36+00:00">
+<meta property="article:modified_time" content="2026-07-28T21:43:36+00:00">
+<meta property="og:updated_time" content="2026-07-28T21:43:36+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/meta/TF-meta.png">
+
+
+
+	
+	
+	<noscript></noscript>
+	
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="WordPress 7.1.2" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.tokeneconomics.com/#website","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Defining the best practices and primitives of AI economics","inLanguage":"en-US","potentialAction":{"@type":"SearchAction","target":"https://www.tokeneconomics.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://www.tokeneconomics.com/#organization","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Tokenomics Foundation defines the best practices and primitives of the token economy","knowsAbout":["Tokenomics","AI cost management","AI infrastructure","FinOps"],"sameAs":["https://www.linkedin.com/company/tokenomics-foundation/","https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA","https://substack.com/@tokenomicsfoundation","https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c"]},{"@type":"WebPage","@id":"https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/#webpage","url":"https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/","name":"Big-T Notation Paper","inLanguage":"en-US","isPartOf":{"@id":"https://www.tokeneconomics.com/#website"},"datePublished":"2026-07-28T21:43:36+00:00","dateModified":"2026-07-28T21:43:36+00:00"}]}</script>
+
+
+
+<meta name="msapplication-TileImage" content="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-270x270.png" />
+</head>
+<body class="wp-singular te_doc-template-default single single-te_doc postid-865 wp-theme-tokeneconomics bg-surface-dark overflow-x-hidden no-global-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPPHJ9DM"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<a class="screen-reader-text" href="#primary">Skip to content</a>
+	<header id="site-header" class="z-50 max-w-8xl mx-auto w-full">
+    <nav aria-label="Global" class="flex items-center justify-between px-6 py-8 lg:px-8">
+      <div class="flex lg:flex-1">
+        <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+          <span class="sr-only">Tokenomics Foundation</span>
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+        </a>
+      </div>
+      <div class="flex lg:hidden">
+        <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 cursor-pointer">
+          <span class="sr-only">Open main menu</span>
+          
+        </button>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12 lg:items-center">
+        <a href="https://www.tokeneconomics.com/insights/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="te-nav-link text-sm/6 font-semibold text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="te-nav-link text-sm/6 font-semibold text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="te-nav-link text-sm/6 font-semibold text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a><div class="te-dropdown-panel"><a href="https://www.tokeneconomics.com/membership/" class="te-dropdown-link">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="te-dropdown-link">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="te-dropdown-link">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="te-dropdown-link">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="te-dropdown-link">Tokenomics Press and Media</a></div></div>      </div>
+      <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+        <a href="#" class="text-sm/6 font-semibold text-brand-light">Log in <span aria-hidden="true">&rarr;</span></a>
+      </div> -->
+    </nav>
+    <el-dialog>
+      <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
+        <div tabindex="0" class="fixed inset-0 focus:outline-none">
+          <el-dialog-panel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-surface-dark p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
+            <div class="flex items-center justify-between">
+              <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+                <span class="sr-only">Tokenomics Foundation</span>
+                <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-8 w-auto" width="117" height="32" />
+              </a>
+              <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-200">
+                <span class="sr-only">Close menu</span>
+                
+              </button>
+            </div>
+            <div class="mt-6 flow-root">
+              <div class="-my-6 divide-y divide-white/10">
+                <div class="space-y-2 py-6">
+                  <a href="https://www.tokeneconomics.com/insights/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Members</a><div class="te-dropdown"><button type="button" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5 te-dropdown-trigger w-full flex items-center justify-between">About</button><div class="te-dropdown-panel te-dropdown-panel--mobile hidden pl-4 mt-1 space-y-1"><a href="https://www.tokeneconomics.com/about/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">About</a><a href="https://www.tokeneconomics.com/membership/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Tokenomics Press and Media</a></div></div>                </div>
+              </div>
+            </div>
+          </el-dialog-panel>
+        </div>
+      </dialog>
+    </el-dialog>
+  </header>
+
+	<div class="w-full bg-primary text-primary-fg">
+		<a class="flex max-w-8xl mx-auto items-center justify-center gap-3 px-6 py-2.5 text-base/7 font-medium lg:px-8 hover:opacity-80" href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals">
+						<span>AI Tokenomics Fundamentals Certification Now Available &rarr;</span>
+								</a>
+	</div>
+	
+<main id="primary" class="site-main">
+		<div class="te-docs-page mx-auto max-w-8xl px-6 lg:px-8 pb-12">
+
+		<!-- Mobile: collapsible docs nav + TOC -->
+		<div class="lg:hidden space-y-2 mb-8">
+			<details class="te-docs-mobile-details rounded-lg border border-white/10 bg-white/5">
+				<summary class="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-semibold text-gray-200">
+					Docs navigation					
+				</summary>
+				<div class="px-4 pb-4">
+					<ul class="te-docs-nav space-y-0">
+		<li>
+				<div class="te-docs-nav__group is-open">
+			<div class="flex items-center">
+								<a href="https://www.tokeneconomics.com/docs/overview/"
+					class="flex-1 block rounded-md px-3 py-1.5 text-sm font-semibold text-gray-200 hover:text-brand-light hover:bg-white/5"
+					>
+					What is Tokenomics				</a>
+								<button type="button"
+					class="te-docs-nav__toggle shrink-0 p-2 rounded-md text-gray-500 hover:text-gray-300 hover:bg-white/5"
+					aria-expanded="true"
+					aria-label="Toggle What is Tokenomics">
+					
+				</button>
+			</div>
+			<ul class="te-docs-nav__children mt-1 space-y-0.5 ml-2 pl-2">
+					<li>
+				<a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/"
+			class="block rounded-md px-3 py-1.5 text-sm font-medium text-gray-400 hover:text-brand-light hover:bg-white/5"
+			>
+			What is AI Tokenomics?		</a>
+			</li>
+				</ul>
+		</div>
+			</li>
+		<li>
+				<div class="te-docs-nav__group is-open">
+			<div class="flex items-center">
+								<a href="https://www.tokeneconomics.com/docs/projects/"
+					class="flex-1 block rounded-md px-3 py-1.5 text-sm font-semibold text-gray-200 hover:text-brand-light hover:bg-white/5"
+					>
+					Projects				</a>
+								<button type="button"
+					class="te-docs-nav__toggle shrink-0 p-2 rounded-md text-gray-500 hover:text-gray-300 hover:bg-white/5"
+					aria-expanded="true"
+					aria-label="Toggle Projects">
+					
+				</button>
+			</div>
+			<ul class="te-docs-nav__children mt-1 space-y-0.5 ml-2 pl-2">
+					<li>
+				<div class="te-docs-nav__group is-open">
+			<div class="flex items-center">
+								<span class="flex-1 block rounded-md px-3 py-1.5 text-sm font-medium text-gray-200 cursor-default">
+					Big-T				</span>
+								<button type="button"
+					class="te-docs-nav__toggle shrink-0 p-2 rounded-md text-gray-500 hover:text-gray-300 hover:bg-white/5"
+					aria-expanded="true"
+					aria-label="Toggle Big-T">
+					
+				</button>
+			</div>
+			<ul class="te-docs-nav__children mt-1 space-y-0.5 ml-2 pl-2">
+					<li>
+				<a href="https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/"
+			class="block rounded-md px-3 py-1.5 text-sm font-medium text-brand-primary"
+			aria-current="page">
+			Big-T Notation Paper		</a>
+			</li>
+				</ul>
+		</div>
+			</li>
+				</ul>
+		</div>
+			</li>
+	</ul>
+				</div>
+			</details>
+			<details class="te-docs-mobile-details te-docs-mobile-toc rounded-lg border border-white/10 bg-white/5">
+				<summary class="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-semibold text-gray-200">
+					On this page					
+				</summary>
+				<ul class="te-docs-toc__list te-docs-toc__list--mobile px-4 pb-4 space-y-2 text-sm"></ul>
+			</details>
+		</div>
+
+		<div class="te-docs-grid lg:grid lg:gap-8">
+
+			<!-- Sidebar nav (desktop) -->
+			<aside class="te-docs-aside hidden lg:block">
+				<nav class="te-docs-sidebar sticky top-8 flex flex-col" aria-label="Docs navigation">
+					<div class="te-docs-sidebar__content te-docs-sidebar__scroll">
+						<ul class="te-docs-nav space-y-0">
+		<li>
+				<div class="te-docs-nav__group is-open">
+			<div class="flex items-center">
+								<a href="https://www.tokeneconomics.com/docs/overview/"
+					class="flex-1 block rounded-md px-3 py-1.5 text-sm font-semibold text-gray-200 hover:text-brand-light hover:bg-white/5"
+					>
+					What is Tokenomics				</a>
+								<button type="button"
+					class="te-docs-nav__toggle shrink-0 p-2 rounded-md text-gray-500 hover:text-gray-300 hover:bg-white/5"
+					aria-expanded="true"
+					aria-label="Toggle What is Tokenomics">
+					
+				</button>
+			</div>
+			<ul class="te-docs-nav__children mt-1 space-y-0.5 ml-2 pl-2">
+					<li>
+				<a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/"
+			class="block rounded-md px-3 py-1.5 text-sm font-medium text-gray-400 hover:text-brand-light hover:bg-white/5"
+			>
+			What is AI Tokenomics?		</a>
+			</li>
+				</ul>
+		</div>
+			</li>
+		<li>
+				<div class="te-docs-nav__group is-open">
+			<div class="flex items-center">
+								<a href="https://www.tokeneconomics.com/docs/projects/"
+					class="flex-1 block rounded-md px-3 py-1.5 text-sm font-semibold text-gray-200 hover:text-brand-light hover:bg-white/5"
+					>
+					Projects				</a>
+								<button type="button"
+					class="te-docs-nav__toggle shrink-0 p-2 rounded-md text-gray-500 hover:text-gray-300 hover:bg-white/5"
+					aria-expanded="true"
+					aria-label="Toggle Projects">
+					
+				</button>
+			</div>
+			<ul class="te-docs-nav__children mt-1 space-y-0.5 ml-2 pl-2">
+					<li>
+				<div class="te-docs-nav__group is-open">
+			<div class="flex items-center">
+								<span class="flex-1 block rounded-md px-3 py-1.5 text-sm font-medium text-gray-200 cursor-default">
+					Big-T				</span>
+								<button type="button"
+					class="te-docs-nav__toggle shrink-0 p-2 rounded-md text-gray-500 hover:text-gray-300 hover:bg-white/5"
+					aria-expanded="true"
+					aria-label="Toggle Big-T">
+					
+				</button>
+			</div>
+			<ul class="te-docs-nav__children mt-1 space-y-0.5 ml-2 pl-2">
+					<li>
+				<a href="https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/"
+			class="block rounded-md px-3 py-1.5 text-sm font-medium text-brand-primary"
+			aria-current="page">
+			Big-T Notation Paper		</a>
+			</li>
+				</ul>
+		</div>
+			</li>
+				</ul>
+		</div>
+			</li>
+	</ul>
+					</div>
+					<button type="button" class="te-docs-sidebar__toggle mt-4 text-gray-500 hover:text-gray-300 transition-colors cursor-pointer" aria-label="Toggle sidebar">
+						
+						
+					</button>
+				</nav>
+			</aside>
+
+			<!-- Content -->
+			<article class="min-w-0">
+								<div class="mb-3 flex flex-wrap gap-2">
+										<span class="inline-flex items-center rounded-full  px-3 py-0.5 text-xs font-medium text-white bg-brand-primary">Working Draft June 2026</span>
+									</div>
+								<div class="flex items-center justify-between gap-4 mb-2">
+					<h1 class="text-4xl font-semibold tracking-tight text-brand-light">Big-T Notation Paper</h1>
+					<div class="te-docs-share relative shrink-0">
+						<button type="button" class="te-docs-share__trigger inline-flex items-center rounded-lg border border-white/10 bg-white/5 p-1.5 text-gray-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
+							
+						</button>
+						<div class="te-docs-share__menu hidden absolute right-0 mt-2 w-72 rounded-lg border border-white/10 bg-gray-900 shadow-xl z-50">
+							<div class="px-4 py-3">
+								<p class="text-xs font-medium uppercase tracking-wide text-gray-500 mb-2">Reading mode</p>
+								<div class="te-docs-reading-mode inline-flex rounded-lg border border-white/10 bg-white/5" role="radiogroup" aria-label="Reading mode">
+									<button type="button" data-mode="light" class="te-docs-reading-mode__btn p-2 rounded-l-lg transition-colors cursor-pointer text-gray-500 hover:text-gray-300" aria-label="Light mode">
+										
+									</button>
+									<button type="button" data-mode="dark" class="te-docs-reading-mode__btn te-docs-reading-mode__btn--active p-2 rounded-r-lg transition-colors cursor-pointer text-gray-500 hover:text-gray-300" aria-label="Dark mode">
+										
+									</button>
+								</div>
+							</div>
+							<ul class="border-t border-white/10 py-1 text-sm">
+								<li>
+									<button type="button" data-share="copy" class="flex w-full items-center gap-2.5 px-4 py-2 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+										
+										Copy page									</button>
+								</li>
+								<li>
+									<button type="button" data-share="chatgpt" class="flex w-full items-center gap-2.5 px-4 py-2 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+										
+										Summarize on ChatGPT									</button>
+								</li>
+								<li>
+									<button type="button" data-share="claude" class="flex w-full items-center gap-2.5 px-4 py-2 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+										
+										Summarize on Claude									</button>
+								</li>
+								<li class="border-t border-white/10 my-1"></li>
+								<li>
+									<button type="button" data-share="linkedin" class="flex w-full items-center gap-2.5 px-4 py-2 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+										
+										Share on LinkedIn									</button>
+								</li>
+								<li>
+									<button type="button" data-share="facebook" class="flex w-full items-center gap-2.5 px-4 py-2 text-gray-300 hover:bg-white/10 hover:text-white cursor-pointer">
+										
+										Share on Facebook									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="te-docs-content te-section__prose prose prose-invert mt-8 max-w-none" data-reading-mode="dark">
+					<h2><b>A Framework for Token Efficiency</b></h2>
+<p><em><span style="font-weight: 400;">Dan Neff (Adobe) Published by the Tokenomics Foundation</span></em></p>
+<p><span style="font-weight: 400;">Big-T lays out a methodology for classifying workloads based on how their token consumption grows as usage scales, complexity increases, or autonomy expands as a precursor to activities like choosing a model. It groups a workload into a category of </span><span style="font-weight: 400;">behavior that lets engineers make decisions without benchmarking every input.</span></p>
+<p><span style="font-weight: 400;">This playbook has three audiences. Engineers and architects will find the deepest implementation guidance in Section 3 onward. Finance and platform leaders will find governance and cost attribution addressed most directly in Section 7. And if you&#8217;re new to AI token consumption, you&#8217;re the reason this exists: the FinOps parallels in each section will translate these concepts into familiar territory.</span></p>
+<p><span style="font-weight: 400;">The framework builds section by section, so each audience will get the most from a full read.</span></p>
+<table>
+<tbody>
+<tr>
+<td>
+<h2><b>Abstract</b></h2>
+<blockquote><p><span style="font-weight: 400;">Every generation of computing has a unit of scarcity that engineers learn to measure and optimize. </span><a href="https://en.wikipedia.org/wiki/Big_O_notation"><span style="font-weight: 400;">Big-O notation</span></a><span style="font-weight: 400;"> gave us the method for it, a shared language for how an algorithm&#8217;s time and space requirements grow with input size. The same discipline later carried to the constraints that followed: API calls, egress bytes, the cloud line items that decided whether a company&#8217;s economics worked. For large language models, that unit of scarcity is the token.</span></p>
+<p><span style="font-weight: 400;">Complexity thinking has been applied to AI before, but almost always to training: the cost of learning a model. How many tokens the deployed model consumes each time it answers a request for a workload is a different question, and it has had no vocabulary of its own. Big-T Notation gives it one. It applies Big-O&#8217;s way of reasoning to how token consumption grows as usage grows, so teams can reason about token cost before the invoice arrives.</span></p>
+<p><span style="font-weight: 400;">Token efficiency sounds like premature optimization. It is not. It is an architectural discipline that organizations need to build alongside AI literacy, because the forces driving token demand are compounding faster than the forces reducing token price. Organizations that scale AI adoption without token-aware architecture will discover they have built the equivalent of an O(n!) algorithm and called it a strategy.</span></p></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<h2><b>1. The scarcity that shapes systems</b></h2>
+<p><span style="font-weight: 400;">Software engineering has always been shaped by whatever resource was scarce. The mainframe era: memory. The client-server era: network bandwidth. The cloud era: API calls, compute-hours, storage tiers. In each transition, engineers who understood the new constraint built systems that scaled, and engineers who ignored it built systems that bankrupted their sponsors.</span></p>
+<p><span style="font-weight: 400;">Tokens are the constraint in AI-native computing. Every model interaction is metered in tokens: prompts, completions, reasoning steps, tool calls. Tokens determine cost. They determine latency. They determine what fits in a context window and what gets truncated, and whether a workload can run on a small efficient model or requires a frontier model at many times the cost.</span></p>
+<p><span style="font-weight: 400;">Most organizations treat tokens the way early web developers treated database queries: as an implementation detail someone else will worry about later. The problem is not that tokens are expensive. The problem is that token consumption compounds in ways that are structurally hard to predict and politically hard to govern.</span></p>
+<h2><b>2. Big-T Notation: the framework</b></h2>
+<h3><b>2.1 The parallel to Big-O</b></h3>
+<p><span style="font-weight: 400;">Big-T measures the cost of using a model, not training one. Big-O does not tell you the exact runtime of an algorithm. It tells you how runtime grows as input scales. An O(n log n) sort is not a prediction; it is a category of behavior that lets engineers make decisions without benchmarking every input.</span></p>
+<p><span style="font-weight: 400;">Big-T applies the same principle to tokens. It does not predict exact token counts. It categorizes workloads by how their token consumption grows as usage scales, complexity increases, or autonomy expands.</span><span style="font-weight: 400;"><br />
+</span><span style="font-weight: 400;"><img fetchpriority="high" decoding="async" class="alignnone wp-image-874" src="https://www.tokeneconomics.com/wp-content/uploads/2026/07/big-t-notation-300x200.png" alt="Big-T Notation" width="815" height="543" srcset="https://www.tokeneconomics.com/wp-content/uploads/2026/07/big-t-notation-300x200.png 300w, https://www.tokeneconomics.com/wp-content/uploads/2026/07/big-t-notation-1024x683.png 1024w, https://www.tokeneconomics.com/wp-content/uploads/2026/07/big-t-notation-768x512.png 768w, https://www.tokeneconomics.com/wp-content/uploads/2026/07/big-t-notation.png 1536w" sizes="(max-width: 815px) 100vw, 815px" /><br />
+</span><b><i>A note on n.</i></b><i><span style="font-weight: 400;"> n covers two things that often move together: count (how many requests hit the workload) and size (how large each request&#8217;s input is). Either or both can be the dimension that scales, in any class. What the class tells you is how model token consumption responds as that dimension grows. The variable is deliberately loose; Big-T is a thinking tool, not a formula, and the point is to name what is scaling before asking how fast.</span></i></p>
+<h3><b>2.2 The Big-T complexity ladder</b></h3>
+<p><span style="font-weight: 400;">The ladder orders workloads the way Big-O orders algorithms, by growth rate: how token consumption grows as usage scales, from slowest-growing at the top to fastest at the bottom. Descending the ladder, the growth compounds. Each step down adds a multiplier, k over n, then a again, until T(∞) removes the ceiling entirely. That compounding is what makes the lower rungs expensive; a class that multiplies turns a modest per-request cost into a bill that climbs far faster than usage does. The risk is sharpened by concealment. As in Big-O, a higher class is not wrong; it is a category of behavior to weigh against the value it returns. But unlike Big-O, where the code makes the complexity visible, a workload&#8217;s class is often hidden, because the multipliers that set it (reasoning tokens, agent depth, retry loops) rarely appear in the request itself. Spend can scale to a far higher class than the request suggests.</span></p>
+<p><img decoding="async" class="alignnone wp-image-869" src="https://www.tokeneconomics.com/wp-content/uploads/2026/07/BigTLadder-200x300.png" alt="Big-T Complexity Ladder" width="841" height="1263" srcset="https://www.tokeneconomics.com/wp-content/uploads/2026/07/BigTLadder-200x300.png 200w, https://www.tokeneconomics.com/wp-content/uploads/2026/07/BigTLadder-768x1152.png 768w, https://www.tokeneconomics.com/wp-content/uploads/2026/07/BigTLadder.png 1024w" sizes="(max-width: 841px) 100vw, 841px" /></p>
+<p><span style="font-weight: 400;">A few notes on each:</span></p>
+<p><b>T(1): Constant.</b><span style="font-weight: 400;"> Token cost does not grow with usage, because the model is not invoked per request. These are the O(1) of AI.</span></p>
+<p><b>T(log n): Sublinear.</b><span style="font-weight: 400;"> The class most organizations miss entirely. The tokens that deterministic filtering removes are never processed at all, so as the data corpus grows, tokens reaching the model grow slowly or stay nearly constant. This is RAG delivered correctly: not a way to add knowledge to a model, but a way to keep token consumption from scaling with data volume. The published numbers are concrete: SQL views shrinking clinical data from roughly 240,000 tokens to 19,000 (a 92 percent reduction) before the model is called; retrieval pipelines reducing a million-token corpus to a few hundred tokens of relevant context (better than 99.9 percent elimination), with the relevant context staying near 250 to 350 tokens whether the source is two thousand tokens or two million.</span></p>
+<p><b>T(n): Linear.</b><span style="font-weight: 400;"> Token cost scales linearly with requests or input size, the O(n) of AI, and this is what most organizations implicitly assume when budgeting. Many linear workloads still carry a fixed overhead on every call: when an agent loads its full tool catalog into context (schema, descriptions, parameters for every tool), those tokens are spent before any work begins. The workload stays linear, but that overhead is a fixed tax paid on every call whether it uses one tool or none, and when it is large relative to the useful work it can dominate the bill.</span></p>
+<p><b>T(n·k): Multiplicative.</b><span style="font-weight: 400;"> The critical insight is that k is often invisible. Extended thinking can consume well over a hundred thousand tokens per request while producing a few hundred tokens of visible response. Tool composability is a hidden driver: when tools cannot pipe results directly into one another, the agent replays the full accumulated context on every intermediate turn, and a five-step chain can cost ten to twenty times the tokens of the same five steps in a single composed pipeline. The tools did the same work. Token cost was set by interface architecture, not the task.</span></p>
+<p><b>T(n·k·a): Agent-multiplicative.</b><span style="font-weight: 400;"> A developer running several agent windows, each with sub-agents executing a task list, is consuming n times k times a tokens, where a is agent tree depth. Delegation does not change the class: a sub-agent per item is the same class as a loop over the items inside one agent. What good sub-agent design changes is the constants. Each invocation starts a fresh context scoped to one sub-problem (a smaller effective n per call) and the orchestration boundary is a natural place to route to a cheaper model. That is optimization within the class, not escape from it. The danger is not delegation; it is unbounded depth and unscoped context running unmonitored. </span></p>
+<p><b>T(∞): Unbounded.</b><span style="font-weight: 400;"> These are not hypothetical. They exist today in production systems that lack circuit breakers.</span></p>
+<h3><b>2.3 What Big-T is not</b></h3>
+<p><span style="font-weight: 400;">Big-T is not a formal mathematical system. There are no proofs and no master theorem. It is a thinking tool: a shared vocabulary that lets engineers, architects, and finance teams reason about token-cost trajectories before committing to an architecture. The value is not precision. The value is the discipline of asking, &#8220;what is the token complexity class of this workload?&#8221; before deploying it.</span></p>
+<p><span style="font-weight: 400;">Big-T also does not measure constants, and this is inherited from Big-O deliberately. Halving token volume through better serialization, halving price per token through model choice or quantization, or holding quality while spending less are all coefficient improvements: economically material, invisible to the class, and covered by the levers in Section 4. Unlike Big-O, Big-T&#8217;s constants can span orders of magnitude, with 5 to 20x price spreads across model tiers within a single generation. However, the class still governs, because constants are bounded and reversible while growth is neither. The framework is two questions asked in order. First, what class is this workload? That is an architecture decision, and only architecture changes it. Second, how cheaply does it run within its class? That is where compression, routing, caching, and serialization live. Classes are compared at a stated quality floor; quality is the precondition of the comparison, not a term in it. </span></p>
+<h3><b>2.4 Worked example: complexity reduction through interface design</b></h3>
+<p><span style="font-weight: 400;">The practical value shows up in a real decision teams make today: how to expose tool capabilities to an agent.</span></p>
+<p><span style="font-weight: 400;">The naive architecture. An agent has access to thirty tools via individual definitions, each loaded into context with schema, description, and parameters. The agent needs to chain five tools. Because the tools are not composable, each intermediate result returns to the agent, gets interpreted, and re-dispatches as a new call. Every round trip replays full context: all thirty tool definitions plus growing history. The token profile is a large constant overhead multiplied across five turns, and the number of turns is driven by interface limitations, not task complexity.</span></p>
+<p><span style="font-weight: 400;">The refactored architecture. The same thirty tools collapse behind a single interface: one tool that accepts a structured command sequence and runs the pipeline internally. The agent composes the full five-step operation in one call. One tool definition instead of thirty, one turn instead of five, no intermediate context replay. The task is identical. The output is identical. Token consumption drops by an order of magnitude, moving the workload from T(n·k) to T(n). Not through a better model, a shorter prompt, or a cheaper provider, but through interface design.</span></p>
+<h3><b>2.5 Worked example: code generation as native compression</b></h3>
+<p><span style="font-weight: 400;">A second pattern comes from recognizing what models are actually good at producing.</span></p>
+<p><span style="font-weight: 400;">The standard way for an agent to perform a batch operation, say creating thirty-one calendar events, is thirty-one individual tool calls, each a round trip that replays accumulated context. Code-generation takes a different path: the agent writes one short program (a loop that iterates over the dates and makes the calls), which executes in a sandboxed runtime. One generation step replaces thirty-one agent turns. Published results from this pattern show roughly a third fewer tokens on simple single-operation tasks and around 80 percent fewer on the batch case, with the same output and the same backend calls.</span></p>
+<p><span style="font-weight: 400;">The reason is that code is the model&#8217;s native language. Models are trained on vast amounts of it. When the output format is code (loops, conditionals, variables, function calls), the model operates in a representation that is both more compressed and more precise than the equivalent natural-language tool invocations. In Big-T terms, tool-calling for a batch of operations is multiplicative, each operation needing a full turn with context replay; code-generation is linear, one step producing a program whose execution cost is borne by compute runtime rather than inference. The operations still happen, but outside the token economy.</span></p>
+<h2><b>3. The compounding-demand thesis</b></h2>
+<p><span style="font-weight: 400;">Token efficiency is urgent because four demand waves are stacking at once. Any one of them would increase enterprise token consumption. Together, they compound.</span></p>
+<p><b>Wave 1: Frontier models are more capable and more expensive per task.</b><span style="font-weight: 400;"> The most capable models produce the highest-quality output and consume the most tokens doing it. Extended thinking, chain-of-thought reasoning, and multi-step tool use are token multipliers, not free features. The capability frontier and the cost frontier move in the same direction. This does not make frontier models wasteful; it makes model choice an architectural decision rather than a default. A linear workload run on a frontier reasoning model quietly becomes multiplicative, the extra tokens consumed inside the reasoning loop, invisible to the user and visible only on the invoice.</span></p>
+<p><b>Wave 2: Larger context windows invite larger prompts.</b><span style="font-weight: 400;"> Windows have expanded by orders of magnitude in a few years. Larger windows are genuinely useful, but they also enable laziness. When the window is small, engineers are forced to be selective. When it is large, the path of least resistance is to dump everything in and let the model sort it out.</span></p>
+<p><b>Wave 3: Agentic architectures multiply calls per task.</b><span style="font-weight: 400;"> Single-turn question-and-answer is linear. Agentic workflows with planning, tool use, and iterative refinement are multiplicative or worse. The frontier of capability is moving toward agent architectures, and the frontier of token consumption is moving with it.</span></p>
+<p><b>Wave 4: Adoption is compounding.</b><span style="font-weight: 400;"> Each additional user, use case, and agent adds to the token baseline. The small fraction of heavy users consuming the majority of tokens today becomes a larger fraction as literacy spreads and tooling improves.</span></p>
+<h2><b>4. Five levers for token efficiency</b></h2>
+<p><img decoding="async" class="alignnone wp-image-872" src="https://www.tokeneconomics.com/wp-content/uploads/2026/07/levers_token_efficiency-300x200.png" alt="Big-T Levers of Token Efficiency" width="873" height="582" srcset="https://www.tokeneconomics.com/wp-content/uploads/2026/07/levers_token_efficiency-300x200.png 300w, https://www.tokeneconomics.com/wp-content/uploads/2026/07/levers_token_efficiency-1024x683.png 1024w, https://www.tokeneconomics.com/wp-content/uploads/2026/07/levers_token_efficiency-768x512.png 768w, https://www.tokeneconomics.com/wp-content/uploads/2026/07/levers_token_efficiency.png 1536w" sizes="(max-width: 873px) 100vw, 873px" /></p>
+<p><b>Lever 1: Model routing.</b><span style="font-weight: 400;"> Not every task needs a frontier model. Learned routers have demonstrated large cost reductions while holding output quality, and routing is now productized in several platforms. Picture a quality floor (minimum acceptable output quality) and a cost ceiling (maximum acceptable spend); routing finds the cheapest model that clears the floor. Same pattern as database read replicas: send traffic to the cheapest resource that can serve it correctly. The routing layer is also a natural injection point for observability. Because every model call passes through the router, deploying cost attribution and request tagging here achieves double-duty: optimization and visibility.</span></p>
+<p><b>Lever 2: Prompt engineering and serialization.</b><span style="font-weight: 400;"> Structured prompting produces substantial gains: extracting only the conceptually relevant sections of a document, compressing summaries to higher information density, encoding repeated patterns more compactly. Serialization is overlooked and often the single largest driver for data-heavy workloads: compact tabular formats can consume roughly half the tokens of verbose ones with no quality loss, and poor serialization routinely wastes a large share of available tokens on formatting overhead alone. On output, the asymmetry in pricing makes compression more valuable still: output tokens cost several times more than input tokens across major providers, so deterministic schema elements should be handled by the decoder rather than generated.</span></p>
+<p><b>Lever 3: Caching as a design principle.</b><span style="font-weight: 400;"> Caching is the most underused lever. Prompt caching (reusing a cached prompt prefix across calls) can sharply cut input cost for workloads with stable system prompts. Semantic caching (matching similar queries to already-computed responses) can eliminate model calls entirely for high-frequency, low-variance requests. If you have run a CDN or a query cache, you already know the shape of this: any linear workload should be evaluated for whether caching reduces it to constant for the common case, with linear as the fallback on a miss.</span></p>
+<p><b>Lever 4: Abstraction transparency.</b><span style="font-weight: 400;"> Credit-based pricing, seat licenses, and bundled &#8220;unlimited AI&#8221; plans obscure the relationship between usage and cost. Abstraction serves a purpose, but it blocks optimization, because you cannot improve what you cannot measure. The principle is provider-neutral: any abstraction that prevents you from seeing token-level economics also prevents you from optimizing them. Token-aware organizations treat AI billing the way mature organizations treat cloud billing: per-call metering, cost attribution to teams and projects, anomaly detection on consumption spikes, and dashboards that make unit economics visible. If your tooling does not expose token-level telemetry, you are paying for the privilege of not knowing what you are paying for.</span></p>
+<p><b>Lever 5: Workload classification and governance.</b><span style="font-weight: 400;"> Not all token consumption is equal. A developer shipping a high-priority feature with an agent consumes tokens against a strategic objective; a summarization bot running on every routine standup consumes tokens against a convenience objective. Both show up as &#8220;AI usage,&#8221; but only one has a defensible return. Governance is not about restricting usage. It is about making sure the highest-consumption workloads align with the highest-value outcomes. The small group of users consuming a large share of tokens are probably the organization&#8217;s most strategically productive AI users. The problem is not knowing whether that is true, and having no mechanism to find out.</span></p>
+<h3><b>The constraint efficiency cannot solve</b></h3>
+<p><span style="font-weight: 400;">The five levers operate inside the token economy. They reduce volume, lower unit cost, and improve visibility, and they are necessary for scaling agentic AI. They are not sufficient. As an organization moves from a small group of power users to broad daily agentic adoption, pressure cascades into every system those agents touch. A human using a system of record makes a handful of API calls per session; an agent orchestrating across sub-agents can hit the same API hundreds of times in a single task. Those systems were built for human-speed access patterns, with rate limits and pagination that assume a user who clicks, reads, thinks, and clicks again. Agentic access looks like a batch job running at API speed, but without batch-job predictability. An organization that achieves excellent token efficiency but runs agents against a system of record with tight rate limits has not solved the scaling problem. It has moved the bottleneck. That is a different problem with a different solution space (gateway design, rate-limit negotiation, read replicas, dedicated agent service accounts), and it sits outside the token-optimization boundary.</span></p>
+<h2><b>5. Efficiency and literacy</b></h2>
+<p><span style="font-weight: 400;">There is a real tension between accelerating AI literacy and managing token cost. Literacy programs encourage experimentation, experimentation consumes tokens, and restricting tokens suppresses the learning that produces an organization&#8217;s most capable AI users. The resolution is not choosing one over the other. It is sequencing them correctly.</span></p>
+<p><span style="font-weight: 400;">Literacy is the prerequisite. Without it, efficiency is meaningless, because there is nothing to optimize. Leadership priority should stay on literacy. But literacy without efficiency is a road to uncontrolled spend: as users progress from casual use to integrated daily workflows to agent-directed architectures, per-user consumption can rise a hundredfold or more. An organization that scales literacy without parallel investment in token-aware architecture will meet a cost curve that bends sharply upward exactly when adoption reaches its inflection point.</span></p>
+<p><span style="font-weight: 400;">The framing that works: efficiency is not the opposite of adoption. Efficiency is what makes adoption sustainable. The effective organization will not use fewer tokens. It will use them better.</span></p>
+<h2><b>6. Reference architecture: the token-efficiency pipeline</b></h2>
+<p><span style="font-weight: 400;">The five levers compose into a pipeline where each layer reduces the workload for the next, and the effective Big-T complexity drops as a request moves down the stack. The pipeline reads top to bottom; each layer peels off a class of waste before the next layer sees the workload.</span></p>
+<ol>
+<li style="font-weight: 400;" aria-level="1"><b>Deterministic preprocessing.</b><span style="font-weight: 400;"> SQL filters, embedding retrieval, regex, structured transforms. Eliminates the majority of tokens before any model is invoked. Reduces toward T(log n).</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Cache check.</b><span style="font-weight: 400;"> Semantic cache and prompt-prefix cache. A hit returns immediately at T(1), bypassing every downstream layer; a miss continues.</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Model router.</b><span style="font-weight: 400;"> Classify task complexity and route to the appropriate model tier. Reduces cost per token, not volume.</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Prompt architecture.</b><span style="font-weight: 400;"> Serialization optimization, system-prompt deduplication, output-format constraints. Reduces input and output token volume.</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Inference.</b><span style="font-weight: 400;"> The tokens that reach the model are the minimum necessary.</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Output-mode selection.</b><span style="font-weight: 400;"> Direct response for simple tasks; code-generation into a sandboxed runtime for batch or repetitive operations, which offloads the multiplicative factor from inference to execution.</span></li>
+</ol>
+<p><span style="font-weight: 400;">An instrumentation-and-governance plane (telemetry, cost attribution, circuit breakers, budget thresholds) wraps all six layers. Without it, no layer is measurable and no optimization is verifiable. The systems-of-record layer sits below and outside the optimization boundary, a reminder that the pipeline addresses token efficiency but not the downstream access-pattern problem.</span></p>
+<h2><b>7. Assessment checklist</b></h2>
+<p><span style="font-weight: 400;">Big-T becomes operational through a seven-area self-assessment, published as a companion worksheet, the Big-T Assessment Checklist. Each area maps to a lever or class discussed above:</span></p>
+<ul>
+<li style="font-weight: 400;" aria-level="1"><b>Visibility.</b><span style="font-weight: 400;"> Do you know your token consumption by model, workload, and cost, and the complexity class of your highest-spend workloads?</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Model routing.</b><span style="font-weight: 400;"> Do you route each task to the cheapest model that serves it, or run everything on one model?</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Prompt hygiene.</b><span style="font-weight: 400;"> Is every token you send doing useful work, or are prompts, examples, raw context, and tool definitions riding along unearned?</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Caching strategy.</b><span style="font-weight: 400;"> Have you found the high-repetition, stable-input workloads and cached them toward constant cost?</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Cost attribution.</b><span style="font-weight: 400;"> Can you tie token cost to the teams, customers, or projects driving it, and see whether your biggest consumers are your biggest contributors?</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Abstraction audit.</b><span style="font-weight: 400;"> Do credit- or seat-based contracts hide per-workload cost, and can you compare the unit economics of alternatives?</span></li>
+<li style="font-weight: 400;" aria-level="1"><b>Governance model.</b><span style="font-weight: 400;"> Do you have circuit breakers, budget thresholds, and a way to tell high-value consumption from low-value?</span></li>
+</ul>
+<p><span style="font-weight: 400;">The worksheet carries the full questions, a scoring method, and guidance on reading results over successive rounds rather than as a one-time total. Instrumentation comes before optimization, so the assessment starts with visibility.</span></p>
+<h2><b>8. Conclusion</b></h2>
+<p><span style="font-weight: 400;">The industry is in the early stages of what looks like a Jevons paradox. Per-token costs are falling and total consumption is exploding. The directional pressure is clear: organizations that treat tokens as an undifferentiated commodity will end up where companies landed when they moved to the cloud without cost governance, surprised by the bill and unable to trace it to value.</span></p>
+<p><span style="font-weight: 400;">Big-T Notation is not a solution. It is a starting point: shared language for reasoning about token complexity before it becomes a financial crisis. The framework is deliberately informal, because the field moves too fast for rigid formalism. What it provides is the discipline of asking the right question at the right time. What is the token complexity class of this workload, and is that complexity justified by the value it produces?</span></p>
+<p><span style="font-weight: 400;">Efficiency is not the enemy of ambition. It is what makes ambition sustainable.</span></p>
+<p><i><span style="font-weight: 400;">Big-T Notation by Dan Neff (Adobe). Published by the Tokenomics Foundation as an open, vendor-neutral framework. Supporting evidence draws on published results from Flexpa, MIT CSAIL, and others, and on public research in model routing, retrieval, caching, and serialization.</span></i></p>
+				</div>
+			</article>
+
+			<!-- On this page (desktop) -->
+			<aside class="hidden lg:block">
+				<nav class="te-docs-toc sticky top-8" aria-label="On this page">
+					<h2 class="text-xs font-semibold uppercase tracking-wide text-gray-200">
+						On this page					</h2>
+					<ul class="te-docs-toc__list mt-3 space-y-2 text-sm"></ul>
+				</nav>
+			</aside>
+
+		</div>
+	</div>
+	</main>
+
+<footer class="px-6 lg:px-8 py-8 mt-12">
+  <div class="p-1.5 rounded-3xl bg-linear-to-r from-brand-primary  to-brand-tertiary">
+    <div class="relative isolate mx-auto max-w-full overflow-hidden rounded-2xl bg-surface-darker  px-6 py-12 ring-1 ring-gray-800 lg:px-16">
+      <div class="xl:flex flex-col items-center justify-between gap-10 sm:flex-row sm:items-start mx-auto max-w-8xl">
+        <div class="flex w-full flex-col items-center gap-8 sm:w-auto sm:min-w-xl sm:items-start">
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+          
+<div class="te-footer-newsletter w-full max-w-md"
+	data-te-newsletter-form
+	data-te-portal-id="5432286"
+	data-te-form-id="6815e400-fd7c-4efb-a9c1-e9d6a6cee7d3">
+	<h2 class="text-left text-sm/6 font-normal text-brand-light">Subscribe to our newsletter</h2>
+
+	<form data-step="1" class="mt-2 flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-x-4" novalidate>
+		<div class="min-w-0 flex-auto">
+			<input type="email" name="email" required
+				aria-label="Email address"
+				placeholder="Add your email address*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+	</form>
+
+	<form data-step="2" hidden class="te-newsletter-step2 mt-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-x-3 sm:flex-wrap" novalidate>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="firstname" required
+				aria-label="First name"
+				placeholder="First name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="lastname" required
+				aria-label="Last name"
+				placeholder="Last name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+		<p data-te-newsletter-msg hidden class="text-sm text-red-400 sm:basis-full"></p>
+	</form>
+</div>
+        </div>
+        <div>
+        <nav aria-label="Footer" class="flex flex-col lg:flex-row justify-start xl:justify-end gap-x-12 gap-y-3 text-sm/6">
+          <a href="https://www.tokeneconomics.com/insights/" class="text-sm/6 font-normal text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="text-sm/6 font-normal text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="text-sm/6 font-normal text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="text-sm/6 font-normal text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="text-sm/6 font-normal text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="text-sm/6 font-normal text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="text-sm/6 font-normal text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a></div>    
+            </nav>
+                            <div class="mt-10 flex xl:justify-end gap-6 max-w-8xl mx-auto">
+                                                    <a href="https://www.linkedin.com/company/tokenomics-foundation/" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Linkedin">
+                                      </a>
+                                                                      <a href="https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Youtube">
+                                      </a>
+                                                                      <a href="https://substack.com/@tokenomicsfoundation" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Substack">
+                                      </a>
+                                                                      <a href="https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Spotify">
+                                      </a>
+                                                </div>
+                      </div>      
+        </div>
+      
+      <div class="mt-16 space-y-2  pt-8 text-left text-xs font-light text-brand-light max-w-8xl mx-auto opacity-70">
+        <p><a class="underline" href="https://www.finops.org/introduction/how-to-use/" target="_blank" rel="noopener noreferrer">This work is licensed under Attribution 4.0 International</a></p>
+        <p>© 2026 Tokenomics Foundation Project a Series of LF Projects, LLC.</p>
+        <p>For web site terms of use, trademark policy and other project policies please see <a class="underline" href="https://lfprojects.org/" target="_blank" rel="noopener noreferrer">https://lfprojects.org.</a></p>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
