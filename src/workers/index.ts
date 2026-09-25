@@ -5,13 +5,19 @@
 // without a code change. See docs/deploy-worker.md for the deploy
 // checklist; this file is never exercised by wrangler in tests — app.test.ts
 // drives src/workers/app.ts directly with native Request objects.
-import { createFetchHandler } from "./app.js";
+import { createFetchHandler, type RateLimiter } from "./app.js";
 import { loadWorkerData } from "./data.js";
 
 export interface Env {
   /** Comma-separated list of allowed Origin header values. Unset/empty means
    * only requests with no Origin header (non-browser MCP clients) succeed. */
   ALLOWED_ORIGINS?: string;
+  /** Cloudflare Workers Rate Limiting binding (wrangler.toml's
+   * `[[ratelimits]]`), gating the /mcp/* routes. Optional/undefined disables
+   * rate limiting — see decisions.md 2026-09-25: not yet declared in the
+   * committed wrangler.toml, so the deployed Worker runs without it until
+   * that's deliberately turned on. */
+  RATE_LIMITER?: RateLimiter;
 }
 
 const { frameworkArtifact, focusStore } = loadWorkerData();
@@ -29,6 +35,7 @@ export default {
       frameworkArtifact,
       focusStore,
       allowedOrigins: parseAllowedOrigins(env.ALLOWED_ORIGINS),
+      rateLimiter: env.RATE_LIMITER,
     });
     return handler(request);
   },
