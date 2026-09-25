@@ -787,3 +787,56 @@ CI tier ordering that a future edit could silently undo.
 Kept deliberately dumb — existence check, no staleness comparison — matching
 `ensureBuilt()` in `scripts/gen-mcp-surface.mjs`. A stale `dist/` is the
 build's problem, not the test runner's.
+
+## 2026-09-25 — Rate-limit the Worker in application code, not at the edge
+
+Decision: `wrangler.toml` declares a `[[ratelimits]]` binding (`RATE_LIMITER`,
+60 requests/60s keyed by caller IP), enforced in `src/workers/app.ts` on
+`/mcp/framework` and `/mcp/focus` (a denied request gets `429` +
+`Retry-After: 60`). Owner instruction: add this now, purely so the deployed
+Worker can be load-tested before any separate decision to advertise/publish
+its URL — it is not itself that publish decision (see 2026-08-15 "Announce
+npm, but do not advertise the hosted Worker", which named rate limiting as
+the pre-condition for revisiting that call).
+
+This reverses `docs/deploy-worker.md`'s prior text, which pointed at
+Cloudflare's zone-level [Rate Limiting (WAF) rules](https://developers.cloudflare.com/waf/rate-limiting-rules/)
+instead of application code. That product configures on a Cloudflare
+**zone** — a custom domain added to the account's DNS. This Worker is
+served from the shared `*.workers.dev` subdomain, which is not a zone the
+owner has WAF configuration over, so the WAF product was never actually
+reachable for this deployment as written. [Workers Rate Limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/)
+(the binding) is Cloudflare's supported mechanism for gating a Worker's own
+routes independent of custom-domain status; it needs Wrangler >= 4.36.0 (this
+repo pulls 4.140.0 via `npx wrangler`) and provisions automatically on the
+next `wrangler deploy` — no separate dashboard/CLI step, unlike a KV/D1
+namespace.
+
+Alternatives considered:
+
+- **Put the Worker behind a custom domain first, then use WAF Rate Limiting
+  rules.** Rejected for now: adds a DNS/zone dependency and a second
+  Cloudflare product surface to configure just to unblock testing; the
+  Workers binding needs neither and can coexist with WAF rules later if a
+  custom domain is added.
+- **Cap `calculate_kpi`/expensive tools only, not all `/mcp/*` traffic.**
+  Rejected: every tool call on both routes is a full MCP `initialize` +
+  `tools/call` round trip building a fresh server per request (the transport
+  is stateless), so there is no cheap/expensive split worth making — the
+  whole route is the unit of cost.
+
+Verification: `src/workers/app.test.ts`'s new "rate limiting" suite (7 cases:
+allow, deny with `429`/`Retry-After`/CORS-echoed headers, applies to both
+routes, does not gate non-MCP paths, Origin/method checks still run before
+the limiter, IP-keying with an `"unknown"` fallback) plus `npx wrangler
+deploy --dry-run`, which confirms Wrangler parses the binding and reports
+`env.RATE_LIMITER (60 requests/60s)` as a recognized Rate Limit resource. Not
+deployed — deploying is a human approval point (`approvals.yaml`); the owner
+runs `wrangler deploy` when ready to test it live.
+
+Known consequence, deliberately not addressed here: the limiter is scoped
+per-isolate-invocation via the shared Cloudflare-managed rate limit store, so
+its accuracy under concurrent/distributed load matches whatever consistency
+guarantees Cloudflare's Rate Limiting binding documents (approximate, not a
+hard atomic counter) — acceptable for a test/abuse-deterrence gate, not
+something to rely on for a strict quota.

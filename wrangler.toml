@@ -15,3 +15,17 @@ compatibility_flags = ["nodejs_compat"]
 # reverts to this file's value on the next plain `wrangler deploy`.
 [vars]
 ALLOWED_ORIGINS = "https://finops-mcp-demo.pages.dev"
+
+# Per-IP rate limit on /mcp/framework and /mcp/focus (src/workers/app.ts),
+# added to test the Worker under real traffic before any decision to publish
+# it as a public endpoint — see decisions.md 2026-09-25. Provisions
+# automatically on the next `wrangler deploy`; no separate dashboard/CLI step.
+# `period` must be 10 or 60 (Workers Rate Limiting API constraint). Requires
+# Wrangler >= 4.36.0.
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+
+[ratelimits.simple]
+limit = 60
+period = 60
