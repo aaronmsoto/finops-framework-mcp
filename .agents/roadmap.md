@@ -15,4 +15,12 @@
   and sets "building" → loop completes the tasks → "done".
 -->
 
-(no features yet — the owner adds the first entry)
+## tokenomics-overview-mcp — a third MCP server for AI tokenomics  —  specced
+
+Serve Tokenomics Foundation guidance (Five-Layer Stack, Big-T notation,
+prompt-cache mechanics and metrics, consumption levers, personas, value
+classification, FOCUS 1.5 AI tracker) to agents alongside the framework and
+FOCUS servers, with stated cross-links into both. Owner answered the design
+questions 2026-09-25 (answers = approval to build).
+Design: `docs/designs/tokenomics-overview-mcp.html`; spec:
+`.agents/specs/tokenomics-overview-mcp.md`.
