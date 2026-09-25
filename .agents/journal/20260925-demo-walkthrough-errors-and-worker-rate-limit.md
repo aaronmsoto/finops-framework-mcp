@@ -94,3 +94,79 @@ the individual npm commands instead (AGENTS.md's documented fallback).
     config (`claude mcp add --transport http ...`). Explicitly deferred by
     the owner's own framing this session ("only... until we test it and
     decide to publish").
+
+## Automate the Worker deploy in CI, gated by a required-reviewer Environment — 2026-09-25T07:00:00Z
+
+Same session, continuing after PR #35 (the rate limiting above) merged to
+`dev`. Owner asked directly whether the Cloudflare deploy could become a
+GitHub Actions CI/CD job "with the right credentials." Presented four
+trigger/approval shapes with tradeoffs via AskUserQuestion; owner chose
+**auto-deploy on push to `main` (path-filtered) gated by a required reviewer
+in a GitHub Environment** — full rationale and the rejected alternatives are
+in decisions.md 2026-09-25 ("Automate the Worker deploy via CI...").
+
+- did: Declined to actually run `wrangler deploy` or merge anything to `main`
+  myself when first asked, per AGENTS.md's hard rule — this is a human
+  approval point regardless of who asks. Separately, a read-only check for
+  Cloudflare credentials in the environment was blocked outright by the
+  sandbox's own "Credential Materialization" classifier — confirms there
+  isn't standing deploy access to work around even if the policy allowed it.
+- did: Added `.github/workflows/deploy-worker.yml` — triggers on push to
+  `main` touching `src/workers/**`, `src/shared/**`, the two server files,
+  `data/framework/**`, `data/focus/**`, `wrangler.toml`, or the lockfile (plus
+  manual `workflow_dispatch`); runs `npm ci && npm run build && npm test`
+  (reuses `bundle-data.test.ts`'s existing drift check rather than adding a
+  separate regenerate-and-diff step), then deploys via
+  `cloudflare/wrangler-action@v4`. The job declares `environment:
+  cloudflare-production` so the deploy step pauses for a human's Approve
+  click once the owner configures that Environment's required reviewer
+  (one-time setup, cannot be done from an agent session — documented in
+  `docs/deploy-worker.md` §0).
+  - **Protected-path edit, explicitly authorized by the owner's own request
+    this session** — same shape as T-059/T-066/T-087. Placed
+    `.agents/.cache/policy-edit-ok`, wrote the file, removed the marker
+    immediately after; verified gone with a follow-up `ls`.
+  - **Could not locally lint the new workflow YAML.** A sandbox-level
+    "Self-Modification" guard (distinct from this repo's own hooks) blocked
+    reading `.github/workflows/deploy-worker.yml` back with any tool this
+    session, including plain `Read`/`python -m yaml`. Per the guard's own
+    instructions, did not try a different tool/encoding to route around it —
+    stopped and am flagging it here and to the owner instead. The file was
+    hand-authored against `publish.yml`'s proven structure (checkout →
+    setup-node → npm ci → build → test → publish/deploy), so it's a small,
+    conventional diff, but **GitHub's own workflow parser is the first real
+    validation it gets** — worth a glance at the Actions tab after this
+    lands on `main`, and confirming the workflow shows up (even if the
+    Environment isn't configured yet, so it can't actually run to
+    completion).
+  - Cloudflare has no GitHub OIDC trusted-deploy option yet (unlike
+    `publish.yml`'s npm/registry jobs), so this is the one job in the
+    pipeline needing a real stored credential
+    (`CLOUDFLARE_API_TOKEN`) — mitigated by scoping it to Workers Scripts:
+    Edit only and storing it as an environment secret, not a repo secret.
+- did: Updated `docs/deploy-worker.md` (new §0 documenting the CI path and
+  the one-time Environment/secrets setup; renumbered the manual steps as the
+  fallback/local-testing path; `wrangler.toml` no longer looks unowned by
+  automation) and `AGENTS.md`'s "never deploy" hard-rule bullet (clarifies
+  the CI job existing doesn't relax the rule — the agent must still never run
+  `wrangler deploy` directly or approve the Environment gate itself).
+- result: workflow file written and reviewed by eye against `publish.yml`'s
+  pattern; cannot claim it's been executed or parsed by GitHub yet — that
+  happens once this reaches `main` and either a qualifying path changes or
+  someone runs it via `workflow_dispatch`. No regressions to the rest of the
+  repo: this change touches only the new workflow file, two docs, and
+  memory/journal — no `src/` or test changes beyond what already shipped in
+  PR #35.
+- next:
+  - **Owner, one-time, cannot be done from here:** create the
+    `cloudflare-production` GitHub Environment with yourself as required
+    reviewer, and add `CLOUDFLARE_API_TOKEN` (scoped, not the Global API Key)
+    + `CLOUDFLARE_ACCOUNT_ID` as secrets on that Environment.
+  - **Owner:** after that setup, either wait for a qualifying push to `main`
+    or trigger it manually via Actions → deploy-worker → Run workflow, then
+    approve the pending deployment when GitHub prompts. Confirm the resulting
+    live Worker behaves per the `docs/deploy-worker.md` §5 smoke test
+    (including the 429/Retry-After case from the rate-limiting work above).
+  - This PR still needs to go through the same `claude/session-k75rxy` →
+    `dev` → rolling-PR → `main` path as #35 — merging to `main` directly was
+    not done, per the hard rule this whole entry is about.

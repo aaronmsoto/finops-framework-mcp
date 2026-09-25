@@ -108,13 +108,26 @@
    **untracked** (tasks.json deliberately untouched, chain intact) and
    verified with the individual npm gate commands instead. Supply a token, or
    retro-file that work as a task.
-0b. **Owner, when ready to test:** `npx wrangler deploy` to activate the new
-   `RATE_LIMITER` binding (2026-09-25, decisions.md) on the live Worker —
-   not deployed yet, deploying is an owner-only step. Then smoke-test with
-   `docs/deploy-worker.md` step 5 (now includes the 429/Retry-After case).
-   Once satisfied it holds up, that's the trigger to revisit whether to
-   advertise the Worker URL (Iteration A's second half — see next item).
-0c. **Owner decision needed, not yet made:** should `demo/requests.js`'s
+0b. **Owner, one-time setup, blocks the item below:** Worker deploys now run
+   via CI (`.github/workflows/deploy-worker.yml`, decisions.md 2026-09-25
+   "Automate the Worker deploy via CI...") but need a GitHub Environment
+   named exactly `cloudflare-production` with **yourself as required
+   reviewer**, plus `CLOUDFLARE_API_TOKEN` (scoped to Workers Scripts: Edit
+   only, not the Global API Key) and `CLOUDFLARE_ACCOUNT_ID` as secrets on
+   that Environment — none of this is doable from an agent session. Setup
+   steps in `docs/deploy-worker.md` §0. The workflow YAML was hand-authored
+   and could not be locally linted this session (a sandbox "self-
+   modification" guard blocked reading it back with any tool) — GitHub's own
+   parser is its first real validation, worth a glance at the Actions tab.
+0c. **Owner, once 0b is done:** trigger the deploy (push to `main` touching a
+   qualifying path, or Actions → deploy-worker → Run workflow) and approve
+   the pending deployment when GitHub prompts, to activate the `RATE_LIMITER`
+   binding (2026-09-25, decisions.md) on the live Worker — not deployed yet.
+   Then smoke-test with `docs/deploy-worker.md` §5 (includes the
+   429/Retry-After case). Once satisfied it holds up, that's the trigger to
+   revisit whether to advertise the Worker URL (Iteration A's second half —
+   see next item).
+0d. **Owner decision needed, not yet made:** should `demo/requests.js`'s
    `CALCULATE_VERSION` change from `"1.0"` to `"1.2"`? Right now the
    walkthrough's last step always shows 3 of 4 featured KPIs as "not
    computable" (FOCUS 1.0's bundled sample has no qualifying commitment-
@@ -212,6 +225,18 @@
   feedback list is superseded by the starter-repo list.
 
 ## Last updated
+
+2026-09-25 (later) — Automated the Cloudflare Worker deploy via CI on owner
+request: new `.github/workflows/deploy-worker.yml` builds/tests on every
+`main` push touching Worker-relevant paths, then deploys through
+`cloudflare/wrangler-action@v4` gated behind a required-reviewer GitHub
+Environment (`cloudflare-production`) — a protected-path edit explicitly
+authorized this session (marker placed and removed, verified gone). Needs
+one-time owner setup (Environment + two secrets) before it can run; not
+deployed anywhere yet. Could not locally lint the new workflow YAML — a
+sandbox guard blocked reading it back — so GitHub's own parser is its first
+validation. See decisions.md 2026-09-25 ("Automate the Worker deploy via
+CI...") and the journal's second entry for this date.
 
 2026-09-25 — Explained the owner's "errors on Run Walkthrough" report
 (reproduced live in headless Chromium: no defect, 3 of 4 featured-KPI

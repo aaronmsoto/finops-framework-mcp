@@ -1,9 +1,17 @@
 # Deploying the MCP Cloudflare Worker
 
-Owner-only checklist (deploying is a human approval point per
-`approvals.yaml` — no automation in this repo runs `wrangler deploy`).
 Deploys both MCP servers (finops-framework and finops-focus-mcp) over HTTPS
 from one Worker, at `/mcp/framework` and `/mcp/focus`.
+
+**As of 2026-09-25, deploys run via CI** (`.github/workflows/deploy-worker.yml`,
+§0 below) — see that section for the one-time setup. Deploying is still a
+human approval point per `approvals.yaml`: the workflow builds and tests
+automatically on every push to `main` that touches Worker-relevant paths, but
+the actual deploy step **pauses for a required reviewer** in the
+`cloudflare-production` GitHub Environment before it runs. Sections 1-6 below
+are the manual/local path — still the right tool for first-time Cloudflare
+account setup, a one-off test deploy from a branch, or an emergency deploy if
+CI is unavailable.
 
 ## What ships
 
@@ -25,6 +33,37 @@ statically walks the import graph from `src/workers/index.ts` and fails if
 anything reachable (following real imports, not `import type`) resolves to
 `node:fs`. All disk access happens at build time, in
 `scripts/bundle-worker-data.mjs`.
+
+## 0. Automated deploys (CI)
+
+`.github/workflows/deploy-worker.yml` triggers on push to `main` when
+`src/workers/**`, `src/shared/**`, the two server files it builds on,
+`data/framework/**`, `data/focus/**`, `wrangler.toml`, or the lockfile
+change — or manually via `workflow_dispatch` (Actions tab → deploy-worker →
+Run workflow). It runs `npm ci`, `npm run build`, `npm test` (which includes
+`bundle-data.test.ts`'s drift check — see §1), then deploys via
+[`cloudflare/wrangler-action`](https://github.com/cloudflare/wrangler-action).
+
+One-time owner setup, not doable from an agent session:
+
+1. Repo **Settings → Environments → New environment**, name it exactly
+   `cloudflare-production`, and add yourself as a **required reviewer**. An
+   environment with no reviewer configured is unprotected — a matching push
+   would deploy immediately, which defeats the point.
+2. On that environment, add secrets `CLOUDFLARE_API_TOKEN` (scope it to
+   **Account → Workers Scripts: Edit** for this account only — never the
+   Global API Key) and `CLOUDFLARE_ACCOUNT_ID`. Environment secrets, not
+   repository secrets, so only a job that declares this environment can read
+   them.
+
+Cloudflare does not yet support GitHub OIDC trusted deploys the way
+`publish.yml`'s npm/registry jobs do ([tracked upstream](https://github.com/cloudflare/wrangler-action/issues/402),
+unimplemented as of this writing) — a stored API token is the only option
+today, unlike the rest of this project's release pipeline.
+
+Once a run reaches the deploy step, GitHub emails/notifies the configured
+reviewer; approving it in the Actions UI is the human-approval act — never
+approve it from an agent session.
 
 ## 1. Regenerate the data bundle (whenever data/framework or data/focus changed)
 
@@ -78,14 +117,17 @@ the response visible to browser JavaScript at all. There's no separate
 switch to "turn CORS on" — putting an origin on `ALLOWED_ORIGINS` and
 redeploying is both steps.
 
-## 3. First-time Cloudflare setup
+## 3. First-time Cloudflare setup (manual path only — CI uses a stored token)
 
 ```sh
 npx wrangler login          # opens a browser, authorizes this machine
 npx wrangler whoami         # confirm the right account
 ```
 
-## 4. Deploy
+## 4. Deploy manually
+
+Prefer letting §0's CI workflow deploy `main`. Use this for a one-off test
+from a branch or if CI is unavailable:
 
 ```sh
 npx wrangler deploy

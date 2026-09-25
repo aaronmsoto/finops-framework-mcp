@@ -47,7 +47,7 @@ Harness lives upstream: this repo consumes `@aaronmsoto/agentic-harness` from Gi
 
 ## Hard rules (each has a deterministic enforcement twin — see .agentic/docs/architecture.md)
 
-- **Never merge to main, deploy, release, or force-push.** These are human approval points defined in `approvals.yaml`. Open a PR and stop. (Enforced: settings ask/deny rules, copilot.sh deny flags, CODEOWNERS, rulesets.)
+- **Never merge to main, deploy, release, or force-push yourself.** These are human approval points defined in `approvals.yaml`. Open a PR and stop. (Enforced: settings ask/deny rules, copilot.sh deny flags, CODEOWNERS, rulesets.) The Cloudflare Worker deploy runs via CI (`.github/workflows/deploy-worker.yml`) but is gated on a required reviewer in the `cloudflare-production` GitHub Environment — that CI job existing does not change this rule: never run `wrangler deploy` directly, and never approve that environment gate yourself.
 - **Never edit `approvals.yaml`, `.claude/settings.json`, `agentic.config.json` gate definitions, or `.github/workflows/`** unless the task explicitly says so. (Enforced: PreToolUse hook + protected_paths + integrity gate.)
 - **Never delete or weaken tests to make gates pass.** No `.only`/`fit`/`fdescribe`. If a test is wrong, say so in the journal and fix it as its own change. (Enforced: integrity gate.)
 - **Do not claim completion without evidence.** Cite gate output; for behavior changes, run the software and cite what you observed. (Enforced: hash chain + independent verifier.)

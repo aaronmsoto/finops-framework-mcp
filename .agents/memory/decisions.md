@@ -840,3 +840,74 @@ its accuracy under concurrent/distributed load matches whatever consistency
 guarantees Cloudflare's Rate Limiting binding documents (approximate, not a
 hard atomic counter) — acceptable for a test/abuse-deterrence gate, not
 something to rely on for a strict quota.
+
+## 2026-09-25 — Automate the Worker deploy via CI, gated by a required-reviewer Environment
+
+Decision: `.github/workflows/deploy-worker.yml` (new) deploys the Cloudflare
+Worker automatically on push to `main` when Worker-relevant paths change
+(`src/workers/**`, `src/shared/**`, the two server files, `data/framework/**`,
+`data/focus/**`, `wrangler.toml`, the lockfile), or on manual
+`workflow_dispatch`. The job runs `npm ci && npm run build && npm test`
+(the same drift/regression gates the manual path relies on), then deploys via
+`cloudflare/wrangler-action@v4` — but the job declares `environment:
+cloudflare-production`, a GitHub Environment the owner configures with a
+required reviewer, so the deploy step **pauses for a human's explicit
+Approve click** in the Actions UI before it runs.
+
+Owner instruction, asked directly: "Could the Cloudflare deploy ... become
+part of a GitHub workflow ci/cd process? (with the right credentials)."
+Presented four trigger/approval shapes (auto+no-gate, auto+required-review,
+manual-dispatch-only, tied to the npm release tag) with the tradeoffs below;
+owner picked auto+required-review.
+
+Rationale: `approvals.yaml`'s `deploy_production: human` and AGENTS.md's
+"never deploy yourself" rule are about what the **agent** may do
+unsupervised, not a blanket ban on deploy automation existing at all. A
+required-reviewer Environment is GitHub's built-in mechanism for "CI can run
+this, but a specific human must click approve first" — it expresses the same
+policy without needing anyone to run `wrangler deploy` from a laptop.
+AGENTS.md's hard-rule bullet was reworded to say this explicitly: the agent
+must still never run `wrangler deploy` directly, and must never approve the
+environment gate itself.
+
+Alternatives considered (all viable, this is a preference call, not a
+correctness one):
+
+- **Fully automatic, no approval gate.** Rejected: removes the human-approval
+  semantics this project has maintained everywhere else (npm publish still
+  needs a human to push the version tag; registry submission only runs after
+  that). A Worker deploy is lower-stakes than main-branch state (no
+  irreversible artifact like a published npm version), but the owner chose to
+  keep a checkpoint anyway.
+- **`workflow_dispatch` only, no automatic trigger.** Rejected: still
+  requires a human to remember to click "Run workflow" after every relevant
+  merge — closer to today's manual process than to CI/CD, just with the
+  command moved from a laptop's `wrangler deploy` to a GitHub UI button.
+- **Tied to the same `v*` tag as `publish.yml`.** Rejected: the Worker has no
+  semver of its own and changes on a different cadence than npm releases
+  (e.g. a data refresh with no package version bump); coupling them would
+  leave the Worker stale between npm releases or force an unnecessary
+  release just to redeploy it.
+
+Not itself a decision to advertise/publish the Worker's URL — see 2026-08-15
+"Announce npm, but do not advertise the hosted Worker", whose pre-condition
+(rate limiting — 2026-09-25 above) this workflow assumes is already in place
+but does not revisit.
+
+Known gap, deliberately not solved here: Cloudflare has no GitHub OIDC
+trusted-deploy mechanism yet (unlike npm/registry in `publish.yml`), so this
+is the one job in this pipeline that needs a real, stored, long-lived
+credential (`CLOUDFLARE_API_TOKEN`) rather than a short-lived OIDC-minted
+one. Mitigated by scoping the token narrowly (Workers Scripts: Edit only)
+and storing it as an environment secret rather than a repository secret, so
+only a job that declares `cloudflare-production` can read it.
+
+Implementation note: writing `.github/workflows/deploy-worker.yml` is a
+protected-path edit (`approvals.yaml` `protected_paths`), explicitly
+authorized by the owner's own request this session — same shape as T-059,
+T-066, T-087. The PreToolUse hook's override marker
+(`.agents/.cache/policy-edit-ok`) was placed for the edit and removed
+immediately after; verified gone. Could not locally lint the new YAML — a
+sandbox-level "self-modification" guard (separate from this repo's own
+hooks) blocked reading it back with any tool in this session; GitHub's own
+workflow parser is the first actual validation it gets.
