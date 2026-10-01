@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en-US" data-brand="tf" data-theme="dark">
+<head>
+    <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
+  	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	
+	<title>The five-layer Tokenomics stack &#8211; Paper &#8211; Tokenomics Foundation</title>
+<meta name='robots' content='max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+<meta name="description" content="Tokenomics in the generation and consumption of tokens The five-layer Tokenomics stack How the AI serving stack and the consumption spectrum determine the cost">
+<meta property="og:title" content="The five-layer Tokenomics stack &#8211; Paper &#8211; Tokenomics Foundation">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/meta/TF-meta.png">
+<meta property="og:description" content="Tokenomics in the generation and consumption of tokens The five-layer Tokenomics stack How the AI serving stack and the consumption spectrum determine the cost">
+<meta property="og:url" content="https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Tokenomics Foundation">
+<meta property="article:published_time" content="2026-08-04T13:34:40+00:00">
+<meta property="article:modified_time" content="2026-08-04T13:35:15+00:00">
+<meta property="og:updated_time" content="2026-08-04T13:35:15+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/meta/TF-meta.png">
+
+
+
+	
+	
+	<noscript></noscript>
+	
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="WordPress 7.1.2" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.tokeneconomics.com/#website","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Defining the best practices and primitives of AI economics","inLanguage":"en-US","potentialAction":{"@type":"SearchAction","target":"https://www.tokeneconomics.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://www.tokeneconomics.com/#organization","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Tokenomics Foundation defines the best practices and primitives of the token economy","knowsAbout":["Tokenomics","AI cost management","AI infrastructure","FinOps"],"sameAs":["https://www.linkedin.com/company/tokenomics-foundation/","https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA","https://substack.com/@tokenomicsfoundation","https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c"]},{"@type":"WebPage","@id":"https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/#webpage","url":"https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/","name":"The five-layer Tokenomics stack – Paper – Tokenomics Foundation","inLanguage":"en-US","isPartOf":{"@id":"https://www.tokeneconomics.com/#website"},"datePublished":"2026-08-04T13:34:40+00:00","dateModified":"2026-08-04T13:35:15+00:00"}]}</script>
+
+
+
+<meta name="msapplication-TileImage" content="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-270x270.png" />
+</head>
+<body class="wp-singular page-template page-template-templates page-template-page-html page-template-templatespage-html-php page page-id-1187 page-child parent-pageid-1173 wp-theme-tokeneconomics bg-surface-dark overflow-x-hidden no-global-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPPHJ9DM"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<a class="screen-reader-text" href="#primary">Skip to content</a>
+	<header id="site-header" class="z-50 max-w-8xl mx-auto w-full">
+    <nav aria-label="Global" class="flex items-center justify-between px-6 py-8 lg:px-8">
+      <div class="flex lg:flex-1">
+        <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+          <span class="sr-only">Tokenomics Foundation</span>
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+        </a>
+      </div>
+      <div class="flex lg:hidden">
+        <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 cursor-pointer">
+          <span class="sr-only">Open main menu</span>
+          
+        </button>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12 lg:items-center">
+        <a href="https://www.tokeneconomics.com/insights/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="te-nav-link text-sm/6 font-semibold text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="te-nav-link text-sm/6 font-semibold text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="te-nav-link text-sm/6 font-semibold text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a><div class="te-dropdown-panel"><a href="https://www.tokeneconomics.com/membership/" class="te-dropdown-link">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="te-dropdown-link">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="te-dropdown-link">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="te-dropdown-link">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="te-dropdown-link">Tokenomics Press and Media</a></div></div>      </div>
+      <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+        <a href="#" class="text-sm/6 font-semibold text-brand-light">Log in <span aria-hidden="true">&rarr;</span></a>
+      </div> -->
+    </nav>
+    <el-dialog>
+      <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
+        <div tabindex="0" class="fixed inset-0 focus:outline-none">
+          <el-dialog-panel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-surface-dark p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
+            <div class="flex items-center justify-between">
+              <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+                <span class="sr-only">Tokenomics Foundation</span>
+                <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-8 w-auto" width="117" height="32" />
+              </a>
+              <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-200">
+                <span class="sr-only">Close menu</span>
+                
+              </button>
+            </div>
+            <div class="mt-6 flow-root">
+              <div class="-my-6 divide-y divide-white/10">
+                <div class="space-y-2 py-6">
+                  <a href="https://www.tokeneconomics.com/insights/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Members</a><div class="te-dropdown"><button type="button" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5 te-dropdown-trigger w-full flex items-center justify-between">About</button><div class="te-dropdown-panel te-dropdown-panel--mobile hidden pl-4 mt-1 space-y-1"><a href="https://www.tokeneconomics.com/about/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">About</a><a href="https://www.tokeneconomics.com/membership/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Tokenomics Press and Media</a></div></div>                </div>
+              </div>
+            </div>
+          </el-dialog-panel>
+        </div>
+      </dialog>
+    </el-dialog>
+  </header>
+
+	<div class="w-full bg-primary text-primary-fg">
+		<a class="flex max-w-8xl mx-auto items-center justify-center gap-3 px-6 py-2.5 text-base/7 font-medium lg:px-8 hover:opacity-80" href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals">
+						<span>AI Tokenomics Fundamentals Certification Now Available &rarr;</span>
+								</a>
+	</div>
+	
+
+<main id="primary" class="site-main mt-0">
+	<div class="te-html-embed-1187"><header class="hero">
+  <div class="wrap">
+    <p class="kicker reveal">Tokenomics in the generation and consumption of tokens</p>
+    <h1 class="reveal">The five-layer Tokenomics stack</h1>
+    <p class="deck reveal">How the AI serving stack and the consumption spectrum determine the cost of a token</p>
+    <p class="byline reveal">Published by the Tokenomics Foundation</p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+
+    <p class="abstract reveal">
+      Tokenomics is a stack discipline rather than a token discipline. The token is the unit of account,
+      not the object of study, and the leverage sits in decisions about silicon, capacity, serving software,
+      models, and routing, along with the governance, identity, observability, and cost management that cut
+      across all of them. This paper sets out those decisions as five layers. Two structures organize them:
+      the layers themselves, where optimization is applied, and the spectrum of consumption, where
+      architectural choices land a workload. Big-T notation names the classes on that spectrum and is taken
+      as given here. The scope is the generation and consumption of tokens; the value that consumption
+      creates, along with the pricing, monetization, and product decisions that follow from it, is addressed
+      separately.
+    </p>
+
+    <figure>
+      <div class="stackfig">
+        <div class="layer-bar reveal"><span class="n">L5</span><span class="l">Routing + governance</span><span class="d">Request routing, budgets, agent caps</span></div>
+        <div class="layer-bar reveal"><span class="n">L4</span><span class="l">Model + quantization</span><span class="d">Right model, right precision</span></div>
+        <div class="layer-bar reveal"><span class="n">L3</span><span class="l">Inference stack</span><span class="d">Right engine, caching, batching</span></div>
+        <div class="layer-bar reveal"><span class="n">L2</span><span class="l">Capacity</span><span class="d">Right hardware, right regions</span></div>
+        <div class="layer-bar reveal"><span class="n">L1</span><span class="l">Silicon</span><span class="d">Chip generation, hardware architecture</span></div>
+      </div>
+      <figcaption class="reveal">
+        <b>Figure 1.</b> <a href="https://www.google.com/url?q=https://www.youtube.com/watch?v%3DyLZ1EqiPAuI&sa=D&source=docs&ust=1785824097316858&usg=AOvVaw3hbOE5bhHzeYMCcvDPJ4ac">The five-layer stack. After <em>The Five-Layer Cake of Tokenomics: How Pinterest
+        Thinks About AI Efficiency</em></a> by Ambud Sharma (Pinterest).
+      </figcaption>
+    </figure>
+
+    <div class="read">
+      <p class="reveal" style="margin-top:40px">
+        The five layers rest on one another, and the order is load bearing. Silicon sets the floor on what a
+        token costs; capacity determines how much of that silicon is usable and how well it is used; the
+        inference stack decides how efficiently each request runs; the model layer fixes what runs and at
+        what precision; routing and governance form the control plane over all of it. Each layer inherits
+        the cost and availability of the ones beneath, so gains compound upward. Cutting across all five are
+        the capabilities that make the stack operable: governance and security, identity and access,
+        observability, and cost management. They are not optimization levers in the way a caching strategy
+        is, but they are why a token can be attributed, a budget enforced, or a quality regression caught.
+        Each is dealt with where it does its work: governance appears at L5 as budgets, quotas, and circuit
+        breakers; observability and cost management underwrite the measurement section below; identity sits
+        beneath both, since a token cannot be attributed to a team, tenant, or feature the stack cannot
+        name. Their absence is what turns an efficient architecture into an unverifiable one.
+      </p>
+      <p class="reveal">
+        The bottom-up sequence applies to anyone who chooses how their models are served, not only those who
+        own hardware; on a cloud, selecting GPU, TPU, CPU, or a managed service is itself a lower-layer
+        decision. The exception is the organization that only calls a frontier API, with no access below the
+        inference stack, whose levers concentrate in model choice, routing, and caching at the top.
+      </p>
+
+      <h2 class="reveal" id="spectrum">The consumption spectrum</h2>
+      <p class="reveal">
+        Token consumption is not flat. The same useful task can consume almost nothing or scale without
+        bound depending on how it is architected, and Big-T notation names the classes that range spans:
+        <code>T(1)</code> where a cache hit avoids generation entirely, <code>T(log n)</code> where
+        deterministic work strips the input before the model sees it, <code>T(n)</code> as the honest linear
+        baseline, <code>T(n·k)</code> where one activity becomes many calls, <code>T(n·k·a)</code> where
+        that fans across an agent tree, and <code>T(∞)</code> where an autonomous loop has no ceiling. The
+        classes, the evidence behind them, and the argument for why a higher class is a decision rather than
+        a failure are set out in the <a href="/projects/big-t-notation/">Big-T paper</a> and taken as given here.
+      </p>
+      <p class="reveal">
+        What the spectrum does not tell you is where to act. That is what the layers are for, and the two
+        answer different questions: the layers are where optimization is applied, the classes are what that
+        optimization achieves. The distinction matters because the layers do not all work the same way.
+        Silicon and capacity set what a token costs, in dollars and in watts, but they cannot move a
+        workload between classes. A poorly utilized fleet makes every token more expensive than it needs to
+        be at whatever class the workload already occupies.
+      </p>
+      <p class="reveal">
+        The upper three layers change how many tokens are consumed, which means they can move a workload
+        down. Caching and reuse in the inference stack turn repeated work into <code>T(1)</code> and
+        <code>T(log n)</code>. Right-sizing a model pulls <code>T(n·k)</code> work back toward
+        <code>T(n)</code>. Budgets, caps, and circuit breakers in the routing layer are what keep an agent
+        out of <code>T(∞)</code>.
+      </p>
+      <p class="reveal">
+        The layers are the tools that move a workload into a lower class, and then hold it there.
+      </p>
+      <p class="reveal">
+        Set side by side, the layers divide cleanly into those that set the cost of a token and those that
+        move a workload between tiers.
+      </p>
+    </div>
+
+    <div class="tablewrap reveal">
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Moves the multiplier?</th><th>Key metric</th><th>Primary lever</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>L1 Silicon</td><td class="no">No, sets cost per token</td><td>Dollars and watts per token</td><td>Match silicon class to workload; adopt newer generations</td></tr>
+          <tr><td>L2 Capacity</td><td class="no">No, sets effective cost per token</td><td>Utilization, idle hours</td><td>Batch the troughs; autoscale; place by region</td></tr>
+          <tr><td>L3 Inference stack</td><td class="yes">Yes, toward <code>T(1)</code> and <code>T(log n)</code></td><td>Cache hit rate, time to first token, throughput</td><td>Right engine; prefix and KV cache; disaggregation</td></tr>
+          <tr><td>L4 Model and quantization</td><td class="yes">Yes, <code>T(n·k)</code> toward <code>T(n)</code></td><td>Cost per task, quality per dollar</td><td>Right-size the model; quantize; adapt</td></tr>
+          <tr><td>L5 Routing and governance</td><td class="yes">Yes, bounds <code>T(n·k·a)</code> and <code>T(∞)</code></td><td>Per-route cost, fan-out and retries</td><td>Complexity routing; budgets; agent caps</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure class="figwide">
+      <div class="fig2 reveal">
+        <div class="fig2-head">
+          <div>
+            <h3>Tokenomics Layers: from request to silicon</h3>
+            <p>Each layer makes key decisions that shape cost, performance, and outcomes.</p>
+          </div>
+        </div>
+
+        <div class="fig2-body">
+          <div class="f2rows">
+
+            <div class="f2row r5">
+              <div class="f2tag"><span class="num">L5</span><span class="nm">Routing &amp; Governance</span></div>
+              <div class="f2cards">
+                <div class="f2c"><h4>Clients &amp; Entry Points</h4><ul><li>Web / Mobile / API</li><li>AI Harnesses</li><li>MCP Clients</li></ul></div>
+                <div class="f2c"><h4>Prompt Routing</h4><ul><li>Intent detection</li><li>Routing</li><li>Policy enforcement</li></ul></div>
+                <div class="f2c"><h4>Policy &amp; Guardrails</h4><ul><li>Pre-flight guardrails</li><li>Compliance</li><li>Response validation</li></ul></div>
+                <div class="f2c"><h4>Provider Router (Proxy)</h4><ul><li>Provider routing</li><li>Fallbacks &amp; retries</li><li>Unified API</li></ul></div>
+              </div>
+            </div>
+
+            <div class="f2row r4">
+              <div class="f2tag"><span class="num">L4</span><span class="nm">Model Management &amp; Selection</span></div>
+              <div class="f2cards">
+                <div class="f2c"><h4>Model Catalog (Registry)</h4><ul><li>Capabilities &amp; context window</li><li>Pricing &amp; cost</li><li>Latency &amp; quality</li><li>Versions &amp; providers</li></ul></div>
+                <div class="f2c"><h4>Model Selection</h4><ul><li>Policy, cost, latency</li><li>Best model for task</li><li>Best provider / region</li><li>Trade-off decisions</li></ul></div>
+                <div class="f2c"><h4>Runtime Configuration</h4><ul><li>System prompt &amp; templates</li><li>Sampling &amp; parameters</li><li>Tools policy</li><li>Tool choice &amp; limits</li></ul></div>
+                <div class="f2c"><h4>Adapters (Weight-Level)</h4><ul><li>LoRA / PEFT</li><li>Adapters</li><li>Weight merging</li></ul></div>
+              </div>
+            </div>
+
+            <div class="f2row r3">
+              <div class="f2tag"><span class="num">L3</span><span class="nm">Inference Stack</span></div>
+              <div class="f2cards">
+                <div class="f2c"><h4>Context &amp; Memory</h4><ul><li>Semantic cache</li><li>KV cache</li><li>Vector DB</li><li>Session memory</li></ul></div>
+                <div class="f2c"><h4>Tools &amp; Actions</h4><ul><li>MCP (outbound)</li><li>Function calling</li><li>Web search</li><li>Databases</li></ul></div>
+                <div class="f2c"><h4>Inference Engines</h4><ul><li>vLLM</li><li>TensorRT-LLM</li><li>SGLang</li><li>TGI, etc.</li></ul></div>
+                <div class="f2c"><h4>Runtime Safety</h4><ul><li>PII detection</li><li>Moderation</li><li>Content safety</li><li>Output validation</li></ul></div>
+                <div class="f2c"><h4>Agent Iteration</h4><ul><li>Tools</li><li>Observes</li><li>Plans</li><li>Calls again</li></ul></div>
+              </div>
+            </div>
+
+            <div class="f2row r2">
+              <div class="f2tag"><span class="num">L2</span><span class="nm">Capacity Layer</span></div>
+              <div class="f2cards">
+                <div class="f2c"><h4>Control Plane</h4><ul><li>Service discovery</li><li>Configuration</li><li>Cluster orchestration</li><li>Secrets management</li></ul></div>
+                <div class="f2c"><h4>Compute Management</h4><ul><li>Scheduling &amp; queues</li><li>Autoscaling</li><li>GPU pools</li><li>Quotas &amp; multi-tenancy</li></ul></div>
+                <div class="f2c"><h4>Memory &amp; Storage Pools</h4><ul><li>Shared memory pools</li><li>Ephemeral storage</li><li>Checkpoint storage</li><li>Cache storage</li></ul></div>
+                <div class="f2c"><h4>Regions &amp; Capacity</h4><ul><li>Regions / AZs</li><li>Network &amp; egress</li><li>Load balancing</li><li>SLA &amp; reliability</li></ul></div>
+              </div>
+            </div>
+
+            <div class="f2row r1">
+              <div class="f2tag"><span class="num">L1</span><span class="nm">Silicon Layer</span></div>
+              <div class="f2cards">
+                <div class="f2c"><h4>Accelerators</h4><ul><li>GPU / TPU / NPU</li><li>ASIC / Custom</li><li>Accelerator cards</li></ul></div>
+                <div class="f2c"><h4>Memory</h4><ul><li>HBM / HBM4</li><li>DRAM</li><li>CXL</li></ul></div>
+                <div class="f2c"><h4>Interconnect</h4><ul><li>NVLink / NVSwitch</li><li>PCIe</li><li>Ethernet / InfiniBand</li></ul></div>
+                <div class="f2c"><h4>System &amp; Power</h4><ul><li>Rack &amp; enclosure</li><li>Power &amp; cooling</li><li>System board</li></ul></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <figcaption class="reveal" style="max-width:none"><b>Figure 2.</b> Mapping AI components to the five-layer stack.</figcaption>
+    </figure>
+
+    <div class="read">
+      <h2 class="reveal" id="l1"><span class="lx">L1</span>Silicon</h2>
+      <p class="reveal">
+        Silicon is the physical substrate: the accelerator and its generation, along with the memory,
+        interconnect, and system power it ships with. It converts energy into tokens, and it sets the floor
+        on cost per token and energy per token for everything above it. Newer generations push both down
+        along a decay curve, and not all tokens are equal: a low-latency token on a general-purpose GPU can
+        cost more than the same token on purpose-built silicon. What this layer covers is what you select;
+        how that hardware is powered, placed, and used is a capacity decision, so interconnect and power
+        appear here as components and again at L2 as choices.
+      </p>
+      <p class="reveal">
+        The measures that matter are cost per token in dollars and in watts, tokens per second per
+        accelerator, price performance in dollars per million tokens, efficiency as TOPS per watt, and the
+        mix of hardware generations across the fleet.
+      </p>
+      <p class="reveal">
+        Optimization begins with matching the silicon class to the workload rather than buying one
+        general-purpose part for everything. Latency-critical and real-time work favors
+        inference-specialized silicon; large mixture-of-experts models favor rack-scale systems with
+        high-bandwidth interconnect. Adopting the newest generation pays off when its price performance
+        justifies the move, and steady, high-volume inference is often a candidate for custom accelerators.
+      </p>
+    </div>
+
+    <div class="tablewrap reveal">
+      <table>
+        <thead><tr><th>Category</th><th>Common options</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>NVIDIA GPU</td><td>Hopper (H100, H200); Blackwell (B200, GB200 NVL72); Blackwell Ultra (B300, GB300 NVL72)</td><td>Rack-scale NVL72 with all-to-all topology suits MoE and autoregressive inference</td></tr>
+          <tr><td>AMD GPU</td><td>Instinct MI300X, MI325X, MI355X</td><td>Strong memory capacity and bandwidth for inference</td></tr>
+          <tr><td>Cloud ASIC</td><td>Google TPU (Trillium, Ironwood); AWS Trainium2 and Trainium3, Inferentia; Microsoft Maia</td><td>Best performance per watt for steady workloads; cloud locked</td></tr>
+          <tr><td>Inference specialist</td><td>Groq LPU, Cerebras WSE, SambaNova RDU</td><td>Sub-millisecond latency per-token or ultra-large models; on prem or first-party cloud</td></tr>
+          <tr><td>Edge</td><td>Hailo, NVIDIA Jetson</td><td>Device-level and local inference</td></tr>
+          <tr><td>Workstation and local</td><td>NVIDIA DGX Spark, AMD Ryzen AI Max, Mac Minis</td><td>Large unified memory at low power; development, prototyping, and small-scale private inference rather than fleet serving</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="read">
+      <h2 class="reveal" id="l2"><span class="lx">L2</span>Capacity</h2>
+      <p class="reveal">
+        Capacity is the decision layer over the substrate beneath it: how much of it you hold, where it
+        sits, how it is powered and connected, and how much of it does useful work. Reserved or on-demand,
+        one region or another, scaled up or scaled to zero, all of it decided against a traffic shape that
+        rarely matches the commitment. Silicon that cannot be powered, or that sits idle, produces expensive
+        tokens, because idle capacity raises the effective per-token cost of the work that does run.
+      </p>
+      <p class="reveal">
+        Utilization is the central measure: productive hours against idle hours, reserved capacity against
+        actual use, power draw and data-center efficiency, regional cost differentials, queue and wait
+        times, and the share of batchable work actually run during demand troughs.
+      </p>
+      <p class="reveal">
+        Idle capacity is best filled with batch and asynchronous inference during off-peak hours.
+        Autoscaling and scale-to-zero absorb spiky traffic; a blend of reserved, on-demand, and spot
+        capacity matches the traffic shape; and workloads move to cheaper or greener regions where data
+        residency allows. Disaggregating prefill and decode lets each run on the capacity that suits it, and
+        rack-scale interconnect serves large and mixture-of-experts models.
+      </p>
+    </div>
+
+    <div class="tablewrap reveal">
+      <table>
+        <thead><tr><th>Category</th><th>Common options</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Cloud and neoclouds</td><td>AWS, GCP, Azure; CoreWeave, Lambda, Nebius, Crusoe</td><td>Neoclouds often differentiate on easier billing and availability</td></tr>
+          <tr><td>GPU scheduling and pooling</td><td>Kubernetes with KubeRay, Slurm, NVIDIA Run:ai</td><td>Share and reclaim accelerators across teams</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="read">
+      <h2 class="reveal" id="l3"><span class="lx">L3</span>Inference stack</h2>
+      <p class="reveal">
+        The inference stack is the serving software: the engine, key-value (KV) cache management, batching,
+        and the split between prefill and decode. It is usually the single largest source of optimization,
+        and the first layer where consumption is actively suppressed rather than merely priced.
+      </p>
+      <p class="reveal">
+        Useful signals include GPU utilization, throughput in tokens and requests per second, time to first
+        token, inter-token latency, KV cache hit rate and prefix-reuse percentage, batch efficiency, and
+        tail latency at the 50th and 95th percentiles.
+      </p>
+      <p class="reveal">
+        The first decision is choosing an engine that fits the workload. From there, prefix caching is
+        enabled and the KV cache is extended beyond GPU memory, tiered across GPU, CPU memory, and NVMe,
+        with cached blocks reused across queries. Speculative decoding adds a small draft model, and
+        continuous batching lets new requests join the running batch as slots free. Disaggregating prefill
+        and decode is decided here and provisioned at L2; the engine supports the split, the capacity layer
+        supplies workers suited to each half.
+      </p>
+      <p class="reveal">
+        Cache hit rate is the number that matters most, and it is won largely through prompt and prefix
+        stability. This is the layer that turns repeated work into <code>T(1)</code> and <code>T(log n)</code>.
+      </p>
+    </div>
+
+    <div class="tablewrap reveal">
+      <table>
+        <thead><tr><th>Category</th><th>Common options</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Inference engines</td><td>vLLM (general default, OpenAI compatible), SGLang (prefix heavy and structured output via RadixAttention), TensorRT-LLM (max throughput on NVIDIA), LMDeploy TurboMind, llama.cpp and Ollama (local)</td><td>All mainstream engines now do continuous batching, paged KV cache, and FP8</td></tr>
+          <tr><td>KV cache layer</td><td>LMCache (GPU, DRAM, NVMe, Redis, S3 tiers; non-prefix reuse), Mooncake, InfiniStore</td><td>Maps to hot, warm, cold tiering; cuts time to first token on long context, RAG, and multi-turn</td></tr>
+          <tr><td>Orchestration</td><td>NVIDIA Dynamo, NVIDIA Triton Inference Server</td><td>Disaggregation and multi-model serving above the engines</td></tr>
+          <tr><td>Managed serving</td><td>BentoML, Baseten, Modal, Fireworks, Together</td><td>Hosted versions of the above</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="read">
+      <h2 class="reveal" id="l4"><span class="lx">L4</span>Model management and selection</h2>
+      <p class="reveal">
+        This layer fixes which model runs, at what numeric precision, and with what adapted weights. Running
+        a frontier-scale model for a trivial task is the classic waste; quantization reduces memory and
+        compute with limited quality loss, and distillation and pruning go further.
+      </p>
+      <p class="reveal">
+        The right measures are cost per task or outcome rather than cost per token alone, quality per dollar
+        expressed as an evaluation score against spend, VRAM footprint, throughput at a given precision, and
+        the accuracy change after quantization, checked against a held-out set so regressions surface before
+        release.
+      </p>
+      <p class="reveal">
+        Models are right-sized to the task, with sub-steps routed to smaller models, and quantized to the
+        precision the hardware supports well. FP8 is near-lossless on current hardware; FP4 formats such as
+        NVFP4 and MXFP4 offer more throughput but need validation and often quantization-aware tuning; INT4
+        with AWQ or GPTQ suits older and consumer GPUs; and GGUF suits CPU and edge.
+      </p>
+      <p class="reveal">
+        Calibrating quantization on real traffic, distilling task-specific small models, and pruning where
+        quality holds complete the toolkit. Adapters such as LoRA are the third option between right-sizing
+        and escalating back to a frontier model: task-specific weights applied over one frozen base, so many
+        variants share a single deployment.
+      </p>
+      <p class="reveal">
+        Right-sizing is what pulls multiplicative work back toward linear; precision and adapter strategy
+        set what each token costs once the class is settled.
+      </p>
+    </div>
+
+    <div class="tablewrap reveal">
+      <table>
+        <thead><tr><th>Category</th><th>Common options</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Open model families</td><td>Llama, Qwen, Kimi, DeepSeek, Mistral, Gemma</td><td>Strong candidates for right-sizing and self-hosting</td></tr>
+          <tr><td>Quantization tooling</td><td>NVIDIA TensorRT Model Optimizer, AutoAWQ, GPTQ, llama.cpp GGUF, Intel Neural Compressor, TorchAO</td><td>Cover FP8, FP4, INT4, and calibration</td></tr>
+          <tr><td>Adapters</td><td>LoRA and PEFT tooling; adapter serving in vLLM and SGLang; weight merging</td><td>Many task variants from one base model</td></tr>
+          <tr><td>Techniques</td><td>SmoothQuant, SpinQuant, SVDQuant; SparseGPT and Wanda pruning</td><td>Recover accuracy at low precision or shrink further</td></tr>
+          <tr><td>Quality gates</td><td>DeepEval and Confident AI, Arize Phoenix, lm-eval-harness</td><td>Precondition for any precision or model change, not an after-the-fact report</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="read">
+      <h2 class="reveal" id="l5"><span class="lx">L5</span>Routing and governance</h2>
+      <p class="reveal">
+        Routing and governance is the control plane in front of everything else: which model or deployment
+        serves each request, caching at the gateway, budgets and quotas, fallbacks, and the guardrails that
+        bound agent fan-out and retries. It is the only layer that can decide whether a request needs no
+        model at all, and the only one that can stop a workload consuming without limit.
+      </p>
+      <p class="reveal">
+        Measurement centers on per-request and per-route cost attribution; cost per feature, team, customer,
+        or tenant; the model-mix distribution; semantic cache hit rate; the share of requests routed to
+        cheaper models; budget burn-down; fan-out width per task; and retry, iteration, and agent-step
+        counts.
+      </p>
+      <p class="reveal">
+        Requests are routed by complexity, so simple prompts reach cheap or local models and only hard
+        prompts reach frontier models, with cascading where it helps. Semantic caching sits at the gateway.
+        Per-team and per-tenant token budgets are enforced, with routes demoted as budgets are hit. Agentic
+        behavior is bounded by fan-out limits, recursion and iteration caps, and circuit breakers, while
+        fallbacks and load balancing provide resilience.
+      </p>
+      <p class="reveal">
+        This is the primary lever for the amplifying classes. Routing pulls multiplicative work toward
+        linear by sending it somewhere cheaper; caps and circuit breakers are what keep agent-multiplicative
+        work from becoming unbounded. The distinction matters, because the first is an optimization and the
+        second is a containment: a workload with no ceiling has no worst case, and no amount of efficiency
+        in the layers beneath compensates for that.
+      </p>
+    </div>
+
+    <div class="tablewrap reveal">
+      <table>
+        <thead><tr><th>Category</th><th>Common options</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Gateways and routers</td><td>LiteLLM (open source, self-hosted), Portkey, Bifrost, Cloudflare AI Gateway, Kong AI Gateway, OpenRouter, Vercel AI Gateway, TrueFoundry, Inworld Router, Microsoft Foundry model router</td><td>One OpenAI-compatible endpoint over many providers, plus routing, fallbacks, and budgets</td></tr>
+          <tr><td>Semantic caching</td><td>Gateway-native caches backed by Redis or Qdrant; GPTCache</td><td>Matches on meaning, not exact text; the similarity threshold needs validation against real traffic</td></tr>
+          <tr><td>Token budgeting</td><td>Per-tenant budget primitives in Bifrost and similar; budget-aware routing</td><td>Budgeting on tokens, not only dollar caps</td></tr>
+          <tr><td>Agent governance</td><td>Quotas, iteration caps, circuit breakers; MCP and agent gateways</td><td>The lever for agent-multiplicative and unbounded work</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="read">
+      <h2 class="reveal" id="measuring">Measuring across the stack</h2>
+      <p class="reveal">
+        Measurement here is diagnostic rather than decisional. In classic FinOps the measurement gates a
+        discretionary choice: here is the spend, and the question is whether an optimization is worth acting
+        on. In tokenomics the optimization is built into how the workload runs, so measurement instead
+        reports whether the discipline is holding and where it is degrading.
+      </p>
+      <p class="reveal">
+        The signal worth watching is drift up the consumption spectrum without a matching rise in value, a
+        workload that was linear quietly becoming multiplicative or agent-multiplicative. Drift is rarely a
+        decision anyone made; it arrives through a model upgrade that enables extended thinking by default,
+        a feature that adds a tool-use loop, an agent given one more level of delegation. The class changed
+        and nothing in the request looks different. Measurement is the only way that surfaces before the
+        invoice does.
+      </p>
+      <p class="reveal">
+        When it does surface, the question is whether the new class is justified by what the workload now
+        returns, and that is a question for whoever owns the workload rather than for the measurement layer
+        itself. The budgets, quotas, and circuit breakers at L5 do not answer it either; they hold a
+        workload inside agreed bounds while the answer is worked out.
+      </p>
+      <p class="reveal">
+        Token cost data arrives from three categories of tooling, which is part of why a shared definition
+        of conformant, token-level cost data matters.
+      </p>
+    </div>
+
+    <div class="tablewrap reveal">
+      <table>
+        <thead><tr><th>Category</th><th>What it does</th><th>Common options</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td>Gateway and proxy</td><td>Intercepts every request in real time, meters tokens and cost, enables routing and budgets</td><td>LiteLLM, Helicone, Portkey, Bifrost, Cloudflare AI Gateway</td><td>Real-time control and request-level attribution</td></tr>
+          <tr><td>Trace level</td><td>Instruments code to capture per-call and per-chain traces with step-level cost</td><td>Langfuse, LangSmith, Arize Phoenix, Braintrust, Datadog LLM, OpenTelemetry and OpenLLMetry</td><td>Linking an agent's many calls into one trace, where multiplicative and agent drift surfaces</td></tr>
+          <tr><td>Billing and FinOps</td><td>Ingests provider invoices and cloud spend, allocates and forecasts</td><td>Tools across the FinOps Landscape</td><td>Allocation, budgeting, and anomaly detection alongside cloud spend</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="read">
+      <p class="reveal" style="margin-top:34px">
+        Two details deserve standardization. Usage now divides into more than input and output: cached
+        tokens, reasoning tokens, and audio and image tokens each price differently, so token-level data
+        should carry the usage type. Without it, the reasoning multiplier that moves a workload between
+        classes is invisible in the billing record, which is precisely the drift this section is about
+        catching.
+      </p>
+      <p class="reveal">
+        The second is granularity. FOCUS data at the token level rather than the invoice level is what makes
+        any of this comparable across providers, models, and teams. Measurement across a stack this
+        heterogeneous depends on the data arriving in a shape that can be compared at all.
+      </p>
+
+      <h2 class="reveal" id="conclusion">Conclusion</h2>
+      <p class="reveal">
+        The stack and the spectrum turn token cost from a single number into a set of architectural
+        decisions with known levers. Silicon sets the lower limit on what a token costs. Capacity decides
+        how much of that silicon does useful work. The inference stack is where repeated work stops being
+        generated at all. The model layer fixes what runs and at what precision. Routing and governance
+        decide whether a request needs a model in the first place, and whether an agent has a ceiling. The
+        lower two layers set what a token costs; the upper three move a workload between classes, and then
+        hold it there.
+      </p>
+      <p class="reveal">
+        The stack says where to act; the spectrum says what the action is worth. The discipline is keeping
+        the two aligned, so that every unit of work runs on the optimal class its value can justify, and
+        every token in that class is as efficient as the layers beneath it can produce it.
+      </p>
+      <p class="reveal">
+        None of that is one person's job. The decisions are distributed across the stack by construction,
+        which means the discipline is too, and an organization gets good at it the way it gets good at
+        security: not by appointing someone, but by enough of the people making those decisions
+        understanding what their layer costs.
+      </p>
+      <p class="reveal">
+        The five layers are a starting model, not a finished standard. They exist to establish a shared
+        vocabulary to refine and extend; the boundaries, the metrics, and the tooling that fills them will
+        move as the field does. Some of that movement is already visible. As local and on-premise generation
+        gains more attention, tokens may leave the metered economy altogether, which changes the shape of
+        the cost rather than removing it. And value, how token cost feeds pricing, monetization, and product
+        decisions, is what turns efficiency into business outcome. Consumption is treated first because it
+        is where the engineering leverage is most concrete today, not because it is the whole of tokenomics.
+      </p>
+    </div>
+
+  </div>
+</article>
+
+</div></main>
+
+
+<footer class="px-6 lg:px-8 py-8 mt-12">
+  <div class="p-1.5 rounded-3xl bg-linear-to-r from-brand-primary  to-brand-tertiary">
+    <div class="relative isolate mx-auto max-w-full overflow-hidden rounded-2xl bg-surface-darker  px-6 py-12 ring-1 ring-gray-800 lg:px-16">
+      <div class="xl:flex flex-col items-center justify-between gap-10 sm:flex-row sm:items-start mx-auto max-w-8xl">
+        <div class="flex w-full flex-col items-center gap-8 sm:w-auto sm:min-w-xl sm:items-start">
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+          
+<div class="te-footer-newsletter w-full max-w-md"
+	data-te-newsletter-form
+	data-te-portal-id="5432286"
+	data-te-form-id="6815e400-fd7c-4efb-a9c1-e9d6a6cee7d3">
+	<h2 class="text-left text-sm/6 font-normal text-brand-light">Subscribe to our newsletter</h2>
+
+	<form data-step="1" class="mt-2 flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-x-4" novalidate>
+		<div class="min-w-0 flex-auto">
+			<input type="email" name="email" required
+				aria-label="Email address"
+				placeholder="Add your email address*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+	</form>
+
+	<form data-step="2" hidden class="te-newsletter-step2 mt-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-x-3 sm:flex-wrap" novalidate>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="firstname" required
+				aria-label="First name"
+				placeholder="First name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="lastname" required
+				aria-label="Last name"
+				placeholder="Last name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+		<p data-te-newsletter-msg hidden class="text-sm text-red-400 sm:basis-full"></p>
+	</form>
+</div>
+        </div>
+        <div>
+        <nav aria-label="Footer" class="flex flex-col lg:flex-row justify-start xl:justify-end gap-x-12 gap-y-3 text-sm/6">
+          <a href="https://www.tokeneconomics.com/insights/" class="text-sm/6 font-normal text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="text-sm/6 font-normal text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="text-sm/6 font-normal text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="text-sm/6 font-normal text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="text-sm/6 font-normal text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="text-sm/6 font-normal text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="text-sm/6 font-normal text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a></div>    
+            </nav>
+                            <div class="mt-10 flex xl:justify-end gap-6 max-w-8xl mx-auto">
+                                                    <a href="https://www.linkedin.com/company/tokenomics-foundation/" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Linkedin">
+                                      </a>
+                                                                      <a href="https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Youtube">
+                                      </a>
+                                                                      <a href="https://substack.com/@tokenomicsfoundation" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Substack">
+                                      </a>
+                                                                      <a href="https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Spotify">
+                                      </a>
+                                                </div>
+                      </div>      
+        </div>
+      
+      <div class="mt-16 space-y-2  pt-8 text-left text-xs font-light text-brand-light max-w-8xl mx-auto opacity-70">
+        <p><a class="underline" href="https://www.finops.org/introduction/how-to-use/" target="_blank" rel="noopener noreferrer">This work is licensed under Attribution 4.0 International</a></p>
+        <p>© 2026 Tokenomics Foundation Project a Series of LF Projects, LLC.</p>
+        <p>For web site terms of use, trademark policy and other project policies please see <a class="underline" href="https://lfprojects.org/" target="_blank" rel="noopener noreferrer">https://lfprojects.org.</a></p>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

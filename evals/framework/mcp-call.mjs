@@ -34,12 +34,15 @@ await client.connect(
     command: "node",
     args: [`dist/servers/${serverName}/main.js`],
     // SDK strips the parent env by default — forward the experimental flag
-    // so eval runs can exercise the gated surface.
+    // (and the tokenomics server's local curriculum overlay path) so eval
+    // runs can exercise the gated surface.
     env: {
       ...getDefaultEnvironment(),
-      ...(process.env.FINOPS_MCP_EXPERIMENTAL
-        ? { FINOPS_MCP_EXPERIMENTAL: process.env.FINOPS_MCP_EXPERIMENTAL }
-        : {}),
+      ...Object.fromEntries(
+        ["FINOPS_MCP_EXPERIMENTAL", "TOKENOMICS_MCP_CURRICULUM"]
+          .filter((k) => process.env[k])
+          .map((k) => [k, process.env[k]]),
+      ),
     },
     stderr: "ignore",
   }),

@@ -1,7 +1,17 @@
 # Release runbook
 
-How the two npm packages (`finops-framework-mcp`, root; `finops-focus-mcp`,
-`packages/finops-focus-mcp/`) and their MCP-registry manifests are published.
+How the npm packages (`finops-framework-mcp`, root; `finops-focus-mcp`,
+`packages/finops-focus-mcp/`; `tokenomics-overview-mcp`,
+`packages/tokenomics-overview-mcp/`) and their MCP-registry manifests are
+published.
+
+> **tokenomics-overview-mcp is not yet wired into CI publishing.** Before the
+> first tag that should ship it, the owner must (protected paths, agents may
+> not edit them): add a `Publish tokenomics-overview-mcp` step
+> (`working-directory: packages/tokenomics-overview-mcp`), a `publisher
+> validate packages/tokenomics-overview-mcp/server.json` line, and a submit
+> step to `.github/workflows/publish.yml`; add its `SERVER_VERSION` case to
+> `tests/version-sync.test.ts`; then run the bootstrap below for it.
 Publishing is an owner approval point (`approvals.yaml`) — agents prepare
 releases; a human runs them.
 
@@ -17,6 +27,8 @@ exists, so the very first publish of each package is manual:
    npm publish --access public          # root: finops-framework-mcp
    cd packages/finops-focus-mcp
    npm publish --access public          # finops-focus-mcp (prepack stages dist+data)
+   cd ../tokenomics-overview-mcp
+   npm publish --access public          # tokenomics-overview-mcp (prepack stages dist+data)
    ```
 
    Use an npm account with 2FA enabled. `--provenance` is unavailable for
@@ -89,6 +101,9 @@ exists, so the very first publish of each package is manual:
      `src/servers/framework/server.ts` `SERVER_VERSION`
    - focus: `packages/finops-focus-mcp/package.json`, its `server.json`
      (same two fields), `src/servers/focus/server.ts` `SERVER_VERSION`
+   - tokenomics: `packages/tokenomics-overview-mcp/package.json`, its
+     `server.json` (same two fields), `src/servers/tokenomics/server.ts`
+     `SERVER_VERSION`
 2. Gates green, PR merged to `main` per the normal approval flow.
 3. Tag and push: `git tag v<version> && git push origin v<version>`.
    `.github/workflows/publish.yml` builds, tests, and publishes both
@@ -123,5 +138,11 @@ exists, so the very first publish of each package is manual:
   (`scripts/pack-focus.mjs`) stages `dist/servers/focus`, `dist/shared`,
   and `data/focus` from the repo root, rebuilding when `dist/` is missing
   or older than `src/`.
+- `packages/tokenomics-overview-mcp` works the same way via
+  `scripts/pack-tokenomics.mjs` (`dist/servers/tokenomics`, `dist/shared`,
+  `data/tokenomics`). Its data is refreshed with
+  `node dist/crawlers/tokenomics/cli.js refresh` (live) or `derive`
+  (offline); review `manifest.json`'s `unregistered` list for new
+  Foundation pages worth adding to the registry.
 - Never publish a `.tgz` lying around in the package directory — always
   publish from the directory so `prepack` restages fresh output.

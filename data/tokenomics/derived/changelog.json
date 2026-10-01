@@ -1,0 +1,56 @@
+[
+  {
+    "added": [],
+    "changed": [
+      "derived/crosslinks.json"
+    ],
+    "crawled_at": "2026-09-25T08:52:54.064Z",
+    "data_version": "1.0.1",
+    "removed": []
+  },
+  {
+    "added": [
+      "content/documents.json",
+      "content/stages.json",
+      "content/layers.json",
+      "content/bigt.json",
+      "content/levers.json",
+      "content/metrics.json",
+      "content/personas.json",
+      "content/value.json",
+      "content/glossary.json",
+      "content/focus-tracker.json",
+      "content/cache-providers.json",
+      "derived/crosslinks.json",
+      "derived/crosswalk.json",
+      "content/markdown/documents/what-is-tokenomics.md",
+      "content/markdown/documents/five-layer-stack.md",
+      "content/markdown/documents/five-layer-stack-paper.md",
+      "content/markdown/documents/big-t-notation.md",
+      "content/markdown/documents/big-t-notation-paper.md",
+      "content/markdown/documents/cache-explainer.md",
+      "content/markdown/documents/personas-operating-model.md",
+      "content/markdown/documents/value-classification.md",
+      "content/markdown/documents/focus-1-5-for-ai.md",
+      "content/markdown/documents/total-cost-of-ai.md",
+      "content/markdown/documents/routing-wars.md",
+      "content/markdown/documents/what-tokenomics-is-and-isnt.md",
+      "content/markdown/stages.md",
+      "content/markdown/layers.md",
+      "content/markdown/bigt-variables.md",
+      "content/markdown/bigt-classes.md",
+      "content/markdown/levers.md",
+      "content/markdown/metrics.md",
+      "content/markdown/personas.md",
+      "content/markdown/value-categories.md",
+      "content/markdown/booking-destinations.md",
+      "content/markdown/glossary.md",
+      "content/markdown/focus-tracker.md",
+      "content/markdown/cache-providers.md"
+    ],
+    "changed": [],
+    "crawled_at": "2026-09-25T08:29:16.211Z",
+    "data_version": "1.0.0",
+    "removed": []
+  }
+]

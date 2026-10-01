@@ -1,0 +1,76 @@
+{
+  "$id": "tokenomics-overview-mcp/personas",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "core": {
+        "type": "boolean"
+      },
+      "description_md": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "provenance": {
+        "additionalProperties": false,
+        "properties": {
+          "document": {
+            "type": "string"
+          },
+          "license": {
+            "const": "CC-BY-4.0"
+          },
+          "section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_url": {
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document",
+          "section",
+          "source_url",
+          "license"
+        ],
+        "type": "object"
+      },
+      "responsibility": {
+        "type": "string"
+      },
+      "signals": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "stages": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "slug",
+      "name",
+      "core",
+      "stages",
+      "responsibility",
+      "description_md",
+      "signals",
+      "provenance"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

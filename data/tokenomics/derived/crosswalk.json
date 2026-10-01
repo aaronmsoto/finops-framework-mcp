@@ -1,0 +1,296 @@
+[
+  {
+    "from": {
+      "slug": "cache-hit-rate",
+      "type": "metric"
+    },
+    "official": false,
+    "rationale": "Same name. The framework KPI describes the percentage of tokens used from cache without a formula; the Tokenomics Foundation formula supplies the denominator (cache read + cache write + uncached input).",
+    "target": {
+      "id": "cache-hit-rate",
+      "kind": "kpi",
+      "server": "framework",
+      "uri": "finops://framework/kpis/cache-hit-rate"
+    }
+  },
+  {
+    "from": {
+      "slug": "cache-hit-rate",
+      "type": "metric"
+    },
+    "official": false,
+    "rationale": "Raising cache hit rate removes recomputed input tokens, which is consumption reduction rather than a rate change.",
+    "target": {
+      "id": "usage-optimization",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/usage-optimization"
+    }
+  },
+  {
+    "from": {
+      "slug": "cache-cost-efficiency",
+      "type": "metric"
+    },
+    "official": false,
+    "rationale": "Cache cost efficiency measures the effective price paid for prompt tokens against the base input price, the per-unit-price lens of Rate Optimization.",
+    "target": {
+      "id": "rate-optimization",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/rate-optimization"
+    }
+  },
+  {
+    "from": {
+      "slug": "cost-per-token",
+      "type": "metric"
+    },
+    "official": false,
+    "rationale": "A per-unit cost metric of the kind Unit Economics tracks.",
+    "target": {
+      "id": "unit-economics",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/unit-economics"
+    }
+  },
+  {
+    "from": {
+      "slug": "ai-unit-economics",
+      "type": "metric"
+    },
+    "official": false,
+    "rationale": "TCA over realized value is an AI-specific unit economics ratio.",
+    "target": {
+      "id": "unit-economics",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/unit-economics"
+    }
+  },
+  {
+    "from": {
+      "slug": "cost-per-token",
+      "type": "metric"
+    },
+    "official": false,
+    "rationale": "Both express token-based model cost; the framework KPI is usage-side, the Tokenomics metric production-side.",
+    "target": {
+      "id": "token-consumption-metrics",
+      "kind": "kpi",
+      "server": "framework",
+      "uri": "finops://framework/kpis/token-consumption-metrics"
+    }
+  },
+  {
+    "from": {
+      "slug": "l5-budgets",
+      "type": "lever"
+    },
+    "official": false,
+    "rationale": "Per-team and per-tenant token budgets at the routing layer implement budgets as runtime controls.",
+    "target": {
+      "id": "budgeting",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/budgeting"
+    }
+  },
+  {
+    "from": {
+      "slug": "l2-place-by-region",
+      "type": "lever"
+    },
+    "official": false,
+    "rationale": "Placing capacity by region is a workload placement decision.",
+    "target": {
+      "id": "architecting-workload-placement",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/architecting-workload-placement"
+    }
+  },
+  {
+    "from": {
+      "slug": "l4-right-size-the-model",
+      "type": "lever"
+    },
+    "official": false,
+    "rationale": "Right-sizing the model is the AI analogue of rightsizing resources.",
+    "target": {
+      "id": "usage-optimization",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/usage-optimization"
+    }
+  },
+  {
+    "from": {
+      "slug": "bigt-abstraction-transparency",
+      "type": "lever"
+    },
+    "official": false,
+    "rationale": "The lever targets credit bundles and seat licenses that hide token economics.",
+    "target": {
+      "id": "licensing-saas",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/licensing-saas"
+    }
+  },
+  {
+    "from": {
+      "slug": "bigt-workload-classification-and-governance",
+      "type": "lever"
+    },
+    "official": false,
+    "rationale": "Classification plus governance of high-consumption workloads is policy work.",
+    "target": {
+      "id": "governance-policy-risk",
+      "kind": "capability",
+      "server": "framework",
+      "uri": "finops://framework/capabilities/governance-policy-risk"
+    }
+  },
+  {
+    "from": {
+      "slug": "engineering",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "engineering",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/engineering"
+    }
+  },
+  {
+    "from": {
+      "slug": "finops-practitioner",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "finops-practitioner",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/finops-practitioner"
+    }
+  },
+  {
+    "from": {
+      "slug": "finance",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "finance",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/finance"
+    }
+  },
+  {
+    "from": {
+      "slug": "product",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "product",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/product"
+    }
+  },
+  {
+    "from": {
+      "slug": "procurement",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "procurement",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/procurement"
+    }
+  },
+  {
+    "from": {
+      "slug": "leadership",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "leadership",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/leadership"
+    }
+  },
+  {
+    "from": {
+      "slug": "security-and-compliance",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "security",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/security"
+    }
+  },
+  {
+    "from": {
+      "slug": "sustainability",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "sustainability",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/sustainability"
+    }
+  },
+  {
+    "from": {
+      "slug": "itam-itfm",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "itam",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/itam"
+    }
+  },
+  {
+    "from": {
+      "slug": "itam-itfm",
+      "type": "persona"
+    },
+    "official": false,
+    "rationale": "Name correspondence only. The Tokenomics personas page says reconciling its set with the FinOps Framework persona catalog 'is a deliberate next step, not attempted here'.",
+    "target": {
+      "id": "itfm",
+      "kind": "persona",
+      "server": "framework",
+      "uri": "finops://framework/personas/itfm"
+    }
+  }
+]

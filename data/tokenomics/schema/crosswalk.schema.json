@@ -1,0 +1,81 @@
+{
+  "$id": "tokenomics-overview-mcp/crosswalk",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "from": {
+        "additionalProperties": false,
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "document",
+              "stage",
+              "layer",
+              "bigt-class",
+              "lever",
+              "metric",
+              "persona",
+              "value-category",
+              "glossary-term",
+              "focus-item"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "slug"
+        ],
+        "type": "object"
+      },
+      "official": {
+        "const": false
+      },
+      "rationale": {
+        "type": "string"
+      },
+      "target": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "server": {
+            "enum": [
+              "framework",
+              "focus",
+              "focus-working-draft"
+            ]
+          },
+          "uri": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "server",
+          "kind",
+          "id",
+          "uri"
+        ],
+        "type": "object"
+      }
+    },
+    "required": [
+      "from",
+      "target",
+      "rationale",
+      "official"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}
