@@ -1,0 +1,127 @@
+{
+  "$id": "tokenomics-overview-mcp/value",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "booking_destinations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "provenance": {
+            "additionalProperties": false,
+            "properties": {
+              "document": {
+                "type": "string"
+              },
+              "license": {
+                "const": "CC-BY-4.0"
+              },
+              "section": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "source_url": {
+                "format": "uri",
+                "type": "string"
+              }
+            },
+            "required": [
+              "document",
+              "section",
+              "source_url",
+              "license"
+            ],
+            "type": "object"
+          },
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "description",
+          "provenance"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "categories": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "estimate_as": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "provenance": {
+            "additionalProperties": false,
+            "properties": {
+              "document": {
+                "type": "string"
+              },
+              "license": {
+                "const": "CC-BY-4.0"
+              },
+              "section": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "source_url": {
+                "format": "uri",
+                "type": "string"
+              }
+            },
+            "required": [
+              "document",
+              "section",
+              "source_url",
+              "license"
+            ],
+            "type": "object"
+          },
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "group",
+          "description",
+          "estimate_as",
+          "provenance"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "categories",
+    "booking_destinations"
+  ],
+  "type": "object"
+}

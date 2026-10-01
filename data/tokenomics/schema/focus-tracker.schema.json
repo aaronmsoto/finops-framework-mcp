@@ -1,0 +1,88 @@
+{
+  "$id": "tokenomics-overview-mcp/focus-tracker",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "body_md": {
+        "type": "string"
+      },
+      "bucket": {
+        "enum": [
+          "done",
+          "flight",
+          "consider",
+          "out"
+        ]
+      },
+      "identifiers": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "kind": {
+        "type": "string"
+      },
+      "labels": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "links": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "provenance": {
+        "additionalProperties": false,
+        "properties": {
+          "document": {
+            "type": "string"
+          },
+          "license": {
+            "const": "CC-BY-4.0"
+          },
+          "section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_url": {
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document",
+          "section",
+          "source_url",
+          "license"
+        ],
+        "type": "object"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "slug",
+      "title",
+      "bucket",
+      "kind",
+      "labels",
+      "identifiers",
+      "body_md",
+      "links",
+      "provenance"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

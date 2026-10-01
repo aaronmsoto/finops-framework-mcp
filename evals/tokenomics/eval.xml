@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Eval suite for the tokenomics-overview-mcp server (spec
+  .agents/specs/tokenomics-overview-mcp.md). Same constraints as the framework
+  and focus suites: every question is answerable TOOLS-ONLY through
+  evals/framework/mcp-call.mjs --server=tokenomics, read-only, independent of
+  the others, and verifiable against the committed data/tokenomics artifact.
+  Several questions deliberately test that the agent reports a source's
+  publication STATUS, since most Tokenomics Foundation sources are drafts.
+-->
+<evals server="tokenomics" artifact="data/tokenomics">
+  <eval id="1">
+    <question>What is the Tokenomics Foundation's published formula for Cache Hit Rate, and what is the publication status of the page it comes from?</question>
+    <expected>Cache hit rate = cache read / (cache read + cache write + uncached input). Source: the Prompt Cache Explainer, Release Candidate 1 (2026-09-22).</expected>
+    <expected_calls>get_metric(metric: "cache-hit-rate")</expected_calls>
+  </eval>
+  <eval id="2">
+    <question>A workload last week had 800,000 cache-read tokens, 50,000 cache-write tokens and 150,000 uncached input tokens. Base input price is $3 per million tokens, cache reads bill at 0.1x and cache writes at 1.25x. What are its Cache Hit Rate and Cache Cost Efficiency?</question>
+    <expected>Cache hit rate 0.8 (80%). Uncached equivalent cost $3.00, actual prompt cost $0.8775, Cache Cost Efficiency 0.7075 (about 70.8%) — clearly above zero, so caching is paying for itself.</expected>
+    <expected_calls>calculate_cache_metrics(cache_read_tokens: 800000, cache_write_tokens: 50000, uncached_input_tokens: 150000, base_input_price_per_mtok: 3, cache_read_multiplier: 0.1, cache_write_multiplier: 1.25)</expected_calls>
+  </eval>
+  <eval id="3">
+    <question>In Big-T notation, what do the three variables in T(n · k · a) stand for, and what is the published fix for the agent-multiplicative class?</question>
+    <expected>n = requests, or input size; k = model calls per request; a = agent depth. Fix for T(n·k·a): "Bound agent depth; add circuit breakers and budgets."</expected>
+    <expected_calls>get_bigt_notation; get_bigt_class(class: "T(n·k·a)")</expected_calls>
+  </eval>
+  <eval id="4">
+    <question>Which layers of the Five-Layer Tokenomics Stack move the Big-T multiplier, and what is the key metric for the inference stack layer?</question>
+    <expected>L3 Inference stack, L4 Model management and selection (model and quantization), and L5 Routing and governance move it; L1 Silicon and L2 Capacity do not (they set cost per token / effective cost per token). L3's key metric: cache hit rate, time to first token, throughput.</expected>
+    <expected_calls>list_layers</expected_calls>
+  </eval>
+  <eval id="5">
+    <question>What token reductions does the Big-T explainer publish for code-generation mode and for filtered retrieval, and which Big-T class does each land in?</question>
+    <expected>Code-generation mode: ~80%, T(n). Filtered retrieval (RAG done right): 92–99.9%, T(log n). (Standard tool calls are the baseline at T(n·k).)</expected>
+    <expected_calls>list_levers(kind: "architectural-approach")</expected_calls>
+  </eval>
+  <eval id="6">
+    <question>According to the cache explainer's provider snapshot, which provider charges nothing for cache writes, and what minimum cacheable prefix does Anthropic document? When were the provider docs reviewed?</question>
+    <expected>Google (Gemini API) has no write charge (implicit caching only). Anthropic: model-dependent, 512 to 4,096 tokens. Provider docs reviewed Aug 2026.</expected>
+    <expected_calls>get_provider_cache_snapshot</expected_calls>
+  </eval>
+  <eval id="7">
+    <question>Which FOCUS 1.5 work item adds the TokenCacheAction property, what values can it carry, and what is its status on the Foundation's tracker?</question>
+    <expected>FR 2099 (the cached-token work), in review (Member review). TokenCacheAction carries "Uncached", "Read", "Write", or "Other"; it ships with TokenDirection ("Input"/"Output") and replaces the drafted TokenType. It is not in a ratified FOCUS release.</expected>
+    <expected_calls>get_focus_ai_tracker(identifier: "TokenCacheAction")</expected_calls>
+  </eval>
+  <eval id="8">
+    <question>Which FinOps Framework capabilities does the Tokenomics Foundation's material itself link to the FinOps Practitioner persona, and what finops:// URIs identify them?</question>
+    <expected>Anomaly Management, Allocation, Budgeting, Forecasting — finops://framework/capabilities/anomaly-management, /allocation, /budgeting, /forecasting — each with an evidence quote from the Personas and Operating Model page (Release Candidate 2).</expected>
+    <expected_calls>get_crosslinks(entity_type: "persona", slug: "finops-practitioner")</expected_calls>
+  </eval>
+  <eval id="9">
+    <question>Which value classification outcome categories belong to the labor group, and to which five destinations does Finance book realized value?</question>
+    <expected>Labor: capacity gain, labor augmentation, labor automation. Booking destinations: new revenue won, revenue retained, spend removed, spend avoided, capital freed.</expected>
+    <expected_calls>list_value_categories</expected_calls>
+  </eval>
+  <eval id="10">
+    <question>How does the Tokenomics Foundation define "tokenmaxing", and is the definition page a ratified standard?</question>
+    <expected>"The now-cautionary habit of running everything through the most powerful model because tokens felt free." Source: "What is AI Tokenomics?" — a Working Draft (June 2026), not a ratified standard.</expected>
+    <expected_calls>define_term(term: "tokenmaxing")</expected_calls>
+  </eval>
+</evals>

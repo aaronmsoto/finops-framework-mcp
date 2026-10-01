@@ -1,0 +1,90 @@
+{
+  "$id": "tokenomics-overview-mcp/crosslinks",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "document": {
+        "type": "string"
+      },
+      "evidence": {
+        "type": "string"
+      },
+      "from": {
+        "additionalProperties": false,
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "document",
+              "stage",
+              "layer",
+              "bigt-class",
+              "lever",
+              "metric",
+              "persona",
+              "value-category",
+              "glossary-term",
+              "focus-item"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "slug"
+        ],
+        "type": "object"
+      },
+      "official": {
+        "const": true
+      },
+      "source_url": {
+        "format": "uri",
+        "type": "string"
+      },
+      "target": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "server": {
+            "enum": [
+              "framework",
+              "focus",
+              "focus-working-draft"
+            ]
+          },
+          "uri": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "server",
+          "kind",
+          "id",
+          "uri"
+        ],
+        "type": "object"
+      }
+    },
+    "required": [
+      "from",
+      "target",
+      "evidence",
+      "document",
+      "source_url",
+      "official"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

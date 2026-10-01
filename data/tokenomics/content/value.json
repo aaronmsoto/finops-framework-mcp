@@ -1,0 +1,191 @@
+{
+  "booking_destinations": [
+    {
+      "description": "Business or price that would not exist without the AI. The number is already in a ledger, so the argument comes down to attribution.",
+      "name": "New revenue won",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep4",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "new-revenue-won"
+    },
+    {
+      "description": "Retention held, or churn avoided, or revenue pulled forward. Three evidence types share this card, and a claim has to say which one it is using.",
+      "name": "Revenue retained",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep4",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "revenue-retained"
+    },
+    {
+      "description": "An invoice, license, server, or contract that actually stopped. An unambiguous evidence type, when the prior spend is removed.",
+      "name": "Spend removed",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep4",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "spend-removed"
+    },
+    {
+      "description": "A cost never incurred. Deterministic, a project you did not have to fund, or probabilistic, an expected loss. Risk claims are always the second.",
+      "name": "Spend avoided",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep4",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "spend-avoided"
+    },
+    {
+      "description": "Working capital released, capacity not purchased, capital expenditure deferred.",
+      "name": "Capital freed",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep4",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "capital-freed"
+    }
+  ],
+  "categories": [
+    {
+      "description": "Revenue that would not exist without the AI. The number sits in a ledger; the challenge is attribution, not measurement.",
+      "estimate_as": "dollars, revenue line",
+      "group": "Direct dollar wins",
+      "name": "Revenue enablement",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "revenue-enablement"
+    },
+    {
+      "description": "Spend that does not occur. Spend that went down is visible on an invoice; spend never incurred is a counterfactual.",
+      "estimate_as": "dollars, opex line",
+      "group": "Direct dollar wins",
+      "name": "Cost avoidance",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "cost-avoidance"
+    },
+    {
+      "description": "Same people produce more. Individually nice-to-haves; in aggregate often the largest line. For a non-profit or mission-driven organization (e.g. Public sector or government) this is usually where the gain lands: the same staff deliver more of the mission, measured in the organization's own output unit, such as cases handled or grants processed.",
+      "estimate_as": "FTE-equivalents freed, or mission output per period",
+      "group": "Labor categories",
+      "name": "Capacity gain",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "capacity-gain"
+    },
+    {
+      "description": "AI does part of the task and the human stays in the loop. The type of work may shift to management or review. The gain shows up as throughput or hours per unit before it ever shows up as headcount. Compare against the human alone.",
+      "estimate_as": "hours per unit, FTE fraction, then dollars",
+      "group": "Labor categories",
+      "name": "Labor augmentation",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "labor-augmentation"
+    },
+    {
+      "description": "AI does the task end to end. Trivial to compute, hardest to defend: it needs the best-of-either baseline and the Quality Floor applied before counting, and it raises who owns the decision once the human is out of the loop, and what the freed people move to.",
+      "estimate_as": "FTE headcount, dollars at loaded cost",
+      "group": "Labor categories",
+      "name": "Labor automation",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "labor-automation"
+    },
+    {
+      "description": "Fewer defects, less rework, better product. This is the quality of the work the business ships.",
+      "estimate_as": "rework cost, customer satisfaction, refund or churn dollars",
+      "group": "Intangible outcomes",
+      "name": "Product Quality",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "product-quality"
+    },
+    {
+      "description": "Measurement of cycle time is usually possible; but what a week of earlier delivery is worth usually is harder. Early delivery could resolve as revenue pulled forward or spend avoided.",
+      "estimate_as": "cycle time, then revenue or dollars",
+      "group": "Intangible outcomes",
+      "name": "Speed to market",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "speed-to-market"
+    },
+    {
+      "description": "Security incidents prevented, product outages avoided, compliance failures caught earlier. The value is a loss that did not occur; the claim rests on an expected-loss estimate: for example, incident rate x incident cost.",
+      "estimate_as": "incidents per period x cost per incident",
+      "group": "Intangible outcomes",
+      "name": "Risk reduction",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "risk-reduction"
+    },
+    {
+      "description": "Something not previously possible. There is no prior state to measure against, so the claim is about viability rather than delta: name the alternative you chose not to build. The counterfactual is the baseline: what it would have cost, or whether it would have shipped at all.",
+      "estimate_as": "viability claim, then revenue dollars",
+      "group": "Intangible outcomes",
+      "name": "New capability",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "new-capability"
+    },
+    {
+      "description": "How the people using the AI respond to the change: retention, engagement, and counterproductive work behaviors such as withdrawal or sabotage. It is estimated the same way as the other categories in this group: survey deltas, turnover rates, and the cost of replacing the people who leave. AI change management is a social and economic outcome of the deployment, and this category is where it is estimated.",
+      "estimate_as": "retention rate, survey delta, then turnover cost in dollars",
+      "group": "Intangible outcomes",
+      "name": "Employee Engagement",
+      "provenance": {
+        "document": "value-classification",
+        "license": "CC-BY-4.0",
+        "section": "vfstep3",
+        "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      },
+      "slug": "employee-engagement"
+    }
+  ]
+}

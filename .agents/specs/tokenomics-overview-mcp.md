@@ -69,7 +69,9 @@ cache-cost-efficiency, uncached-equivalent-cost, net-benefit, cost-per-token,
 risk-expected-loss, ai-unit-economics), personas 12 (8 core + 4 allied),
 value_categories 10, booking_destinations 5, cache_providers 3. Levers,
 glossary terms, FOCUS-tracker items: minimum bounds. Every record carries
-`{source_url, section?, license: "CC-BY-4.0", status}`; formulas verbatim.
+`{document, section, source_url, license: "CC-BY-4.0"}`; the publication
+status lives on the document record and is rendered into every output
+(single records via a status line, lists via a sources-and-status footer).
 
 ## Cross-links
 
@@ -108,8 +110,9 @@ public, so its text never enters `data/` or the npm tarball. The importer
 emits overlay JSON to a local path; the server loads it only when both the
 experimental flag and `TOKENOMICS_MCP_CURRICULUM=<dir>` are set, validates it
 with ajv, and labels every output `official: false`, "cert-prep curriculum
-(unofficial)". Module-original formulas are tagged `module_method`. Practice
-banks are never imported (exam-integrity).
+(unofficial)". Slides keep their source lines and facilitator notes (which
+mark module-original methods). Practice banks are never imported
+(exam-integrity).
 
 ## Packaging
 
@@ -118,15 +121,19 @@ banks are never imported (exam-integrity).
 [dist, data/tokenomics, README, LICENSE, NOTICE], prepack
 `scripts/pack-tokenomics.mjs`, mcpName
 io.github.aaronmsoto/tokenomics-overview-mcp, server.json with
-`TOKENOMICS_MCP_DATA`, `TOKENOMICS_MCP_CURRICULUM`). Version 0.1.0.
+`TOKENOMICS_MCP_DATA` only — the experimental overlay variable is not
+advertised, per decisions.md 2026-08-15). Version 0.1.0. The checked-in
+`.mcp.json` gains the server only after it is on npm (fresh-clone rule);
+`.mcp.json.example` gains it now.
 
 ## Acceptance criteria
 
 - [ ] `refresh` against the live site produces data/tokenomics with the
       pinned counts; a second `refresh` from cache and a `derive` are
       byte-identical; artifact ≤1.5MB; fixtures make parser tests offline.
-- [ ] Cache Hit Rate and Cache Cost Efficiency formulas in the artifact match
-      the cache-explainer page text verbatim; `calculate_cache_metrics`
+- [ ] Cache Hit Rate and Cache Cost Efficiency formulas in the artifact are
+      built only from the cache-explainer's own formula text (stacked
+      fractions linearized as `num / (den)`); `calculate_cache_metrics`
       reproduces a hand-computed fixture exactly and rejects negative/zero-
       denominator input with an error, not NaN.
 - [ ] Every stated cross-link's evidence quote is found in its document and

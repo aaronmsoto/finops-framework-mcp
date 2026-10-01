@@ -1,0 +1,57 @@
+{
+  "$id": "tokenomics-overview-mcp/manifest",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "crawled_at": {
+      "type": "string"
+    },
+    "data_version": {
+      "type": "string"
+    },
+    "parse_warnings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "sha256": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "source_urls": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "unregistered": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "data_version",
+    "schema_version",
+    "crawled_at",
+    "source_urls",
+    "sha256",
+    "counts",
+    "parse_warnings",
+    "unregistered"
+  ],
+  "type": "object"
+}

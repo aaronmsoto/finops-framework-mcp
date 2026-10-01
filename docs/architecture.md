@@ -43,6 +43,16 @@ All tests live under `src/**/*.test.ts` (repo `tests/**` is a protected
 path); `vitest.config.ts` includes them and excludes `fixtures/` from
 coverage. Future FOCUS sibling: `src/crawlers/focus`, `src/servers/focus`
 reuse `src/shared` directly; extract packages only if that day ever needs it.
+**Now built (third server):** `packages/tokenomics-overview-mcp` — AI
+tokenomics from the Tokenomics Foundation (tokeneconomics.com, CC BY 4.0):
+`src/crawlers/tokenomics` (REST discovery + rendered-HTML parse → canonical
+markdown → offline `derive` → ajv → emit), `src/shared/tokenomics` (types,
+schemas, loader, curriculum overlay), `src/servers/tokenomics`
+(`tokenomics://overview/…`), `data/tokenomics/`. Cross-links to the other two
+servers are evidence-checked strings, never imports. The owner's private
+cert-prep curriculum is a local, experimental-only overlay. Design and
+binding spec: `docs/designs/tokenomics-overview-mcp.html`,
+`.agents/specs/tokenomics-overview-mcp.md`.
 **Now built:** `packages/finops-focus-mcp` — a second, published MCP server
 covering the FOCUS spec (columns, KPI mappings, cross-version diffs), reusing
 `src/shared` and following the same crawler → artifact → server pipeline.

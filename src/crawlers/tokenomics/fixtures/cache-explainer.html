@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en-US" data-brand="tf" data-theme="dark">
+<head>
+    <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
+  	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	
+	<title>AI Tokenomics Prompt Cache Explainer - Optimization Playbook - Tokenomics Foundation</title>
+<meta name='robots' content='max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+<meta name="description" content="How prompt caching works, and how to monitor, measure, and optimize cache hits, a core lever in AI tokenomics.">
+<meta property="og:title" content="AI Tokenomics Prompt Cache Explainer - Optimization Playbook - Tokenomics Foundation">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://www.tokeneconomics.com/wp-content/uploads/2026/05/Firefly_produce-a-similar-image-with-a-showing-a-different-shape-845189.png">
+<meta property="og:image:width" content="624">
+<meta property="og:image:height" content="416">
+<meta property="og:description" content="How prompt caching works, and how to monitor, measure, and optimize cache hits, a core lever in AI tokenomics.">
+<meta property="og:url" content="https://www.tokeneconomics.com/cache-explainer/">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Tokenomics Foundation">
+<meta property="article:published_time" content="2026-08-21T13:50:24+00:00">
+<meta property="article:modified_time" content="2026-09-24T15:50:14+00:00">
+<meta property="og:updated_time" content="2026-09-24T15:50:14+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.tokeneconomics.com/wp-content/uploads/2026/05/Firefly_produce-a-similar-image-with-a-showing-a-different-shape-845189.png">
+
+
+
+	
+	
+	<noscript></noscript>
+	
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="WordPress 7.1.2" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.tokeneconomics.com/#website","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Defining the best practices and primitives of AI economics","inLanguage":"en-US","potentialAction":{"@type":"SearchAction","target":"https://www.tokeneconomics.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://www.tokeneconomics.com/#organization","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Tokenomics Foundation defines the best practices and primitives of the token economy","knowsAbout":["Tokenomics","AI cost management","AI infrastructure","FinOps"],"sameAs":["https://www.linkedin.com/company/tokenomics-foundation/","https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA","https://substack.com/@tokenomicsfoundation","https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c"]},{"@type":"WebPage","@id":"https://www.tokeneconomics.com/cache-explainer/#webpage","url":"https://www.tokeneconomics.com/cache-explainer/","name":"AI Tokenomics Prompt Cache Explainer - Optimization Playbook - Tokenomics Foundation","inLanguage":"en-US","isPartOf":{"@id":"https://www.tokeneconomics.com/#website"},"datePublished":"2026-08-21T13:50:24+00:00","dateModified":"2026-09-24T15:50:14+00:00"}]}</script>
+
+
+
+<meta name="msapplication-TileImage" content="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-270x270.png" />
+</head>
+<body class="wp-singular page-template page-template-templates page-template-page-html page-template-templatespage-html-php page page-id-1598 wp-theme-tokeneconomics bg-surface-dark overflow-x-hidden no-global-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPPHJ9DM"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<a class="screen-reader-text" href="#primary">Skip to content</a>
+	<header id="site-header" class="z-50 max-w-8xl mx-auto w-full">
+    <nav aria-label="Global" class="flex items-center justify-between px-6 py-8 lg:px-8">
+      <div class="flex lg:flex-1">
+        <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+          <span class="sr-only">Tokenomics Foundation</span>
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+        </a>
+      </div>
+      <div class="flex lg:hidden">
+        <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 cursor-pointer">
+          <span class="sr-only">Open main menu</span>
+          
+        </button>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12 lg:items-center">
+        <a href="https://www.tokeneconomics.com/insights/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="te-nav-link text-sm/6 font-semibold text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="te-nav-link text-sm/6 font-semibold text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="te-nav-link text-sm/6 font-semibold text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a><div class="te-dropdown-panel"><a href="https://www.tokeneconomics.com/membership/" class="te-dropdown-link">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="te-dropdown-link">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="te-dropdown-link">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="te-dropdown-link">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="te-dropdown-link">Tokenomics Press and Media</a></div></div>      </div>
+      <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+        <a href="#" class="text-sm/6 font-semibold text-brand-light">Log in <span aria-hidden="true">&rarr;</span></a>
+      </div> -->
+    </nav>
+    <el-dialog>
+      <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
+        <div tabindex="0" class="fixed inset-0 focus:outline-none">
+          <el-dialog-panel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-surface-dark p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
+            <div class="flex items-center justify-between">
+              <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+                <span class="sr-only">Tokenomics Foundation</span>
+                <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-8 w-auto" width="117" height="32" />
+              </a>
+              <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-200">
+                <span class="sr-only">Close menu</span>
+                
+              </button>
+            </div>
+            <div class="mt-6 flow-root">
+              <div class="-my-6 divide-y divide-white/10">
+                <div class="space-y-2 py-6">
+                  <a href="https://www.tokeneconomics.com/insights/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Members</a><div class="te-dropdown"><button type="button" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5 te-dropdown-trigger w-full flex items-center justify-between">About</button><div class="te-dropdown-panel te-dropdown-panel--mobile hidden pl-4 mt-1 space-y-1"><a href="https://www.tokeneconomics.com/about/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">About</a><a href="https://www.tokeneconomics.com/membership/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Tokenomics Press and Media</a></div></div>                </div>
+              </div>
+            </div>
+          </el-dialog-panel>
+        </div>
+      </dialog>
+    </el-dialog>
+  </header>
+
+	<div class="w-full bg-primary text-primary-fg">
+		<a class="flex max-w-8xl mx-auto items-center justify-center gap-3 px-6 py-2.5 text-base/7 font-medium lg:px-8 hover:opacity-80" href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals">
+						<span>AI Tokenomics Fundamentals Certification Now Available &rarr;</span>
+								</a>
+	</div>
+	
+
+<main id="primary" class="site-main mt-0">
+	<div class="te-html-embed-1598"><!--
+  ============================================================================
+  Prompt Caching mini-tool &middot; companion to the Token Optimization Playbook (L3)
+  ============================================================================
+  EMBEDDING
+    Paste this whole block into one WordPress Custom HTML block on a
+    te_page template, same as Big-T Notation. No iframe.
+
+    Everything is scoped under #te-cache-tool and every custom class is
+    prefixed tc-, so nothing leaks into the theme.
+
+    Site tokens are consumed with fallbacks, e.g.
+      var(--color-brand-primary, #4f7cff)
+    so the block inherits the live tf brand on-site and still renders
+    correctly standalone (preview, artifact, docs export).
+
+    House classes used for consistency: te-section, te-section__eyebrow,
+    te-section__heading, te-section__muted, te-section__card, te-reveal.
+    Note on specificity: the rules below are ID-scoped, so they outrank the
+    theme's own .te-* rules. That is what makes the block render identically
+    standalone. If you would rather the live theme drive a given property,
+    delete that declaration here rather than trying to override it.
+
+  SINGLE THEME
+    Dark only, matching the site. Deliberate, not an omission.
+
+  RELEASE CANDIDATE 1 (2026-09-22)
+    First release candidate. Provenance: merged onto the 09-21 local
+    baseline (prompt-caching.md.09-21-baseline, proven to compile
+    byte-identical to the shipped 09-21 HTML), NOT onto the GDoc export.
+    The GDoc "Prefix Cache Explainer - after feedback.md" was derived from
+    a pre-09-21 export, so it lacks the 09-21 local passes (TOC, disambig
+    grid, denominator-note deletion, simulator move). Applied from the GDoc
+    as copyedits only: hero lead phrasing; Start here heading ("Cache hits
+    are almost free wins"); "cache read" phrasing fix; "co-work" phrasing
+    fix; model-switching heading; denominator note edit REJECTED (its base
+    text was deleted locally on 09-21; the deletion stands). Cache cost
+    efficiency: Stephen's manual pass kept "Keep in mind" but restored the
+    high-TTL clause and dropped the "somewhat harder to obtain" opener.
+    Round-trip artifacts
+    normalized: backslash escapes, collapsed table/widget/formula blocks,
+    curly quotes; all render hints come from the local baseline, not the
+    export. Style fixes applied this round: the "A cache hit is nearly
+    free" line was demoted from pull quote to normal prose (it was the
+    doc's only quote and not a quote); "Coming next: AI moves fast"
+    promoted from subtext to normal prose. Simulator padding measured
+    in-browser at this build (1280px + 390px): tool padding
+    clamp(18px,3vw,30px) verified, no change needed.
+
+  REVISION 2026-09-21
+    Floating TOC added (same pattern as Value Classification and Personas):
+    sticky rail pinned to the content container's right edge at >=1280px,
+    static single-column disclosure open by default below that. Section h2
+    headings no longer carry a 22ch max-width cap; they run the same 60rem
+    reading measure as prose, tables, grids, and the simulator, so all
+    section edges line up. Simulator section moved to the top of the
+    document per WG feedback; KV / prefix / prompt cache disambiguation
+    cards added to "Start here". Builder emits section ids, data-spy, and
+    the toc_nav; md sections may carry a toc "Short label" override.
+    Heading wrap switched from text-wrap: balance to text-wrap: pretty:
+    balance force-broke two-line headings in the middle of their measure
+    (visible short right edge vs. the cards/prose below); pretty fills
+    the full width and only avoids short last lines.
+    Hero lead (.te-section__muted) and pull quote (.tc-pull) caps raised
+    from 46ch / 40ch to the shared reading measure; pull quote wrap also
+    switched balance -> pretty.
+
+  REVISION 2026-09-03
+    Metrics trimmed to two: Cache Hit Rate (bounded coverage) and Cache
+    Cost Efficiency (cost avoided). Crawl/walk/run ladder and the reuse
+    and break-even ratio cards removed; the break-even idea now appears
+    only as the zero point of CCE. Formulas rendered as stacked
+    fractions. Consistent terms: cache read, cache write, uncached
+    input throughout. Deleted the troubleshooting, trade-offs, and
+    role-lists sections. Footer acknowledgements held until Release.
+    Added a placeholder paragraph for a future routing-and-caching
+    section, and an informational note that providers price caching in
+    different kinds, not just different rates.
+
+  REVISION 2026-08-27
+    Added: a Reuse Ratio / Break-Even Ratio target (contributed via WG
+    discussion; credited in the footer, the single acknowledgment spot),
+    an access-mode matrix (web UI, first-party
+    tools, third-party tools, direct API), and a provider behavior
+    snapshot from public documentation (Anthropic, OpenAI, Google Gemini)
+    as reviewed August 2026. Provider names appear only in those two new
+    sections; everything else stays vendor-neutral.
+
+  NOTE ON NAMING
+    "Access mode" is used for the four ways people consume hosted
+    inference. It is a usage channel, not a layer of the technical stack,
+    so it deliberately avoids the reserved word "layer."
+  ============================================================================
+-->
+
+<div id="te-cache-tool" data-brand="tf">
+
+
+
+
+<!-- ================================================================ HERO -->
+<section class="te-section" data-theme="dark" id="tcHero" data-spy>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 te-reveal">
+    <div class="tc-stack">
+      <p class="te-section__eyebrow">AI Tokenomics Optimization Playbook &middot; Layer 3 companion</p>
+      <h1 class="te-section__heading">The cache is a prefix, not a memory.</h1>
+      <p class="te-section__muted">Caching is one of the highest-leverage levers in AI tokenomics, and yet the benefit is easily undone by a single line of text in the wrong place. Here is how caching works, and how to monitor, measure, and optimize it.</p>
+
+      <div class="tc-ribbon-wrap">
+        <div class="tc-ribbon" id="tcRibbon" aria-hidden="true"></div>
+        <div class="tc-legend">
+          <span><i class="tc-sw"></i> Reused from cache: billed at a fraction of standard input</span>
+          <span><i class="tc-sw cold"></i> Recomputed every request: billed in full</span>
+        </div>
+      </div>
+
+      <p class="tc-small">The mechanics are vendor-neutral. The provider behavior sections cite public documentation as reviewed August 2026. Published by the Tokenomics Foundation.</p>
+    </div>
+  </div>
+</section>
+
+
+<nav class="tc-tocwrap mx-auto max-w-7xl px-6 lg:px-8" aria-label="Table of contents">
+  <details class="tc-toc" id="tcToc" open>
+    <summary>Contents</summary>
+    <div class="tc-toc__list">
+      <a href="#tcSimulator" data-target="tcSimulator"><span class="n">01</span>Interactive Tool</a>
+      <a href="#tcTheOneThing" data-target="tcTheOneThing"><span class="n">02</span>Core Concept</a>
+      <a href="#tcThreeRules" data-target="tcThreeRules"><span class="n">03</span>The Mechanics</a>
+      <a href="#tcMonitoring" data-target="tcMonitoring"><span class="n">04</span>Monitoring</a>
+      <a href="#tcModelSwitching" data-target="tcModelSwitching"><span class="n">05</span>Model Switching</a>
+      <a href="#tcAccessModes" data-target="tcAccessModes"><span class="n">06</span>Access Modes</a>
+      <a href="#tcProviderSnapshot" data-target="tcProviderSnapshot"><span class="n">07</span>Provider Behavior</a>
+    </div>
+  </details>
+</nav>
+
+
+<!-- ============================================================= SIMULATOR -->
+<section class="te-section" data-theme="dark" id="tcSimulator" data-spy>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 te-reveal">
+    <div class="tc-stack">
+      <p class="te-section__eyebrow">Interactive &middot; Prompt structure</p>
+      <h2 class="te-section__heading">Drag the blocks, watch the money move</h2>
+      <p class="tc-prose">What does it look like when you control the entire prompt? Below is a realistic request: a tool-heavy assistant with a large system prompt, retrieved documents, and a running conversation. Grab the blue six-dot handle on any block and drag it to a new order. The prefix cache behavior is simulated, matching from the top until it reaches the first thing that is not identical to last time.</p>
+
+      <div class="tc-tool">
+        <div class="tc-tool-head">
+          <h3>Request composition</h3>
+          <p>Set how each block behaves between two consecutive requests. <em>Grows at the end</em> is the conversation case: earlier turns are reusable, the newest turn is not, and nothing after it can be cached.</p>
+        </div>
+
+        <div class="tc-blocks" id="tcBlocks" role="list" aria-label="Prompt blocks, in request order. Drag a block or use arrow keys to reorder."></div>
+
+        <div class="tc-actions">
+            <button class="tc-btn primary" id="tcFix" type="button">Sort into optimal order</button>
+            <button class="tc-btn" id="tcBad" type="button">Load the common broken setup</button>
+        </div>
+
+        <div class="tc-meter" aria-hidden="true"><i id="tcMeter" style="width:0%"></i></div>
+
+        <dl class="tc-readout">
+            <div><dt>Cached prefix</dt><dd class="tc-digits" id="tcCached">0</dd></div>
+            <div><dt>Recomputed</dt><dd class="tc-digits" id="tcMiss">0</dd></div>
+            <div><dt>Input from cache</dt><dd class="accent tc-digits" id="tcPct">0%</dd></div>
+            <div><dt>Effective input cost</dt><dd class="tc-digits" id="tcCost">1.00&times;</dd></div>
+        </dl>
+
+        <p class="tc-verdict" id="tcVerdict" role="status" aria-live="polite"></p>
+      </div>
+
+      <p class="tc-small">Cost index assumes a cache read bills at roughly a tenth of standard input, the common order of magnitude across providers. Substitute your own contract rate; the shape of the curve does not change. Note the ceiling: because conversation history grows, a live chat never reaches 100%.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================================================== THE ONE THING -->
+<section class="te-section" data-theme="dark" id="tcTheOneThing" data-spy>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 te-reveal">
+    <div class="tc-stack">
+      <p class="te-section__eyebrow">Start here</p>
+      <h2 class="te-section__heading">Cache hits are almost free wins... except that they aren't free</h2>
+      <p class="tc-prose">A cache hit is nearly free. A cache miss costs full price. The key point of cache optimization is raising how often you hit, without paying to write entries that are never read.</p>
+      <p class="tc-prose">That framing is true whether you run your own inference servers or send every request to a hosted API.</p>
+      <p class="tc-prose">Three very similar names circulate for this simple idea at different levels. All three mean the same founding instinct of AI tokenomics: do not recompute tokens you have already seen.</p>
+      <div class="tc-grid-3">
+        <div class="te-section__card">
+          <p class="tc-rule-num">Inside the engine</p>
+          <h3>KV cache</h3>
+          <p>Attention state computed for a request, held so the model skips recomputing past tokens while it generates a response. Per-request by default; the two caches below extend that state across requests.</p>
+        </div>
+        <div class="te-section__card">
+          <p class="tc-rule-num">You run the cache</p>
+          <h3>Prefix cache</h3>
+          <p>KV cache reused across requests. As long as the next request starts with the same run of tokens as the last one, the engine picks up where the last one left off. Self-hosted serving stacks call this prefix caching, and you tune the cache size, the block size, the lifetime, the eviction TTL, etc.</p>
+        </div>
+        <div class="te-section__card">
+          <p class="tc-rule-num">The provider runs the cache</p>
+          <h3>Prompt cache</h3>
+          <p>The same mechanism sold through a model provider's API: essentially a synonym for prefix caching, run for you. The trade-off is that you have very little control over the tuning options in exchange for not running the inference servers.</p>
+        </div>
+      </div>
+      <p class="tc-prose">This is what the rest of this document means by a prompt cache. The catch is that a prefix cache / prompt cache is not a semantic cache, so it does not remember <em>ideas</em>. It remembers a <strong>literal sequence of tokens, starting from the very first one</strong>. Reuse stops at the first character that differs. Everything after that point is recomputed and billed in full, no matter how much of it is identical to last time.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================== THREE RULES -->
+<section class="te-section" data-theme="medium" id="tcThreeRules" data-spy>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 te-reveal">
+    <div class="tc-stack">
+      <p class="te-section__eyebrow">The mechanics</p>
+      <h2 class="te-section__heading">Three rules govern every prompt cache you will use</h2>
+      <div class="tc-grid-3">
+        <div class="te-section__card">
+          <p class="tc-rule-num">Rule 1</p>
+          <h3>It matches from the start</h3>
+          <p>A cache can only reuse the run of tokens beginning at position zero. There is no matching a chunk from the middle. Change token 12 of a 30,000-token prompt and you have thrown away 29,988 tokens of reuse.</p>
+        </div>
+        <div class="te-section__card">
+          <p class="tc-rule-num">Rule 2</p>
+          <h3>It matches exactly</h3>
+          <p>Not semantically, not approximately. A different timestamp, a re-serialized JSON key order, an extra newline, a swapped tool description: all misses. Anything that regenerates your prompt non-deterministically is a cache bug.</p>
+        </div>
+        <div class="te-section__card">
+          <p class="tc-rule-num">Rule 3</p>
+          <h3>It matches in blocks, and it expires</h3>
+          <p>Reuse is granted in chunks, not single tokens, so a prefix shorter than one block buys nothing. Entries also age out after a short idle window, which is why low-traffic workloads can hold a perfect prompt and still miss constantly.</p>
+        </div>
+      </div>
+      <p class="tc-prose">Read those three together and the design rule writes itself: <strong>stable content first, growing content next, per-request content last.</strong> One more constraint sits on top of all three, and it is the one non-technical users hit first: a cache entry belongs to <strong>one model</strong>. More on that shortly.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ MONITORING -->
+<section class="te-section" data-theme="dark" id="tcMonitoring" data-spy>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 te-reveal">
+    <div class="tc-stack">
+      <p class="te-section__eyebrow">Monitoring</p>
+      <h2 class="te-section__heading">Measuring prefix caching</h2>
+      <p class="tc-prose">The concept above is testable, which is where AI tokenomics turns from idea into practice: every major provider returns token counts broken out by type on each response, and every gateway and observability tool worth using will log them. The specific fields you use to pull these metrics may differ, but the meaning or equations will not. Once you are logging these three fields, the two metrics below are arithmetic on them.</p>
+
+      <div class="tc-table-wrap">
+        <table>
+          <thead><tr><th>Bucket</th><th>What it counts</th><th>How it bills</th><th>What it tells you</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Cache read</strong></td><td>Prefix tokens served from an existing cache entry</td><td>A small fraction of standard input</td><td>The win. This is the number you are trying to grow.</td></tr>
+            <tr><td><strong>Cache write</strong></td><td>Tokens written into the cache on a miss</td><td>A <em>premium</em> over standard input</td><td>An investment. It pays back only if that entry is read again, ideally many times.</td></tr>
+            <tr><td><strong>Uncached input</strong></td><td>Everything after the reusable prefix</td><td>Standard input rate</td><td>Your volatile tail. Shrinking it is another angle to improve efficiency.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tc-prose">Treat a cache write as paying to put inventory on a shelf, and a cache read as pulling it back off. Two metrics read that inventory, one for coverage and one for payback.</p>
+      <div class="tc-grid-2">
+        <div class="te-section__card">
+          <p class="tc-rule-num">Metric one &middot; coverage</p>
+          <h3>Cache hit rate</h3>
+          <div class="tc-formula tc-formula--tight">
+            <div class="tc-mathrow">
+              <span class="tc-eq">Cache hit rate =</span>
+              <span class="tc-frac"><span class="tc-num">cache read</span><span class="tc-den">cache read + cache write + uncached input</span></span>
+            </div>
+          </div>
+          <p>One number, built from the three buckets above, bounded between 0 and 100%. Bounded is what makes it <em>composable</em>: you can average it, roll it up across teams and workloads, and put it on the same slide as any other percentage. An unbounded ratio ("3,400% reuse") means nothing to a human reader and cannot be averaged. This is unfortunately a metric that is reported by default by many model providers.</p>
+        </div>
+        <div class="te-section__card">
+          <p class="tc-rule-num">Metric two &middot; payback</p>
+          <h3>Cache cost efficiency</h3>
+          <div class="tc-formula tc-formula--tight">
+            <div class="tc-mathrow">
+              <span class="tc-eq">Cache cost efficiency = 1 &minus;</span>
+              <span class="tc-frac"><span class="tc-num">actual prompt cost</span><span class="tc-den">uncached equivalent cost</span></span>
+            </div>
+            <span class="tc-where">uncached equivalent cost = (cache read + cache write + uncached input) &times; base input price</span>
+          </div>
+          <p>The fraction of prompt spend that caching actually avoided. Cache cost efficiency is <strong>zero at break-even</strong>: the write premium exactly repaid. Positive once paying the cache surcharge is worth it, negative when caching is losing you money. That scale is what you want while tuning: a direct comparison that holds across tuning option changes, like choosing the more expensive high TTL cache.</p>
+          <p class="tc-small">However, this metric assumes you can get the <em>actual</em> prompt cost, which is easy on the direct API, murky on subscription plans, and impossible where the provider reports no write bucket. Keep in mind that the three buckets are not the whole invoice: output tokens, batch and committed-use discounts, and contracted rates all sit outside this input-side ratio.</p>
+        </div>
+      </div>
+
+      <p class="tc-prose">Compare both <em>per workload</em>, not blended, and re-check the assumptions whenever a model version or provider price list changes; they can move without notice. Note which providers price caching in different kinds, not just different rates: some charge per token written, one charges storage per token-hour.</p>
+
+      <div class="tc-grid-2">
+        <div class="te-section__card">
+          <p class="tc-rule-num">What good looks like</p>
+          <h3>Cache hit rate: climb toward your workload's ceiling</h3>
+          <p>Cache hit rate is coverage, driven mostly by prompt ordering. A live chat can never reach 100% because the conversation grows, so track the trend against the structural ceiling, not toward perfection. A flat or falling line while volumes grow means something upstream started breaking the prefix.</p>
+        </div>
+        <div class="te-section__card">
+          <p class="tc-rule-num">What good looks like</p>
+          <h3>Cache cost efficiency: clearly above zero</h3>
+          <p>A cache that is paying for itself sits well above zero, which means each cached entry is read back many times before it expires. A workload hovering just over zero is doing payback-once work: rare hits, misconfigured prompt ordering, or very short sessions could cause this.</p>
+        </div>
+      </div>
+
+      <p class="tc-prose">One caveat that decides which metric you can even compute: you have to have the granular usage data. On the direct API that arrives on every response; on subscription plans and third-party harnesses they may not surface at all, which is the observability ladder in the access-modes section below.</p>
+
+      <p class="tc-prose">Coming next: AI moves fast, and next we need to create a dedicated section on routing and caching together. Provider caches are machine-local, so a hit is a property of the prompt <em>and</em> of which machine answers. However, recently, cache affinity fields and cross-machine cache offload have appeared in both frontier and self-hosted flavors to address this.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================================================= MODEL SWITCHING -->
+<section class="te-section" data-theme="medium" id="tcModelSwitching" data-spy>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 te-reveal">
+    <div class="tc-stack">
+      <p class="te-section__eyebrow">The one everybody hits</p>
+      <h2 class="te-section__heading">Every model has its own cache (and switching models clears it)</h2>
+      <p class="tc-prose">A cache entry belongs to exactly one model. If you point the same conversation to a different model mid-conversation, none of it is cached there. At that point, the entire prompt is re-read and billed in full. If you expect the conversation to continue for a long time, this may still be a good decision.</p>
+
+      <div class="tc-dialog" role="img" aria-label="Illustration of a model-switch confirmation dialog warning that the full history will be re-read.">
+        <p class="tc-dialog-title">Switch model?</p>
+        <p>Your next response will be slower and use more tokens. This conversation is cached for the current model. Switching means the full history gets re-read on your next message.</p>
+        <div class="tc-dialog-btns"><span>Cancel</span><span class="solid">Switch anyway</span></div>
+        <p class="tc-dialog-cap">Some tools now warn you before this happens.</p>
+      </div>
+
+      <p class="tc-prose">The same reset fires whenever the model on the other end of the request changes, and it usually happens without a dialog:</p>
+
+      <div class="tc-grid-3">
+        <div class="te-section__card">
+          <h3>You switch mid-task</h3>
+          <p>Escalating a long conversation to a stronger model re-reads everything. The longer you have been working, the more the switch costs. Switch early in a task, not deep into one. Or ask your current session for a summary and a clear hand-off to restart the session.</p>
+        </div>
+        <div class="te-section__card">
+          <h3>Your provider ships an update</h3>
+          <p>A new model version invalidates cached prefixes across your whole fleet, overnight, with no change on your side. Hit rate can fall off a cliff for reasons nobody on your team caused.</p>
+        </div>
+        <div class="te-section__card">
+          <h3>Your router spreads the load</h3>
+          <p>Fallbacks, A/B tests, and cost-based routing split one warm cache into several cold ones. Routing and caching pull against each other; a router that saves 20% when switching to a less-expensive model can lose more than that in missing a warm cache.</p>
+        </div>
+      </div>
+
+      <p class="tc-prose"><strong>What to do about it.</strong> Pin model versions where your provider allows it, so updates are something you schedule rather than something you discover. Provide any API headers required to control cache behavior. If you have a long session, stay with one model unless the switch is genuinely worth re-reading everything. And when you compare routing strategies, compare <em>effective</em> cost including lost cache reads, not list rates. The cheaper model is not always the cheaper session, a core AI tokenomics lesson to learn with regards to routing.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================================================== ACCESS MODES -->
+<section class="te-section" data-theme="dark" id="tcAccessModes" data-spy>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 te-reveal">
+    <div class="tc-stack">
+      <p class="te-section__eyebrow">Access modes</p>
+      <h2 class="te-section__heading">The same model caches very differently depending on how you reach it</h2>
+      <p class="tc-prose">Mechanics and AI tokenomics are one thing; <strong>observability</strong> is another. Your leverage over the cache, and even your ability to see it, depends on which door you walk in through. Below, "first-party tools" means the provider's own harness (a terminal coding agent, a co-work assistant); "third-party tools" means a product that rehosts frontier models behind its own subscription or its own proxy.</p>
+
+      <div class="tc-table-wrap">
+        <table>
+          <thead><tr><th>Access mode</th><th>Who controls the prompt structure</th><th>What you can see</th><th>Where cache economics show up</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Web UI / chat app</strong></td><td>The provider's harness, entirely. You never see the prompt it assembles.</td><td>No token counts at all. Plan limits and usage meters, not cache fields.</td><td>Invisible, deliberately: caching is folded into plan economics, not surfaced to you.</td></tr>
+            <tr><td><strong>First-party tools</strong></td><td>The vendor's harness, with a few dials (rules files, MCP config, compaction behavior).</td><td>Session-level token dashboards and cost estimates, cache read and write buckets included on some tools. But dollar figures are often computed locally at list rates, not what you actually pay.</td><td>Visible per session, cost estimates. Cache-miss behaviors may be flagged as a nudge; the harness manages breakpoints for you.</td></tr>
+            <tr><td><strong>Third-party tools</strong></td><td>The vendor. The prompt is assembled by their proxy, not by you.</td><td>Opaque by design. Credits or requests burned, not token buckets. Which model actually served a request can change mid-plan.</td><td>Bundle economics. Cache savings are netted into the credit pool and aren't always visible in real-time.</td></tr>
+            <tr><td><strong>Direct API</strong></td><td>You do, down to byte order and breakpoint placement.</td><td>Full usage fields on every response, every bucket, every request.</td><td>On your invoice, line by line. Full control, full responsibility, no surprises hidden upstream.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tc-prose"><strong>Where reality diverges from expectation.</strong> A few traps that catch almost everyone:</p>
+      <div class="tc-grid-3">
+        <div class="te-section__card">
+          <h3>The dollar figure is an estimate</h3>
+          <p>Coding tools that show a session cost usually compute it locally at standard list rates. Contracted discounts, promotional pricing, and plan-based billing all make the real number different. Treat the in-tool figure as a shape, not an invoice.</p>
+        </div>
+        <div class="te-section__card">
+          <h3>Subscription usage is not priced usage</h3>
+          <p>On a flat plan, cache misses show up as rate limits instead of line items. Costs are still real (the provider passes them through as capacity limits), but the feedback channel is throttling, not billing, and it tells you nothing about <em>why</em>.</p>
+        </div>
+        <div class="te-section__card">
+          <h3>Subagents do not share your cache</h3>
+          <p>Provider caches are isolated per organization, per workspace, per region. Within your org, a fleet of subagents with the same system prompt <em>can</em> reuse one prefix, but routing is machine-local at high volume, and a parallel fan-out all misses at once: an entry only becomes available after the first response begins, and every sibling pays its own write.</p>
+        </div>
+      </div>
+
+      <p class="tc-prose">Also note the clock: on at least one major provider the cache lifetime ages from the <em>start</em> of the request that touches it, not the end. A long reasoning stream can burn most of the lifetime before the follow-up request is even typed.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================ PROVIDER SNAPSHOT -->
+<section class="te-section" data-theme="medium" id="tcProviderSnapshot" data-spy>
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 te-reveal">
+    <div class="tc-stack">
+      <p class="te-section__eyebrow">Provider behavior</p>
+      <h2 class="te-section__heading">The frontier providers agree on almost nothing</h2>
+      <p class="tc-prose">This is a snapshot of a few frontier API providers' published cache behavior, as documented in public provider documentation reviewed August 2026. It is a snapshot, not a spec: multipliers, minimums, and lifetimes move when models ship, and they can move without notice. Verify against the current provider docs before relying on any row.</p>
+
+      <div class="tc-table-wrap">
+        <table>
+          <thead><tr><th>Provider (docs reviewed Aug 2026)</th><th>Cache write charge</th><th>Cache read charge</th><th>Minimum cacheable prefix</th><th>Lifetime and notes</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Anthropic</strong> (Claude API)</td><td>1.25&times; base (5-minute TTL) or 2&times; (1-hour TTL). Caching is opt-in: explicit breakpoints, or a single automatic caching flag.</td><td>0.1&times; base</td><td>Model-dependent: 512 to 4,096 tokens. Too short? No error, just silently no cache.</td><td>5 min or 1 hour, refreshed free on each read. Ages from request start. 20-block lookback finds prior writes. Isolated per workspace.</td></tr>
+            <tr><td><strong>OpenAI</strong> (OpenAI platform)</td><td><strong>Changed with the GPT-5.6 series (July 2026): now 1.25&times; base.</strong> Earlier models: no write charge. On the new models, explicit breakpoints, or an implicit mode you opt into.</td><td>0.1&times; base on GPT-5.6 and later; model-dependent cached rates on earlier models (advertised up to 90% off).</td><td>1,024 visible tokens (GPT-5.6 and later), 2,048 earlier. Hidden harness tokens do not count toward the minimum.</td><td>At least 30 minutes after the latest write or reuse. Automatic caching on by default; a cache-hit-rate dashboard exists. Overflow routing can evict entries. Isolated per organization and region.</td></tr>
+            <tr><td><strong>Google</strong> (Gemini API)</td><td>No write charge. Implicit caching only on current models: enabled by default, nothing to configure.</td><td>Read discount passed through automatically; explicit cache objects exist on the older request style.</td><td>Model-dependent: 2,048 to 4,096 input tokens.</td><td>Provider-managed, not exposed. The usage report shows a single cached-tokens field; there is no write bucket to measure.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tc-prose"><strong>The gap that matters most:</strong> OpenAI charging for cache writes is a 2026 change that caught informed teams by surprise; caching literature written before July 2026 still describes write-free prefixes as a structural difference between vendors, which is incorrect.</p>
+
+      <div class="tc-grid-3">
+        <div class="te-section__card">
+          <h3>Hidden tokens shape the prefix before you do</h3>
+          <p>Any hosted or third-party harness inserts its own system message ahead of your first token, and that hidden content occupies the head of the prefix. What you believe is "the start of your prompt" is not where the cache's notion of the start begins.</p>
+        </div>
+        <div class="te-section__card">
+          <h3>Thinking tokens and tool outputs</h3>
+          <p>Reasoning tokens are mostly invisible in billing: Anthropic cannot mark them as cache breakpoints directly, but caches them inside earlier turns, where they count as input tokens when read back. Tool outputs are ordinary cached blocks once appended. Either way, everything after the first changed token misses, including when a harness compacts your history for you.</p>
+        </div>
+        <div class="te-section__card">
+          <h3>Context compression, caching and retries</h3>
+          <p>Initial research from Tokenomics members like PointFive (<a href="https://www.pointfive.co/AI-Research" target="_blank" rel="noopener">blog</a>) and Quesma (<a href="https://quesma.com/blog/does-rtk-make-ai-coding-cheaper/" target="_blank" rel="noopener">blog</a>) are showing that context compression utilities aren't always a clear win for all workloads. Is it possible to generate completely free wins using compression with no trade-offs? Or is the current maturity of agentic post-training not able to adapt to inputs drifting too far from unoptimized datasets?</p>
+        </div>
+      </div>
+
+      <p class="tc-small">Source: public provider documentation pages on prompt caching and context caching, reviewed August 2026, plus one vendor-published cache-hit dashboard. Figures are the providers' published multipliers, not contract quotes. The documentation locations move; search the provider name plus "prompt caching" rather than trusting a bookmark.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================== FOOTER -->
+<section class="te-section" data-theme="dark">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="tc-foot">
+        <p>Published by the Tokenomics Foundation as an open, vendor-neutral resource. CC BY 4.0.</p>
+        <p>Prompt Caching &middot; Release Candidate 1 &middot; Last updated: 2026-09-22</p>
+        <p>Thanks to all of the members of the Consumption Working Group for Sprint 1: Aaron Soto, Alan Hand, Ali Hosseini, Bartosz Kotrys, Chris Niemann, Humair Khan, Izhak Zimmermann, James Hall, Jeremy Chaplin, Joshua Bauman, Kevin Mueller, Luis Lazo, Matt Small, Sebastian Amrogowicz, Tara Urso, and Vitaly Belyasov.</p>
+      </div>
+  </div>
+</section>
+
+
+
+</div></div></main>
+
+
+<footer class="px-6 lg:px-8 py-8 mt-12">
+  <div class="p-1.5 rounded-3xl bg-linear-to-r from-brand-primary  to-brand-tertiary">
+    <div class="relative isolate mx-auto max-w-full overflow-hidden rounded-2xl bg-surface-darker  px-6 py-12 ring-1 ring-gray-800 lg:px-16">
+      <div class="xl:flex flex-col items-center justify-between gap-10 sm:flex-row sm:items-start mx-auto max-w-8xl">
+        <div class="flex w-full flex-col items-center gap-8 sm:w-auto sm:min-w-xl sm:items-start">
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+          
+<div class="te-footer-newsletter w-full max-w-md"
+	data-te-newsletter-form
+	data-te-portal-id="5432286"
+	data-te-form-id="6815e400-fd7c-4efb-a9c1-e9d6a6cee7d3">
+	<h2 class="text-left text-sm/6 font-normal text-brand-light">Subscribe to our newsletter</h2>
+
+	<form data-step="1" class="mt-2 flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-x-4" novalidate>
+		<div class="min-w-0 flex-auto">
+			<input type="email" name="email" required
+				aria-label="Email address"
+				placeholder="Add your email address*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+	</form>
+
+	<form data-step="2" hidden class="te-newsletter-step2 mt-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-x-3 sm:flex-wrap" novalidate>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="firstname" required
+				aria-label="First name"
+				placeholder="First name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="lastname" required
+				aria-label="Last name"
+				placeholder="Last name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+		<p data-te-newsletter-msg hidden class="text-sm text-red-400 sm:basis-full"></p>
+	</form>
+</div>
+        </div>
+        <div>
+        <nav aria-label="Footer" class="flex flex-col lg:flex-row justify-start xl:justify-end gap-x-12 gap-y-3 text-sm/6">
+          <a href="https://www.tokeneconomics.com/insights/" class="text-sm/6 font-normal text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="text-sm/6 font-normal text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="text-sm/6 font-normal text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="text-sm/6 font-normal text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="text-sm/6 font-normal text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="text-sm/6 font-normal text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="text-sm/6 font-normal text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a></div>    
+            </nav>
+                            <div class="mt-10 flex xl:justify-end gap-6 max-w-8xl mx-auto">
+                                                    <a href="https://www.linkedin.com/company/tokenomics-foundation/" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Linkedin">
+                                      </a>
+                                                                      <a href="https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Youtube">
+                                      </a>
+                                                                      <a href="https://substack.com/@tokenomicsfoundation" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Substack">
+                                      </a>
+                                                                      <a href="https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Spotify">
+                                      </a>
+                                                </div>
+                      </div>      
+        </div>
+      
+      <div class="mt-16 space-y-2  pt-8 text-left text-xs font-light text-brand-light max-w-8xl mx-auto opacity-70">
+        <p><a class="underline" href="https://www.finops.org/introduction/how-to-use/" target="_blank" rel="noopener noreferrer">This work is licensed under Attribution 4.0 International</a></p>
+        <p>© 2026 Tokenomics Foundation Project a Series of LF Projects, LLC.</p>
+        <p>For web site terms of use, trademark policy and other project policies please see <a class="underline" href="https://lfprojects.org/" target="_blank" rel="noopener noreferrer">https://lfprojects.org.</a></p>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
