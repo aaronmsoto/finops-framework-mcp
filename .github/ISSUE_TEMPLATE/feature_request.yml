@@ -10,6 +10,7 @@ body:
       options:
         - finops-framework-mcp
         - finops-focus-mcp
+        - tokenomics-overview-mcp
         - both / repo-wide
     validations:
       required: true

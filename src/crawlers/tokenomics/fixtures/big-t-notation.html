@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en-US" data-brand="tf" data-theme="dark">
+<head>
+    <!-- Google Tag Manager -->
+  
+  <!-- End Google Tag Manager -->
+  	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	
+	<title>Big-T Notation Project - Tokenomics Foundation</title>
+<meta name='robots' content='max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+<meta name="description" content="A shared language for reasoning about how AI token consumption grows as usage scales, so teams can see the cost curve before the invoice arrives.">
+<meta property="og:title" content="Big-T Notation Project - Tokenomics Foundation">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://www.tokeneconomics.com/wp-content/uploads/2026/07/Tokenomic-Foundation-4.png">
+<meta property="og:image:width" content="1202">
+<meta property="og:image:height" content="678">
+<meta property="og:image:alt" content="Tokenomic Foundation">
+<meta property="og:description" content="A shared language for reasoning about how AI token consumption grows as usage scales, so teams can see the cost curve before the invoice arrives.">
+<meta property="og:url" content="https://www.tokeneconomics.com/projects/big-t-notation/">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Tokenomics Foundation">
+<meta property="article:published_time" content="2026-08-01T15:33:10+00:00">
+<meta property="article:modified_time" content="2026-08-27T13:58:50+00:00">
+<meta property="og:updated_time" content="2026-08-27T13:58:50+00:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.tokeneconomics.com/wp-content/uploads/2026/07/Tokenomic-Foundation-4.png">
+
+
+
+	
+	
+	<noscript></noscript>
+	
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="WordPress 7.1.2" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.tokeneconomics.com/#website","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Defining the best practices and primitives of AI economics","inLanguage":"en-US","potentialAction":{"@type":"SearchAction","target":"https://www.tokeneconomics.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://www.tokeneconomics.com/#organization","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Tokenomics Foundation defines the best practices and primitives of the token economy","knowsAbout":["Tokenomics","AI cost management","AI infrastructure","FinOps"],"sameAs":["https://www.linkedin.com/company/tokenomics-foundation/","https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA","https://substack.com/@tokenomicsfoundation","https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c"]},{"@type":"WebPage","@id":"https://www.tokeneconomics.com/projects/big-t-notation/#webpage","url":"https://www.tokeneconomics.com/projects/big-t-notation/","name":"Big-T Notation Project - Tokenomics Foundation","inLanguage":"en-US","isPartOf":{"@id":"https://www.tokeneconomics.com/#website"},"datePublished":"2026-08-01T15:33:10+00:00","dateModified":"2026-08-27T13:58:50+00:00"}]}</script>
+
+
+
+<meta name="msapplication-TileImage" content="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-270x270.png" />
+</head>
+<body class="wp-singular te_page-template-default single single-te_page postid-983 wp-theme-tokeneconomics bg-surface-dark overflow-x-hidden no-global-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPPHJ9DM"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<a class="screen-reader-text" href="#primary">Skip to content</a>
+	<header id="site-header" class="z-50 max-w-8xl mx-auto w-full">
+    <nav aria-label="Global" class="flex items-center justify-between px-6 py-8 lg:px-8">
+      <div class="flex lg:flex-1">
+        <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+          <span class="sr-only">Tokenomics Foundation</span>
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+        </a>
+      </div>
+      <div class="flex lg:hidden">
+        <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 cursor-pointer">
+          <span class="sr-only">Open main menu</span>
+          
+        </button>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12 lg:items-center">
+        <a href="https://www.tokeneconomics.com/insights/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="te-nav-link text-sm/6 font-semibold text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="te-nav-link text-sm/6 font-semibold text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="te-nav-link text-sm/6 font-semibold text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a><div class="te-dropdown-panel"><a href="https://www.tokeneconomics.com/membership/" class="te-dropdown-link">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="te-dropdown-link">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="te-dropdown-link">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="te-dropdown-link">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="te-dropdown-link">Tokenomics Press and Media</a></div></div>      </div>
+      <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+        <a href="#" class="text-sm/6 font-semibold text-brand-light">Log in <span aria-hidden="true">&rarr;</span></a>
+      </div> -->
+    </nav>
+    <el-dialog>
+      <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
+        <div tabindex="0" class="fixed inset-0 focus:outline-none">
+          <el-dialog-panel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-surface-dark p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
+            <div class="flex items-center justify-between">
+              <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
+                <span class="sr-only">Tokenomics Foundation</span>
+                <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-8 w-auto" width="117" height="32" />
+              </a>
+              <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-200">
+                <span class="sr-only">Close menu</span>
+                
+              </button>
+            </div>
+            <div class="mt-6 flow-root">
+              <div class="-my-6 divide-y divide-white/10">
+                <div class="space-y-2 py-6">
+                  <a href="https://www.tokeneconomics.com/insights/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Members</a><div class="te-dropdown"><button type="button" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5 te-dropdown-trigger w-full flex items-center justify-between">About</button><div class="te-dropdown-panel te-dropdown-panel--mobile hidden pl-4 mt-1 space-y-1"><a href="https://www.tokeneconomics.com/about/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">About</a><a href="https://www.tokeneconomics.com/membership/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Tokenomics Press and Media</a></div></div>                </div>
+              </div>
+            </div>
+          </el-dialog-panel>
+        </div>
+      </dialog>
+    </el-dialog>
+  </header>
+
+	<div class="w-full bg-primary text-primary-fg">
+		<a class="flex max-w-8xl mx-auto items-center justify-center gap-3 px-6 py-2.5 text-base/7 font-medium lg:px-8 hover:opacity-80" href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals">
+						<span>AI Tokenomics Fundamentals Certification Now Available &rarr;</span>
+								</a>
+	</div>
+	
+
+<main id="primary" class="site-main">
+		<div class="te-section relative flex flex-col pt-20 sm:pt-24 pb-20 sm:pb-24" data-theme="medium">
+		<div class="relative isolate flex flex-1 flex-col px-6 lg:px-8">
+			<div class="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center">
+				<div class="mx-auto max-w-5xl text-center">
+											<p class="te-section__eyebrow mb-2">An open, vendor-neutral framework</p>
+																<h1 class="te-section__heading mx-auto max-w-4xl text-center text-5xl font-semibold leading-tight tracking-tight text-pretty sm:text-7xl">Big-T Notation</h1>
+																					<p class="te-section__muted mx-auto mt-4 max-w-4xl text-2xl text-pretty sm:text-2xl/8">Big-O for AI Consumption. A shared language for reasoning about how AI token consumption grows as usage scales, so teams can see the cost curve before the invoice arrives.</p>
+																<div class="te-hero-formula mt-8" style="font-family:var(--font-mono);font-size:clamp(24px,4vw,36px);font-weight:700;">T(n · k · a)<small class="te-section__muted block text-sm font-normal mt-2" style="font-family:var(--font-body);">requests × model calls per request × agent depth</small></div>
+																<p class="mt-6 text-sm" style="color:var(--color-subtle);">By Dan Neff (Adobe) · Published by the Tokenomics Foundation</p>
+														</div>
+			</div>
+		</div>
+	</div>
+	<section class="te-section pt-12 sm:pt-16 pb-1" data-theme="dark" id="what">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><p class="te-section__eyebrow">What it is</p><h2 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">The unit of scarcity has changed. The vocabulary hasn&#039;t.</h2></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>Every generation of computing has a unit of scarcity that engineers learn to measure and optimize. Mainframes had memory. Client-server had bandwidth. Cloud had API calls and egress. For large language models, that unit is the <strong>token</strong>.</p><p>Big-O notation never told you an algorithm's exact runtime. It told you how runtime <em>grows</em> as input scales, a category of behavior that lets engineers make decisions without benchmarking every input. Big-T applies the same discipline to tokens. It classifies workloads by how their token consumption grows as usage scales, complexity increases, or autonomy expands.</p><p>Big-T is deliberately informal. There are no proofs and no master theorem. It is a thinking tool: a shared vocabulary that lets engineers, architects, and finance teams reason about token-cost trajectories before committing to an architecture. The value is not precision. The value is the discipline of asking the right question at the right time.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-8 sm:pt-10 pb-1" data-theme="dark">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="mx-auto max-w-3xl text-center">
+						<figure class="">
+				<blockquote class="te-section__heading text-xl/8 font-semibold sm:text-2xl/9">
+					<p>&ldquo;All we did is we created a common language and a common currency. We agree that this is how we&#039;re defining things.&rdquo;</p>
+				</blockquote>
+								<figcaption class="mt-8 flex items-center justify-center gap-x-4">
+										<div class="text-left">
+						<div class="te-section__heading font-semibold">Dan Neff</div>
+												<div class="te-section__muted text-sm/6">
+							Creator of Big-T Notation, Adobe						</div>
+											</div>
+				</figcaption>
+							</figure>
+		</div>
+	</div>
+	</section>
+	<section class="te-section pt-8 sm:pt-10 pb-12 sm:pb-16" data-theme="dark">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">Why now?</h3></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>Four demand waves are stacking at once: frontier models consume more tokens per task, larger context windows invite larger prompts, agentic architectures multiply calls per task, and adoption itself is compounding. Per-token prices are falling while total consumption explodes, a classic Jevons paradox. Organizations that scale AI without token-aware architecture will discover they have built the equivalent of an O(n!) algorithm and called it a strategy.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-4 sm:pb-6" data-theme="medium" id="notation">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><p class="te-section__eyebrow">Key elements</p><h2 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">The notation: T(n · k · a)</h2></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>Three variables capture the dimensions along which token cost grows. Name what is scaling before asking how fast.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-1 pb-1" data-theme="medium">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+						<div class=" grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"><span class="te-symbol">n</span></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Requests, or input size</h3>
+													<p class="te-section__muted mt-2 text-base/7">Covers two things that often move together: how many requests hit the workload, and how large each request&#039;s input is. Either or both can be the scaling dimension.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"><span class="te-symbol">k</span></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Model calls per request</h3>
+													<p class="te-section__muted mt-2 text-base/7">Reasoning steps, multi-turn chains, tool calls that replay context. The trap: k is usually invisible. It rarely appears in the request itself.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"><span class="te-symbol">a</span></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Agent depth</h3>
+													<p class="te-section__muted mt-2 text-base/7">Sub-agents calling sub-agents. An orchestrator spawning workers multiplies everything above it in the tree.</p>
+																				</div>
+					</div>
+			</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-12 sm:pb-16" data-theme="medium">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">Two questions, asked in order</h3></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>First: <strong>what class is this workload?</strong> That is an architecture decision, and only architecture changes it. Second: <strong>how cheaply does it run within its class?</strong> That is where compression, routing, caching, and serialization live.</p><p>Big-T deliberately ignores constants, but the class still governs, because constants are bounded and reversible while growth is neither. Classes are compared at a stated quality floor; quality is the precondition of the comparison, not a term in it.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-1" data-theme="dark" id="ladder">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><p class="te-section__eyebrow">Core concept</p><h2 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">How token costs scale</h2></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>Picture a workload flowing left to right. Deterministic filtering keeps the stream narrow. Hidden multipliers make it loop back on itself. Agent trees branch it into a mesh that scales quadratically.</p>
+<p><figure class="flow" aria-label="Diagram showing token cost flow widening from sublinear filtering through multiplicative loops to agentic branching"><div class="flow-legend"><span><span class="dot" style="background:#10b981"></span>Sublinear: filter before inference</span><span><span class="dot" style="background:#f59e0b"></span>Multiplicative: hidden k loops</span><span><span class="dot" style="background:#ef4444"></span>Agent-multiplicative: bound the
+  tree</span></div><figcaption>A workload's class is often invisible in the request. The multipliers that set it (reasoning tokens, agent depth, retry loops) show up
+   only on the invoice.</figcaption></figure></p>
+<p style="text-align: center;font-size: 0.85rem;color: #98a2b3">A workload's class is often invisible in the request. The multipliers that set it (reasoning tokens, agent depth, retry loops) show up only on the invoice.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-8 sm:pt-10 pb-1" data-theme="dark">	<div class="mx-auto max-w-4xl px-6 lg:px-8">
+		<div class="te-section__header "><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">The complexity ladder</h3></div>				<div class="mt-10 flex flex-col gap-3">
+						<div class="te-section__card grid grid-cols-1 gap-2 rounded-xl p-5 sm:grid-cols-[130px_1fr] sm:gap-4" style="border-left:5px solid #10b981">
+				<div>
+					<span class="text-lg font-bold" style="font-family:var(--font-mono);color:#10b981;">T(1)</span>
+											<small class="te-section__eyebrow block" style="color:var(--color-disabled);">Constant</small>
+									</div>
+				<div>
+											<p class="te-section__muted text-sm"><strong>The model is not called per request.</strong> A cache hit, a static lookup, an embedding search. Reuse of a precomputed answer. The O(1) of AI.</p>
+																<p class="mt-2 text-xs" style="color:#10b981;"><strong>Fix:</strong> Cache and precompute aggressively.</p>
+									</div>
+			</div>
+						<div class="te-section__card grid grid-cols-1 gap-2 rounded-xl p-5 sm:grid-cols-[130px_1fr] sm:gap-4" style="border-left:5px solid #14b8a6">
+				<div>
+					<span class="text-lg font-bold" style="font-family:var(--font-mono);color:#14b8a6;">T(log n)</span>
+											<small class="te-section__eyebrow block" style="color:var(--color-disabled);">Sublinear</small>
+									</div>
+				<div>
+											<p class="te-section__muted text-sm"><strong>Deterministic code shrinks the input before the model sees it.</strong> The class most organizations miss entirely. RAG done right; code is the new cache layer. Published results: SQL views shrinking clinical data from ~240,000 tokens to 19,000 before the model is called, and retrieval pipelines eliminating better than 99.9 percent of a million-token corpus.</p>
+																<p class="mt-2 text-xs" style="color:#14b8a6;"><strong>Fix:</strong> Filter and retrieve before inference, not after.</p>
+									</div>
+			</div>
+						<div class="te-section__card grid grid-cols-1 gap-2 rounded-xl p-5 sm:grid-cols-[130px_1fr] sm:gap-4" style="border-left:5px solid #3b82f6">
+				<div>
+					<span class="text-lg font-bold" style="font-family:var(--font-mono);color:#3b82f6;">T(n)</span>
+											<small class="te-section__eyebrow block" style="color:var(--color-disabled);">Linear</small>
+									</div>
+				<div>
+											<p class="te-section__muted text-sm"><strong>One model call per request, cost proportional to input size.</strong> Summarize, answer, translate. The healthy default, and what most budgets implicitly assume. Watch for fixed per-call overhead from large tool catalogs.</p>
+																<p class="mt-2 text-xs" style="color:#3b82f6;"><strong>Fix:</strong> Trim per-call overhead; keep this the default.</p>
+									</div>
+			</div>
+						<div class="te-section__card grid grid-cols-1 gap-2 rounded-xl p-5 sm:grid-cols-[130px_1fr] sm:gap-4" style="border-left:5px solid #f59e0b">
+				<div>
+					<span class="text-lg font-bold" style="font-family:var(--font-mono);color:#f59e0b;">T(n·k)</span>
+											<small class="te-section__eyebrow block" style="color:var(--color-disabled);">Multiplicative</small>
+									</div>
+				<div>
+											<p class="te-section__muted text-sm"><strong>k model calls per request, and k is usually invisible.</strong> Extended thinking can burn over a hundred thousand tokens per request while producing a few hundred visible ones. Non-composable tools that replay full context each turn can make a five-step chain cost 10 to 20x the composed version.</p>
+																<p class="mt-2 text-xs" style="color:#f59e0b;"><strong>Fix:</strong> Compose tool pipelines; instrument for hidden k.</p>
+									</div>
+			</div>
+						<div class="te-section__card grid grid-cols-1 gap-2 rounded-xl p-5 sm:grid-cols-[130px_1fr] sm:gap-4" style="border-left:5px solid #ef4444">
+				<div>
+					<span class="text-lg font-bold" style="font-family:var(--font-mono);color:#ef4444;">T(n·k·a)</span>
+											<small class="te-section__eyebrow block" style="color:var(--color-disabled);">Agent-multiplicative</small>
+									</div>
+				<div>
+											<p class="te-section__muted text-sm"><strong>An orchestrator spawns sub-agents that spawn tool calls.</strong> The O(n²) of AI: architecturally powerful, economically dangerous if unmonitored. The danger is not delegation; it is unbounded depth and unscoped context running unwatched.</p>
+																<p class="mt-2 text-xs" style="color:#ef4444;"><strong>Fix:</strong> Bound agent depth; add circuit breakers and budgets.</p>
+									</div>
+			</div>
+						<div class="te-section__card grid grid-cols-1 gap-2 rounded-xl p-5 sm:grid-cols-[130px_1fr] sm:gap-4" style="border-left:5px solid #f43f5e">
+				<div>
+					<span class="text-lg font-bold" style="font-family:var(--font-mono);color:#f43f5e;">T(∞)</span>
+											<small class="te-section__eyebrow block" style="color:var(--color-disabled);">Unbounded</small>
+									</div>
+				<div>
+											<p class="te-section__muted text-sm"><strong>Loops with no termination condition.</strong> Retry-on-failure with no cap, recursive self-rewriting. The infinite loops of the token economy, and they exist today in production systems that lack circuit breakers.</p>
+																<p class="mt-2 text-xs" style="color:#f43f5e;"><strong>Fix:</strong> Hard termination conditions and circuit breakers. Always.</p>
+									</div>
+			</div>
+					</div>
+			</div>
+	</section>
+	<section class="te-section pt-8 sm:pt-10 pb-12 sm:pb-16" data-theme="dark">		<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="mx-auto max-w-2xl text-center">
+			<div class="te-section__header text-center"><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">The one question</h3></div>							<p class="te-section__muted mt-6 text-lg/8">What is the token complexity class of this workload, and is that complexity justified by the value it produces?</p>
+								</div>
+	</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-1" data-theme="medium" id="savings">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="te-section__header "><p class="te-section__eyebrow">Worked example</p><h2 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">The path to 34× savings</h2></div>					<p class="te-section__muted mt-4 max-w-3xl text-lg/8">Summarizing ten white papers, four ways. Same task, same quality floor, roughly 34× apart in cost. None of it came from a discount.</p>
+		
+		<div class="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
+						<div class="flex flex-col rounded-2xl border p-6" style="background:var(--color-error-muted);border-color:var(--color-error-ring);">
+									<span class="inline-block self-start rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase" style="background:#ef4444;">Scenario 1 · The expensive way</span>
+													<span class="mt-3 text-xl font-bold" style="font-family:var(--font-mono);color:#ef4444;">T(n·k)</span>
+													<h4 class="te-section__heading mt-1 text-lg font-bold">Multi-chat replay · $3.04</h4>
+													<p class="te-section__muted mt-2 text-sm">A single chat with a flagship model forces the model to replay the entire accumulated context for every new summary. Maximum token waste, driven by interface habits rather than the task.</p>
+													<ul class="mt-3" style="list-style:none;margin:0;padding:0;">
+													<li class="te-section__muted relative border-t border-dashed py-2 pl-6 text-sm" style="border-color:var(--color-border);"><span class="absolute left-0 font-bold" style="color:#ef4444;">&#10005;</span>All ten papers stacked in one context</li>
+													<li class="te-section__muted relative border-t border-dashed py-2 pl-6 text-sm" style="border-color:var(--color-border);"><span class="absolute left-0 font-bold" style="color:#ef4444;">&#10005;</span>Every summary re-reads all prior history</li>
+													<li class="te-section__muted relative border-t border-dashed py-2 pl-6 text-sm" style="border-color:var(--color-border);"><span class="absolute left-0 font-bold" style="color:#ef4444;">&#10005;</span>Frontier model used for routine summarization</li>
+											</ul>
+							</div>
+			
+						<div class="te-section__card flex flex-col rounded-2xl p-5">
+									<p class="te-section__muted text-center text-xs font-bold tracking-wide uppercase">Cost decline by complexity class</p>
+													<div class="mt-2 text-center">
+						<b class="te-section__heading text-3xl tracking-tight">over 97%</b>
+													<small class="te-section__muted block text-xs">cost reduction (~34× savings)</small>
+											</div>
+								<div class="mt-4 flex flex-1 items-end gap-3 min-h-32" style="height:200px;border-bottom:2px solid var(--color-border);">
+										<div class="flex flex-1 flex-col items-center justify-end" style="height:100%;">
+													<span class="te-section__muted text-xs" style="font-family:var(--font-mono);">T(n·k)</span>
+												<span class="text-sm font-bold" style="color:#ef4444;">$3.04</span>
+						<div style="width:100%;max-width:60px;height:100%;border-radius:6px 6px 0 0;background:#ef4444;margin-top:4px;"></div>
+					</div>
+										<div class="flex flex-1 flex-col items-center justify-end" style="height:100%;">
+													<span class="te-section__muted text-xs" style="font-family:var(--font-mono);">T(n)</span>
+												<span class="text-sm font-bold" style="color:#f59e0b;">$0.65</span>
+						<div style="width:100%;max-width:60px;height:21%;border-radius:6px 6px 0 0;background:#f59e0b;margin-top:4px;"></div>
+					</div>
+										<div class="flex flex-1 flex-col items-center justify-end" style="height:100%;">
+													<span class="te-section__muted text-xs" style="font-family:var(--font-mono);">T(n)</span>
+												<span class="text-sm font-bold" style="color:#8b5cf6;">$0.13</span>
+						<div style="width:100%;max-width:60px;height:4%;border-radius:6px 6px 0 0;background:#8b5cf6;margin-top:4px;"></div>
+					</div>
+										<div class="flex flex-1 flex-col items-center justify-end" style="height:100%;">
+													<span class="te-section__muted text-xs" style="font-family:var(--font-mono);">T(n)</span>
+												<span class="text-sm font-bold" style="color:#10b981;">$0.09</span>
+						<div style="width:100%;max-width:60px;height:3%;border-radius:6px 6px 0 0;background:#10b981;margin-top:4px;"></div>
+					</div>
+									</div>
+				<div class="mt-2 flex gap-3">
+											<span class="te-section__muted flex-1 text-center text-xs">1. As described</span>
+											<span class="te-section__muted flex-1 text-center text-xs">2. Separate chats</span>
+											<span class="te-section__muted flex-1 text-center text-xs">3. Right-sized</span>
+											<span class="te-section__muted flex-1 text-center text-xs">4. Engineered</span>
+									</div>
+			</div>
+			
+						<div class="flex flex-col rounded-2xl border p-6" style="background:var(--color-success-muted);border-color:var(--color-success-ring);">
+									<span class="inline-block self-start rounded-full px-3 py-1 text-xs font-bold tracking-wide uppercase" style="background:#10b981;">Scenario 4 · The engineered way</span>
+													<span class="mt-3 text-xl font-bold" style="font-family:var(--font-mono);color:#10b981;">T(n)</span>
+													<h4 class="te-section__heading mt-1 text-lg font-bold">Bound output · $0.09</h4>
+													<p class="te-section__muted mt-2 text-sm">The same ten summaries, engineered: each choice removes a layer of waste, and the class drops from multiplicative to linear.</p>
+													<ul class="mt-3" style="list-style:none;margin:0;padding:0;">
+													<li class="te-section__muted relative border-t border-dashed py-2 pl-6 text-sm" style="border-color:var(--color-border);"><span class="absolute left-0 font-bold" style="color:#10b981;">&#10003;</span><strong>Isolated contexts</strong> kill context replay</li>
+													<li class="te-section__muted relative border-t border-dashed py-2 pl-6 text-sm" style="border-color:var(--color-border);"><span class="absolute left-0 font-bold" style="color:#10b981;">&#10003;</span><strong>Right-sized model</strong> routes summarization to an efficient tier</li>
+													<li class="te-section__muted relative border-t border-dashed py-2 pl-6 text-sm" style="border-color:var(--color-border);"><span class="absolute left-0 font-bold" style="color:#10b981;">&#10003;</span><strong>Bounded template</strong>: structured output, ~150 words, trimmed input</li>
+											</ul>
+							</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-8 sm:pt-10 pb-12 sm:pb-16" data-theme="medium">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="te-section__header "><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">The three levers in the example</h3></div>				<div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--green mb-4"></div>
+													<p class="te-section__eyebrow mb-2">Kill context replay</p>
+													<h3 class="te-section__heading text-lg font-semibold">Use isolated contexts</h3>
+													<p class="te-section__muted mt-2 text-base/7">Don&#039;t stack multiple documents in one chat. Use scripts or fresh chats so you only pay for the context the current task needs.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--green mb-4"></div>
+													<p class="te-section__eyebrow mb-2">Right-size the model</p>
+													<h3 class="te-section__heading text-lg font-semibold">Route by complexity</h3>
+													<p class="te-section__muted mt-2 text-base/7">Reserve flagship models for deep reasoning and synthesis. Use efficient models for standard tasks like summarization.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--green mb-4"></div>
+													<p class="te-section__eyebrow mb-2">Constrain the output</p>
+													<h3 class="te-section__heading text-lg font-semibold">Use bounded templates</h3>
+													<p class="te-section__muted mt-2 text-base/7">Replace &quot;summarize this&quot; with a structured template (problem, method, findings, ~150 words) to trim the costly output axis and improve comparability.</p>
+																				</div>
+					</div>
+			</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-1" data-theme="dark" id="concepts">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><p class="te-section__eyebrow">Core concepts</p><h2 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">The ideas behind the notation</h2></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>The ladder is the vocabulary. These are the patterns it helps you see.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-4 sm:pt-6 pb-1" data-theme="dark">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+						<div class=" grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--amber mb-4"></div>
+													<p class="te-section__eyebrow mb-2">hidden k</p>
+													<h3 class="te-section__heading text-lg font-semibold">The multiplier you can&#039;t see</h3>
+													<p class="te-section__muted mt-2 text-base/7">Unlike Big-O, where code makes complexity visible, a workload&#039;s class is often hidden. Reasoning tokens, agent depth, and retry loops rarely appear in the request itself. Spend can scale to a far higher class than the request suggests.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"></div>
+													<p class="te-section__eyebrow mb-2">interface design</p>
+													<h3 class="te-section__heading text-lg font-semibold">Class changes come from architecture</h3>
+													<p class="te-section__muted mt-2 text-base/7">Thirty tools collapsed behind one composable interface turns five context-replaying turns into one call. Same task, same output, an order of magnitude fewer tokens: T(n·k) becomes T(n). Not a better model, a better interface.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--green mb-4"></div>
+													<p class="te-section__eyebrow mb-2">code as compression</p>
+													<h3 class="te-section__heading text-lg font-semibold">Move tasks from inference to execution</h3>
+													<p class="te-section__muted mt-2 text-base/7">Code is the model&#039;s native language. For batch work, one generated program run in a sandbox replaces dozens of tool-calling turns: published results show roughly 80 percent fewer tokens on batch operations, same output. The operations still happen, but outside the token economy.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--purple mb-4"></div>
+													<p class="te-section__eyebrow mb-2">serialization</p>
+													<h3 class="te-section__heading text-lg font-semibold">Format is a cost decision</h3>
+													<p class="te-section__muted mt-2 text-base/7">Compact tabular formats can consume roughly half the tokens of verbose ones with no quality loss. And since output tokens cost several times more than input, deterministic structure belongs in the decoder, not the generation.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--teal mb-4"></div>
+													<p class="te-section__eyebrow mb-2">transparency</p>
+													<h3 class="te-section__heading text-lg font-semibold">Transparency over abstraction</h3>
+													<p class="te-section__muted mt-2 text-base/7">Credit bundles and seat licenses obscure the link between usage and cost. You cannot optimize what you cannot measure: if your tooling hides token-level telemetry, you are paying for the privilege of not knowing what you are paying for.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--blue mb-4"></div>
+													<p class="te-section__eyebrow mb-2">jevons paradox</p>
+													<h3 class="te-section__heading text-lg font-semibold">Efficiency gets reinvested</h3>
+													<p class="te-section__muted mt-2 text-base/7">Cut a workload&#039;s cost and teams run it three times a day instead of once. That is the point. The effective organization will not use fewer tokens; it will use them better, with growth pointed at value.</p>
+																				</div>
+					</div>
+			</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-1" data-theme="dark">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">Architectural approaches, compared</h3></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>The same work, three architectures. The class tells you how cost grows; the reduction tells you what the architecture is worth today.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-4 sm:pt-6 pb-1" data-theme="dark">	<div class="mx-auto max-w-5xl px-6 lg:px-8">
+				<div class=" overflow-x-auto">
+			<table class="te-section__card w-full border-collapse overflow-hidden rounded-xl text-sm">
+								<thead>
+					<tr>
+													<th class="te-section__muted px-[18px] py-[15px] text-left text-[11.5px] font-medium tracking-[0.1em] uppercase">Approach</th>
+													<th class="te-section__muted px-[18px] py-[15px] text-left text-[11.5px] font-medium tracking-[0.1em] uppercase">How it works</th>
+													<th class="te-section__muted px-[18px] py-[15px] text-left text-[11.5px] font-medium tracking-[0.1em] uppercase">Token reduction</th>
+													<th class="te-section__muted px-[18px] py-[15px] text-left text-[11.5px] font-medium tracking-[0.1em] uppercase">Class</th>
+											</tr>
+				</thead>
+								<tbody class="te-section__divide divide-y">
+										<tr>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted"><strong>Standard tool calls</strong></span>
+															</td>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted">Each operation is a full agent turn that replays accumulated context</span>
+															</td>
+													<td class="px-[18px] py-4 align-top min-w-40">
+																	<div>
+										<span class="te-section__heading mb-1 block whitespace-nowrap text-xs font-bold">baseline</span>
+										<div class="rounded-full" style="height:10px;background:var(--color-popover);overflow:hidden;">
+											<div style="height:100%;width:4%;border-radius:999px;background:#ef4444;"></div>
+										</div>
+									</div>
+															</td>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted"><code>T(n·k)</code></span>
+															</td>
+											</tr>
+										<tr>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted"><strong>Code-generation mode</strong></span>
+															</td>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted">One generated script executes the batch in a sandboxed runtime</span>
+															</td>
+													<td class="px-[18px] py-4 align-top min-w-40">
+																	<div>
+										<span class="te-section__heading mb-1 block whitespace-nowrap text-xs font-bold">~80%</span>
+										<div class="rounded-full" style="height:10px;background:var(--color-popover);overflow:hidden;">
+											<div style="height:100%;width:80%;border-radius:999px;background:#8b5cf6;"></div>
+										</div>
+									</div>
+															</td>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted"><code>T(n)</code></span>
+															</td>
+											</tr>
+										<tr>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted"><strong>Filtered retrieval (RAG done right)</strong></span>
+															</td>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted">SQL, regex, and embedding search shrink input before inference</span>
+															</td>
+													<td class="px-[18px] py-4 align-top min-w-40">
+																	<div>
+										<span class="te-section__heading mb-1 block whitespace-nowrap text-xs font-bold">92–99.9%</span>
+										<div class="rounded-full" style="height:10px;background:var(--color-popover);overflow:hidden;">
+											<div style="height:100%;width:96%;border-radius:999px;background:#10b981;"></div>
+										</div>
+									</div>
+															</td>
+													<td class="px-[18px] py-4 align-top ">
+																	<span class="te-section__muted"><code>T(log n)</code></span>
+															</td>
+											</tr>
+									</tbody>
+			</table>
+		</div>
+	</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-1" data-theme="dark">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">The &quot;skill&quot; concept</h3></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>One pattern from practice worth naming: packaging a repeatable AI capability so its instructions are paid for once, not carried everywhere.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-8 sm:pt-10 pb-12 sm:pb-16" data-theme="dark">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+						<div class=" grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--blue mb-4"></div>
+													<p class="te-section__eyebrow mb-2">What is a skill?</p>
+													<h3 class="te-section__heading text-lg font-semibold">A repeatable AI capability</h3>
+													<p class="te-section__muted mt-2 text-base/7">A portable folder of instructions and scripts, a consistent, opinionated, well-formed prompt that teaches a model to perform a specific task your way every time.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--blue mb-4"></div>
+													<p class="te-section__eyebrow mb-2">Key finding</p>
+													<h3 class="te-section__heading text-lg font-semibold">Load only when needed</h3>
+													<p class="te-section__muted mt-2 text-base/7">Unlike a bloated system prompt riding along on every call, a skill is loaded only when relevant, so you pay for the instructions once and keep the context window clean.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--blue mb-4"></div>
+													<p class="te-section__eyebrow mb-2">Why it compounds</p>
+													<h3 class="te-section__heading text-lg font-semibold">Shareable across teams</h3>
+													<p class="te-section__muted mt-2 text-base/7">Turning a good one-off prompt into a skill lets it be reused and shared across a team, version-controlled like code, producing consistent, high-quality results.</p>
+																				</div>
+					</div>
+			</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-4 sm:pb-6" data-theme="medium" id="howto">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><p class="te-section__eyebrow">How to use it</p><h2 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">Putting Big-T to work</h2></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>Big-T is a condiment, not the main dish. It rides along with decisions you already make: choosing an architecture, picking a model, explaining a spend spike.</p><ol><li><strong>Get visibility first.</strong> Figure out how many tokens you are consuming, on what models, for what workloads, at what cost. If you cannot answer that, you have observability work to do before optimization work. Instrumentation comes before optimization.</li><li><strong>Classify your highest-spend workloads.</strong> Place each on the ladder. Is it linear? Is there a hidden k from reasoning tokens or context replay? Is agent depth bounded? The class is an architecture property, so read the architecture, not the invoice.</li><li><strong>Ask the one question.</strong> Is this workload's complexity class justified by the value it produces? A higher class is not wrong; it is a cost behavior to weigh against return. Frontier agents shipping strategic features can earn their class. A convenience bot usually cannot.</li><li><strong>Change the class where architecture allows.</strong> Compose tool pipelines, preprocess deterministically, cache toward constant, generate code for batch work. Moving one class up the ladder beats any coefficient tweak, because growth compounds and constants do not.</li><li><strong>Optimize within the class, then govern.</strong> Apply the five levers below. Wrap agentic workloads in circuit breakers and budget thresholds. Reassess as usage grows; a class that was fine at pilot scale may not be fine at adoption scale.</li></ol>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-4 sm:pt-6 pb-1" data-theme="medium">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="te-section__header "><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">The five levers</h3></div>				<div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">1. Model routing</h3>
+													<p class="te-section__muted mt-2 text-base/7">Send each task to the cheapest model that clears the quality floor. Same pattern as database read replicas.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">2. Prompt engineering &amp; serialization</h3>
+													<p class="te-section__muted mt-2 text-base/7">Compact formats can halve token counts with no quality loss. Let the decoder handle deterministic structure instead of generating it.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">3. Caching as a design principle</h3>
+													<p class="te-section__muted mt-2 text-base/7">Prompt-prefix caching cuts input cost; semantic caching eliminates calls entirely. Evaluate every linear workload for reduction to constant.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">4. Abstraction transparency</h3>
+													<p class="te-section__muted mt-2 text-base/7">Credit bundles and seat licenses hide token economics. You cannot optimize what you cannot measure.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">5. Workload classification &amp; governance</h3>
+													<p class="te-section__muted mt-2 text-base/7">Tie the highest-consumption workloads to the highest-value outcomes. Governance is alignment, not restriction.</p>
+																				</div>
+					</div>
+			</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-1" data-theme="medium">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="te-section__header "><h3 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty">Who it&#039;s for</h3></div>				<div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--teal mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Engineers and architects</h3>
+													<p class="te-section__muted mt-2 text-base/7">Use the ladder when designing agent systems, tool interfaces, and pipelines. The class is set at design time, so this is where it is cheapest to change.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--purple mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Finance and platform leaders</h3>
+													<p class="te-section__muted mt-2 text-base/7">Use it for cost attribution and governance. When a team&#039;s spend spikes, &quot;what class is that workload, and is it justified?&quot; is a better conversation than &quot;spend less.&quot;</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+																	<div class="te-icon-circle te-icon-circle--blue mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">FinOps practitioners and newcomers</h3>
+													<p class="te-section__muted mt-2 text-base/7">You have seen this movie: unmetered cloud spend, then visibility, then optimization, then unit economics. Big-T is that same discipline arriving for tokens.</p>
+																				</div>
+					</div>
+			</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-12 sm:pb-16" data-theme="medium">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="mx-auto max-w-3xl text-center">
+						<figure class="">
+				<blockquote class="te-section__heading text-xl/8 font-semibold sm:text-2xl/9">
+					<p>&ldquo;Efficiency is not the enemy of ambition. It is what makes ambition sustainable.&rdquo;</p>
+				</blockquote>
+								<figcaption class="mt-8 flex items-center justify-center gap-x-4">
+										<div class="text-left">
+						<div class="te-section__heading font-semibold">Dan Neff</div>
+												<div class="te-section__muted text-sm/6">
+							A Framework for Token Efficiency						</div>
+											</div>
+				</figcaption>
+							</figure>
+		</div>
+	</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-1" data-theme="dark" id="resources">	<div class="relative isolate mx-auto max-w-5xl px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl">
+			<div class="te-section__header "><p class="te-section__eyebrow">Go deeper</p><h2 class="te-section__heading mt-2 text-4xl font-semibold tracking-tight text-pretty sm:text-5xl">Further resources</h2></div>						<div class="te-section__prose te-asset-prose light-paragraphs text-pretty mt-10">
+				<p>Big-T is being open-sourced through the Tokenomics Foundation as a community-owned framework. These companion resources are in development.</p>			</div>
+					</div>
+	</div>
+	</section>
+	<section class="te-section pt-8 sm:pt-10 pb-12 sm:pb-16" data-theme="dark">	<div class="mx-auto max-w-7xl px-6 lg:px-8">
+						<div class=" grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+						<div class="te-section__card relative rounded-2xl p-8 te-clickable-card transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_-1px_1px] hover:shadow-white/40">
+									<span class="te-card-badge te-card-badge--success">Available</span>
+																	<div class="te-icon-circle te-icon-circle--brand mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">The Big-T paper</h3>
+													<p class="te-section__muted mt-2 text-base/7">The full framework: the ladder, the compounding-demand thesis, the five levers, worked examples, and the reference token-efficiency pipeline.</p>
+																		<div class="mt-4">
+						<a href="https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/" class="rounded-md px-2.5 py-1.5 text-sm te-btn-primary">Read paper</a>					</div>
+												</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+									<span class="te-card-badge te-card-badge--warning">Coming soon</span>
+																	<div class="te-icon-circle te-icon-circle--green mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Assessment checklist</h3>
+													<p class="te-section__muted mt-2 text-base/7">A seven-area self-assessment worksheet covering visibility, routing, prompt hygiene, caching, cost attribution, abstraction audits, and governance, with scoring guidance.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+									<span class="te-card-badge te-card-badge--warning">Coming soon</span>
+																	<div class="te-icon-circle te-icon-circle--amber mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Pricing calculator</h3>
+													<p class="te-section__muted mt-2 text-base/7">Estimate what a workload costs across complexity classes and model tiers, and see what moving up the ladder is worth.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+									<span class="te-card-badge te-card-badge--warning">Coming soon</span>
+																	<div class="te-icon-circle te-icon-circle--purple mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Slides and infographics</h3>
+													<p class="te-section__muted mt-2 text-base/7">A presentation deck and visuals for bringing Big-T to your team, your leadership, or your next architecture review.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+									<span class="te-card-badge te-card-badge--warning">Coming soon</span>
+																	<div class="te-icon-circle te-icon-circle--rose mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Podcast conversations</h3>
+													<p class="te-section__muted mt-2 text-base/7">Dan Neff in conversation on the origins of Big-T, open-sourcing the framework, and what it looks like in practice inside a large enterprise.</p>
+																				</div>
+						<div class="te-section__card relative rounded-2xl p-8">
+									<span class="te-card-badge te-card-badge--warning">Coming soon</span>
+																	<div class="te-icon-circle te-icon-circle--teal mb-4"></div>
+																	<h3 class="te-section__heading text-lg font-semibold">Token Optimization Playbook</h3>
+													<p class="te-section__muted mt-2 text-base/7">The pragmatic companion: applied techniques mapped to each lever, from serialization to routing to caching strategy.</p>
+																				</div>
+					</div>
+			</div>
+	</section>
+	<section class="te-section pt-12 sm:pt-16 pb-12 sm:pb-16" data-theme="dark">		<div class="mx-auto max-w-7xl px-6 lg:px-8">
+		<div class="mx-auto max-w-2xl text-center">
+										<p class="te-section__muted mt-6 text-lg/8">Big-T Notation by Dan Neff (Adobe). Published by the Tokenomics Foundation as an open, vendor-neutral framework. Supporting evidence draws on published results from Flexpa, MIT CSAIL, and others, and public research in model routing, retrieval, caching, and serialization.</p>
+								</div>
+	</div>
+	</section>
+		<nav
+		id="te-sticky-nav-1"
+		class="te-sticky-nav"
+		data-theme="medium"
+		data-scroll-offset="418"
+		aria-label="Page navigation"
+		aria-hidden="true"
+	>
+				<div class="te-sticky-nav__desktop">
+			<div class="te-sticky-nav__inner">
+				<div class="te-sticky-nav__links">
+																	<a href="#what" class="te-sticky-nav__link">What it is</a>
+																							<a href="#notation" class="te-sticky-nav__link">The notation</a>
+																							<a href="#ladder" class="te-sticky-nav__link">The ladder</a>
+																							<a href="#savings" class="te-sticky-nav__link">The 34x path</a>
+																							<a href="#concepts" class="te-sticky-nav__link">Core concepts</a>
+																							<a href="#howto" class="te-sticky-nav__link">How to use it</a>
+																							<a href="#resources" class="te-sticky-nav__link">Resources</a>
+															</div>
+								<a href="https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/" class="rounded-sm px-2 py-1 text-sm te-btn-primary">Read paper</a>							</div>
+		</div>
+
+				<div class="te-sticky-nav__mobile">
+			<button type="button" class="te-sticky-nav__toggle" aria-expanded="false">
+				<span class="te-sticky-nav__current">What it is</span>
+				
+			</button>
+			<div class="te-sticky-nav__dropdown" aria-hidden="true">
+														<a href="#what" class="te-sticky-nav__drop-link">What it is</a>
+																			<a href="#notation" class="te-sticky-nav__drop-link">The notation</a>
+																			<a href="#ladder" class="te-sticky-nav__drop-link">The ladder</a>
+																			<a href="#savings" class="te-sticky-nav__drop-link">The 34x path</a>
+																			<a href="#concepts" class="te-sticky-nav__drop-link">Core concepts</a>
+																			<a href="#howto" class="te-sticky-nav__drop-link">How to use it</a>
+																			<a href="#resources" class="te-sticky-nav__drop-link">Resources</a>
+																	<div class="px-6 py-3">
+					<a href="https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/" class="rounded-sm px-2 py-1 text-sm te-btn-primary">Read paper</a>				</div>
+							</div>
+		</div>
+	</nav>
+	
+	</main>
+
+
+<footer class="px-6 lg:px-8 py-8 mt-12">
+  <div class="p-1.5 rounded-3xl bg-linear-to-r from-brand-primary  to-brand-tertiary">
+    <div class="relative isolate mx-auto max-w-full overflow-hidden rounded-2xl bg-surface-darker  px-6 py-12 ring-1 ring-gray-800 lg:px-16">
+      <div class="xl:flex flex-col items-center justify-between gap-10 sm:flex-row sm:items-start mx-auto max-w-8xl">
+        <div class="flex w-full flex-col items-center gap-8 sm:w-auto sm:min-w-xl sm:items-start">
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+          
+<div class="te-footer-newsletter w-full max-w-md"
+	data-te-newsletter-form
+	data-te-portal-id="5432286"
+	data-te-form-id="6815e400-fd7c-4efb-a9c1-e9d6a6cee7d3">
+	<h2 class="text-left text-sm/6 font-normal text-brand-light">Subscribe to our newsletter</h2>
+
+	<form data-step="1" class="mt-2 flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-x-4" novalidate>
+		<div class="min-w-0 flex-auto">
+			<input type="email" name="email" required
+				aria-label="Email address"
+				placeholder="Add your email address*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+	</form>
+
+	<form data-step="2" hidden class="te-newsletter-step2 mt-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-x-3 sm:flex-wrap" novalidate>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="firstname" required
+				aria-label="First name"
+				placeholder="First name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<div class="min-w-0 flex-1">
+			<input type="text" name="lastname" required
+				aria-label="Last name"
+				placeholder="Last name*"
+				class="te-newsletter-input w-full rounded-full bg-white/5 px-5 py-3 text-base text-brand-light outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-brand-primary sm:text-sm/6" />
+		</div>
+		<button type="submit" class="te-btn-primary shrink-0">Subscribe</button>
+		<p data-te-newsletter-msg hidden class="text-sm text-red-400 sm:basis-full"></p>
+	</form>
+</div>
+        </div>
+        <div>
+        <nav aria-label="Footer" class="flex flex-col lg:flex-row justify-start xl:justify-end gap-x-12 gap-y-3 text-sm/6">
+          <a href="https://www.tokeneconomics.com/insights/" class="text-sm/6 font-normal text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="text-sm/6 font-normal text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="text-sm/6 font-normal text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="text-sm/6 font-normal text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="text-sm/6 font-normal text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="text-sm/6 font-normal text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="text-sm/6 font-normal text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a></div>    
+            </nav>
+                            <div class="mt-10 flex xl:justify-end gap-6 max-w-8xl mx-auto">
+                                                    <a href="https://www.linkedin.com/company/tokenomics-foundation/" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Linkedin">
+                                      </a>
+                                                                      <a href="https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Youtube">
+                                      </a>
+                                                                      <a href="https://substack.com/@tokenomicsfoundation" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Substack">
+                                      </a>
+                                                                      <a href="https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Spotify">
+                                      </a>
+                                                </div>
+                      </div>      
+        </div>
+      
+      <div class="mt-16 space-y-2  pt-8 text-left text-xs font-light text-brand-light max-w-8xl mx-auto opacity-70">
+        <p><a class="underline" href="https://www.finops.org/introduction/how-to-use/" target="_blank" rel="noopener noreferrer">This work is licensed under Attribution 4.0 International</a></p>
+        <p>© 2026 Tokenomics Foundation Project a Series of LF Projects, LLC.</p>
+        <p>For web site terms of use, trademark policy and other project policies please see <a class="underline" href="https://lfprojects.org/" target="_blank" rel="noopener noreferrer">https://lfprojects.org.</a></p>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

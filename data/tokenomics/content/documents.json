@@ -1,0 +1,522 @@
+[
+  {
+    "author": null,
+    "kind": "docs",
+    "license": "CC-BY-4.0",
+    "modified": "2026-09-16",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "measuring-ai-value-starts-with-tokenomics",
+        "title": "Measuring AI Value Starts with Tokenomics"
+      },
+      {
+        "id": "why-the-ai-bill-does-not-behave-like-other-technologies",
+        "title": "Why the AI Bill Does Not Behave like Other Technologies"
+      },
+      {
+        "id": "three-questions-tokenomics-has-to-answer",
+        "title": "Three Questions Tokenomics Has to Answer"
+      },
+      {
+        "id": "where-the-tokenomics-work-happens",
+        "title": "Where the Tokenomics Work Happens"
+      },
+      {
+        "id": "terminology-reference",
+        "title": "Terminology Reference"
+      }
+    ],
+    "slug": "what-is-tokenomics",
+    "status": "Working Draft",
+    "status_date": "June 2026",
+    "status_source": "page",
+    "title": "What is AI Tokenomics?",
+    "url": "https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/",
+    "word_count": 1970
+  },
+  {
+    "author": null,
+    "kind": "project",
+    "license": "CC-BY-4.0",
+    "modified": "2026-08-25",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "what-it-is",
+        "title": "Tokenomics is an AI stack discipline, not a token discipline."
+      },
+      {
+        "id": "stack",
+        "title": "The five layers rest on one another."
+      },
+      {
+        "id": "table",
+        "title": "Which layers set the cost, and which move the class"
+      },
+      {
+        "id": "layers",
+        "title": "Where the decisions sit"
+      },
+      {
+        "id": "resources",
+        "title": "Further resources"
+      }
+    ],
+    "slug": "five-layer-stack",
+    "status": "Draft paper (projects index label)",
+    "status_date": null,
+    "status_source": "registry",
+    "title": "The Five-Layer Tokenomics Stack",
+    "url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/",
+    "word_count": 950
+  },
+  {
+    "author": null,
+    "kind": "paper",
+    "license": "CC-BY-4.0",
+    "modified": "2026-08-04",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "spectrum",
+        "title": "The consumption spectrum"
+      },
+      {
+        "id": "l1",
+        "title": "L1 Silicon"
+      },
+      {
+        "id": "l2",
+        "title": "L2 Capacity"
+      },
+      {
+        "id": "l3",
+        "title": "L3 Inference stack"
+      },
+      {
+        "id": "l4",
+        "title": "L4 Model management and selection"
+      },
+      {
+        "id": "l5",
+        "title": "L5 Routing and governance"
+      },
+      {
+        "id": "measuring",
+        "title": "Measuring across the stack"
+      },
+      {
+        "id": "conclusion",
+        "title": "Conclusion"
+      }
+    ],
+    "slug": "five-layer-stack-paper",
+    "status": "Draft paper (projects index label)",
+    "status_date": null,
+    "status_source": "registry",
+    "title": "The five-layer Tokenomics stack",
+    "url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/",
+    "word_count": 3716
+  },
+  {
+    "author": "Dan Neff (Adobe)",
+    "kind": "project",
+    "license": "CC-BY-4.0",
+    "modified": "2026-08-27",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "what",
+        "title": "The unit of scarcity has changed. The vocabulary hasn't."
+      },
+      {
+        "id": "notation",
+        "title": "The notation: T(n · k · a)"
+      },
+      {
+        "id": "ladder",
+        "title": "How token costs scale"
+      },
+      {
+        "id": "savings",
+        "title": "The path to 34× savings"
+      },
+      {
+        "id": "concepts",
+        "title": "The ideas behind the notation"
+      },
+      {
+        "id": "howto",
+        "title": "Putting Big-T to work"
+      },
+      {
+        "id": "resources",
+        "title": "Further resources"
+      }
+    ],
+    "slug": "big-t-notation",
+    "status": "Published project explainer (no status label)",
+    "status_date": null,
+    "status_source": "registry",
+    "title": "Big-T Notation",
+    "url": "https://www.tokeneconomics.com/projects/big-t-notation/",
+    "word_count": 2372
+  },
+  {
+    "author": "Dan Neff (Adobe)",
+    "kind": "paper",
+    "license": "CC-BY-4.0",
+    "modified": "2026-07-28",
+    "sections": [
+      {
+        "id": "a-framework-for-token-efficiency",
+        "title": "A Framework for Token Efficiency"
+      },
+      {
+        "id": "1-the-scarcity-that-shapes-systems",
+        "title": "1. The scarcity that shapes systems"
+      },
+      {
+        "id": "2-big-t-notation-the-framework",
+        "title": "2. Big-T Notation: the framework"
+      },
+      {
+        "id": "3-the-compounding-demand-thesis",
+        "title": "3. The compounding-demand thesis"
+      },
+      {
+        "id": "4-five-levers-for-token-efficiency",
+        "title": "4. Five levers for token efficiency"
+      },
+      {
+        "id": "5-efficiency-and-literacy",
+        "title": "5. Efficiency and literacy"
+      },
+      {
+        "id": "6-reference-architecture-the-token-efficiency-pipeline",
+        "title": "6. Reference architecture: the token-efficiency pipeline"
+      },
+      {
+        "id": "7-assessment-checklist",
+        "title": "7. Assessment checklist"
+      },
+      {
+        "id": "8-conclusion",
+        "title": "8. Conclusion"
+      }
+    ],
+    "slug": "big-t-notation-paper",
+    "status": "Working Draft",
+    "status_date": "June 2026",
+    "status_source": "page",
+    "title": "Big-T Notation Paper",
+    "url": "https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/",
+    "word_count": 3749
+  },
+  {
+    "author": "Tokenomics Foundation Consumption Working Group",
+    "kind": "project",
+    "license": "CC-BY-4.0",
+    "modified": "2026-09-24",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "tcsimulator",
+        "title": "Drag the blocks, watch the money move"
+      },
+      {
+        "id": "tctheonething",
+        "title": "Cache hits are almost free wins... except that they aren't free"
+      },
+      {
+        "id": "tcthreerules",
+        "title": "Three rules govern every prompt cache you will use"
+      },
+      {
+        "id": "tcmonitoring",
+        "title": "Measuring prefix caching"
+      },
+      {
+        "id": "tcmodelswitching",
+        "title": "Every model has its own cache (and switching models clears it)"
+      },
+      {
+        "id": "tcaccessmodes",
+        "title": "The same model caches very differently depending on how you reach it"
+      },
+      {
+        "id": "tcprovidersnapshot",
+        "title": "The frontier providers agree on almost nothing"
+      }
+    ],
+    "slug": "cache-explainer",
+    "status": "Release Candidate 1",
+    "status_date": "2026-09-22",
+    "status_source": "page",
+    "title": "AI Tokenomics Prompt Cache Explainer",
+    "url": "https://www.tokeneconomics.com/cache-explainer/",
+    "word_count": 3054
+  },
+  {
+    "author": null,
+    "kind": "project",
+    "license": "CC-BY-4.0",
+    "modified": "2026-09-21",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "wp-what",
+        "title": "What this is"
+      },
+      {
+        "id": "wp-stages",
+        "title": "The three stages"
+      },
+      {
+        "id": "wp-where",
+        "title": "Where the enterprise sits"
+      },
+      {
+        "id": "wp-personas",
+        "title": "The personas"
+      },
+      {
+        "id": "wp-allied",
+        "title": "Allied personas"
+      },
+      {
+        "id": "wp-raci",
+        "title": "Responsibility by lifecycle stage"
+      },
+      {
+        "id": "wp-motion",
+        "title": "The operating model in motion"
+      },
+      {
+        "id": "wp-refs",
+        "title": "References"
+      }
+    ],
+    "slug": "personas-operating-model",
+    "status": "Release Candidate 2",
+    "status_date": "2026-09-04",
+    "status_source": "page",
+    "title": "AI Tokenomics Personas and Operating Model",
+    "url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
+    "word_count": 4975
+  },
+  {
+    "author": null,
+    "kind": "project",
+    "license": "CC-BY-4.0",
+    "modified": "2026-09-24",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "vfstep1",
+        "title": "Business Mission: Value starts with why the business exists"
+      },
+      {
+        "id": "vfstep2",
+        "title": "Financial Treatment: Different AI uses require different treatment"
+      },
+      {
+        "id": "vfstep3",
+        "title": "Outcome Categories: The value classification"
+      },
+      {
+        "id": "vfstep4",
+        "title": "Measurement and Conversion: The claim chain"
+      },
+      {
+        "id": "vf-real-world-example-an-ai-code-review-assistant-end-to-end-value-classification",
+        "title": "Real World Example: An AI Code Review Assistant, End to End Value Classification"
+      },
+      {
+        "id": "vf-what-comes-next-marrying-total-cost-of-ai-to-value-outcomes",
+        "title": "What comes next: marrying total cost of AI to value outcomes"
+      }
+    ],
+    "slug": "value-classification",
+    "status": "Release Candidate 2",
+    "status_date": "2026-09-16",
+    "status_source": "page",
+    "title": "Classifying and Measuring Realized Value from AI",
+    "url": "https://www.tokeneconomics.com/ai-value-classification/",
+    "word_count": 3880
+  },
+  {
+    "author": "Matt Cowsert",
+    "kind": "project",
+    "license": "CC-BY-4.0",
+    "modified": "2026-09-21",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "in-the-working-draft",
+        "title": "In the working draft"
+      },
+      {
+        "id": "in-review",
+        "title": "In review"
+      },
+      {
+        "id": "started-not-yet-certain",
+        "title": "Started, not yet certain"
+      },
+      {
+        "id": "not-in-1-5",
+        "title": "Not in 1.5"
+      }
+    ],
+    "slug": "focus-1-5-for-ai",
+    "status": "Status as of 17 Sep 2026",
+    "status_date": "17 Sep 2026",
+    "status_source": "page",
+    "title": "What 1.5 does for AI cost, and what it does not",
+    "url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
+    "word_count": 4698
+  },
+  {
+    "author": "J.R. Storment",
+    "kind": "insight",
+    "license": "CC-BY-4.0",
+    "modified": "2026-09-10",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "episode-summary",
+        "title": "Episode summary"
+      },
+      {
+        "id": "key-takeaways-measure-tca-focus-on-value-realized",
+        "title": "Key takeaways - Measure TCA, focus on Value Realized"
+      },
+      {
+        "id": "episode-highlights",
+        "title": "Episode Highlights"
+      }
+    ],
+    "slug": "total-cost-of-ai",
+    "status": "Podcast episode 17 (TCA is a proposal, not ratified)",
+    "status_date": null,
+    "status_source": "registry",
+    "title": "Why Tokens Aren’t the AI Bill: Introducing Total Cost of AI (TCA)",
+    "url": "https://www.tokeneconomics.com/insights/total-cost-of-ai-tca/",
+    "word_count": 4755
+  },
+  {
+    "author": "J.R. Storment",
+    "kind": "insight",
+    "license": "CC-BY-4.0",
+    "modified": "2026-08-29",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "episode-summary",
+        "title": "Episode summary"
+      },
+      {
+        "id": "episode-highlights",
+        "title": "Episode Highlights"
+      },
+      {
+        "id": "key-takeaways",
+        "title": "Key takeaways"
+      }
+    ],
+    "slug": "routing-wars",
+    "status": "Podcast episode 16 (survey data described as early, directional)",
+    "status_date": null,
+    "status_source": "registry",
+    "title": "Routing Wars: Tokenomics in Action",
+    "url": "https://www.tokeneconomics.com/insights/podcast-16-of-tokenomics-brief-routing-wars-tokenomics-in-action/",
+    "word_count": 4974
+  },
+  {
+    "author": null,
+    "kind": "insight",
+    "license": "CC-BY-4.0",
+    "modified": "2026-08-19",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "executive-summary",
+        "title": "Executive summary"
+      },
+      {
+        "id": "the-elephant",
+        "title": "The elephant problem"
+      },
+      {
+        "id": "what-it-is",
+        "title": "What tokenomics is: the definitions on offer"
+      },
+      {
+        "id": "three-zones",
+        "title": "The three-zone map, and the fight about it"
+      },
+      {
+        "id": "measuring-value",
+        "title": "Measuring value: the first concrete method offered"
+      },
+      {
+        "id": "what-it-isnt",
+        "title": "What tokenomics is not"
+      },
+      {
+        "id": "counterpoints",
+        "title": "Counterpoints and live tensions"
+      },
+      {
+        "id": "working-definition",
+        "title": "A working definition, offered to be argued with"
+      },
+      {
+        "id": "open-questions",
+        "title": "The open questions this doc does not answer"
+      }
+    ],
+    "slug": "what-tokenomics-is-and-isnt",
+    "status": "Member-call synthesis (unlisted page)",
+    "status_date": null,
+    "status_source": "registry",
+    "title": "What Tokenomics Is, and What It Isn't",
+    "url": "https://www.tokeneconomics.com/what-tokenomics-is-and-what-it-isnt/",
+    "word_count": 7367
+  }
+]

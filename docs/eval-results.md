@@ -224,3 +224,46 @@ columns; changelog resource with materiality caveat + official:false;
 calculate_kpi not-computable guidance at 1.0 with ESR unchanged at
 26.552972346576816%; versioned commitment mappings; README phrasing;
 cross-version hints + working example slug).
+
+# Tokenomics suite (`evals/tokenomics/eval.xml`)
+
+Same protocol: a fresh-context agent given only
+`node evals/framework/mcp-call.mjs --server=tokenomics` (and, for the
+combined scenario, `--server=framework|focus`), graded by the supervising
+session against the pre-registered `<expected>` answers.
+
+## Tokenomics Run 1 — 2026-09-25, data 1.0.0, server 0.1.0
+
+| #   | Probe                                         | Verdict  | Notes                                                        |
+| --- | --------------------------------------------- | -------- | ------------------------------------------------------------ |
+| 1   | Cache Hit Rate formula + source status        | **PASS** | verbatim formula; Release Candidate 1 (2026-09-22)           |
+| 2   | Cache metrics on a worked example             | **PASS** | 80% hit rate; CCE 0.7075 (hand-checked)                      |
+| 3   | Big-T variables + T(n·k·a) fix                | **PASS** | n/k/a named; fix quoted                                      |
+| 4   | Layers that move the multiplier; L3 metric    | **PASS** | L3–L5 yes, L1–L2 no; cache hit rate, TTFT, throughput        |
+| 5   | Published token reductions + classes          | **PASS** | ~80% → T(n); 92–99.9% → T(log n)                             |
+| 6   | Provider cache snapshot                       | **PASS** | Google no write charge; Anthropic 512–4,096; reviewed Aug 26 |
+| 7   | TokenCacheAction tracker item                 | **PASS** | FR 2099, in review; values Uncached/Read/Write/Other         |
+| 8   | Capabilities linked to FinOps Practitioner    | **PASS** | anomaly-management, allocation, budgeting, forecasting URIs  |
+| 9   | Labor categories + booking destinations       | **PASS** | 3 + 5, all named                                             |
+| 10  | "tokenmaxing" + status of the definition page | **PASS** | verbatim; Working Draft, not ratified                        |
+
+**Score: 10/10.** One recoverable error: the agent first called
+`get_metric` with `slug` (the bridge's `list-tools` prints no input
+schemas).
+
+## Combined three-server scenario — 2026-09-25 (`evals/tokenomics/combined-scenario.xml`)
+
+Tokenomics `get_bigt_class` (T(n·k)) → `calculate_cache_metrics` (hit rate
+20%, CCE 10.5%) → `get_crosslinks` (cache-hit-rate → FOCUS 1.2
+SkuPriceDetails + working-draft TokenCacheAction) → focus `get_column`
+(SkuPriceDetails 1.2: no token/cache properties yet) → framework
+`get_capability` (anomaly-management). **PASS end-to-end**; URIs followed
+across servers with no errors. Friction fixed in the same change: the
+calculator now reports a write:read ratio and flags writes exceeding
+reads (quoting the explainer); `define_term` returns exact matches first;
+`get_crosslinks` text names each link's source entity and flags ratified
+FOCUS columns quoted from the 1.5 status page; `list_layers` shows each
+layer's name beside its summary-table label. Not changed: no stated link
+ties the cache metrics to a framework capability (the evidence rule), so
+ownership stays the agent's call — the experimental crosswalk offers
+usage-optimization / rate-optimization as unofficial suggestions.

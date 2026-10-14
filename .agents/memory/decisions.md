@@ -787,3 +787,114 @@ CI tier ordering that a future edit could silently undo.
 Kept deliberately dumb — existence check, no staleness comparison — matching
 `ensureBuilt()` in `scripts/gen-mcp-surface.mjs`. A stale `dist/` is the
 build's problem, not the test runner's.
+
+## 2026-09-25 — Rate-limit the Worker in application code, not at the edge
+
+Decision: `wrangler.toml` declares a `[[ratelimits]]` binding (`RATE_LIMITER`,
+60 requests/60s keyed by caller IP), enforced in `src/workers/app.ts` on
+`/mcp/framework` and `/mcp/focus` (a denied request gets `429` +
+`Retry-After: 60`). Owner instruction: add this now, purely so the deployed
+Worker can be load-tested before any separate decision to advertise/publish
+its URL — it is not itself that publish decision (see 2026-08-15 "Announce
+npm, but do not advertise the hosted Worker", which named rate limiting as
+the pre-condition for revisiting that call).
+
+This reverses `docs/deploy-worker.md`'s prior text, which pointed at
+Cloudflare's zone-level [Rate Limiting (WAF) rules](https://developers.cloudflare.com/waf/rate-limiting-rules/)
+instead of application code. That product configures on a Cloudflare
+**zone** — a custom domain added to the account's DNS. This Worker is
+served from the shared `*.workers.dev` subdomain, which is not a zone the
+owner has WAF configuration over, so the WAF product was never actually
+reachable for this deployment as written. [Workers Rate Limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/)
+(the binding) is Cloudflare's supported mechanism for gating a Worker's own
+routes independent of custom-domain status; it needs Wrangler >= 4.36.0 (this
+repo pulls 4.140.0 via `npx wrangler`) and provisions automatically on the
+next `wrangler deploy` — no separate dashboard/CLI step, unlike a KV/D1
+namespace.
+
+Alternatives considered:
+
+- **Put the Worker behind a custom domain first, then use WAF Rate Limiting
+  rules.** Rejected for now: adds a DNS/zone dependency and a second
+  Cloudflare product surface to configure just to unblock testing; the
+  Workers binding needs neither and can coexist with WAF rules later if a
+  custom domain is added.
+- **Cap `calculate_kpi`/expensive tools only, not all `/mcp/*` traffic.**
+  Rejected: every tool call on both routes is a full MCP `initialize` +
+  `tools/call` round trip building a fresh server per request (the transport
+  is stateless), so there is no cheap/expensive split worth making — the
+  whole route is the unit of cost.
+
+Verification: `src/workers/app.test.ts`'s new "rate limiting" suite (7 cases:
+allow, deny with `429`/`Retry-After`/CORS-echoed headers, applies to both
+routes, does not gate non-MCP paths, Origin/method checks still run before
+the limiter, IP-keying with an `"unknown"` fallback) plus `npx wrangler
+deploy --dry-run`, which confirms Wrangler parses the binding and reports
+`env.RATE_LIMITER (60 requests/60s)` as a recognized Rate Limit resource. Not
+deployed — deploying is a human approval point (`approvals.yaml`); the owner
+runs `wrangler deploy` when ready to test it live.
+
+Known consequence, deliberately not addressed here: the limiter is scoped
+per-isolate-invocation via the shared Cloudflare-managed rate limit store, so
+its accuracy under concurrent/distributed load matches whatever consistency
+guarantees Cloudflare's Rate Limiting binding documents (approximate, not a
+hard atomic counter) — acceptable for a test/abuse-deterrence gate, not
+something to rely on for a strict quota.
+
+## 2026-09-25 — tokenomics-overview-mcp: curriculum is a local overlay, not data
+
+- Decision: the owner chose "Foundation pages + labeled extras" (cert-prep
+  curriculum behind `FINOPS_MCP_EXPERIMENTAL`). Implemented the extras as a
+  runtime overlay: `cli.js import-curriculum --from <cert-prep>/ai-tokenomics`
+  writes `curriculum.json` to a local dir (default `.cache/`), and the server
+  loads it only with the flag AND `TOKENOMICS_MCP_CURRICULUM`. Nothing from
+  the curriculum is committed or packaged; practice banks are never read.
+- Why: this repo and its npm packages are public; the curriculum site is
+  passcode-gated and the Fundamentals guide is marked private in cert-prep.
+  Committing it under `derived/` would publish it.
+- Alternatives considered: commit as `derived/*.json` `official: false`
+  (rejected — publishes private material); drop the extras (rejected —
+  contradicts the owner's answer). Reversing is a data-path change, flagged
+  as open question 1 in the design.
+
+## 2026-09-25 — Stated cross-links require a verbatim evidence quote
+
+- Decision: a tokenomics→framework/FOCUS link is on the default surface
+  only if it carries a quote found verbatim (markup/whitespace-normalized)
+  in the composed source document; FOCUS targets must also be named in the
+  quote's paragraph. Refresh fails otherwise; `crosslinks.test.ts`
+  cross-reads data/framework and data/focus for target existence. Name
+  correspondences (Tokenomics personas ↔ FinOps personas, cache-hit-rate ↔
+  the framework KPI of the same name) live in the experimental crosswalk.
+- Why: the framework server deleted its inferred relationship graph because
+  inference did not clear the bar (v1-official-only); the personas page
+  itself says reconciling with the FinOps persona catalog is "a deliberate
+  next step, not attempted here".
+- Alternatives considered: name matching on the default surface (rejected
+  for the reason above); hand-curated links without evidence (rejected —
+  unverifiable).
+
+## 2026-09-25 — scanForInjection gains an opt-in allow-list
+
+- Decision: `scanForInjection(where, text, allow = [])`; the tokenomics
+  crawler allows only `system-prompt`. Framework/FOCUS behavior unchanged.
+- Why: "system prompt" is core vocabulary across AI-cost guidance (prompt
+  caching, gateway routing); the heuristic fired on 5 legitimate pages.
+- Alternatives considered: a tokenomics-local copy of the scanner (rejected —
+  two scanners drift); dropping the pattern globally (rejected — still a
+  useful signal on FinOps prose).
+
+## 2026-09-25 — Stated-link naming rule, made explicit (amends the entry above)
+
+- Decision: after independent review found framework targets exempt from
+  the "evidence names the target" check, each framework target now carries
+  a `mentions` phrase (the capability's name or its defining activity, e.g.
+  "anomaly detection" → anomaly-management) that must appear in the
+  evidence; refresh fails otherwise. The one link whose quote named no
+  target ("Cost attribution …" → allocation) was dropped. FOCUS targets keep
+  the paragraph rule (tracker cards name the identifier one sentence before
+  the use) and single-word JSON keys (Email, Name, Type) are no longer
+  treated as FOCUS identifiers.
+- Alternatives considered: exact capability-title match only (rejected —
+  the Foundation writes "anomaly detection", never "Anomaly Management");
+  keeping the exemption (rejected — silent wrong targets).

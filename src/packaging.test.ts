@@ -15,11 +15,20 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const focusPkgDir = path.join(repoRoot, "packages/finops-focus-mcp");
+const tokenomicsPkgDir = path.join(
+  repoRoot,
+  "packages/tokenomics-overview-mcp",
+);
 
 function ensureBuilt(): void {
   const frameworkMain = path.join(repoRoot, "dist/servers/framework/main.js");
   const focusMain = path.join(repoRoot, "dist/servers/focus/main.js");
-  if (!fs.existsSync(frameworkMain) || !fs.existsSync(focusMain)) {
+  const tokenomicsMain = path.join(repoRoot, "dist/servers/tokenomics/main.js");
+  if (
+    !fs.existsSync(frameworkMain) ||
+    !fs.existsSync(focusMain) ||
+    !fs.existsSync(tokenomicsMain)
+  ) {
     execFileSync("npm", ["run", "build"], { cwd: repoRoot, stdio: "inherit" });
   }
 }
@@ -53,6 +62,10 @@ describe("packaging: finops-focus-mcp shim (T-036)", () => {
 
     expect(paths.some((p) => p.startsWith("dist/servers/focus/"))).toBe(false);
     expect(paths.some((p) => p.startsWith("data/focus/"))).toBe(false);
+    expect(paths.some((p) => p.startsWith("dist/servers/tokenomics/"))).toBe(
+      false,
+    );
+    expect(paths.some((p) => p.startsWith("data/tokenomics/"))).toBe(false);
 
     // sanity: the framework server and its data still ship
     expect(paths).toContain("dist/servers/framework/main.js");
@@ -67,6 +80,10 @@ describe("packaging: finops-focus-mcp shim (T-036)", () => {
       false,
     );
     expect(paths.some((p) => p.startsWith("data/framework/"))).toBe(false);
+    expect(paths.some((p) => p.startsWith("dist/servers/tokenomics/"))).toBe(
+      false,
+    );
+    expect(paths.some((p) => p.startsWith("data/tokenomics/"))).toBe(false);
 
     expect(paths).toContain("dist/servers/focus/main.js");
     expect(paths.some((p) => p.startsWith("data/focus/"))).toBe(true);
@@ -121,6 +138,78 @@ describe("packaging: finops-focus-mcp shim (T-036)", () => {
         encoding: "utf8",
       });
       expect(versionOut).toMatch(/^finops-focus-mcp v\d+\.\d+\.\d+/);
+    } finally {
+      fs.rmSync(packScratch, { recursive: true, force: true });
+      fs.rmSync(installScratch, { recursive: true, force: true });
+    }
+  }, 60_000);
+});
+
+// The tokenomics-overview-mcp shim follows the same boundary contract
+// (.agents/specs/tokenomics-overview-mcp.md "Packaging"): its tarball ships
+// only the tokenomics server + data/tokenomics, never the curriculum overlay.
+describe("packaging: tokenomics-overview-mcp shim", () => {
+  beforeAll(() => {
+    ensureBuilt();
+  }, 120_000);
+
+  it("ships only the tokenomics server and its data, under 1MB", () => {
+    const pack = packDryRun(tokenomicsPkgDir);
+    const paths = pack.files.map((f) => f.path);
+    for (const prefix of [
+      "dist/servers/framework/",
+      "dist/servers/focus/",
+      "data/framework/",
+      "data/focus/",
+    ]) {
+      expect(
+        paths.some((p) => p.startsWith(prefix)),
+        prefix,
+      ).toBe(false);
+    }
+    expect(paths.some((p) => p.includes("curriculum.json"))).toBe(false);
+    expect(paths).toContain("dist/servers/tokenomics/main.js");
+    expect(paths).toContain("data/tokenomics/manifest.json");
+    expect(paths).toContain("NOTICE.md");
+    expect(pack.size).toBeLessThan(1024 * 1024);
+  }, 60_000);
+
+  it("packs into scratch, installs, and runs the bin --version", () => {
+    const packScratch = fs.mkdtempSync(path.join(os.tmpdir(), "tk pack "));
+    const installScratch = fs.mkdtempSync(
+      path.join(os.tmpdir(), "tk install "),
+    );
+    try {
+      const out = execFileSync(
+        "npm",
+        ["pack", "--pack-destination", packScratch, "--json"],
+        { cwd: tokenomicsPkgDir, encoding: "utf8" },
+      );
+      const [{ filename }] = JSON.parse(out) as { filename: string }[];
+      const tarball = path.join(packScratch, filename);
+      fs.writeFileSync(
+        path.join(installScratch, "package.json"),
+        JSON.stringify({ name: "tk-pack-scratch", version: "0.0.0" }),
+      );
+      execFileSync(
+        "npm",
+        [
+          "install",
+          tarball,
+          "--no-save",
+          "--no-audit",
+          "--no-fund",
+          "--prefer-offline",
+        ],
+        { cwd: installScratch, stdio: "inherit" },
+      );
+      const bin = path.join(
+        installScratch,
+        "node_modules/.bin/tokenomics-overview-mcp",
+      );
+      expect(execFileSync(bin, ["--version"], { encoding: "utf8" })).toMatch(
+        /^tokenomics-overview-mcp v\d+\.\d+\.\d+ \(data v/,
+      );
     } finally {
       fs.rmSync(packScratch, { recursive: true, force: true });
       fs.rmSync(installScratch, { recursive: true, force: true });

@@ -31,6 +31,15 @@ import type { FocusStore } from "../shared/focus/artifact.js";
 import { createServer as createFrameworkServer } from "../servers/framework/server.js";
 import { createServer as createFocusServer } from "../servers/focus/server.js";
 
+/** Matches the shape of a Cloudflare Workers Rate Limiting binding
+ * (`env.RATE_LIMITER` in wrangler.toml's `[[ratelimits]]`), kept as a local
+ * structural type rather than a dependency on `@cloudflare/workers-types` —
+ * this file is otherwise free of Cloudflare-specific types (native `Request`/
+ * `Response` only), and this is the one binding it needs. */
+export interface RateLimiter {
+  limit(options: { key: string }): Promise<{ success: boolean }>;
+}
+
 export interface FetchHandlerOptions {
   frameworkArtifact: Artifact;
   focusStore: FocusStore;
@@ -38,6 +47,11 @@ export interface FetchHandlerOptions {
    * Origin header (non-browser clients, curl, server-to-server) is always
    * allowed regardless of this list. */
   allowedOrigins: readonly string[];
+  /** Optional per-IP rate limiter for the /mcp/* routes. Undefined disables
+   * rate limiting entirely (e.g. in tests that don't care about it) — see
+   * decisions.md 2026-09-25 for why this is temporary/test-only and not yet
+   * wired into the deployed Worker's wrangler.toml. */
+  rateLimiter?: RateLimiter;
 }
 
 export type FetchHandler = (request: Request) => Promise<Response>;
@@ -68,8 +82,10 @@ async function handleMcp(
  * artifacts and an Origin allowlist. Pure with respect to its inputs — safe
  * to call once per isolate (src/workers/index.ts does), or per request in
  * tests. */
+const RATE_LIMIT_KEY_HEADER = "cf-connecting-ip";
+
 export function createFetchHandler(opts: FetchHandlerOptions): FetchHandler {
-  const { frameworkArtifact, focusStore, allowedOrigins } = opts;
+  const { frameworkArtifact, focusStore, allowedOrigins, rateLimiter } = opts;
 
   return async function fetchHandler(request: Request): Promise<Response> {
     const origin = request.headers.get("origin");
@@ -118,6 +134,29 @@ export function createFetchHandler(opts: FetchHandlerOptions): FetchHandler {
         }),
         { status: 405, headers },
       );
+    }
+
+    // Only the two POST-only MCP routes are metered — nothing else does
+    // enough work to be worth gating. Keyed by the caller's IP as reported by
+    // Cloudflare's edge (absent outside Cloudflare's network, e.g. in tests
+    // and `wrangler dev` without `--remote`; those callers share one "unknown"
+    // bucket rather than bypassing the limit or crashing on a missing header).
+    if (isMcpRoute && rateLimiter) {
+      const key = request.headers.get(RATE_LIMIT_KEY_HEADER) ?? "unknown";
+      const { success } = await rateLimiter.limit({ key });
+      if (!success) {
+        const headers = new Headers({
+          "Content-Type": "application/json",
+          "Retry-After": "60",
+        });
+        if (origin !== null) {
+          headers.set("Access-Control-Allow-Origin", origin);
+        }
+        return new Response(
+          JSON.stringify({ error: "rate limit exceeded, retry later" }),
+          { status: 429, headers },
+        );
+      }
     }
 
     let response: Response;

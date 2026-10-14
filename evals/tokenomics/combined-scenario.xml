@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Combined three-server scenario (spec .agents/specs/tokenomics-overview-mcp.md,
+  acceptance: "three-server combined scenario"). One ORDERED walkthrough across
+  the tokenomics, framework and focus bridges
+  (evals/framework/mcp-call.mjs --server=tokenomics|framework|focus), no other
+  tools or files. The servers connect only through slugs and the
+  finops:// / focus:// URIs the tokenomics server returns.
+  Story: a support agent's prompt-cache bill looks wrong.
+-->
+<scenario name="prompt-cache-to-billing-walkthrough" servers="tokenomics,framework,focus">
+  <step id="1" server="tokenomics">
+    <action>get_bigt_class(class: "T(n·k)")</action>
+    <goal>Place a multi-turn support agent that replays context on the Big-T ladder and get the published fix.</goal>
+    <expected>T(n·k) Multiplicative; fix "Compose tool pipelines; instrument for hidden k." Moved by L4 (right-size the model).</expected>
+  </step>
+  <step id="2" server="tokenomics">
+    <action>calculate_cache_metrics(cache_read_tokens: 200000, cache_write_tokens: 300000, uncached_input_tokens: 500000, base_input_price_per_mtok: 3, cache_read_multiplier: 0.1, cache_write_multiplier: 1.25)</action>
+    <goal>Measure coverage and payback with the cache explainer's formulas.</goal>
+    <expected>Cache hit rate 0.2; actual prompt cost $2.685 vs uncached equivalent $3.00; Cache Cost Efficiency 0.105 — only just above zero (payback-once behavior: writes rarely read back).</expected>
+  </step>
+  <step id="3" server="tokenomics">
+    <action>get_crosslinks(entity_type: "metric", slug: "cache-hit-rate")</action>
+    <goal>Find where cache hit rate lands in billing data.</goal>
+    <expected>FOCUS working-draft TokenCacheAction (no URI yet) and focus://spec/1.2/columns/skupricedetails, evidence "cache hit rate for token-metered SKUs".</expected>
+  </step>
+  <step id="4" server="focus">
+    <action>get_column(column: "SkuPriceDetails", version: "1.2")</action>
+    <goal>Read today's ratified column that the 1.5 cache properties extend.</goal>
+    <expected>SkuPriceDetails exists in FOCUS 1.2 (a Dimension of key-value properties describing the SKU price); no TokenCacheAction property in 1.2.</expected>
+  </step>
+  <step id="5" server="tokenomics">
+    <action>get_crosslinks(entity_type: "persona", slug: "finops-practitioner")</action>
+    <goal>Find which FinOps capability owns catching this pattern.</goal>
+    <expected>finops://framework/capabilities/anomaly-management (evidence: "Anomaly detection shifts from spend spikes to complexity shifts"), plus allocation, budgeting, forecasting.</expected>
+  </step>
+  <step id="6" server="framework">
+    <action>get_capability(capability: "anomaly-management")</action>
+    <goal>Read the owning capability in the FinOps Framework.</goal>
+    <expected>Anomaly Management capability record (Understand Usage &amp; Cost domain) with its official definition and KPIs.</expected>
+  </step>
+</scenario>

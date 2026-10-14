@@ -29,9 +29,17 @@ export interface InjectionHit {
   where: string;
 }
 
-export function scanForInjection(where: string, text: string): InjectionHit[] {
+/** `allow` names patterns a crawler has shown to be domain vocabulary in its
+ * corpus (e.g. "system prompt" throughout AI-cost guidance); every other
+ * pattern still applies. Defaults to none. */
+export function scanForInjection(
+  where: string,
+  text: string,
+  allow: readonly string[] = [],
+): InjectionHit[] {
   const hits: InjectionHit[] = [];
   for (const { name, re } of INJECTION_PATTERNS) {
+    if (allow.includes(name)) continue;
     const m = re.exec(text);
     if (m) {
       const start = Math.max(0, m.index - 60);

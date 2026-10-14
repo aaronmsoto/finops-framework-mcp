@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a problem with finops-framework-mcp or finops-focus-mcp
+description: Report a problem with finops-framework-mcp, finops-focus-mcp, or tokenomics-overview-mcp
 title: "[bug] "
 labels: [bug]
 body:
@@ -10,7 +10,8 @@ body:
       options:
         - finops-framework-mcp
         - finops-focus-mcp
-        - both / not sure
+        - tokenomics-overview-mcp
+        - more than one / not sure
     validations:
       required: true
   - type: input

@@ -1,0 +1,38 @@
+[
+  {
+    "key_question": "How is the AI factory built?",
+    "name": "Production",
+    "provenance": {
+      "document": "personas-operating-model",
+      "license": "CC-BY-4.0",
+      "section": "wp-stages",
+      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+    },
+    "scope": "The supply side of AI. Energy, capital resources, and the economics of building and running AI in production. How capacity is planned, costed, and brought online.",
+    "slug": "production"
+  },
+  {
+    "key_question": "How are AI services consumed, and by whom?",
+    "name": "Consumption",
+    "provenance": {
+      "document": "personas-operating-model",
+      "license": "CC-BY-4.0",
+      "section": "wp-stages",
+      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+    },
+    "scope": "Owns delivering AI services: how much is consumed, by whom, where the waste lives, and how to serve efficiently without degrading outcomes.",
+    "slug": "consumption"
+  },
+  {
+    "key_question": "What value does AI produce?",
+    "name": "Value",
+    "provenance": {
+      "document": "personas-operating-model",
+      "license": "CC-BY-4.0",
+      "section": "wp-stages",
+      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+    },
+    "scope": "Owns the last part of Tokenomics, measuring the business value AI produces, so AI investment can be judged on the outcomes it delivers rather than cost alone.",
+    "slug": "value"
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "$id": "tokenomics-overview-mcp/metrics",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "definition_md": {
+        "type": "string"
+      },
+      "formula": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "formula_text": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "inputs": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "name": {
+        "type": "string"
+      },
+      "provenance": {
+        "additionalProperties": false,
+        "properties": {
+          "document": {
+            "type": "string"
+          },
+          "license": {
+            "const": "CC-BY-4.0"
+          },
+          "section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_url": {
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document",
+          "section",
+          "source_url",
+          "license"
+        ],
+        "type": "object"
+      },
+      "slug": {
+        "type": "string"
+      },
+      "targets": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      }
+    },
+    "required": [
+      "slug",
+      "name",
+      "formula",
+      "formula_text",
+      "definition_md",
+      "targets",
+      "inputs",
+      "provenance"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}
