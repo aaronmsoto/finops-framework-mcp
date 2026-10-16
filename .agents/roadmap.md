@@ -24,3 +24,13 @@ FOCUS servers, with stated cross-links into both. Owner answered the design
 questions 2026-09-25 (answers = approval to build).
 Design: `docs/designs/tokenomics-overview-mcp.html`; spec:
 `.agents/specs/tokenomics-overview-mcp.md`.
+
+## Tokenomics: ingest the Organizational Routing Guide  —  idea
+
+Waiting on the source. Tokenomics Foundation's "Routing AI Requests: An
+Organizational Guide" is a Consumption WG Sprint 2 draft ("Not a working
+group position", 2026-10-08). When it is final, ingest it as document 13:
+cost per outcome, cost per task and misroute rate metrics, five routing
+patterns, proxy/router/gateway terms, and a possible
+`calculate_routing_metrics` tool. Comparison and ingest plan:
+`docs/research/tokenomics-routing-guide-draft.md`.
