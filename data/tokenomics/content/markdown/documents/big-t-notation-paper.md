@@ -2,21 +2,22 @@
 author: Dan Neff (Adobe)
 kind: paper
 license: CC-BY-4.0
-modified: 2026-07-28
+modified: 2026-10-16
 slug: big-t-notation-paper
-source_url: https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/
-status: Working Draft
-status_date: June 2026
-status_source: page
+source_url: https://www.tokeneconomics.com/projects/big-t-notation-paper/
+status: Full paper (projects index label)
+status_source: registry
 title: Big-T Notation Paper
-word_count: 3749
+word_count: 3746
 ---
 
 # Big-T Notation Paper
 
-## A Framework for Token Efficiency {section=a-framework-for-token-efficiency}
+## Overview {section=overview}
 
-*Dan Neff (Adobe) Published by the Tokenomics Foundation*
+A Framework for Token Efficiency
+
+Dan Neff (Adobe) Published by the Tokenomics Foundation
 
 Big-T lays out a methodology for classifying workloads based on how their token consumption grows as usage scales, complexity increases, or autonomy expands as a precursor to activities like choosing a model. It groups a workload into a category of behavior that lets engineers make decisions without benchmarking every input.
 
@@ -24,18 +25,23 @@ This playbook has three audiences. Engineers and architects will find the deepes
 
 The framework builds section by section, so each audience will get the most from a full read.
 
-| **Abstract** Every generation of computing has a unit of scarcity that engineers learn to measure and optimize.Big-O notationgave us the method for it, a shared language for how an algorithm’s time and space requirements grow with input size. The same discipline later carried to the constraints that followed: API calls, egress bytes, the cloud line items that decided whether a company’s economics worked. For large language models, that unit of scarcity is the token. Complexity thinking has been applied to AI before, but almost always to training: the cost of learning a model. How many tokens the deployed model consumes each time it answers a request for a workload is a different question, and it has had no vocabulary of its own. Big-T Notation gives it one. It applies Big-O’s way of reasoning to how token consumption grows as usage grows, so teams can reason about token cost before the invoice arrives. Token efficiency sounds like premature optimization. It is not. It is an architectural discipline that organizations need to build alongside AI literacy, because the forces driving token demand are compounding faster than the forces reducing token price. Organizations that scale AI adoption without token-aware architecture will discover they have built the equivalent of an O(n!) algorithm and called it a strategy. |
-| --- |
+## Abstract {section=abstract}
 
-## 1. The scarcity that shapes systems {section=1-the-scarcity-that-shapes-systems}
+Every generation of computing has a unit of scarcity that engineers learn to measure and optimize. Big-O notation gave us the method for it, a shared language for how an algorithm’s time and space requirements grow with input size. The same discipline later carried to the constraints that followed: API calls, egress bytes, the cloud line items that decided whether a company’s economics worked. For large language models, that unit of scarcity is the token.
+
+Complexity thinking has been applied to AI before, but almost always to training: the cost of learning a model. How many tokens the deployed model consumes each time it answers a request for a workload is a different question, and it has had no vocabulary of its own. Big-T Notation gives it one. It applies Big-O’s way of reasoning to how token consumption grows as usage grows, so teams can reason about token cost before the invoice arrives.
+
+Token efficiency sounds like premature optimization. It is not. It is an architectural discipline that organizations need to build alongside AI literacy, because the forces driving token demand are compounding faster than the forces reducing token price. Organizations that scale AI adoption without token-aware architecture will discover they have built the equivalent of an O(n!) algorithm and called it a strategy.
+
+## 1. The scarcity that shapes systems {section=the-scarcity-that-shapes-systems}
 
 Software engineering has always been shaped by whatever resource was scarce. The mainframe era: memory. The client-server era: network bandwidth. The cloud era: API calls, compute-hours, storage tiers. In each transition, engineers who understood the new constraint built systems that scaled, and engineers who ignored it built systems that bankrupted their sponsors.
 
-Tokens are the constraint in AI-native computing. Every model interaction is metered in tokens: prompts, completions, reasoning steps, tool calls. Tokens determine cost. They determine latency. They determine what fits in a context window and what gets truncated, and whether a workload can run on a small efficient model or requires a frontier model at many times the cost.
+Tokens are the constraint in AI-native computing. Every model interaction is metered in tokens: prompts, completions, reasoning steps, tool calls. Tokens determine cost. They determine latency. They determine what fits in a [context window](https://www.tokeneconomics.com/what-is-ai-tokenomics/#term-context-window) and what gets truncated, and whether a workload can run on a small efficient model or requires a frontier model at many times the cost.
 
 Most organizations treat tokens the way early web developers treated database queries: as an implementation detail someone else will worry about later. The problem is not that tokens are expensive. The problem is that token consumption compounds in ways that are structurally hard to predict and politically hard to govern.
 
-## 2. Big-T Notation: the framework {section=2-big-t-notation-the-framework}
+## 2. Big-T Notation: the framework {section=big-t-notation-the-framework}
 
 ### 2.1 The parallel to Big-O
 
@@ -43,11 +49,11 @@ Big-T measures the cost of using a model, not training one. Big-O does not tell 
 
 Big-T applies the same principle to tokens. It does not predict exact token counts. It categorizes workloads by how their token consumption grows as usage scales, complexity increases, or autonomy expands.
 
-***A note on n.****n covers two things that often move together: count (how many requests hit the workload) and size (how large each request’s input is). Either or both can be the dimension that scales, in any class. What the class tells you is how model token consumption responds as that dimension grows. The variable is deliberately loose; Big-T is a thinking tool, not a formula, and the point is to name what is scaling before asking how fast.*
+**A note on n.**n covers two things that often move together: count (how many requests hit the workload) and size (how large each request’s input is). Either or both can be the dimension that scales, in any class. What the class tells you is how model token consumption responds as that dimension grows. The variable is deliberately loose; Big-T is a thinking tool, not a formula, and the point is to name what is scaling before asking how fast.
 
 ### 2.2 The Big-T complexity ladder
 
-The ladder orders workloads the way Big-O orders algorithms, by growth rate: how token consumption grows as usage scales, from slowest-growing at the top to fastest at the bottom. Descending the ladder, the growth compounds. Each step down adds a multiplier, k over n, then a again, until T(∞) removes the ceiling entirely. That compounding is what makes the lower rungs expensive; a class that multiplies turns a modest per-request cost into a bill that climbs far faster than usage does. The risk is sharpened by concealment. As in Big-O, a higher class is not wrong; it is a category of behavior to weigh against the value it returns. But unlike Big-O, where the code makes the complexity visible, a workload’s class is often hidden, because the multipliers that set it (reasoning tokens, agent depth, retry loops) rarely appear in the request itself. Spend can scale to a far higher class than the request suggests.
+[The ladder](https://www.tokeneconomics.com/projects/big-t-notation/#ladder) orders workloads the way Big-O orders algorithms, by growth rate: how token consumption grows as usage scales, from slowest-growing at the top to fastest at the bottom. Descending the ladder, the growth compounds. Each step down adds a multiplier, k over n, then a again, until T(∞) removes the ceiling entirely. That compounding is what makes the lower rungs expensive; a class that multiplies turns a modest per-request cost into a bill that climbs far faster than usage does. The risk is sharpened by concealment. As in Big-O, a higher class is not wrong; it is a category of behavior to weigh against the value it returns. But unlike Big-O, where the code makes the complexity visible, a workload’s class is often hidden, because the multipliers that set it ([reasoning tokens](https://www.tokeneconomics.com/what-is-ai-tokenomics/#term-reasoning-tokens), agent depth, retry loops) rarely appear in the request itself. Spend can scale to a far higher class than the request suggests.
 
 A few notes on each:
 
@@ -73,9 +79,9 @@ Big-T also does not measure constants, and this is inherited from Big-O delibera
 
 The practical value shows up in a real decision teams make today: how to expose tool capabilities to an agent.
 
-The naive architecture. An agent has access to thirty tools via individual definitions, each loaded into context with schema, description, and parameters. The agent needs to chain five tools. Because the tools are not composable, each intermediate result returns to the agent, gets interpreted, and re-dispatches as a new call. Every round trip replays full context: all thirty tool definitions plus growing history. The token profile is a large constant overhead multiplied across five turns, and the number of turns is driven by interface limitations, not task complexity.
+**The naive architecture.** An agent has access to thirty tools via individual definitions, each loaded into context with schema, description, and parameters. The agent needs to chain five tools. Because the tools are not composable, each intermediate result returns to the agent, gets interpreted, and re-dispatches as a new call. Every round trip replays full context: all thirty tool definitions plus growing history. The token profile is a large constant overhead multiplied across five turns, and the number of turns is driven by interface limitations, not task complexity.
 
-The refactored architecture. The same thirty tools collapse behind a single interface: one tool that accepts a structured command sequence and runs the pipeline internally. The agent composes the full five-step operation in one call. One tool definition instead of thirty, one turn instead of five, no intermediate context replay. The task is identical. The output is identical. Token consumption drops by an order of magnitude, moving the workload from T(n·k) to T(n). Not through a better model, a shorter prompt, or a cheaper provider, but through interface design.
+**The refactored architecture.** The same thirty tools collapse behind a single interface: one tool that accepts a structured command sequence and runs the pipeline internally. The agent composes the full five-step operation in one call. One tool definition instead of thirty, one turn instead of five, no intermediate context replay. The task is identical. The output is identical. Token consumption drops by an order of magnitude, moving the workload from T(n·k) to T(n). Not through a better model, a shorter prompt, or a cheaper provider, but through interface design.
 
 ### 2.5 Worked example: code generation as native compression
 
@@ -85,7 +91,7 @@ The standard way for an agent to perform a batch operation, say creating thirty-
 
 The reason is that code is the model’s native language. Models are trained on vast amounts of it. When the output format is code (loops, conditionals, variables, function calls), the model operates in a representation that is both more compressed and more precise than the equivalent natural-language tool invocations. In Big-T terms, tool-calling for a batch of operations is multiplicative, each operation needing a full turn with context replay; code-generation is linear, one step producing a program whose execution cost is borne by compute runtime rather than inference. The operations still happen, but outside the token economy.
 
-## 3. The compounding-demand thesis {section=3-the-compounding-demand-thesis}
+## 3. The compounding-demand thesis {section=the-compounding-demand-thesis}
 
 Token efficiency is urgent because four demand waves are stacking at once. Any one of them would increase enterprise token consumption. Together, they compound.
 
@@ -97,13 +103,13 @@ Token efficiency is urgent because four demand waves are stacking at once. Any o
 
 **Wave 4: Adoption is compounding.** Each additional user, use case, and agent adds to the token baseline. The small fraction of heavy users consuming the majority of tokens today becomes a larger fraction as literacy spreads and tooling improves.
 
-## 4. Five levers for token efficiency {section=4-five-levers-for-token-efficiency}
+## 4. Five levers for token efficiency {section=five-levers-for-token-efficiency}
 
-**Lever 1: Model routing.** Not every task needs a frontier model. Learned routers have demonstrated large cost reductions while holding output quality, and routing is now productized in several platforms. Picture a quality floor (minimum acceptable output quality) and a cost ceiling (maximum acceptable spend); routing finds the cheapest model that clears the floor. Same pattern as database read replicas: send traffic to the cheapest resource that can serve it correctly. The routing layer is also a natural injection point for observability. Because every model call passes through the router, deploying cost attribution and request tagging here achieves double-duty: optimization and visibility.
+**Lever 1: Model routing.** Not every task needs a frontier model. Learned routers have demonstrated large cost reductions while holding output quality, and routing is now productized in several platforms. Picture a quality floor (minimum acceptable output quality) and a cost ceiling (maximum acceptable spend); routing finds the cheapest model that clears the floor. Same pattern as database read replicas: send traffic to the cheapest resource that can serve it correctly. The [routing layer](https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack/) is also a natural injection point for observability. Because every model call passes through the router, deploying cost attribution and request tagging here achieves double-duty: optimization and visibility.
 
 **Lever 2: Prompt engineering and serialization.** Structured prompting produces substantial gains: extracting only the conceptually relevant sections of a document, compressing summaries to higher information density, encoding repeated patterns more compactly. Serialization is overlooked and often the single largest driver for data-heavy workloads: compact tabular formats can consume roughly half the tokens of verbose ones with no quality loss, and poor serialization routinely wastes a large share of available tokens on formatting overhead alone. On output, the asymmetry in pricing makes compression more valuable still: output tokens cost several times more than input tokens across major providers, so deterministic schema elements should be handled by the decoder rather than generated.
 
-**Lever 3: Caching as a design principle.** Caching is the most underused lever. Prompt caching (reusing a cached prompt prefix across calls) can sharply cut input cost for workloads with stable system prompts. Semantic caching (matching similar queries to already-computed responses) can eliminate model calls entirely for high-frequency, low-variance requests. If you have run a CDN or a query cache, you already know the shape of this: any linear workload should be evaluated for whether caching reduces it to constant for the common case, with linear as the fallback on a miss.
+**Lever 3: Caching as a design principle.** Caching is the most underused lever. [Prompt caching](https://www.tokeneconomics.com/cache-explainer/) (reusing a cached prompt prefix across calls) can sharply cut input cost for workloads with stable system prompts. Semantic caching (matching similar queries to already-computed responses) can eliminate model calls entirely for high-frequency, low-variance requests. If you have run a CDN or a query cache, you already know the shape of this: any linear workload should be evaluated for whether caching reduces it to constant for the common case, with linear as the fallback on a miss.
 
 **Lever 4: Abstraction transparency.** Credit-based pricing, seat licenses, and bundled “unlimited AI” plans obscure the relationship between usage and cost. Abstraction serves a purpose, but it blocks optimization, because you cannot improve what you cannot measure. The principle is provider-neutral: any abstraction that prevents you from seeing token-level economics also prevents you from optimizing them. Token-aware organizations treat AI billing the way mature organizations treat cloud billing: per-call metering, cost attribution to teams and projects, anomaly detection on consumption spikes, and dashboards that make unit economics visible. If your tooling does not expose token-level telemetry, you are paying for the privilege of not knowing what you are paying for.
 
@@ -113,7 +119,7 @@ Token efficiency is urgent because four demand waves are stacking at once. Any o
 
 The five levers operate inside the token economy. They reduce volume, lower unit cost, and improve visibility, and they are necessary for scaling agentic AI. They are not sufficient. As an organization moves from a small group of power users to broad daily agentic adoption, pressure cascades into every system those agents touch. A human using a system of record makes a handful of API calls per session; an agent orchestrating across sub-agents can hit the same API hundreds of times in a single task. Those systems were built for human-speed access patterns, with rate limits and pagination that assume a user who clicks, reads, thinks, and clicks again. Agentic access looks like a batch job running at API speed, but without batch-job predictability. An organization that achieves excellent token efficiency but runs agents against a system of record with tight rate limits has not solved the scaling problem. It has moved the bottleneck. That is a different problem with a different solution space (gateway design, rate-limit negotiation, read replicas, dedicated agent service accounts), and it sits outside the token-optimization boundary.
 
-## 5. Efficiency and literacy {section=5-efficiency-and-literacy}
+## 5. Efficiency and literacy {section=efficiency-and-literacy}
 
 There is a real tension between accelerating AI literacy and managing token cost. Literacy programs encourage experimentation, experimentation consumes tokens, and restricting tokens suppresses the learning that produces an organization’s most capable AI users. The resolution is not choosing one over the other. It is sequencing them correctly.
 
@@ -121,7 +127,7 @@ Literacy is the prerequisite. Without it, efficiency is meaningless, because the
 
 The framing that works: efficiency is not the opposite of adoption. Efficiency is what makes adoption sustainable. The effective organization will not use fewer tokens. It will use them better.
 
-## 6. Reference architecture: the token-efficiency pipeline {section=6-reference-architecture-the-token-efficiency-pipeline}
+## 6. Reference architecture: the token-efficiency pipeline {section=reference-architecture-the-token-efficiency-pipeline}
 
 The five levers compose into a pipeline where each layer reduces the workload for the next, and the effective Big-T complexity drops as a request moves down the stack. The pipeline reads top to bottom; each layer peels off a class of waste before the next layer sees the workload.
 
@@ -134,7 +140,7 @@ The five levers compose into a pipeline where each layer reduces the workload fo
 
 An instrumentation-and-governance plane (telemetry, cost attribution, circuit breakers, budget thresholds) wraps all six layers. Without it, no layer is measurable and no optimization is verifiable. The systems-of-record layer sits below and outside the optimization boundary, a reminder that the pipeline addresses token efficiency but not the downstream access-pattern problem.
 
-## 7. Assessment checklist {section=7-assessment-checklist}
+## 7. Assessment checklist {section=assessment-checklist}
 
 Big-T becomes operational through a seven-area self-assessment, published as a companion worksheet, the Big-T Assessment Checklist. Each area maps to a lever or class discussed above:
 
@@ -148,12 +154,12 @@ Big-T becomes operational through a seven-area self-assessment, published as a c
 
 The worksheet carries the full questions, a scoring method, and guidance on reading results over successive rounds rather than as a one-time total. Instrumentation comes before optimization, so the assessment starts with visibility.
 
-## 8. Conclusion {section=8-conclusion}
+## 8. Conclusion {section=conclusion}
 
-The industry is in the early stages of what looks like a Jevons paradox. Per-token costs are falling and total consumption is exploding. The directional pressure is clear: organizations that treat tokens as an undifferentiated commodity will end up where companies landed when they moved to the cloud without cost governance, surprised by the bill and unable to trace it to value.
+The industry is in the early stages of what looks like a [Jevons paradox](https://www.tokeneconomics.com/what-is-ai-tokenomics/#term-jevons-paradox). Per-token costs are falling and total consumption is exploding. The directional pressure is clear: organizations that treat tokens as an undifferentiated commodity will end up where companies landed when they moved to the cloud without cost governance, surprised by the bill and unable to trace it to value.
 
 Big-T Notation is not a solution. It is a starting point: shared language for reasoning about token complexity before it becomes a financial crisis. The framework is deliberately informal, because the field moves too fast for rigid formalism. What it provides is the discipline of asking the right question at the right time. What is the token complexity class of this workload, and is that complexity justified by the value it produces?
 
 Efficiency is not the enemy of ambition. It is what makes ambition sustainable.
 
-*Big-T Notation by Dan Neff (Adobe). Published by the Tokenomics Foundation as an open, vendor-neutral framework. Supporting evidence draws on published results from Flexpa, MIT CSAIL, and others, and on public research in model routing, retrieval, caching, and serialization.*
+Big-T Notation by Dan Neff (Adobe). Published by the Tokenomics Foundation as an open, vendor-neutral framework. Supporting evidence draws on published results from Flexpa, MIT CSAIL, and others, and on public research in model routing, retrieval, caching, and serialization.

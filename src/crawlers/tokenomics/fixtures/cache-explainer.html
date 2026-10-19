@@ -2,15 +2,19 @@
 <html lang="en-US" data-brand="tf" data-theme="dark">
 <head>
     <!-- Google Tag Manager -->
-  
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer',"GTM-KPPHJ9DM");</script>
   <!-- End Google Tag Manager -->
   	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
-	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<title>AI Tokenomics Prompt Cache Explainer - Optimization Playbook - Tokenomics Foundation</title>
 <meta name='robots' content='max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
-
+<link rel="canonical" href="https://www.tokeneconomics.com/projects/cache-explainer/">
 <meta name="description" content="How prompt caching works, and how to monitor, measure, and optimize cache hits, a core lever in AI tokenomics.">
 <meta property="og:title" content="AI Tokenomics Prompt Cache Explainer - Optimization Playbook - Tokenomics Foundation">
 <meta property="og:type" content="article">
@@ -18,39 +22,68 @@
 <meta property="og:image:width" content="624">
 <meta property="og:image:height" content="416">
 <meta property="og:description" content="How prompt caching works, and how to monitor, measure, and optimize cache hits, a core lever in AI tokenomics.">
-<meta property="og:url" content="https://www.tokeneconomics.com/cache-explainer/">
+<meta property="og:url" content="https://www.tokeneconomics.com/projects/cache-explainer/">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Tokenomics Foundation">
 <meta property="article:published_time" content="2026-08-21T13:50:24+00:00">
-<meta property="article:modified_time" content="2026-09-24T15:50:14+00:00">
-<meta property="og:updated_time" content="2026-09-24T15:50:14+00:00">
+<meta property="article:modified_time" content="2026-10-14T21:42:02+00:00">
+<meta property="og:updated_time" content="2026-10-14T21:42:02+00:00">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.tokeneconomics.com/wp-content/uploads/2026/05/Firefly_produce-a-similar-image-with-a-showing-a-different-shape-845189.png">
+<link rel='dns-prefetch' href='//cdn.jsdelivr.net' />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://www.tokeneconomics.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.tokeneconomics.com%2Fprojects%2Fcache-explainer%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://www.tokeneconomics.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.tokeneconomics.com%2Fprojects%2Fcache-explainer%2F&#038;format=xml" />
+	<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&#038;family=Inter+Tight:wght@300;400;500;600;700&#038;family=JetBrains+Mono:wght@400;500&#038;display=swap">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&#038;family=Inter+Tight:wght@300;400;500;600;700&#038;family=JetBrains+Mono:wght@400;500&#038;display=swap" media="print" onload="this.media='all'">
+	<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&#038;family=Inter+Tight:wght@300;400;500;600;700&#038;family=JetBrains+Mono:wght@400;500&#038;display=swap"></noscript>
+	<style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id="wp-emoji-styles-inline-css">
 
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style^=border-color],[style*=";border-color"],[style*="; border-color"]){border-style:solid}html :where([style^=border-top-color],[style*=";border-top-color"],[style*="; border-top-color"]){border-top-style:solid}html :where([style^=border-right-color],[style*=";border-right-color"],[style*="; border-right-color"]){border-right-style:solid}html :where([style^=border-bottom-color],[style*=";border-bottom-color"],[style*="; border-bottom-color"]){border-bottom-style:solid}html :where([style^=border-left-color],[style*=";border-left-color"],[style*="; border-left-color"]){border-left-style:solid}html :where([style^=border-width],[style*=";border-width"],[style*="; border-width"]){border-style:solid}html :where([style^=border-top-width],[style*=";border-top-width"],[style*="; border-top-width"]){border-top-style:solid}html :where([style^=border-right-width],[style*=";border-right-width"],[style*="; border-right-width"]){border-right-style:solid}html :where([style^=border-bottom-width],[style*=";border-bottom-width"],[style*="; border-bottom-width"]){border-bottom-style:solid}html :where([style^=border-left-width],[style*=";border-left-width"],[style*="; border-left-width"]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
 
+/*# sourceURL=/wp-includes/css/dist/block-library/common.min.css */
+</style>
+<style id="classic-theme-styles-inline-css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
 
-	
-	
-	<noscript></noscript>
-	
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
 
-
-
-
-
-
-
-
-
-<meta name="generator" content="WordPress 7.1.2" />
-
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.tokeneconomics.com/#website","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Defining the best practices and primitives of AI economics","inLanguage":"en-US","potentialAction":{"@type":"SearchAction","target":"https://www.tokeneconomics.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://www.tokeneconomics.com/#organization","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Tokenomics Foundation defines the best practices and primitives of the token economy","knowsAbout":["Tokenomics","AI cost management","AI infrastructure","FinOps"],"sameAs":["https://www.linkedin.com/company/tokenomics-foundation/","https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA","https://substack.com/@tokenomicsfoundation","https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c"]},{"@type":"WebPage","@id":"https://www.tokeneconomics.com/cache-explainer/#webpage","url":"https://www.tokeneconomics.com/cache-explainer/","name":"AI Tokenomics Prompt Cache Explainer - Optimization Playbook - Tokenomics Foundation","inLanguage":"en-US","isPartOf":{"@id":"https://www.tokeneconomics.com/#website"},"datePublished":"2026-08-21T13:50:24+00:00","dateModified":"2026-09-24T15:50:14+00:00"}]}</script>
-
-
-
+<link rel='stylesheet' id='tokeneconomics-style-css' href='https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/css/app.css?ver=1791385556' media='all' />
+<script data-wp-strategy="defer" defer id="tailwindplus-elements-js" src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1.0.22?ver=1.0.22"></script>
+<link rel="https://api.w.org/" href="https://www.tokeneconomics.com/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://www.tokeneconomics.com/wp-json/wp/v2/pages/1598" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.tokeneconomics.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 7.1.3" />
+<link rel='shortlink' href='https://www.tokeneconomics.com/?p=1598' />
+<link rel="alternate" type="text/markdown" href="https://www.tokeneconomics.com/projects/cache-explainer.md">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.tokeneconomics.com/#website","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Defining the best practices and primitives of AI economics","inLanguage":"en-US","potentialAction":{"@type":"SearchAction","target":"https://www.tokeneconomics.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://www.tokeneconomics.com/#organization","url":"https://www.tokeneconomics.com/","name":"Tokenomics Foundation","description":"Tokenomics Foundation defines the best practices and primitives of the token economy","knowsAbout":["Tokenomics","AI cost management","AI infrastructure","FinOps"],"sameAs":["https://www.linkedin.com/company/tokenomics-foundation/","https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA","https://substack.com/@tokenomicsfoundation","https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c"]},{"@type":"WebPage","@id":"https://www.tokeneconomics.com/projects/cache-explainer/#webpage","url":"https://www.tokeneconomics.com/projects/cache-explainer/","name":"AI Tokenomics Prompt Cache Explainer - Optimization Playbook - Tokenomics Foundation","inLanguage":"en-US","isPartOf":{"@id":"https://www.tokeneconomics.com/#website"},"datePublished":"2026-08-21T13:50:24+00:00","dateModified":"2026-10-14T21:42:02+00:00"}]}</script>
+<link rel="icon" href="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-180x180.png" />
 <meta name="msapplication-TileImage" content="https://www.tokeneconomics.com/wp-content/uploads/2026/07/cropped-Tokenomics-Foundation-Icon-for-Circle-DarkBG-270x270.png" />
 </head>
-<body class="wp-singular page-template page-template-templates page-template-page-html page-template-templatespage-html-php page page-id-1598 wp-theme-tokeneconomics bg-surface-dark overflow-x-hidden no-global-nav">
+<body class="wp-singular page-template page-template-templates page-template-page-html page-template-templatespage-html-php page page-id-1598 page-child parent-pageid-1007 wp-theme-tokeneconomics bg-surface-dark overflow-x-hidden no-global-nav">
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPPHJ9DM"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -61,17 +94,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="flex lg:flex-1">
         <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
           <span class="sr-only">Tokenomics Foundation</span>
-          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/tokenomics-foundation-logo.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
         </a>
       </div>
       <div class="flex lg:hidden">
         <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200 cursor-pointer">
           <span class="sr-only">Open main menu</span>
-          
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+            <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </button>
       </div>
       <div class="hidden lg:flex lg:gap-x-12 lg:items-center">
-        <a href="https://www.tokeneconomics.com/insights/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="te-nav-link text-sm/6 font-semibold text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="te-nav-link text-sm/6 font-semibold text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="te-nav-link text-sm/6 font-semibold text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a><div class="te-dropdown-panel"><a href="https://www.tokeneconomics.com/membership/" class="te-dropdown-link">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="te-dropdown-link">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="te-dropdown-link">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="te-dropdown-link">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="te-dropdown-link">Tokenomics Press and Media</a></div></div>      </div>
+        <a href="https://www.tokeneconomics.com/insights/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/what-is-ai-tokenomics/" class="te-nav-link text-sm/6 font-semibold text-brand-light">What Is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="te-nav-link text-sm/6 font-semibold text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="te-nav-link text-sm/6 font-semibold text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="te-nav-link text-sm/6 font-semibold text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About<svg class="te-dropdown-chevron size-4 shrink-0 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg></a><div class="te-dropdown-panel"><a href="https://www.tokeneconomics.com/membership/" class="te-dropdown-link">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="te-dropdown-link">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="te-dropdown-link">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="te-dropdown-link">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="te-dropdown-link">Tokenomics Press and Media</a></div></div>      </div>
       <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end">
         <a href="#" class="text-sm/6 font-semibold text-brand-light">Log in <span aria-hidden="true">&rarr;</span></a>
       </div> -->
@@ -83,17 +118,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="flex items-center justify-between">
               <a href="https://www.tokeneconomics.com/" class="-m-1.5 p-1.5">
                 <span class="sr-only">Tokenomics Foundation</span>
-                <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-8 w-auto" width="117" height="32" />
+                <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/tokenomics-foundation-logo.svg" alt="Tokenomics Foundation Logo" class="h-8 w-auto" width="117" height="32" />
               </a>
               <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-200">
                 <span class="sr-only">Close menu</span>
-                
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+                  <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
               </button>
             </div>
             <div class="mt-6 flow-root">
               <div class="-my-6 divide-y divide-white/10">
                 <div class="space-y-2 py-6">
-                  <a href="https://www.tokeneconomics.com/insights/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Members</a><div class="te-dropdown"><button type="button" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5 te-dropdown-trigger w-full flex items-center justify-between">About</button><div class="te-dropdown-panel te-dropdown-panel--mobile hidden pl-4 mt-1 space-y-1"><a href="https://www.tokeneconomics.com/about/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">About</a><a href="https://www.tokeneconomics.com/membership/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Tokenomics Press and Media</a></div></div>                </div>
+                  <a href="https://www.tokeneconomics.com/insights/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Projects</a><a href="https://www.tokeneconomics.com/what-is-ai-tokenomics/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">What Is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5">Members</a><div class="te-dropdown"><button type="button" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-brand-light hover:bg-white/5 te-dropdown-trigger w-full flex items-center justify-between">About<svg class="te-dropdown-chevron size-4 shrink-0 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg></button><div class="te-dropdown-panel te-dropdown-panel--mobile hidden pl-4 mt-1 space-y-1"><a href="https://www.tokeneconomics.com/about/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">About</a><a href="https://www.tokeneconomics.com/membership/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Become a Member</a><a href="https://www.tokeneconomics.com/about/governing-board/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Governing Board</a><a href="https://www.tokeneconomics.com/about/technical-steering-committee/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Technical Steering Committee</a><a href="https://www.tokeneconomics.com/about/tokenomics-working-groups/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Working Groups</a><a href="https://www.tokeneconomics.com/about/press/" class="-mx-3 block rounded-lg px-3 py-2 text-sm/6 font-medium text-gray-300 hover:text-brand-light hover:bg-white/5">Tokenomics Press and Media</a></div></div>                </div>
               </div>
             </div>
           </el-dialog-panel>
@@ -110,7 +147,347 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 	
 
 <main id="primary" class="site-main mt-0">
-	<div class="te-html-embed-1598"><!--
+	<style>@layer te-html-embed{.te-html-embed-1598 *:not(svg,svg *,.te-html-embed-shortcode,.te-html-embed-shortcode *){all:revert}.te-html-embed-1598 svg:not(.te-html-embed-shortcode *){display:revert;vertical-align:revert}.te-html-embed-1598 .te-html-embed-shortcode{font-family:var(--font-sans);line-height:1.5}}.te-html-embed-1598{all:initial;display:block}@scope (.te-html-embed-1598) to (.te-html-embed-shortcode){
+/* ---------------------------------------------------------------- tokens */
+#te-cache-tool {
+  --tc-brand:      var(--color-brand-primary, #4f7cff);
+  --tc-brand-2:    var(--color-brand-secondary, #6b93ff);
+  --tc-brand-dim:  rgba(79, 124, 255, .15);
+  --tc-brand-line: rgba(79, 124, 255, .35);
+
+  --tc-surface:    var(--color-surface-dark, #0a0b0f);
+  --tc-card:       #17171b;
+  --tc-card-2:     #1e1f25;
+  --tc-border:     var(--color-border, rgba(255, 255, 255, .07));
+  --tc-border-2:   rgba(255, 255, 255, .04);
+
+  --tc-text:       var(--color-brand-light, #ffffff);
+  --tc-muted:      rgba(255, 255, 255, .80);
+  --tc-prose:      rgba(255, 255, 255, .72);
+  --tc-subtle:     var(--color-subtle, rgba(255, 255, 255, .52));
+
+  /* semantic, kept separate from the brand accent */
+  --tc-warn:       #f0a03c;
+  --tc-crit:       #ff6b7a;
+  --tc-ok:         #56c39a;
+  --tc-cold:       #454a58;
+
+  --tc-head:  var(--font-heading, "Inter Tight", Inter, system-ui, sans-serif);
+  --tc-body:  var(--font-body, Inter, system-ui, -apple-system, sans-serif);
+  --tc-mono:  var(--font-mono, "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace);
+
+  --tc-r:  var(--rounded-2xl, 16px);
+  --tc-r2: var(--rounded-lg, 8px);
+
+  background: var(--tc-surface);
+  color: var(--tc-prose);
+  font-family: var(--tc-body);
+  font-size: 16px;
+  line-height: 1.75;
+}
+#te-cache-tool *, #te-cache-tool *::before, #te-cache-tool *::after { box-sizing: border-box; }
+
+/* ------------------------------------------------ layout scaffold (Tailwind
+   equivalents, scoped, so the block also works where Tailwind is absent) */
+#te-cache-tool .mx-auto  { margin-left: auto; margin-right: auto; }
+#te-cache-tool .max-w-7xl { max-width: 80rem; }
+/* one reading measure for the whole page: prose, tables, grids, and the
+   simulator all share this width so their edges line up (matches the
+   ~68ch prose cap inside the 60rem stack) */
+#te-cache-tool .te-section > div > .tc-stack { max-width: 60rem; }
+#te-cache-tool .te-section > div > .tc-foot { max-width: 60rem; }
+#te-cache-tool .max-w-3xl { max-width: 48rem; }
+#te-cache-tool .px-6      { padding-left: 1.5rem; padding-right: 1.5rem; }
+@media (min-width: 1024px) { #te-cache-tool .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; } }
+
+/* floating table of contents, same pattern the Value Classification and
+   Personas documents use. >=1280px: a sticky wrapper (zero height) carries
+   an absolutely positioned panel pinned to the CONTENT container's right
+   edge, not the viewport edge, so the block never fights the site header
+   and the page never leans. The gutter it needs is reserved as
+   padding-right inside each band's inner container below. <1280px: the
+   rail goes static and the panel becomes a disclosure above the first
+   section, open by default (a reader can still collapse it by hand).
+   --tc-top is a site measurement: re-check it against the live header
+   height before import. */
+#te-cache-tool { --tc-top: 88px; --tc-toc-w: 236px; }
+#te-cache-tool .tc-tocwrap { position: static; z-index: 20; }
+#te-cache-tool .tc-toc {
+  background: var(--tc-card-2); border: 1px solid var(--tc-border-2);
+  border-radius: 12px; padding: .3rem .35rem;
+}
+#te-cache-tool .tc-toc summary {
+  list-style: none; cursor: pointer;
+  font-family: var(--tc-mono); font-size: .6563rem; font-weight: 600;
+  letter-spacing: .5px; text-transform: uppercase; color: var(--tc-subtle);
+  padding: .5rem .6rem; display: flex; align-items: center; gap: .5rem;
+}
+#te-cache-tool .tc-toc summary::-webkit-details-marker { display: none; }
+#te-cache-tool .tc-toc summary::before {
+  content: ""; width: 6px; height: 6px; flex: 0 0 auto;
+  border-right: 1.5px solid var(--tc-brand); border-bottom: 1.5px solid var(--tc-brand);
+  transform: rotate(45deg); transition: transform .15s;
+}
+#te-cache-tool .tc-toc[open] summary::before { transform: rotate(-135deg); }
+#te-cache-tool .tc-toc__list { padding: .15rem 0 .35rem; }
+#te-cache-tool .tc-toc a {
+  display: flex; align-items: baseline; gap: .5rem;
+  padding: .38rem .6rem; border-radius: 8px; text-decoration: none;
+  color: var(--tc-subtle); font-size: .8125rem; line-height: 1.35;
+  border-left: 2px solid transparent;
+}
+#te-cache-tool .tc-toc a .n {
+  font-family: var(--tc-mono); font-size: .625rem; color: var(--tc-cold);
+  flex: 0 0 auto; letter-spacing: .3px;
+}
+#te-cache-tool .tc-toc a:hover { color: var(--tc-text); background: rgba(255,255,255,.03); }
+#te-cache-tool .tc-toc a:focus-visible { outline: 2px solid var(--tc-brand); outline-offset: 1px; }
+#te-cache-tool .tc-toc a.is-active {
+  color: var(--tc-text); background: rgba(79,124,255,.1);
+  border-left-color: var(--tc-brand);
+}
+#te-cache-tool .tc-toc a.is-active .n { color: var(--tc-brand); }
+#te-cache-tool .te-section { scroll-margin-top: 92px; }
+@media (min-width: 1280px) {
+  #te-cache-tool .tc-tocwrap { position: sticky; top: var(--tc-top); height: 0; }
+  #te-cache-tool .tc-toc {
+    position: absolute; right: 1.5rem; top: 2.6rem; width: var(--tc-toc-w);
+    max-height: calc(100vh - var(--tc-top) - 3rem); overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  }
+  #te-cache-tool .te-section > div {
+    padding-right: calc(1.5rem + var(--tc-toc-w) + 2.5rem);
+  }
+}
+@media (max-width: 1279px) {
+  #te-cache-tool .tc-tocwrap { display: block; padding: 1.5rem 1.5rem 0; }
+}
+
+#te-cache-tool .te-section {
+  background: var(--tc-surface);
+  padding-top: clamp(48px, 8vw, 96px);
+  padding-bottom: clamp(48px, 8vw, 96px);
+}
+/* alternating band: section takes the card tone, cards inside step up one */
+#te-cache-tool .te-section[data-theme="medium"] { background: #17171b; --tc-card: #1e1f25; --tc-card-2: #24252c; }
+#te-cache-tool .te-section > div > .tc-stack { display: grid; gap: clamp(20px, 3vw, 32px); }
+
+/* ------------------------------------------------------------- typography */
+#te-cache-tool .te-section__eyebrow {
+  font-family: var(--tc-mono);
+  font-size: 12px; font-weight: 600; line-height: 1.4;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--tc-brand); margin: 0;
+}
+#te-cache-tool .te-section__heading {
+  font-family: var(--tc-head); color: var(--tc-text);
+  font-weight: 600; letter-spacing: -0.025em; line-height: 1.1;
+  text-wrap: pretty; margin: 0;
+}
+#te-cache-tool h1.te-section__heading { font-size: clamp(40px, 7vw, 72px); letter-spacing: -0.03em; max-width: 16ch; }
+#te-cache-tool h2.te-section__heading { font-size: clamp(28px, 4.2vw, 44px); }
+#te-cache-tool h3 {
+  font-family: var(--tc-head); color: var(--tc-text);
+  font-size: 18px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.35; margin: 0;
+}
+#te-cache-tool .te-section__muted {
+  font-family: var(--tc-body); color: var(--tc-muted);
+  font-size: clamp(18px, 2.2vw, 24px); line-height: 1.45; margin: 0; max-width: none;
+}
+#te-cache-tool p { margin: 0; max-width: none; }
+#te-cache-tool .tc-prose { color: var(--tc-prose); font-size: 16px; line-height: 1.75; }
+#te-cache-tool .tc-small { font-size: 14px; line-height: 1.65; color: var(--tc-subtle); }
+#te-cache-tool strong { color: var(--tc-text); font-weight: 600; }
+#te-cache-tool em { font-style: italic; }
+#te-cache-tool .te-symbol, #te-cache-tool .tc-mono { font-family: var(--tc-mono); color: var(--tc-brand); font-weight: 700; }
+#te-cache-tool .tc-digits { font-variant-numeric: tabular-nums; }
+#te-cache-tool a { color: var(--tc-brand); text-underline-offset: 3px; }
+
+/* ------------------------------------------------------------------ cards */
+#te-cache-tool .te-section__card {
+  background: var(--tc-card); border: 1px solid var(--tc-border);
+  border-radius: var(--tc-r); padding: clamp(20px, 3vw, 32px);
+  display: grid; gap: 12px; align-content: start;
+}
+#te-cache-tool .tc-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+#te-cache-tool .tc-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+#te-cache-tool .te-section__card p { font-size: 15px; line-height: 1.65; color: var(--tc-prose); max-width: none; }
+#te-cache-tool .tc-rule-num {
+  font-family: var(--tc-mono); font-size: 11px; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--tc-subtle);
+}
+
+/* -------------------------------------------------------------- hero band */
+#te-cache-tool .tc-ribbon-wrap {
+  border-top: 1px solid var(--tc-border); border-bottom: 1px solid var(--tc-border);
+  padding: 22px 0; display: grid; gap: 14px;
+}
+#te-cache-tool .tc-ribbon { display: flex; gap: 3px; height: 48px; }
+#te-cache-tool .tc-ribbon b { flex: 1; border-radius: 2px; background: var(--tc-brand); }
+#te-cache-tool .tc-ribbon b.cold { background: var(--tc-cold); }
+#te-cache-tool .tc-legend { display: flex; flex-wrap: wrap; gap: 6px 28px; font-size: 13px; color: var(--tc-subtle); }
+#te-cache-tool .tc-legend span { display: inline-flex; align-items: center; gap: 9px; }
+#te-cache-tool .tc-sw { width: 12px; height: 12px; border-radius: 3px; background: var(--tc-brand); flex: none; }
+#te-cache-tool .tc-sw.cold { background: var(--tc-cold); }
+
+/* ------------------------------------------------------------- pull quote */
+#te-cache-tool .tc-pull {
+  border-left: 2px solid var(--tc-brand); padding-left: 24px;
+  font-family: var(--tc-head); color: var(--tc-text);
+  font-size: clamp(20px, 2.8vw, 28px); line-height: 1.35; letter-spacing: -0.02em;
+  max-width: none; text-wrap: pretty;
+}
+
+/* ------------------------------------------------------- switch dialog art */
+#te-cache-tool .tc-dialog {
+  max-width: 440px; background: var(--tc-card-2);
+  border: 1px solid var(--tc-border); border-top: 2px solid var(--tc-brand);
+  border-radius: var(--tc-r2); padding: 22px 24px 18px; display: grid; gap: 14px;
+}
+#te-cache-tool .tc-dialog-title { font-family: var(--tc-head); font-size: 17px; font-weight: 600; color: var(--tc-text); letter-spacing: -0.015em; }
+#te-cache-tool .tc-dialog p { font-size: 14.5px; line-height: 1.6; max-width: none; }
+#te-cache-tool .tc-dialog-btns { display: flex; gap: 10px; justify-content: flex-end; }
+#te-cache-tool .tc-dialog-btns span {
+  font-size: 13px; padding: 7px 15px; border-radius: 6px;
+  border: 1px solid var(--tc-border); color: var(--tc-muted);
+}
+#te-cache-tool .tc-dialog-btns .solid { background: var(--tc-brand); border-color: var(--tc-brand); color: #fff; font-weight: 500; }
+#te-cache-tool .tc-dialog-cap { border-top: 1px solid var(--tc-border-2); padding-top: 12px; font-size: 12.5px; color: var(--tc-subtle); }
+
+/* -------------------------------------------------------------- simulator */
+#te-cache-tool .tc-tool {
+  background: var(--tc-card); border: 1px solid var(--tc-border);
+  border-radius: var(--tc-r); padding: clamp(18px, 3vw, 30px); display: grid; gap: 22px;
+}
+#te-cache-tool .tc-tool-head {
+  display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; justify-content: space-between;
+  border-bottom: 1px solid var(--tc-border); padding-bottom: 16px;
+}
+#te-cache-tool .tc-tool-head p { font-size: 14px; color: var(--tc-subtle); max-width: 60ch; }
+
+#te-cache-tool .tc-blocks { display: grid; gap: 8px; position: relative; }
+#te-cache-tool .tc-blk {
+  display: grid; grid-template-columns: 26px 26px 1fr auto auto; gap: 16px; align-items: center;
+  padding: 12px 16px 12px 10px; border-radius: var(--tc-r2);
+  border: 1px solid var(--tc-border); border-left: 3px solid var(--tc-brand-line);
+  background: var(--tc-card-2); transition: border-color .18s, background .18s;
+}
+#te-cache-tool .tc-blk.dragging {
+  border-color: var(--tc-brand-line);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .5);
+}
+#te-cache-tool .tc-blk.drag-over { border-color: var(--tc-brand); }
+#te-cache-tool .tc-drop {
+  height: 12px; margin: 0; border-radius: 4px;
+  background: var(--tc-brand-dim);
+  border: 1px dashed var(--tc-brand-line);
+}
+#te-cache-tool .tc-grip {
+  appearance: none; -webkit-appearance: none;
+  width: 26px; height: 30px; padding: 0; margin: 0;
+  display: grid; place-items: center;
+  background: transparent; border: 0;
+  color: var(--tc-brand-line); cursor: grab; touch-action: none;
+  transition: color .15s;
+}
+#te-cache-tool .tc-grip svg { width: 14px; height: 20px; display: block; pointer-events: none; }
+#te-cache-tool .tc-grip:hover, #te-cache-tool .tc-grip:focus-visible { color: var(--tc-brand); }
+#te-cache-tool .tc-grip:focus-visible { outline: 2px solid var(--tc-brand); outline-offset: 2px; border-radius: 4px; }
+@media (pointer: fine) { #te-cache-tool .tc-grip:active { cursor: grabbing; } }
+@media (pointer: coarse) { #te-cache-tool .tc-grip { width: 44px; height: 44px; } }
+#te-cache-tool .tc-blk.hit  { border-left-color: var(--tc-brand); background: var(--tc-brand-dim); }
+#te-cache-tool .tc-blk.part { border-left-color: var(--tc-brand); background: linear-gradient(100deg, var(--tc-brand-dim) 0 62%, var(--tc-card-2) 62%); }
+#te-cache-tool .tc-pos  { font-family: var(--tc-mono); font-size: 12px; color: var(--tc-subtle); font-variant-numeric: tabular-nums; }
+#te-cache-tool .tc-name { font-size: 15px; line-height: 1.35; color: var(--tc-text); }
+#te-cache-tool .tc-name small { display: block; font-size: 12.5px; color: var(--tc-subtle); }
+#te-cache-tool .tc-toks { font-family: var(--tc-mono); font-size: 13px; color: var(--tc-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+#te-cache-tool .tc-ctrl { display: flex; gap: 6px; align-items: center; }
+
+#te-cache-tool select, #te-cache-tool button {
+  font-family: var(--tc-body); color: var(--tc-text);
+  background: var(--tc-card); border: 1px solid var(--tc-border);
+  border-radius: 6px; cursor: pointer;
+}
+#te-cache-tool select { font-size: 12.5px; padding: 6px 8px; max-width: 190px; }
+#te-cache-tool select:hover, #te-cache-tool button:hover:not(:disabled) { border-color: var(--tc-brand-line); }
+#te-cache-tool .tc-btn { font-size: 13.5px; padding: 9px 16px; }
+#te-cache-tool .tc-btn.primary { background: var(--tc-brand); border-color: var(--tc-brand); color: #fff; font-weight: 500; }
+#te-cache-tool .tc-btn.primary:hover { background: var(--tc-brand-2); border-color: var(--tc-brand-2); }
+#te-cache-tool .tc-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+#te-cache-tool :is(button, select, input, [tabindex]):focus-visible { outline: 2px solid var(--tc-brand); outline-offset: 2px; }
+
+#te-cache-tool .tc-meter { height: 12px; border-radius: 6px; overflow: hidden; background: var(--tc-cold); }
+#te-cache-tool .tc-meter i { display: block; height: 100%; background: var(--tc-brand); transition: width .28s ease; }
+#te-cache-tool .tc-readout { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0; }
+#te-cache-tool .tc-readout > div { background: var(--tc-card-2); border: 1px solid var(--tc-border); border-radius: var(--tc-r2); padding: 14px 16px; display: grid; gap: 4px; }
+#te-cache-tool .tc-readout dt { font-family: var(--tc-mono); font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--tc-subtle); }
+#te-cache-tool .tc-readout dd { margin: 0; font-family: var(--tc-head); font-size: clamp(22px, 3vw, 28px); font-weight: 600; letter-spacing: -0.03em; color: var(--tc-text); font-variant-numeric: tabular-nums; }
+#te-cache-tool .tc-readout dd.accent { color: var(--tc-brand); }
+#te-cache-tool .tc-verdict { font-size: 14.5px; line-height: 1.6; color: var(--tc-muted); min-height: 3em; max-width: 76ch; }
+
+@media (max-width: 640px) {
+  #te-cache-tool .tc-blk { grid-template-columns: 26px 26px 1fr; row-gap: 12px; }
+  #te-cache-tool .tc-toks { grid-column: 3; }
+  #te-cache-tool .tc-ctrl { grid-column: 1 / -1; justify-content: space-between; }
+  #te-cache-tool select { max-width: none; flex: 1; }
+}
+
+/* ----------------------------------------------------------------- tables */
+#te-cache-tool .tc-table-wrap { overflow-x: auto; border: 1px solid var(--tc-border); border-radius: var(--tc-r); background: var(--tc-card); }
+#te-cache-tool table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14.5px; color: var(--tc-prose); }
+#te-cache-tool th, #te-cache-tool td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--tc-border-2); vertical-align: top; line-height: 1.55; }
+#te-cache-tool th { font-family: var(--tc-mono); font-size: 10.5px; letter-spacing: 1.1px; text-transform: uppercase; color: var(--tc-subtle); font-weight: 600; }
+#te-cache-tool tr:last-child td { border-bottom: 0; }
+#te-cache-tool .tc-risk { font-family: var(--tc-mono); font-size: 12.5px; white-space: nowrap; }
+#te-cache-tool .tc-risk.low  { color: var(--tc-ok); }
+#te-cache-tool .tc-risk.mid  { color: var(--tc-warn); }
+#te-cache-tool .tc-risk.high { color: var(--tc-crit); }
+
+/* ---------------------------------------------------------------- formula */
+#te-cache-tool .tc-formula {
+  font-family: var(--tc-mono); font-size: clamp(12.5px, 1.7vw, 15px); line-height: 2;
+  background: var(--tc-card); border: 1px solid var(--tc-border); border-radius: var(--tc-r);
+  padding: 24px; overflow-x: auto; color: var(--tc-muted);
+}
+#te-cache-tool .tc-formula b { color: var(--tc-brand); font-weight: 600; }
+#te-cache-tool .tc-formula--tight {
+  font-size: clamp(11px, 1.4vw, 13.5px); line-height: 1.9;
+  background: var(--tc-card-2); border-radius: var(--tc-r2);
+  padding: 16px 18px;
+}
+/* stacked fractions: label and fraction share ONE centered axis; the
+   fraction is a grid whose stretched cells make the vinculum always span
+   the wider term. No flex row: at card width the label would be crushed. */
+#te-cache-tool .tc-eq { display: block; color: var(--tc-brand); font-weight: 600; margin: 0 0 6px; text-align: center; }
+#te-cache-tool .tc-formula .tc-mathrow { display: block; text-align: center; }
+#te-cache-tool .tc-formula .tc-mathrow + .tc-mathrow { margin-top: 10px; }
+#te-cache-tool .tc-frac { display: inline-grid; justify-items: center; vertical-align: middle; max-width: 100%; }
+#te-cache-tool .tc-num { grid-row: 1; grid-column: 1 / span 2; justify-self: stretch; text-align: center; padding: 0 14px 5px; border-bottom: 1px solid var(--tc-brand-line); white-space: nowrap; }
+#te-cache-tool .tc-den { grid-row: 2; grid-column: 1 / span 2; justify-self: stretch; text-align: center; padding: 5px 14px 0; white-space: normal; text-wrap: balance; }
+#te-cache-tool .tc-where { display: block; margin-top: 12px; font-size: .9em; color: var(--tc-subtle); white-space: normal; text-align: center; }
+
+/* the footer band carries only the attribution line; it should close the
+   page, not repeat the full section rhythm above the rule */
+#te-cache-tool .te-section:has(.tc-foot) {
+  padding-top: clamp(24px, 4vw, 40px);
+  padding-bottom: clamp(32px, 5vw, 56px);
+}
+/* the section right above the footer also closes its bottom rhythm short */
+#te-cache-tool .te-section:has(+ .te-section .tc-foot) {
+  padding-bottom: clamp(24px, 4vw, 40px);
+}
+
+/* ------------------------------------------------------------------ lists */
+#te-cache-tool ul { margin: 0; padding-left: 1.15em; display: grid; gap: 10px; font-size: 15px; line-height: 1.6; }
+#te-cache-tool li::marker { color: var(--tc-brand); }
+
+/* ----------------------------------------------------------------- footer */
+#te-cache-tool .tc-foot { border-top: 1px solid var(--tc-border); padding-top: 24px; display: grid; gap: 8px; font-size: 13px; color: var(--tc-subtle); }
+
+@media (prefers-reduced-motion: reduce) {
+  #te-cache-tool * { animation: none !important; transition: none !important; }
+}
+}</style><div class="te-html-embed-1598"><!--
   ============================================================================
   Prompt Caching mini-tool &middot; companion to the Token Optimization Playbook (L3)
   ============================================================================
@@ -552,7 +929,374 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 
+<script>
+(function () {
+  "use strict";
+  var ROOT = document.getElementById("te-cache-tool");
+  if (!ROOT) return;
 
+  /* Floating table of contents (same pattern as Value Classification /
+     Personas): open by default at every width; the active link follows
+     the scroll position. */
+  var toc = document.getElementById("tcToc");
+  var tocLinks = ROOT.querySelectorAll(".tc-toc a[data-target]");
+  var spied = ROOT.querySelectorAll("[data-spy]");
+  if (toc && tocLinks.length && spied.length) {
+    var ticking = false;
+    var spy = function () {
+      var y = (window.pageYOffset || document.documentElement.scrollTop) + 140;
+      var best = null, bestTop = -Infinity, i, el, top;
+      for (i = 0; i < spied.length; i++) {
+        el = spied[i];
+        top = el.getBoundingClientRect().top + (window.pageYOffset || 0);
+        if (top <= y && top > bestTop) { bestTop = top; best = el.id; }
+      }
+      if (!best) best = spied[0].id;
+      for (i = 0; i < tocLinks.length; i++) {
+        var on = tocLinks[i].getAttribute("data-target") === best;
+        tocLinks[i].className = tocLinks[i].className.replace(/\s*is-active/g, "") + (on ? " is-active" : "");
+      }
+      ticking = false;
+    };
+    var onScroll = function () {
+      if (ticking) return;
+      ticking = true;
+      if (window.requestAnimationFrame) window.requestAnimationFrame(spy);
+      else setTimeout(spy, 60);
+    };
+    spy();
+    window.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fmt = function (n) { return n.toLocaleString("en-US"); };
+
+  /* ---------------------------------------------------------- hero ribbon */
+  var ribbon = $("tcRibbon"), CELLS = 44, HOT = 31, bars = [];
+  for (var i = 0; i < CELLS; i++) {
+    var b = document.createElement("b");
+    if (i >= HOT) b.className = "cold";
+    ribbon.appendChild(b);
+    bars.push(b);
+  }
+  if (!reduce) {
+    setInterval(function () {
+      for (var j = HOT; j < CELLS; j++) bars[j].style.opacity = (0.3 + Math.random() * 0.7).toFixed(2);
+    }, 900);
+  }
+
+  /* ------------------------------------------------------------ simulator */
+  var CACHED_RATE = 0.1;
+
+  var KINDS = [
+    { v: "stable", label: "Identical next request" },
+    { v: "append", label: "Grows at the end" },
+    { v: "new",    label: "Different every request" }
+  ];
+  var RANK = { stable: 0, append: 1, "new": 2 };
+
+  var CANON = [
+    { id: "system",  name: "System instructions",      note: "Role, policy, output format",         tokens: 900,   kind: "stable" },
+    { id: "tools",   name: "Tool definitions",         note: "30 tools, ~500 tokens each",          tokens: 15000, kind: "stable" },
+    { id: "docs",    name: "Retrieved documents",      note: "Same set for the whole session",      tokens: 6000,  kind: "stable" },
+    { id: "history", name: "Conversation history",     note: "Prior turns reusable, newest is not", tokens: 4200,  kind: "append", fresh: 640 },
+    { id: "user",    name: "This turn's user message", note: "Different every request",             tokens: 320,   kind: "new" },
+    { id: "meta",    name: "Current date and time",    note: "\u201cToday is 21 Aug, 14:32 UTC\u201d, added for relative dates", tokens: 40, kind: "new" }
+  ];
+  var BAD_ORDER = ["meta", "user", "history", "docs", "tools", "system"];
+
+  var blocks = [];
+  function load(order) {
+    blocks = order.map(function (id) {
+      var s = CANON.filter(function (c) { return c.id === id; })[0];
+      return { id: s.id, name: s.name, note: s.note, tokens: s.tokens, kind: s.kind, fresh: s.fresh || 0 };
+    });
+  }
+  load(BAD_ORDER);
+
+  var listEl = $("tcBlocks");
+
+  /* Walk the prompt left to right. Reuse continues through byte-identical
+     blocks; an append-only block contributes its older portion and then
+     terminates the prefix, because everything behind it has shifted. */
+  function analyze() {
+    var cached = 0, cut = blocks.length, partial = -1, stopper = null;
+    for (var i = 0; i < blocks.length; i++) {
+      var b = blocks[i];
+      if (b.kind === "stable") { cached += b.tokens; continue; }
+      if (b.kind === "append") {
+        cached += Math.max(0, b.tokens - b.fresh);
+        partial = i;
+      }
+      cut = i; stopper = b;
+      break;
+    }
+    var total = blocks.reduce(function (s, x) { return s + x.tokens; }, 0);
+    return { cached: cached, total: total, cut: cut, partial: partial, stopper: stopper };
+  }
+
+  function render() {
+    var a = analyze();
+    listEl.textContent = "";
+
+    blocks.forEach(function (b, i) {
+      var row = document.createElement("div");
+      row.className = "tc-blk" + (i < a.cut ? " hit" : (i === a.partial ? " part" : ""));
+      row.setAttribute("role", "listitem");
+
+      var grip = document.createElement("button");
+      grip.type = "button";
+      grip.className = "tc-grip";
+      grip.setAttribute("aria-roledescription", "reorder handle");
+      grip.setAttribute("aria-label", "Reorder " + b.name + ", currently position " + (i + 1) + " of " + blocks.length + ". Drag, or press up and down arrows, Home or End.");
+      grip.setAttribute("aria-keyshortcuts", "ArrowUp ArrowDown Home End");
+      grip.innerHTML =
+        '<svg viewBox="0 0 14 20" aria-hidden="true" focusable="false">' +
+        '<circle cx="4.5" cy="3.5" r="1.7" fill="currentColor"/>' +
+        '<circle cx="9.5" cy="3.5" r="1.7" fill="currentColor"/>' +
+        '<circle cx="4.5" cy="10" r="1.7" fill="currentColor"/>' +
+        '<circle cx="9.5" cy="10" r="1.7" fill="currentColor"/>' +
+        '<circle cx="4.5" cy="16.5" r="1.7" fill="currentColor"/>' +
+        '<circle cx="9.5" cy="16.5" r="1.7" fill="currentColor"/>' +
+        "</svg>";
+      wireGrip(grip, b, i);
+
+      var pos = document.createElement("span");
+      pos.className = "tc-pos";
+      pos.textContent = String(i + 1).padStart(2, "0");
+
+      var name = document.createElement("div");
+      name.className = "tc-name";
+      name.appendChild(document.createTextNode(b.name));
+      var small = document.createElement("small");
+      small.textContent = b.note;
+      name.appendChild(small);
+
+      var toks = document.createElement("span");
+      toks.className = "tc-toks";
+      toks.textContent = fmt(b.tokens) + " tok";
+
+      var ctrl = document.createElement("div");
+      ctrl.className = "tc-ctrl";
+
+      var sel = document.createElement("select");
+      sel.setAttribute("aria-label", "How does \u201c" + b.name + "\u201d change between requests?");
+      KINDS.forEach(function (k) {
+        var o = document.createElement("option");
+        o.value = k.v; o.textContent = k.label;
+        if (k.v === b.kind) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.addEventListener("change", function () {
+        b.kind = sel.value;
+        if (b.kind === "append" && !b.fresh) b.fresh = Math.max(1, Math.round(b.tokens * 0.15));
+        render();
+      });
+
+      ctrl.appendChild(sel);
+      row.appendChild(grip); row.appendChild(pos); row.appendChild(name); row.appendChild(toks); row.appendChild(ctrl);
+      listEl.appendChild(row);
+    });
+
+    score(a);
+  }
+
+  /* -------------------------------------------------- drag & drop reorder */
+  var drag = null;
+  var DRAG_THRESHOLD = 5;
+
+  function wireGrip(grip, b, i) {
+    grip.addEventListener("pointerdown", function (e) {
+      if (drag || (e.pointerType === "mouse" && e.button !== 0)) return;
+      var rows = Array.prototype.slice.call(listEl.querySelectorAll(".tc-blk"));
+      var id = blocks.indexOf(b);
+      if (id < 0) return;
+      drag = {
+        id: id, grip: grip, row: rows[id],
+        pid: e.pointerId, sx: e.clientX, sy: e.clientY,
+        moved: false, ghost: null, rowTop: 0
+      };
+      try { grip.setPointerCapture(e.pointerId); } catch (err) { /* no-op */ }
+      grip.addEventListener("pointermove", onDragMove);
+      grip.addEventListener("pointerup", endDrag);
+      grip.addEventListener("pointercancel", cancelDrag);
+    });
+    grip.addEventListener("keydown", function (e) {
+      var from = blocks.indexOf(b);
+      if (from < 0) return;
+      var to = null;
+      if (e.key === "ArrowUp" || e.key === "ArrowLeft") to = from - 1;
+      else if (e.key === "ArrowDown" || e.key === "ArrowRight") to = from + 1;
+      else if (e.key === "Home") to = 0;
+      else if (e.key === "End") to = blocks.length - 1;
+      if (to === null || to < 0 || to >= blocks.length) return;
+      e.preventDefault();
+      var t = blocks[from]; blocks[from] = blocks[to]; blocks[to] = t;
+      render();
+      var grips = listEl.querySelectorAll(".tc-grip");
+      if (grips[to]) grips[to].focus();
+    });
+  }
+
+  function onDragMove(e) {
+    if (!drag || e.pointerId !== drag.pid) return;
+    if (!drag.moved) {
+      var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < DRAG_THRESHOLD) return;
+      startGhost(e.clientY);
+    }
+    e.preventDefault();
+    var top = drag.rowTop + (e.clientY - drag.sy) - listEl.getBoundingClientRect().top;
+    drag.row.style.top = top + "px";
+    positionGhost(e.clientY);
+  }
+
+  function startGhost(clientY) {
+    drag.moved = true;
+    var r = drag.row.getBoundingClientRect();
+    var ghost = document.createElement("div");
+    ghost.className = "tc-drop";
+    ghost.style.height = r.height + "px";
+    drag.ghost = ghost;
+    drag.rowTop = r.top;
+    drag.row.classList.add("dragging");
+    /* keep the row inside the list (scoped styles apply, grid flow yields
+       to the placeholder); position it absolutely relative to .tc-blocks */
+    drag.row.style.position = "absolute";
+    drag.row.style.top = (r.top - listEl.getBoundingClientRect().top) + "px";
+    drag.row.style.left = "0";
+    drag.row.style.right = "0";
+    drag.row.style.zIndex = "40";
+    listEl.insertBefore(ghost, drag.row);
+    positionGhost(clientY);
+  }
+
+  function positionGhost(clientY) {
+    if (!drag.moved || !drag.ghost) return;
+    var target = clientY - drag.sy + drag.rowTop;
+    var before = null;
+    Array.prototype.forEach.call(listEl.children, function (r) {
+      if (r === drag.row || r.classList.contains("tc-drop") || before) return;
+      var rr = r.getBoundingClientRect();
+      if (rr.top + rr.height / 2 > target) before = r;
+    });
+    Array.prototype.forEach.call(listEl.children, function (r) {
+      r.classList.remove("drag-over");
+    });
+    if (before) {
+      before.classList.add("drag-over");
+      before.parentNode.insertBefore(drag.ghost, before);
+    } else {
+      drag.ghost.parentNode.insertBefore(drag.ghost, null);
+    }
+  }
+
+  function cleanupRow(d) {
+    d.row.classList.remove("dragging");
+    d.row.style.position = "";
+    d.row.style.top = "";
+    d.row.style.left = "";
+    d.row.style.right = "";
+    d.row.style.zIndex = "";
+    d.ghost.remove();
+  }
+
+  function commitDrag(d) {
+    /* the placeholder's slot among the non-dragging rows IS the new position
+       (the dragging row stays a child of the list but is skipped).
+       Returns false if the ghost was not found (then the caller restores). */
+    var kids = Array.prototype.slice.call(listEl.children);
+    var slot = -1, count = 0;
+    for (var k = 0; k < kids.length; k++) {
+      if (kids[k] === d.row) continue;
+      if (kids[k].classList.contains("tc-drop")) { slot = count; break; }
+      count++;
+    }
+    if (slot < 0) return false;
+    var id = d.id;
+    var item = blocks.splice(id, 1)[0];
+    blocks.splice(slot, 0, item);
+    render();
+    var grips = listEl.querySelectorAll(".tc-grip");
+    if (grips[slot]) grips[slot].focus();
+    return true;
+  }
+
+  function endDrag(e) {
+    if (!drag || e.pointerId !== drag.pid) return;
+    var d = drag; drag = null;
+    d.grip.removeEventListener("pointermove", onDragMove);
+    d.grip.removeEventListener("pointerup", endDrag);
+    d.grip.removeEventListener("pointercancel", cancelDrag);
+    if (!d.moved) return;
+    try { d.grip.releasePointerCapture(d.pid); } catch (err) { /* no-op */ }
+    /* commit reads the ghost's position, so it must run while the ghost
+       still exists; render() then rebuilds the list fresh */
+    if (!commitDrag(d)) cleanupRow(d);
+  }
+
+  function cancelDrag(e) {
+    if (!drag || e.pointerId !== drag.pid) return;
+    var d = drag; drag = null;
+    d.grip.removeEventListener("pointermove", onDragMove);
+    d.grip.removeEventListener("pointerup", endDrag);
+    d.grip.removeEventListener("pointercancel", cancelDrag);
+    if (d.moved) { cleanupRow(d); render(); }
+  }
+
+  function score(a) {
+    var total = a.total, cached = a.cached, miss = total - cached;
+    var pct = total ? (cached / total) * 100 : 0;
+    var cost = (cached * CACHED_RATE + miss) / total;
+
+    $("tcCached").textContent = fmt(cached);
+    $("tcMiss").textContent = fmt(miss);
+    $("tcPct").textContent = pct.toFixed(1) + "%";
+    $("tcCost").textContent = cost.toFixed(2) + "\u00d7";
+    $("tcMeter").style.width = pct.toFixed(1) + "%";
+
+    /* reusable tokens stranded behind the block that terminates the prefix */
+    var stranded = blocks.slice(a.cut + 1).reduce(function (s, b) {
+      return s + (b.kind === "stable" ? b.tokens : (b.kind === "append" ? Math.max(0, b.tokens - b.fresh) : 0));
+    }, 0);
+
+    var save = 1 / cost, msg;
+    if (cached === 0) {
+      var first = blocks[0];
+      msg = "Nothing is cached. The very first block (" + first.name.toLowerCase() + ", all " +
+            fmt(first.tokens) + " tokens of it) changes on every request, so reuse stops at position zero and the " +
+            fmt(total - first.tokens) + " reusable tokens behind it are recomputed and billed in full every single time.";
+    } else if (stranded > 0) {
+      msg = pct.toFixed(1) + "% cached. Reuse stops at " + a.stopper.name.toLowerCase() + ", which strands " +
+            fmt(stranded) + " reusable tokens behind it. Move them above it and they become cache reads.";
+      if (a.partial === a.cut) {
+        msg += " Anything after a block that grows is unreachable, however stable it is: the new turn shifts every position after it.";
+      }
+    } else if (a.partial >= 0) {
+      msg = "Optimal for a live conversation. " + pct.toFixed(1) + "% of input is served from cache and effective input cost is about " +
+            save.toFixed(1) + "\u00d7 lower than sending this uncached. The remainder is the newest turn plus the per-request tail, which can never be cached. That is the ceiling, not a gap to close.";
+    } else {
+      msg = "Optimal ordering. " + pct.toFixed(1) + "% of input is served from cache and effective input cost is about " +
+            save.toFixed(1) + "\u00d7 lower than sending this prompt uncached.";
+    }
+    $("tcVerdict").textContent = msg;
+  }
+
+  $("tcFix").addEventListener("click", function () {
+    blocks.sort(function (x, y) {
+      if (RANK[x.kind] !== RANK[y.kind]) return RANK[x.kind] - RANK[y.kind];
+      return y.tokens - x.tokens;
+    });
+    render();
+  });
+  $("tcBad").addEventListener("click", function () { load(BAD_ORDER); render(); });
+
+  render();
+
+})();
+</script>
 </div></div></main>
 
 
@@ -561,7 +1305,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="relative isolate mx-auto max-w-full overflow-hidden rounded-2xl bg-surface-darker  px-6 py-12 ring-1 ring-gray-800 lg:px-16">
       <div class="xl:flex flex-col items-center justify-between gap-10 sm:flex-row sm:items-start mx-auto max-w-8xl">
         <div class="flex w-full flex-col items-center gap-8 sm:w-auto sm:min-w-xl sm:items-start">
-          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/TokenomicsFoundationLogoColorPosRGB.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
+          <img src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/images/branding/logos/tokenomics-foundation-logo.svg" alt="Tokenomics Foundation Logo" class="h-10 w-auto" width="146" height="40" />
           
 <div class="te-footer-newsletter w-full max-w-md"
 	data-te-newsletter-form
@@ -599,17 +1343,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
         <div>
         <nav aria-label="Footer" class="flex flex-col lg:flex-row justify-start xl:justify-end gap-x-12 gap-y-3 text-sm/6">
-          <a href="https://www.tokeneconomics.com/insights/" class="text-sm/6 font-normal text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="text-sm/6 font-normal text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/" class="text-sm/6 font-normal text-brand-light">What is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="text-sm/6 font-normal text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="text-sm/6 font-normal text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="text-sm/6 font-normal text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="text-sm/6 font-normal text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About</a></div>    
+          <a href="https://www.tokeneconomics.com/insights/" class="text-sm/6 font-normal text-brand-light">Insights</a><a href="https://www.tokeneconomics.com/projects/" class="text-sm/6 font-normal text-brand-light">Projects</a><a href="https://www.tokeneconomics.com/what-is-ai-tokenomics/" class="text-sm/6 font-normal text-brand-light">What Is AI Tokenomics?</a><a href="https://www.tokeneconomics.com/events/" class="text-sm/6 font-normal text-brand-light">Events</a><a href="https://learn.tokeneconomics.com/path/ai-tokenomics-fundamentals" class="text-sm/6 font-normal text-brand-light">Training</a><a href="https://www.tokeneconomics.com/about/members/" class="text-sm/6 font-normal text-brand-light">Members</a><div class="te-dropdown"><a href="https://www.tokeneconomics.com/about/" class="text-sm/6 font-normal text-brand-light te-dropdown-trigger inline-flex items-center gap-x-1">About<svg class="te-dropdown-chevron size-4 shrink-0 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg></a></div>    
             </nav>
                             <div class="mt-10 flex xl:justify-end gap-6 max-w-8xl mx-auto">
                                                     <a href="https://www.linkedin.com/company/tokenomics-foundation/" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Linkedin">
-                                      </a>
+                    <svg class="size-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>                  </a>
                                                                       <a href="https://www.youtube.com/channel/UCiS53QYGhclZojD60RcliXA" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Youtube">
-                                      </a>
+                    <svg class="size-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>                  </a>
                                                                       <a href="https://substack.com/@tokenomicsfoundation" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Substack">
-                                      </a>
+                    <svg class="size-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>                  </a>
                                                                       <a href="https://open.spotify.com/show/4j2W0pZqxg2DCv1AbCXKcu?si=aa6c0124ee8f423c" target="_blank" rel="noopener noreferrer" class="text-gray-400 transition-colors hover:text-white" aria-label="Spotify">
-                                      </a>
+                    <svg class="size-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>                  </a>
                                                 </div>
                       </div>      
         </div>
@@ -619,20 +1363,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p>© 2026 Tokenomics Foundation Project a Series of LF Projects, LLC.</p>
         <p>For web site terms of use, trademark policy and other project policies please see <a class="underline" href="https://lfprojects.org/" target="_blank" rel="noopener noreferrer">https://lfprojects.org.</a></p>
       </div>
-      
+      <svg viewBox="0 0 1024 1024" aria-hidden="true" class="absolute top-1/2 left-1/2 -z-10 size-256 -translate-x-1/2 opacity-60">
+          <circle r="512" cx="512" cy="512" fill="url(#te-newsletter-glow-2)" fill-opacity="0.7"></circle>
+          <defs>
+            <radialGradient id="te-newsletter-glow-2" r="1" cx="0" cy="0" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 512) rotate(90) scale(512)">
+              <stop stop-color="#7b5cff"></stop>
+              <stop offset="1" stop-color="#7b5cff" stop-opacity="0"></stop>
+            </radialGradient>
+          </defs>
+        </svg>
     </div>
   </div>
 </footer>
 
 
 
-
-
-
-
-
-
-
-
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/tokeneconomics/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script data-wp-strategy="defer" defer id="tokeneconomics-nav-dropdown-js" src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/js/nav-dropdown.js?ver=1782208058"></script>
+<script data-wp-strategy="defer" defer id="tokeneconomics-hero-parallax-js" src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/js/hero-parallax.js?ver=1786717193"></script>
+<script data-wp-strategy="defer" defer id="tokeneconomics-reveal-on-scroll-js" src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/js/reveal-on-scroll.js?ver=1786969885"></script>
+<script data-wp-strategy="defer" defer id="tokeneconomics-clickable-card-js" src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/js/clickable-card.js?ver=1786232257"></script>
+<script data-wp-strategy="defer" defer id="tokeneconomics-newsletter-form-js" src="https://www.tokeneconomics.com/wp-content/themes/tokeneconomics/assets/js/newsletter-form.js?ver=1790104455"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://www.tokeneconomics.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.3"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=https://www.tokeneconomics.com/wp-includes/js/wp-emoji-loader.min.js
+</script>
 </body>
 </html>

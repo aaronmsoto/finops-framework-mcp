@@ -75,7 +75,7 @@ export function registerPrompts(
             "5. Point to the FinOps capability and FOCUS columns that carry this in billing data (get_crosslinks).",
         ),
         embedded(URI.bigt, bigtLadderMd(a)),
-        instruction(`Five-Layer Stack summary:\n\n${layersTable()}`),
+        instruction(`Seven-Layer Stack summary:\n\n${layersTable()}`),
       ],
     }),
   );

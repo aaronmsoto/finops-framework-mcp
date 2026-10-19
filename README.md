@@ -42,8 +42,8 @@ presented as if the Foundation published it.
   standardized billing/usage data spec — pinned to a spec version (1.0 or
   1.2) on every answer, so nothing gets blended across releases that
   actually changed a column's meaning.
-- **tokenomics-overview-mcp** (new sibling, not yet on npm — see below)
-  covers AI tokenomics from the Tokenomics Foundation: the Five-Layer Stack,
+- **tokenomics-overview-mcp** (published separately from v0.2.0, see below)
+  covers AI tokenomics from the Tokenomics Foundation: the Seven-Layer Stack,
   Big-T notation, prompt-cache metrics (Cache Hit Rate, Cache Cost
   Efficiency), consumption levers, and stated cross-links into the other
   two servers.
@@ -198,10 +198,10 @@ end-to-end through the Worker.
 An **AI tokenomics** MCP server (`src/crawlers/tokenomics`,
 `src/servers/tokenomics`, `data/tokenomics/`) built on the same pipeline
 from the [Tokenomics Foundation](https://www.tokeneconomics.com)'s CC BY
-pages: the Five-Layer Tokenomics Stack, Big-T notation (`T(n · k · a)`),
+pages: the Seven-Layer Tokenomics Stack, Big-T notation (`T(n · k · a)`),
 the prompt cache explainer's two reference metrics with a
 `calculate_cache_metrics` tool, consumption levers, personas, value
-classification, and the FOCUS 1.5 AI-cost tracker. Every answer states the
+classification, and the FOCUS 1.5 AI-cost capabilities. Every answer states the
 source's publication status (most are Working Drafts or Release
 Candidates). `get_crosslinks` returns `finops://framework/…` and
 `focus://spec/…` URIs for the two servers above, each backed by a quote

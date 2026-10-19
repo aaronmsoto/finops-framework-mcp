@@ -151,7 +151,10 @@ export interface TkGlossaryTerm {
   provenance: TkProvenance;
 }
 
-export type TkFocusBucket = "done" | "flight" | "consider" | "out";
+/** Status on the FOCUS 1.5 page: in the working draft, in final (Member)
+ * review, or not in 1.5. */
+export const FOCUS_BUCKETS = ["done", "review", "out"] as const;
+export type TkFocusBucket = (typeof FOCUS_BUCKETS)[number];
 
 export interface TkFocusTrackerItem {
   slug: string;

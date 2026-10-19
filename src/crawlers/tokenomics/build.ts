@@ -19,6 +19,7 @@ import {
   CROSSWALK,
   STATED_LINKS,
   trackerLinkTargets,
+  target as targetFor,
   type StatedLinkSpec,
 } from "./links-data.js";
 import {
@@ -79,7 +80,7 @@ export function composeFromHtml(
       parseDocument(e, get(e.slug), restModified.get(e.url) ?? null),
     ),
   );
-  const layers = extractLayers(get("five-layer-stack-paper"));
+  const layers = extractLayers(get("seven-layer-stack-paper"));
   const bigt = extractBigT(get("big-t-notation"));
   const value = extractValue(get("value-classification"));
   const glossary = uniqueGlossary([
@@ -227,11 +228,44 @@ function paragraphOf(body: string, evidence: string): string | null {
     : null;
 }
 
+/** Sentences of a markdown body, without heading or list markers. */
+function sentencesOf(body: string): string[] {
+  return body
+    .split(/\n+/)
+    .flatMap((line) =>
+      normalizeForEvidence(
+        line.replace(/^\s*(?:#{1,6}|[-*]|\d+\.)\s+/, ""),
+      ).split(/(?<=[.!?])\s+/),
+    )
+    .filter(Boolean);
+}
+
 function firstSentenceWith(body: string, id: string): string | null {
-  const flat = normalizeForEvidence(body);
-  const sentences = flat.split(/(?<=[.!?])\s+/);
-  const s = sentences.find((x) => new RegExp(`\\b${id}\\b`).test(x));
-  return s ?? null;
+  return (
+    sentencesOf(body).find((x) => new RegExp(`\\b${id}\\b`).test(x)) ?? null
+  );
+}
+
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** FOCUS column display names ("SKU Price Details") a card names in prose,
+ * longest first so "Pricing Currency Effective Cost" is not also read as
+ * "Pricing Currency". Single-word names are too ambiguous to count. */
+function columnNamesIn(
+  body: string,
+  names: Map<string, string>,
+): { name: string; id: string }[] {
+  let text = normalizeForEvidence(body);
+  const out: { name: string; id: string }[] = [];
+  const sorted = [...names].sort((x, y) => y[0].length - x[0].length);
+  for (const [name, id] of sorted) {
+    if (name.split(" ").length < 2) continue;
+    const re = new RegExp(`\\b${escapeRe(name)}\\b`, "g");
+    if (!re.test(text)) continue;
+    out.push({ name, id });
+    text = text.replace(re, "\u0000");
+  }
+  return out;
 }
 
 /**
@@ -244,9 +278,20 @@ export function buildCrossLinks(
   bodies: Map<string, string>,
   focusColumnIds: Set<string>,
   focusAttributes: Map<string, string> = new Map(),
+  focusColumnNames: Map<string, string> = new Map(),
 ): TkCrossLink[] {
   const urlOf = new Map(e.documents.map((d) => [d.slug, d.url]));
   const out: TkCrossLink[] = [];
+  // FOCUS 1.5 cards name identifiers in their detail list, not always in
+  // the sentence that states the use: the card is the citation scope there.
+  const scopeOf = (spec: StatedLinkSpec, para: string): string => {
+    if (spec.document !== "focus-1-5-for-ai") return para;
+    const needle = normalizeForEvidence(spec.evidence);
+    const card = e.focusTracker.find((f) =>
+      normalizeForEvidence(f.body_md).includes(needle),
+    );
+    return card ? normalizeForEvidence(card.body_md) : para;
+  };
   const check = (spec: StatedLinkSpec) => {
     const body = bodies.get(spec.document);
     if (!body)
@@ -270,7 +315,13 @@ export function buildCrossLinks(
             `cross-link target ${t.id} is not named by its evidence in ${spec.document}`,
           );
         }
-      } else if (!new RegExp(`\\b${t.id}\\b`).test(para)) {
+      } else if (
+        !new RegExp(`\\b${t.id}\\b`).test(scopeOf(spec, para)) &&
+        !(
+          spec.mentions?.[t.id] &&
+          normalizeForEvidence(spec.evidence).includes(spec.mentions[t.id])
+        )
+      ) {
         throw new Error(
           `cross-link target ${t.id} is not named near its evidence in ${spec.document}`,
         );
@@ -299,6 +350,20 @@ export function buildCrossLinks(
         document: "focus-1-5-for-ai",
         evidence: sentence,
         targets: [target],
+      });
+    }
+    for (const { name, id } of columnNamesIn(item.body_md, focusColumnNames)) {
+      if (item.identifiers.includes(id)) continue;
+      const sentence = sentencesOf(item.body_md).find((x) =>
+        new RegExp(`\\b${escapeRe(name)}\\b`).test(x),
+      );
+      if (!sentence) continue;
+      check({
+        from: { type: "focus-item", slug: item.slug },
+        document: "focus-1-5-for-ai",
+        evidence: sentence,
+        targets: [targetFor.focusColumn(id)],
+        mentions: { [id]: name },
       });
     }
   }

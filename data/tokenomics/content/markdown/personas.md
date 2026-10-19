@@ -11,7 +11,7 @@ count: 12
 - responsibility: Platform-layer costs, model lifecycle, RAG pipelines
 - provenance.document: personas-operating-model
 - provenance.section: wp-personas
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -58,7 +58,7 @@ Model serving targets, platform trade-offs (throughput vs. context window), conc
 - responsibility: Track and allocate AI cost and usage
 - provenance.document: personas-operating-model
 - provenance.section: wp-personas
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -93,7 +93,7 @@ Budget thresholds for non-linear pricing, governance for agent depth and session
 - responsibility: Generates the demand; the surfaces where services are consumed and value is realized or not
 - provenance.document: personas-operating-model
 - provenance.section: wp-personas
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -145,7 +145,7 @@ Which tool and model tier to use within what is provisioned; when a task is wort
 - responsibility: Product AI vs. Internal AI budgets, forecasting for compounding demand
 - provenance.document: personas-operating-model
 - provenance.section: wp-personas
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -187,7 +187,7 @@ Budget allocation between Product AI and Internal AI, ROI measurement connecting
 - responsibility: Quality floors and model spectrum matching
 - provenance.document: personas-operating-model
 - provenance.section: wp-personas
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -222,7 +222,7 @@ Quality thresholds per workload, model tier selection for features vs. tools, la
 - responsibility: Physical scarcity, model expiry, consumption-rate commitments
 - provenance.document: personas-operating-model
 - provenance.section: wp-personas
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -264,7 +264,7 @@ Sourcing strategy (direct vs. marketplace vs. inference provider), commitment te
 - responsibility: Investment posture, capital-scale commitments, value mandate
 - provenance.document: personas-operating-model
 - provenance.section: wp-personas
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -300,7 +300,7 @@ Portfolio allocation across postures; AI investment council structure and cadenc
 - responsibility: Physical supply constraints: securing capacity before anyone can consume it
 - provenance.document: personas-operating-model
 - provenance.section: wp-personas
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -336,7 +336,7 @@ What this persona owns
 - responsibility: Allied persona
 - provenance.document: personas-operating-model
 - provenance.section: wp-allied
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -357,7 +357,7 @@ Data residency and PII handling; model governance and approved-model lists; acce
 - responsibility: Allied persona
 - provenance.document: personas-operating-model
 - provenance.section: wp-allied
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -378,7 +378,7 @@ Five-to-ten-year power, land, and supply agreements; liability and IP terms for 
 - responsibility: Allied persona
 - provenance.document: personas-operating-model
 - provenance.section: wp-allied
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages
@@ -399,7 +399,7 @@ The energy-to-intelligence chain gives Sustainability a direct line into tokenom
 - responsibility: Allied persona
 - provenance.document: personas-operating-model
 - provenance.section: wp-allied
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ### stages

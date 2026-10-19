@@ -12,7 +12,7 @@ count: 10
 - estimate_as: dollars, revenue line
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## Cost avoidance {slug=cost-avoidance}
@@ -22,7 +22,7 @@ count: 10
 - estimate_as: dollars, opex line
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## Capacity gain {slug=capacity-gain}
@@ -32,7 +32,7 @@ count: 10
 - estimate_as: FTE-equivalents freed, or mission output per period
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## Labor augmentation {slug=labor-augmentation}
@@ -42,7 +42,7 @@ count: 10
 - estimate_as: hours per unit, FTE fraction, then dollars
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## Labor automation {slug=labor-automation}
@@ -52,7 +52,7 @@ count: 10
 - estimate_as: FTE headcount, dollars at loaded cost
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## Product Quality {slug=product-quality}
@@ -62,7 +62,7 @@ count: 10
 - estimate_as: rework cost, customer satisfaction, refund or churn dollars
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## Speed to market {slug=speed-to-market}
@@ -72,7 +72,7 @@ count: 10
 - estimate_as: cycle time, then revenue or dollars
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## Risk reduction {slug=risk-reduction}
@@ -82,7 +82,7 @@ count: 10
 - estimate_as: incidents per period x cost per incident
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## New capability {slug=new-capability}
@@ -92,7 +92,7 @@ count: 10
 - estimate_as: viability claim, then revenue dollars
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ## Employee Engagement {slug=employee-engagement}
@@ -102,5 +102,5 @@ count: 10
 - estimate_as: retention rate, survey delta, then turnover cost in dollars
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0

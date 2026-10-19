@@ -4,12 +4,12 @@
 
 This package contains and redistributes text from the **Tokenomics
 Foundation** website, <https://www.tokeneconomics.com> (`data/tokenomics/`:
-twelve documents — the AI Tokenomics definition, the Five-Layer Tokenomics
-Stack explainer and paper, the Big-T Notation explainer and paper, the
-Prompt Cache Explainer, the Personas and Operating Model map, Classifying
-and Measuring Realized Value from AI, the FOCUS 1.5 AI-cost status page,
-two Tokenomics Brief episode pages, and the "What Tokenomics Is, and What It
-Isn't" member synthesis).
+fourteen documents — the AI Tokenomics definition, the Seven-Layer
+Tokenomics Stack explainer and paper, the Big-T Notation explainer and
+paper, the Prompt Cache Explainer, the Personas and Operating Model map,
+Classifying and Measuring Realized Value from AI, the FOCUS 1.5 AI-cost
+page, four Tokenomics Brief episode pages, and the "What Tokenomics Is, and
+What It Isn't" member synthesis).
 
 That content is licensed under the **Creative Commons Attribution 4.0
 International license (CC BY 4.0)**:

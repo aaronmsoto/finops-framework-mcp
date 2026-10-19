@@ -11,7 +11,7 @@ count: 3
 - key_question: How is the AI factory built?
 - provenance.document: personas-operating-model
 - provenance.section: wp-stages
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ## Consumption {slug=consumption}
@@ -20,7 +20,7 @@ count: 3
 - key_question: How are AI services consumed, and by whom?
 - provenance.document: personas-operating-model
 - provenance.section: wp-stages
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0
 
 ## Value {slug=value}
@@ -29,5 +29,5 @@ count: 3
 - key_question: What value does AI produce?
 - provenance.document: personas-operating-model
 - provenance.section: wp-stages
-- provenance.source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+- provenance.source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 - provenance.license: CC-BY-4.0

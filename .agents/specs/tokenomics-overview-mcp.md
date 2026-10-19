@@ -25,7 +25,17 @@ status that change weekly, plus the owner's local cert-prep curriculum.
   one Custom HTML block or empty; te_page/asset have no content field) —
   bodies come from rendered HTML (`main#primary section.te-section[id]`,
   docs pages by h2). JSON-LD gives dateModified.
-- Registry v1 (pinned in `src/crawlers/tokenomics/urls.ts`, 12 documents):
+- Registry v2 (2026-10-19, data v2.0.0, 14 documents): the site replaced
+  the Five-Layer Stack with the Seven-Layer Stack (L0 Energy … L6 Demand;
+  slugs seven-layer-stack + seven-layer-stack-paper, clean rename), moved
+  most project pages under /projects/, moved the definition to
+  /what-is-ai-tokenomics/ (glossary now a `<dl>`), and rewrote the FOCUS 1.5
+  page as capability cards (buckets done | review | out). Added Tokenomics
+  Brief ep.15 (tokenomics-goes-official) and ep.18
+  (state-of-ai-tokenomics-takeaways, final survey figures) for routing /
+  gateway context. Sprint 2 working-group drafts stay out until final
+  (`docs/research/tokenomics-routing-guide-draft.md`).
+- Registry v1 (2026-09-25, 12 documents):
   what-is-tokenomics (docs, WD, Definition v0.5.2); five-layer-stack +
   five-layer-stack-paper; big-t-notation + big-t-notation-paper (WD);
   cache-explainer (RC1 2026-09-22); personas-operating-model (RC2);

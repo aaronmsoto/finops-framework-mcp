@@ -198,34 +198,42 @@ describe("cross-links", () => {
     }
     return { e, out };
   };
-  const focusIds = new Set(
-    (
-      JSON.parse(
-        readFileSync(join(ROOT, "data/focus/1.2/columns.json"), "utf8"),
-      ) as {
-        id: string;
-      }[]
-    ).map((c) => c.id),
-  );
+  const focusCols = JSON.parse(
+    readFileSync(join(ROOT, "data/focus/1.2/columns.json"), "utf8"),
+  ) as { id: string; display_name: string }[];
+  const focusIds = new Set(focusCols.map((c) => c.id));
+  const focusNames = new Map(focusCols.map((c) => [c.display_name, c.id]));
 
   it("builds evidence-checked links including tracker identifiers", () => {
     const { e, out } = bodies();
-    const links = buildCrossLinks(e, out, focusIds);
+    const links = buildCrossLinks(e, out, focusIds, new Map(), focusNames);
     expect(
       links.some((l) => l.target.id === "PrincipalId" && l.target.uri === null),
     ).toBe(true);
+    const sku = links.find(
+      (l) =>
+        l.target.id === "SkuPriceDetails" &&
+        l.target.uri === "focus://spec/1.2/columns/skupricedetails",
+    );
+    expect(sku?.evidence).toContain("SKU Price Details");
+  });
+
+  it("links FOCUS columns the cards name in prose by display name", () => {
+    const { e, out } = bodies();
+    const ids = buildCrossLinks(e, out, focusIds, new Map(), focusNames)
+      .filter((l) => l.target.server === "focus")
+      .map((l) => l.target.id);
+    expect(ids).toContain("ConsumedQuantity");
     expect(
-      links.some(
-        (l) =>
-          l.target.id === "SkuPriceDetails" &&
-          l.target.uri === "focus://spec/1.2/columns/skupricedetails",
+      buildCrossLinks(e, out, focusIds).some(
+        (l) => l.target.id === "ConsumedQuantity",
       ),
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("throws when a stated link's evidence is missing from its document", () => {
     const { e, out } = bodies();
-    out.set("five-layer-stack-paper", "no evidence here");
+    out.set("seven-layer-stack-paper", "no evidence here");
     expect(() => buildCrossLinks(e, out, focusIds)).toThrow(
       /evidence not found/,
     );

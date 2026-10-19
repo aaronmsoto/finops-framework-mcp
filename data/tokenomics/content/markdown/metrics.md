@@ -10,7 +10,7 @@ count: 7
 - formula: Cache hit rate = cache read / (cache read + cache write + uncached input)
 - provenance.document: cache-explainer
 - provenance.section: tcmonitoring
-- provenance.source_url: https://www.tokeneconomics.com/cache-explainer/
+- provenance.source_url: https://www.tokeneconomics.com/projects/cache-explainer/
 - provenance.license: CC-BY-4.0
 
 ### inputs
@@ -32,7 +32,7 @@ One number, built from the three buckets above, bounded between 0 and 100%. Boun
 - formula: Cache cost efficiency = 1 − actual prompt cost / uncached equivalent cost
 - provenance.document: cache-explainer
 - provenance.section: tcmonitoring
-- provenance.source_url: https://www.tokeneconomics.com/cache-explainer/
+- provenance.source_url: https://www.tokeneconomics.com/projects/cache-explainer/
 - provenance.license: CC-BY-4.0
 
 ### inputs
@@ -55,7 +55,7 @@ However, this metric assumes you can get the *actual* prompt cost, which is easy
 - formula: uncached equivalent cost = (cache read + cache write + uncached input) × base input price
 - provenance.document: cache-explainer
 - provenance.section: tcmonitoring
-- provenance.source_url: https://www.tokeneconomics.com/cache-explainer/
+- provenance.source_url: https://www.tokeneconomics.com/projects/cache-explainer/
 - provenance.license: CC-BY-4.0
 
 ### inputs
@@ -78,7 +78,7 @@ Denominator of Cache cost efficiency: what the same prompt tokens would have cos
 - formula_text: hardware cost divided by tokens produced
 - provenance.document: what-is-tokenomics
 - provenance.section: terminology-reference
-- provenance.source_url: https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/
+- provenance.source_url: https://www.tokeneconomics.com/what-is-ai-tokenomics/
 - provenance.license: CC-BY-4.0
 
 ### inputs
@@ -92,14 +92,14 @@ Denominator of Cache cost efficiency: what the same prompt tokens would have cos
 
 ### definition_md
 
-the cost of producing one token, hardware cost divided by tokens produced; an output metric that reflects true infrastructure return, as opposed to input metrics like cost per GPU hour or floating-point operations per dollar.
+The cost of producing one token, hardware cost divided by tokens produced; an output metric that reflects true infrastructure return, as opposed to input metrics like cost per GPU hour or floating-point operations per dollar.
 
 ## Net benefit {slug=net-benefit}
 
 - formula: gross delta × volume - outputs that missed the floor - cost created - harm from misses = net benefit
 - provenance.document: value-classification
 - provenance.section: vfstep4
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ### inputs
@@ -131,7 +131,7 @@ The confidence mark carries the weakest provenance among the inputs: a net built
 - formula_text: incidents per period x cost per incident
 - provenance.document: value-classification
 - provenance.section: vfstep3
-- provenance.source_url: https://www.tokeneconomics.com/ai-value-classification/
+- provenance.source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 - provenance.license: CC-BY-4.0
 
 ### inputs

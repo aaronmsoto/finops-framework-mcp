@@ -1,9 +1,9 @@
 ---
 kind: project
 license: CC-BY-4.0
-modified: 2026-09-24
+modified: 2026-10-14
 slug: value-classification
-source_url: https://www.tokeneconomics.com/ai-value-classification/
+source_url: https://www.tokeneconomics.com/projects/ai-value-classification/
 status: Release Candidate 2
 status_date: 2026-09-16
 status_source: page

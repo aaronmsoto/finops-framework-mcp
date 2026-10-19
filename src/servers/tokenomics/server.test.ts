@@ -91,7 +91,7 @@ describe("tools — default surface", () => {
     const res = await call("get_tokenomics_info");
     expect(res.isError).toBeFalsy();
     const docs = res.structuredContent?.documents as { status: string }[];
-    expect(docs).toHaveLength(12);
+    expect(docs).toHaveLength(14);
     expect(docs.every((d) => d.status.length > 0)).toBe(true);
     expect(res.structuredContent?.experimental).toBe(false);
     expect(res.content[0]?.text).toContain("Release Candidate");
@@ -143,16 +143,18 @@ describe("tools — default surface", () => {
     expect(b.content[0]?.text).toContain("tcmonitoring");
   });
 
-  it("list_layers returns the five layers with the published summary", async () => {
+  it("list_layers returns the seven layers, L0–L6, with the published summary", async () => {
     const res = await call("list_layers");
     const layers = res.structuredContent?.layers as {
       number: number;
       moves_multiplier: boolean;
     }[];
-    expect(layers.map((l) => l.number)).toEqual([1, 2, 3, 4, 5]);
+    expect(layers.map((l) => l.number)).toEqual([0, 1, 2, 3, 4, 5, 6]);
     expect(layers.map((l) => l.moves_multiplier)).toEqual([
       false,
       false,
+      false,
+      true,
       true,
       true,
       true,
@@ -416,7 +418,7 @@ describe("tools — default surface", () => {
     expect(
       (all.structuredContent?.items as unknown[]).length,
     ).toBeGreaterThanOrEqual(10);
-    expect(all.content[0]?.text).toContain("In review");
+    expect(all.content[0]?.text).toContain("In final review");
     const cache = await call("get_focus_ai_tracker", {
       identifier: "TokenCacheAction",
     });
@@ -504,20 +506,21 @@ describe("eval-driven refinements", () => {
 
   it("get_crosslinks text names each link's source and flags unratified FOCUS work", async () => {
     const res = await call("get_crosslinks", {
-      entity_type: "metric",
-      slug: "cache-hit-rate",
+      entity_type: "focus-item",
+      slug: "fr-2018",
     });
     const text = res.content[0]?.text ?? "";
-    expect(text).toContain("metric `cache-hit-rate`");
+    expect(text).toContain("focus-item `fr-2018`");
     expect(text).toContain("not in it yet");
     expect(text).toContain("not in any ratified release");
   });
 
-  it("list_layers text shows the layer name next to the summary label", async () => {
+  it("list_layers text names L5 as the access, routing and control layer", async () => {
     const res = await call("list_layers");
-    expect(res.content[0]?.text).toContain(
-      "L4 Model management and selection (summary label: “L4 Model and quantization”)",
-    );
+    const text = res.content[0]?.text ?? "";
+    expect(text).toContain("L5 AI access and control");
+    expect(text).toContain("Complexity routing");
+    expect(text).not.toContain("summary label");
   });
 });
 
@@ -555,7 +558,7 @@ describe("review-driven refinements", () => {
       expect(text, name).toContain("CC BY 4.0");
     }
     const levers = await call("list_levers", { layer: 3 });
-    expect(levers.content[0]?.text).toContain("Draft paper");
+    expect(levers.content[0]?.text).toContain("Release Candidate");
   });
 
   it("define_term misses point at related records", async () => {
@@ -767,7 +770,7 @@ describe("outputSchema conformance", () => {
       ["get_bigt_notation", {}],
       ["get_bigt_class", { class: "T(1)" }],
       ["list_levers", {}],
-      ["get_lever", { lever: "l3-prefix-and-kv-cache" }],
+      ["get_lever", { lever: "l3-prefix-kv-and-semantic-cache" }],
       ["list_metrics", {}],
       ["get_metric", { metric: "cache-cost-efficiency" }],
       [
@@ -785,7 +788,7 @@ describe("outputSchema conformance", () => {
       ["get_persona", { persona: "engineering" }],
       ["list_value_categories", {}],
       ["define_term", { term: "tokenmaxing" }],
-      ["get_focus_ai_tracker", { bucket: "flight" }],
+      ["get_focus_ai_tracker", { bucket: "review" }],
       ["get_crosslinks", {}],
       ["search_tokenomics", { query: "quantization" }],
       ["get_crosswalk", {}],

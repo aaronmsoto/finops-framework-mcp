@@ -6,7 +6,7 @@
       "document": "cache-explainer",
       "license": "CC-BY-4.0",
       "section": "tcprovidersnapshot",
-      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+      "source_url": "https://www.tokeneconomics.com/projects/cache-explainer/"
     },
     "provider": "Anthropic (Claude API)",
     "read_charge": "0.1× base",
@@ -21,7 +21,7 @@
       "document": "cache-explainer",
       "license": "CC-BY-4.0",
       "section": "tcprovidersnapshot",
-      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+      "source_url": "https://www.tokeneconomics.com/projects/cache-explainer/"
     },
     "provider": "OpenAI (OpenAI platform)",
     "read_charge": "0.1× base on GPT-5.6 and later; model-dependent cached rates on earlier models (advertised up to 90% off).",
@@ -36,7 +36,7 @@
       "document": "cache-explainer",
       "license": "CC-BY-4.0",
       "section": "tcprovidersnapshot",
-      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+      "source_url": "https://www.tokeneconomics.com/projects/cache-explainer/"
     },
     "provider": "Google (Gemini API)",
     "read_charge": "Read discount passed through automatically; explicit cache objects exist on the older request style.",

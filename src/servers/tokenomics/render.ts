@@ -11,6 +11,7 @@ import type {
   TkPersona,
   TkProvenance,
 } from "../../shared/tokenomics/types.js";
+import { FOCUS_BUCKETS } from "../../shared/tokenomics/types.js";
 import { URI } from "./uris.js";
 
 // One renderer per entity, shared by tools, resources, and prompts so the
@@ -141,7 +142,7 @@ export function bigtClassMd(
   ];
   if (layers.length) {
     parts.push(
-      `**Layers that move this class (Five-Layer Stack summary table):** ` +
+      `**Layers that move this class (Seven-Layer Stack summary table):** ` +
         layers
           .map((l) => `L${l.number} ${l.name} (${l.multiplier_effect})`)
           .join("; "),
@@ -297,13 +298,12 @@ export function glossaryMd(a: TokenomicsArtifact): string {
 export function focusTrackerMd(a: TokenomicsArtifact): string {
   const d = docBySlug(a, "focus-1-5-for-ai");
   const labels: Record<string, string> = {
-    done: "In the working draft (merged)",
-    flight: "In review",
-    consider: "Started, not yet certain",
+    done: "In the working draft",
+    review: "In final review",
     out: "Not in 1.5",
   };
   const parts = [`# ${d.title}`, `_${statusLine(d)}_`];
-  for (const bucket of ["done", "flight", "consider", "out"]) {
+  for (const bucket of FOCUS_BUCKETS) {
     const items = a.focusTracker.filter((f) => f.bucket === bucket);
     if (!items.length) continue;
     parts.push(

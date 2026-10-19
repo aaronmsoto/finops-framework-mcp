@@ -14,7 +14,7 @@ vi.mock("./server.js", () => ({
 }));
 
 const VERSION_LINE =
-  /^tokenomics-overview-mcp v\d+\.\d+\.\d+ \(data v\d+\.\d+\.\d+, 12 Tokenomics Foundation documents\)$/;
+  /^tokenomics-overview-mcp v\d+\.\d+\.\d+ \(data v\d+\.\d+\.\d+, 14 Tokenomics Foundation documents\)$/;
 
 describe("direct-run detection", () => {
   const saved = process.argv[1];

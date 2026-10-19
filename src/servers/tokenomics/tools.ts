@@ -13,6 +13,7 @@ import type {
   TkMetric,
   TkPersona,
 } from "../../shared/tokenomics/types.js";
+import { FOCUS_BUCKETS } from "../../shared/tokenomics/types.js";
 import {
   cursorContext,
   err,
@@ -141,7 +142,7 @@ const personaRecord = z.object({
 const focusItem = z.object({
   slug: z.string(),
   title: z.string(),
-  bucket: z.enum(["done", "flight", "consider", "out"]),
+  bucket: z.enum(FOCUS_BUCKETS),
   kind: z.string(),
   labels: z.array(z.string()),
   identifiers: z.array(z.string()),
@@ -237,7 +238,8 @@ export function registerTools(
         l.slug === s ||
         (n !== undefined && l.number === Number(n)) ||
         slugify(l.name) === slugify(s) ||
-        slugify(l.table_label) === slugify(s),
+        slugify(l.table_label) === slugify(s) ||
+        slugify(l.name).split("-")[0] === slugify(s),
     );
     return (
       hit ??
@@ -245,7 +247,7 @@ export function registerTools(
         "layer",
         input,
         a.layers.map((l) => l.slug),
-        "Use list_layers (l1…l5).",
+        "Use list_layers (l0…l6).",
       )
     );
   }
@@ -360,7 +362,7 @@ export function registerTools(
       const documents = a.documents.map((d) => docRowOf(d.slug));
       const start_here = [
         "get_bigt_notation — classify how a workload's token cost grows",
-        "list_layers — the Five-Layer Stack and where each lever sits",
+        "list_layers — the Seven-Layer Stack and where each lever sits",
         "get_metric cache-hit-rate / calculate_cache_metrics — measure prompt caching",
         "get_crosslinks — hop to finops:// (FinOps Framework) and focus:// (FOCUS) servers",
       ];
@@ -478,23 +480,23 @@ export function registerTools(
   server.registerTool(
     "list_layers",
     {
-      title: "List the Five-Layer Tokenomics Stack",
+      title: "List the Seven-Layer Tokenomics Stack",
       description:
-        "The five layers (L1 Silicon … L5 Routing and governance) with the published summary: whether each moves the Big-T multiplier, its key metric, and its primary levers. Lower layers set what a token costs; upper layers decide how many tokens you spend.",
+        "The seven layers (L0 Energy … L5 AI access and control, the routing/gateway layer … L6 Demand and entry points) with the published summary: whether each moves the Big-T multiplier, its key metric, and its primary levers. The lower three set what a token costs; the middle three move a workload between Big-T classes; the top layer sets demand.",
       inputSchema: {},
       outputSchema: { layers: z.array(layerRow), status: z.string() },
       annotations: RO,
     },
     () => {
       const rows = a.layers.map(layerRowOf);
-      const d = docBySlug(a, "five-layer-stack-paper");
+      const d = docBySlug(a, "seven-layer-stack-paper");
       return ok(
         { layers: rows, status: statusLine(d) },
         `| Layer | Moves the multiplier? | Key metric | Primary levers |\n| --- | --- | --- | --- |\n` +
           rows
             .map(
               (l) =>
-                `| L${l.number} ${l.name} (summary label: “${l.table_label}”) | ${l.multiplier_effect} | ${l.key_metric} | ${l.primary_levers.join("; ")} |`,
+                `| L${l.number} ${l.name}${l.table_label === `L${l.number} ${l.name}` ? "" : ` (summary label: “${l.table_label}”)`} | ${l.multiplier_effect} | ${l.key_metric} | ${l.primary_levers.join("; ")} |`,
             )
             .join("\n") +
           `\n\n_${statusLine(d)}_` +
@@ -508,7 +510,7 @@ export function registerTools(
     {
       title: "Get one stack layer",
       description:
-        "One layer of the Five-Layer Stack: description, components, published tooling table, and the levers that sit at it. `layer` accepts 'l3', '3', 'L3', or the layer name ('inference stack').",
+        "One layer of the Seven-Layer Stack: description, components, published tooling table, and the levers that sit at it. `layer` accepts 'l5', '5', 'L5', the layer name ('ai access and control'), or its first word ('energy', 'demand'). L5 is the proxy / router / gateway layer.",
       inputSchema: {
         layer: z.string().describe("e.g. 'l3' or 'inference stack'"),
       },
@@ -665,9 +667,9 @@ export function registerTools(
     {
       title: "List consumption and efficiency levers",
       description:
-        "Optimization levers as the Foundation publishes them: the stack's primary levers per layer (caching, batching, right-sizing, quantization, complexity routing, budgets, agent caps…), Big-T's five levers (routing, serialization, caching, abstraction transparency, governance), architectural approaches with published token reductions, and the 34× worked-example steps. Filter by `layer` (1-5), `bigt_class`, `kind`, or `document`.",
+        "Optimization levers as the Foundation publishes them: the stack's primary levers per layer (caching, batching, right-sizing, quantization, complexity routing, budgets, agent caps…), Big-T's five levers (routing, serialization, caching, abstraction transparency, governance), architectural approaches with published token reductions, and the 34× worked-example steps. Filter by `layer` (0-6), `bigt_class`, `kind`, or `document`.",
       inputSchema: {
-        layer: z.number().int().min(1).max(5).optional(),
+        layer: z.number().int().min(0).max(6).optional(),
         bigt_class: z.string().optional().describe("e.g. 'T(n·k)'"),
         kind: z.enum(LEVER_KINDS).optional(),
         document: z.string().optional(),
@@ -1294,9 +1296,9 @@ export function registerTools(
     {
       title: "FOCUS 1.5 AI-cost tracker",
       description:
-        "The Foundation's status page on what FOCUS 1.5 does for AI cost: items merged into the working draft (e.g. SkuPriceDetails Model* properties, PrincipalId), in review (TokenCacheAction / TokenDirection cached-token work), started, and not in 1.5 (1.6 candidates). Filter by `bucket` (done|flight|consider|out) or an `identifier` such as 'TokenCacheAction'. Working-draft items are not in any ratified FOCUS release; the FOCUS server serves ratified versions.",
+        "The Foundation's page on what FOCUS 1.5 does for AI cost, one card per capability: in the working draft (e.g. ModelId and other model properties on SKU Price Details, TokenCacheAction / TokenDirection, PrincipalId / CredentialId), in final Member review (SKU Price dataset, AI billing worked examples), and not in 1.5. Filter by `bucket` (done|review|out) or an `identifier` such as 'TokenCacheAction'. Nothing here is in a ratified FOCUS release until 1.5 is ratified; the FOCUS server serves ratified versions.",
       inputSchema: {
-        bucket: z.enum(["done", "flight", "consider", "out"]).optional(),
+        bucket: z.enum(FOCUS_BUCKETS).optional(),
         identifier: z.string().optional(),
       },
       outputSchema: { items: z.array(focusItem), status: z.string() },
