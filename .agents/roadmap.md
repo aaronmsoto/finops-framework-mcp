@@ -15,6 +15,17 @@
   and sets "building" → loop completes the tasks → "done".
 -->
 
+## FOCUS 1.3 / 1.4 / 1.5 support in finops-focus-mcp  —  idea
+
+Hyperscalers export FOCUS 1.0/1.2 (Azure and GCP 1.2 still preview); 1.3 is
+only at a few SaaS/data providers and nobody emits 1.4 yet, so 1.0/1.2 stay
+the default. Proposed order: add ratified 1.3 + 1.4 for migration diffs and
+the new contract/invoice datasets (size multi-dataset parsing first); ingest
+1.5 right after its 3 Dec 2026 ratification and re-point the tokenomics
+FOCUS links from working-draft identifiers to real 1.5 URIs; add a
+provider-support resource. Evidence and recommendation:
+`docs/research/focus-version-support.md`.
+
 ## tokenomics-overview-mcp — a third MCP server for AI tokenomics  —  specced
 
 Serve Tokenomics Foundation guidance (Five-Layer Stack, Big-T notation,

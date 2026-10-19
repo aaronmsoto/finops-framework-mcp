@@ -1,6 +1,6 @@
-# Publishes both npm packages on a version tag via npm trusted publishing
+# Publishes the three npm packages on a version tag via npm trusted publishing
 # (OIDC — no NPM_TOKEN secret; provenance is generated automatically), then
-# submits both server.json manifests to the MCP Registry, also via OIDC.
+# submits all three server.json manifests to the MCP Registry, also via OIDC.
 # Prerequisite: each package must already exist on npm with a trusted
 # publisher configured for this repo + this workflow file — see
 # docs/release-runbook.md for the one-time bootstrap.
@@ -28,11 +28,17 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
+      # Each step skips a version already on npm, so a re-run after a partial
+      # failure, or a package's manual bootstrap publish of this same version
+      # (docs/release-runbook.md), does not fail the job on a duplicate.
       - name: Publish finops-framework-mcp
-        run: npm publish --access public --provenance
+        run: ./scripts/npm-publish-once.sh
       - name: Publish finops-focus-mcp
-        run: npm publish --access public --provenance
+        run: ../../scripts/npm-publish-once.sh
         working-directory: packages/finops-focus-mcp
+      - name: Publish tokenomics-overview-mcp
+        run: ../../scripts/npm-publish-once.sh
+        working-directory: packages/tokenomics-overview-mcp
 
   # Registry listing, deliberately a SEPARATE job rather than more steps on
   # `publish`. npm publish is irreversible; if the registry submission fails,
@@ -61,13 +67,16 @@ jobs:
         run: go install github.com/modelcontextprotocol/registry/cmd/publisher@v1.8.1
       - name: Authenticate to the MCP Registry
         run: publisher login github-oidc
-      # Fails the job on a malformed manifest before either submission, so a
-      # bad file cannot leave one server listed and the other not.
-      - name: Validate both manifests
+      # Fails the job on a malformed manifest before any submission, so a
+      # bad file cannot leave one server listed and another not.
+      - name: Validate all manifests
         run: |
           publisher validate server.json
           publisher validate packages/finops-focus-mcp/server.json
+          publisher validate packages/tokenomics-overview-mcp/server.json
       - name: Submit finops-framework-mcp
         run: publisher publish server.json
       - name: Submit finops-focus-mcp
         run: publisher publish packages/finops-focus-mcp/server.json
+      - name: Submit tokenomics-overview-mcp
+        run: publisher publish packages/tokenomics-overview-mcp/server.json
