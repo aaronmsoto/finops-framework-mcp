@@ -14,7 +14,7 @@
     "stages": 3,
     "value_categories": 10
   },
-  "crawled_at": "2026-10-19T23:20:49.328Z",
+  "crawled_at": "2026-10-19T23:33:08.281Z",
   "data_version": "2.0.0",
   "parse_warnings": [
     "seven-layer-stack: no status label on page; using registry label \"Release Candidate (projects index label)\"",
@@ -56,7 +56,7 @@
     "content/markdown/documents/what-tokenomics-is-and-isnt.md": "9b5d9b5b1241409691d3424a7049ef884722a737744ec29888aafc02f66affef",
     "content/markdown/focus-tracker.md": "992c546d5bb5f55c41e9ff921111b4a335ef6eb805b4f90c345226095c06fbe0",
     "content/markdown/glossary.md": "d69c5f4f814ee0201fdcbf2b3f6f728bad3fa91e01c43335d1c9a5a07a8c4ffe",
-    "content/markdown/layers.md": "0c283cbbaf4eb43fef7bdaa0ec24fcbda1f10a002ec0f61479ed7f9d5def782c",
+    "content/markdown/layers.md": "3d15f1d43a600dbe21934d9e2867d7f2a9ef66efc31269f7cff9d9ac5109d608",
     "content/markdown/levers.md": "c61d7cd2dbf7b5401403438ea6295e403fe85d11e79e72544ff617a5d2f5591d",
     "content/markdown/metrics.md": "776adea5f00d742491d3a7e4145f73e7630a735bdae9f8c8b3910cfe7949aec6",
     "content/markdown/personas.md": "b2cd6795ba3eac2b4cadfaaac6649961a808cbd51f29cf9104b54f5cf930627c",
@@ -66,7 +66,7 @@
     "content/personas.json": "ca743d5266b67eaff603fe3d5bc3e79b5c9688f74e9b3b29d99974603db60eba",
     "content/stages.json": "3b6ef668ec763820e117b67cf0be2856a69aedb7e9cdaf96d8a819426b8738a2",
     "content/value.json": "20cf4480a76086730275b5424a7a005984a64974022cc487251602d3bd561802",
-    "derived/changelog.json": "deaa3971e71455e7335b604867c35c9b384541dec1edf23f86b45528f1c24292",
+    "derived/changelog.json": "fa92f6c53701f04c33140721c424588909a59d1564f62642799b6810a53bb71e",
     "derived/crosslinks.json": "1befbb99097ac1b44570a4fe0023f6a4055de6271efdc6fa62b87af78fa823de",
     "derived/crosswalk.json": "dc760215a3c79df1d75763115bc7446fe3d9fd92b49880cd2c3684c3a50766fb",
     "schema/bigt.schema.json": "0ff0622916d97b89b676cdb10835f36c710e44310579fbd48ce07068210aff06",

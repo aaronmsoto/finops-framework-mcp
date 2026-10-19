@@ -10,9 +10,18 @@ published.
 > so the order matters:
 >
 > 1. Merge the release PR to `main`.
-> 2. From a clean `main` checkout, publish **only** tokenomics by hand
->    (bootstrap step 1, last two commands) and configure its trusted
->    publisher (bootstrap step 2).
+> 2. From a clean `main` checkout, publish **only** tokenomics by hand, then
+>    configure its trusted publisher (bootstrap step 2):
+>
+>    ```bash
+>    npm ci && npm run build && npm test
+>    cd packages/tokenomics-overview-mcp
+>    npm publish --access public    # prepack stages dist + data
+>    ```
+>
+>    Skip bootstrap step 3 (manual registry submission) for it: the tag's
+>    `registry` job submits it, and a manual submission first would make
+>    that job fail on a duplicate version.
 > 3. Tag and push `v0.2.0`. CI publishes finops-framework-mcp and
 >    finops-focus-mcp 0.2.0, skips tokenomics-overview-mcp 0.2.0 (already on
 >    npm, via `scripts/npm-publish-once.sh`), and the `registry` job lists
@@ -129,7 +138,10 @@ exists, so the very first publish of each package is manual:
    the published packages, step 1's version bump is what keeps this
    correct — the job just submits whatever is committed.
 
-   If the `registry` job fails, re-run it from the Actions UI. If it keeps
+   If the `registry` job fails, re-run it from the Actions UI. A re-run
+   resubmits every manifest, and a server whose version already went
+   through fails as a duplicate; in that case submit only the remaining
+   manifests by hand (bootstrap step 3). If it keeps
    failing, the manual commands in bootstrap step 3 are still the fallback;
    nothing about them changed.
 

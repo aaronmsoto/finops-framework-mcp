@@ -249,23 +249,30 @@ function firstSentenceWith(body: string, id: string): string | null {
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 /** FOCUS column display names ("SKU Price Details") a card names in prose,
- * longest first so "Pricing Currency Effective Cost" is not also read as
- * "Pricing Currency". Single-word names are too ambiguous to count. */
+ * each with the first sentence that names it. Longer names are masked first
+ * so "Pricing Currency Effective Cost" is not also read as "Effective Cost".
+ * Single-word names are too ambiguous to count. */
 function columnNamesIn(
   body: string,
   names: Map<string, string>,
-): { name: string; id: string }[] {
-  let text = normalizeForEvidence(body);
-  const out: { name: string; id: string }[] = [];
-  const sorted = [...names].sort((x, y) => y[0].length - x[0].length);
-  for (const [name, id] of sorted) {
-    if (name.split(" ").length < 2) continue;
-    const re = new RegExp(`\\b${escapeRe(name)}\\b`, "g");
-    if (!re.test(text)) continue;
-    out.push({ name, id });
-    text = text.replace(re, "\u0000");
+): { name: string; id: string; sentence: string }[] {
+  const sorted = [...names]
+    .filter(([name]) => name.split(" ").length >= 2)
+    .sort((x, y) => y[0].length - x[0].length);
+  const found = new Map<
+    string,
+    { name: string; id: string; sentence: string }
+  >();
+  for (const sentence of sentencesOf(body)) {
+    let text = sentence;
+    for (const [name, id] of sorted) {
+      const re = new RegExp(`\\b${escapeRe(name)}\\b`, "g");
+      if (!re.test(text)) continue;
+      if (!found.has(id)) found.set(id, { name, id, sentence });
+      text = text.replace(re, "\u0000");
+    }
   }
-  return out;
+  return [...found.values()];
 }
 
 /**
@@ -287,10 +294,13 @@ export function buildCrossLinks(
   const scopeOf = (spec: StatedLinkSpec, para: string): string => {
     if (spec.document !== "focus-1-5-for-ai") return para;
     const needle = normalizeForEvidence(spec.evidence);
-    const card = e.focusTracker.find((f) =>
+    const cards = e.focusTracker.filter((f) =>
       normalizeForEvidence(f.body_md).includes(needle),
     );
-    return card ? normalizeForEvidence(card.body_md) : para;
+    // Evidence in more than one card is ambiguous: fall back to the paragraph.
+    return cards.length === 1
+      ? normalizeForEvidence((cards[0] as TkFocusTrackerItem).body_md)
+      : para;
   };
   const check = (spec: StatedLinkSpec) => {
     const body = bodies.get(spec.document);
@@ -352,12 +362,11 @@ export function buildCrossLinks(
         targets: [target],
       });
     }
-    for (const { name, id } of columnNamesIn(item.body_md, focusColumnNames)) {
+    for (const { name, id, sentence } of columnNamesIn(
+      item.body_md,
+      focusColumnNames,
+    )) {
       if (item.identifiers.includes(id)) continue;
-      const sentence = sentencesOf(item.body_md).find((x) =>
-        new RegExp(`\\b${escapeRe(name)}\\b`).test(x),
-      );
-      if (!sentence) continue;
       check({
         from: { type: "focus-item", slug: item.slug },
         document: "focus-1-5-for-ai",

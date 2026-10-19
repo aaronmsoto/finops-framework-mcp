@@ -512,6 +512,14 @@ describe("eval-driven refinements", () => {
     const text = res.content[0]?.text ?? "";
     expect(text).toContain("focus-item `fr-2018`");
     expect(text).toContain("not in it yet");
+    const metric = await call("get_crosslinks", {
+      entity_type: "metric",
+      slug: "cache-hit-rate",
+    });
+    const mt = metric.content[0]?.text ?? "";
+    expect(mt).toContain("metric `cache-hit-rate`");
+    expect(mt).toContain("TokenCacheAction");
+    expect(mt).toContain("not in any ratified release");
     expect(text).toContain("not in any ratified release");
   });
 

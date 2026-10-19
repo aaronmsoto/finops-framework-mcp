@@ -325,7 +325,7 @@ export function startMd(
 ): string {
   const lines = [
     "# Tokenomics Overview MCP",
-    "Grounded AI tokenomics guidance from the Tokenomics Foundation (tokeneconomics.com): the Five-Layer Stack, Big-T notation, prompt-caching mechanics and metrics, consumption levers, personas, value classification, and the FOCUS 1.5 AI tracker.",
+    "Grounded AI tokenomics guidance from the Tokenomics Foundation (tokeneconomics.com): the Seven-Layer Stack (L5 covers proxies, model routers and AI gateways), Big-T notation, prompt-caching mechanics and metrics, consumption levers, personas, value classification, and the FOCUS 1.5 AI-cost capabilities.",
     "Most sources are Working Drafts or Release Candidates. Every answer states the status; do not present them as ratified standards.",
     "## Documents",
     a.documents

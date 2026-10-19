@@ -231,6 +231,36 @@ describe("cross-links", () => {
     ).toBe(false);
   });
 
+  it("cites a short column name only where it is not inside a longer one", () => {
+    const { e, out } = bodies();
+    const body =
+      "Pricing Currency Effective Cost is shown here. Later the Effective Cost differs.";
+    const item = {
+      ...(e.focusTracker[0] as (typeof e.focusTracker)[number]),
+      slug: "synthetic-card",
+      identifiers: [],
+      body_md: body,
+    };
+    out.set(
+      "focus-1-5-for-ai",
+      `${out.get("focus-1-5-for-ai") as string}\n\n${body}`,
+    );
+    const links = buildCrossLinks(
+      { ...e, focusTracker: [...e.focusTracker, item] },
+      out,
+      focusIds,
+      new Map(),
+      focusNames,
+    ).filter((l) => l.from.slug === "synthetic-card");
+    expect(links.find((l) => l.target.id === "EffectiveCost")?.evidence).toBe(
+      "Later the Effective Cost differs.",
+    );
+    expect(
+      links.find((l) => l.target.id === "PricingCurrencyEffectiveCost")
+        ?.evidence,
+    ).toBe("Pricing Currency Effective Cost is shown here.");
+  });
+
   it("throws when a stated link's evidence is missing from its document", () => {
     const { e, out } = bodies();
     out.set("seven-layer-stack-paper", "no evidence here");

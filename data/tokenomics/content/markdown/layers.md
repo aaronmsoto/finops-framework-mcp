@@ -3,7 +3,7 @@ collection: layers
 count: 7
 ---
 
-# The Five-Layer Tokenomics Stack
+# The Seven-Layer Tokenomics Stack
 
 ## Energy {slug=l0}
 

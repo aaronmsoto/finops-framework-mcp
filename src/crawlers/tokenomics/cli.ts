@@ -191,8 +191,9 @@ export async function refresh(opts: CliOptions): Promise<number> {
         readFileSync(join(opts.htmlDir, `${e.slug}.html`), "utf8"),
       );
     }
-    // REST `modified` dates for pages whose HTML carries no JSON-LD date,
-    // captured alongside the HTML so offline runs stay byte-identical.
+    // REST `modified` dates for every registry page (used where the HTML
+    // carries no JSON-LD date), captured with the HTML so offline runs stay
+    // byte-identical. Recapture it with the fixtures after a live refresh.
     const rest = join(opts.htmlDir, "rest-modified.json");
     if (existsSync(rest)) {
       const dates = JSON.parse(readFileSync(rest, "utf8")) as Record<
