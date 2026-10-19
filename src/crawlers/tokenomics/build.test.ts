@@ -71,7 +71,12 @@ beforeAll(() => {
   md = composeFromHtml(loadFixtures(), new Map());
 });
 
-describe("fixture refresh (offline, drift guard)", () => {
+// Each test here runs the whole pipeline over ~1.5 MB of fixture HTML (some
+// twice); under CI coverage instrumentation that outgrows vitest's 5 s
+// unit-test default.
+const PIPELINE_TIMEOUT = { timeout: 30_000 };
+
+describe("fixture refresh (offline, drift guard)", PIPELINE_TIMEOUT, () => {
   it("reproduces the committed artifact's content, links and schemas exactly", async () => {
     const out = tempDir();
     expect(await refresh(opts(out))).toBe(0);
@@ -276,7 +281,7 @@ describe("cross-links", () => {
   });
 });
 
-describe("cli", () => {
+describe("cli", PIPELINE_TIMEOUT, () => {
   it("prints usage and exits 2 on unknown commands or missing --from", async () => {
     const logs: string[] = [];
     expect(await main(["nope"], (m) => logs.push(m))).toBe(2);
