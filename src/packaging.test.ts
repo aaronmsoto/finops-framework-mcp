@@ -43,12 +43,21 @@ interface PackResult {
   files: PackedFile[];
 }
 
+/** `npm pack --json` prints an array of results up to npm 11 and an object
+ * keyed by package name from npm 12 (publish.yml installs npm@latest). */
+function packResult(out: string): PackResult {
+  const parsed = JSON.parse(out) as PackResult[] | Record<string, PackResult>;
+  const result = Array.isArray(parsed) ? parsed[0] : Object.values(parsed)[0];
+  if (!result) throw new Error(`npm pack --json returned no result: ${out}`);
+  return result;
+}
+
 function packDryRun(cwd: string): PackResult {
   const out = execFileSync("npm", ["pack", "--dry-run", "--json"], {
     cwd,
     encoding: "utf8",
   });
-  return (JSON.parse(out) as PackResult[])[0];
+  return packResult(out);
 }
 
 describe("packaging: finops-focus-mcp shim (T-036)", () => {
@@ -104,7 +113,7 @@ describe("packaging: finops-focus-mcp shim (T-036)", () => {
         ["pack", "--pack-destination", packScratch, "--json"],
         { cwd: focusPkgDir, encoding: "utf8" },
       );
-      const [{ filename }] = JSON.parse(out) as { filename: string }[];
+      const { filename } = packResult(out);
       const tarball = path.join(packScratch, filename);
       expect(fs.statSync(tarball).size).toBeLessThan(1024 * 1024);
 
@@ -185,7 +194,7 @@ describe("packaging: tokenomics-overview-mcp shim", () => {
         ["pack", "--pack-destination", packScratch, "--json"],
         { cwd: tokenomicsPkgDir, encoding: "utf8" },
       );
-      const [{ filename }] = JSON.parse(out) as { filename: string }[];
+      const { filename } = packResult(out);
       const tarball = path.join(packScratch, filename);
       fs.writeFileSync(
         path.join(installScratch, "package.json"),
