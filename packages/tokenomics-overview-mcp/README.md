@@ -77,6 +77,20 @@ Claude Desktop (`claude_desktop_config.json`), with all three servers:
 Check the installed package and data version with
 `npx -y tokenomics-overview-mcp --version`.
 
+### Remote option
+
+The same 20 tools are also served over Streamable HTTP at `/mcp/tokenomics`
+by the monorepo's Cloudflare Worker (stateless; no experimental tools). Point
+a Streamable HTTP client at a deployed Worker instead of running `npx`:
+
+```bash
+claude mcp add --transport http tokenomics-overview "$WORKER_URL/mcp/tokenomics"
+```
+
+See
+[`docs/deploy-worker.md`](https://github.com/aaronmsoto/finops-framework-mcp/blob/main/docs/deploy-worker.md)
+to deploy one.
+
 ## How to use it
 
 Start with `get_tokenomics_info {}`: it lists every source document with its

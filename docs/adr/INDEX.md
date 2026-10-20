@@ -11,4 +11,6 @@ in [`.agentic/docs/adr/`](../../.agentic/docs/adr/) for reference.
 
 ## Index
 
-_No project ADRs yet. Add the first as `0001-<title>.md` and list it here._
+| ADR | Title | Status |
+| --- | --- | --- |
+| [0001](0001-focus-1-3-to-1-5-support.md) | Add FOCUS 1.3, 1.4 and 1.5 together, after 1.5 ratifies | Proposed (deferred to Dec 2026) |

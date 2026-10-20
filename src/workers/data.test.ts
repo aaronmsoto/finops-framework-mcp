@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { loadWorkerData } from "./data.js";
 import frameworkArtifact from "./generated/framework-artifact.js";
 import focusStoreData from "./generated/focus-store.js";
+import tokenomicsArtifactData from "./generated/tokenomics-artifact.js";
 
 describe("loadWorkerData", () => {
   it("returns the generated framework artifact unchanged", () => {
@@ -35,6 +36,22 @@ describe("loadWorkerData", () => {
     expect(focusStore.diff).toEqual(focusStoreData.diff);
     expect(focusStore.kpiMapping).toEqual(focusStoreData.kpiMapping);
     expect(focusStore.sampleManifest).toEqual(focusStoreData.sampleManifest);
+  });
+
+  it("rehydrates tokenomicsArtifact.documentBodies as a Map and passes the rest through", () => {
+    const { tokenomicsArtifact } = loadWorkerData();
+
+    expect(tokenomicsArtifact.documentBodies).toBeInstanceOf(Map);
+    expect(Object.fromEntries(tokenomicsArtifact.documentBodies)).toEqual(
+      tokenomicsArtifactData.documentBodies,
+    );
+    expect(tokenomicsArtifact.documentBodies.size).toBe(
+      tokenomicsArtifact.documents.length,
+    );
+    expect({ ...tokenomicsArtifact, documentBodies: null }).toEqual({
+      ...tokenomicsArtifactData,
+      documentBodies: null,
+    });
   });
 
   it("is pure — repeated calls return equal but independent Map instances", () => {

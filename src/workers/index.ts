@@ -1,5 +1,5 @@
-// Cloudflare Worker entry point (T-037, wrangler.toml `main`). Loads both
-// data artifacts once per isolate (module scope — reused across requests
+// Cloudflare Worker entry point (T-037, wrangler.toml `main`). Loads all
+// three data artifacts once per isolate (module scope — reused across requests
 // until the isolate recycles) and reads the Origin allowlist from a
 // wrangler.toml `[vars]` binding so the owner can change it per environment
 // without a code change. See docs/deploy-worker.md for the deploy
@@ -13,14 +13,12 @@ export interface Env {
    * only requests with no Origin header (non-browser MCP clients) succeed. */
   ALLOWED_ORIGINS?: string;
   /** Cloudflare Workers Rate Limiting binding (wrangler.toml's
-   * `[[ratelimits]]`), gating the /mcp/* routes. Optional/undefined disables
-   * rate limiting — see decisions.md 2026-09-25: not yet declared in the
-   * committed wrangler.toml, so the deployed Worker runs without it until
-   * that's deliberately turned on. */
+   * `[[ratelimits]]`, 60 requests/60s per IP), gating the /mcp/* routes.
+   * Undefined (e.g. a local run without the binding) disables rate limiting. */
   RATE_LIMITER?: RateLimiter;
 }
 
-const { frameworkArtifact, focusStore } = loadWorkerData();
+const { frameworkArtifact, focusStore, tokenomicsArtifact } = loadWorkerData();
 
 export function parseAllowedOrigins(raw: string | undefined): string[] {
   return (raw ?? "")
@@ -34,6 +32,7 @@ export default {
     const handler = createFetchHandler({
       frameworkArtifact,
       focusStore,
+      tokenomicsArtifact,
       allowedOrigins: parseAllowedOrigins(env.ALLOWED_ORIGINS),
       rateLimiter: env.RATE_LIMITER,
     });

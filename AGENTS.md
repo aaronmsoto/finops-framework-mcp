@@ -21,9 +21,10 @@ cross-version diffs), and the tokenomics server
 same TypeScript pipeline: crawler → markdown-canonical data artifact
 (`data/{framework,focus,tokenomics}/`, regenerable offline via
 `cli.js derive`) → stdio server. Unofficial extensions are gated
-behind `FINOPS_MCP_EXPERIMENTAL=1`. **Now built:** the framework server also
-ships a Cloudflare Worker Streamable HTTP entry point (`src/workers/`, see
-`docs/deploy-worker.md`) and a static browser `demo/` against it. Gates run
+behind `FINOPS_MCP_EXPERIMENTAL=1`. **Now built:** all three servers also
+ship over Streamable HTTP from one Cloudflare Worker (`src/workers/`, routes
+`/mcp/{framework,focus,tokenomics}`, see `docs/deploy-worker.md`), with a
+static browser `demo/` against it. Gates run
 via `./scripts/agentic gates`, tests via vitest.
 
 ## Session protocol (every session, both tools)

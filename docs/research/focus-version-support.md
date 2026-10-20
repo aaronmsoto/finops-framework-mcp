@@ -1,6 +1,10 @@
 # FOCUS version support — recommendation
 
-Status: **proposal for the owner** (2026-10-19). Nothing here is built. The
+Status: **proposal for the owner** (2026-10-19). Nothing here is built.
+**Update 2026-10-20:** the owner chose to build 1.3, 1.4 and 1.5 together
+once 1.5 is ratified, not 1.3/1.4 first. The plan is
+[ADR-0001](../adr/0001-focus-1-3-to-1-5-support.md); recommendation 2 below
+is superseded by it. The
 FOCUS server (`finops-focus-mcp`) carries spec 1.0 and 1.2
 (`src/crawlers/focus/urls.ts` `VERSIONS`); the tokenomics server links to
 FOCUS 1.2 columns and names 1.5 working-draft identifiers with no URI.
@@ -97,9 +101,10 @@ SaaS/data providers, and nobody emits 1.4 yet.
 
 ## Open items to verify before building
 
-- **Datasets:** whether the FOCUS_Spec repository layout for 1.3/1.4 puts
-  non-Cost-and-Usage datasets in a structure our column parser does not
-  read.
+- **Datasets:** answered 2026-10-20 — yes. 1.3+ moves columns to
+  `specification/datasets/<dataset>/columns/` and requirements under a
+  `## Requirements` heading the current parser does not read. Details in
+  [ADR-0001](../adr/0001-focus-1-3-to-1-5-support.md).
 - **OCI's actual version:** 1.0 or 1.2.
 - **1.3 export status:** GA vs preview for the four SaaS providers on 1.3.
 - **SKU Price dataset:** whether it passed the 8 Oct 2026 Member approval

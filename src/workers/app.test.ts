@@ -8,6 +8,7 @@
 import { join } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadArtifact, loadFocusStore } from "../shared/index.js";
+import { loadTokenomicsArtifact } from "../shared/tokenomics/artifact.js";
 import {
   createFetchHandler,
   type FetchHandler,
@@ -16,6 +17,7 @@ import {
 
 const FRAMEWORK_DIR = join(import.meta.dirname, "../../data/framework");
 const FOCUS_DIR = join(import.meta.dirname, "../../data/focus");
+const TOKENOMICS_DIR = join(import.meta.dirname, "../../data/tokenomics");
 const ALLOWED_ORIGIN = "https://demo.example.com";
 
 let handler: FetchHandler;
@@ -23,9 +25,11 @@ let handler: FetchHandler;
 beforeAll(() => {
   const frameworkArtifact = loadArtifact(FRAMEWORK_DIR);
   const focusStore = loadFocusStore(FOCUS_DIR);
+  const tokenomicsArtifact = loadTokenomicsArtifact(TOKENOMICS_DIR);
   handler = createFetchHandler({
     frameworkArtifact,
     focusStore,
+    tokenomicsArtifact,
     allowedOrigins: [ALLOWED_ORIGIN],
   });
 });
@@ -66,6 +70,7 @@ const INITIALIZE_BODY = {
 describe.each([
   { route: "mcp/framework", listTool: "get_framework_info" },
   { route: "mcp/focus", listTool: "list_versions" },
+  { route: "mcp/tokenomics", listTool: "get_tokenomics_info" },
 ])("$route", ({ route, listTool }) => {
   it("responds to initialize", async () => {
     const res = await handler(rpcRequest(route, INITIALIZE_BODY));
@@ -100,6 +105,77 @@ describe.each([
     const json = await readJsonResponse(res);
     const result = json.result as { isError?: boolean };
     expect(result.isError).toBeFalsy();
+  });
+});
+
+describe("mcp/tokenomics surface", () => {
+  it("serves the 20-tool default surface, never the experimental crosswalk", async () => {
+    const res = await handler(
+      rpcRequest("mcp/tokenomics", {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/list",
+      }),
+    );
+    const result = (await readJsonResponse(res)).result as {
+      tools: { name: string }[];
+    };
+    const names = result.tools.map((t) => t.name);
+    expect(names).toHaveLength(20);
+    expect(names).toContain("calculate_cache_metrics");
+    expect(names).not.toContain("get_crosswalk");
+  });
+
+  it("computes cache metrics over HTTP with the published formulas", async () => {
+    const res = await handler(
+      rpcRequest("mcp/tokenomics", {
+        jsonrpc: "2.0",
+        id: 2,
+        method: "tools/call",
+        params: {
+          name: "calculate_cache_metrics",
+          arguments: {
+            cache_read_tokens: 800000,
+            cache_write_tokens: 50000,
+            uncached_input_tokens: 150000,
+            base_input_price_per_mtok: 3,
+            cache_read_multiplier: 0.1,
+            cache_write_multiplier: 1.25,
+          },
+        },
+      }),
+    );
+    expect(res.status).toBe(200);
+    const result = (await readJsonResponse(res)).result as {
+      isError?: boolean;
+      structuredContent: Record<string, number>;
+    };
+    expect(result.isError).toBeFalsy();
+    expect(result.structuredContent.cache_hit_rate).toBe(0.8);
+    expect(result.structuredContent.cache_cost_efficiency).toBeCloseTo(
+      0.7075,
+      10,
+    );
+  });
+
+  it("serves full document bodies rehydrated from the artifact", async () => {
+    const res = await handler(
+      rpcRequest("mcp/tokenomics", {
+        jsonrpc: "2.0",
+        id: 3,
+        method: "tools/call",
+        params: {
+          name: "get_document",
+          arguments: { document: "seven-layer-stack", section: "stack" },
+        },
+      }),
+    );
+    const result = (await readJsonResponse(res)).result as {
+      isError?: boolean;
+      content: { type: string; text?: string }[];
+    };
+    expect(result.isError).toBeFalsy();
+    expect(result.content[0]?.text).toContain("AI access");
   });
 });
 
@@ -165,6 +241,20 @@ describe("CORS preflight", () => {
   it("also answers the /mcp/focus route's preflight", async () => {
     const res = await handler(
       new Request("https://worker.example/mcp/focus", {
+        method: "OPTIONS",
+        headers: {
+          Origin: ALLOWED_ORIGIN,
+          "Access-Control-Request-Method": "POST",
+        },
+      }),
+    );
+    expect(res.status).toBe(204);
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
+  });
+
+  it("also answers the /mcp/tokenomics route's preflight", async () => {
+    const res = await handler(
+      new Request("https://worker.example/mcp/tokenomics", {
         method: "OPTIONS",
         headers: {
           Origin: ALLOWED_ORIGIN,
@@ -248,10 +338,12 @@ describe("routing edge cases", () => {
 describe("rate limiting", () => {
   let frameworkArtifact: ReturnType<typeof loadArtifact>;
   let focusStore: ReturnType<typeof loadFocusStore>;
+  let tokenomicsArtifact: ReturnType<typeof loadTokenomicsArtifact>;
 
   beforeAll(() => {
     frameworkArtifact = loadArtifact(FRAMEWORK_DIR);
     focusStore = loadFocusStore(FOCUS_DIR);
+    tokenomicsArtifact = loadTokenomicsArtifact(TOKENOMICS_DIR);
   });
 
   function fixedLimiter(success: boolean): RateLimiter {
@@ -262,6 +354,7 @@ describe("rate limiting", () => {
     return createFetchHandler({
       frameworkArtifact,
       focusStore,
+      tokenomicsArtifact,
       allowedOrigins: [ALLOWED_ORIGIN],
       rateLimiter,
     });
@@ -288,6 +381,17 @@ describe("rate limiting", () => {
   it("applies to /mcp/focus too", async () => {
     const res = await handlerWith(fixedLimiter(false))(
       rpcRequest("mcp/focus", { jsonrpc: "2.0", id: 1, method: "tools/list" }),
+    );
+    expect(res.status).toBe(429);
+  });
+
+  it("applies to /mcp/tokenomics too", async () => {
+    const res = await handlerWith(fixedLimiter(false))(
+      rpcRequest("mcp/tokenomics", {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/list",
+      }),
     );
     expect(res.status).toBe(429);
   });
@@ -320,6 +424,7 @@ describe("rate limiting", () => {
     const handler = createFetchHandler({
       frameworkArtifact,
       focusStore,
+      tokenomicsArtifact,
       allowedOrigins: [],
       rateLimiter: {
         limit: async ({ key }) => {
