@@ -7,6 +7,10 @@
     "focus-spec": {
       "command": "npx",
       "args": ["-y", "finops-focus-mcp"]
+    },
+    "tokenomics-overview": {
+      "command": "npx",
+      "args": ["-y", "tokenomics-overview-mcp"]
     }
   }
 }

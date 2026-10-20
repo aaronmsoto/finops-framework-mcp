@@ -1,0 +1,420 @@
+<!doctype html>
+<!--
+  docs/guide/example-ai-caching.html — page 9 of 9 (spec: .agents/specs/usage-guide-v1.md;
+  added with tokenomics-overview-mcp v0.2.1).
+
+  The one worked example that uses all three servers. Shared chrome and the ESR
+  page's result-card styles are reused verbatim; .card-grid (from index.html) is
+  appended for the two-workload comparison. Every number, quote and transcript was
+  captured from live probes of the built servers (framework data v2.1.1, FOCUS 1.2,
+  tokenomics data v2.0.0) immediately before writing; the exact call is printed in
+  the .callnote under each block.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Prompt Caching — FinOps MCP Servers Usage Guide</title>
+<meta name="description" content="Worked example across all three servers: the FinOps Framework Cache Hit Rate KPI, the Tokenomics Foundation formula and calculator on two workloads, and where cached-token data lives in FOCUS 1.2 and 1.5.">
+<link rel="canonical" href="https://aaronmsoto.github.io/finops-framework-mcp/example-ai-caching.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="FinOps MCP Servers — Usage Guide">
+<meta property="og:title" content="Worked example · Is prompt caching paying off?">
+<meta property="og:description" content="Worked example across all three servers: the FinOps Framework Cache Hit Rate KPI, the Tokenomics Foundation formula and calculator on two workloads, and where cached-token data lives in FOCUS 1.2 and 1.5.">
+<meta property="og:url" content="https://aaronmsoto.github.io/finops-framework-mcp/example-ai-caching.html">
+<meta name="twitter:card" content="summary">
+<style>
+  :root {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+      --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+      --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131C17; --ink: #E8EFEA; --panel: #1C2A22; --panel-2: #18241D;
+    --moss: #34B98A; --moss-ink: #6FD9B2; --amber: #D08A2E; --amber-bg: #34281332;
+    --slate: #9BAFA3; --line: #2E4036; --chip-off: #22322A;
+  }
+  :root[data-theme="light"] {
+    --paper: #F6F8F5; --ink: #16211B; --panel: #E3EDE6; --panel-2: #EDF2EE;
+    --moss: #0B7A55; --moss-ink: #085C40; --amber: #A66A1E; --amber-bg: #F5EAD8;
+    --slate: #56655C; --line: #C9D6CD; --chip-off: #E9EFEA;
+  }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+    line-height: 1.55; margin: 0; overflow-x: hidden; }
+  main { max-width: 78ch; margin: 0 auto; padding: 0 1.25rem 4rem; }
+  h1, h2, h3 { font-family: var(--serif); text-wrap: balance; line-height: 1.15; }
+  h1 { font-size: 2rem; margin: 0.25rem 0 0.5rem; font-weight: 600; }
+  h2 { font-size: 1.35rem; margin: 2.4rem 0 0.6rem; font-weight: 600;
+    border-top: 1px solid var(--line); padding-top: 1.6rem; }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; font-weight: 600; }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--slate); }
+  .lede { color: var(--slate); margin: 0.4rem 0 0; }
+  .servers { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
+  .server-chip { font-family: var(--mono); font-size: 0.78rem; padding: 0.3rem 0.65rem;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); }
+  .server-chip b { color: var(--moss); font-weight: 600; }
+  .step { margin-top: 2.6rem; display: grid; grid-template-columns: 2.1rem 1fr; gap: 0.9rem; }
+  .step-n { font-family: var(--serif); font-size: 1.5rem; color: var(--moss);
+    border-top: 2px solid var(--moss); padding-top: 0.3rem; text-align: center;
+    font-variant-numeric: tabular-nums; }
+  .step-body { border-top: 1px solid var(--line); padding-top: 0.55rem; min-width: 0; }
+  .badge { display: inline-block; font-size: 0.64rem; font-weight: 700;
+    letter-spacing: 0.08em; padding: 0.14rem 0.45rem; border-radius: 3px;
+    vertical-align: 0.15em; white-space: nowrap; }
+  .badge.official { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .badge.derived { color: var(--amber); border: 1px solid var(--amber); background: var(--amber-bg); }
+  .quote { border-left: 3px solid var(--moss); background: var(--panel-2);
+    padding: 0.7rem 1rem; margin: 0.9rem 0; font-family: var(--serif); font-size: 1.02rem; }
+  .callnote { font-family: var(--mono); font-size: 0.72rem; color: var(--slate);
+    margin-top: 0.5rem; overflow-x: auto; white-space: nowrap; }
+  details.kpi { border: 1px solid var(--line); border-radius: 6px; margin: 0.55rem 0;
+    background: var(--panel-2); }
+  details.kpi summary { cursor: pointer; padding: 0.6rem 0.9rem; font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+  details.kpi summary::-webkit-details-marker { display: none; }
+  details.kpi[open] summary { border-bottom: 1px solid var(--line); }
+  .kpi-inner { padding: 0.7rem 0.9rem 0.9rem; font-size: 0.92rem; }
+  .formula { font-family: var(--mono); font-size: 0.8rem; background: var(--panel);
+    padding: 0.55rem 0.75rem; border-radius: 4px; margin: 0.5rem 0; overflow-x: auto;
+    white-space: pre-wrap; }
+  .cols { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem; }
+  .col-chip { font-family: var(--mono); font-size: 0.74rem; padding: 0.18rem 0.5rem;
+    border-radius: 4px; background: var(--chip-off); border: 1px solid var(--line); }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; margin: 0.7rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; min-width: 34rem; }
+  th { text-align: left; font-size: 0.68rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--slate); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    background: var(--panel-2); }
+  td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.mono, .mono { font-family: var(--mono); font-size: 0.8rem; }
+  .lvl { font-size: 0.7rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 3px; }
+  .lvl.mand { color: var(--moss-ink); border: 1px solid var(--moss); }
+  .lvl.cond { color: var(--slate); border: 1px dashed var(--slate); }
+  .absent { color: var(--slate); font-style: italic; }
+  .new-chip { font-size: 0.62rem; font-weight: 700; color: var(--paper);
+    background: var(--moss); border-radius: 3px; padding: 0.1rem 0.35rem; margin-left: 0.35rem; }
+  .zero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 0.6rem; margin: 0.8rem 0; }
+  .zero-card { border: 1px solid var(--line); border-radius: 6px; padding: 0.6rem 0.75rem;
+    background: var(--panel-2); }
+  .zero-card .v { font-family: var(--mono); font-size: 1.15rem; font-weight: 700; }
+  .zero-card .n { font-size: 0.72rem; color: var(--slate); margin-top: 0.15rem; }
+  .takeaway { border: 1px solid var(--moss); border-radius: 8px; padding: 0.9rem 1.1rem;
+    margin-top: 1rem; background: var(--panel-2); }
+  .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
+  a { color: var(--moss); }
+
+  /* --- shared chrome: guide header + nav + footer (identical on every guide page) --- */
+  header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
+  header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
+    font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+  header.guide .title-row { display: flex; flex-wrap: wrap; align-items: baseline;
+    justify-content: space-between; gap: 0.35rem 0.75rem; }
+  a.repo-link { font-size: 0.72rem; text-decoration: none; color: var(--moss);
+    border: 1px solid var(--line); border-radius: 999px; padding: 0.16rem 0.6rem;
+    background: var(--panel-2); white-space: nowrap; }
+  a.repo-link:hover { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); }
+  nav.guide { margin-top: 0.6rem; border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 0.5rem 0; }
+  nav.guide ol { list-style: none; display: flex; flex-wrap: wrap;
+    gap: 0.3rem 0.55rem; margin: 0; padding: 0; }
+  nav.guide a { font-size: 0.76rem; text-decoration: none; color: var(--slate);
+    border: 1px solid transparent; border-radius: 999px; padding: 0.18rem 0.55rem;
+    display: inline-block; }
+  nav.guide a:hover { color: var(--moss); border-color: var(--line); }
+  nav.guide a[aria-current="page"] { color: var(--paper); background: var(--moss);
+    border-color: var(--moss); font-weight: 600; }
+  nav.guide.sub { border-top: 0; padding-top: 0.4rem; }
+  nav.guide.sub ol { gap: 0.25rem 0.4rem; }
+  nav.guide.sub a { font-size: 0.7rem; padding: 0.14rem 0.5rem; }
+  nav.guide.sub a[aria-current="page"] { background: var(--panel); color: var(--moss-ink);
+    border-color: var(--moss); font-weight: 600; }
+  main.guide-main { padding-top: 0.9rem; }
+  footer.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 3rem;
+    border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--slate); }
+  footer.guide p { margin: 0.35rem 0; }
+  footer.guide .unofficial-legend { font-weight: 600; }
+
+  /* --- wide-viewport container (2026-08-06, nav shortened 2026-08-13) ---
+     The nav used to carry six long labels and needed 892px to sit on one row;
+     it now carries five short top-level labels (Intro / Framework MCP / FOCUS
+     MCP / Tokenomics MCP / Examples) plus, on the five Examples pages only, a
+     second row of five short sub-page labels — both rows fit one line at phone widths
+     without --wrap. --wrap still exists for the Data Model's five-card row
+     and other content that needed the extra desktop room; it is no longer
+     load-bearing for the nav itself. */
+  :root { --wrap: 78ch; }
+  @media (min-width: 64rem) { :root { --wrap: 62rem; } }
+  header.guide, footer.guide, main { max-width: var(--wrap); }
+  main p:not(.callnote), main ul, main ol { max-width: 78ch; }
+  nav.guide a { white-space: nowrap; }
+
+  /* --- page 5 additions: worked-example specific (from the ESR walkthrough) --- */
+  .toggle-wrap { display: flex; align-items: center; gap: 0.6rem; margin: 1rem 0 0.8rem; }
+  .vt { display: inline-flex; border: 1px solid var(--moss); border-radius: 6px; overflow: hidden; }
+  .vt button { font-family: var(--mono); font-size: 0.85rem; padding: 0.4rem 0.9rem;
+    border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+  .vt button[aria-pressed="true"] { background: var(--moss); color: var(--paper); font-weight: 700; }
+  .vt button:focus-visible { outline: 2px solid var(--amber); outline-offset: -2px; }
+  .esr-card { background: var(--panel); border-radius: 8px; padding: 1.1rem 1.2rem;
+    margin: 1rem 0; }
+  .esr-value { font-family: var(--serif); font-size: 3rem; color: var(--moss);
+    font-variant-numeric: tabular-nums; line-height: 1; }
+  .esr-math { font-family: var(--mono); font-size: 0.82rem; margin-top: 0.7rem;
+    display: grid; gap: 0.25rem; overflow-x: auto; }
+  .esr-math span b { color: var(--moss); font-weight: 600; }
+  @media (prefers-reduced-motion: no-preference) {
+    .esr-value { transition: opacity 0.3s ease; }
+  }
+  /* --- page 9 additions --- */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 0.9rem; margin: 1rem 0 0; }
+  .card-grid .esr-card { margin: 0; }
+  .esr-value { font-size: 2.6rem; }
+  /* transcript blocks (from index.html) */
+  pre.tx { font-family: var(--mono); font-size: 0.74rem; line-height: 1.45;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px;
+    padding: 0.7rem 0.85rem; margin: 0.6rem 0 0; overflow-x: auto; }
+  pre.tx .c { color: var(--slate); }
+</style>
+</head>
+<body>
+
+<header class="guide">
+  <div class="title-row">
+    <p class="guide-title">FinOps MCP Servers — Usage Guide</p>
+    <a class="repo-link" href="https://github.com/aaronmsoto/finops-framework-mcp"
+      >Source on GitHub ↗</a>
+  </div>
+  <nav class="guide" aria-label="Guide pages">
+    <ol>
+      <li><a href="index.html">Intro</a></li>
+      <li><a href="framework-server.html">Framework MCP</a></li>
+      <li><a href="focus-server.html">FOCUS MCP</a></li>
+      <li><a href="tokenomics-server.html">Tokenomics MCP</a></li>
+      <li><a href="example-showback.html" aria-current="page">Examples</a></li>
+    </ol>
+  </nav>
+  <nav class="guide sub" aria-label="Example pages">
+    <ol>
+      <li><a href="example-showback.html">Showback</a></li>
+      <li><a href="example-esr.html">ESR</a></li>
+      <li><a href="example-forecasting.html">Forecasting</a></li>
+      <li><a href="example-quick-qa.html">Quick Q&amp;A</a></li>
+      <li><a href="example-ai-caching.html" aria-current="page">AI Caching</a></li>
+    </ol>
+  </nav>
+</header>
+
+<main class="guide-main">
+  <p class="eyebrow">Page 9 of 9 · Worked example · three MCP servers, one AI cost question</p>
+  <h1>Is Prompt Caching Paying Off?</h1>
+  <p class="lede">Prompt caching is one of the biggest levers on an AI bill, and one of the
+  easiest to get wrong. This page walks the chain an agent follows with all three servers:
+  the FinOps Framework names the KPI → the Tokenomics Foundation supplies its formula and
+  the calculation → FOCUS™ shows where the token data lives in billing exports today and in
+  1.5.</p>
+  <div class="servers">
+    <span class="server-chip"><b>finops-framework-mcp</b> · the KPI</span>
+    <span class="server-chip"><b>tokenomics-overview-mcp</b> · the formula and the math</span>
+    <span class="server-chip"><b>finops-focus-mcp</b> · the billing columns</span>
+  </div>
+
+  <!-- STEP 1 -->
+  <section class="step">
+    <div class="step-n">1</div>
+    <div class="step-body">
+      <h2>The FinOps Framework names the KPI <span class="badge official">official</span></h2>
+      <p>Searching the framework for “cache hit rate” finds one KPI in its library:</p>
+      <div class="quote">“Measures the percentage of tokens used from cache. Cached tokens are
+      significantly cheaper. A low cache hit rate signals an optimization opportunity for
+      FinOps Practitioner and Engineering Personas.”</div>
+      <p style="font-size:0.9rem;">The record has no formula, no data sources and is not
+      featured on any capability page yet. It says <em>what</em> to watch, not how to compute
+      it. That is the gap the next server fills.</p>
+      <p class="callnote">framework · search_framework {query: "cache hit rate"} · get_kpis {slug: "cache-hit-rate"}</p>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step">
+    <div class="step-n">2</div>
+    <div class="step-body">
+      <h2>Tokenomics supplies the published formula <span class="badge official">quoted</span></h2>
+      <div class="formula">Cache hit rate = cache read / (cache read + cache write + uncached input)</div>
+      <div class="quote">“One number, built from the three buckets above, bounded between 0 and
+      100%. Bounded is what makes it <em>composable</em>: you can average it, roll it up across
+      teams and workloads, and put it on the same slide as any other percentage.”</div>
+      <p style="font-size:0.9rem;">What good looks like, per the cache explainer: “climb toward
+      your workload's ceiling … A live chat can never reach 100% because the conversation
+      grows, so track the trend against the structural ceiling, not toward perfection.”</p>
+      <p style="font-size:0.9rem;">A hit rate alone can't tell you whether caching saves money,
+      because cache <em>writes</em> usually cost more than plain input. The explainer pairs it
+      with a second metric:</p>
+      <div class="formula">Cache cost efficiency = 1 − actual prompt cost / uncached equivalent cost<br>
+uncached equivalent cost = (cache read + cache write + uncached input) × base input price</div>
+      <p style="font-size:0.88rem;">Source status: Release Candidate 1 (2026-09-22) · “AI
+      Tokenomics Prompt Cache Explainer”.</p>
+      <p class="callnote">tokenomics · get_metric {metric: "cache-hit-rate"} · list_metrics {}</p>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step">
+    <div class="step-n">3</div>
+    <div class="step-body">
+      <h2>Run the numbers on two workloads</h2>
+      <p>Both runs use 1 million input tokens at a $3 per million base input price, a 0.1×
+      cache-read rate and a 1.25× cache-write rate. Those rates match the provider snapshot
+      the server also serves (Anthropic: write 1.25× base with a 5-minute TTL, read 0.1× base).
+      Only the mix of tokens differs.</p>
+      <div class="card-grid">
+        <div class="esr-card">
+          <p class="eyebrow" style="margin:0 0 0.4rem;">Workload A · stable prefix</p>
+          <div class="esr-value">70.8%</div>
+          <p style="font-size:0.85rem; margin:0.3rem 0 0;">cache cost efficiency · hit rate <b>80.0%</b></p>
+          <div class="esr-math">
+            <span>read 800,000 · write 50,000 · uncached 150,000</span>
+            <span>uncached equivalent cost = <b>$3.00</b></span>
+            <span>actual prompt cost = <b>$0.8775</b></span>
+          </div>
+        </div>
+        <div class="esr-card">
+          <p class="eyebrow" style="margin:0 0 0.4rem;">Workload B · prefix keeps changing</p>
+          <div class="esr-value" style="color:var(--amber);">−1.0%</div>
+          <p style="font-size:0.85rem; margin:0.3rem 0 0;">cache cost efficiency · hit rate <b>10.0%</b></p>
+          <div class="esr-math">
+            <span>read 100,000 · write 400,000 · uncached 500,000</span>
+            <span>uncached equivalent cost = <b>$3.00</b></span>
+            <span>actual prompt cost = <b>$3.03</b></span>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:0.9rem;">The server interprets each result. For workload B:</p>
+      <div class="quote">“Cache hit rate 10.0%; cache cost efficiency -1.0% — negative: caching
+      is costing more than it saves (writes not read back enough). Cache writes (400000) exceed
+      cache reads (100000): per the cache explainer, a write “pays back only if that entry is
+      read again, ideally many times.”</div>
+      <p style="font-size:0.88rem;">The tool computes only what you pass in: output tokens,
+      batch or committed-use discounts and contracted rates sit outside this input-side
+      ratio, and it says so in every response.</p>
+      <p class="callnote">tokenomics · calculate_cache_metrics {cache_read_tokens: 800000, cache_write_tokens: 50000, uncached_input_tokens: 150000, base_input_price_per_mtok: 3, cache_read_multiplier: 0.1, cache_write_multiplier: 1.25}</p>
+      <p class="callnote">tokenomics · calculate_cache_metrics {cache_read_tokens: 100000, cache_write_tokens: 400000, uncached_input_tokens: 500000, base_input_price_per_mtok: 3, cache_read_multiplier: 0.1, cache_write_multiplier: 1.25} · get_provider_cache_snapshot {}</p>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step">
+    <div class="step-n">4</div>
+    <div class="step-body">
+      <h2>Find the lever, and what breaks it</h2>
+      <p>Caching is the primary lever at L3, the inference stack:</p>
+      <div class="quote">“Prefix, KV, and semantic cache — Primary lever for L3 Inference stack
+      (key metric: Cache hit rate, time to first token, throughput). Yes, toward T(1) and
+      T(log n).”</div>
+      <p style="font-size:0.9rem;">For workload B, the <span class="mono">assess_prompt_caching</span>
+      prompt gives the agent its checklist: put stable content first, growing content next and
+      per-request content last; then flag what silently breaks the prefix:
+      “timestamps, re-serialized JSON, tool list churn, model switches, router spreading
+      load.” The last two connect caching to the
+      <a href="tokenomics-server.html#demo">model-routing demo</a>: a router that switches a
+      long session to another model re-reads the whole prompt uncached.</p>
+      <p class="callnote">tokenomics · get_lever {lever: "l3-prefix-kv-and-semantic-cache"} · prompts/get assess_prompt_caching {workload: "support chatbot with a 6k-token system prompt"}</p>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="step">
+    <div class="step-n">5</div>
+    <div class="step-body">
+      <h2>Where the token data lives in FOCUS</h2>
+      <p>To track this KPI from billing data rather than provider dashboards, you need cache
+      reads, writes and uncached input labelled per price. In the ratified FOCUS 1.2 that
+      information can only travel in a general-purpose column:</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Column (FOCUS 1.2)</th><th>Type</th><th>Feature level</th><th>Data type</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">SkuPriceDetails</td><td>Dimension</td><td><span class="lvl cond">Conditional</span></td><td>JSON (key-value), introduced in 1.1</td></tr>
+        </tbody>
+      </table></div>
+      <p style="font-size:0.9rem;">FOCUS 1.5 adds standard properties for exactly this, in the
+      working draft and due for ratification on 3 Dec 2026:</p>
+      <div class="quote">“<span class="mono">TokenCacheAction</span> takes "Uncached", "Read",
+      "Write", or "Other" on prices that meter only tokens consumed from a request.
+      <span class="mono">TokenDirection</span> takes "Input" or "Output" on prices that meter
+      tokens in one direction.” “They are the first FOCUS-defined SKU Price Details properties
+      with a fixed set of allowed values.”</div>
+      <p style="font-size:0.9rem;">The tokenomics server states that link with its evidence
+      and returns <span class="mono">focus://spec/1.2/columns/skupricedetails</span> for the
+      FOCUS server to read. The draft property names have no URI, because no ratified FOCUS
+      release contains them yet.</p>
+      <p class="callnote">focus · get_column {column: "SkuPriceDetails"} · tokenomics · get_focus_ai_tracker {identifier: "TokenCacheAction"} · get_crosslinks {entity_type: "focus-item", slug: "fr-2099"}</p>
+    </div>
+  </section>
+
+  <!-- STEP 6 -->
+  <section class="step">
+    <div class="step-n">6</div>
+    <div class="step-body">
+      <h2>Close the loop <span class="badge derived">UNOFFICIAL</span></h2>
+      <p>No Foundation page links the framework's KPI to the tokenomics metric, so the default
+      surface doesn't either. With <span class="mono">FINOPS_MCP_EXPERIMENTAL=1</span>, the
+      server's curated crosswalk does, and labels itself:</p>
+      <pre class="tx">_UNOFFICIAL: curated crosswalk entries are this server's own mappings; no Tokenomics
+Foundation page states them._
+
+- metric **cache-hit-rate** → framework kpi **cache-hit-rate**
+  (`finops://framework/kpis/cache-hit-rate`): Same name. The framework KPI describes
+  the percentage of tokens used from cache without a formula; the Tokenomics Foundation
+  formula supplies the denominator (cache read + cache write + uncached input).
+- metric **cache-hit-rate** → framework capability **usage-optimization**
+  (`finops://framework/capabilities/usage-optimization`): Raising cache hit rate removes
+  recomputed input tokens, which is consumption reduction rather than a rate change.</pre>
+      <p class="callnote">tokenomics (FINOPS_MCP_EXPERIMENTAL=1) · get_crosswalk {entity_type: "metric", slug: "cache-hit-rate"}</p>
+    </div>
+  </section>
+
+  <div class="takeaway">
+    <h3>What the agent can now tell you</h3>
+    <p style="margin:0; font-size:0.92rem;">The KPI to report (FinOps Framework), how to
+    compute it and whether caching actually saves money (Tokenomics: 70.8% saved on workload
+    A, a 1.0% loss on workload B), the lever and the layout rules to fix B, and where the
+    three token buckets will appear in your FOCUS data: in
+    <span class="mono">SkuPriceDetails</span> today, as standard properties once FOCUS 1.5 is
+    ratified. Each part comes from a different server, and each is cited.</p>
+  </div>
+</main>
+
+<footer class="guide">
+  <p>FinOps Framework content © FinOps Foundation, licensed
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
+  specification content and sample data © FinOps Foundation / FOCUS project
+  contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
+  Foundation. AI tokenomics content © Tokenomics Foundation (a Series of LF
+  Projects, LLC), licensed CC BY 4.0. Content on this page has been
+  restructured and adapted from those sources; this guide and these servers
+  are community projects — <strong>not published or endorsed by the FinOps
+  Foundation, the FOCUS project, or the Tokenomics Foundation</strong>.</p>
+  <p class="unofficial-legend"><strong>UNOFFICIAL legend:</strong> anything marked
+  <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
+  values, cross-version diffs, and the tokenomics crosswalk — is derived by these
+  servers (<span class="mono">official: false</span>), not published upstream; verify
+  before production use.</p>
+</footer>
+
+</body>
+</html>

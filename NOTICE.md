@@ -81,9 +81,37 @@ fixture for the FOCUS conformance validator and as `calculate_kpi`'s
 ground-truth sample; the FOCUS project does not endorse this repository or
 its use of the data.
 
+## AI tokenomics content — Tokenomics Foundation (CC BY 4.0)
+
+This repository also contains and redistributes text from the **Tokenomics
+Foundation** website, <https://www.tokeneconomics.com>, in
+`data/tokenomics/` (served by the `tokenomics-overview-mcp` package). Every
+document and record there carries its `source_url`, the section it came
+from, and the document's publication status; the retrieval time for the
+whole artifact is `crawled_at` in `data/tokenomics/manifest.json`.
+
+That content is licensed under the **Creative Commons Attribution 4.0
+International license (CC BY 4.0)**:
+<https://creativecommons.org/licenses/by/4.0/>. © Tokenomics Foundation
+Project, a Series of LF Projects, LLC. The State of Tokenomics report is
+**not** included (it is published as all rights reserved).
+
+### Modifications
+
+In accordance with CC BY 4.0 §3(a)(1)(B): pages are converted from HTML to
+markdown and split into sections; tables, formulas, and cards are parsed into
+structured JSON. `data/tokenomics/derived/` holds this project's own derived
+works: cross-links to the FinOps Framework and FOCUS servers (each backed by
+a verbatim quote from the source page) and a curated crosswalk marked
+`official: false`. Full detail is in
+[`packages/tokenomics-overview-mcp/NOTICE.md`](packages/tokenomics-overview-mcp/NOTICE.md).
+**The Tokenomics Foundation does not endorse this repository or its use of
+the material.**
+
 ## This repository's code
 
 The source code of finops-framework-mcp is licensed under the MIT license —
 see `LICENSE`. FinOps™, FinOps Foundation™, and FOCUS™ are trademarks of
 the FinOps Foundation; this repository is an independent, unofficial
-project and is not affiliated with or endorsed by the FinOps Foundation.
+project and is not affiliated with or endorsed by the FinOps Foundation,
+the FOCUS project, or the Tokenomics Foundation.

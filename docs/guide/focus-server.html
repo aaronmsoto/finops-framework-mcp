@@ -1,9 +1,9 @@
 <!doctype html>
 <!--
-  docs/guide/focus-server.html — page 3 of 7 (spec: .agents/specs/usage-guide-v1.md).
+  docs/guide/focus-server.html — page 3 of 9 (spec: .agents/specs/usage-guide-v1.md).
 
   Shared chrome (base CSS block, header.guide/nav.guide, footer.guide) is identical
-  on all seven guide pages; page-3 additions are appended at the end of the style
+  on every guide page; page-3 additions are appended at the end of the style
   block only. No external assets: everything renders offline over file://.
 -->
 <html lang="en">
@@ -113,7 +113,7 @@
   .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
   a { color: var(--moss); }
 
-  /* --- shared chrome: guide header + nav + footer (identical on all seven pages) --- */
+  /* --- shared chrome: guide header + nav + footer (identical on every guide page) --- */
   header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
   header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
     font-weight: 600; margin: 0; letter-spacing: 0.01em; }
@@ -147,9 +147,9 @@
 
   /* --- wide-viewport container (2026-08-06, nav shortened 2026-08-13) ---
      The nav used to carry six long labels and needed 892px to sit on one row;
-     it now carries four short top-level labels (Intro / Framework MCP / FOCUS
-     MCP / Examples) plus, on the four Examples pages only, a second row of
-     four short sub-page labels — both rows fit one line at phone widths
+     it now carries five short top-level labels (Intro / Framework MCP / FOCUS
+     MCP / Tokenomics MCP / Examples) plus, on the five Examples pages only, a
+     second row of five short sub-page labels — both rows fit one line at phone widths
      without --wrap. --wrap still exists for the Data Model's five-card row
      and other content that needed the extra desktop room; it is no longer
      load-bearing for the nav itself. */
@@ -195,13 +195,14 @@
       <li><a href="index.html">Intro</a></li>
       <li><a href="framework-server.html">Framework MCP</a></li>
       <li><a href="focus-server.html" aria-current="page">FOCUS MCP</a></li>
+      <li><a href="tokenomics-server.html">Tokenomics MCP</a></li>
       <li><a href="example-showback.html">Examples</a></li>
     </ol>
   </nav>
 </header>
 
 <main class="guide-main">
-  <p class="eyebrow">Page 3 of 7 · Server reference</p>
+  <p class="eyebrow">Page 3 of 9 · Server reference</p>
   <h1>finops-focus-mcp</h1>
   <p class="lede">An agentic interface to the <strong>FOCUS™ specification</strong> (the
   FinOps Open Cost &amp; Usage Specification): every column and cross-cutting attribute,
@@ -452,7 +453,10 @@
   <p style="margin-top:2rem;">Next: see this server paired with
   <a href="framework-server.html">finops-framework-mcp</a> in the
   <a href="example-esr.html">Rate Optimization (ESR)</a> worked example, or jump to
-  <a href="example-showback.html">Showback</a> for a columns-driven reporting walkthrough.</p>
+  <a href="example-showback.html">Showback</a> for a columns-driven reporting walkthrough.
+  For AI token billing, the <a href="tokenomics-server.html">tokenomics-overview-mcp</a>
+  reference covers what FOCUS 1.5 adds, and the
+  <a href="example-ai-caching.html">AI caching</a> example uses all three servers.</p>
 </main>
 
 <footer class="guide">
@@ -460,15 +464,16 @@
   <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
   specification content and sample data © FinOps Foundation / FOCUS project
   contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
-  Foundation. Content on this page has been restructured and adapted from
-  those sources; this guide and these servers are community projects —
-  <strong>not published or endorsed by the FinOps Foundation or the FOCUS
-  project</strong>.</p>
+  Foundation. AI tokenomics content © Tokenomics Foundation (a Series of LF
+  Projects, LLC), licensed CC BY 4.0. Content on this page has been
+  restructured and adapted from those sources; this guide and these servers
+  are community projects — <strong>not published or endorsed by the FinOps
+  Foundation, the FOCUS project, or the Tokenomics Foundation</strong>.</p>
   <p class="unofficial-legend"><strong>UNOFFICIAL legend:</strong> anything marked
   <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
-  values, and cross-version diffs — is derived by these servers
-  (<span class="mono">official: false</span>), not published upstream; verify before
-  production use.</p>
+  values, cross-version diffs, and the tokenomics crosswalk — is derived by these
+  servers (<span class="mono">official: false</span>), not published upstream; verify
+  before production use.</p>
 </footer>
 
 </body>

@@ -11,8 +11,13 @@ Setup and smoke test: [`deploy-pages.md`](deploy-pages.md).
 
 What lives here:
 
-- [`guide/`](guide/index.html) — the seven-page usage guide; the published
-  site's front door.
+- [`guide/`](guide/index.html) — the nine-page usage guide covering all three
+  MCP servers (framework, FOCUS, tokenomics); the published site's front door.
+- [`research/`](research/) — dated research notes: the parked routing-guide
+  draft review and the FOCUS version-support recommendation.
+- [`release-runbook.md`](release-runbook.md), [`deploy-worker.md`](deploy-worker.md),
+  [`deploy-pages.md`](deploy-pages.md), [`mcp-surface.md`](mcp-surface.md) —
+  releasing, deploying, and the generated tool/resource/prompt surface.
 
 - [`designs/`](designs/) — rich, self-contained HTML design docs for your
   features, created via the `design-feature` skill
