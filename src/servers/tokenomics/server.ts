@@ -9,7 +9,7 @@ import { registerTools } from "./tools.js";
 // join a fs-free Worker import graph later, like the other two servers.
 export const SERVER_NAME = "tokenomics-overview-mcp";
 export const SERVER_TITLE = "Tokenomics Overview MCP";
-export const SERVER_VERSION = "0.2.0";
+export const SERVER_VERSION = "0.2.1";
 
 export interface CreateServerOptions {
   /** FINOPS_MCP_EXPERIMENTAL=1 / --experimental: curated crosswalk. */
