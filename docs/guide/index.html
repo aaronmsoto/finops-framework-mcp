@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  docs/guide/index.html — page 1 of 7 (spec: .agents/specs/usage-guide-v1.md).
+  docs/guide/index.html — page 1 of 9 (spec: .agents/specs/usage-guide-v1.md).
 
   SHARED CHROME TEMPLATE. Every page in docs/guide/ reuses, verbatim:
     1. this <style> block (CSS variables + light/dark + .step/.kpi/.zero-grid/
@@ -29,12 +29,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FinOps MCP Servers — Usage Guide</title>
-<meta name="description" content="Install and run two read-only MCP servers for the FinOps Framework and the FOCUS specification, with live-probed transcripts of the first call against each.">
+<meta name="description" content="Install and run three read-only MCP servers for the FinOps Framework, the FOCUS specification and Tokenomics Foundation AI tokenomics guidance, with live-probed transcripts of the first call against each.">
 <link rel="canonical" href="https://aaronmsoto.github.io/finops-framework-mcp/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FinOps MCP Servers — Usage Guide">
-<meta property="og:title" content="Two MCP servers for FinOps">
-<meta property="og:description" content="Install and run two read-only MCP servers for the FinOps Framework and the FOCUS specification, with live-probed transcripts of the first call against each.">
+<meta property="og:title" content="Three MCP servers for FinOps and AI tokenomics">
+<meta property="og:description" content="Install and run three read-only MCP servers for the FinOps Framework, the FOCUS specification and Tokenomics Foundation AI tokenomics guidance, with live-probed transcripts of the first call against each.">
 <meta property="og:url" content="https://aaronmsoto.github.io/finops-framework-mcp/">
 <meta name="twitter:card" content="summary">
 <style>
@@ -128,7 +128,7 @@
   .takeaway h3 { font-family: var(--serif); margin: 0 0 0.4rem; font-size: 1.05rem; }
   a { color: var(--moss); }
 
-  /* --- shared chrome: guide header + nav + footer (identical on all seven pages) --- */
+  /* --- shared chrome: guide header + nav + footer (identical on every guide page) --- */
   header.guide { max-width: 78ch; margin: 0 auto; padding: 1.5rem 1.25rem 0; }
   header.guide .guide-title { font-family: var(--serif); font-size: 0.95rem;
     font-weight: 600; margin: 0; letter-spacing: 0.01em; }
@@ -162,9 +162,9 @@
 
   /* --- wide-viewport container (2026-08-06, nav shortened 2026-08-13) ---
      The nav used to carry six long labels and needed 892px to sit on one row;
-     it now carries four short top-level labels (Intro / Framework MCP / FOCUS
-     MCP / Examples) plus, on the four Examples pages only, a second row of
-     four short sub-page labels — both rows fit one line at phone widths
+     it now carries five short top-level labels (Intro / Framework MCP / FOCUS
+     MCP / Tokenomics MCP / Examples) plus, on the five Examples pages only, a
+     second row of five short sub-page labels — both rows fit one line at phone widths
      without --wrap. --wrap still exists for the Data Model's five-card row
      and other content that needed the extra desktop room; it is no longer
      load-bearing for the nav itself. */
@@ -220,30 +220,32 @@
       <li><a href="index.html" aria-current="page">Intro</a></li>
       <li><a href="framework-server.html">Framework MCP</a></li>
       <li><a href="focus-server.html">FOCUS MCP</a></li>
+      <li><a href="tokenomics-server.html">Tokenomics MCP</a></li>
       <li><a href="example-showback.html">Examples</a></li>
     </ol>
   </nav>
 </header>
 
 <main class="guide-main">
-  <p class="eyebrow">Page 1 of 7 · Intro &amp; Getting Started</p>
-  <h1>Two MCP servers for FinOps</h1>
+  <p class="eyebrow">Page 1 of 9 · Intro &amp; Getting Started</p>
+  <h1>Three MCP servers for FinOps and AI tokenomics</h1>
   <p class="lede">This repository ships an independent, unofficial agentic
-  interface to the FinOps Foundation's published guidance: one MCP server for
-  the <strong>FinOps Framework</strong>, one for the
-  <strong>FOCUS™ specification</strong>. Both are
-  read-only, offline, version-pinned, and label every derived answer as
-  unofficial. This page gets them running in your client and shows the first
-  call against each.</p>
+  interface to published FinOps and AI-cost guidance: one MCP server for the
+  <strong>FinOps Framework</strong>, one for the <strong>FOCUS™
+  specification</strong>, and one for the <strong>Tokenomics Foundation</strong>'s
+  AI tokenomics guidance. All three are read-only, offline, cite their sources,
+  and label every derived answer as unofficial. This page gets them running in
+  your client and shows the first call against each.</p>
   <div class="servers">
     <span class="server-chip"><b>finops-framework-mcp</b> · 11 tools · data v2.1.1</span>
     <span class="server-chip"><b>finops-focus-mcp</b> · 9 tools · FOCUS 1.0 + 1.2</span>
+    <span class="server-chip"><b>tokenomics-overview-mcp</b> · 20 tools · data v2.0.0</span>
   </div>
 
   <div class="next-card repo-card">
     <a href="https://github.com/aaronmsoto/finops-framework-mcp"
       >github.com/aaronmsoto/finops-framework-mcp ↗</a>
-    <p>Everything on this site is open source: both servers, the crawlers that
+    <p>Everything on this site is open source: all three servers, the crawlers that
     build their data, the committed data artifacts, and the pages of this guide.
     MIT-licensed code, CC BY 4.0 content. Issues and pull requests welcome.</p>
   </div>
@@ -253,11 +255,11 @@
     <div class="step-n">1</div>
     <div class="step-body">
       <h2>What this repo is</h2>
-      <p>An LLM asked “how mature is our Allocation practice?” or “which FOCUS
-      columns do I need for effective savings rate?” will happily improvise.
-      These two servers exist so it doesn't have to: they serve the
-      Foundation's own text, structured, with the source URL and licence
-      attached to every response.</p>
+      <p>An LLM asked “how mature is our Allocation practice?”, “which FOCUS
+      columns do I need for effective savings rate?” or “is our prompt caching
+      paying off?” will happily improvise. These three servers exist so it
+      doesn't have to: they serve the publishers' own text and formulas,
+      structured, with the source URL and licence attached to every response.</p>
       <p>Each server is the same three decoupled parts — and the last two
       run with no network access at all:</p>
       <div class="formula">crawler ──▶ markdown-canonical data artifact ──▶ stdio MCP server</div>
@@ -276,8 +278,11 @@
         startup and refuse to run on a bad one.</li>
         <li><strong>Version-pinned.</strong> FOCUS answers are always scoped to a
         spec version rather than blended across releases.</li>
+        <li><strong>Status on every answer.</strong> Most Tokenomics Foundation
+        guidance is a working draft or release candidate; the tokenomics server
+        states each source's status rather than presenting it as a standard.</li>
       </ul>
-      <p class="callnote">framework · get_framework_info {} · focus · list_versions {} · both list-tools</p>
+      <p class="callnote">framework · get_framework_info {} · focus · list_versions {} · tokenomics · get_tokenomics_info {} · all three list-tools</p>
     </div>
   </section>
 
@@ -285,8 +290,8 @@
   <section class="step">
     <div class="step-n">2</div>
     <div class="step-body">
-      <h2>The two servers, side by side <span class="badge official">counts from live probes</span></h2>
-      <p>Every number in these two cards was read out of a live server
+      <h2>The three servers, side by side <span class="badge official">counts from live probes</span></h2>
+      <p>Every number in these three cards was read out of a live server
       response, not a hand-maintained list.</p>
 
       <div class="card-grid">
@@ -329,6 +334,28 @@
             <dt>125</dt><dd>resources listed + 4 URI templates (<span class="mono">focus://</span>)</dd>
           </dl>
         </div>
+
+        <div class="card">
+          <h3>tokenomics-overview-mcp</h3>
+          <p class="sub">Tokenomics Foundation · tokeneconomics.com · data v2.0.0, crawled 2026-10-19</p>
+          <p>The AI cost model: what sets the price of a token, how consumption
+          scales with usage and autonomy, and which levers (caching, right-sizing,
+          model routing, budgets) bring it down.</p>
+          <dl>
+            <dt>14</dt><dd>source documents, each with its publication status</dd>
+            <dt>7</dt><dd>Seven-Layer Stack layers (L0 Energy … L6 Demand)</dd>
+            <dt>6</dt><dd>Big-T complexity classes, T(1) … T(∞)</dd>
+            <dt>32</dt><dd>consumption levers</dd>
+            <dt>7</dt><dd>reference metrics (Cache Hit Rate, Cache Cost Efficiency …)</dd>
+            <dt>18</dt><dd>FOCUS 1.5 AI-cost capability cards</dd>
+            <dt>35</dt><dd>quote-backed cross-links into the other two servers</dd>
+          </dl>
+          <dl>
+            <dt>20</dt><dd>tools</dd>
+            <dt>3</dt><dd>prompts</dd>
+            <dt>83</dt><dd>resources listed + 6 URI templates (<span class="mono">tokenomics://</span>)</dd>
+          </dl>
+        </div>
       </div>
 
       <h3 class="sec">FOCUS columns by feature level</h3>
@@ -345,6 +372,7 @@
       walks the full 1.0→1.2 diff.</p>
       <p class="callnote">framework · get_framework_info {} · list-prompts · list-resources · list-resource-templates</p>
       <p class="callnote">focus · list_versions {} · list_columns {version, feature_level} × 6 · list-prompts · list-resources</p>
+      <p class="callnote">tokenomics · get_tokenomics_info {} · list-tools · list-prompts · list-resources · list-resource-templates · get_crosslinks {}</p>
     </div>
   </section>
 
@@ -353,31 +381,39 @@
     <div class="step-n">3</div>
     <div class="step-body">
       <h2>Getting started — install</h2>
-      <p>Both servers are published on npm —
-      <a href="https://www.npmjs.com/package/finops-framework-mcp">finops-framework-mcp</a>
-      and <a href="https://www.npmjs.com/package/finops-focus-mcp">finops-focus-mcp</a>,
+      <p>All three servers are published on npm —
+      <a href="https://www.npmjs.com/package/finops-framework-mcp">finops-framework-mcp</a>,
+      <a href="https://www.npmjs.com/package/finops-focus-mcp">finops-focus-mcp</a> and
+      <a href="https://www.npmjs.com/package/tokenomics-overview-mcp">tokenomics-overview-mcp</a>,
       each a stdio binary — so an MCP client only ever needs a command and its
       arguments, and there is nothing to clone or build. Each package carries its
-      own data artifact, so both run offline after install. Node
-      <span class="mono">&gt;=22</span> is required by both.</p>
-      <pre class="tx"><span class="c"># run either server directly — stdio, nothing to configure</span>
+      own data artifact, so each runs offline after install. Node
+      <span class="mono">&gt;=22</span> is the only requirement. Install the ones you
+      need; they work independently and better together.</p>
+      <pre class="tx"><span class="c"># run any server directly — stdio, nothing to configure</span>
 npx -y finops-framework-mcp
 npx -y finops-focus-mcp
+npx -y tokenomics-overview-mcp
 
 <span class="c"># or from a clone of this repo</span>
 npm install &amp;&amp; npm run build &amp;&amp; npm run server</pre>
-      <p style="font-size:0.88rem;">The framework server loads the data
-      artifact packaged with its release (<span class="mono">data/framework</span>);
-      point it at a locally-refreshed artifact with
-      <span class="mono">FINOPS_MCP_DATA</span> or the first CLI argument.</p>
+      <p style="font-size:0.88rem;">Each server loads the data artifact packaged
+      with its release. To point one at a locally-refreshed artifact, use
+      <span class="mono">FINOPS_MCP_DATA</span> (framework) or
+      <span class="mono">FOCUS_MCP_DATA</span> (FOCUS) or
+      <span class="mono">TOKENOMICS_MCP_DATA</span> (tokenomics), or pass the
+      directory as the server's first CLI argument. Set <span class="mono">FINOPS_MCP_EXPERIMENTAL=1</span>
+      to turn on the clearly-labelled unofficial extras, such as the tokenomics
+      crosswalk.</p>
 
       <h3 class="sec">Claude Code — one command per server</h3>
       <pre class="tx">claude mcp add finops-framework -- npx -y finops-framework-mcp
-claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
+claude mcp add focus-spec -- npx -y finops-focus-mcp
+claude mcp add tokenomics-overview -- npx -y tokenomics-overview-mcp</pre>
 
       <h3 class="sec">Claude Code — project-scoped <span class="mono">.mcp.json</span></h3>
       <p style="font-size:0.88rem;">Commit this at the repo root to give
-      everyone on the project both servers:</p>
+      everyone on the project all three servers:</p>
       <pre class="tx">{
   <span class="k">"mcpServers"</span>: {
     <span class="k">"finops-framework"</span>: {
@@ -387,6 +423,10 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
     <span class="k">"focus-spec"</span>: {
       <span class="k">"command"</span>: "npx",
       <span class="k">"args"</span>: ["-y", "finops-focus-mcp"]
+    },
+    <span class="k">"tokenomics-overview"</span>: {
+      <span class="k">"command"</span>: "npx",
+      <span class="k">"args"</span>: ["-y", "tokenomics-overview-mcp"]
     }
   }
 }</pre>
@@ -401,6 +441,10 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
     <span class="k">"focus-spec"</span>: {
       <span class="k">"command"</span>: "npx",
       <span class="k">"args"</span>: ["-y", "finops-focus-mcp"]
+    },
+    <span class="k">"tokenomics-overview"</span>: {
+      <span class="k">"command"</span>: "npx",
+      <span class="k">"args"</span>: ["-y", "tokenomics-overview-mcp"]
     }
   }
 }</pre>
@@ -417,9 +461,10 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
     <div class="step-n">4</div>
     <div class="step-body">
       <h2>Or run them remotely — the Cloudflare Worker</h2>
-      <p>Both servers are also deployable over <strong>Streamable HTTP</strong> from a
-      single bundled Cloudflare Worker
-      (<span class="mono">src/workers/</span>), which serves them at two paths:</p>
+      <p>The framework and FOCUS servers are also deployable over
+      <strong>Streamable HTTP</strong> from a single bundled Cloudflare Worker
+      (<span class="mono">src/workers/</span>), which serves them at two paths. The
+      tokenomics server is stdio-only for now.</p>
       <div class="cols">
         <span class="col-chip">POST /mcp/framework</span>
         <span class="col-chip">POST /mcp/focus</span>
@@ -437,9 +482,10 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
       stdio-bridged and server-to-server MCP clients — are always allowed;
       browser requests need their origin on the Worker's
       <span class="mono">ALLOWED_ORIGINS</span> allowlist, which is also what drives
-      CORS. And there is deliberately no authentication and no rate limiting:
-      the Worker serves only public, read-only content with no per-user state
-      behind it.</p>
+      CORS. There is deliberately no authentication, because the Worker serves
+      only public, read-only content with no per-user state behind it; a per-IP
+      rate limit (60 requests per 60 seconds, then <span class="mono">429</span>) guards
+      the two <span class="mono">/mcp/*</span> routes.</p>
       <p style="font-size:0.9rem;">There is no public hosted endpoint to point
       you at here — deploying is a human approval point in this repo, so the
       URL is whatever the operator's own
@@ -458,9 +504,9 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
     <div class="step-n">5</div>
     <div class="step-body">
       <h2>Your first call against each server <span class="badge official">official</span></h2>
-      <p>Both servers publish a “start here” tool. Below is real, unedited
-      output from each — captured through the repo's own MCP client bridge,
-      which is the same stdio protocol your client will speak.</p>
+      <p>Each server publishes a “start here” tool. Below is real output from
+      each, captured through the repo's own MCP client bridge, which is the same
+      stdio protocol your client will speak.</p>
 
       <h3 class="sec">finops-focus-mcp · list_versions</h3>
       <p style="font-size:0.88rem;">Call this first: it tells you which
@@ -538,11 +584,32 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
 }</pre>
       <p class="callnote">framework · get_capability {capability: "anomaly-management", include: ["summary"]}</p>
 
+      <h3 class="sec">tokenomics-overview-mcp · get_tokenomics_info</h3>
+      <p style="font-size:0.88rem;">The entry point lists every source document with
+      its publication status, then suggests where to go next. The text content is shown
+      below with nine of the fourteen document lines elided.</p>
+      <pre class="tx"><span class="c">$ node evals/framework/mcp-call.mjs --server=tokenomics call get_tokenomics_info '{}'</span>
+Tokenomics Foundation data v2.0.0 (crawled 2026-10-19). Sources are mostly drafts and release candidates — cite the status.
+
+- What Is AI Tokenomics? — Tokenomics Draft Definition v0.5.2 (September 1 2026) [what-is-tokenomics]
+- The Seven-Layer Tokenomics Stack — Release Candidate (projects index label) [seven-layer-stack]
+- AI Tokenomics Prompt Cache Explainer — Release Candidate 1 (2026-09-22) [cache-explainer]
+- Routing Wars: Tokenomics in Action — Podcast episode 16 (survey data described as early, directional) [routing-wars]
+- The State of AI Tokenomics: Top Takeaways — Podcast episode 18 (final State of AI Tokenomics survey figures) [state-of-ai-tokenomics-takeaways]
+<span class="c">  … 9 more documents …</span>
+
+Start here:
+- get_bigt_notation — classify how a workload's token cost grows
+- list_layers — the Seven-Layer Stack and where each lever sits
+- get_metric cache-hit-rate / calculate_cache_metrics — measure prompt caching
+- get_crosslinks — hop to finops:// (FinOps Framework) and focus:// (FOCUS) servers</pre>
+      <p class="callnote">tokenomics · get_tokenomics_info {} → content[0].text (document list shortened)</p>
       <h3 class="sec">Don't know a slug? Don't guess</h3>
-      <p style="font-size:0.9rem;">Both servers ship a ranked keyword search
+      <p style="font-size:0.9rem;">All three servers ship a ranked keyword search
       whose whole job is turning words into slugs you can feed to the other
-      tools — <span class="mono">search_framework {query}</span> on one side,
-      <span class="mono">search_focus {query, version}</span> on the other. Each hit
+      tools — <span class="mono">search_framework {query}</span>,
+      <span class="mono">search_focus {query, version}</span> and
+      <span class="mono">search_tokenomics {query}</span>. Each hit
       returns a slug and a resource URI. And if you'd rather orient than
       search, <span class="mono">get_framework_info {}</span> returns the framework's
       structure and a short navigation guide in one call:</p>
@@ -559,9 +626,10 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
     <div class="step-n">6</div>
     <div class="step-body">
       <h2>Where to go next</h2>
-      <p>Two reference pages, then four worked examples that use both servers
-      together — three planned walkthroughs and one live, unscripted Q&amp;A
-      session. Every number and quote on all six is produced the same way as
+      <p>Three reference pages, then five worked examples: three planned
+      walkthroughs and a live, unscripted Q&amp;A session that pair the framework
+      and FOCUS servers, and one that uses all three servers on an AI cost
+      question. Every number and quote on all eight is produced the same way as
       the transcripts above.</p>
       <div class="next-grid">
         <div class="next-card">
@@ -577,6 +645,13 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
           attributes → requirements → search → diff → unofficial KPI mapping,
           prompts and <span class="mono">focus://</span> resources. Worked demo:
           BilledCost at both versions plus the 1.0→1.2 diff.</p>
+        </div>
+        <div class="next-card">
+          <a href="tokenomics-server.html">tokenomics-overview-mcp reference</a>
+          <p>What the Tokenomics Foundation sources say and how settled each is,
+          the Seven-Layer Stack and Big-T notation, the 20 tools grouped by job,
+          prompts, <span class="mono">tokenomics://</span> resources, and the 35
+          quote-backed cross-links. Worked demo: model routing and AI gateways.</p>
         </div>
         <div class="next-card">
           <a href="example-showback.html">Worked example · Showback</a>
@@ -602,18 +677,27 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
           domain, a capability summary, a Crawl→Walk maturity gap with
           validating KPIs, and starter Unit Economics KPIs from FOCUS 1.2.</p>
         </div>
+        <div class="next-card">
+          <a href="example-ai-caching.html">Worked example · Is prompt caching paying off?</a>
+          <p>All three servers: the framework's Cache Hit Rate KPI → the
+          Tokenomics Foundation formula and calculator on two workloads → the
+          FOCUS columns, today and in 1.5, that carry cached-token data.</p>
+        </div>
       </div>
 
       <div class="takeaway">
         <h3>The one-minute version</h3>
-        <p style="margin:0; font-size:0.92rem;">Install both bins
+        <p style="margin:0; font-size:0.92rem;">Install the bins
         (<span class="mono">npx -y finops-framework-mcp</span>,
-        <span class="mono">npx -y finops-focus-mcp</span>), register them in your client with
-        the same command/args pair, then start every session with
-        <span class="mono">get_framework_info {}</span> and
-        <span class="mono">list_versions {}</span>. Ask the framework server <em>what good
-        looks like</em>; ask the FOCUS server <em>which columns prove it</em>. Anything
-        the servers derived rather than quoted arrives already labelled
+        <span class="mono">npx -y finops-focus-mcp</span>,
+        <span class="mono">npx -y tokenomics-overview-mcp</span>), register them in your
+        client with the same command/args pair, then start every session with
+        <span class="mono">get_framework_info {}</span>,
+        <span class="mono">list_versions {}</span> and
+        <span class="mono">get_tokenomics_info {}</span>. Ask the framework server <em>what
+        good looks like</em>, the FOCUS server <em>which columns prove it</em>, and the
+        tokenomics server <em>what drives AI token cost and how to bring it down</em>.
+        Anything the servers derived rather than quoted arrives already labelled
         unofficial — believe the label.</p>
       </div>
     </div>
@@ -625,15 +709,16 @@ claude mcp add focus-spec -- npx -y finops-focus-mcp</pre>
   <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. FOCUS™
   specification content and sample data © FinOps Foundation / FOCUS project
   contributors, licensed CC BY 4.0. FOCUS is a trademark of the Linux
-  Foundation. Content on this page has been restructured and adapted from
-  those sources; this guide and these servers are community projects —
-  <strong>not published or endorsed by the FinOps Foundation or the FOCUS
-  project</strong>.</p>
+  Foundation. AI tokenomics content © Tokenomics Foundation (a Series of LF
+  Projects, LLC), licensed CC BY 4.0. Content on this page has been
+  restructured and adapted from those sources; this guide and these servers
+  are community projects — <strong>not published or endorsed by the FinOps
+  Foundation, the FOCUS project, or the Tokenomics Foundation</strong>.</p>
   <p class="unofficial-legend"><strong>UNOFFICIAL legend:</strong> anything marked
   <span class="badge derived">UNOFFICIAL</span> — KPI→column mappings, computed KPI
-  values, and cross-version diffs — is derived by these servers
-  (<span class="mono">official: false</span>), not published upstream; verify before
-  production use.</p>
+  values, cross-version diffs, and the tokenomics crosswalk — is derived by these
+  servers (<span class="mono">official: false</span>), not published upstream; verify
+  before production use.</p>
 </footer>
 
 </body>

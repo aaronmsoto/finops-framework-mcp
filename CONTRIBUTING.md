@@ -39,15 +39,16 @@ from GitHub Packages and needs a `read:packages` token in `NPM_TOKEN`:
 
 ## Testing the servers locally
 
-The repo ships a `.mcp.json` that loads both servers into MCP clients that
-read it (Claude Code among them). It runs the **published** packages, so
+The repo ships a `.mcp.json` that loads all three servers into MCP clients
+that read it (Claude Code among them). It runs the **published** packages, so
 opening this repo in a client works with no build:
 
 ```json
 {
   "mcpServers": {
     "finops-framework": { "command": "npx", "args": ["-y", "finops-framework-mcp"] },
-    "focus-spec": { "command": "npx", "args": ["-y", "finops-focus-mcp"] }
+    "focus-spec": { "command": "npx", "args": ["-y", "finops-focus-mcp"] },
+    "tokenomics-overview": { "command": "npx", "args": ["-y", "tokenomics-overview-mcp"] }
   }
 }
 ```

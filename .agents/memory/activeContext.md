@@ -11,15 +11,17 @@
 
 ## In flight
 
-- PR from `claude/tokenomics-overview-mcp-cz5jqn` to `dev`: tokenomics data
-  v2.0.0 (Seven-Layer Stack, 14 docs), release wiring, all packages 0.2.0.
+- Docs PR to `dev`: README / package READMEs / NOTICE and the usage guide
+  now cover all three servers (new guide pages: tokenomics-server,
+  example-ai-caching).
 
 ## Next steps
 
-1. Owner: merge the PR to `dev`, then the rolling dev → main release PR.
-2. Owner: publish `tokenomics-overview-mcp@0.2.0` by hand from `main`, set up
-   its npm trusted publisher, then tag `v0.2.0`
-   (`docs/release-runbook.md` top note).
+1. Owner: merge the docs PR, then dev → main; the Pages workflow republishes
+   the guide on that push to `main`.
+2. Released: finops-framework-mcp and finops-focus-mcp 0.2.0,
+   tokenomics-overview-mcp 0.2.1. All three trusted publishers are valid and
+   all three servers are in the MCP Registry.
 3. Next FOCUS work, in order (`docs/research/focus-version-support.md`):
    size multi-dataset parsing for 1.3/1.4, then ingest 1.5 after its 3 Dec
    2026 ratification and re-point the tokenomics FOCUS links.
@@ -35,5 +37,5 @@
 
 ## Last updated
 
-2026-10-19 — Re-crawled for the Seven-Layer Stack; release wiring for
-0.2.0 added.
+2026-10-20 — Released 0.2.0 / 0.2.1; docs and the Pages guide updated for
+all three servers.
