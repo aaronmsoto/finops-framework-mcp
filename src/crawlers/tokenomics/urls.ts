@@ -27,6 +27,7 @@ export const DENY_PATH_PREFIXES = [
   "/tokenomics-100-sf",
   "/tokenomics-certified",
   "/tokenomics-mind-map",
+  "/projects/ai-tokenomics-mind-map",
 ];
 
 export interface RegistryEntry {
@@ -48,28 +49,29 @@ export interface RegistryEntry {
 export const REGISTRY: RegistryEntry[] = [
   {
     slug: "what-is-tokenomics",
-    url: `${ORIGIN}/docs/overview/what-is-tokenomics/`,
+    url: `${ORIGIN}/what-is-ai-tokenomics/`,
     kind: "docs",
-    statusPattern: /\b(Working Draft)\s+(?:[A-Z][a-z]+ \d{4})/,
-    statusFallback: "Working Draft",
-    datePattern: /Working Draft\s+([A-Z][a-z]+ \d{4})/,
+    statusPattern: /\b(Tokenomics Draft Definition v\d+(?:\.\d+)*)/,
+    statusFallback: "Draft definition",
+    datePattern:
+      /Tokenomics Draft Definition v[\d.]+,?\s+([A-Z][a-z]+ \d{1,2},? \d{4})/,
     author: null,
   },
   {
-    slug: "five-layer-stack",
-    url: `${ORIGIN}/projects/the-five-layer-tokenomics-stack/`,
+    slug: "seven-layer-stack",
+    url: `${ORIGIN}/projects/the-seven-layer-tokenomics-stack/`,
     kind: "project",
     statusPattern: null,
-    statusFallback: "Draft paper (projects index label)",
+    statusFallback: "Release Candidate (projects index label)",
     datePattern: null,
     author: null,
   },
   {
-    slug: "five-layer-stack-paper",
-    url: `${ORIGIN}/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/`,
+    slug: "seven-layer-stack-paper",
+    url: `${ORIGIN}/projects/the-seven-layer-tokenomics-stack-paper/`,
     kind: "paper",
     statusPattern: null,
-    statusFallback: "Draft paper (projects index label)",
+    statusFallback: "Release Candidate (projects index label)",
     datePattern: null,
     author: null,
   },
@@ -84,16 +86,16 @@ export const REGISTRY: RegistryEntry[] = [
   },
   {
     slug: "big-t-notation-paper",
-    url: `${ORIGIN}/docs/projects/big-t/big-t-notation-paper/`,
+    url: `${ORIGIN}/projects/big-t-notation-paper/`,
     kind: "paper",
     statusPattern: /\b(Working Draft)\s+(?:[A-Z][a-z]+ \d{4})/,
-    statusFallback: "Working Draft",
+    statusFallback: "Full paper (projects index label)",
     datePattern: /Working Draft\s+([A-Z][a-z]+ \d{4})/,
     author: "Dan Neff (Adobe)",
   },
   {
     slug: "cache-explainer",
-    url: `${ORIGIN}/cache-explainer/`,
+    url: `${ORIGIN}/projects/cache-explainer/`,
     title: "AI Tokenomics Prompt Cache Explainer",
     kind: "project",
     statusPattern: /\b(Release Candidate \d+)\b/,
@@ -103,7 +105,7 @@ export const REGISTRY: RegistryEntry[] = [
   },
   {
     slug: "personas-operating-model",
-    url: `${ORIGIN}/personas-and-operating-model-map/`,
+    url: `${ORIGIN}/projects/personas-and-operating-model-map/`,
     kind: "project",
     statusPattern: /\b(Release Candidate \d+)\b/,
     statusFallback: "Release Candidate",
@@ -112,7 +114,7 @@ export const REGISTRY: RegistryEntry[] = [
   },
   {
     slug: "value-classification",
-    url: `${ORIGIN}/ai-value-classification/`,
+    url: `${ORIGIN}/projects/ai-value-classification/`,
     kind: "project",
     statusPattern: /\b(Release Candidate \d+)\b/,
     statusFallback: "Release Candidate",
@@ -123,9 +125,9 @@ export const REGISTRY: RegistryEntry[] = [
     slug: "focus-1-5-for-ai",
     url: `${ORIGIN}/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/`,
     kind: "project",
-    statusPattern: /\b(Status as of \d{1,2} [A-Z][a-z]{2,8} \d{4})/,
-    statusFallback: "Status page (nothing on it is a commitment)",
-    datePattern: /Status as of (\d{1,2} [A-Z][a-z]{2,8} \d{4})/,
+    statusPattern: /\b(1\.5 ratification \d{1,2} [A-Z][a-z]{2,8} \d{4})/,
+    statusFallback: "Status page (FOCUS 1.5 not yet ratified)",
+    datePattern: /1\.5 ratification (\d{1,2} [A-Z][a-z]{2,8} \d{4})/,
     author: "Matt Cowsert",
   },
   {
@@ -156,12 +158,31 @@ export const REGISTRY: RegistryEntry[] = [
     datePattern: null,
     author: null,
   },
+  {
+    slug: "tokenomics-goes-official",
+    url: `${ORIGIN}/insights/tokenomics-not-counting-tokens/`,
+    kind: "insight",
+    statusPattern: null,
+    statusFallback: "Podcast episode 15",
+    datePattern: null,
+    author: "J.R. Storment",
+  },
+  {
+    slug: "state-of-ai-tokenomics-takeaways",
+    url: `${ORIGIN}/insights/state-of-ai-tokenomics-top-takeaways/`,
+    kind: "insight",
+    statusPattern: null,
+    statusFallback:
+      "Podcast episode 18 (final State of AI Tokenomics survey figures)",
+    datePattern: null,
+    author: "J.R. Storment",
+  },
 ];
 
 export const EXPECTED_COUNTS: Record<string, number> = {
-  documents: 12,
+  documents: 14,
   stages: 3,
-  layers: 5,
+  layers: 7,
   bigt_classes: 6,
   bigt_variables: 3,
   metrics: 7,

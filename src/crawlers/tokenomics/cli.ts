@@ -55,6 +55,16 @@ function focusColumnIds(focusDir: string): Set<string> {
   return new Set(cols.map((c) => c.id));
 }
 
+/** FOCUS 1.2 column display name ("SKU Price Details") → column id. */
+function focusColumnNames(focusDir: string): Map<string, string> {
+  const p = join(focusDir, "1.2", "columns.json");
+  const cols = JSON.parse(readFileSync(p, "utf8")) as {
+    id: string;
+    display_name: string;
+  }[];
+  return new Map(cols.map((c) => [c.display_name, c.id]));
+}
+
 function focusAttributes(focusDir: string): Map<string, string> {
   const p = join(focusDir, "1.2", "attributes.json");
   const attrs = JSON.parse(readFileSync(p, "utf8")) as {
@@ -95,6 +105,7 @@ function jsonFiles(
   md: Map<string, string>,
   focusIds: Set<string>,
   focusAttrs: Map<string, string>,
+  focusNames: Map<string, string>,
 ): Map<string, unknown> {
   const bodies = new Map<string, string>();
   for (const d of e.documents) {
@@ -115,7 +126,7 @@ function jsonFiles(
     ["content/cache-providers.json", e.cacheProviders],
     [
       "derived/crosslinks.json",
-      buildCrossLinks(e, bodies, focusIds, focusAttrs),
+      buildCrossLinks(e, bodies, focusIds, focusAttrs, focusNames),
     ],
     ["derived/crosswalk.json", buildCrosswalk()],
   ]);
@@ -145,6 +156,7 @@ function finish(
     md,
     focusColumnIds(opts.focusDir),
     focusAttributes(opts.focusDir),
+    focusColumnNames(opts.focusDir),
   );
   const schemaErrors = validateAll(files);
   if (schemaErrors.length) {
@@ -178,6 +190,17 @@ export async function refresh(opts: CliOptions): Promise<number> {
         e.slug,
         readFileSync(join(opts.htmlDir, `${e.slug}.html`), "utf8"),
       );
+    }
+    // REST `modified` dates for every registry page (used where the HTML
+    // carries no JSON-LD date), captured with the HTML so offline runs stay
+    // byte-identical. Recapture it with the fixtures after a live refresh.
+    const rest = join(opts.htmlDir, "rest-modified.json");
+    if (existsSync(rest)) {
+      const dates = JSON.parse(readFileSync(rest, "utf8")) as Record<
+        string,
+        string
+      >;
+      for (const [url, d] of Object.entries(dates)) modified.set(url, d);
     }
   } else {
     const fetcher = new CachedFetcher(opts.cacheDir, opts.useCache, {

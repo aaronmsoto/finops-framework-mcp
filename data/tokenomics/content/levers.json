@@ -1,78 +1,138 @@
 [
   {
     "bigt_classes": [],
-    "description_md": "Primary lever for L1 Silicon (key metric: Dollars and watts per token). No, sets cost per token.",
+    "description_md": "Primary lever for L0 Energy (key metric: Energy per token, PUE). No, sets the price and supply of power.",
     "effect": null,
     "kind": "stack-primary-lever",
-    "layer": 1,
-    "name": "Match silicon class to workload",
+    "layer": 0,
+    "name": "Site by delivered power price and capacity",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
-    "slug": "l1-match-silicon-class-to-workload"
+    "slug": "l0-site-by-delivered-power-price-and-capacity"
   },
   {
     "bigt_classes": [],
-    "description_md": "Primary lever for L1 Silicon (key metric: Dollars and watts per token). No, sets cost per token.",
+    "description_md": "Primary lever for L0 Energy (key metric: Energy per token, PUE). No, sets the price and supply of power.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 0,
+    "name": "Contract supply",
+    "provenance": {
+      "document": "seven-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l0-contract-supply"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L0 Energy (key metric: Energy per token, PUE). No, sets the price and supply of power.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 0,
+    "name": "Shift deferrable work in time",
+    "provenance": {
+      "document": "seven-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l0-shift-deferrable-work-in-time"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L1 Physical infrastructure (key metric: Dollars per token, performance per watt). No, sets cost per token.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 1,
+    "name": "Match accelerator class to workload",
+    "provenance": {
+      "document": "seven-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l1-match-accelerator-class-to-workload"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L1 Physical infrastructure (key metric: Dollars per token, performance per watt). No, sets cost per token.",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 1,
     "name": "Adopt newer generations",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l1-adopt-newer-generations"
   },
   {
     "bigt_classes": [],
-    "description_md": "Primary lever for L2 Capacity (key metric: Utilization, idle hours). No, sets effective cost per token.",
+    "description_md": "Primary lever for L1 Physical infrastructure (key metric: Dollars per token, performance per watt). No, sets cost per token.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 1,
+    "name": "Place by region",
+    "provenance": {
+      "document": "seven-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l1-place-by-region"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L2 Infrastructure management (key metric: Utilization, idle hours). No, sets effective cost per token.",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 2,
     "name": "Batch the troughs",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l2-batch-the-troughs"
   },
   {
     "bigt_classes": [],
-    "description_md": "Primary lever for L2 Capacity (key metric: Utilization, idle hours). No, sets effective cost per token.",
+    "description_md": "Primary lever for L2 Infrastructure management (key metric: Utilization, idle hours). No, sets effective cost per token.",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 2,
     "name": "Autoscale",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l2-autoscale"
   },
   {
     "bigt_classes": [],
-    "description_md": "Primary lever for L2 Capacity (key metric: Utilization, idle hours). No, sets effective cost per token.",
+    "description_md": "Primary lever for L2 Infrastructure management (key metric: Utilization, idle hours). No, sets effective cost per token.",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 2,
-    "name": "Place by region",
+    "name": "Pool and share GPUs",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
-    "slug": "l2-place-by-region"
+    "slug": "l2-pool-and-share-gpus"
   },
   {
     "bigt_classes": [
@@ -85,10 +145,10 @@
     "layer": 3,
     "name": "Right engine",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l3-right-engine"
   },
@@ -101,14 +161,14 @@
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 3,
-    "name": "Prefix and KV cache",
+    "name": "Prefix, KV, and semantic cache",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
-    "slug": "l3-prefix-and-kv-cache"
+    "slug": "l3-prefix-kv-and-semantic-cache"
   },
   {
     "bigt_classes": [
@@ -121,10 +181,10 @@
     "layer": 3,
     "name": "Disaggregation",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l3-disaggregation"
   },
@@ -133,16 +193,16 @@
       "t-n-k",
       "t-n"
     ],
-    "description_md": "Primary lever for L4 Model and quantization (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
+    "description_md": "Primary lever for L4 Model management and selection (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 4,
     "name": "Right-size the model",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l4-right-size-the-model"
   },
@@ -151,16 +211,16 @@
       "t-n-k",
       "t-n"
     ],
-    "description_md": "Primary lever for L4 Model and quantization (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
+    "description_md": "Primary lever for L4 Model management and selection (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 4,
     "name": "Quantize",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l4-quantize"
   },
@@ -169,16 +229,34 @@
       "t-n-k",
       "t-n"
     ],
-    "description_md": "Primary lever for L4 Model and quantization (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
+    "description_md": "Primary lever for L4 Model management and selection (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 4,
+    "name": "Configure the runtime",
+    "provenance": {
+      "document": "seven-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l4-configure-the-runtime"
+  },
+  {
+    "bigt_classes": [
+      "t-n-k",
+      "t-n"
+    ],
+    "description_md": "Primary lever for L4 Model management and selection (key metric: Cost per task, quality per dollar). Yes, T(n·k) toward T(n).",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 4,
     "name": "Adapt",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l4-adapt"
   },
@@ -187,16 +265,16 @@
       "t-n-k-a",
       "t-infinity"
     ],
-    "description_md": "Primary lever for L5 Routing and governance (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
+    "description_md": "Primary lever for L5 AI access and control (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 5,
     "name": "Complexity routing",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l5-complexity-routing"
   },
@@ -205,16 +283,16 @@
       "t-n-k-a",
       "t-infinity"
     ],
-    "description_md": "Primary lever for L5 Routing and governance (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
+    "description_md": "Primary lever for L5 AI access and control (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 5,
     "name": "Budgets",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l5-budgets"
   },
@@ -223,18 +301,48 @@
       "t-n-k-a",
       "t-infinity"
     ],
-    "description_md": "Primary lever for L5 Routing and governance (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
+    "description_md": "Primary lever for L5 AI access and control (key metric: Per-route cost, fan-out and retries). Yes, bounds T(n·k·a) and T(∞).",
     "effect": null,
     "kind": "stack-primary-lever",
     "layer": 5,
     "name": "Agent caps",
     "provenance": {
-      "document": "five-layer-stack-paper",
+      "document": "seven-layer-stack-paper",
       "license": "CC-BY-4.0",
       "section": "spectrum",
-      "source_url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/"
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
     },
     "slug": "l5-agent-caps"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L6 Demand and entry points (key metric: Request frequency, context volume). Yes, sets the class a workload requires.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 6,
+    "name": "Set requirements per use case",
+    "provenance": {
+      "document": "seven-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l6-set-requirements-per-use-case"
+  },
+  {
+    "bigt_classes": [],
+    "description_md": "Primary lever for L6 Demand and entry points (key metric: Request frequency, context volume). Yes, sets the class a workload requires.",
+    "effect": null,
+    "kind": "stack-primary-lever",
+    "layer": 6,
+    "name": "Trim and reuse context",
+    "provenance": {
+      "document": "seven-layer-stack-paper",
+      "license": "CC-BY-4.0",
+      "section": "spectrum",
+      "source_url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/"
+    },
+    "slug": "l6-trim-and-reuse-context"
   },
   {
     "bigt_classes": [],

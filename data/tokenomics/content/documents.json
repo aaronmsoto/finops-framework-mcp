@@ -3,7 +3,7 @@
     "author": null,
     "kind": "docs",
     "license": "CC-BY-4.0",
-    "modified": "2026-09-16",
+    "modified": "2026-10-16",
     "sections": [
       {
         "id": "overview",
@@ -31,18 +31,18 @@
       }
     ],
     "slug": "what-is-tokenomics",
-    "status": "Working Draft",
-    "status_date": "June 2026",
+    "status": "Tokenomics Draft Definition v0.5.2",
+    "status_date": "September 1 2026",
     "status_source": "page",
-    "title": "What is AI Tokenomics?",
-    "url": "https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/",
-    "word_count": 1970
+    "title": "What Is AI Tokenomics?",
+    "url": "https://www.tokeneconomics.com/what-is-ai-tokenomics/",
+    "word_count": 1996
   },
   {
     "author": null,
     "kind": "project",
     "license": "CC-BY-4.0",
-    "modified": "2026-08-25",
+    "modified": "2026-10-17",
     "sections": [
       {
         "id": "overview",
@@ -54,7 +54,7 @@
       },
       {
         "id": "stack",
-        "title": "The five layers rest on one another."
+        "title": "The seven layers rest on one another."
       },
       {
         "id": "table",
@@ -69,19 +69,19 @@
         "title": "Further resources"
       }
     ],
-    "slug": "five-layer-stack",
-    "status": "Draft paper (projects index label)",
+    "slug": "seven-layer-stack",
+    "status": "Release Candidate (projects index label)",
     "status_date": null,
     "status_source": "registry",
-    "title": "The Five-Layer Tokenomics Stack",
-    "url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/",
-    "word_count": 950
+    "title": "The Seven-Layer Tokenomics Stack",
+    "url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack/",
+    "word_count": 1301
   },
   {
     "author": null,
     "kind": "paper",
     "license": "CC-BY-4.0",
-    "modified": "2026-08-04",
+    "modified": "2026-10-16",
     "sections": [
       {
         "id": "overview",
@@ -92,12 +92,16 @@
         "title": "The consumption spectrum"
       },
       {
+        "id": "l0",
+        "title": "L0 Energy"
+      },
+      {
         "id": "l1",
-        "title": "L1 Silicon"
+        "title": "L1 Physical infrastructure"
       },
       {
         "id": "l2",
-        "title": "L2 Capacity"
+        "title": "L2 Infrastructure management"
       },
       {
         "id": "l3",
@@ -109,7 +113,11 @@
       },
       {
         "id": "l5",
-        "title": "L5 Routing and governance"
+        "title": "L5 AI access and control"
+      },
+      {
+        "id": "l6",
+        "title": "L6 Demand and entry points"
       },
       {
         "id": "measuring",
@@ -120,13 +128,13 @@
         "title": "Conclusion"
       }
     ],
-    "slug": "five-layer-stack-paper",
-    "status": "Draft paper (projects index label)",
+    "slug": "seven-layer-stack-paper",
+    "status": "Release Candidate (projects index label)",
     "status_date": null,
     "status_source": "registry",
-    "title": "The five-layer Tokenomics stack",
-    "url": "https://www.tokeneconomics.com/projects/the-five-layer-tokenomics-stack/the-five-layer-tokenomics-stack-paper/",
-    "word_count": 3716
+    "title": "The Seven-Layer Tokenomics Stack",
+    "url": "https://www.tokeneconomics.com/projects/the-seven-layer-tokenomics-stack-paper/",
+    "word_count": 5020
   },
   {
     "author": "Dan Neff (Adobe)",
@@ -179,58 +187,62 @@
     "author": "Dan Neff (Adobe)",
     "kind": "paper",
     "license": "CC-BY-4.0",
-    "modified": "2026-07-28",
+    "modified": "2026-10-16",
     "sections": [
       {
-        "id": "a-framework-for-token-efficiency",
-        "title": "A Framework for Token Efficiency"
+        "id": "overview",
+        "title": "Overview"
       },
       {
-        "id": "1-the-scarcity-that-shapes-systems",
+        "id": "abstract",
+        "title": "Abstract"
+      },
+      {
+        "id": "the-scarcity-that-shapes-systems",
         "title": "1. The scarcity that shapes systems"
       },
       {
-        "id": "2-big-t-notation-the-framework",
+        "id": "big-t-notation-the-framework",
         "title": "2. Big-T Notation: the framework"
       },
       {
-        "id": "3-the-compounding-demand-thesis",
+        "id": "the-compounding-demand-thesis",
         "title": "3. The compounding-demand thesis"
       },
       {
-        "id": "4-five-levers-for-token-efficiency",
+        "id": "five-levers-for-token-efficiency",
         "title": "4. Five levers for token efficiency"
       },
       {
-        "id": "5-efficiency-and-literacy",
+        "id": "efficiency-and-literacy",
         "title": "5. Efficiency and literacy"
       },
       {
-        "id": "6-reference-architecture-the-token-efficiency-pipeline",
+        "id": "reference-architecture-the-token-efficiency-pipeline",
         "title": "6. Reference architecture: the token-efficiency pipeline"
       },
       {
-        "id": "7-assessment-checklist",
+        "id": "assessment-checklist",
         "title": "7. Assessment checklist"
       },
       {
-        "id": "8-conclusion",
+        "id": "conclusion",
         "title": "8. Conclusion"
       }
     ],
     "slug": "big-t-notation-paper",
-    "status": "Working Draft",
-    "status_date": "June 2026",
-    "status_source": "page",
+    "status": "Full paper (projects index label)",
+    "status_date": null,
+    "status_source": "registry",
     "title": "Big-T Notation Paper",
-    "url": "https://www.tokeneconomics.com/docs/projects/big-t/big-t-notation-paper/",
-    "word_count": 3749
+    "url": "https://www.tokeneconomics.com/projects/big-t-notation-paper/",
+    "word_count": 3746
   },
   {
     "author": "Tokenomics Foundation Consumption Working Group",
     "kind": "project",
     "license": "CC-BY-4.0",
-    "modified": "2026-09-24",
+    "modified": "2026-10-14",
     "sections": [
       {
         "id": "overview",
@@ -270,14 +282,14 @@
     "status_date": "2026-09-22",
     "status_source": "page",
     "title": "AI Tokenomics Prompt Cache Explainer",
-    "url": "https://www.tokeneconomics.com/cache-explainer/",
+    "url": "https://www.tokeneconomics.com/projects/cache-explainer/",
     "word_count": 3054
   },
   {
     "author": null,
     "kind": "project",
     "license": "CC-BY-4.0",
-    "modified": "2026-09-21",
+    "modified": "2026-10-14",
     "sections": [
       {
         "id": "overview",
@@ -321,14 +333,14 @@
     "status_date": "2026-09-04",
     "status_source": "page",
     "title": "AI Tokenomics Personas and Operating Model",
-    "url": "https://www.tokeneconomics.com/personas-and-operating-model-map/",
+    "url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/",
     "word_count": 4975
   },
   {
     "author": null,
     "kind": "project",
     "license": "CC-BY-4.0",
-    "modified": "2026-09-24",
+    "modified": "2026-10-14",
     "sections": [
       {
         "id": "overview",
@@ -364,43 +376,39 @@
     "status_date": "2026-09-16",
     "status_source": "page",
     "title": "Classifying and Measuring Realized Value from AI",
-    "url": "https://www.tokeneconomics.com/ai-value-classification/",
+    "url": "https://www.tokeneconomics.com/projects/ai-value-classification/",
     "word_count": 3880
   },
   {
     "author": "Matt Cowsert",
     "kind": "project",
     "license": "CC-BY-4.0",
-    "modified": "2026-09-21",
+    "modified": "2026-10-07",
     "sections": [
       {
         "id": "overview",
         "title": "Overview"
       },
       {
-        "id": "in-the-working-draft",
-        "title": "In the working draft"
+        "id": "theme-ai",
+        "title": "What 1.5 lets you see in AI billing data"
       },
       {
-        "id": "in-review",
-        "title": "In review"
+        "id": "theme-out",
+        "title": "What is not in 1.5, and why"
       },
       {
-        "id": "started-not-yet-certain",
-        "title": "Started, not yet certain"
-      },
-      {
-        "id": "not-in-1-5",
-        "title": "Not in 1.5"
+        "id": "common-questions",
+        "title": "Common questions"
       }
     ],
     "slug": "focus-1-5-for-ai",
-    "status": "Status as of 17 Sep 2026",
-    "status_date": "17 Sep 2026",
+    "status": "1.5 ratification 3 Dec 2026",
+    "status_date": "3 Dec 2026",
     "status_source": "page",
-    "title": "What 1.5 does for AI cost, and what it does not",
+    "title": "What FOCUS 1.5 does for AI cost, and what it does not",
     "url": "https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/",
-    "word_count": 4698
+    "word_count": 3941
   },
   {
     "author": "J.R. Storment",
@@ -518,5 +526,63 @@
     "title": "What Tokenomics Is, and What It Isn't",
     "url": "https://www.tokeneconomics.com/what-tokenomics-is-and-what-it-isnt/",
     "word_count": 7367
+  },
+  {
+    "author": "J.R. Storment",
+    "kind": "insight",
+    "license": "CC-BY-4.0",
+    "modified": "2026-08-26",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "summary",
+        "title": "Summary"
+      },
+      {
+        "id": "key-takeaways",
+        "title": "Key takeaways"
+      }
+    ],
+    "slug": "tokenomics-goes-official",
+    "status": "Podcast episode 15",
+    "status_date": null,
+    "status_source": "registry",
+    "title": "Podcast #15 of Tokenomics Brief: Tokenomics Goes Official: Defining AI Economics, Value, Routing Layers & the Per-Watt Economy",
+    "url": "https://www.tokeneconomics.com/insights/tokenomics-not-counting-tokens/",
+    "word_count": 5963
+  },
+  {
+    "author": "J.R. Storment",
+    "kind": "insight",
+    "license": "CC-BY-4.0",
+    "modified": "2026-10-06",
+    "sections": [
+      {
+        "id": "overview",
+        "title": "Overview"
+      },
+      {
+        "id": "episode-summary",
+        "title": "Episode summary"
+      },
+      {
+        "id": "episode-highlights",
+        "title": "Episode Highlights"
+      },
+      {
+        "id": "key-takeaways",
+        "title": "Key takeaways"
+      }
+    ],
+    "slug": "state-of-ai-tokenomics-takeaways",
+    "status": "Podcast episode 18 (final State of AI Tokenomics survey figures)",
+    "status_date": null,
+    "status_source": "registry",
+    "title": "The State of AI Tokenomics: Top Takeaways",
+    "url": "https://www.tokeneconomics.com/insights/state-of-ai-tokenomics-top-takeaways/",
+    "word_count": 3910
   }
 ]

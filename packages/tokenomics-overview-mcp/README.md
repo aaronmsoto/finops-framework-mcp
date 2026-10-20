@@ -4,12 +4,15 @@
 
 An unofficial [MCP](https://modelcontextprotocol.io) server that gives AI
 agents grounded context on **AI tokenomics** from the
-[Tokenomics Foundation](https://www.tokeneconomics.com): the Five-Layer
-Tokenomics Stack, **Big-T notation** (`T(n · k · a)`), prompt-caching
-mechanics and the two reference metrics — **Cache Hit Rate** and **Cache
-Cost Efficiency** — consumption levers (caching, batching, right-sizing,
-quantization, complexity routing, budgets, agent caps), personas, value
-classification, and the FOCUS 1.5 AI-cost tracker.
+[Tokenomics Foundation](https://www.tokeneconomics.com): the **Seven-Layer
+Tokenomics Stack** (L0 Energy through L6 Demand, with L5 AI access and
+control covering proxies, model routers and AI gateways), **Big-T
+notation** (`T(n · k · a)`), prompt-caching mechanics and the two reference
+metrics — **Cache Hit Rate** and **Cache Cost Efficiency** — consumption
+levers (caching, batching, right-sizing, quantization, complexity routing,
+budgets, agent caps), model-routing market and survey context from the
+Tokenomics Brief, personas, value classification, and the FOCUS 1.5 AI-cost
+capabilities.
 
 Most Foundation sources are Working Drafts or Release Candidates. Every
 answer states the source's status, and agents are instructed never to

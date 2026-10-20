@@ -7,7 +7,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-personas",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Platform-layer costs, model lifecycle, RAG pipelines",
     "signals": [
@@ -31,7 +31,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-personas",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Track and allocate AI cost and usage",
     "signals": [
@@ -53,7 +53,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-personas",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Generates the demand; the surfaces where services are consumed and value is realized or not",
     "signals": [
@@ -78,7 +78,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-personas",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Product AI vs. Internal AI budgets, forecasting for compounding demand",
     "signals": [
@@ -100,7 +100,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-personas",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Quality floors and model spectrum matching",
     "signals": [
@@ -122,7 +122,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-personas",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Physical scarcity, model expiry, consumption-rate commitments",
     "signals": [
@@ -145,7 +145,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-personas",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Investment posture, capital-scale commitments, value mandate",
     "signals": [
@@ -168,7 +168,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-personas",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Physical supply constraints: securing capacity before anyone can consume it",
     "signals": [
@@ -190,7 +190,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-allied",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Allied persona",
     "signals": [],
@@ -205,7 +205,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-allied",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Allied persona",
     "signals": [],
@@ -220,7 +220,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-allied",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Allied persona",
     "signals": [],
@@ -235,7 +235,7 @@
       "document": "personas-operating-model",
       "license": "CC-BY-4.0",
       "section": "wp-allied",
-      "source_url": "https://www.tokeneconomics.com/personas-and-operating-model-map/"
+      "source_url": "https://www.tokeneconomics.com/projects/personas-and-operating-model-map/"
     },
     "responsibility": "Allied persona",
     "signals": [],

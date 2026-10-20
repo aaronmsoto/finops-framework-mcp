@@ -64,13 +64,13 @@ export interface StatedLinkSpec {
 /** Hand-registered stated links. `evidence` must appear verbatim (markdown
  * markup and whitespace normalized) in the document's canonical markdown.
  * A framework target's `mentions` phrase must appear in the evidence itself;
- * a FOCUS target's identifier must appear in the evidence's paragraph (the
- * tracker cards name identifiers in the sentence before the one that states
- * the use). Refresh fails otherwise. */
+ * a FOCUS target's identifier must appear in the evidence's paragraph, or
+ * for the FOCUS 1.5 page in the same capability card (cards name
+ * identifiers in their detail list). Refresh fails otherwise. */
 export const STATED_LINKS: StatedLinkSpec[] = [
   {
-    from: { type: "document", slug: "five-layer-stack-paper" },
-    document: "five-layer-stack-paper",
+    from: { type: "document", slug: "seven-layer-stack-paper" },
+    document: "seven-layer-stack-paper",
     evidence: "Allocation, budgeting, and anomaly detection",
     targets: [
       target.capability("allocation"),
@@ -135,11 +135,8 @@ export const STATED_LINKS: StatedLinkSpec[] = [
   {
     from: { type: "metric", slug: "cache-hit-rate" },
     document: "focus-1-5-for-ai",
-    evidence: "cache hit rate for token-metered SKUs",
-    targets: [
-      target.focusDraft("TokenCacheAction"),
-      target.focusColumn("SkuPriceDetails"),
-    ],
+    evidence: "cache hit rate for token-metered SKUs by model",
+    targets: [target.focusDraft("TokenCacheAction")],
   },
 ];
 
@@ -223,7 +220,7 @@ export const CROSSWALK: CrosswalkSpec[] = [
       "Per-team and per-tenant token budgets at the routing layer implement budgets as runtime controls.",
   },
   {
-    from: { type: "lever", slug: "l2-place-by-region" },
+    from: { type: "lever", slug: "l1-place-by-region" },
     target: target.capability("architecting-workload-placement"),
     rationale: "Placing capacity by region is a workload placement decision.",
   },

@@ -17,7 +17,7 @@ the FinOps Framework at https://finops.org/framework, the FOCUS server
 (`packages/finops-focus-mcp`) covers the FOCUS spec (columns, KPI mappings,
 cross-version diffs), and the tokenomics server
 (`packages/tokenomics-overview-mcp`) covers Tokenomics Foundation guidance
-(Five-Layer Stack, Big-T notation, cache metrics, levers). Each follows the
+(Seven-Layer Stack, Big-T notation, cache metrics, levers). Each follows the
 same TypeScript pipeline: crawler → markdown-canonical data artifact
 (`data/{framework,focus,tokenomics}/`, regenerable offline via
 `cli.js derive`) → stdio server. Unofficial extensions are gated

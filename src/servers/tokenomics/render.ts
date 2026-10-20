@@ -11,6 +11,7 @@ import type {
   TkPersona,
   TkProvenance,
 } from "../../shared/tokenomics/types.js";
+import { FOCUS_BUCKETS } from "../../shared/tokenomics/types.js";
 import { URI } from "./uris.js";
 
 // One renderer per entity, shared by tools, resources, and prompts so the
@@ -141,7 +142,7 @@ export function bigtClassMd(
   ];
   if (layers.length) {
     parts.push(
-      `**Layers that move this class (Five-Layer Stack summary table):** ` +
+      `**Layers that move this class (Seven-Layer Stack summary table):** ` +
         layers
           .map((l) => `L${l.number} ${l.name} (${l.multiplier_effect})`)
           .join("; "),
@@ -297,13 +298,12 @@ export function glossaryMd(a: TokenomicsArtifact): string {
 export function focusTrackerMd(a: TokenomicsArtifact): string {
   const d = docBySlug(a, "focus-1-5-for-ai");
   const labels: Record<string, string> = {
-    done: "In the working draft (merged)",
-    flight: "In review",
-    consider: "Started, not yet certain",
+    done: "In the working draft",
+    review: "In final review",
     out: "Not in 1.5",
   };
   const parts = [`# ${d.title}`, `_${statusLine(d)}_`];
-  for (const bucket of ["done", "flight", "consider", "out"]) {
+  for (const bucket of FOCUS_BUCKETS) {
     const items = a.focusTracker.filter((f) => f.bucket === bucket);
     if (!items.length) continue;
     parts.push(
@@ -325,7 +325,7 @@ export function startMd(
 ): string {
   const lines = [
     "# Tokenomics Overview MCP",
-    "Grounded AI tokenomics guidance from the Tokenomics Foundation (tokeneconomics.com): the Five-Layer Stack, Big-T notation, prompt-caching mechanics and metrics, consumption levers, personas, value classification, and the FOCUS 1.5 AI tracker.",
+    "Grounded AI tokenomics guidance from the Tokenomics Foundation (tokeneconomics.com): the Seven-Layer Stack (L5 covers proxies, model routers and AI gateways), Big-T notation, prompt-caching mechanics and metrics, consumption levers, personas, value classification, and the FOCUS 1.5 AI-cost capabilities.",
     "Most sources are Working Drafts or Release Candidates. Every answer states the status; do not present them as ratified standards.",
     "## Documents",
     a.documents

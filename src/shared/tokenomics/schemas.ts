@@ -2,6 +2,8 @@
 // Single source of truth for loadTokenomicsArtifact and the crawler's
 // pre-emit validation; mirrors the entity types in ./types.ts.
 
+import { FOCUS_BUCKETS } from "./types.js";
+
 const S = "https://json-schema.org/draft/2020-12/schema";
 const str = { type: "string" } as const;
 const nstr = { type: ["string", "null"] } as const;
@@ -179,7 +181,7 @@ export const glossarySchema = collection("glossary", {
 export const focusTrackerSchema = collection("focus-tracker", {
   slug: str,
   title: str,
-  bucket: { enum: ["done", "flight", "consider", "out"] },
+  bucket: { enum: [...FOCUS_BUCKETS] },
   kind: str,
   labels: strArr,
   identifiers: strArr,
@@ -280,4 +282,4 @@ export const TOKENOMICS_ARTIFACT_FILES: Record<
   "derived/changelog.json": changelogSchema,
 };
 
-export const TOKENOMICS_SCHEMA_VERSION = "1.0.0";
+export const TOKENOMICS_SCHEMA_VERSION = "2.0.0";

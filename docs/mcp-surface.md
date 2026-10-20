@@ -306,9 +306,9 @@ Calculate a mapped KPI over bundled sample data
 
 ## tokenomics-overview server
 
-Data v1.0.1, crawled 2026-09-25; 12 Tokenomics Foundation documents. The surface a default `npx tokenomics-overview-mcp` serves.
+Data v2.0.0, crawled 2026-10-19; 14 Tokenomics Foundation documents. The surface a default `npx tokenomics-overview-mcp` serves.
 
-**3 prompt(s) · 5 fixed resource(s) + 6 template(s) (72 concrete resource(s) listed) · 20 tool(s)**
+**3 prompt(s) · 5 fixed resource(s) + 6 template(s) (83 concrete resource(s) listed) · 20 tool(s)**
 
 ### Prompts
 
@@ -347,13 +347,13 @@ Big-T architecture review
 
 Tokenomics Foundation document (text/markdown) — Canonical markdown of one source document, with its publication status.
 
-Completion: `slug`: completable (e.g. what-is-tokenomics, five-layer-stack, five-layer-stack-paper, big-t-notation, big-t-notation-paper, …)
+Completion: `slug`: completable (e.g. what-is-tokenomics, seven-layer-stack, seven-layer-stack-paper, big-t-notation, big-t-notation-paper, …)
 
 #### `tokenomics://overview/layers/{slug}`
 
-Stack layer (text/markdown) — One layer of the Five-Layer Tokenomics Stack.
+Stack layer (text/markdown) — One layer of the Seven-Layer Tokenomics Stack.
 
-Completion: `slug`: completable (e.g. l1, l2, l3, l4, l5)
+Completion: `slug`: completable (e.g. l0, l1, l2, l3, l4, …)
 
 #### `tokenomics://overview/bigt/{slug}`
 
@@ -365,7 +365,7 @@ Completion: `slug`: completable (e.g. t-1, t-log-n, t-n, t-n-k, t-n-k-a, …)
 
 Optimization lever (text/markdown) — One consumption/efficiency lever with provenance.
 
-Completion: `slug`: completable (e.g. l1-match-silicon-class-to-workload, l1-adopt-newer-generations, l2-batch-the-troughs, l2-autoscale, l2-place-by-region, …)
+Completion: `slug`: completable (e.g. l0-site-by-delivered-power-price-and-capacity, l0-contract-supply, l0-shift-deferrable-work-in-time, l1-match-accelerator-class-to-workload, l1-adopt-newer-generations, …)
 
 #### `tokenomics://overview/metrics/{slug}`
 
@@ -402,7 +402,7 @@ Get a source document (or one section)
 
 #### `list_layers`
 
-List the Five-Layer Tokenomics Stack
+List the Seven-Layer Tokenomics Stack
 
 _(no parameters)_
 
@@ -428,7 +428,7 @@ Get one Big-T complexity class
 
 List consumption and efficiency levers
 
-- `layer`, optional, integer, range 1–5
+- `layer`, optional, integer, range 0–6
 - `bigt_class`, optional, string — e.g. 'T(n·k)'
 - `kind`, optional, enum(stack-primary-lever|bigt-lever|architectural-approach|worked-example-step)
 - `document`, optional, string
@@ -500,7 +500,7 @@ Define a tokenomics term
 
 FOCUS 1.5 AI-cost tracker
 
-- `bucket`, optional, enum(done|flight|consider|out)
+- `bucket`, optional, enum(done|review|out)
 - `identifier`, optional, string
 
 #### `get_crosslinks`

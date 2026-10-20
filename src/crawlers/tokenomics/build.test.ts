@@ -71,7 +71,12 @@ beforeAll(() => {
   md = composeFromHtml(loadFixtures(), new Map());
 });
 
-describe("fixture refresh (offline, drift guard)", () => {
+// Each test here runs the whole pipeline over ~1.5 MB of fixture HTML (some
+// twice); under CI coverage instrumentation that outgrows vitest's 5 s
+// unit-test default.
+const PIPELINE_TIMEOUT = { timeout: 30_000 };
+
+describe("fixture refresh (offline, drift guard)", PIPELINE_TIMEOUT, () => {
   it("reproduces the committed artifact's content, links and schemas exactly", async () => {
     const out = tempDir();
     expect(await refresh(opts(out))).toBe(0);
@@ -198,34 +203,72 @@ describe("cross-links", () => {
     }
     return { e, out };
   };
-  const focusIds = new Set(
-    (
-      JSON.parse(
-        readFileSync(join(ROOT, "data/focus/1.2/columns.json"), "utf8"),
-      ) as {
-        id: string;
-      }[]
-    ).map((c) => c.id),
-  );
+  const focusCols = JSON.parse(
+    readFileSync(join(ROOT, "data/focus/1.2/columns.json"), "utf8"),
+  ) as { id: string; display_name: string }[];
+  const focusIds = new Set(focusCols.map((c) => c.id));
+  const focusNames = new Map(focusCols.map((c) => [c.display_name, c.id]));
 
   it("builds evidence-checked links including tracker identifiers", () => {
     const { e, out } = bodies();
-    const links = buildCrossLinks(e, out, focusIds);
+    const links = buildCrossLinks(e, out, focusIds, new Map(), focusNames);
     expect(
       links.some((l) => l.target.id === "PrincipalId" && l.target.uri === null),
     ).toBe(true);
+    const sku = links.find(
+      (l) =>
+        l.target.id === "SkuPriceDetails" &&
+        l.target.uri === "focus://spec/1.2/columns/skupricedetails",
+    );
+    expect(sku?.evidence).toContain("SKU Price Details");
+  });
+
+  it("links FOCUS columns the cards name in prose by display name", () => {
+    const { e, out } = bodies();
+    const ids = buildCrossLinks(e, out, focusIds, new Map(), focusNames)
+      .filter((l) => l.target.server === "focus")
+      .map((l) => l.target.id);
+    expect(ids).toContain("ConsumedQuantity");
     expect(
-      links.some(
-        (l) =>
-          l.target.id === "SkuPriceDetails" &&
-          l.target.uri === "focus://spec/1.2/columns/skupricedetails",
+      buildCrossLinks(e, out, focusIds).some(
+        (l) => l.target.id === "ConsumedQuantity",
       ),
-    ).toBe(true);
+    ).toBe(false);
+  });
+
+  it("cites a short column name only where it is not inside a longer one", () => {
+    const { e, out } = bodies();
+    const body =
+      "Pricing Currency Effective Cost is shown here. Later the Effective Cost differs.";
+    const item = {
+      ...(e.focusTracker[0] as (typeof e.focusTracker)[number]),
+      slug: "synthetic-card",
+      identifiers: [],
+      body_md: body,
+    };
+    out.set(
+      "focus-1-5-for-ai",
+      `${out.get("focus-1-5-for-ai") as string}\n\n${body}`,
+    );
+    const links = buildCrossLinks(
+      { ...e, focusTracker: [...e.focusTracker, item] },
+      out,
+      focusIds,
+      new Map(),
+      focusNames,
+    ).filter((l) => l.from.slug === "synthetic-card");
+    expect(links.find((l) => l.target.id === "EffectiveCost")?.evidence).toBe(
+      "Later the Effective Cost differs.",
+    );
+    expect(
+      links.find((l) => l.target.id === "PricingCurrencyEffectiveCost")
+        ?.evidence,
+    ).toBe("Pricing Currency Effective Cost is shown here.");
   });
 
   it("throws when a stated link's evidence is missing from its document", () => {
     const { e, out } = bodies();
-    out.set("five-layer-stack-paper", "no evidence here");
+    out.set("seven-layer-stack-paper", "no evidence here");
     expect(() => buildCrossLinks(e, out, focusIds)).toThrow(
       /evidence not found/,
     );
@@ -238,7 +281,7 @@ describe("cross-links", () => {
   });
 });
 
-describe("cli", () => {
+describe("cli", PIPELINE_TIMEOUT, () => {
   it("prints usage and exits 2 on unknown commands or missing --from", async () => {
     const logs: string[] = [];
     expect(await main(["nope"], (m) => logs.push(m))).toBe(2);

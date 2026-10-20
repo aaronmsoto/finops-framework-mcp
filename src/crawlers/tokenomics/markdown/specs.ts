@@ -18,7 +18,7 @@ export const STAGES: CollectionSpec = {
 
 export const LAYERS: CollectionSpec = {
   collection: "layers",
-  heading: "The Five-Layer Tokenomics Stack",
+  heading: "The Seven-Layer Tokenomics Stack",
   titleKey: "name",
   fields: [
     { key: "number", type: "int" },
