@@ -152,9 +152,15 @@ exists, so the very first publish of each package is manual:
 
 ## Notes
 
-- All three packages currently release in lockstep from one tag. If their
-  versions ever diverge, split the workflow's publish steps behind
-  tag-name filters.
+- Versions may diverge: one `v*` tag runs every step, and each npm publish
+  (`scripts/npm-publish-once.sh`) and registry submission
+  (`scripts/mcp-registry-publish-once.sh`) skips a name@version already
+  out, so a tag only ships the packages whose version was bumped. Name the
+  tag after the release (e.g. `v0.2.1` for a tokenomics-only patch).
+- A newly added trusted publisher shows "pending validation" until a CI
+  publish uses it, and expires if none does by the date npm shows. A
+  package bootstrapped by hand therefore needs a version bump and one tag
+  run before that date (tokenomics-overview-mcp 0.2.1 did this).
 - `packages/finops-focus-mcp` has no source of its own: its `prepack`
   (`scripts/pack-focus.mjs`) stages `dist/servers/focus`, `dist/shared`,
   and `data/focus` from the repo root, rebuilding when `dist/` is missing
