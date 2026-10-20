@@ -1,6 +1,6 @@
 {
   "name": "tokenomics-overview-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Unofficial MCP server exposing Tokenomics Foundation AI tokenomics guidance to AI agents: the Seven-Layer Stack, Big-T notation, prompt-caching metrics and consumption levers, personas, value classification, and stated cross-links to the FinOps Framework and FOCUS servers.",
   "keywords": [
     "mcp",

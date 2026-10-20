@@ -74,9 +74,11 @@ jobs:
           publisher validate server.json
           publisher validate packages/finops-focus-mcp/server.json
           publisher validate packages/tokenomics-overview-mcp/server.json
+      # Like the npm steps, each submission skips a name@version already
+      # listed, so a release that bumps one package re-runs cleanly.
       - name: Submit finops-framework-mcp
-        run: publisher publish server.json
+        run: ./scripts/mcp-registry-publish-once.sh server.json
       - name: Submit finops-focus-mcp
-        run: publisher publish packages/finops-focus-mcp/server.json
+        run: ./scripts/mcp-registry-publish-once.sh packages/finops-focus-mcp/server.json
       - name: Submit tokenomics-overview-mcp
-        run: publisher publish packages/tokenomics-overview-mcp/server.json
+        run: ./scripts/mcp-registry-publish-once.sh packages/tokenomics-overview-mcp/server.json
