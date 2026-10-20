@@ -19,12 +19,12 @@
 
 Hyperscalers export FOCUS 1.0/1.2 (Azure and GCP 1.2 still preview); 1.3 is
 only at a few SaaS/data providers and nobody emits 1.4 yet, so 1.0/1.2 stay
-the default. Proposed order: add ratified 1.3 + 1.4 for migration diffs and
-the new contract/invoice datasets (size multi-dataset parsing first); ingest
-1.5 right after its 3 Dec 2026 ratification and re-point the tokenomics
-FOCUS links from working-draft identifiers to real 1.5 URIs; add a
-provider-support resource. Evidence and recommendation:
-`docs/research/focus-version-support.md`.
+the default. Owner decision (2026-10-20): build 1.3, 1.4 and 1.5 together
+right after 1.5's 3 Dec 2026 ratification — dataset-aware ingest, a
+`## Requirements` parser fix, dataset in URIs (Cost and Usage default), a
+general from/to diff, re-point the tokenomics FOCUS links to real 1.5 URIs,
+and a provider-support resource. Plan: `docs/adr/0001-focus-1-3-to-1-5-support.md`
+(proposed); evidence: `docs/research/focus-version-support.md`.
 
 ## tokenomics-overview-mcp — a third MCP server for AI tokenomics  —  specced
 

@@ -28,6 +28,19 @@ export type SearchResult = GenericSearchResult<SearchEntityType>;
  * equal relevance (higher title/field weights) so a query like "cache hit
  * rate" lands on the metric before the prose that mentions it. */
 export function buildSearchIndex(a: TokenomicsArtifact): SearchDoc[] {
+  let docs = INDEX_CACHE.get(a);
+  if (!docs) {
+    docs = computeSearchIndex(a);
+    INDEX_CACHE.set(a, docs);
+  }
+  return docs;
+}
+
+/** Cached per artifact object (see the framework server's search.ts: the
+ * Worker builds a fresh server per request); search never mutates it. */
+const INDEX_CACHE = new WeakMap<TokenomicsArtifact, SearchDoc[]>();
+
+function computeSearchIndex(a: TokenomicsArtifact): SearchDoc[] {
   const docs: SearchDoc[] = [];
   const push = (
     entity_type: SearchEntityType,

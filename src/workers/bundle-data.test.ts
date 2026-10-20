@@ -9,11 +9,14 @@
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadArtifact, loadFocusStore } from "../shared/index.js";
+import { loadTokenomicsArtifact } from "../shared/tokenomics/artifact.js";
 import frameworkArtifact from "./generated/framework-artifact.js";
 import focusStoreData from "./generated/focus-store.js";
+import tokenomicsArtifactData from "./generated/tokenomics-artifact.js";
 
 const FRAMEWORK_DIR = join(import.meta.dirname, "../../data/framework");
 const FOCUS_DIR = join(import.meta.dirname, "../../data/focus");
+const TOKENOMICS_DIR = join(import.meta.dirname, "../../data/tokenomics");
 
 describe("generated worker data (T-037)", () => {
   it("framework-artifact.ts matches a fresh load of data/framework", () => {
@@ -29,6 +32,14 @@ describe("generated worker data (T-037)", () => {
       kpiMapping: fresh.kpiMapping,
       sampleManifest: fresh.sampleManifest,
       sampleCsv: Object.fromEntries(fresh.sampleCsv),
+    });
+  });
+
+  it("tokenomics-artifact.ts matches a fresh load of data/tokenomics", () => {
+    const fresh = loadTokenomicsArtifact(TOKENOMICS_DIR);
+    expect(tokenomicsArtifactData).toEqual({
+      ...fresh,
+      documentBodies: Object.fromEntries(fresh.documentBodies),
     });
   });
 });

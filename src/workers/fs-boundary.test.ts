@@ -104,5 +104,6 @@ describe("worker fs boundary (T-037)", () => {
     const relPaths = [...visited].map((f) => f.slice(SRC_ROOT.length + 1));
     expect(relPaths).toContain("servers/framework/tools.ts");
     expect(relPaths).toContain("servers/focus/tools.ts");
+    expect(relPaths).toContain("servers/tokenomics/tools.ts");
   });
 });

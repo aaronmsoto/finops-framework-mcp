@@ -23,8 +23,22 @@ export type SearchEntityType =
 export type SearchDoc = GenericSearchDoc<SearchEntityType>;
 export type SearchResult = GenericSearchResult<SearchEntityType>;
 
-/** Built at server startup from the artifact — never persisted (critique m10). */
+/** Built from the artifact on first use and cached per artifact object for
+ * the life of the process — never persisted (critique m10). The Worker
+ * builds a fresh server per request, so without the cache every request
+ * would re-tokenize the whole artifact; search never mutates the index. */
+const INDEX_CACHE = new WeakMap<Artifact, SearchDoc[]>();
+
 export function buildSearchIndex(artifact: Artifact): SearchDoc[] {
+  let docs = INDEX_CACHE.get(artifact);
+  if (!docs) {
+    docs = computeSearchIndex(artifact);
+    INDEX_CACHE.set(artifact, docs);
+  }
+  return docs;
+}
+
+function computeSearchIndex(artifact: Artifact): SearchDoc[] {
   const docs: SearchDoc[] = [];
   const doc = (
     entity_type: SearchEntityType,

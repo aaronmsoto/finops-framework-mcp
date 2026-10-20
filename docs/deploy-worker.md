@@ -2,23 +2,34 @@
 
 Owner-only checklist (deploying is a human approval point per
 `approvals.yaml` — no automation in this repo runs `wrangler deploy`).
-Deploys both MCP servers (finops-framework and finops-focus-mcp) over HTTPS
-from one Worker, at `/mcp/framework` and `/mcp/focus`.
+Deploys all three MCP servers over HTTPS (Streamable HTTP, stateless JSON
+responses) from one Worker:
+
+| Route | Server | Same tools as |
+| --- | --- | --- |
+| `/mcp/framework` | FinOps Framework | `npx -y finops-framework-mcp` |
+| `/mcp/focus` | FOCUS spec | `npx -y finops-focus-mcp` |
+| `/mcp/tokenomics` | Tokenomics Foundation guidance | `npx -y tokenomics-overview-mcp` |
+
+`/mcp/tokenomics` serves the tokenomics server's default surface (20 tools):
+the experimental `get_crosswalk` tool is never registered on the Worker, and
+neither is the local curriculum overlay — both stay stdio-only.
 
 ## What ships
 
 - `src/workers/index.ts` — the Worker entry point (`wrangler.toml`'s `main`).
-  Loads both data artifacts once per isolate from
+  Loads all three data artifacts once per isolate from
   `src/workers/generated/*.ts` (see below) and builds a fresh MCP `Server` +
   `WebStandardStreamableHTTPServerTransport` per request (stateless: no
   session state persists across requests or isolates).
 - `src/workers/app.ts` — the routing/Origin-allowlist logic, framework-
   agnostic and unit-tested with native `Request` objects
   (`src/workers/app.test.ts`) — never against a running `wrangler dev`.
-- `src/workers/generated/framework-artifact.ts` and `focus-store.ts` — the
-  build-time-validated data snapshots (see next section). Committed to the
-  repo; `src/workers/bundle-data.test.ts` fails CI if they drift from
-  `data/framework`/`data/focus`.
+- `src/workers/generated/framework-artifact.ts`, `focus-store.ts` and
+  `tokenomics-artifact.ts` — the build-time-validated data snapshots (see
+  next section). Committed to the repo; `src/workers/bundle-data.test.ts`
+  fails CI if they drift from `data/framework`, `data/focus` or
+  `data/tokenomics`.
 
 The Worker never touches `node:fs` at runtime — `src/workers/fs-boundary.test.ts`
 statically walks the import graph from `src/workers/index.ts` and fails if
@@ -26,16 +37,16 @@ anything reachable (following real imports, not `import type`) resolves to
 `node:fs`. All disk access happens at build time, in
 `scripts/bundle-worker-data.mjs`.
 
-## 1. Regenerate the data bundle (whenever data/framework or data/focus changed)
+## 1. Regenerate the data bundle (whenever anything under data/ changed)
 
 ```sh
 npm run bundle:worker   # = npm run build && node scripts/bundle-worker-data.mjs
 ```
 
-This re-validates both artifacts with the same ajv schemas + manifest
-sha256 checks the stdio servers use (`loadArtifact`/`loadFocusStore`), then
-rewrites `src/workers/generated/framework-artifact.ts` and `focus-store.ts`
-as plain TypeScript modules (formatted with prettier so the format gate
+This re-validates all three artifacts with the same ajv schemas + manifest
+sha256 checks the stdio servers use (`loadArtifact`/`loadFocusStore`/
+`loadTokenomicsArtifact`), then rewrites the three
+`src/workers/generated/*.ts` files as plain TypeScript modules (formatted with prettier so the format gate
 stays green). Commit the result — `./scripts/agentic gates --tier all`
 should stay green, including the drift check in `bundle-data.test.ts`.
 
@@ -110,9 +121,15 @@ curl -s "$WORKER_URL/mcp/focus" \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json, text/event-stream' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+
+curl -s "$WORKER_URL/mcp/tokenomics" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"calculate_cache_metrics","arguments":{"cache_read_tokens":800000,"cache_write_tokens":50000,"uncached_input_tokens":150000,"base_input_price_per_mtok":3,"cache_read_multiplier":0.1,"cache_write_multiplier":1.25}}}'
 ```
 
-Expect a `200` with a JSON-RPC `result` from both. An unknown path (e.g.
+Expect a `200` with a JSON-RPC `result` from all three; the tokenomics call
+should report `cache_hit_rate: 0.8` and `cache_cost_efficiency: 0.7075`. An unknown path (e.g.
 `/mcp/nope`) should 404; a disallowed `Origin` header should 403; an
 unsupported method (e.g. `PUT`) should 405; more than 60 requests to the same
 route within 60 seconds from the same IP should 429 with `Retry-After: 60`.
@@ -129,22 +146,33 @@ npx wrangler rollback [deployment-id]
 - The Worker is stateless by design (spec non-goal: no session state, no
   user-supplied datasets — `calculate_kpi` only computes over the bundled
   samples, same as the stdio servers).
-- Bundle size: `data/framework` + `data/focus` together are a few MB on
-  disk; re-serialized as the two generated TypeScript modules they're a
-  similar order of magnitude before Worker bundling/compression. If a
-  future data refresh pushes past Cloudflare's Worker size limit for your
-  plan, the fix is scoped to `scripts/bundle-worker-data.mjs` (e.g. per-
-  version code-splitting) — not a reason to reach for `node:fs` at runtime.
-- Refreshing the framework/FOCUS data (`npm run refresh`, FOCUS ingestion)
+- Bundle size: with all three servers, `npx wrangler deploy --dry-run`
+  reports about 3.9 MiB total upload, **about 760 KiB gzipped** (measured
+  2026-10-20). That is well under the Workers Paid plan's 10 MB compressed
+  limit, and under the Free plan's 3 MB too. If a future data refresh
+  pushes past your plan's limit, the fix is scoped to
+  `scripts/bundle-worker-data.mjs` (e.g. per-version code-splitting) — not
+  a reason to reach for `node:fs` at runtime.
+- CPU: each request builds a fresh MCP server (the Worker is stateless), so
+  per-request cost is server construction plus the tool call. Each server
+  memoizes its search index per data artifact, and the artifacts live at
+  module scope, so only the first request in an isolate pays for building
+  indexes. Measured warm `createServer` times are about 6 ms (framework),
+  4 ms (FOCUS) and 6 ms (tokenomics); a cold isolate's first request is
+  25–40 ms. The Workers Paid plan (the $5/month Standard usage model)
+  allows 30 s of CPU per request by default, so this is comfortable; on the
+  Free plan's 10 ms CPU limit, a cold-isolate first request can be refused.
+  Run the Worker on the Paid plan.
+- Refreshing data (`npm run refresh`, FOCUS ingestion, the tokenomics crawler)
   does not auto-deploy anything — re-run step 1, review the diff, commit,
   then repeat step 4 when ready.
 - No authentication: deliberate, not an oversight. The Worker serves only
-  public, read-only FinOps Foundation/FOCUS content (§CORS above already
+  public, read-only FinOps Foundation, FOCUS and Tokenomics Foundation content (§CORS above already
   restricts browser callers, not API access) with no per-user state to
   protect — there is nothing behind it worth gating.
 - **Rate limiting** (added 2026-09-25, decisions.md): `wrangler.toml` declares
   a `[[ratelimits]]` binding (`RATE_LIMITER`, 60 requests/60s per caller IP),
-  enforced in `src/workers/app.ts` on `/mcp/framework` and `/mcp/focus` only —
+  enforced in `src/workers/app.ts` on the three `/mcp/*` routes only —
   a denied request gets `429` with `Retry-After: 60`. This is edge-adjacent
   [Workers Rate Limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/),
   **not** the zone-level [Rate Limiting (WAF) rules](https://developers.cloudflare.com/waf/rate-limiting-rules/)
