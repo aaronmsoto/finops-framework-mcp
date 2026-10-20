@@ -13,3 +13,6 @@ __pycache__/
 .cache/
 packages/*/data/
 *.tgz
+
+# wrangler dev / dry-run local state
+.wrangler/

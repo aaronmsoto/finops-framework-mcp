@@ -18,7 +18,9 @@ export type SearchResult = GenericSearchResult<SearchEntityType>;
  * version-scoped — columns are added/renamed across versions, so a merged
  * cross-version index would blur which version a hit actually applies to). */
 /** Cached per version artifact object (see the framework server's search.ts:
- * the Worker builds a fresh server per request); search never mutates it. */
+ * the Worker builds a fresh server per request); search never mutates it.
+ * Keyed by artifact alone even though `version` is baked into each doc's URI:
+ * loadFocusStore gives every version its own artifact object. */
 const INDEX_CACHE = new WeakMap<FocusVersionArtifact, SearchDoc[]>();
 
 export function buildSearchIndex(

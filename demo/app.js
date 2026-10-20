@@ -50,8 +50,9 @@ function applyPreset(workload) {
 function workloadFromInputs() {
   const workload = {};
   for (const field of WORKLOAD_FIELDS) {
-    const value = Number(document.getElementById(field).value);
-    if (!Number.isFinite(value) || value < 0) {
+    const raw = document.getElementById(field).value.trim();
+    const value = Number(raw);
+    if (raw === "" || !Number.isFinite(value) || value < 0) {
       throw new Error(`${field} must be a non-negative number`);
     }
     workload[field] = value;
