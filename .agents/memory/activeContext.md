@@ -11,31 +11,31 @@
 
 ## In flight
 
-- Docs PR to `dev`: README / package READMEs / NOTICE and the usage guide
-  now cover all three servers (new guide pages: tokenomics-server,
-  example-ai-caching).
+- PR to `dev`: tokenomics on the Cloudflare Worker (`/mcp/tokenomics`),
+  per-artifact search-index caching, the "Is prompt caching paying off?"
+  demo walkthrough, and proposed ADR-0001 for FOCUS 1.3–1.5.
 
 ## Next steps
 
-1. Owner: merge the docs PR, then dev → main; the Pages workflow republishes
-   the guide on that push to `main`.
-2. Released: finops-framework-mcp and finops-focus-mcp 0.2.0,
-   tokenomics-overview-mcp 0.2.1. All three trusted publishers are valid and
-   all three servers are in the MCP Registry.
-3. Next FOCUS work, in order (`docs/research/focus-version-support.md`):
-   size multi-dataset parsing for 1.3/1.4, then ingest 1.5 after its 3 Dec
-   2026 ratification and re-point the tokenomics FOCUS links.
-4. Parked: Sprint 2 drafts (routing guide, terminology & KPIs, measuring
+1. Owner: merge the PR, then `npx wrangler deploy` and redeploy the demo
+   (`docs/deploy-worker.md`, `docs/deploy-demo.md`). Smoke test
+   `/mcp/tokenomics` with the curl in deploy-worker step 5.
+2. FOCUS: nothing until 1.5 ratifies (3 Dec 2026). Then build 1.3, 1.4 and
+   1.5 together per `docs/adr/0001-focus-1-3-to-1-5-support.md`, and accept
+   the ADR.
+3. Parked: Sprint 2 drafts (routing guide, terminology & KPIs, measuring
    AI value in SE). They show up in `manifest.json` `unregistered`; ingest
    when final (`docs/research/tokenomics-routing-guide-draft.md`).
 
 ## Open questions
 
+- ADR-0001: whether 1.3+ ingest should read `specification/requirements_model/`
+  JSON instead of the column markdown. Decide when building.
 - Routing guide: are cost per outcome and cost per task two metrics? Wait
   for the final text.
 - Curriculum privacy and the remaining unregistered pages: owner decides.
 
 ## Last updated
 
-2026-10-20 — Released 0.2.0 / 0.2.1; docs and the Pages guide updated for
-all three servers.
+2026-10-20 — Tokenomics added to the Worker and demo; FOCUS 1.3–1.5 plan
+written as a proposed ADR.

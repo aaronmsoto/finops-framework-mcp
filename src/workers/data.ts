@@ -1,9 +1,10 @@
-// Fs-free assembly of the two MCP data artifacts for the Cloudflare Worker
+// Fs-free assembly of the three MCP data artifacts for the Cloudflare Worker
 // (T-037). The worker is stateless and must never touch node:fs at runtime
 // (data is loaded from disk, ajv-validated, and hashed only at build time by
 // scripts/bundle-worker-data.mjs) — this module only imports the generated
-// JSON modules under ./generated/ and rehydrates FocusStore's two Map
-// fields, which aren't JSON-representable, back from plain objects.
+// JSON modules under ./generated/ and rehydrates the Map fields (FocusStore's
+// versions and sampleCsv, the tokenomics artifact's documentBodies), which
+// aren't JSON-representable, back from plain objects.
 //
 // NOTE: the `Artifact`/`FocusVersionArtifact` types are imported here as
 // `import type` only, so they are erased at compile time and never make
@@ -14,6 +15,7 @@ import type {
   FocusVersionArtifact,
   FocusStore,
 } from "../shared/focus/artifact.js";
+import type { TokenomicsArtifact } from "../shared/tokenomics/artifact.js";
 import type {
   FocusDiff,
   FocusIndex,
@@ -22,6 +24,7 @@ import type {
 } from "../shared/focus/types.js";
 import frameworkArtifact from "./generated/framework-artifact.js";
 import focusStoreData from "./generated/focus-store.js";
+import tokenomicsArtifactData from "./generated/tokenomics-artifact.js";
 
 /** The JSON-safe shape scripts/bundle-worker-data.mjs emits for FocusStore:
  * identical except the two Map fields are plain objects. */
@@ -34,9 +37,17 @@ export interface SerializedFocusStore {
   sampleCsv: Record<string, string>;
 }
 
+/** The JSON-safe shape emitted for the tokenomics artifact: identical except
+ * documentBodies is a plain object. */
+export type SerializedTokenomicsArtifact = Omit<
+  TokenomicsArtifact,
+  "documentBodies"
+> & { documentBodies: Record<string, string> };
+
 export interface WorkerData {
   frameworkArtifact: Artifact;
   focusStore: FocusStore;
+  tokenomicsArtifact: TokenomicsArtifact;
 }
 
 /** Rebuilds the Map fields from the generated plain-object modules. Pure —
@@ -51,5 +62,11 @@ export function loadWorkerData(): WorkerData {
     sampleManifest: serialized.sampleManifest,
     sampleCsv: new Map(Object.entries(serialized.sampleCsv)),
   };
-  return { frameworkArtifact, focusStore };
+  const tokenomicsArtifact: TokenomicsArtifact = {
+    ...tokenomicsArtifactData,
+    documentBodies: new Map(
+      Object.entries(tokenomicsArtifactData.documentBodies),
+    ),
+  };
+  return { frameworkArtifact, focusStore, tokenomicsArtifact };
 }

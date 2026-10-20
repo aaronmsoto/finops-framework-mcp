@@ -169,11 +169,20 @@ URIs, defaults and limits) are generated from live MCP output in
 
 ### Remote option: the Cloudflare Worker
 
-The framework and FOCUS servers can also run over **Streamable HTTP** from a
-bundled Cloudflare Worker (`src/workers/`, endpoints `/mcp/framework` and
-`/mcp/focus`; see [`docs/deploy-worker.md`](docs/deploy-worker.md)), and
-[`demo/`](demo/) is a static browser walkthrough that drives both through it.
-The tokenomics server is stdio-only for now.
+All three servers can also run over **Streamable HTTP** from one bundled
+Cloudflare Worker (`src/workers/`, endpoints `/mcp/framework`, `/mcp/focus`
+and `/mcp/tokenomics`; see [`docs/deploy-worker.md`](docs/deploy-worker.md)).
+Any MCP client that speaks Streamable HTTP can connect to a deployed Worker,
+for example:
+
+```bash
+claude mcp add --transport http tokenomics-overview "$WORKER_URL/mcp/tokenomics"
+```
+
+The Worker is stateless and serves each server's default surface (no
+experimental tools). [`demo/`](demo/) is a static browser page with two
+walkthroughs through it: "Is prompt caching paying off?" (all three servers,
+on your own token counts) and Rate Optimization (framework and FOCUS).
 
 ## How it's built
 

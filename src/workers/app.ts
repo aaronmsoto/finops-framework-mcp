@@ -1,6 +1,6 @@
 // Fetch-handler factory for the Cloudflare Worker (T-037,
 // .agents/specs/focus-mcp-v1.md "Packaging / worker / demo"). Routes
-// /mcp/framework and /mcp/focus to the same MCP servers the stdio bins
+// /mcp/framework, /mcp/focus and /mcp/tokenomics to the same MCP servers the stdio bins
 // serve, over the SDK's Web Standard Streamable HTTP transport — a fresh
 // server + transport per request (stateless: no sessionIdGenerator, so no
 // in-memory session state survives across requests/isolates), plus a
@@ -22,14 +22,18 @@
 //
 // Deliberately does not import from ../shared/index.js (the barrel) or any
 // module that imports node:fs — see src/workers/data.ts and
-// src/workers/fs-boundary.test.ts. createServer() for both servers only
-// pulls in fs-free modules (confirmed by that test).
+// src/workers/fs-boundary.test.ts. createServer() for all three servers only
+// pulls in fs-free modules (confirmed by that test). The tokenomics server
+// runs in its default surface: no experimental crosswalk, and never the
+// local curriculum overlay.
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import type { Artifact } from "../shared/types.js";
 import type { FocusStore } from "../shared/focus/artifact.js";
+import type { TokenomicsArtifact } from "../shared/tokenomics/artifact.js";
 import { createServer as createFrameworkServer } from "../servers/framework/server.js";
 import { createServer as createFocusServer } from "../servers/focus/server.js";
+import { createServer as createTokenomicsServer } from "../servers/tokenomics/server.js";
 
 /** Matches the shape of a Cloudflare Workers Rate Limiting binding
  * (`env.RATE_LIMITER` in wrangler.toml's `[[ratelimits]]`), kept as a local
@@ -43,14 +47,14 @@ export interface RateLimiter {
 export interface FetchHandlerOptions {
   frameworkArtifact: Artifact;
   focusStore: FocusStore;
+  tokenomicsArtifact: TokenomicsArtifact;
   /** Origin header values allowed to call the worker. A request with no
    * Origin header (non-browser clients, curl, server-to-server) is always
    * allowed regardless of this list. */
   allowedOrigins: readonly string[];
-  /** Optional per-IP rate limiter for the /mcp/* routes. Undefined disables
-   * rate limiting entirely (e.g. in tests that don't care about it) — see
-   * decisions.md 2026-09-25 for why this is temporary/test-only and not yet
-   * wired into the deployed Worker's wrangler.toml. */
+  /** Optional per-IP rate limiter for the /mcp/* routes (wrangler.toml's
+   * `[[ratelimits]]` binding in production; see decisions.md 2026-09-25).
+   * Undefined disables rate limiting, e.g. in tests that don't exercise it. */
   rateLimiter?: RateLimiter;
 }
 
@@ -59,7 +63,10 @@ export type FetchHandler = (request: Request) => Promise<Response>;
 const ROUTES = {
   framework: "/mcp/framework",
   focus: "/mcp/focus",
+  tokenomics: "/mcp/tokenomics",
 } as const;
+
+const MCP_PATHS = new Set<string>(Object.values(ROUTES));
 
 const CORS_ALLOW_METHODS = "POST, GET, DELETE, OPTIONS";
 const CORS_ALLOW_HEADERS =
@@ -78,14 +85,20 @@ async function handleMcp(
   return transport.handleRequest(request);
 }
 
-/** Builds the worker's fetch handler from the two pre-loaded data
+/** Builds the worker's fetch handler from the three pre-loaded data
  * artifacts and an Origin allowlist. Pure with respect to its inputs — safe
  * to call once per isolate (src/workers/index.ts does), or per request in
  * tests. */
 const RATE_LIMIT_KEY_HEADER = "cf-connecting-ip";
 
 export function createFetchHandler(opts: FetchHandlerOptions): FetchHandler {
-  const { frameworkArtifact, focusStore, allowedOrigins, rateLimiter } = opts;
+  const {
+    frameworkArtifact,
+    focusStore,
+    tokenomicsArtifact,
+    allowedOrigins,
+    rateLimiter,
+  } = opts;
 
   return async function fetchHandler(request: Request): Promise<Response> {
     const origin = request.headers.get("origin");
@@ -108,8 +121,7 @@ export function createFetchHandler(opts: FetchHandlerOptions): FetchHandler {
     }
 
     const { pathname } = new URL(request.url);
-    const isMcpRoute =
-      pathname === ROUTES.framework || pathname === ROUTES.focus;
+    const isMcpRoute = MCP_PATHS.has(pathname);
 
     // The transport is stateless (no sessionIdGenerator): every request gets
     // a fresh server, so there is no session for a GET SSE stream to relay
@@ -136,7 +148,7 @@ export function createFetchHandler(opts: FetchHandlerOptions): FetchHandler {
       );
     }
 
-    // Only the two POST-only MCP routes are metered — nothing else does
+    // Only the POST-only MCP routes are metered — nothing else does
     // enough work to be worth gating. Keyed by the caller's IP as reported by
     // Cloudflare's edge (absent outside Cloudflare's network, e.g. in tests
     // and `wrangler dev` without `--remote`; those callers share one "unknown"
@@ -169,6 +181,11 @@ export function createFetchHandler(opts: FetchHandlerOptions): FetchHandler {
       case ROUTES.focus:
         response = await handleMcp(request, () =>
           createFocusServer(focusStore),
+        );
+        break;
+      case ROUTES.tokenomics:
+        response = await handleMcp(request, () =>
+          createTokenomicsServer(tokenomicsArtifact),
         );
         break;
       default:

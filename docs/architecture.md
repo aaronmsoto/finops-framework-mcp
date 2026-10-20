@@ -253,7 +253,8 @@ content the model should fetch via tools (M8). Single renderer shared with
 stdio primary via `servers/framework` bin; `createServer(artifact)` is
 transport-free; Streamable HTTP later = a new entry point only. **Now
 built:** `src/workers/index.ts` — a Cloudflare Worker entry point serving
-the framework server over Streamable HTTP, plus a static browser `demo/`
+all three servers over Streamable HTTP (`/mcp/framework`, `/mcp/focus`,
+`/mcp/tokenomics`), plus a static browser `demo/`
 against it (see `docs/deploy-worker.md`).
 
 ### 5.5 Capability declarations (m4)

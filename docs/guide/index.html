@@ -461,19 +461,23 @@ claude mcp add tokenomics-overview -- npx -y tokenomics-overview-mcp</pre>
     <div class="step-n">4</div>
     <div class="step-body">
       <h2>Or run them remotely — the Cloudflare Worker</h2>
-      <p>The framework and FOCUS servers are also deployable over
+      <p>All three servers are also deployable over
       <strong>Streamable HTTP</strong> from a single bundled Cloudflare Worker
-      (<span class="mono">src/workers/</span>), which serves them at two paths. The
-      tokenomics server is stdio-only for now.</p>
+      (<span class="mono">src/workers/</span>), which serves each one at its own
+      path with the same default tools as the stdio package (experimental tools
+      stay stdio-only).</p>
       <div class="cols">
         <span class="col-chip">POST /mcp/framework</span>
         <span class="col-chip">POST /mcp/focus</span>
+        <span class="col-chip">POST /mcp/tokenomics</span>
       </div>
       <p style="font-size:0.9rem; margin-top:0.7rem;">The Worker builds a fresh
       MCP server and transport per request — <strong>stateless by design</strong>: no
       session state persists across requests or isolates, and there is no
       user-supplied data path (<span class="mono">calculate_kpi</span> computes only
-      over the bundled samples, exactly as the stdio servers do). Both data
+      over the bundled samples, exactly as the stdio servers do, and
+      <span class="mono">calculate_cache_metrics</span> uses the token counts in the
+      request and keeps nothing). All three data
       artifacts are compiled into the bundle at build time; nothing reachable
       from the Worker entry point touches <span class="mono">node:fs</span> at runtime,
       and a test statically walks the import graph to keep it that way.</p>
@@ -485,7 +489,7 @@ claude mcp add tokenomics-overview -- npx -y tokenomics-overview-mcp</pre>
       CORS. There is deliberately no authentication, because the Worker serves
       only public, read-only content with no per-user state behind it; a per-IP
       rate limit (60 requests per 60 seconds, then <span class="mono">429</span>) guards
-      the two <span class="mono">/mcp/*</span> routes.</p>
+      the three <span class="mono">/mcp/*</span> routes.</p>
       <p style="font-size:0.9rem;">There is no public hosted endpoint to point
       you at here — deploying is a human approval point in this repo, so the
       URL is whatever the operator's own
@@ -495,6 +499,10 @@ claude mcp add tokenomics-overview -- npx -y tokenomics-overview-mcp</pre>
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json, text/event-stream' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'</pre>
+      <p style="font-size:0.9rem;">To use a deployed Worker from an MCP client
+      that speaks Streamable HTTP, give it the route's URL instead of an
+      <span class="mono">npx</span> command:</p>
+      <pre class="tx">claude mcp add --transport http tokenomics-overview "$WORKER_URL/mcp/tokenomics"</pre>
       <p class="callnote">source: docs/deploy-worker.md (owner deployment checklist)</p>
     </div>
   </section>

@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 // Build-time data bundler for the Cloudflare Worker (T-037,
 // .agents/specs/focus-mcp-v1.md "Packaging / worker / demo"). The worker is
-// stateless and must never touch node:fs at runtime, so the framework and
-// FOCUS artifacts are assembled and ajv-validated here (reusing the same
+// stateless and must never touch node:fs at runtime, so the framework, FOCUS
+// and tokenomics artifacts are assembled and ajv-validated here (reusing the same
 // loadArtifact/loadFocusStore seam the stdio servers use — same schemas,
 // same manifest sha256 checks) and re-emitted as plain TypeScript modules
 // under src/workers/generated/ that `import default` the data as object
-// literals. FocusStore's two Map fields are serialized as plain objects
-// (rehydrated into Maps at request time by src/workers/data.ts) since Maps
-// aren't JSON-representable. Requires a prior `npm run build` (loads the
+// literals. Map fields (FocusStore's versions and sampleCsv, the tokenomics
+// artifact's documentBodies) are serialized as plain objects and rehydrated
+// into Maps by src/workers/data.ts, since Maps aren't JSON-representable. Requires a prior `npm run build` (loads the
 // compiled loaders from dist/shared/, like scripts/bundle-focus-samples.mjs
 // does for the crawler seam).
 
@@ -16,6 +16,7 @@ import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 import { loadArtifact, loadFocusStore } from "../dist/shared/index.js";
+import { loadTokenomicsArtifact } from "../dist/shared/tokenomics/artifact.js";
 
 const ROOT = join(import.meta.dirname, "..");
 const OUT_DIR = join(ROOT, "src/workers/generated");
@@ -70,10 +71,27 @@ function bundleFocus() {
   console.error("bundle-worker-data: wrote focus-store.ts");
 }
 
+function bundleTokenomics() {
+  const artifact = loadTokenomicsArtifact(join(ROOT, "data/tokenomics"));
+  const serialized = {
+    ...artifact,
+    documentBodies: Object.fromEntries(artifact.documentBodies),
+  };
+  writeModule(
+    "tokenomics-artifact.ts",
+    'import type { SerializedTokenomicsArtifact } from "../data.js";',
+    "SerializedTokenomicsArtifact",
+    "tokenomicsArtifact",
+    serialized,
+  );
+  console.error("bundle-worker-data: wrote tokenomics-artifact.ts");
+}
+
 ensureBuilt();
 mkdirSync(OUT_DIR, { recursive: true });
 bundleFramework();
 bundleFocus();
+bundleTokenomics();
 
 // Keep the committed output gate-clean (format gate: prettier --check)
 // regardless of who re-runs this script.
@@ -84,6 +102,7 @@ execFileSync(
     "--write",
     join(OUT_DIR, "framework-artifact.ts"),
     join(OUT_DIR, "focus-store.ts"),
+    join(OUT_DIR, "tokenomics-artifact.ts"),
   ],
   { cwd: ROOT, stdio: "inherit" },
 );

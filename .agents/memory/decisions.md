@@ -898,3 +898,18 @@ something to rely on for a strict quota.
 - Alternatives considered: exact capability-title match only (rejected —
   the Foundation writes "anomaly detection", never "Anomaly Management");
   keeping the exemption (rejected — silent wrong targets).
+
+## 2026-10-20 — FOCUS 1.3/1.4 wait for 1.5; tokenomics on the Worker
+
+- Decision (owner): build FOCUS 1.3, 1.4 and 1.5 together right after 1.5
+  ratifies (3 Dec 2026), per proposed `docs/adr/0001-focus-1-3-to-1-5-support.md`.
+  1.2 stays the default version.
+- Alternatives considered: 1.3 + 1.4 now and 1.5 later (rejected — the
+  dataset and parser redesign would be done twice for versions almost no
+  provider exports); 1.5 only (rejected — loses the 1.2→1.4 column removals
+  in `compare_versions`).
+- Decision: the Worker's `/mcp/tokenomics` serves the default surface only
+  (no `get_crosswalk`, no curriculum overlay), matching the other routes.
+  Search indexes are memoized per artifact object (WeakMap) instead of
+  being prebuilt into the bundle (rejected — doubles bundle size for a cost
+  paid once per isolate).

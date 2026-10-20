@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FinOps Framework + FOCUS MCP — Rate Optimization walkthrough</title>
+    <title>FinOps MCP servers — live walkthroughs</title>
     <style>
       :root {
         color-scheme: light dark;
@@ -14,6 +14,9 @@
         --accent: #0f5fa8;
         --error: #b3261e;
         --code-bg: #f5f5f5;
+        --good: #0b7a55;
+        --warn: #a66a1e;
+        --card: #f7f9fb;
       }
       @media (prefers-color-scheme: dark) {
         :root {
@@ -24,6 +27,9 @@
           --accent: #6fb1ff;
           --error: #ff8a80;
           --code-bg: #1d2024;
+          --good: #34b98a;
+          --warn: #d08a2e;
+          --card: #1a1d22;
         }
       }
       * {
@@ -132,6 +138,149 @@
       pre.error {
         color: var(--error);
       }
+      .picker {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+        gap: 0.75rem;
+        margin: 1.5rem 0 0;
+        border: 0;
+        padding: 0;
+      }
+      .picker legend {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 0.5rem;
+      }
+      .walk {
+        display: block;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.85rem 1rem;
+        cursor: pointer;
+        background: var(--card);
+      }
+      .walk:has(input:checked) {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent);
+      }
+      .walk input {
+        margin-right: 0.4rem;
+      }
+      .walk strong {
+        font-size: 0.98rem;
+      }
+      .walk p {
+        margin: 0.35rem 0 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-top: 0.5rem;
+      }
+      .chip {
+        font-family: monospace;
+        font-size: 0.72rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.1rem 0.5rem;
+      }
+      .workload {
+        margin: 1rem 0 0;
+        padding: 1rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .workload[hidden] {
+        display: none;
+      }
+      .workload h2 {
+        font-size: 0.95rem;
+        margin: 0 0 0.25rem;
+      }
+      .workload p {
+        margin: 0 0 0.75rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+        gap: 0.6rem;
+      }
+      .fields label {
+        display: grid;
+        gap: 0.2rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .fields input {
+        padding: 0.45rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: monospace;
+      }
+      .presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.75rem;
+      }
+      button.ghost {
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid var(--accent);
+        font-weight: 500;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.82rem;
+      }
+      .result {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+        gap: 0.75rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--card);
+      }
+      .result[hidden] {
+        display: none;
+      }
+      .metric .v {
+        font-size: 1.8rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      #m-cost .v {
+        font-size: 1.3rem;
+        white-space: nowrap;
+        padding-top: 0.5rem;
+      }
+      .metric .n {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .metric.good .v {
+        color: var(--good);
+      }
+      .metric.bad .v {
+        color: var(--warn);
+      }
+      .result .why {
+        grid-column: 1 / -1;
+        margin: 0;
+        font-size: 0.88rem;
+      }
+      .step .server {
+        font-family: monospace;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
       footer {
         margin-top: 3rem;
         font-size: 0.8rem;
@@ -141,17 +290,104 @@
   </head>
   <body>
     <main>
-      <h1>FinOps Framework + FOCUS MCP — Rate Optimization walkthrough</h1>
+      <h1>FinOps MCP servers — live walkthroughs</h1>
       <p class="lede">
-        A static, no-build demo of the combined value the
-        <code>finops-framework-mcp</code> and
-        <code>finops-focus-mcp</code> servers only have together: capability
-        &rarr; featured KPIs &rarr; the FOCUS columns needed to compute each,
-        per spec version &rarr; calculate on bundled sample data. Every request
-        below is a real JSON-RPC <code>tools/call</code> sent to the worker
-        endpoints configured below (see <code>demo/config.js</code>,
-        <code>docs/deploy-worker.md</code>).
+        A static, no-build demo of what the
+        <code>finops-framework-mcp</code>, <code>finops-focus-mcp</code> and
+        <code>tokenomics-overview-mcp</code> servers do together. Every step
+        below is a real JSON-RPC <code>tools/call</code> sent to the Worker
+        endpoints configured here (see <code>demo/config.js</code>,
+        <code>docs/deploy-worker.md</code>), and the full request and response
+        are shown.
       </p>
+
+      <fieldset class="picker">
+        <legend>Choose a walkthrough</legend>
+        <label class="walk">
+          <input type="radio" name="walkthrough" value="ai-caching" checked />
+          <strong>Is prompt caching paying off?</strong>
+          <p>
+            The framework's Cache Hit Rate KPI &rarr; the Tokenomics
+            Foundation's formula, run on your own token counts &rarr; the FOCUS
+            column that carries cached-token data.
+          </p>
+          <span class="chips">
+            <span class="chip">framework</span>
+            <span class="chip">tokenomics</span>
+            <span class="chip">focus</span>
+          </span>
+        </label>
+        <label class="walk">
+          <input type="radio" name="walkthrough" value="rate-optimization" />
+          <strong>Rate Optimization</strong>
+          <p>
+            Capability &rarr; featured KPIs &rarr; the FOCUS columns that
+            compute them in 1.0 and 1.2 &rarr; calculated on bundled sample
+            data.
+          </p>
+          <span class="chips">
+            <span class="chip">framework</span>
+            <span class="chip">focus</span>
+          </span>
+        </label>
+      </fieldset>
+
+      <section class="workload" id="workload">
+        <h2>Your workload's prompt tokens</h2>
+        <p>
+          Input-side token counts for one period, from your provider's usage
+          export. The defaults are the usage guide's “stable prefix” example.
+        </p>
+        <div class="fields">
+          <label
+            >Cache read tokens
+            <input id="cache_read_tokens" type="number" min="0" step="1" />
+          </label>
+          <label
+            >Cache write tokens
+            <input id="cache_write_tokens" type="number" min="0" step="1" />
+          </label>
+          <label
+            >Uncached input tokens
+            <input id="uncached_input_tokens" type="number" min="0" step="1" />
+          </label>
+          <label
+            >Base input price ($ / 1M tokens)
+            <input
+              id="base_input_price_per_mtok"
+              type="number"
+              min="0"
+              step="0.01"
+            />
+          </label>
+          <label
+            >Cache read rate (× base)
+            <input
+              id="cache_read_multiplier"
+              type="number"
+              min="0"
+              step="0.01"
+            />
+          </label>
+          <label
+            >Cache write rate (× base)
+            <input
+              id="cache_write_multiplier"
+              type="number"
+              min="0"
+              step="0.01"
+            />
+          </label>
+        </div>
+        <div class="presets">
+          <button class="ghost" type="button" data-preset="stable">
+            Stable prefix
+          </button>
+          <button class="ghost" type="button" data-preset="churning">
+            Prefix keeps changing
+          </button>
+        </div>
+      </section>
 
       <div class="controls">
         <label for="worker-url">Worker base URL</label>
@@ -164,16 +400,34 @@
         />
         <button id="run" type="button">Run walkthrough</button>
       </div>
-      <p id="status"></p>
+      <p id="status" role="status"></p>
+
+      <section class="result" id="result" hidden aria-live="polite">
+        <div class="metric" id="m-hit">
+          <div class="v">—</div>
+          <div class="n">cache hit rate</div>
+        </div>
+        <div class="metric" id="m-eff">
+          <div class="v">—</div>
+          <div class="n">cache cost efficiency</div>
+        </div>
+        <div class="metric" id="m-cost">
+          <div class="v">—</div>
+          <div class="n">actual vs uncached prompt cost</div>
+        </div>
+        <p class="why" id="m-why"></p>
+      </section>
 
       <div id="log"></div>
 
       <footer>
         FinOps Framework and FOCUS content served by these tools is &copy;
-        FinOps Foundation / the FOCUS project, CC BY 4.0 — see
-        <code>NOTICE.md</code>. The KPI&rarr;FOCUS-column mapping and its
-        calculations are an <strong>unofficial</strong> derivation by this
-        project, not endorsed by the FinOps Foundation or the FOCUS project.
+        FinOps Foundation / the FOCUS project, and AI tokenomics content is
+        &copy; Tokenomics Foundation (a Series of LF Projects, LLC), all CC BY
+        4.0 — see <code>NOTICE.md</code>. The KPI&rarr;FOCUS-column mapping and
+        its calculations are an <strong>unofficial</strong>
+        derivation by this project, not endorsed by the FinOps Foundation, the
+        FOCUS project or the Tokenomics Foundation.
       </footer>
     </main>
     <script type="module" src="./app.js"></script>
