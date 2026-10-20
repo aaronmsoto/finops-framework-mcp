@@ -2,86 +2,80 @@
 
 [![finops-framework-mcp on npm](https://img.shields.io/npm/v/finops-framework-mcp?label=finops-framework-mcp)](https://www.npmjs.com/package/finops-framework-mcp)
 [![finops-focus-mcp on npm](https://img.shields.io/npm/v/finops-focus-mcp?label=finops-focus-mcp)](https://www.npmjs.com/package/finops-focus-mcp)
+[![tokenomics-overview-mcp on npm](https://img.shields.io/npm/v/tokenomics-overview-mcp?label=tokenomics-overview-mcp)](https://www.npmjs.com/package/tokenomics-overview-mcp)
 [![license MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-An unofficial [MCP](https://modelcontextprotocol.io) server pair that gives
-AI assistants a structured, sourced interface to the FinOps Foundation's
-published guidance — the **FinOps Framework** (capabilities, maturity
-assessments, KPIs, personas) and the **FOCUS** billing-data specification —
-so an assistant answers FinOps questions with the Foundation's actual text
-and formulas instead of improvising.
+Three unofficial [MCP](https://modelcontextprotocol.io) servers that give AI
+assistants a structured, sourced interface to published FinOps and AI-cost
+guidance, so an assistant answers with the publishers' actual text and
+formulas instead of improvising:
+
+| Server | Covers | Source |
+| --- | --- | --- |
+| [**finops-framework-mcp**](https://www.npmjs.com/package/finops-framework-mcp) | The **FinOps Framework**: capabilities, Crawl/Walk/Run maturity, KPIs, personas | [finops.org/framework](https://www.finops.org/framework/) |
+| [**finops-focus-mcp**](https://www.npmjs.com/package/finops-focus-mcp) | The **FOCUS** billing-data specification, pinned per version (1.0, 1.2) | [focus.finops.org](https://focus.finops.org) |
+| [**tokenomics-overview-mcp**](https://www.npmjs.com/package/tokenomics-overview-mcp) | **AI tokenomics**: the Seven-Layer Stack, Big-T notation, prompt-cache metrics, consumption levers incl. model routing, FOCUS 1.5 AI cost | [tokeneconomics.com](https://www.tokeneconomics.com) |
+
+All three are **read-only** (an agent can read guidance, never change your
+practice or data) and **offline once installed** (no network access at
+runtime, no telemetry). Use any one on its own; together they cover what good
+looks like, which billing columns prove it, and what drives AI token cost.
 
 ## Start here: the usage guide
 
 **[aaronmsoto.github.io/finops-framework-mcp](https://aaronmsoto.github.io/finops-framework-mcp/)**
-is a free, no-install walkthrough written for FinOps practitioners as much
-as engineers — nothing to configure, just click through. It explains what
-these two servers do and why, connects one to Claude in a couple of
-minutes, and works through four real worked examples (a showback report, a
-rate-optimization calculation, a Crawl-to-Walk maturity journey, and a live
-Q&A session) with every number and quote pulled from an actual run of these
-servers. See [Documentation](#documentation) below for the full page list.
+is a free, no-install walkthrough written for FinOps practitioners as much as
+engineers. It explains what each server does, connects them to Claude in a
+couple of minutes, and works through five examples, from a showback report to
+whether prompt caching is paying off. Every number and quote in it comes from
+a real run of these servers. See [Documentation](#documentation) for the page
+list.
 
 ## Why this exists
 
-Ask an AI assistant "how mature is our Allocation practice?" or "which
-FOCUS columns feed Effective Savings Rate?" without this, and it will
-happily improvise a plausible-sounding answer. These two servers exist so
-it doesn't have to: every response is the FinOps Foundation's own published
-text and formulas, structured for an assistant to read, with the source URL
-and license attached to it. Anything these servers had to work out
-themselves — a KPI-to-FOCUS-column mapping, a computed KPI value, a
-cross-version diff — is clearly labeled **UNOFFICIAL** rather than
-presented as if the Foundation published it.
+Ask an AI assistant "how mature is our Allocation practice?", "which FOCUS
+columns feed Effective Savings Rate?" or "is our prompt caching paying off?"
+without these servers, and it will happily improvise a plausible answer. With
+them, every response is the publisher's own text and formulas, structured for
+an assistant to read, with the source URL and license attached.
 
-- **finops-framework-mcp** (this package) covers the FinOps Framework: 6
-  Principles, 3 Phases, 4 Domains, 22 Capabilities (each with Crawl/Walk/Run
-  maturity assessments, per-persona activities, and KPIs), 11 Personas, 5
-  Technology Categories, the Scopes concept, and an 88-entry KPI library.
-- **finops-focus-mcp** (published separately, see below) covers FOCUS — the
-  standardized billing/usage data spec — pinned to a spec version (1.0 or
-  1.2) on every answer, so nothing gets blended across releases that
-  actually changed a column's meaning.
-- **tokenomics-overview-mcp** (published separately from v0.2.0, see below)
-  covers AI tokenomics from the Tokenomics Foundation: the Seven-Layer Stack,
-  Big-T notation, prompt-cache metrics (Cache Hit Rate, Cache Cost
-  Efficiency), consumption levers, and stated cross-links into the other
-  two servers.
+Anything a server had to work out itself is labeled, never passed off as
+published guidance:
 
-Both servers are **read-only**: there's no way for an AI agent to change
-your FinOps practice or your billing data through them, only to read
-published guidance about it. Both are also **offline once installed** — no
-network access at runtime, no telemetry, no external calls.
+- The FOCUS server's KPI-to-column mapping, computed KPI values and
+  cross-version diff are marked **UNOFFICIAL** (`official: false`).
+- The tokenomics server states each source's **publication status** on every
+  answer, because most Tokenomics Foundation guidance is a working draft or
+  release candidate. Its curated crosswalk is unofficial and only appears
+  with `FINOPS_MCP_EXPERIMENTAL=1`.
+- The framework server is official-only out of the box: no invented
+  relationships between capabilities, no maturity levels beyond the
+  Foundation's Crawl/Walk/Run.
 
 ## Quickstart
 
-Both servers are published on npm —
-[`finops-framework-mcp`](https://www.npmjs.com/package/finops-framework-mcp) and
-[`finops-focus-mcp`](https://www.npmjs.com/package/finops-focus-mcp) — so there is
-nothing to clone or build. Each ships its data artifact inside the package and runs
-offline after install; Node >= 22 is the only requirement.
+All three are on npm, so there is nothing to clone or build. Each package
+ships its own data and runs offline. **Node >= 22** is the only requirement.
 
 ```bash
 npx -y finops-framework-mcp
+npx -y finops-focus-mcp
+npx -y tokenomics-overview-mcp
 ```
 
 (`-y` skips npx's first-run install prompt, which can hang non-interactive
-MCP clients; pin a version with `npx -y finops-framework-mcp@latest` or
-`@0.1`.)
+MCP clients. Pin a version with, for example, `npx -y finops-focus-mcp@0.2`.)
 
-or, from a clone:
-
-```bash
-npm install && npm run build && npm run server
-```
-
-Claude Code:
+**Claude Code:**
 
 ```bash
 claude mcp add finops-framework -- npx -y finops-framework-mcp
+claude mcp add focus-spec -- npx -y finops-focus-mcp
+claude mcp add tokenomics-overview -- npx -y tokenomics-overview-mcp
 ```
 
-Claude Desktop (`claude_desktop_config.json`):
+**Claude Desktop** (`claude_desktop_config.json`), or a project-scoped
+`.mcp.json`, or any stdio MCP client:
 
 ```json
 {
@@ -89,168 +83,204 @@ Claude Desktop (`claude_desktop_config.json`):
     "finops-framework": {
       "command": "npx",
       "args": ["-y", "finops-framework-mcp"]
+    },
+    "focus-spec": {
+      "command": "npx",
+      "args": ["-y", "finops-focus-mcp"]
+    },
+    "tokenomics-overview": {
+      "command": "npx",
+      "args": ["-y", "tokenomics-overview-mcp"]
     }
   }
 }
 ```
 
-The artifact directory defaults to the one packaged with the npm release
-(`data/framework`); override with `FINOPS_MCP_DATA` or the first CLI
-argument if you're running against a locally-refreshed artifact.
+**Environment variables** (all optional):
 
-Surface (default, official-only): 11 read-only tools —
-`get_framework_info` (entry point), `search_framework`, `list_capabilities`,
-`get_capability`, `get_maturity_assessment`, `get_kpis`, `assess_maturity_path`,
-`map_personas`, `get_entity`, `get_maturity_model`, `get_changelog` —
-`finops://framework/…` resources for full documents, and 4 prompts
-(`explain-framework`, `assess-capability-maturity`, `plan-maturity-roadmap`,
-`map-personas-to-capabilities`).
+| Variable | Server | Effect |
+| --- | --- | --- |
+| `FINOPS_MCP_DATA` | framework | Use a locally refreshed artifact instead of the packaged `data/framework` (the first CLI argument works too) |
+| `TOKENOMICS_MCP_DATA` | tokenomics | Use a locally refreshed artifact instead of the packaged `data/tokenomics` |
+| `FINOPS_MCP_EXPERIMENTAL=1` | framework, tokenomics | Turn on clearly labeled unofficial extras: the framework's parsed maturity `get_actions`, the tokenomics crosswalk |
+
+Each bin also answers `--version` with its package and data version.
+
+## How to use them
+
+Start a session with each server's entry point, then follow its suggestions:
+
+| Server | Start with | Then |
+| --- | --- | --- |
+| framework | `get_framework_info {}` | `search_framework`, `list_capabilities`, `get_capability` (with `include` to control size), `get_kpis`, `assess_maturity_path` |
+| FOCUS | `list_versions {}` | `search_focus`, `get_column`, `get_requirements`, `compare_versions`, `get_kpi_mapping`, `calculate_kpi` |
+| tokenomics | `get_tokenomics_info {}` | `list_layers`, `get_bigt_notation`, `list_levers`, `get_metric`, `calculate_cache_metrics`, `get_crosslinks` |
+
+Questions each one answers well:
+
+- **Framework:** "What does Walk-level Forecasting require?", "Which KPIs
+  does the Foundation feature for Rate Optimization?", "Who does what in
+  Anomaly Management?"
+- **FOCUS:** "What does `BilledCost` mean in 1.2, and what changed since
+  1.0?", "Which columns do I need to compute Effective Savings Rate?"
+- **Tokenomics:** "Which layer owns model routing and AI gateways?", "How
+  does this agent's token use scale with autonomy?", "Our cache read, write
+  and uncached input tokens were X, Y, Z: is caching saving money?"
+
+**Using them together.** The servers ship separately and never call each
+other. Instead, answers hand off by URI: the tokenomics server's
+`get_crosslinks` returns `finops://framework/…` and `focus://spec/…` URIs,
+each backed by a verbatim quote from the Tokenomics Foundation page, for the
+agent to read with the other two servers. The
+[prompt-caching example](https://aaronmsoto.github.io/finops-framework-mcp/example-ai-caching.html)
+walks one question through all three.
+
+### Server surfaces
+
+- **finops-framework-mcp**: 11 tools — `get_framework_info` (entry point),
+  `search_framework`, `list_capabilities`, `get_capability`,
+  `get_maturity_assessment`, `get_kpis`, `assess_maturity_path`,
+  `map_personas`, `get_entity`, `get_maturity_model`, `get_changelog` — plus
+  `finops://framework/…` resources and 4 prompts (`explain-framework`,
+  `assess-capability-maturity`, `plan-maturity-roadmap`,
+  `map-personas-to-capabilities`). Data: 6 Principles, 3 Phases, 4 Domains,
+  22 Capabilities, 11 Personas, 5 Technology Categories, the Scopes concept,
+  and an 88-entry KPI library.
+- **finops-focus-mcp**: 9 tools for column and attribute lookup, normative
+  requirements, search, the 1.0 → 1.2 diff, and unofficial KPI-to-column
+  mappings with sample-data KPI calculation, plus `focus://spec/…` resources
+  and 3 prompts. See [`packages/finops-focus-mcp`](packages/finops-focus-mcp/).
+- **tokenomics-overview-mcp**: 20 tools across documents, the Seven-Layer
+  Stack, Big-T notation, levers, metrics (with a cache-metrics calculator),
+  personas, value classification, the FOCUS 1.5 AI-cost capabilities and
+  cross-links, plus `tokenomics://overview/…` resources and 3 prompts
+  (`optimize_consumption`, `assess_prompt_caching`, `bigt_review`). Data: 14
+  source documents, 7 layers, 6 Big-T classes, 32 levers, 7 metrics, 12
+  personas, 35 stated cross-links. See
+  [`packages/tokenomics-overview-mcp`](packages/tokenomics-overview-mcp/).
+
+The full prompts, resources and tools of all three servers (names, arguments,
+URIs, defaults and limits) are generated from live MCP output in
+[`docs/mcp-surface.md`](docs/mcp-surface.md).
+
+### Remote option: the Cloudflare Worker
+
+The framework and FOCUS servers can also run over **Streamable HTTP** from a
+bundled Cloudflare Worker (`src/workers/`, endpoints `/mcp/framework` and
+`/mcp/focus`; see [`docs/deploy-worker.md`](docs/deploy-worker.md)), and
+[`demo/`](demo/) is a static browser walkthrough that drives both through it.
+The tokenomics server is stdio-only for now.
 
 ## How it's built
 
-Three fully decoupled parts, so a content refresh never needs a code
-change:
+Every server is the same three decoupled parts, so a content refresh never
+needs a code change:
 
 ```
-crawler ──▶ data artifact ──▶ MCP server
-(src/crawlers/framework)   (data/framework/)   (src/servers/framework)
- fetch → parse → sanitize   versioned JSON +    resources + tools +
- → compose → derive         markdown + JSON     prompts over stdio
- → validate → diff → emit   Schemas + manifest
+crawler ──▶ data artifact ──▶ MCP server (stdio)
+src/crawlers/<name>   data/<name>/   src/servers/<name>
+fetch → parse →       versioned JSON + canonical markdown
+compose → derive →    + JSON Schemas + sha256 manifest
+validate → emit
 ```
 
-`content/markdown/` is the **canonical** intermediate: the crawler composes
-it from parsed HTML, and every JSON file is regenerated from that markdown
-by an offline `derive` step (no network access) — so a schema or JSON-only
-fix can be regenerated without recrawling finops.org. A re-crawl refreshes
-the server with **zero code changes**; the server validates the artifact
-against its schemas at startup and refuses to start on a bad artifact.
+for `<name>` in `framework`, `focus` and `tokenomics`. `content/markdown/` is
+the **canonical** intermediate: the crawler composes it from parsed HTML, and
+every JSON file is regenerated from it by an offline `derive` step, so a
+schema or JSON-only fix never needs a re-crawl. Each server validates its
+artifact against its schemas at startup and refuses to start on a bad one.
 
-Out of the box this server is deliberately **official-only**: no invented
-relationship graph between capabilities, no maturity levels beyond the
-Foundation's Crawl/Walk/Run, no parsed-out assessment items. An early
-capability relationship graph
-(`get_prerequisites`/`get_related`) was built, evaluated, and **deleted
-outright** — see `.agents/specs/v1-official-only.md` — because neither the
-harvested nor the inferred edges cleared the accuracy bar. The only derived
-content either server returns is the FOCUS server's KPI-to-column mappings,
-computed KPI values, and cross-version diffs — each labeled `official: false`
-with an in-text UNOFFICIAL banner.
+The framework server's early capability relationship graph
+(`get_prerequisites`/`get_related`) was built, evaluated and **deleted**
+because its edges didn't clear the accuracy bar; see
+`.agents/specs/v1-official-only.md`.
 
 ## Refreshing the data
 
 ```bash
-npm run refresh            # crawl (polite, cached, robots-honoring) → new artifact + diff report
+npm run build
+npm run refresh                                   # framework: crawl → artifact + diff report
+node dist/crawlers/focus/cli.js                   # FOCUS: ingest the pinned spec tags (1.0, 1.2)
+node dist/crawlers/tokenomics/cli.js refresh      # tokenomics: Tokenomics Foundation pages
+node dist/crawlers/framework/cli.js derive        # offline markdown → JSON (framework, tokenomics)
 ```
 
-No changes on finops.org → byte-identical artifact, no version bump. Content
-changes → semantic diff report (`.cache/crawl-report/diff-report.md`),
-changelog entry, and a semver bump (patch = text edits, minor = entity
-add/remove). A scheduled GitHub Actions workflow is provided at
-`docs/proposed/refresh-data.yml` — `.github/workflows/` is a protected path
-in this repo, so the owner installs it:
+Crawls are polite, cached and robots-honoring. No upstream changes produce a
+byte-identical artifact and no version bump; content changes produce a
+changelog entry and a semver bump of the data version. The tokenomics refresh
+also lists pages it found but doesn't ingest (for example working-group
+drafts) under `unregistered` in its manifest. A scheduled refresh workflow is
+provided at `docs/proposed/refresh-data.yml`; `.github/workflows/` is a
+protected path here, so the owner installs it:
 
 ```bash
 git mv docs/proposed/refresh-data.yml .github/workflows/refresh-data.yml
 ```
 
-Until installed, scheduled refreshes are inactive. Note GitHub auto-disables
-cron workflows after ~60 days of repo inactivity.
-
 ## Data versioning policy
 
-Consumers pin a data version by pinning a git ref (tag/commit) of this repo;
-tracking `main` floats to the latest merged refresh. `manifest.json` carries
-`data_version`, `schema_version`, `crawled_at`, per-file sha256, and entity
-counts; `derived/changelog.json` (also served as `get_changelog` /
-`finops://framework/meta/changelog`) records what changed between versions.
-Schema-breaking changes bump `schema_version` and require a server release.
+Consumers pin a data version by pinning a package version or a git ref of
+this repo. Each `manifest.json` carries `data_version`, `schema_version`,
+`crawled_at`, per-file sha256 and entity counts; `derived/changelog.json`
+records what changed between versions (served by the framework server as
+`get_changelog`). Schema-breaking changes bump `schema_version` and require a
+server release. Releases are cut from a `v*` tag; see
+[`docs/release-runbook.md`](docs/release-runbook.md).
 
 ## License and attribution
 
-Code: MIT (see `LICENSE`). Framework content in `data/framework/**` and
-FOCUS specification content in `data/focus/**`: © FinOps Foundation /
-FOCUS project contributors, **CC BY 4.0**, restructured/adapted — see
-`NOTICE.md` for the required attribution and modification notices. FinOps™,
-FinOps Foundation™, and FOCUS™ are trademarks of the FinOps Foundation;
-this project is independent and not affiliated with or endorsed by the
-FinOps Foundation.
+Code: MIT (see `LICENSE`). Content, each **CC BY 4.0**, restructured and
+adapted — see [`NOTICE.md`](NOTICE.md) for the required attribution and
+modification notices:
 
-## Sibling server: finops-focus-mcp
+- `data/framework/**`: © FinOps Foundation
+- `data/focus/**`: © FinOps Foundation / FOCUS project contributors
+- `data/tokenomics/**`: © Tokenomics Foundation (a Series of LF Projects, LLC)
 
-A version-aware **FOCUS specification** MCP server (`src/crawlers/focus`,
-`src/servers/focus`, `data/focus/` — FOCUS 1.0 and 1.2) reusing
-`src/shared`. It publishes separately as
-[`packages/finops-focus-mcp`](packages/finops-focus-mcp/) (npm bin
-`finops-focus-mcp`) with its own README, NOTICE, and registry manifest:
-9 tools covering column/attribute lookup, normative requirements, search,
-cross-version diffs, plus clearly-flagged **unofficial** KPI-to-FOCUS
-mappings and sample-data KPI calculation.
-
-Both servers are also deployable over **Streamable HTTP** via the bundled
-Cloudflare Worker (`src/workers/`, endpoints `/mcp/framework` and
-`/mcp/focus` — see [`docs/deploy-worker.md`](docs/deploy-worker.md)), and
-[`demo/`](demo/) is a static browser walkthrough that drives both servers
-end-to-end through the Worker.
-
-## Sibling server: tokenomics-overview-mcp
-
-An **AI tokenomics** MCP server (`src/crawlers/tokenomics`,
-`src/servers/tokenomics`, `data/tokenomics/`) built on the same pipeline
-from the [Tokenomics Foundation](https://www.tokeneconomics.com)'s CC BY
-pages: the Seven-Layer Tokenomics Stack, Big-T notation (`T(n · k · a)`),
-the prompt cache explainer's two reference metrics with a
-`calculate_cache_metrics` tool, consumption levers, personas, value
-classification, and the FOCUS 1.5 AI-cost capabilities. Every answer states the
-source's publication status (most are Working Drafts or Release
-Candidates). `get_crosslinks` returns `finops://framework/…` and
-`focus://spec/…` URIs for the two servers above, each backed by a quote
-from the Foundation page. It publishes separately as
-[`packages/tokenomics-overview-mcp`](packages/tokenomics-overview-mcp/);
-design and spec: [`docs/designs/tokenomics-overview-mcp.html`](docs/designs/tokenomics-overview-mcp.html),
-[`.agents/specs/tokenomics-overview-mcp.md`](.agents/specs/tokenomics-overview-mcp.md).
-
-The full prompts/resources/tools hierarchy of all three servers — names, args,
-URIs, param defaults/limits — is generated from live MCP output at
-[`docs/mcp-surface.md`](docs/mcp-surface.md).
+FinOps™, FinOps Foundation™ and FOCUS™ are trademarks of the FinOps
+Foundation. This project is independent and not affiliated with or endorsed
+by the FinOps Foundation, the FOCUS project, or the Tokenomics Foundation.
 
 ## Documentation
 
-[**`docs/guide/`**](docs/guide/index.html) is the usage guide — seven
-self-contained pages in which every number, quote, and transcript was
-captured from a live probe of these servers or computed from the committed
-sample data. It is also the published site: `.github/workflows/pages.yml`
-deploys `docs/guide/` — and only that directory — to
+[**`docs/guide/`**](docs/guide/index.html) is the usage guide: nine
+self-contained pages in which every number, quote and transcript was captured
+from a live probe of these servers or computed from the committed sample
+data. It is also the published site: `.github/workflows/pages.yml` deploys
+`docs/guide/`, and only that directory, to
 <https://aaronmsoto.github.io/finops-framework-mcp/> on every push to `main`
 that touches it (setup and smoke test in
 [`docs/deploy-pages.md`](docs/deploy-pages.md)).
 
-| Page                                                        | What it covers                                                                                                                                          |
-| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Intro & Getting Started](docs/guide/index.html)             | Both servers side by side; install, Claude Code / Claude Desktop / `.mcp.json` config, the Worker remote option, first call per server                 |
-| [Framework MCP reference](docs/guide/framework-server.html)  | Data model, all 11 tools grouped by job, prompts and resources, pagination, an Anomaly Management demo                                                 |
-| [FOCUS MCP reference](docs/guide/focus-server.html)          | Version model, all 9 tools, `focus://` resources, a BilledCost deep-dive and the 1.0→1.2 diff                                                          |
-| [Showback Reporting](docs/guide/example-showback.html)       | Understand Usage & Cost → Allocation + Reporting & Analytics → the FOCUS columns a showback needs → a report computed from the official sample |
-| [Rate Optimization (ESR)](docs/guide/example-esr.html)       | Capability → featured KPIs → FOCUS columns at 1.0 vs 1.2 → Effective Savings Rate on the official sample                                               |
-| [Forecasting Journey](docs/guide/example-forecasting.html)   | A maturity journey to Walk-level Forecasting: official Crawl/Walk characteristics, KPIs, and the data that feeds a forecast                            |
-| [Quick Q&A](docs/guide/example-quick-qa.html)                | Four unscripted live prompts in one session: capabilities by domain, a capability summary, a Crawl→Walk maturity gap with validating KPIs, and starter Unit Economics KPIs from FOCUS 1.2 |
+| Page | What it covers |
+| --- | --- |
+| [Intro & Getting Started](docs/guide/index.html) | All three servers side by side; install, Claude Code / Claude Desktop / `.mcp.json` config, the Worker remote option, the first call against each server |
+| [Framework MCP reference](docs/guide/framework-server.html) | Data model, all 11 tools grouped by job, prompts and resources, pagination, an Anomaly Management demo |
+| [FOCUS MCP reference](docs/guide/focus-server.html) | Version model, all 9 tools, `focus://` resources, a BilledCost deep-dive and the 1.0→1.2 diff |
+| [Tokenomics MCP reference](docs/guide/tokenomics-server.html) | Sources and their status, the Seven-Layer Stack and Big-T, all 20 tools, prompts, `tokenomics://` resources, cross-links, a model-routing and AI-gateway demo |
+| [Showback Reporting](docs/guide/example-showback.html) | Allocation + Reporting & Analytics → the FOCUS columns a showback needs → a report computed from the official sample |
+| [Rate Optimization (ESR)](docs/guide/example-esr.html) | Capability → featured KPIs → FOCUS columns at 1.0 vs 1.2 → Effective Savings Rate on the official sample |
+| [Forecasting Journey](docs/guide/example-forecasting.html) | A maturity journey to Walk-level Forecasting: official Crawl/Walk characteristics, KPIs, and the data that feeds a forecast |
+| [Quick Q&A](docs/guide/example-quick-qa.html) | Four unscripted live prompts in one session across the framework and FOCUS servers |
+| [Is Prompt Caching Paying Off?](docs/guide/example-ai-caching.html) | All three servers: the framework's Cache Hit Rate KPI → the Tokenomics formula and calculator on two workloads → where cached-token data lives in FOCUS 1.2 and 1.5 |
 
-Every page opens over `file://` too — the guide has no external assets.
-Guide pages are rich HTML by design — an intentional exception to this
-repo's markdown-for-docs convention, recorded in
-`.agents/memory/decisions.md`.
+Every page opens over `file://` too; the guide has no external assets. Guide
+pages are rich HTML by design, an intentional exception to this repo's
+markdown-for-docs convention recorded in `.agents/memory/decisions.md`.
 
 ## Development
 
 - Agent instructions: [AGENTS.md](AGENTS.md) · design: `docs/architecture.md`
   (adversarial reviews: `docs/critique-1.md`, `docs/critique-2.md`,
   `docs/critique-3-publish-gate.md`, `docs/critique-4-focus-gate.md`,
-  `docs/final-status-review.md`)
+  `docs/final-status-review.md`) · tokenomics design:
+  [`docs/designs/tokenomics-overview-mcp.html`](docs/designs/tokenomics-overview-mcp.html)
 - Gates: `./scripts/agentic gates` · tests: `npm test` (fixture-based, no
   network) · evals: `evals/framework/` (`docs/eval-results.md`)
-- Working in a clone: the checked-in `.mcp.json` loads **both** servers into
-  MCP clients that read it, running the published packages via `npx` so a
-  fresh clone works with no build. To exercise your working tree instead,
+- Working in a clone: the checked-in `.mcp.json` loads **all three** servers
+  into MCP clients that read it, running the published packages via `npx` so
+  a fresh clone works with no build. To exercise your working tree instead,
   `cp .mcp.json.example .mcp.json` and build first (`dist/` is gitignored),
-  then restart the client — clients read MCP config only at startup. See
+  then restart the client; clients read MCP config only at startup. See
   [CONTRIBUTING.md](CONTRIBUTING.md#testing-the-servers-locally).
+- Releasing: [`docs/release-runbook.md`](docs/release-runbook.md).
