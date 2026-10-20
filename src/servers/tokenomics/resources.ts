@@ -146,7 +146,7 @@ export function registerResources(
     TEMPLATES.layer,
     () => a.layers.map((l) => l.slug),
     "Stack layer",
-    "One layer of the Five-Layer Tokenomics Stack.",
+    "One layer of the Seven-Layer Tokenomics Stack.",
     (s) => {
       const l = a.layers.find((x) => x.slug === s) as (typeof a.layers)[number];
       return layerMd(

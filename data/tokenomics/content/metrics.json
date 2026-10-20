@@ -13,7 +13,7 @@
       "document": "cache-explainer",
       "license": "CC-BY-4.0",
       "section": "tcmonitoring",
-      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+      "source_url": "https://www.tokeneconomics.com/projects/cache-explainer/"
     },
     "slug": "cache-hit-rate",
     "targets": [
@@ -33,7 +33,7 @@
       "document": "cache-explainer",
       "license": "CC-BY-4.0",
       "section": "tcmonitoring",
-      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+      "source_url": "https://www.tokeneconomics.com/projects/cache-explainer/"
     },
     "slug": "cache-cost-efficiency",
     "targets": [
@@ -55,13 +55,13 @@
       "document": "cache-explainer",
       "license": "CC-BY-4.0",
       "section": "tcmonitoring",
-      "source_url": "https://www.tokeneconomics.com/cache-explainer/"
+      "source_url": "https://www.tokeneconomics.com/projects/cache-explainer/"
     },
     "slug": "uncached-equivalent-cost",
     "targets": []
   },
   {
-    "definition_md": "the cost of producing one token, hardware cost divided by tokens produced; an output metric that reflects true infrastructure return, as opposed to input metrics like cost per GPU hour or floating-point operations per dollar.",
+    "definition_md": "The cost of producing one token, hardware cost divided by tokens produced; an output metric that reflects true infrastructure return, as opposed to input metrics like cost per GPU hour or floating-point operations per dollar.",
     "formula": null,
     "formula_text": "hardware cost divided by tokens produced",
     "inputs": [
@@ -73,7 +73,7 @@
       "document": "what-is-tokenomics",
       "license": "CC-BY-4.0",
       "section": "terminology-reference",
-      "source_url": "https://www.tokeneconomics.com/docs/overview/what-is-tokenomics/"
+      "source_url": "https://www.tokeneconomics.com/what-is-ai-tokenomics/"
     },
     "slug": "cost-per-token",
     "targets": []
@@ -94,7 +94,7 @@
       "document": "value-classification",
       "license": "CC-BY-4.0",
       "section": "vfstep4",
-      "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      "source_url": "https://www.tokeneconomics.com/projects/ai-value-classification/"
     },
     "slug": "net-benefit",
     "targets": []
@@ -112,7 +112,7 @@
       "document": "value-classification",
       "license": "CC-BY-4.0",
       "section": "vfstep3",
-      "source_url": "https://www.tokeneconomics.com/ai-value-classification/"
+      "source_url": "https://www.tokeneconomics.com/projects/ai-value-classification/"
     },
     "slug": "risk-expected-loss",
     "targets": []

@@ -15,6 +15,17 @@
   and sets "building" → loop completes the tasks → "done".
 -->
 
+## FOCUS 1.3 / 1.4 / 1.5 support in finops-focus-mcp  —  idea
+
+Hyperscalers export FOCUS 1.0/1.2 (Azure and GCP 1.2 still preview); 1.3 is
+only at a few SaaS/data providers and nobody emits 1.4 yet, so 1.0/1.2 stay
+the default. Proposed order: add ratified 1.3 + 1.4 for migration diffs and
+the new contract/invoice datasets (size multi-dataset parsing first); ingest
+1.5 right after its 3 Dec 2026 ratification and re-point the tokenomics
+FOCUS links from working-draft identifiers to real 1.5 URIs; add a
+provider-support resource. Evidence and recommendation:
+`docs/research/focus-version-support.md`.
+
 ## tokenomics-overview-mcp — a third MCP server for AI tokenomics  —  specced
 
 Serve Tokenomics Foundation guidance (Five-Layer Stack, Big-T notation,
@@ -24,3 +35,13 @@ FOCUS servers, with stated cross-links into both. Owner answered the design
 questions 2026-09-25 (answers = approval to build).
 Design: `docs/designs/tokenomics-overview-mcp.html`; spec:
 `.agents/specs/tokenomics-overview-mcp.md`.
+
+## Tokenomics: ingest the Organizational Routing Guide  —  idea
+
+Waiting on the source. Tokenomics Foundation's "Routing AI Requests: An
+Organizational Guide" is a Consumption WG Sprint 2 draft ("Not a working
+group position", 2026-10-08). When it is final, ingest it as document 13:
+cost per outcome, cost per task and misroute rate metrics, five routing
+patterns, proxy/router/gateway terms, and a possible
+`calculate_routing_metrics` tool. Comparison and ingest plan:
+`docs/research/tokenomics-routing-guide-draft.md`.

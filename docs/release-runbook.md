@@ -5,13 +5,30 @@ How the npm packages (`finops-framework-mcp`, root; `finops-focus-mcp`,
 `packages/tokenomics-overview-mcp/`) and their MCP-registry manifests are
 published.
 
-> **tokenomics-overview-mcp is not yet wired into CI publishing.** Before the
-> first tag that should ship it, the owner must (protected paths, agents may
-> not edit them): add a `Publish tokenomics-overview-mcp` step
-> (`working-directory: packages/tokenomics-overview-mcp`), a `publisher
-> validate packages/tokenomics-overview-mcp/server.json` line, and a submit
-> step to `.github/workflows/publish.yml`; add its `SERVER_VERSION` case to
-> `tests/version-sync.test.ts`; then run the bootstrap below for it.
+> **v0.2.0 is tokenomics-overview-mcp's first release.** It is wired into
+> `publish.yml` and `tests/version-sync.test.ts`, but it is not on npm yet,
+> so the order matters:
+>
+> 1. Merge the release PR to `main`.
+> 2. From a clean `main` checkout, publish **only** tokenomics by hand, then
+>    configure its trusted publisher (bootstrap step 2):
+>
+>    ```bash
+>    npm ci && npm run build && npm test
+>    cd packages/tokenomics-overview-mcp
+>    npm publish --access public    # prepack stages dist + data
+>    ```
+>
+>    Skip bootstrap step 3 (manual registry submission) for it: the tag's
+>    `registry` job submits it, and a manual submission first would make
+>    that job fail on a duplicate version.
+> 3. Tag and push `v0.2.0`. CI publishes finops-framework-mcp and
+>    finops-focus-mcp 0.2.0, skips tokenomics-overview-mcp 0.2.0 (already on
+>    npm, via `scripts/npm-publish-once.sh`), and the `registry` job lists
+>    all three manifests.
+>
+> Tokenomics 0.2.0 therefore ships without npm provenance (local publishes
+> cannot attest); provenance starts with its first CI-published version.
 Publishing is an owner approval point (`approvals.yaml`) — agents prepare
 releases; a human runs them.
 
@@ -41,7 +58,7 @@ exists, so the very first publish of each package is manual:
    created after May 2026 require selecting at least one allowed action or
    publishes 403.
 
-3. Submit both MCP-registry manifests (after the npm packages are live —
+3. Submit all three MCP-registry manifests (after the npm packages are live —
    registry ownership validation reads `mcpName` from the published
    tarball's package.json). This is a **listing**, not a release: it adds
    the servers to the directory MCP clients browse
@@ -70,6 +87,7 @@ exists, so the very first publish of each package is manual:
    mcp-publisher validate            # optional; checks without submitting
    mcp-publisher publish             # root server.json
    cd packages/finops-focus-mcp && mcp-publisher publish
+   cd ../tokenomics-overview-mcp && mcp-publisher publish
    ```
 
    **Run this from a normal machine, not an agent session.** `login github`
@@ -86,7 +104,7 @@ exists, so the very first publish of each package is manual:
    sidesteps the device-code problem entirely, since Actions mints the token
    directly) — see step 4 of the next section.
 
-   Schema note: both manifests declare the `2025-09-29` server schema and
+   Schema note: all three manifests declare the `2025-09-29` server schema and
    validate cleanly, but `2025-12-11` is current and the tool advises new
    servers to migrate. Migration is deferred, not forgotten — re-submitting
    a manifest is a normal per-release operation (see step 4 below), so this
@@ -106,21 +124,24 @@ exists, so the very first publish of each package is manual:
      `SERVER_VERSION`
 2. Gates green, PR merged to `main` per the normal approval flow.
 3. Tag and push: `git tag v<version> && git push origin v<version>`.
-   `.github/workflows/publish.yml` builds, tests, and publishes both
-   packages via OIDC (no token, provenance automatic). **Do not tag until
-   step 2 of the bootstrap is done for both packages** — the workflow fires
-   on tag push and a package without a trusted publisher configured returns
-   403.
+   `.github/workflows/publish.yml` builds, tests, and publishes all three
+   packages via OIDC (no token, provenance automatic), skipping any whose
+   version is already on npm. **Do not tag until step 2 of the bootstrap is
+   done for every package** — the workflow fires on tag push and a package
+   without a trusted publisher configured returns 403.
 4. **Nothing to do — the registry submission is automatic.** The same tag
    push runs `publish.yml`'s `registry` job, which authenticates with
-   `publisher login github-oidc` and submits both manifests. It is a
+   `publisher login github-oidc` and submits all three manifests. It is a
    separate job that `needs: publish`, so npm publishing (irreversible)
    stays green and visible even if the registry step fails, and only that
    job is re-run. Because the registry requires manifest versions to match
    the published packages, step 1's version bump is what keeps this
    correct — the job just submits whatever is committed.
 
-   If the `registry` job fails, re-run it from the Actions UI. If it keeps
+   If the `registry` job fails, re-run it from the Actions UI. A re-run
+   resubmits every manifest, and a server whose version already went
+   through fails as a duplicate; in that case submit only the remaining
+   manifests by hand (bootstrap step 3). If it keeps
    failing, the manual commands in bootstrap step 3 are still the fallback;
    nothing about them changed.
 
@@ -131,7 +152,7 @@ exists, so the very first publish of each package is manual:
 
 ## Notes
 
-- Both packages currently release in lockstep from one tag. If their
+- All three packages currently release in lockstep from one tag. If their
   versions ever diverge, split the workflow's publish steps behind
   tag-name filters.
 - `packages/finops-focus-mcp` has no source of its own: its `prepack`

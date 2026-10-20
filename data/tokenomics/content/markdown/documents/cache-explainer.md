@@ -2,9 +2,9 @@
 author: Tokenomics Foundation Consumption Working Group
 kind: project
 license: CC-BY-4.0
-modified: 2026-09-24
+modified: 2026-10-14
 slug: cache-explainer
-source_url: https://www.tokeneconomics.com/cache-explainer/
+source_url: https://www.tokeneconomics.com/projects/cache-explainer/
 status: Release Candidate 1
 status_date: 2026-09-22
 status_source: page

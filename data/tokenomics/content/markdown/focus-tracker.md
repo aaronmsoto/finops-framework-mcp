@@ -1,23 +1,24 @@
 ---
 collection: focus-tracker
-count: 22
+count: 18
 ---
 
 # FOCUS 1.5 AI tracker
 
-## Cost data can now say which model was billed and who built it. {slug=fr-2018}
+## Cost data can name the AI model and who built it. {slug=fr-2018}
 
 - bucket: done
-- kind: ai
+- kind: ai-capability
 - provenance.document: focus-1-5-for-ai
-- provenance.section: in-the-working-draft
+- provenance.section: theme-ai
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- Merged 20 Jul
+- In the working draft
 - FR 2018
+- PR 2442
 
 ### identifiers
 
@@ -25,9 +26,6 @@ count: 22
 - ModelFamily
 - ModelId
 - ModelVersion
-- SkuMeter
-- SkuPriceDetails
-- TokenDirection
 
 ### links
 
@@ -36,110 +34,35 @@ count: 22
 
 ### body_md
 
-#### What it adds
+Four recommended FOCUS-defined properties in SKU Price Details record the model behind a charge: the developer that created it, the model family, the model identifier as billed, and the version. Developer, family, and version read the same way whether the model is bought from its developer or served by a cloud provider; the model identifier is recorded as each provider bills it.
 
-Four FOCUS-defined properties on `SkuPriceDetails`: `ModelDeveloper`, `ModelFamily`, `ModelId`, and `ModelVersion`. No new columns, and no change to the existing `SkuPriceDetails` requirements, so this is additive for every data generator.
+**Why it matters.** This is the piece that makes multi-provider AI spend comparable. Without it, an organization can total what it spent on models last quarter but cannot break that down by model without provider-specific parsing.
 
-It also lands a worked appendix example with two scenarios and backing CSV data: a model purchased directly from its developer, and the same model resold by a cloud provider as a first-party service. The second scenario is the one practitioners get wrong today, because the service provider and the model developer are different companies.
+- The properties are `ModelDeveloper`, `ModelFamily`, `ModelId`, and `ModelVersion`.
+- `ModelId` is the identifier as it appears in billing and can differ between providers selling the same model; family and version are as the model developer defines them.
+- No columns are added and existing requirements are unchanged, so the change is additive for every data generator. Including these properties is recommended rather than required, so a conformant dataset can omit them.
+- A worked example covers a model bought directly from its developer and the same model served by a cloud provider as its own service. In the second, the service provider and the model developer are different companies, and no existing participating-entity column names the developer.
+- In the worked examples, input and output tokens are separate SKUs with their own meters; the token direction property below labels them on the price whatever the provider calls the meter.
 
-#### A deliberate omission, since revisited
-
-The input versus output token split shipped structurally, as separate SKUs distinguished by `SkuMeter`, rather than through a dedicated property. The cached-token work in review (bucket 2) adds a `TokenDirection` property, so the split can also be declared on the price itself.
-
-#### Why it matters
-
-This is the piece that makes multi-provider AI spend comparable. Without it, an organization can say it spent a given amount on models last quarter but cannot break that down by model without provider-specific parsing.
-
-## Cost rows can identify the principal that drove the spend. {slug=fr-2358}
+## Cached tokens separate from uncached ones, and input from output, on the price itself. {slug=fr-2099}
 
 - bucket: done
-- kind: ai
+- kind: ai-capability
 - provenance.document: focus-1-5-for-ai
-- provenance.section: in-the-working-draft
+- provenance.section: theme-ai
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- Merged 10 Sep
-- FR 2358
-
-### identifiers
-
-- PrincipalId
-
-### links
-
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2358
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2360
-
-### body_md
-
-#### What it adds
-
-A `PrincipalId` column on the Cost and Usage dataset, identifying the principal: the user, service account, or other entity in an identity and access management model that was granted access to the resource or service. It preserves a principal-level audit trail across PaaS, SaaS, and generative AI billing. The actor columns are delivered incrementally: Requester Details and Credential ID follow in Member review (bucket 2).
-
-#### Why it belongs in the AI story
-
-This is the attribution primitive behind per-user and per-agent cost. As spend shifts from provisioned infrastructure to per-call model invocations, the question changes from "which account owns this instance" to "which developer, team, or autonomous agent burned these tokens." `PrincipalId` is what makes that answerable inside billing data rather than by joining to observability. The AI billing examples in review populate it.
-
-## Service category definitions no longer assume cloud, and Compute now tells bare metal from virtual machines. {slug=fr-2377}
-
-- bucket: done
-- kind: enabler
-- provenance.document: focus-1-5-for-ai
-- provenance.section: in-the-working-draft
-- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
-- provenance.license: CC-BY-4.0
-
-### labels
-
-- Merged 10 Sep
-- Enabler
-- FR 2377
-
-### identifiers
-
-- ServiceCategory
-
-### links
-
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2377
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2379
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2624
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2378
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2518
-
-### body_md
-
-#### What it changes
-
-In July, the `ServiceCategory` descriptions that referred to "cloud" were rewritten so they apply equally to hybrid, SaaS, and on-premises environments (Action Item 2378). In September, the Compute category description picked up physical compute and the Virtual Machines subcategory split into Bare Metal and Virtual Machines. The feature request closed as complete on 17 September. A broader expansion of the allowed values for on-premises, SaaS, and physical infrastructure (PR 2518) remains a draft and is not part of 1.5.
-
-#### Context for AI
-
-An "AI and Machine Learning" service category already exists, with subcategories for AI Platforms, Bots, Generative AI, Machine Learning, Natural Language Processing, and "Other (AI and Machine Learning)". This work removes the cloud-only framing around it, which mattered because a large share of AI spend now arrives from vendors that are not cloud providers, and it lets GPU capacity bought as bare metal classify apart from virtual machines. Deeper AI subcategories (FR 1943) did not enter 1.5 and sit in bucket 4.
-
-## Separate tokens served from cache from tokens processed fresh, and input from output, on the price itself. {slug=fr-2099}
-
-- bucket: flight
-- kind: ai
-- provenance.document: focus-1-5-for-ai
-- provenance.section: in-review
-- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
-- provenance.license: CC-BY-4.0
-
-### labels
-
-- Member review
+- In the working draft
 - FR 2099
+- PR 2606
 
 ### identifiers
 
-- SkuPriceDetails
 - TokenCacheAction
 - TokenDirection
-- TokenType
 
 ### links
 
@@ -148,36 +71,36 @@ An "AI and Machine Learning" service category already exists, with subcategories
 
 ### body_md
 
-#### The problem it answers
+Two recommended FOCUS-defined properties label token prices: how the tokens interacted with a prompt cache, and whether they went into the model or came out of it. They normalize cache and token meter names that differ from one provider to the next.
 
-Cached and uncached tokens can differ in price by an order of magnitude at the same provider. Without the distinction, a rise in token cost cannot be separated from a fall in cache hit rate, so the single most actionable AI optimization lever is invisible in cost data.
+**Why it matters.** Cached input tokens often cost a fraction of uncached ones at the same provider; in the specification's worked example, a cache read costs a tenth of the input price. Without a common label, separating a fall in cache hit rate from a rise in traffic means matching each provider's meter names by hand, so one of the most actionable AI optimization levers is hard to track across providers.
 
-#### What it adds
+- `TokenCacheAction` takes "Uncached", "Read", "Write", or "Other" on prices that meter only tokens consumed from a request. `TokenDirection` takes "Input" or "Output" on prices that meter tokens in one direction. A price that bills several kinds of tokens on one meter omits the property that would misdescribe them.
+- They are the first FOCUS-defined SKU Price Details properties with a fixed set of allowed values. Including them is recommended rather than required.
+- A cached token counted on a "Read" or "Write" row is not counted again on another row, so token totals do not double count.
+- Reasoning tokens metered separately carry "Output". Modality, reasoning effort, cache retention duration, and context window size are not values of either property.
+- A worked example shows two providers that meter caching differently: one charges to write to the cache, the other charges to keep content in it. Charges for keeping cached content carry neither property.
+- Two example queries join the Resource Usage supported feature: cache hit rate for token-metered SKUs by model, and the ratio of input to output tokens by model.
+- The glossary adds AI model, prompt cache, and token, and separates a token as a unit of measure from a token as a store of value.
 
-Two FOCUS-defined properties on `SkuPriceDetails`, each with allowed values and no new columns. `TokenCacheAction` carries "Uncached", "Read", "Write", or "Other" on SKU prices that meter tokens consumed from a request. `TokenDirection` carries "Input" or "Output" on token-metered SKU prices whose tokens share a direction, so a SKU that bills both on one meter omits it. They replace the single `TokenType` property drafted earlier and are the first FOCUS-defined properties to carry allowed values. One requirement stops a cached token being counted twice: consumed quantity on an "Uncached" row excludes tokens counted on a "Read" or "Write" row. A footnote marks the edges: reasoning tokens carry "Output", and modality, reasoning effort, cache retention duration, and context window size are not values of these properties. A glossary entry separates token as a unit of measure from token as a store of value. An "AI Prompt Caching" appendix example with two scenarios and CSV data ships with it, plus two queries under the Resource Usage supported feature: cache hit rate for token-metered SKUs, and the input-to-output token ratio by model.
+## Worked examples for mapping AI model billing into FOCUS. {slug=fr-1941}
 
-#### Where it stands
-
-The two-property shape was decided by TF-2 on 2 September and merged into the pull request on 15 September. It moved to Member review on 17 September, with an approval on its current commit and two on earlier ones. Open: the two property descriptions are being rewritten, and whether "Uncached" becomes "None" and whether output-token rows carry a cache action at all. A cache cost efficiency query drafted for the Cost Comparison supported feature came out before Member review, to return once the SKU Price dataset and these properties have been tested together.
-
-## Worked examples showing how to map token and generation billing from any AI provider into FOCUS. {slug=fr-1941}
-
-- bucket: flight
-- kind: ai
+- bucket: review
+- kind: ai-capability
 - provenance.document: focus-1-5-for-ai
-- provenance.section: in-review
+- provenance.section: theme-ai
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- Task Force review
+- In final review
 - FR 1941
+- PR 2605
 
 ### identifiers
 
-- PrincipalId
-- SkuMeter
+(none)
 
 ### links
 
@@ -186,117 +109,81 @@ The two-property shape was decided by TF-2 on 2 September and merged into the pu
 
 ### body_md
 
-#### The problem it answers
+Six worked scenarios, each with sample data, showing how token billing maps onto existing FOCUS columns, plus an AI Model Billing supported feature with example queries. No columns are added: FOCUS already has the columns to carry token consumption, and the gap these close is applying them the same way.
 
-The gap is not the schema. FOCUS already has the columns needed to carry token consumption. The gap is that practitioners cannot tell how those columns apply to AI billing, so every provider gets normalized differently.
+every single one has a different data formatA FinOps practitioner managing 20-plus AI providers
 
-every single one has a different data formatBecky Canterbury, Shutterstock, on working with 20-plus AI vendors
+**Why it matters.** When FinOps Practitioners cannot tell how existing columns apply to AI billing, every provider gets normalized differently. Shared examples give data generators and practitioners one reference for the arrangements they meet most.
+
+#### The scenarios
+
+- A model developer billing per token, directly.
+- Several models on one invoice, each priced separately.
+- Cached tokens bought through a cloud provider's marketplace, where the model developer is the seller and the cloud provider hosts and invoices.
+- A cloud provider billing for its own service that serves a third-party model.
+- A prepayment drawn down by token usage, the only scenario with committed-price usage rows.
+- A multi-model invoice through a cloud marketplace, with cache meters.
+
+#### How the rows are built
+
+Consumed Quantity and Consumed Unit carry the raw token count; Pricing Quantity and Pricing Unit carry the same consumption in the block the provider prices against, such as per million tokens. SKU ID identifies the priced model offering and SKU Meter the token type. The rows use the model identity and token properties, and the requester columns where a principal or credential applies. The AI Model Billing supported feature adds two queries: effective cost per million tokens by SKU, token direction, and cache action, and token consumption over time.
 
 Requested by NatWest, SLB, UK Government Digital Service, Shutterstock, Syngenta, Anglepoint, AWS, and the FinOps Foundation.
 
-#### What it delivers
+## Cost rows can name the principal and the credential behind an AI charge. {slug=fr-2358}
 
-No columns are added or changed. An "AI Billing" appendix section with six scenarios, each backed by a CSV: a foundation model billed per token by its developer; capacity bought up front through a prepayment and drawn down by usage, so billed cost is zero on usage rows and effective cost reflects consumption; a foundation model invoiced through a cloud provider marketplace, which also covers cached tokens; a multi-model invoice through that marketplace; multi-model usage; and a foundation model served first-party by a cloud provider. An "AI Billing" supported feature with two example SQL queries registers alongside. Token direction is carried per SKU through `SkuMeter`, consistent with the model identity examples, and the rows populate `PrincipalId`.
-
-#### Where it stands
-
-TF-2 confirmed on 16 September that it stays in 1.5. Dave Moreau and Graham Murphy joined the author on it, and the work is due to finish over the following three weeks. Six findings posted in that session on the newest scenarios, including two conformance errors in the drawdown example, are being fixed. It holds one approval, on an earlier commit, and sequences behind the cached-token pull request so the examples use its property names, with a custom property allowed where the examples need to say more. The examples may keep improving during Member review as long as the data shape holds.
-
-## Requester Details and Credential ID complete the actor columns. {slug=fr-2358-requester-details-and-credential}
-
-- bucket: flight
-- kind: ai
+- bucket: done
+- kind: ai-capability
 - provenance.document: focus-1-5-for-ai
-- provenance.section: in-review
+- provenance.section: theme-ai
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- Member review
+- In the working draft
 - FR 2358
+- PR 2360, Principal ID
+- PR 2553, Credential ID and Requester Details
 
 ### identifiers
 
 - CredentialId
-- Email
-- Name
 - PrincipalId
 - RequesterDetails
-- Type
 
 ### links
 
 - https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2358
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2360
 - https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2553
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2495
 
 ### body_md
 
-#### What it adds
+Three new Cost and Usage columns. Principal ID identifies the user, service account, or other identity granted access. Credential ID identifies the credential presented on the request, such as an API key or a session. Requester Details carries the attributes a provider publishes for each, such as a display name, type, and email address.
 
-Two more Cost and Usage columns beside the merged `PrincipalId`. `CredentialId` identifies the credential presented on the request that produced the charge: an identifier that references a credential, never a value that authenticates one. `RequesterDetails` is a JSON array of key-value entries carrying descriptive attributes, `Type`, `Name`, and `Email`, for the principal and the credential, with further levels such as a delegating identity as custom entries of the same shape. An entry appears only when its identifier is populated, and a published schema pins the keys.
+**Why it matters.** As spend shifts from provisioned infrastructure to per-call model invocations, the question changes from which account owns an instance to which developer, team, or automated agent used the tokens. These columns answer it inside billing data rather than by joining to observability.
 
-#### The July question, resolved
+- Principal ID is the attribution dimension: grouping by it combines a user's or workload's charges however each request was credentialed. Credential ID is the audit dimension: it isolates the spend driven by one key or session.
+- Neither ID column may contain a value that authenticates a request, such as the key string itself, and each is empty when the provider publishes no identifier.
+- Neither column identifies who benefits from a charge. A shared workload, a gateway, or an embedded assistant can act for people who never appear in billing data.
+- An agent appears when it acts under its own service account or key. Further levels, such as a delegating identity or a client application, can be carried as custom entries in Requester Details.
+- A worked example walks through 14 scenarios, including a generative AI API key owned by a user, a key issued to a service account, a pipeline that opens a new session on every run, seat-based SaaS with per-token AI usage, and a provider whose keys are themselves the identity.
+- The columns are `PrincipalId`, `CredentialId`, and `RequesterDetails`. All three are Conditional, governed by a new operating model condition for requester attribution.
 
-The open decision on the last edition of this page, whether identity attributes ship alongside `PrincipalId` or wait, closed in August. The attributes ride in `RequesterDetails`, keyed to the identifiers, rather than in a separate identity column. The model covers a person, a service account, or an automated agent acting through one, which is the shape agentic spend takes.
+## Provider-issued credits can be recorded as a consumption currency. {slug=pr-2617}
 
-#### Where it stands
-
-Approved by four reviewers, two of them on the current commit, and in Member review since 17 September. Not in it: a Consumer ID column (PR 2495) is postponed and not part of 1.5, and scoped detail configuration, which would let practitioners choose how much actor detail a dataset carries, moved to 1.6 on 16 September (bucket 4).
-
-## A published price catalog, which is where model identity actually lives. {slug=fr-1057}
-
-- bucket: flight
-- kind: enabler
+- bucket: done
+- kind: ai-capability
 - provenance.document: focus-1-5-for-ai
-- provenance.section: in-review
+- provenance.section: theme-ai
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- Task Force review
-- Enabler
-- FR 1057
-
-### identifiers
-
-(none)
-
-### links
-
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1057
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2424
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2595
-
-### body_md
-
-#### What it adds
-
-A new SKU Price dataset, carrying prices independently of consumption, so a rate can be read before anyone buys, with the window it applies in and the accounts eligible for it.
-
-#### Where it stands
-
-Two decisions landed in September. The dataset is Conditional: a data generator must publish it only if it publishes unit prices, the same operating model condition that already governs the four Cost and Usage columns pointing into it. That was settled on 15 September. And its two unit price columns collapse into one, so a list price and a contracted price each get their own row, confirmed by TF-1 the same day. That reshape is being applied now and resets approvals, so the pull request needs fresh approval on the new head before it can start Member review. The two SKU Price supported features (PR 2595) are approved on their current commit and wait on the reshape; the consumption currency scoping (PR 2617) is the next card.
-
-#### The connection to AI
-
-The model-identity properties in bucket 1, and the cache and direction properties in review, all describe a SKU price rather than a usage row. This dataset is where an organization reads a provider's token rates before spending, prices a planned workload against them, and tests what a negotiated rate is worth. It is the difference between reporting on AI cost and negotiating it.
-
-## Prepaid tokens and provider credits handled as consumption currency. {slug=pr-2617}
-
-- bucket: flight
-- kind: enabler
-- provenance.document: focus-1-5-for-ai
-- provenance.section: in-review
-- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
-- provenance.license: CC-BY-4.0
-
-### labels
-
-- Member review
-- Enabler
+- In the working draft
+- Action Item 2550
 - PR 2617
 
 ### identifiers
@@ -310,68 +197,26 @@ The model-identity properties in bucket 1, and the cache and direction propertie
 
 ### body_md
 
-#### What it does
+The currency rules now recognize a consumption currency: a provider-issued unit such as platform credits or normalized billing units. ISO 4217 currency codes are reserved for national currencies.
 
-The review of how tokens, credits, and crypto are treated as virtual currency (Action Item 2550, closed 18 August) found the `CurrencyFormat` attribute contradicting itself: it lists virtual currency as an allowed currency type while requiring an ISO 4217 code for every value, and no provider-issued unit has one. The pull request scopes the virtual currency allowance to consumption currency and carries the scoping through to the examples.
+**Why it matters.** Much AI usage is priced in a provider's own credits or billing units. The price can now be recorded in that unit, alongside the billed cost in national currency. Prepaid spend in a national currency is a different case. The worked examples in final review show one such arrangement: a token prepayment recorded as a commitment and drawn down by usage.
 
-#### Where it stands
+The `CurrencyFormat` attribute previously allowed virtual currency while also requiring an ISO 4217 code on every value, which no provider-issued unit has. Now ISO 4217 applies when a value represents a national currency, and a column must not use an ISO 4217 code for anything else. A SaaS example shows a consumption currency pricing model.
 
-In Member review with one change request outstanding, and a review on 16 September raised one normative point: the broadened virtual currency definition would also cover cryptocurrency, which needs scoping. The glossary text is shared with the SKU Price dataset, so the two move together.
+## Common unit names for multimodal and agentic usage. {slug=fr-2363}
 
-#### Why it matters for AI
-
-A large share of AI spend is transacted in something other than a national currency. Buyers purchase token bundles or platform credits up front and draw them down. If FOCUS treats those units inconsistently, prepaid AI spend either disappears from cost reporting or double counts against the cash that bought it. This work and the prepayment drawdown example in FR 1941 address two halves of the same problem.
-
-## Distinguish globally served models from region-pinned ones. {slug=fr-2414}
-
-- bucket: consider
-- kind: ai
+- bucket: done
+- kind: ai-capability
 - provenance.document: focus-1-5-for-ai
-- provenance.section: started-not-yet-certain
+- provenance.section: theme-ai
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- Open Forum 18 Sep
-- FR 2414
-
-### identifiers
-
-- RegionScope
-- ServingScope
-- SkuPriceDetails
-
-### links
-
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2414
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2613
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2667
-
-### body_md
-
-#### The problem it answers
-
-Global and regional serving carry different rates and different data residency characteristics. This is one of the few AI cost dimensions that is simultaneously a finance question and a compliance question, which makes it awkward to leave undeclared in billing data.
-
-#### Where it stands
-
-A `SkuPriceDetails` property carrying the pricing region scope. PR 2613 introduces it as `ServingScope` and holds two approvals; PR 2667, stacked on it, renames it to `RegionScope`, the name the working group's research recommended, adopted on 17 September. TF-2 sent the property to the Open Forum of 18 September; if it is not sufficiently complete after that, it moves to 1.6. Consistency with the SKU Price columns being introduced is the other check.
-
-## A FinOps Foundation paper on FOCUS for AI, sitting outside the specification itself. {slug=a-finops-foundation-paper-on-focus}
-
-- bucket: consider
-- kind: enabler
-- provenance.document: focus-1-5-for-ai
-- provenance.section: started-not-yet-certain
-- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
-- provenance.license: CC-BY-4.0
-
-### labels
-
-- On hold
-- Enabler
-- Action Item 1857
+- In the working draft
+- FR 2363
+- PR 2362
 
 ### identifiers
 
@@ -379,35 +224,167 @@ A `SkuPriceDetails` property carrying the pricing region scope. PR 2613 introduc
 
 ### links
 
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1857
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2363
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2362
 
 ### body_md
 
-#### What it is
+The recommended unit names now include Character, Image, Job, Message, Page, and Session alongside Token and Request, each with a description.
 
-Supporting content rather than a specification change. It is the narrative piece that explains the position to an audience that will not read column definitions.
+**Why it matters.** Without common names, providers describe multimodal and agentic usage in their own strings, so unit costs cannot be compared without mapping each one by hand.
 
-#### Where it stands
+These are recommended values in the Unit Format attribute, which governs how units are written in columns such as Consumed Unit and Pricing Unit. Classifying input modality itself is separate work that 1.5 did not take up.
 
-On hold since 4 August. The FinOps Foundation chose to wait for the Task Force staff dedicated to FOCUS for AI to work on it, and moved its date to 31 October. It is not tied to the release date, so it may follow 1.5 rather than accompany it.
+## A SKU Price dataset publishes token rates before anyone spends. {slug=fr-1057}
 
-## Represent reasoning tokens, which are billed but never appear in the response. {slug=fr-2487}
-
-- bucket: out
-- kind: ai
+- bucket: review
+- kind: enablers
 - provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
+- provenance.section: theme-ai
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- 1.6 candidate
+- In final review
+- FR 1057
+- PR 2424, the dataset
+- PR 2595, the supported features
+
+### identifiers
+
+(none)
+
+### links
+
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1057
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2424
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2595
+
+### body_md
+
+A new dataset carrying a provider's prices on their own, separate from consumption: list and negotiated token prices, the dates each applies, quantity tiers, and the accounts eligible for a price. Each price connects to the cost rows billed at it through the SKU Price ID that Cost and Usage already carries.
+
+**Why it matters.** This is where an organization reads a provider's published token rates, prices a planned workload against them, and tests what a negotiated rate is worth. For a model not yet used, the rate is found by the provider's SKU ID or description; the normalized model properties reach a catalog price only through usage already billed.
+
+- The dataset does not carry the model and token properties itself. A catalog price reaches them through the SKU Price ID on the Cost and Usage rows billed at that price.
+- Each record carries one unit price and says what kind of price it is, such as a public list price, a list price fixed for a contract, usually when it starts, or another contracted rate. Contract ID is empty for a price that is not specific to a contract and identifies the contract for one that is.
+- It is delivered as a snapshot of the current price list, and a data generator includes it when its operating model includes unit pricing.
+- Two supported features come with it: Catalog Discovery and Price Estimation, and Rate Optimization and Contract Evaluation.
+
+## Service categories that no longer assume cloud, with bare metal apart from virtual machines. {slug=fr-2377}
+
+- bucket: done
+- kind: enablers
+- provenance.document: focus-1-5-for-ai
+- provenance.section: theme-ai
+- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
+- provenance.license: CC-BY-4.0
+
+### labels
+
+- In the working draft
+- FR 2377
+- PR 2379
+- PR 2624
+
+### identifiers
+
+(none)
+
+### links
+
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2377
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2379
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2624
+
+### body_md
+
+Service Category descriptions are rewritten to apply to any technology provider, and a new Bare Metal subcategory separates physical servers from virtual machines.
+
+**Why it matters.** AI spend often arrives from providers that are not clouds, and GPU capacity is often bought as bare metal. Service categories now describe those providers, and bare metal classifies apart from virtual machines.
+
+An AI and Machine Learning category already exists, with subcategories for AI Platforms, Bots, Generative AI, Machine Learning, Natural Language Processing, and Other. Deeper AI subcategories are not part of 1.5.
+
+## Distinguishing globally served models from region-pinned ones. {slug=fr-2414}
+
+- bucket: out
+- kind: postponed-during-this-cycle
+- provenance.document: focus-1-5-for-ai
+- provenance.section: theme-out
+- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
+- provenance.license: CC-BY-4.0
+
+### labels
+
+- Postponed
+- FR 2414
+- PR 2613
+
+### identifiers
+
+- RegionScope
+
+### links
+
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2414
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2613
+
+### body_md
+
+A property for the region scope of a price: whether it applies to global serving or to a specific region. Postponed in September, with its name and its relationship to the SKU Price dataset still open.
+
+**Why it matters.** Global and regional serving carry different rates and different data residency characteristics, so this is a finance question and a compliance question at once.
+
+The draft property was renamed to `RegionScope` during review. Choosing a specific region over the global price was cited in Task Force discussion as raising the price by about 10%, a smaller gap than between cached and uncached tokens.
+
+## Two follow-ons to the requester columns. {slug=pr-2473-scoped-detail}
+
+- bucket: out
+- kind: postponed-during-this-cycle
+- provenance.document: focus-1-5-for-ai
+- provenance.section: theme-out
+- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
+- provenance.license: CC-BY-4.0
+
+### labels
+
+- Postponed
+- PR 2473, scoped detail
+- PR 2495, Consumer ID
+
+### identifiers
+
+(none)
+
+### links
+
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2473
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2495
+
+### body_md
+
+Scoped detail configuration, letting a practitioner choose optional, higher-cardinality detail such as principal-level attribution for parts of a dataset, and a Consumer ID column.
+
+Selecting requester detail for only parts of a dataset remains open for a later release.
+
+## Reasoning tokens, which are billed but never appear in the response. {slug=fr-2487}
+
+- bucket: out
+- kind: filed-not-taken-up-in-1-5
+- provenance.document: focus-1-5-for-ai
+- provenance.section: theme-out
+- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
+- provenance.license: CC-BY-4.0
+
+### labels
+
+- Not taken up
 - FR 2487
 
 ### identifiers
 
-- TokenDirection
+(none)
 
 ### links
 
@@ -415,22 +392,20 @@ On hold since 4 August. The FinOps Foundation chose to wait for the Task Force s
 
 ### body_md
 
-Reasoning models charge for intermediate tokens the customer never sees. Finance teams reconciling an invoice against application logs find output token counts that do not match the bill, with no standard field explaining the gap.
+Reasoning models charge for intermediate tokens the customer never sees, so output token counts in application logs do not match the invoice. Partly answered in 1.5: a separately metered reasoning token carries token direction "Output", so it is counted with output tokens. A dedicated treatment, including reasoning effort, remains open.
 
-Partly answered by the cached-token work in review, whose footnote states that reasoning tokens carry `TokenDirection` "Output", so the count reconciles as output. A property for reasoning effort is explicitly not among that work's values and remains open.
-
-## Represent the standing charge for keeping a context cache warm. {slug=fr-2488}
+## The standing charge for keeping a context cache. {slug=fr-2488}
 
 - bucket: out
-- kind: ai
+- kind: filed-not-taken-up-in-1-5
 - provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
+- provenance.section: theme-out
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- 1.6 candidate
+- Not taken up
 - FR 2488
 
 ### identifiers
@@ -443,27 +418,25 @@ Partly answered by the cached-token work in review, whose footnote states that r
 
 ### body_md
 
-Context caching bills on two axes: the tokens processed, and the storage held over time. The second behaves like a storage charge rather than a usage charge, and it accrues whether or not the cache is read.
+Context caching can bill on two axes: the tokens processed, and the content held over time. The second behaves like a storage charge and accrues whether or not the cache is read. In 1.5 these charges carry neither token property; a dedicated treatment remains open.
 
-A contributor tabulated live prices in August on FR 2488 and showed storage and cache-read rates diverging under context tiering at the same provider, so a single meter cannot carry both. Cache retention duration is explicitly not a value of the new cache properties in review, so this stays its own piece of work.
-
-## Distinguish text, image, audio, and video inputs, which are priced on different units and rates. {slug=fr-2489}
+## Input modality: text, image, audio, and video. {slug=fr-2489}
 
 - bucket: out
-- kind: ai
+- kind: filed-not-taken-up-in-1-5
 - provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
+- provenance.section: theme-out
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- 1.6 candidate
+- Not taken up
 - FR 2489
 
 ### identifiers
 
-- SkuMeter
+(none)
 
 ### links
 
@@ -471,22 +444,20 @@ A contributor tabulated live prices in August on FR 2488 and showed storage and 
 
 ### body_md
 
-Adds input modality classification along with recommended `SkuMeter` values. Multimodal traffic is billed per token, per image, per second of audio, and per frame, depending on provider and input type. Without a modality dimension, those units collapse into an aggregate that cannot be compared or forecast.
+Multimodal traffic is billed per token, per image, per second of audio, or per frame, depending on provider and input. 1.5 adds common unit names for several of these, but a modality classification and recommended meter values remain open.
 
-Modality is explicitly not a value of the new token properties in review. The classification and the recommended meter values are two jobs rather than one, which kept it outside the 1.5 window.
-
-## Distinguish model costs that vary by context window size. {slug=fr-2521}
+## Prices that change with context window size. {slug=fr-2521}
 
 - bucket: out
-- kind: ai
+- kind: filed-not-taken-up-in-1-5
 - provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
+- provenance.section: theme-out
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- 1.6 candidate
+- Not taken up
 - FR 2521
 
 ### identifiers
@@ -499,22 +470,20 @@ Modality is explicitly not a value of the new token properties in review. The cl
 
 ### body_md
 
-Several providers price the same model differently above a context length threshold. The rate change is invisible in cost data today, so a cost increase driven by longer prompts is indistinguishable from one driven by more calls.
+Several providers price the same model differently above a context length threshold. Without the distinction, a cost increase driven by longer prompts looks the same as one driven by more calls.
 
-Context window size is explicitly not a value of the new token properties in review. Owner and Task Force are still unassigned.
-
-## Distinguish priority, standard, and batch inference, which carry different rates. {slug=fr-2437}
+## Priority, standard, and batch inference tiers. {slug=fr-2437}
 
 - bucket: out
-- kind: ai
+- kind: filed-not-taken-up-in-1-5
 - provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
+- provenance.section: theme-out
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- 1.6 candidate
+- Not taken up
 - FR 2437
 
 ### identifiers
@@ -527,20 +496,20 @@ Context window size is explicitly not a value of the new token properties in rev
 
 ### body_md
 
-Batch and off-peak processing tiers are commonly discounted by half or more against real-time inference. Making the tier visible turns "move this workload to batch" from an intuition into a measurable saving, and lets an organization verify it actually happened. Confirmed in June as a standalone feature request rather than part of model identity.
+Batch and off-peak processing is commonly discounted by about half against real-time inference. Making the tier visible would turn "move this workload to batch" into a measurable saving.
 
-## Represent committed AI capacity the way other commitment discounts are represented. {slug=fr-2371}
+## Provisioned throughput as a commitment. {slug=fr-2371}
 
 - bucket: out
-- kind: ai
+- kind: filed-not-taken-up-in-1-5
 - provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
+- provenance.section: theme-out
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- 1.6 candidate
+- Not taken up
 - FR 2371
 
 ### identifiers
@@ -553,22 +522,20 @@ Batch and off-peak processing tiers are commonly discounted by half or more agai
 
 ### body_md
 
-Provisioned throughput is a commitment purchase, structurally similar to a reserved instance or savings plan. FOCUS already has a mature commitment discount model. The question is whether provisioned AI capacity maps onto it cleanly or needs its own treatment.
+Committed AI capacity is structurally similar to a reserved instance or savings plan. The open question is whether it maps onto the existing commitment discount model cleanly or needs its own treatment. It is where committed AI dollars sit and where utilization against them is measured.
 
-Of everything in this bucket, this is the one most likely to matter at the leadership level, because it is where committed AI dollars sit and where utilization against those commitments gets measured.
-
-## Deeper AI service subcategories, so AI spend can be analyzed in layers. {slug=fr-1943}
+## Deeper AI service subcategories, including Agentic AI. {slug=fr-1943}
 
 - bucket: out
-- kind: ai
+- kind: filed-not-taken-up-in-1-5
 - provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
+- provenance.section: theme-out
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- 1.6 candidate
+- Not taken up
 - FR 1943
 
 ### identifiers
@@ -581,46 +548,22 @@ Of everything in this bucket, this is the one most likely to matter at the leade
 
 ### body_md
 
-Extends the existing AI and Machine Learning subcategories to support layered analysis, separating the infrastructure an AI workload runs on from the model serving it from the application consuming it. Today those three layers can all land in one bucket, which is the reason "what did AI cost us" is hard to answer consistently across organizations. The Service Category work merged this cycle (bucket 1) removed the cloud-only framing but did not add AI layers.
+Layered subcategories would separate the infrastructure an AI workload runs on from the model serving it and the application consuming it. Today those layers can land in one subcategory, which is why "what did AI cost us" is hard to answer the same way across organizations.
 
-## Two actor-column follow-ons deferred by decision in September. {slug=two-actor-column-follow-ons-deferred-by-decision}
+## Tool or harness identity, application session and event identifiers, and per-request token limits. {slug=fr-1941-tool-or-harness-identity}
 
 - bucket: out
-- kind: ai
+- kind: set-aside
 - provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
+- provenance.section: theme-out
 - provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
 - provenance.license: CC-BY-4.0
 
 ### labels
 
-- 1.6
-
-### identifiers
-
-- JsonObjectFormat
-
-### links
-
-- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/pull/2473
-
-### body_md
-
-- **Scoped detail configuration** (PR 2473). An extension of the Dataset Configuration attribute letting practitioners select optional, higher-cardinality detail, such as principal-level attribution, for documented areas of a dataset without every row carrying it. Moved to 1.6 with no objection; a simplified draft will be reposted for that cycle. Until then, column selection and the data generator's documentation govern how much actor detail appears.
-- **`JsonObjectFormat` support for arrays** beyond what Requester Details needs: the attribute name, key uniqueness for array entries, and nesting rules become a 1.6 feature request.
-
-## Per-request maximum token limits alongside cost. {slug=per-request-maximum-token-limits-alongside-cost}
-
-- bucket: out
-- kind: ai
-- provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
-- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
-- provenance.license: CC-BY-4.0
-
-### labels
-
-- Out of scope
+- Set aside
+- FR 1941
+- FR 2018
 
 ### identifiers
 
@@ -628,84 +571,11 @@ Extends the existing AI and Machine Learning subcategories to support layered an
 
 ### links
 
-(none)
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/1941
+- https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/issues/2018
 
 ### body_md
 
-Request-level configuration sits closer to observability than to billing, consistent with the feature request's own exclusion of telemetry. It was not routed to any of the parallel AI feature requests, so it is a deliberate stop rather than a deferral.
+Set aside during the AI billing examples and model identity work. Per-request token limits are request configuration rather than billing data, and application session and event identifiers are observability join signals with no home in FOCUS; they are distinct from the authenticated session that Credential ID can carry. Tool or harness identity was left out of the first pass of examples.
 
-## Tool or harness identity, meaning which tool produced the tokens. {slug=tool-or-harness-identity-meaning-which}
-
-- bucket: out
-- kind: ai
-- provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
-- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
-- provenance.license: CC-BY-4.0
-
-### labels
-
-- Out of scope
-
-### identifiers
-
-(none)
-
-### links
-
-(none)
-
-### body_md
-
-Ruled out of the first example pass. This is the one most likely to come back, because agentic tooling is where attribution questions are heading. It is a sequencing call, not a rejection of the concept. The Requester Details column in review can carry a delegating identity as a custom entry, which is the nearest home today.
-
-## Session and event identifiers. {slug=session-and-event-identifiers}
-
-- bucket: out
-- kind: ai
-- provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
-- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
-- provenance.license: CC-BY-4.0
-
-### labels
-
-- Out of scope
-
-### identifiers
-
-(none)
-
-### links
-
-(none)
-
-### body_md
-
-These are observability-side join signals with no FOCUS-defined home. Billing data does not carry them, and inventing a place for them inside FOCUS would put the specification in the business of describing application telemetry.
-
-## Token type, input versus output, as a first-class column. {slug=token-type-input-versus-output-as}
-
-- bucket: out
-- kind: ai
-- provenance.document: focus-1-5-for-ai
-- provenance.section: not-in-1-5
-- provenance.source_url: https://www.tokeneconomics.com/projects/what-1-5-does-for-ai-cost-and-what-it-does-not/
-- provenance.license: CC-BY-4.0
-
-### labels
-
-- Superseded
-
-### identifiers
-
-- SkuMeter
-- TokenDirection
-
-### links
-
-(none)
-
-### body_md
-
-Deferred in July, then resolved differently. The split arrives as the `TokenDirection` property on SKU price details in the cached-token work in review, not as a column. The structural carry through separate SKUs and `SkuMeter`, which is what shipped with model identity, stays valid alongside it.
+Requester Details can carry a client application as a custom entry where a provider publishes one.

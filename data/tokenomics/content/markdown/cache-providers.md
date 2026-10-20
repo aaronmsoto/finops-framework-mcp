@@ -14,7 +14,7 @@ count: 3
 - reviewed: Provider documentation reviewed Aug 2026
 - provenance.document: cache-explainer
 - provenance.section: tcprovidersnapshot
-- provenance.source_url: https://www.tokeneconomics.com/cache-explainer/
+- provenance.source_url: https://www.tokeneconomics.com/projects/cache-explainer/
 - provenance.license: CC-BY-4.0
 
 ## OpenAI (OpenAI platform) {slug=openai}
@@ -26,7 +26,7 @@ count: 3
 - reviewed: Provider documentation reviewed Aug 2026
 - provenance.document: cache-explainer
 - provenance.section: tcprovidersnapshot
-- provenance.source_url: https://www.tokeneconomics.com/cache-explainer/
+- provenance.source_url: https://www.tokeneconomics.com/projects/cache-explainer/
 - provenance.license: CC-BY-4.0
 
 ## Google (Gemini API) {slug=google}
@@ -38,5 +38,5 @@ count: 3
 - reviewed: Provider documentation reviewed Aug 2026
 - provenance.document: cache-explainer
 - provenance.section: tcprovidersnapshot
-- provenance.source_url: https://www.tokeneconomics.com/cache-explainer/
+- provenance.source_url: https://www.tokeneconomics.com/projects/cache-explainer/
 - provenance.license: CC-BY-4.0

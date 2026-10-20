@@ -36,7 +36,7 @@ function mutate(dir: string, rel: string, fn: (v: unknown) => unknown): void {
 describe("loadTokenomicsArtifact", () => {
   it("loads the committed artifact with document bodies", () => {
     const a = loadTokenomicsArtifact(DATA);
-    expect(a.documents).toHaveLength(12);
+    expect(a.documents).toHaveLength(14);
     expect(a.documentBodies.get("cache-explainer")).toMatch(/^# /);
     expect(a.crosslinks.every((l) => l.official)).toBe(true);
     expect(a.crosswalk.every((c) => !c.official)).toBe(true);

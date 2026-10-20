@@ -16,6 +16,7 @@ import type {
   TkStage,
   TkValueCategory,
 } from "../../../shared/tokenomics/types.js";
+import { FOCUS_BUCKETS } from "../../../shared/tokenomics/types.js";
 import { ORIGIN, REGISTRY } from "../urls.js";
 import {
   flatText,
@@ -190,7 +191,7 @@ export function extractPersonas(html: string): TkPersona[] {
 }
 
 // ---------------------------------------------------------------------------
-// five-layer-stack-paper: layers + stack levers
+// seven-layer-stack-paper: layers + stack levers
 
 export function extractLayers(html: string): TkLayer[] {
   const $ = load(html);
@@ -237,7 +238,7 @@ export function extractLayers(html: string): TkLayer[] {
       description_md: need(blockMd($, prose), `L${number} prose`),
       components: components.get(number) ?? [],
       tooling_md: tableWrap.length ? blockMd($, tableWrap.find("table")) : null,
-      provenance: prov("five-layer-stack-paper", `l${number}`),
+      provenance: prov("seven-layer-stack-paper", `l${number}`),
     };
   });
 }
@@ -272,7 +273,7 @@ export function extractStackLevers(layers: TkLayer[]): TkLever[] {
         bigt_classes: classesIn(l.multiplier_effect),
         description_md: `Primary lever for ${l.table_label} (key metric: ${l.key_metric}). ${l.multiplier_effect}.`,
         effect: null,
-        provenance: prov("five-layer-stack-paper", "spectrum"),
+        provenance: prov("seven-layer-stack-paper", "spectrum"),
       });
     }
   }
@@ -506,22 +507,20 @@ export function extractCacheGlossary(html: string): TkGlossaryTerm[] {
 export function extractDefinitionGlossary(html: string): TkGlossaryTerm[] {
   const $ = load(html);
   const out: TkGlossaryTerm[] = [];
-  const h2 = $("h2").filter((_, h) =>
-    /terminology reference/i.test(flatText($(h))),
-  );
-  h2.nextUntil("h2", "p").each((_, p) => {
-    const strong = $(p).children("strong").first();
-    const t = flatText(strong);
-    if (!t.endsWith(":")) return;
-    const term = t.slice(0, -1).trim();
-    const definition = flatText($(p)).slice(t.length).trim();
-    out.push({
-      slug: slugify(term),
-      term,
-      definition,
-      provenance: prov("what-is-tokenomics", "terminology-reference"),
+  $("#terminology-reference")
+    .closest("section")
+    .find("dl.glossary .term")
+    .each((_, t) => {
+      const term = flatText($(t).find("dt").first());
+      const definition = flatText($(t).find("dd:not(.see)").first());
+      if (!term || !definition) return;
+      out.push({
+        slug: slugify(term),
+        term,
+        definition,
+        provenance: prov("what-is-tokenomics", "terminology-reference"),
+      });
     });
-  });
   return out;
 }
 
@@ -537,10 +536,8 @@ export function extractProseMetrics(pages: {
   const out: TkMetric[] = [];
   {
     const $ = load(pages.definition);
-    const p = $("p").filter((_, x) => /^Cost per token:/.test(flatText($(x))));
-    const text = flatText(
-      need(p.first().length ? p.first() : null, "cost per token term"),
-    );
+    const dd = $("#term-cost-per-token dd:not(.see)").first();
+    const text = flatText(need(dd.length ? dd : null, "cost per token term"));
     const m = need(
       /(hardware cost divided by tokens produced)/.exec(text),
       "cost per token formula",
@@ -550,7 +547,7 @@ export function extractProseMetrics(pages: {
       name: "Cost per token",
       formula: null,
       formula_text: m[1] as string,
-      definition_md: text.replace(/^Cost per token:\s*/, ""),
+      definition_md: text,
       targets: [],
       inputs: ["hardware cost", "tokens produced"],
       provenance: prov("what-is-tokenomics", "terminology-reference"),
@@ -670,38 +667,39 @@ export function extractValue(html: string): {
 }
 
 // ---------------------------------------------------------------------------
-// focus-1-5-for-ai: tracker cards
+// focus-1-5-for-ai: capability cards
+
+/** Card group: the nearest preceding sub-heading in its theme section
+ * ("Enablers: …", "Postponed during this cycle", …), else the theme's
+ * headline AI capabilities. */
+function focusCardKind($: CheerioAPI, card: Cheerio<AnyNode>): string {
+  const sub = card.closest(".cards").prevAll(".subhead").first();
+  if (!sub.length) return "ai-capability";
+  return slugify(flatText(sub).split(":")[0] as string);
+}
 
 export function extractFocusTracker(html: string): TkFocusTrackerItem[] {
   const $ = load(html);
-  const bucketSection: Record<string, string> = {
-    done: "in-the-working-draft",
-    flight: "in-review",
-    consider: "started-not-yet-certain",
-    out: "not-in-1-5",
-  };
   const out: TkFocusTrackerItem[] = [];
   const seen = new Set<string>();
-  $("details.card[data-status]").each((_, c) => {
+  $("article.cap-card[data-status]").each((_, c) => {
     const $c = $(c);
     const bucket = String($c.attr("data-status")) as TkFocusBucket;
-    if (!(bucket in bucketSection)) return;
-    const title = flatText($c.find(".card-title").first());
-    const labels: string[] = [];
-    $c.find(".tags .pill").each((__, p) => {
-      labels.push(flatText($(p)));
+    if (!FOCUS_BUCKETS.includes(bucket)) return;
+    const title = flatText($c.find(".cap-title").first());
+    const links: string[] = [];
+    const labels = [flatText($c.find(".pill").first())].filter(Boolean);
+    $c.find(".links a").each((__, a) => {
+      const href = $(a).attr("href");
+      if (href) links.push(href);
+      labels.push(flatText($(a)));
     });
-    const body = $c.find(".card-body").first().clone();
-    body.find(".links").remove();
+    const body = $c.clone();
+    body.find(".pill, .cap-title, .links, summary").remove();
     const identifiers = new Set<string>();
     body.find("code").each((__, code) => {
       const t = flatText($(code));
       if (/^[A-Z][A-Za-z0-9]+$/.test(t)) identifiers.add(t);
-    });
-    const links: string[] = [];
-    $c.find(".links a").each((__, a) => {
-      const href = $(a).attr("href");
-      if (href) links.push(href);
     });
     const ref = labels.find((l) => /^(FR|PR)\s*\d+/.test(l));
     let slug = slugify(ref ?? title.split(/\s+/).slice(0, 6).join(" "));
@@ -712,12 +710,15 @@ export function extractFocusTracker(html: string): TkFocusTrackerItem[] {
       slug,
       title,
       bucket,
-      kind: $c.attr("data-kind") ?? "unspecified",
+      kind: focusCardKind($, $c),
       labels,
       identifiers: [...identifiers].sort(),
       body_md: blockMd($, body.children()),
       links,
-      provenance: prov("focus-1-5-for-ai", bucketSection[bucket] as string),
+      provenance: prov(
+        "focus-1-5-for-ai",
+        $c.closest("section[id]").attr("id") ?? null,
+      ),
     });
   });
   return out;

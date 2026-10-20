@@ -13,7 +13,7 @@
   Categories, Scopes, KPI library), `packages/finops-focus-mcp` (the
   FOCUS spec: columns, KPI-to-column mappings, cross-version diffs), and
   `packages/tokenomics-overview-mcp` (Tokenomics Foundation AI-cost
-  guidance: Five-Layer Stack, Big-T, cache metrics, levers; CC BY 4.0,
+  guidance: Seven-Layer Stack, Big-T, cache metrics, levers; CC BY 4.0,
   © Tokenomics Foundation / LF Projects — spec
   `.agents/specs/tokenomics-overview-mcp.md`).
 - Phase: v1 built — both servers, a Worker (Streamable HTTP) deployment of

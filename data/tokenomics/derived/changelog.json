@@ -1,5 +1,49 @@
 [
   {
+    "added": [
+      "content/markdown/documents/seven-layer-stack.md",
+      "content/markdown/documents/seven-layer-stack-paper.md",
+      "content/markdown/documents/tokenomics-goes-official.md",
+      "content/markdown/documents/state-of-ai-tokenomics-takeaways.md"
+    ],
+    "changed": [
+      "content/documents.json",
+      "content/stages.json",
+      "content/layers.json",
+      "content/levers.json",
+      "content/metrics.json",
+      "content/personas.json",
+      "content/value.json",
+      "content/glossary.json",
+      "content/focus-tracker.json",
+      "content/cache-providers.json",
+      "derived/crosslinks.json",
+      "derived/crosswalk.json",
+      "content/markdown/documents/what-is-tokenomics.md",
+      "content/markdown/documents/big-t-notation-paper.md",
+      "content/markdown/documents/cache-explainer.md",
+      "content/markdown/documents/personas-operating-model.md",
+      "content/markdown/documents/value-classification.md",
+      "content/markdown/documents/focus-1-5-for-ai.md",
+      "content/markdown/stages.md",
+      "content/markdown/layers.md",
+      "content/markdown/levers.md",
+      "content/markdown/metrics.md",
+      "content/markdown/personas.md",
+      "content/markdown/value-categories.md",
+      "content/markdown/booking-destinations.md",
+      "content/markdown/glossary.md",
+      "content/markdown/focus-tracker.md",
+      "content/markdown/cache-providers.md"
+    ],
+    "crawled_at": "2026-10-19T23:33:08.281Z",
+    "data_version": "2.0.0",
+    "removed": [
+      "content/markdown/documents/five-layer-stack-paper.md",
+      "content/markdown/documents/five-layer-stack.md"
+    ]
+  },
+  {
     "added": [],
     "changed": [
       "derived/crosslinks.json"

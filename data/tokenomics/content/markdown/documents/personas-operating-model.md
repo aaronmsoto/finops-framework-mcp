@@ -1,9 +1,9 @@
 ---
 kind: project
 license: CC-BY-4.0
-modified: 2026-09-21
+modified: 2026-10-14
 slug: personas-operating-model
-source_url: https://www.tokeneconomics.com/personas-and-operating-model-map/
+source_url: https://www.tokeneconomics.com/projects/personas-and-operating-model-map/
 status: Release Candidate 2
 status_date: 2026-09-04
 status_source: page

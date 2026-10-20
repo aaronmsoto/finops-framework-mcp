@@ -6,6 +6,7 @@ import {
   extractBigT,
   extractCacheMetrics,
   extractCacheProviders,
+  extractDefinitionGlossary,
   ExtractError,
   extractFocusTracker,
   extractLayers,
@@ -44,17 +45,21 @@ describe("cache explainer extraction", () => {
 });
 
 describe("stack, Big-T, personas, value, FOCUS", () => {
-  it("extracts five layers with levers and components", () => {
-    const l = extractLayers(fx("five-layer-stack-paper"));
+  it("extracts seven layers, L0–L6, with levers and components", () => {
+    const l = extractLayers(fx("seven-layer-stack-paper"));
+    expect(l.map((x) => x.number)).toEqual([0, 1, 2, 3, 4, 5, 6]);
     expect(l.map((x) => x.name)).toEqual([
-      "Silicon",
-      "Capacity",
+      "Energy",
+      "Physical infrastructure",
+      "Infrastructure management",
       "Inference stack",
       "Model management and selection",
-      "Routing and governance",
+      "AI access and control",
+      "Demand and entry points",
     ]);
-    expect(l[2]?.primary_levers).toContain("prefix and KV cache");
-    expect(l[4]?.components.length).toBeGreaterThan(0);
+    expect(l[3]?.primary_levers).toContain("prefix, KV, and semantic cache");
+    expect(l[5]?.components.map((c) => c.name)).toContain("Router (Selection)");
+    expect(l.every((x) => x.components.length > 0)).toBe(true);
   });
 
   it("extracts the Big-T notation, variables and ladder in order", () => {
@@ -87,13 +92,26 @@ describe("stack, Big-T, personas, value, FOCUS", () => {
     expect(v.booking).toHaveLength(5);
   });
 
-  it("extracts FOCUS tracker cards with buckets and identifiers", () => {
+  it("extracts FOCUS 1.5 capability cards with status and identifiers", () => {
     const f = extractFocusTracker(fx("focus-1-5-for-ai"));
     const cache = f.find((x) => x.identifiers.includes("TokenCacheAction"));
-    expect(cache?.bucket).toBe("flight");
+    expect(cache?.bucket).toBe("done");
+    expect(cache?.labels).toContain("PR 2606");
+    expect(cache?.body_md).not.toContain("Additional details");
     expect(new Set(f.map((x) => x.bucket))).toEqual(
-      new Set(["done", "flight", "consider", "out"]),
+      new Set(["done", "review", "out"]),
     );
+    expect(f.find((x) => x.kind === "enablers")?.provenance.section).toBe(
+      "theme-ai",
+    );
+  });
+
+  it("reads the terminology reference definition list", () => {
+    const g = extractDefinitionGlossary(fx("what-is-tokenomics"));
+    expect(g.length).toBeGreaterThanOrEqual(12);
+    const routing = g.find((x) => x.slug === "model-routing");
+    expect(routing?.definition).toMatch(/^Automatically sending each request/);
+    expect(g.every((x) => !x.definition.startsWith("See "))).toBe(true);
   });
 
   it("quotes prose-stated metrics verbatim", () => {

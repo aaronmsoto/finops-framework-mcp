@@ -99,7 +99,7 @@
   },
   {
     "from": {
-      "slug": "l2-place-by-region",
+      "slug": "l1-place-by-region",
       "type": "lever"
     },
     "official": false,
