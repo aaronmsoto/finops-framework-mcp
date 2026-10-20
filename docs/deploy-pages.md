@@ -88,8 +88,9 @@ The nine real paths should be `200`.
   `docs/guide/`.
 - Because the rest of `docs/` is off-site, the guide pages that cite
   `docs/mcp-surface.md` link to the GitHub blob URL on `main` rather than a
-  relative path. If `mcp-surface.md` is ever moved or renamed, those two
-  links break silently — nothing validates them.
+  relative path (framework-server, focus-server and tokenomics-server). If
+  `mcp-surface.md` is ever moved or renamed, those links break silently —
+  nothing validates them.
 - Changing the repository name or owner changes the published URL, which
   invalidates the `canonical`/`og:url` values baked into the nine guide pages
   and the root-relative link in `404.html`. **A custom domain does the

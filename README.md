@@ -100,11 +100,14 @@ claude mcp add tokenomics-overview -- npx -y tokenomics-overview-mcp
 
 | Variable | Server | Effect |
 | --- | --- | --- |
-| `FINOPS_MCP_DATA` | framework | Use a locally refreshed artifact instead of the packaged `data/framework` (the first CLI argument works too) |
-| `TOKENOMICS_MCP_DATA` | tokenomics | Use a locally refreshed artifact instead of the packaged `data/tokenomics` |
+| `FINOPS_MCP_DATA` | framework | Use a locally refreshed artifact instead of the packaged `data/framework` |
+| `FOCUS_MCP_DATA` | FOCUS | Same, for `data/focus` |
+| `TOKENOMICS_MCP_DATA` | tokenomics | Same, for `data/tokenomics` |
 | `FINOPS_MCP_EXPERIMENTAL=1` | framework, tokenomics | Turn on clearly labeled unofficial extras: the framework's parsed maturity `get_actions`, the tokenomics crosswalk |
 
-Each bin also answers `--version` with its package and data version.
+Each server also accepts the data directory as its first CLI argument, and
+answers `--version` with its package version plus its data version (FOCUS:
+the spec versions it serves).
 
 ## How to use them
 
@@ -128,10 +131,11 @@ Questions each one answers well:
   and uncached input tokens were X, Y, Z: is caching saving money?"
 
 **Using them together.** The servers ship separately and never call each
-other. Instead, answers hand off by URI: the tokenomics server's
-`get_crosslinks` returns `finops://framework/…` and `focus://spec/…` URIs,
-each backed by a verbatim quote from the Tokenomics Foundation page, for the
-agent to read with the other two servers. The
+other. Instead, answers hand off by URI: each of the tokenomics server's 35
+`get_crosslinks` links is backed by a verbatim quote from the Tokenomics
+Foundation page, and carries a `finops://framework/…` or `focus://spec/…` URI
+for the agent to read with the other two servers. FOCUS 1.5 working-draft
+names, which no ratified release contains yet, come back with no URI. The
 [prompt-caching example](https://aaronmsoto.github.io/finops-framework-mcp/example-ai-caching.html)
 walks one question through all three.
 
@@ -179,16 +183,17 @@ needs a code change:
 ```
 crawler ──▶ data artifact ──▶ MCP server (stdio)
 src/crawlers/<name>   data/<name>/   src/servers/<name>
-fetch → parse →       versioned JSON + canonical markdown
-compose → derive →    + JSON Schemas + sha256 manifest
-validate → emit
 ```
 
-for `<name>` in `framework`, `focus` and `tokenomics`. `content/markdown/` is
-the **canonical** intermediate: the crawler composes it from parsed HTML, and
-every JSON file is regenerated from it by an offline `derive` step, so a
-schema or JSON-only fix never needs a re-crawl. Each server validates its
-artifact against its schemas at startup and refuses to start on a bad one.
+for `<name>` in `framework`, `focus` and `tokenomics`. The framework and
+tokenomics crawlers go fetch → parse → compose → derive → validate → emit:
+`content/markdown/` is the **canonical** intermediate, composed from parsed
+HTML, and every JSON file is regenerated from it by an offline `derive` step,
+so a schema or JSON-only fix never needs a re-crawl. Their artifacts carry
+JSON Schemas and a sha256 manifest, and each server validates its artifact at
+startup and refuses to start on a bad one. The FOCUS crawler instead ingests
+each pinned spec release by git tag into `data/focus/<version>/`, with the
+derived diff and KPI mapping under `data/focus/derived/`.
 
 The framework server's early capability relationship graph
 (`get_prerequisites`/`get_related`) was built, evaluated and **deleted**
@@ -202,7 +207,8 @@ npm run build
 npm run refresh                                   # framework: crawl → artifact + diff report
 node dist/crawlers/focus/cli.js                   # FOCUS: ingest the pinned spec tags (1.0, 1.2)
 node dist/crawlers/tokenomics/cli.js refresh      # tokenomics: Tokenomics Foundation pages
-node dist/crawlers/framework/cli.js derive        # offline markdown → JSON (framework, tokenomics)
+node dist/crawlers/framework/cli.js derive        # framework: offline markdown → JSON, byte-identical
+node dist/crawlers/tokenomics/cli.js derive       # tokenomics: same, for data/tokenomics
 ```
 
 Crawls are polite, cached and robots-honoring. No upstream changes produce a

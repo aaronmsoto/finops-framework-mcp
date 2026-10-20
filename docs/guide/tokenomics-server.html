@@ -366,9 +366,9 @@
   <div class="tbl-wrap"><table>
     <thead><tr><th>Prompt</th><th>Purpose</th><th>Arguments</th></tr></thead>
     <tbody>
-      <tr><td class="mono">optimize_consumption</td><td>Walks a workload through Big-T classification, the stack layers and their levers, cache metrics, and the FinOps/FOCUS cross-links.</td><td class="mono">workload (required)</td></tr>
+      <tr><td class="mono">optimize_consumption</td><td>Walks a workload through Big-T classification, the stack layers and their levers, cache metrics, and the FinOps/FOCUS cross-links — grounded in Tokenomics Foundation guidance.</td><td class="mono">workload (required)</td></tr>
       <tr><td class="mono">assess_prompt_caching</td><td>Checks a prompt layout against the cache explainer's three rules, then measures Cache Hit Rate and Cache Cost Efficiency with the published formulas.</td><td class="mono">workload (optional)</td></tr>
-      <tr><td class="mono">bigt_review</td><td>Reviews an architecture with Big-T notation: identifies n, k and a, places it on the ladder, and proposes bounds where it is agent-multiplicative or unbounded.</td><td class="mono">architecture (required); suspected_class</td></tr>
+      <tr><td class="mono">bigt_review</td><td>Reviews an architecture with Big-T notation: identifies n, k, and a, places it on the ladder, and proposes bounds (depth caps, budgets, circuit breakers) where it is agent-multiplicative or unbounded.</td><td class="mono">architecture (required); suspected_class</td></tr>
     </tbody>
   </table></div>
   <p class="callnote">tokenomics · list-prompts (verbatim descriptions and arguments)</p>
@@ -400,7 +400,7 @@
   proves it.</p>
   <div class="diff-tally">
     <div class="tally-card add"><div class="num">10</div><div class="lbl">→ FinOps Framework capabilities</div></div>
-    <div class="tally-card add"><div class="num">14</div><div class="lbl">→ ratified FOCUS 1.2 columns</div></div>
+    <div class="tally-card add"><div class="num">14</div><div class="lbl">→ ratified FOCUS 1.2 columns (13) and attributes (1)</div></div>
     <div class="tally-card chg"><div class="num">11</div><div class="lbl">→ FOCUS 1.5 working-draft names (no URI yet)</div></div>
   </div>
   <p style="font-size:0.9rem;">A FOCUS 1.5 card, for example, links the cached-token
@@ -455,7 +455,7 @@
           <tr><td>Proxy (Pass-Through)</td><td>Transparent pass-through, rate limits, bounded retries, timeouts, fallbacks across providers, unified API surface</td></tr>
           <tr><td>Router (Selection)</td><td>Intent and complexity detection, model and provider selection, routing by data classification, cache, rules &amp; no-model routes</td></tr>
           <tr><td>Policy &amp; Guardrails</td><td>Pre-flight guardrails &amp; compliance, response validation, request, token &amp; budget limits, agent fan-out &amp; tool limits</td></tr>
-          <tr><td>Attribution Capture</td><td>Capture source metadata from L6; validate user, app, agent &amp; team; stamp use case &amp; initiative</td></tr>
+          <tr><td>Attribution Capture</td><td>Capture source metadata from L6; validate user, app, agent &amp; team; stamp use case &amp; initiative; enforce and propagate metadata</td></tr>
         </tbody>
       </table></div>
       <p style="font-size:0.88rem;">The same response carries the published tooling table,

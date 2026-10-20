@@ -30,9 +30,10 @@ monorepo and works alongside
 [`finops-framework-mcp`](https://www.npmjs.com/package/finops-framework-mcp)
 (the FinOps Framework) and
 [`finops-focus-mcp`](https://www.npmjs.com/package/finops-focus-mcp) (the
-FOCUS billing spec): `get_crosslinks` returns `finops://framework/…` and
-`focus://spec/…` URIs for those servers, each backed by a quote from the
-Foundation page that names the target.
+FOCUS billing spec): each `get_crosslinks` link is backed by a quote from the
+Foundation page that names the target, with a `finops://framework/…` or
+`focus://spec/…` URI to read with those servers (no URI yet for FOCUS 1.5
+working-draft names).
 
 **Usage guide:**
 [aaronmsoto.github.io/finops-framework-mcp/tokenomics-server.html](https://aaronmsoto.github.io/finops-framework-mcp/tokenomics-server.html)
